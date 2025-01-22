@@ -10,10 +10,10 @@ This week we will be looking at some of the standard data structures which can b
 --- 
 
 ## Content
-- [ ] [Slides]()
+- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/week_1/lecture1.pdf)
 - [ ] [Lecture]()
 - [ ] [Lecture Notes]()
-- [ ] [Lab]() [(Solutions)]()
+- [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/week_1/week2lab.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/week_1/week2lab_solutions.ipynb)
 - [ ] [Lab Note]()
 
 ## Readings
