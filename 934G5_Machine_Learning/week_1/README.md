@@ -1,1 +1,26 @@
+# Week 1 - Introduction
+We are starting off with an introduction to machine learning, with a quick overview of example real-world applications as well as a look at the basic linear model, which is fundamental to machine learning. We will also discuss what you can expect from the module.
 
+Learning outcomes
+By the end of this unit of teaching and learning, you will:
+- be familiar with some of the basic terms, concepts, and notations in machine learning; 
+- have explored the basic linear model (regression and classification).
+
+---
+
+## Content
+- [ ] [Slides]()
+- [ ] [Lecture]()
+- [ ] [Lecture Notes]()
+- [ ] [Lab]()
+- [ ] [Lab Notes]()
+- [ ] [Quiz]()
+ 
+## Readings
+#### Compulsory
+- [ ] [S Rogers, M Girolami. A first course in machine learning. 2017.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019840002461?institute=44SUS_INST&auth=SAML) **[Chapter 1]**
+- [ ] [C Bishop. Pattern recognition and machine learning. 2006.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019850002461?institute=44SUS_INST&auth=SAML) **[Section 1.1]**
+#### Additional
+- [ ] [M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) **[Sections 1.1, 2.1-2.2, 3.1, 5.1, 8.1, 9.1]**
+- [ ] [I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) **[Sections 5.1, 5.2, 5.4]**
+- [ ] [S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML) **[Chapters 1, 2, 5]**
