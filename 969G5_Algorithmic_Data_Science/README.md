@@ -5,5 +5,5 @@
 - [Reading List](https://sussex.leganto.exlibrisgroup.com/leganto/nui/lists/20811099570002461?auth=SAML)
 
 # Weeks
-- [Week 0 - Crash Course Into Python and Mathmatics]()
-- [Week 1 - Data Structures and Data Formats]()
+- [Week 0 - Crash Course Into Python and Mathmatics](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/week_0)
+- [Week 1 - Data Structures and Data Formats](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/week_1)
