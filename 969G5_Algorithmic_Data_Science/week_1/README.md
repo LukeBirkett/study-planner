@@ -7,6 +7,15 @@ This week we will be looking at some of the standard data structures which can b
 - Be familiar with fixed size arrays, lists, dictionaries, hash tables and binary search trees.
 - Be able to manipulate lists and dictionaries in Python, and time operations.
 
-## Background reading
+--- 
+
+## Content
+- [ ] [Slides]()
+- [ ] [Lecture]()
+- [ ] [Lecture Notes]()
+- [ ] [Lab]() [(Solutions)]()
+- [ ] [Lab Note]()
+
+## Readings
 
 Cormen et al: Chapter 10 (Elementary data structures), Chapter 11 (Hash tables), Chapter 12 (Binary Search trees) [Chapter numbers might vary in different versions of book]
