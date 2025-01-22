@@ -18,7 +18,7 @@ This week we will be looking at some of the standard data structures which can b
 
 ## Readings
 
-- [Cormen et al. Introduction to algorithms.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811099630002461?institute=44SUS_INST&auth=SAML)
+- [ ] [Cormen et al. Introduction to algorithms.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811099630002461?institute=44SUS_INST&auth=SAML)
   - Chapter 10 (Elementary data structures)
   - Chapter 11 (Hash tables)
   - Chapter 12 (Binary Search trees)
