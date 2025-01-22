@@ -9,10 +9,10 @@ By the end of this unit of teaching and learning, you will:
 ---
 
 ## Content
-- [ ] [Slides]()
+- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201%20-%20Introduction.pdf)
 - [ ] [Lecture]()
 - [ ] [Lecture Notes]()
-- [ ] [Lab]()
+- [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201_with%20solutions.ipynb)
 - [ ] [Lab Notes]()
 - [ ] [Quiz]()
  
