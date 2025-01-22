@@ -5,4 +5,4 @@
 - [Recordings](https://sussex.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?embedded=1&nomobileprompt=true#folderID=%22e1318202-75a9-4e2a-9b42-b0ce01101ac7%22)
 
 # Weeks
-- [Week 1 - Introduction]()
+- [Week 1 - Introduction](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_1)
