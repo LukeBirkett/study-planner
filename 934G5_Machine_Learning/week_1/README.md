@@ -1,4 +1,4 @@
-# Week 1 - Introduction
+# [Week 1 - Introduction](https://canvas.sussex.ac.uk/courses/31315/pages/week-1-introduction?module_item_id=1445744)
 We are starting off with an introduction to machine learning, with a quick overview of example real-world applications as well as a look at the basic linear model, which is fundamental to machine learning. We will also discuss what you can expect from the module.
 
 Learning outcomes
