@@ -14,8 +14,11 @@ This week we will be looking at some of the standard data structures which can b
 - [ ] [Lecture]()
 - [ ] [Lecture Notes]()
 - [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/week_1/week2lab.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/week_1/week2lab_solutions.ipynb)
-- [ ] [Lab Note]()
+- [ ] [Lab Notes]()
 
 ## Readings
 
-Cormen et al: Chapter 10 (Elementary data structures), Chapter 11 (Hash tables), Chapter 12 (Binary Search trees) [Chapter numbers might vary in different versions of book]
+- [Cormen et al. Introduction to algorithms.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811099630002461?institute=44SUS_INST&auth=SAML)
+  - Chapter 10 (Elementary data structures)
+  - Chapter 11 (Hash tables)
+  - Chapter 12 (Binary Search trees)
