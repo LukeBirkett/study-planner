@@ -18,7 +18,7 @@ By the end of this unit of teaching and learning, you will:
  
 ## Readings
 #### Compulsory
-- [ ] [S Rogers, M Girolami. A first course in machine learning. 2017.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019840002461?institute=44SUS_INST&auth=SAML) **[Chapter 1]** Notes: [1.1 to 1.2](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/FCML_1.1_1.2.pdf) [1.3](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/FCML_1.3.pdf)
+- [x] [S Rogers, M Girolami. A first course in machine learning. 2017.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019840002461?institute=44SUS_INST&auth=SAML) **[Chapter 1]** Notes: [1.1 to 1.2](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/FCML_1.1_1.2.pdf) [1.3](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/FCML_1.3.pdf)
 - [ ] [C Bishop. Pattern recognition and machine learning. 2006.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019850002461?institute=44SUS_INST&auth=SAML) **[Section 1.1]**
 #### Additional
 - [ ] [M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) **[Sections 1.1, 2.1-2.2, 3.1, 5.1, 8.1, 9.1]**
