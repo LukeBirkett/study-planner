@@ -23,5 +23,5 @@ By the end of this unit of teaching and learning, you will:
 #### Additional
 - [x] [M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) **[Sections 1.1, 2.1-2.2, 3.1, 5.1, 8.1, 9.1]**  <br>
 Notes: [Linear Algebra 2-2.2](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/MM2C2.pdf), [Norm 3.1.](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/MML_3.1_Norm.pdf), [Linear Problem Formulation"](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/MML_9.1.pdf)
-- [ ] [I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) **[Sections 5.1, 5.2, 5.4]**
+- [x] [I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) **[Sections 5.1, 5.2, 5.4]**
 - [ ] [S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML) **[Chapters 1, 2, 5]**
