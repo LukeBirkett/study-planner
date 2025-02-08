@@ -10,7 +10,7 @@ By the end of this unit of teaching and learning, you will:
 
 ## Content
 - [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201%20-%20Introduction.pdf)
-- [ ] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d1fad0ec-2b98-452c-ac82-b27200f8e4b1)
+- [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d1fad0ec-2b98-452c-ac82-b27200f8e4b1)
 - [ ] [Lecture Notes]()
 - [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201_with%20solutions.ipynb)
 - [ ] [Lab Notes]()
