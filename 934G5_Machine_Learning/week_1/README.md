@@ -14,7 +14,7 @@ By the end of this unit of teaching and learning, you will:
 - [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/ML_W1_Lecture.pdf)
 - [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201_with%20solutions.ipynb)
 - [ ] [Lab Notes]()
-- [ ] [Quiz]()
+- [ ] [Quiz](https://canvas.sussex.ac.uk/courses/31315/quizzes/50386)
  
 ## Readings
 #### Compulsory
