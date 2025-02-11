@@ -16,7 +16,8 @@
 ## Readings
 - [ ] [Introduction Text](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_1/introduction_text.md)
 - [ ] [Defining adaptive systems](https://canvas.sussex.ac.uk/courses/31028/pages/defining-adaptive-systems?wrap=1)
-- [ ] Ren, G., Chen, W., Dasgupta, S., Kolodziejski, C., Wörgötter, F., & Manoonpong, P. (2015). **Multiple chaotic central pattern generators with learning for legged locomotion and malfunction compensation.** Information Sciences, 294, 666–682. [Link](https://doi.org/10.1016/j.ins.2014.05.001)
-- [ ] D. J. Futuyma and M. Kirkpatrick, Evolution, 4th ed., Sinauer Associates, 2017 [Link]()
-- [ ] Koos, S., Cully, A., & Mouret, J. B. (2013). Fast damage recovery in robotics with the t-resilience algorithm. The International Journal of Robotics Research, 32(14), 1700-1723 [Link]()
-- [ ] Miyashita, S., Guitron, S., Li, S., & Rus, D. (2017). Robotic metamorphosis by origami exoskeletons. Science Robotics, 2(10) [Link]()
+- [ ] Donella H Meadows. Thinking in Systems: A primer. Chelsea Green Publishing, 2008.
+- [ ] Fine, P., Di Paolo, E., and Izquierdo, E. (2007). Adapting to your body.
+- [ ] In e Costa F., A., L.M., R., E., C., I., H., and A., C., editors, Advances in Artificial Life. ECAL 2007. Lecture Notes in Computer Science, volume 4648, pages 203–212. Springer, Berlin, Heidelberg.
+- [ ] Körding, K. P. and Wolpert, D. M. (2006). Bayesian decision theory in sensorimotor control. Trends in cognitive sciences, 10(7):319. Recommended articles and books
+
