@@ -1,4 +1,4 @@
-# [Week 1 - Supervised Learning 1](https://canvas.sussex.ac.uk/courses/31315/pages/week-2-supervised-learning-i?module_item_id=1445745)
+# [Week 2 - Supervised Learning 1](https://canvas.sussex.ac.uk/courses/31315/pages/week-2-supervised-learning-i?module_item_id=1445745)
 This week, we will have a look at supervised learning algorithms not based on the basic linear model. 
 
 ### Learning outcomes
@@ -12,8 +12,8 @@ explored these algorithms in practice.
 - [ ] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5250165?wrap=1)
 - [ ] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a32813c8-3179-4314-a505-b27900f80b90)
 - [ ] [Lecture Notes]()
-- [ ] [Lab]() [(Solutions)]()
-- [ ] [Ungraded Assignment]()
+- [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202_with%20solutions.ipynb)
+- [ ] [Ungraded Assignment](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202_assignments.ipynb)
 - [ ] [Quiz](https://canvas.sussex.ac.uk/courses/31315/quizzes/50568)
  
 ## Readings
