@@ -12,8 +12,7 @@ By the end of this unit of teaching and learning, you will:
 - [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201%20-%20Introduction.pdf)
 - [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d1fad0ec-2b98-452c-ac82-b27200f8e4b1)
 - [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/ML_W1_Lecture.pdf)
-- [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201_with%20solutions.ipynb)
-- [ ] [Lab Notes]()
+- [x] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_1/Week%201_with%20solutions.ipynb)
 - [x] [Quiz](https://canvas.sussex.ac.uk/courses/31315/quizzes/50386)
  
 ## Readings
