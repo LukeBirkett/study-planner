@@ -19,4 +19,5 @@ In this lecture, I will introduce some core ideas, and then we will start to loo
 - [ ] [Padlet](https://uofsussex.padlet.org/cajohnson32/a-space-for-comments-and-questions-re-lecture-1-yrtjs0ty9pwcs2p0)
 
 ## Readings
+- [ ] [Introduction Text](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_1/introduction_text.md)
 - [ ] [Defining adaptive systems](https://canvas.sussex.ac.uk/courses/31028/pages/defining-adaptive-systems?wrap=1)
