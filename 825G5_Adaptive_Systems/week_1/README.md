@@ -22,3 +22,7 @@ In this lecture, I will introduce some core ideas, and then we will start to loo
 ## Readings
 - [ ] [Introduction Text](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_1/introduction_text.md)
 - [ ] [Defining adaptive systems](https://canvas.sussex.ac.uk/courses/31028/pages/defining-adaptive-systems?wrap=1)
+- [ ] Ren, G., Chen, W., Dasgupta, S., Kolodziejski, C., Wörgötter, F., & Manoonpong, P. (2015). **Multiple chaotic central pattern generators with learning for legged locomotion and malfunction compensation.** Information Sciences, 294, 666–682. [Link](https://doi.org/10.1016/j.ins.2014.05.001)
+- [ ] D. J. Futuyma and M. Kirkpatrick, Evolution, 4th ed., Sinauer Associates, 2017 [Link]()
+- [ ] Koos, S., Cully, A., & Mouret, J. B. (2013). Fast damage recovery in robotics with the t-resilience algorithm. The International Journal of Robotics Research, 32(14), 1700-1723 [Link]()
+- [ ] Miyashita, S., Guitron, S., Li, S., & Rus, D. (2017). Robotic metamorphosis by origami exoskeletons. Science Robotics, 2(10) [Link]()
