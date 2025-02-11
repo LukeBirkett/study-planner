@@ -8,8 +8,8 @@
 ---
 
 ## Content
-- [ ] [Week 2 Lecture 2](https://canvas.sussex.ac.uk/courses/31028/files/5567949?wrap=1)
-- [ ] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=85b59894-f072-4828-b5c5-b27b00e732ab)
+- [x] [Week 2 Lecture 2](https://canvas.sussex.ac.uk/courses/31028/files/5567949?wrap=1)
+- [x] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=85b59894-f072-4828-b5c5-b27b00e732ab)
 - [ ] [Lecture Notes]()
 - [ ] [Seminar Reading](https://canvas.sussex.ac.uk/courses/31028/files/5558954?module_item_id=1492370)
 
