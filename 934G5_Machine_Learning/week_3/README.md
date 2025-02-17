@@ -13,7 +13,8 @@ explored these algorithms in practice.
 - [ ] [Lecture Notes]()
 - [ ] [Lab]() [(Solutions)]()
 - [ ] [Ungraded Assignment]()
-- [ ] [Quiz]()
+- [ ] Datasets [[1](), [2]()]
+- [ ] [Quiz: SVM, Bayes classifier, Logistic regression](https://canvas.sussex.ac.uk/courses/31315/quizzes/50387)
  
 ## Readings
 #### Compulsory
