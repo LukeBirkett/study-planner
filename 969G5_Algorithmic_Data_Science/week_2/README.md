@@ -16,5 +16,7 @@ By the end of this unit of teaching and learning, you will be able to:
 - [ ] [Lab Notes]()
 
 ## Readings
-- [ ] [Cormen et al. Chapters 2, 3 and 8]()
-
+- [ ] [Cormen et al. Introduction to algorithms.](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811099630002461?institute=44SUS_INST&auth=SAML)
+  - [ ] Chapter 2 (Getting Started)
+  - [ ] Chapter 3 (Growth of Functions)
+  - [ ] Chapter 8 (Sorting in Linear Time)
