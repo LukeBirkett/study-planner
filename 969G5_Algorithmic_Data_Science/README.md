@@ -6,5 +6,5 @@
 # [Weeks](https://canvas.sussex.ac.uk/courses/31352/modules)
 - [Week 0 - Crash Course Into Python and Mathmatics](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/week_0)
 - [Week 1 - Data Structures and Data Formats](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/week_1)
-- [Week 2 - Algorithmic Complexity. Sorting.]()
-- [Week 3 - Matrices - Manipulation and computation]()
+- [Week 2 - Algorithmic Complexity. Sorting.](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/week_2)
+- [Week 3 - Matrices - Manipulation and computation](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/week_3)
