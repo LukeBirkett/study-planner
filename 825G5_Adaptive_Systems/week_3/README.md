@@ -13,5 +13,5 @@ Learning Objective:
 - [ ] [Seminar Reading]()
 
 ## Readings
-- [ ] 
+- [ ] [Link]()
 
