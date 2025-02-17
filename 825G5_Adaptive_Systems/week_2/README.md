@@ -15,7 +15,7 @@
 - [ ] [Seminar Reading](https://canvas.sussex.ac.uk/courses/31028/files/5558954?module_item_id=1492370)
 
 ## Readings
-- [ ] Donella H Meadows. Thinking in Systems: A primer. Chelsea Green Publishing, 2008. [Link]()
+- [ ] Donella H Meadows. Thinking in Systems: A primer. Chelsea Green Publishing, 2008. [Link](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/p3abpr/alma991043450002461)
 - [ ] Fine, P., Di Paolo, E., and Izquierdo, E. (2007). Adapting to your body. [Link]()
 - [ ] In e Costa F., A., L.M., R., E., C., I., H., and A., C., editors, Advances in Artificial Life. ECAL 2007. Lecture Notes in Computer Science, volume 4648, pages 203–212. Springer, Berlin, Heidelberg. [Link]()
 - [ ] Körding, K. P. and Wolpert, D. M. (2006). Bayesian decision theory in sensorimotor control. Trends in cognitive sciences, 10(7):319 [Link]()
