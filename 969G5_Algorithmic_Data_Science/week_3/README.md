@@ -13,7 +13,7 @@ By the end of this unit of teaching and learning, you will be able to:
 - [ ] [Slides](https://canvas.sussex.ac.uk/courses/31352/files/5225799?module_item_id=1446269)
 - [ ] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=019fc45e-56b3-425a-94c4-b20400c5f617)
 - [ ] [Lecture Notes]()
-- [ ] [Lab]() [(Solutions)]()
+- [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/week_3/week4%20lab.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/week_3/week4%20lab%20-%20solution.ipynb)
 - [ ] [Lab Notes]()
 
 ## Readings
