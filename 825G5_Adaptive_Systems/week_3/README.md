@@ -13,5 +13,5 @@ Learning Objective:
 - [ ] [Seminar](https://canvas.sussex.ac.uk/courses/31028/pages/week-3-seminar?module_item_id=1496359)
 
 ## Readings
-- [ ] [Link]()
+- [ ] [Cybternetics Resources](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources)
 
