@@ -2,7 +2,7 @@
 This week, we will have a look at more supervised learning algorithms. 
 
 ### Learning outcomes:
-- learnt the basic principles behind support vector machine, Naïve Bayes, and logistic regression; 
+- Learnt the basic principles behind support vector machine, Naïve Bayes, and logistic regression; 
 explored these algorithms in practice.
 
 ---
