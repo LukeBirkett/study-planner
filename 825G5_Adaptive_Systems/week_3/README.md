@@ -9,7 +9,7 @@ Learning Objective:
 - [ ] [Week 3 Lecture 1]()
 - [ ] [Week 3 Lecture 2]()
 - [ ] [Lecture Recording]()
-- [ ] Lecture Notes []()]
+- [ ] [Lecture Notes]()
 - [ ] [Seminar Reading]()
 
 ## Readings
