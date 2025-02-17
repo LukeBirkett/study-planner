@@ -1,4 +1,4 @@
-# [Week 2 - Supervised Learning 1]()
+# [Week 3 - Supervised Learning 2]()
 This week, we will  
 
 ### Learning outcomes
