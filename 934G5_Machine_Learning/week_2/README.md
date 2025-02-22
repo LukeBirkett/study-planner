@@ -21,7 +21,7 @@ explored these algorithms in practice.
 - [x] S Rogers, M Girolami. A first course in machine learning. 2017. [Reading list link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019840002461?institute=44SUS_INST&auth=SAML) **[Section 5.3.1]** [KNN](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/ML_Rodgers_KNN.pdf)
 - [x] J Zaki, W Meira. Data Mining and Machine Learning. 2020. [Reading list link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22133526900002461?institute=44SUS_INST&auth=SAML) **[Sections 18.3, 19]** [KNN](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/ML_Zaki_KNN.pdf), [DecisionTrees](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/ML_Zaki_Decision_Trees.pdf)
 - [x] L Breiman. Bagging predictors. Machine learning, 24, pp. 123-140. 1996. [Reading list link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019940002461?institute=44SUS_INST&auth=SAML)
-- [ ] L Breiman. Random forests. Machine learning, 45, pp. 5-32. 2001. [Reading list link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019940002461?institute=44SUS_INST&auth=SAML)
+- [ ] L Breiman. Random forests. Machine learning, 45, pp. 5-32. 2001. [Reading list link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019920002461?institute=44SUS_INST&auth=SAML)
 - [ ] Y Freund, R Schapire. Experiments with a new boosting algorithm. International Conference on Machine Learning, vol. 96, pp. 148-156. 1996. [Reading list link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019950002461?institute=44SUS_INST&auth=SAML)
 
 #### Additional
