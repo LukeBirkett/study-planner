@@ -14,7 +14,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [ ] Lecture Notes
 - [ ] [Lab]() [(Solutions)]()
 - [ ] [Ungraded Assignment]()
-- [ ] [Quiz: ]()
+- [ ] [Quiz: Perceptron & MLP](https://canvas.sussex.ac.uk/courses/31315/quizzes/50388)
  
 ## Readings
 #### Compulsory
