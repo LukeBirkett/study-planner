@@ -8,3 +8,15 @@
 - [Week 1 - Introduction](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_1)
 - [Week 2 - Systems](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_2)
 - [Week 3 - Cybernetics and Negative Feedback](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_3)
+
+
+--- 
+
+# [Reading Resources](https://canvas.sussex.ac.uk/courses/31028/pages/reading-and-additional-information?module_item_id=1492560)
+- [Defining adaptive systems](https://canvas.sussex.ac.uk/courses/31028/pages/defining-adaptive-systems)
+- [Cybernetics resources](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources)
+- [Stigmergy, self-organisation, and collective behaviour resources](https://canvas.sussex.ac.uk/courses/31028/pages/stigmergy-self-organisation-and-collective-behaviour-resources)
+- [Robotics resources](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources)
+- [Probability and information theory, and free energy related resources](https://canvas.sussex.ac.uk/courses/31028/pages/probability-and-information-theory-and-free-energy-related-resources)
+- [Autopoiesis resources](https://canvas.sussex.ac.uk/courses/31028/pages/autopoiesis-resources)
+- [Artificial immune systems](https://canvas.sussex.ac.uk/courses/31028/pages/artificial-immune-systems)
