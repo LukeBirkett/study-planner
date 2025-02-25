@@ -6,3 +6,4 @@
 - [Week 1 - Introduction](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_1)
 - [Week 2 - Supervised Learning I](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_2)
 - [Week 3 - Supervised Learning II](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_3)
+- [Week 4 - Supervised Learning III](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_4)
