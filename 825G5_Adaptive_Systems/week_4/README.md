@@ -16,7 +16,7 @@ An introduction to:
 - [ ] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6494b641-a509-498a-bc88-b28900e9d23b)
 - [ ] Lecture Notes []()
 - [ ] [Notebook Example - Sensorimotor_Example]()
-- [ ] [Seminar]()
+- [ ] [Lab 0: Negative feedback control](https://canvas.sussex.ac.uk/courses/31028/pages/lab-0-negative-feedback-control?module_item_id=1496976)
 
 ## Readings
 - [ ] [Robotics Resources](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources?wrap=1)
