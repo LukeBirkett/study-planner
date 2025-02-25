@@ -23,3 +23,4 @@
 - [ ] [Brooks, R. (1986). A robust layered control system for a mobile robot](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_crossref_primary_10_1109_JRA_1986_1087032)
 - [ ] [Brooks, R. A. (2002). Flesh and machines : how robots will change us](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_proquest_reports_196776410)
 - [ ] [Pfeifer, R. and Scheier, C. (2001). Understanding intelligence](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_elsevier_sciencedirect_doi_10_1016_S0004_3702_01_00063_7)
+- [ ] [Shim, Yoonsik and Husbands, Phil (2012) Chaotic exploration and learning of locomotion behaviours. Sussex](https://canvas.sussex.ac.uk/courses/31028/files/5540062?wrap=1)
