@@ -15,19 +15,11 @@
 
 ## Readings
 - [ ] [Robotics Resources](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources?wrap=1)
-- [ ] [Braitenberg_vehicles](https://canvas.sussex.ac.uk/courses/31028/files/5539225?wrap=1)
+- [ ] [Braitenberg, V. (1986). Vehicles: Experiments in synthetic psychology](https://canvas.sussex.ac.uk/courses/31028/files/5539225?wrap=1)
 - [ ] [Brooks - Intelligence without representation](https://canvas.sussex.ac.uk/courses/31028/files/5539781?wrap=1)
-- [ ] [Brooks - Elephants Don't Play Chess](https://canvas.sussex.ac.uk/courses/31028/files/5539218?wrap=1)
-
-
-
-[1] Braitenberg, V. (1986). Vehicles: Experiments in synthetic psychology. MIT press, Cambridge, MA.
-[2] Walter, W. G. (1953). The Living Brain. Duckworth, New York.
-[3] Holland, O. (2003). Exploration and high adventure: the legacy of Grey Walter. Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences, 361(1811):2085–2121.
-[5] Brooks, R. A. (1990). Elephants don’t play chess. Robotics and Autonomous Systems, 6(1-2):3–15.
-[6] Brooks, R. A. (1989). A robot that walks; emergent behaviors from a carefully evolved network. In Proceedings, 1989 International Conference on Robotics and Automation, pages 692–4+2 vol.2.
-[7] Brooks, R. (1986). A robust layered control system for a mobile robot. IEEE Journal on Robotics and Automation, 2(1):14– 23.
-[8] Brooks, R. A. (2002). Flesh and machines : how robots will change us. Pantheon Books, New York, N.Y., 1st ed.. edition.
-[9] Pfeifer, R. and Scheier, C. (2001). Understanding intelligence. MIT press.
-
-
+- [ ] [Brooks, R. A. (1990). Elephants don’t play chess. Robotics and Autonomous Systems](https://canvas.sussex.ac.uk/courses/31028/files/5539218?wrap=1)
+- [ ] [Holland, O. (2003). Exploration and high adventure: the legacy of Grey Walter](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_royalsociety_journals_RSTA1996v361i1811_0831072349_zip_rsta1996_361_issue_1811_rsta_2003_1260_rsta_2003_1260)
+- [ ] [Brooks, R. A. (1989). A robot that walks; emergent behaviors from a carefully evolved network](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_ieee_primary_100065)
+- [ ] [Brooks, R. (1986). A robust layered control system for a mobile robot](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_crossref_primary_10_1109_JRA_1986_1087032)
+- [ ] [Brooks, R. A. (2002). Flesh and machines : how robots will change us](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_proquest_reports_196776410)
+- [ ] [Pfeifer, R. and Scheier, C. (2001). Understanding intelligence](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_elsevier_sciencedirect_doi_10_1016_S0004_3702_01_00063_7)
