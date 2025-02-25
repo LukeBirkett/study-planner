@@ -23,6 +23,6 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [ ] C Bishop. Pattern recognition and machine learning. 2006. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019850002461?institute=44SUS_INST&auth=SAML) [Sections 4.1.7, 5.1-5.3]
 
 #### Additional
-- [ ] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. [Link]() [Section 7.1]
-- [ ] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. [Link]() [Chapter 20]
-- [ ] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link]() [Chapters 3-4, 6]
+- [ ] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) [Section 7.1]
+- [ ] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML) [Chapter 20]
+- [ ] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Chapters 3-4, 6]
