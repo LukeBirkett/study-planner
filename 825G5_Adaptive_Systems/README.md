@@ -14,7 +14,7 @@
 
 # [Reading Resources](https://canvas.sussex.ac.uk/courses/31028/pages/reading-and-additional-information?module_item_id=1492560)
 - [Defining adaptive systems](https://canvas.sussex.ac.uk/courses/31028/pages/defining-adaptive-systems)
-- [Cybernetics resources](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources)
+- [Cybernetics resources](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources) Week 3
 - [Stigmergy, self-organisation, and collective behaviour resources](https://canvas.sussex.ac.uk/courses/31028/pages/stigmergy-self-organisation-and-collective-behaviour-resources)
 - [Robotics resources](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources)
 - [Probability and information theory, and free energy related resources](https://canvas.sussex.ac.uk/courses/31028/pages/probability-and-information-theory-and-free-energy-related-resources)
