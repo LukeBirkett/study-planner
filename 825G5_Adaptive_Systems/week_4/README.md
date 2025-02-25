@@ -10,8 +10,11 @@
 - [ ] [Week 4 Lecture 2]()
 - [ ] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6494b641-a509-498a-bc88-b28900e9d23b)
 - [ ] Lecture Notes []
-- [ ] [Notebook Example]()
+- [ ] [Notebook Example - Sensorimotor_Example]()
 - [ ] [Seminar]()
 
 ## Readings
-- [ ] 
+- [ ] [Robotics Resources](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources?wrap=1)
+- [ ] [Braitenberg_vehicles](https://canvas.sussex.ac.uk/courses/31028/files/5539225?wrap=1)
+- [ ] [Brooks - Intelligence without representation](https://canvas.sussex.ac.uk/courses/31028/files/5539781?wrap=1)
+- [ ] [Brooks - Elephants Don't Play Chess](https://canvas.sussex.ac.uk/courses/31028/files/5539218?wrap=1)
