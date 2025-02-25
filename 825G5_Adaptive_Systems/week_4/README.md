@@ -1,5 +1,10 @@
 # [Week 4 Cybernetics](https://canvas.sussex.ac.uk/courses/31028/pages/week-4-sensorimotor-behaviour-2?module_item_id=1498247)
 #### Learning Objectives
+An introduction to:
+- The sensorimotor loop: a new kind of feedback loop, which we can’t necessarily characterise as positive or negative
+- For living agents (organisms) and robots, all “external” (or observed) behaviour is sensorimotor behaviour
+- Braitenberg’s vehicles: a thought experiment with simple sensorimotor systems
+- Which we will build upon in lab classes
 
 
 ---
