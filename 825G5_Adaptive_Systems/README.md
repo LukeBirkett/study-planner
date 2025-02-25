@@ -8,7 +8,7 @@
 - [Week 1 - Introduction](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_1)
 - [Week 2 - Systems](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_2)
 - [Week 3 - Cybernetics and Negative Feedback](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_3)
-- [Week 4 - Sensorimotor Behaviour]()
+- [Week 4 - Sensorimotor Behaviour](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_4)
 
 
 --- 
