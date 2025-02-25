@@ -17,6 +17,7 @@ In this lecture, I will introduce some core ideas, and then we will start to loo
 - [x] Lecture Notes [[Part 1](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_1/AS_W1_Notes.pdf), [Part 2](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_1/AS_W1_P2.pdf)]
 - [ ] [Python notebook implementation of biomorphs](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_1/biomorphs.zip)
 - [ ] [The coevolution game/Mesa](https://canvas.sussex.ac.uk/courses/31028/pages/the-coevolution-game?module_item_id=1492613)
+- [ ] [Mesa Labs Update](https://canvas.sussex.ac.uk/courses/31028/pages/main-labs-page?module_item_id=1496975)
 - [ ] [Padlet](https://uofsussex.padlet.org/cajohnson32/a-space-for-comments-and-questions-re-lecture-1-yrtjs0ty9pwcs2p0)
 
 ## Readings
