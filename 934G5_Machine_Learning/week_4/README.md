@@ -1,4 +1,4 @@
-# [Week 4 - Supervised Learning 3]()
+# [Week 4 - Supervised Learning 3](https://canvas.sussex.ac.uk/courses/31315/pages/week-4-supervised-learning-iii?module_item_id=1445747)
 This week, we will start to look at neural networks, which is a category of machine learning algorithms that can be used for supervised learning. 
 
 ### Learning outcomes:
