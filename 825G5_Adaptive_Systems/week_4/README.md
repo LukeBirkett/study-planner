@@ -13,7 +13,7 @@ An introduction to:
 - [x] [Introductory Text](https://canvas.sussex.ac.uk/courses/31028/pages/week-4-sensorimotor-behaviour-2?module_item_id=1498247)
 - [ ] [Week 4 Lecture 1 Braitenbergs_Vehicles](https://canvas.sussex.ac.uk/courses/31028/files/5585187?wrap=1)
 - [ ] [Week 4 Lecture 2]()
-- [ ] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6494b641-a509-498a-bc88-b28900e9d23b)
+- [ ] Lecture Recording: [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6494b641-a509-498a-bc88-b28900e9d23b)
 - [ ] Lecture Notes []()
 - [ ] [Notebook Example - Sensorimotor_Example]()
 - [ ] [Lab 0: Negative feedback control](https://canvas.sussex.ac.uk/courses/31028/pages/lab-0-negative-feedback-control?module_item_id=1496976)
