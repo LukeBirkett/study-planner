@@ -18,7 +18,7 @@ explored these algorithms in practice.
  
 ## Readings
 #### Compulsory
-- [ ] S Rogers, M Girolami. A first course in machine learning. 2017. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019840002461?institute=44SUS_INST&auth=SAML) **[Section 5.2, 5.3.2]**
+- [x] S Rogers, M Girolami. A first course in machine learning. 2017. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019840002461?institute=44SUS_INST&auth=SAML) **[Section 5.2, 5.3.2]**
 - [ ] J Zaki, W Meira. Data Mining and Machine Learning. 2020. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22133526900002461?institute=44SUS_INST&auth=SAML) **[Sections 18.1-18.2, 21, 24]**
 - [ ] C Cortes, V Vapnik. Support-vector networks. Machine learning, 20, pp.273-297. 1995. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019930002461?institute=44SUS_INST&auth=SAML)
 - [ ] I Rish. An empirical study of the naive Bayes classifier. IJCAI workshop on empirical methods in artificial intelligence, 3, 22, pp. 41-46. 2001. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22198469060002461?institute=44SUS_INST&auth=SAML)
