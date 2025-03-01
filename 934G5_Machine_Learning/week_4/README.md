@@ -11,7 +11,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 ## Content
 - [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5597260?wrap=1)
 - [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ee08e834-f339-4ee3-9499-b28800c38031)
-- [ ] Lecture Notes
+- [x] Lecture Notes [Perceptron](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/ML_L4_Perceptron.pdf), [Mutli-Perceptron](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/ML_L4_MultiPerceptron.pdf)
 - [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/Week%204.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/Week%204_with%20solutions.ipynb)
 - [ ] [Ungraded Assignment](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/Week%204_assignments.ipynb)
 - [ ] [Quiz: Perceptron & MLP](https://canvas.sussex.ac.uk/courses/31315/quizzes/50388)
