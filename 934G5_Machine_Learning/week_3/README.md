@@ -26,4 +26,4 @@ explored these algorithms in practice.
 #### Additional
 - [ ] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML) **[Chapters 15]**
 - [ ] C Bishop. Pattern recognition and machine learning. 2006. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019850002461?institute=44SUS_INST&auth=SAML) **[Sections 2.3, 4.3, 7.1]**
-- [ ] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) **[Chapters 6.1-6.3, 7.1, 12]**
+- [x] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) **[Chapters 6.1-6.3, 7.1, 12]**
