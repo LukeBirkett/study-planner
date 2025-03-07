@@ -29,5 +29,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [x] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) [Section 7.1]
 - [ ] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML) [Chapter 20] <br> 
   [Neural Networks]()
-- [ ] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Chapters 3-4, 6] <br> 
-  [Linear NN for Regression](),  [Linear NN for Classifcation](),  [Building Guide]()
+- [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Chapters 3-4, 6] <br> 
+  - [x] [Linear NN for Regression]() (Should revisit to implement from stratch tutorial)
+  - [x] [Linear NN for Classifcation]() (Should revisit to implement from stratch tutorial)
+  - [ ] [Building Guide]()
