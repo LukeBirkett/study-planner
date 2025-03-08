@@ -18,8 +18,8 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  
 ## Readings
 #### Compulsory
-- [ ] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Sections 5.1-5.3, 5.5] <br> 
-  [Multilayer Perceptron](),  [Mutlilayer Perceptron](),  [Generalization in DL]()
+- [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Sections 5.1-5.3, 5.5] <br> 
+  [Multilayer Perceptron](),  [Propagations and Graphs](),  [Generalization in DL]()
 - [ ] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) [Chapters 6, 8] <br>
   [Deep Feed Forward Networks](),  [Optimization for Training Deep Models]()
 - [ ] C Bishop. Pattern recognition and machine learning. 2006. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019850002461?institute=44SUS_INST&auth=SAML) [Sections 4.1.7, 5.1-5.3] <br>
