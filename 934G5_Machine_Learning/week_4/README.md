@@ -22,8 +22,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
   [Multilayer Perceptron](),  [Propagations and Graphs](),  [Generalization in DL]()
 - [ ] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) [Chapters 6, 8] <br>
   [Deep Feed Forward Networks](),  [Optimization for Training Deep Models]()
-- [ ] C Bishop. Pattern recognition and machine learning. 2006. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019850002461?institute=44SUS_INST&auth=SAML) [Sections 4.1.7, 5.1-5.3] <br>
-  [Perceptron Algo](),  [Feed Forward Network Functions](),  [Network Training](),  [Error Backprop]()
+- [x] C Bishop. Pattern recognition and machine learning. 2006. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019850002461?institute=44SUS_INST&auth=SAML) [Sections 4.1.7, 5.1-5.3]
 
 #### Additional
 - [x] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) [Section 7.1]
