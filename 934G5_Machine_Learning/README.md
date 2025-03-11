@@ -7,3 +7,7 @@
 - [Week 2 - Supervised Learning I](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_2)
 - [Week 3 - Supervised Learning II](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_3)
 - [Week 4 - Supervised Learning III](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_4)
+- [Week 5 - Model Validation I]()
+- [Week 6 - Model Validation II]()
+- [Week 7 - AI Ethics]()
+- [Week 8 - Advanced Neural Networks]()
