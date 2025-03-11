@@ -19,16 +19,17 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 ## Readings
 #### Compulsory
 - [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Sections 5.1-5.3, 5.5] <br> 
-  [Multilayer Perceptron](),  [Propagations and Graphs](),  [Generalization in DL]()
-- [ ] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) [Chapters 6, 8] <br>
-  [Deep Feed Forward Networks](),  [Optimization for Training Deep Models]()
+  - [x] [Multilayer Perceptron, Props and General](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/Zhang_CH5_Propagation.pdf)
+- [x] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) [Chapters 6, 8] <br>
+  - [x] [Deep Feed Forward Networks](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/Goodfellow_CH5_DeepNetworks.pdf)
+  - [x] Optimization for Training Deep Models
 - [x] C Bishop. Pattern recognition and machine learning. 2006. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019850002461?institute=44SUS_INST&auth=SAML) [Sections 4.1.7, 5.1-5.3]
 
 #### Additional
 - [x] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML) [Section 7.1]
-- [ ] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML) [Chapter 20] <br> 
-  [Neural Networks]()
+- [x] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML) [Chapter 20] <br> 
+  - [x] [Neural Networks](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/Shalev_CH20_NN.pdf)
 - [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Chapters 3-4, 6] <br> 
-  - [x] [Linear NN for Regression]() (Should revisit to implement from stratch tutorial)
-  - [x] [Linear NN for Classifcation]() (Should revisit to implement from stratch tutorial)
+  - [x] [Linear NN for Regression](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/Zhang_CH3_LinearNNReg.pdf)
+  - [x] [Linear NN for Classifcation](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/Zhang_CH4_LinearNNClassif.pdf)
   - [ ] [Building Guide]()
