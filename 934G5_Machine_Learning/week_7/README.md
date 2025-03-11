@@ -13,7 +13,7 @@ This week,
 - [ ] [Lecture Notes]()
 - [ ] [Lab]() [(Solutions)]()
 - [ ] [Ungraded Assignment]()
-- [ ] [Quiz: Perceptron & MLP]()
+- [ ] [Quiz: ]()
  
 ## Readings
 #### Compulsory
