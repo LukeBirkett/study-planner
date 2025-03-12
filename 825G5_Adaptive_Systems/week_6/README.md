@@ -28,9 +28,9 @@
 - [ ] [6] Heylighen, F. (2016). Stigmergy as a universal coordination mechanism i: Definition and components. Cognitive Systems Research, 38:4–13. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540202?wrap=1)
 - [ ] [7] Feldman, D. P. (2019). Chaos and Dynamical Systems. Princeton University Press.
 - [ ] [8] Stebbing, T. (2011). A cybernetic view of biological growth: the Maia hypothesis. Cambridge University Press.
-- [ ] [13] Riano, L. and McGinnity, M. (2010). Emergent behaviours driven by chaotic dynamics. In 2010 International Conference on Emerging Security Technologies, pages 159–164. IEEE.
-- [ ] [14] Beer, R. D. (1995). On the dynamics of small continuous-time recurrent neural networks. Adaptive Behavior, 3(4):469–509.
-- [ ] [15] Kaneko, K. and Tsuda, I. (2003). Chaotic itinerancy. Chaos: An Interdisciplinary Journal of Nonlinear Science, 13(3):926–936.
+- [ ] [13] Riano, L. and McGinnity, M. (2010). Emergent behaviours driven by chaotic dynamics. In 2010 International Conference on Emerging Security Technologies, pages 159–164. IEEE. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540151?wrap=1)
+- [ ] [14] Beer, R. D. (1995). On the dynamics of small continuous-time recurrent neural networks. Adaptive Behavior, 3(4):469–509. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540067?wrap=1)
+- [ ] [15] Kaneko, K. and Tsuda, I. (2003). Chaotic itinerancy. Chaos: An Interdisciplinary Journal of Nonlinear Science, 13(3):926–936. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540229?wrap=1)
 - [ ] [16] Shim, Y. and Husbands, P. (2012). Chaotic exploration and learning of locomotion behaviors. Neural computation, 24(8):2185–2222.
 - [ ] [17] William Ross Ashby. Design for a brain : the origin of adaptive behaviour. Chapman, London, 2nd edition, 1960.
 - [ ] [18] Wilson, E. O. (1976). The organization of colony defense in the ant Pheidole dentata Mayr (Hymenoptera: Formicidae). Behavioral Ecology and Sociobiology, 1, 63-81.
