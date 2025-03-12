@@ -12,9 +12,9 @@
 - [ ] Lecture Recording:
 
 ## Readings
-- [ ] [Stigmergy resources](https://canvas.sussex.ac.uk/courses/31028/pages/stigmergy-self-organisation-and-collective-behaviour-resources)
-- [ ] [Chaos resources (robotics)](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources)
-- [ ] [Cybernetics resources](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources)
+- [Stigmergy resources](https://canvas.sussex.ac.uk/courses/31028/pages/stigmergy-self-organisation-and-collective-behaviour-resources)
+- [Chaos resources (robotics)](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources)
+- [Cybernetics resources](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources)
 - [ ] Strogatz (2005). Crowd synchrony onvthe Millennium Bridge. [Link](https://www.nature.com/articles/438043a)
 - [ ] Belykh (2021). Emergence of the London Millennium Bridge instability without synchronisation.
 - [ ] Theraulaz and Bonabeau. (1999). A brief history of stigmergy.
