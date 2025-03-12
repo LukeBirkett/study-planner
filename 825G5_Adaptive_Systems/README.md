@@ -9,9 +9,9 @@
 - [Week 2 - Systems](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_2)
 - [Week 3 - Cybernetics and Negative Feedback](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_3)
 - [Week 4 - Sensorimotor Behaviour](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_4)
-- [Week 5 - Braitenberg Labs 1/2]()
-- [Week 6 - Positive Feedback]()
-- [Week 7 - Introducing Ashby]()
+- [Week 5 - Braitenberg Labs 1/2](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_5)
+- [Week 6 - Positive Feedback](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_6)
+- [Week 7 - Introducing Ashby](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_7)
 
 
 --- 
