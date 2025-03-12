@@ -36,6 +36,6 @@
 - [ ] [17] William Ross Ashby. Design for a brain : the origin of adaptive behaviour. Chapman, London, 2nd edition, 1960.
 - [ ] [18] Wilson, E. O. (1976). The organization of colony defense in the ant Pheidole dentata Mayr (Hymenoptera: Formicidae). Behavioral Ecology and Sociobiology, 1, 63-81.
 - [ ] [19] Holldobler, B., & Wilson, E. O. (2009). The superorganism: the beauty elegance and strangeness of insect societies. WW Norton & Company.
-- [ ] [21] Dorigo, M., Birattari, M., & Stutzle, T. (2006). Ant colony optimization. IEEE computational intelligence magazine, 1(4), 28-39.
+- [ ] [21] Dorigo, M., Birattari, M., & Stutzle, T. (2006). Ant colony optimization. IEEE computational intelligence magazine, 1(4), 28-39. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540205?wrap=1)
 - [ ] [22] Deneubourg, J. L., Aron, S., Goss, S., & Pasteels, J. M. (1990). The self-organizing exploratory pattern of the argentine ant. Journal of insect behavior, 3, 159-168.
 - [ ] [23] Ijspeert, A. J. (2008). Central pattern generators for locomotion control in animals and robots: a review. Neural networks, 21(4), 642-653.
