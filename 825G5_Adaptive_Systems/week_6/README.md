@@ -25,7 +25,7 @@
 - [ ] [2] Helbing, D., Schweitzer, F., Keltsch, J., and Molnár, P. (1997). Active walker model for the formation of human and animal trail systems. Physical Review E, 56(3):2527–2539.
 - [ ] [3] Mitchell, M. (2009). Complexity: A guided tour. Oxford University Press.
 - [ ] [4] Strogatz, S. H., Abrams, D. M., McRobie, A., Eckhardt, B., & Ott, E. (2005). Crowd synchrony on the Millennium Bridge. Nature (London), 438(7064), 43–44. https://doi.org/10.1038/438043a
-- [ ] [5] Deneubourg, J.-L., Goss, S., Franks, N., and Pasteels, J. M. (1989). The blind leading the blind: modeling chemically mediated army ant raid patterns. Journal of insect behavior, 2(5):719–725.
+- [ ] [5] Deneubourg, J.-L., Goss, S., Franks, N., and Pasteels, J. M. (1989). The blind leading the blind: modeling chemically mediated army ant raid patterns. Journal of insect behavior, 2(5):719–725. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5539537?wrap=1)
 - [ ] [6] Heylighen, F. (2016). Stigmergy as a universal coordination mechanism i: Definition and components. Cognitive Systems Research, 38:4–13. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540202?wrap=1)
 - [ ] [7] Feldman, D. P. (2019). Chaos and Dynamical Systems. Princeton University Press.
 - [ ] [8] Stebbing, T. (2011). A cybernetic view of biological growth: the Maia hypothesis. Cambridge University Press.
