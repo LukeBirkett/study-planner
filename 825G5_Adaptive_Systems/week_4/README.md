@@ -23,7 +23,7 @@ An introduction to:
 
 ## Readings
 - [ ] [Robotics Resources](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources?wrap=1)
-- [ ] [Braitenberg, V. (1986). Vehicles: Experiments in synthetic psychology](https://canvas.sussex.ac.uk/courses/31028/files/5539225?wrap=1)
+- [ ] [Braitenberg, V. (1986). Vehicles: Experiments in synthetic psychology](https://canvas.sussex.ac.uk/courses/31028/files/5539225?wrap=1) **must read
 - [ ] [Brooks - Intelligence without representation](https://canvas.sussex.ac.uk/courses/31028/files/5539781?wrap=1)
 - [ ] [Brooks, R. A. (1990). Elephants don’t play chess. Robotics and Autonomous Systems](https://canvas.sussex.ac.uk/courses/31028/files/5539218?wrap=1)
 - [ ] [Holland, O. (2003). Exploration and high adventure: the legacy of Grey Walter](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/1idjcfu/cdi_royalsociety_journals_RSTA1996v361i1811_0831072349_zip_rsta1996_361_issue_1811_rsta_2003_1260_rsta_2003_1260)
