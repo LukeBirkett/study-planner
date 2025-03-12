@@ -20,7 +20,7 @@
 - [Defining adaptive systems](https://canvas.sussex.ac.uk/courses/31028/pages/defining-adaptive-systems)
 - [Cybernetics resources](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources) Week 3
 - [Robotics resources](https://canvas.sussex.ac.uk/courses/31028/pages/robotics-resources) Week 4
-- [Stigmergy, self-organisation, and collective behaviour resources](https://canvas.sussex.ac.uk/courses/31028/pages/stigmergy-self-organisation-and-collective-behaviour-resources)
+- [Stigmergy, self-organisation, and collective behaviour resources](https://canvas.sussex.ac.uk/courses/31028/pages/stigmergy-self-organisation-and-collective-behaviour-resources) Week 6
 - [Probability and information theory, and free energy related resources](https://canvas.sussex.ac.uk/courses/31028/pages/probability-and-information-theory-and-free-energy-related-resources)
 - [Autopoiesis resources](https://canvas.sussex.ac.uk/courses/31028/pages/autopoiesis-resources)
 - [Artificial immune systems](https://canvas.sussex.ac.uk/courses/31028/pages/artificial-immune-systems)
