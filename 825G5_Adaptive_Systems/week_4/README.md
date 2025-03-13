@@ -11,7 +11,7 @@ An introduction to:
 ## Content
 - [x] [Introductory Text](https://canvas.sussex.ac.uk/courses/31028/pages/week-4-sensorimotor-behaviour-2?module_item_id=1498247)
 - [ ] [Week 4 Lecture 1 Braitenbergs_Vehicles](https://canvas.sussex.ac.uk/courses/31028/files/5585187?wrap=1)
-- [ ] [Week 4 Lecture 2]()
+- [ ] [Week 4 Lecture 2 Sensorimotor Behaviour](https://canvas.sussex.ac.uk/courses/31028/files/5597677?wrap=1)
 - [ ] Lecture Recording:
   - [x] [4.1 Braitenbergs_Vehicles Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6494b641-a509-498a-bc88-b28900e9d23b#:~:text=1%3A23%3A30-,ibliography,-1%3A26%3A57)
   - [ ] [4.1 Braitenbergs_Vehicles Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e0b072db-c13a-4f72-aebb-b29000e760a5#:~:text=Bookmarks-,MECHAI,-0%3A29)
