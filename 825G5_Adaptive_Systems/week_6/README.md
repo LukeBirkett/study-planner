@@ -10,7 +10,7 @@
 - [ ] [Week 6 Lecture_5.2_P1: Stigmergy, P2: Chaos](https://canvas.sussex.ac.uk/courses/31028/files/5608013?wrap=1)
 - [ ] [BVP Notebook](https://canvas.sussex.ac.uk/courses/31028/files/5539168?wrap=1)
 - [ ] Lecture Recording:
-  - [ ] [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=172cf668-25b4-48cd-95c9-b29700e6cb86#:~:text=43%3A27-,Adaptive,-Systems)
+  - [x] [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=172cf668-25b4-48cd-95c9-b29700e6cb86#:~:text=43%3A27-,Adaptive,-Systems)
   - [ ] [Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1ef82b38-cba6-4015-8c98-b29e00e6db7a)
 
 ## Readings
