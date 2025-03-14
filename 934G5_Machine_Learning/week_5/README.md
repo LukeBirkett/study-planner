@@ -9,8 +9,8 @@ By the end of this unit of teaching and learning, you will have learnt about:
 ---
 
 ## Content
-- [ ] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5302043?wrap=1)
-- [ ] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=32d50556-1ebb-477f-a7af-b290008f0d87)
+- [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5302043?wrap=1)
+- [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=32d50556-1ebb-477f-a7af-b290008f0d87)
 - [ ] [Lecture Notes]()
  
 ## Readings
