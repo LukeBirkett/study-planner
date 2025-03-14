@@ -1,4 +1,4 @@
-# [Week 6 - Model Valid II](https://canvas.sussex.ac.uk/courses/31315/pages/week-6-model-validation-ii?module_item_id=1445749)
+# [Week 6 - Model Validation II](https://canvas.sussex.ac.uk/courses/31315/pages/week-6-model-validation-ii?module_item_id=1445749)
 This week, we will look at data dimensionality reduction for input data as well as model evaluation strategies and metrics. 
 
 ### Learning outcomes:
