@@ -17,7 +17,7 @@ An introduction to:
   - [x] [4.1 Braitenbergs_Vehicles Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e0b072db-c13a-4f72-aebb-b29000e760a5#:~:text=Bookmarks-,MECHAI,-0%3A29)
   - [x] [4.2 Sensorimotor_Systems Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e0b072db-c13a-4f72-aebb-b29000e760a5#:~:text=33%3A09-,Adaptive,-Systems)
   - [x] [4.2 Sensorimotor_Systems Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=172cf668-25b4-48cd-95c9-b29700e6cb86#:~:text=Bookmarks-,Compare,-and%20contrast%20the)
-- [ ] [Lecture Notes]()
+- [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_4/AS_4.1_4.2_Braiten_Sensi.pdf)
 - [ ] [Notebook Example - Sensorimotor_Example]()
 - [ ] [Lab 0: Negative feedback control](https://canvas.sussex.ac.uk/courses/31028/pages/lab-0-negative-feedback-control?module_item_id=1496976)
 
