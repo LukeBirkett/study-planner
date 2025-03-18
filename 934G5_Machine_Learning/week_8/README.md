@@ -11,7 +11,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 ## Content
 - [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5334866?wrap=1)
 - [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b2fc1a4-37c5-454a-a46b-b2a300f6b744)
-- [ ] [Lecture Notes]()
+- [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_8/ML_Week_8_AdvancedNN.pdf)
 - [ ] [Lab]() [(Solutions)]()
 - [ ] [Ungraded Assignment]()
 - [ ] [Quiz: CNNs, RNNs](https://canvas.sussex.ac.uk/courses/31315/quizzes/50390)
