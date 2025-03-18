@@ -1,4 +1,4 @@
-# [Week 7 - AI Ethics]()
+# [Week 7 - AI Ethics](https://canvas.sussex.ac.uk/courses/31315/pages/week-7-ai-ethics?module_item_id=1445750)
 This week, we will look at some of the risks and issues of machine learning and reflect on principles that are important for a machine learning developer to consider in order to develop systems that have an ethically aligned design and support human flourishing, rather than (intended or unintended) negative individual, communal, societal, or global impact.
 
 ### Learning outcomes:
