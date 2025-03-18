@@ -9,8 +9,8 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 ---
 
 ## Content
-- [ ] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5334866?wrap=1)
-- [ ] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b2fc1a4-37c5-454a-a46b-b2a300f6b744)
+- [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5334866?wrap=1)
+- [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b2fc1a4-37c5-454a-a46b-b2a300f6b744)
 - [ ] [Lecture Notes]()
 - [ ] [Lab]() [(Solutions)]()
 - [ ] [Ungraded Assignment]()
