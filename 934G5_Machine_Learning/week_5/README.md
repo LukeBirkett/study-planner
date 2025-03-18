@@ -11,7 +11,7 @@ By the end of this unit of teaching and learning, you will have learnt about:
 ## Content
 - [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5302043?wrap=1)
 - [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=32d50556-1ebb-477f-a7af-b290008f0d87)
-- [ ] [Lecture Notes]()
+- [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_5/ML_Week_5_ModelValid1.pdf)
  
 ## Readings
 - [ ] A Paullada, ID Raji, EM Bender, E Denton, and A Hanna. Data and its (dis) contents: A survey of dataset development and use in machine learning research. Patterns 2, no. 11. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019960002461?institute=44SUS_INST&auth=SAML)
