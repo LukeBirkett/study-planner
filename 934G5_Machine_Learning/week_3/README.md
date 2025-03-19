@@ -11,9 +11,9 @@ explored these algorithms in practice.
 - [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5575143?wrap=1)
 - [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a80b784a-d17f-466c-be98-b28000f7e3a5)
 - [x] Lecture Notes [Logistic Regression](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/ML_Logistic_Regression.pdf) [SVM](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/ML_SVM.pdf) [Bayes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/ML_Naive_Bayes.pdf) 
-- [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/Week%203.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/Week%203_with%20solutions.ipynb)
+- [x] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/Week%203.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/Week%203_with%20solutions.ipynb)
 - [ ] [Ungraded Assignment](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/Week%203_assignments.ipynb)
-- [ ] Datasets [[1](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/curated_data_1month_2010-2022_nonans.csv), [2](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/Metadata_VARIABLES.xlsx)]
+- [x] Datasets [[1](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/curated_data_1month_2010-2022_nonans.csv), [2](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_3/Metadata_VARIABLES.xlsx)]
 - [x] [Quiz: SVM, Bayes classifier, Logistic regression](https://canvas.sussex.ac.uk/courses/31315/quizzes/50387)
  
 ## Readings
