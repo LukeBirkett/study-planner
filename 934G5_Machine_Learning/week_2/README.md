@@ -14,7 +14,7 @@ explored these algorithms in practice.
 - [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/ML_W2_Notes.pdf)
 - [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202_with%20solutions.ipynb)
 - [ ] [Ungraded Assignment](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202_assignments.ipynb)
-- [ ] [Quiz](https://canvas.sussex.ac.uk/courses/31315/quizzes/50568)
+- [x] [Quiz](https://canvas.sussex.ac.uk/courses/31315/quizzes/50568)
  
 ## Readings
 #### Compulsory
