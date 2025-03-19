@@ -12,7 +12,7 @@ explored these algorithms in practice.
 - [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5250165?wrap=1)
 - [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a32813c8-3179-4314-a505-b27900f80b90)
 - [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/ML_W2_Notes.pdf)
-- [ ] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202_with%20solutions.ipynb)
+- [x] [Lab](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202.ipynb) [(Solutions)](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202_with%20solutions.ipynb)
 - [ ] [Ungraded Assignment](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_2/Week%202_assignments.ipynb)
 - [x] [Quiz](https://canvas.sussex.ac.uk/courses/31315/quizzes/50568)
  
