@@ -11,4 +11,10 @@ In earlier lectures we saw how some systems are self-stable, meaning that they a
   - [ ] [Part 1](https://canvas.sussex.ac.uk/courses/31028/pages/week-7-introducing-ashby?module_item_id=1499770) 
 
 ## Readings
-- [ ] 
+- [ ] William Ross Ashby. Design for a brain : the origin of adaptive behaviour
+- [ ] William Ross Ashby. The nervous system as physical machine; with special reference to the origin of adaptive behaviour
+- [ ] William Ross Ashby. Adaptiveness and equilibrium
+- [ ] William Ross Ashby. An introduction to cybernetics
+- [ ] Gina Turrigiano. Homeostatic signaling: the positive side of negative feedback
+- [ ] Yoonsik Shim and Phil Husbands. Chaotic exploration and learning of locomotion behaviors
+- [ ] Xabier E. Barandiaran and Matthew D. Egbert. Norm-establishing and norm- following in autonomous agency
