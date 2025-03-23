@@ -11,10 +11,10 @@ In earlier lectures we saw how some systems are self-stable, meaning that they a
   - [ ] [Part 1](https://canvas.sussex.ac.uk/courses/31028/pages/week-7-introducing-ashby?module_item_id=1499770) 
 
 ## Readings
-- [ ] William Ross Ashby. Design for a brain : the origin of adaptive behaviour
-- [ ] William Ross Ashby. The nervous system as physical machine; with special reference to the origin of adaptive behaviour
-- [ ] William Ross Ashby. Adaptiveness and equilibrium
-- [ ] William Ross Ashby. An introduction to cybernetics
+- [ ] William Ross Ashby. Design for a brain : the origin of adaptive behaviour 1960 [Link](https://canvas.sussex.ac.uk/courses/31028/files/5539260?wrap=1)
+- [ ] William Ross Ashby. The nervous system as physical machine; with special reference to the origin of adaptive behaviour [Link](https://canvas.sussex.ac.uk/courses/31028/files/5540140?wrap=1) 
+- [ ] William Ross Ashby. Adaptiveness and equilibrium 1940 [Link](https://canvas.sussex.ac.uk/courses/31028/files/5540158?wrap=1)
+- [ ] William Ross Ashby. An introduction to cybernetics 1956 [Link](https://canvas.sussex.ac.uk/courses/31028/files/5540080?wrap=1)
 - [ ] Gina Turrigiano. Homeostatic signaling: the positive side of negative feedback
-- [ ] Yoonsik Shim and Phil Husbands. Chaotic exploration and learning of locomotion behaviors
-- [ ] Xabier E. Barandiaran and Matthew D. Egbert. Norm-establishing and norm- following in autonomous agency
+- [ ] Yoonsik Shim and Phil Husbands. Chaotic exploration and learning of locomotion behaviors [Link](https://canvas.sussex.ac.uk/courses/31028/files/5540062?wrap=1)
+- [ ] Xabier E. Barandiaran and Matthew D. Egbert. Norm-establishing and norm- following in autonomous agency [Link](https://canvas.sussex.ac.uk/courses/31028/files/5540010?wrap=1)
