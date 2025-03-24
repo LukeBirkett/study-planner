@@ -5,10 +5,10 @@ In earlier lectures we saw how some systems are self-stable, meaning that they a
 ---
 
 ## Content
-- [ ] [Lecture_6.1 Ashby Definition](https://canvas.sussex.ac.uk/courses/31028/files/5619045?wrap=1)
+- [x] [Lecture_6.1 Ashby Definition](https://canvas.sussex.ac.uk/courses/31028/files/5619045?wrap=1)
 - [ ] [Lecture_6.1 Ashby Introduction](https://canvas.sussex.ac.uk/courses/31028/files/5629079?module_item_id=1500264)
 - [ ] Lecture Recording:
-  - [ ] [Part 1](https://canvas.sussex.ac.uk/courses/31028/pages/week-7-introducing-ashby?module_item_id=1499770) 
+  - [x] [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=92a0c585-1984-45ef-87a9-b2a500e7242b) 
 
 ## Readings
 - [ ] William Ross Ashby. Design for a brain : the origin of adaptive behaviour 1960 [Link](https://canvas.sussex.ac.uk/courses/31028/files/5539260?wrap=1)
