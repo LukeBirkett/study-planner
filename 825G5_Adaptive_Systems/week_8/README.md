@@ -23,7 +23,9 @@ Ashby's general theory of the ultrastable system is so general and so abstract t
 - [ ] Lecture Recording:
   - [ ] [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d77159fc-166c-4689-8bfd-b2ac00e7963b)
   - [ ] [Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7705af40-c56f-4a11-94a6-b2b1010bf813)
-- [ ] [Lecture Notes: ])
+- [ ] [Lecture Notes: ]()
+- [ ] [Lab 3 part 1 - Simulating Ashby's Homeostat](https://canvas.sussex.ac.uk/courses/31028/pages/lab-3-part-1-simulating-ashbys-homeostat?module_item_id=1500792)
+- [ ] [Lab 3 part 2 - Analysing Ashby's Homeostat](https://canvas.sussex.ac.uk/courses/31028/pages/lab-3-part-2-analysing-ashbys-homeostat?module_item_id=1500793)
 
 ## Readings
 - [Ashby Writtings](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources)
