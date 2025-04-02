@@ -11,5 +11,5 @@
 - [Week 6 - Model Validation II](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_6)
 - [Week 7 - AI Ethics](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_7)
 - [Week 8 - Advanced Neural Networks](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_8)
-- [Week 9 - Beyond Supervised Learning](https://canvas.sussex.ac.uk/courses/31315/pages/week-9-beyond-supervised-learning?module_item_id=1445752)
-- [Week 10 - Reinforcement Learning](https://canvas.sussex.ac.uk/courses/31315/pages/week-10-attention?module_item_id=1445753)
+- [Week 9 - Beyond Supervised Learning]()
+- [Week 10 - Reinforcement Learning]()
