@@ -11,5 +11,5 @@
 - [Week 6 - Model Validation II](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_6)
 - [Week 7 - AI Ethics](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_7)
 - [Week 8 - Advanced Neural Networks](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_8)
-- [Week 9 - Beyond Supervised Learning]()
-- [Week 10 - Reinforcement Learning]()
+- [Week 9 - Beyond Supervised Learning](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_9)
+- [Week 10 - Reinforcement Learning](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_10)
