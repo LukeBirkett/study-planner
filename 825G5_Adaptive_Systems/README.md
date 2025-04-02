@@ -13,6 +13,7 @@
 - [Week 6 - Positive Feedback](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_6)
 - [Week 7 - Introducing Ashby](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_7)
 - [Week 8 - Ashby & Ultrastable Systems](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_8)
+- [Week 9 - Evorobotics]()
 
 
 --- 
