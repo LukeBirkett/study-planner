@@ -32,3 +32,7 @@ pip install numpy
 pip install matplotlib
 pip install scikit-learn
 ```
+
+```
+touch my_script.py
+```
