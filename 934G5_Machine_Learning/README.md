@@ -26,3 +26,7 @@ python -m ipykernel install --user --name=myenv
 pip install notebook
 jupyter notebook
 ```
+
+```
+pip install numpy
+```
