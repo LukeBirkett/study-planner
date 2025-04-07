@@ -13,3 +13,16 @@
 - [Week 8 - Advanced Neural Networks](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_8)
 - [Week 9 - Beyond Supervised Learning](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_9)
 - [Week 10 - Reinforcement Learning](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_10)
+
+---
+
+#### Set New Venv
+
+```
+python -m venv myenv
+source myenv/bin/activate
+pip install ipykernel
+python -m ipykernel install --user --name=myenv
+pip install notebook
+jupyter notebook
+```
