@@ -1,4 +1,4 @@
-# [Week - Ashby and Ultrastable](https://canvas.sussex.ac.uk/courses/31028/pages/week-8-ashby-and-ultrastable-systems?module_item_id=1500418)
+# [Week 8 - Ashby and Ultrastable](https://canvas.sussex.ac.uk/courses/31028/pages/week-8-ashby-and-ultrastable-systems?module_item_id=1500418)
 #### Learning Objectives
 Having covered the preliminaries of Ashby's state-determined systems approach to modelling systems, we move on to some of the more interesting aspects of his theories today.  
 
