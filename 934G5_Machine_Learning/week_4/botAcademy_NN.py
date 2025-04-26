@@ -93,16 +93,28 @@ for epoch in range(epochs):
         b_h_o += -learn_rate * delta_o
 
         print("Backprop")
-        print("Mean Square Error derives down to output - labels")
+        print("Mean Square Error derives down to delta_o = (output - labels)")
+
+        print(f"hidden neuron shape is: {h.shape}")
+        print(f"This is will transformed into a row of shape: {np.transpose(h).shape}")
+        print(f"This is because it will be MATMUL aginst the derivative loss function of shape: {delta_o.shape}")
+        print(f"The goal is to obtain a matrix of the same size a w_h_o ({w_h_o.shape}) so the weights can be updated")
+        print(f"MATMUL retains the rows of LHS and cols of RHS")
+
 
         # Backpropagation hidden -> input (activation function derivative)
         delta_h = np.transpose(w_h_o) @ delta_o * (h * (1 - h))
-        w_i_h += -learn_rate * delta_h @ np.transpose(img) # (20, 1) @ (1, 784)
+        w_i_h += -learn_rate * delta_h @ np.transpose(img)
         b_i_h += -learn_rate * delta_h
 
-        print(delta_h.shape)
-        print(np.transpose(img).shape)
-        print((delta_h @ np.transpose(img)).shape)
+        print(f"Hidden player neurons is a more involved derivative")
+        print(f"(h * (1 - h)) is the derivative of the sigmoid activation")
+        print(f"Following from that the process is the same as previous step")
+        print(f"Sigmoid derivative shape: {(h * (1 - h)).shape}")
+        print(f"delta_o shape: {delta_o.shape}")
+        print(f"w_h_o transposed shape: {np.transpose(w_h_o).shape}")
+        print(f"{np.transpose(w_h_o).shape} @ {delta_o.shape} * {(h * (1 - h)).shape}")
+        print(f"MATMUL takes precedence over elementwise operation")
 
         if i == 0:
             break
