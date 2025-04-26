@@ -5,8 +5,8 @@ In earlier lectures we saw how some systems are self-stable, meaning that they a
 ---
 
 ## Content
-- [x] [Lecture_6.1 Ashby Definition](https://canvas.sussex.ac.uk/courses/31028/files/5619045?wrap=1) [Notes]()
-- [x] [Lecture_6.2 Ashby Introduction Dynamical Systems](https://canvas.sussex.ac.uk/courses/31028/files/5629079?module_item_id=1500264) [Notes]()
+- [x] [Lecture_6.1 Ashby Definition](https://canvas.sussex.ac.uk/courses/31028/files/5619045?wrap=1) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_7/AS_6.1_Ashby_Defintions_Intro.pdf)
+- [x] [Lecture_6.2 Ashby Introduction Dynamical Systems](https://canvas.sussex.ac.uk/courses/31028/files/5629079?module_item_id=1500264) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_7/AS_6.2_Ashby_Dynamic_Systems.pdf)
 - [x] Lecture Recording:
   - [x] [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=92a0c585-1984-45ef-87a9-b2a500e7242b)
   - [x] [Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d77159fc-166c-4689-8bfd-b2ac00e7963b)
