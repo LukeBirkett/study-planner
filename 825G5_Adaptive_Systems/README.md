@@ -18,7 +18,13 @@
 ---
 
 # [Labs](https://canvas.sussex.ac.uk/courses/31028/pages/main-labs-page?module_item_id=1498549)
-- [ ] []()
+- [ ] [Lab 0](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_0)
+- [ ] [Lab 1](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_1)
+- [ ] [Lab 2](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_2)
+- [ ] [Lab 3](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_3)
+- [ ] [Lab 4](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_4)
+- [ ] [Lab 5](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_5)
+- [ ] [Lab 6](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_6)
 
 --- 
 
