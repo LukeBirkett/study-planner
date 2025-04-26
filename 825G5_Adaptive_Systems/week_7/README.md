@@ -6,7 +6,7 @@ In earlier lectures we saw how some systems are self-stable, meaning that they a
 
 ## Content
 - [x] [Lecture_6.1 Ashby Definition](https://canvas.sussex.ac.uk/courses/31028/files/5619045?wrap=1)
-- [ ] [Lecture_6.1 Ashby Introduction](https://canvas.sussex.ac.uk/courses/31028/files/5629079?module_item_id=1500264)
+- [ ] [Lecture_6.2 Ashby Introduction](https://canvas.sussex.ac.uk/courses/31028/files/5629079?module_item_id=1500264)
 - [ ] Lecture Recording:
   - [x] [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=92a0c585-1984-45ef-87a9-b2a500e7242b)
   - [ ] [Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d77159fc-166c-4689-8bfd-b2ac00e7963b)
