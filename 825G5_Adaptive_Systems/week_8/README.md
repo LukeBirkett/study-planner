@@ -1,5 +1,8 @@
 # [Week 8 - Ashby and Ultrastable](https://canvas.sussex.ac.uk/courses/31028/pages/week-8-ashby-and-ultrastable-systems?module_item_id=1500418)
-#### Learning Objectives
+
+<details>
+  <summary><strong>Learning Objectives</strong></summary>
+  
 Having covered the preliminaries of Ashby's state-determined systems approach to modelling systems, we move on to some of the more interesting aspects of his theories today.  
 
 Although Ashby's theories are generally abstract enough to be applied to many kinds of system, he was most interested in living systems, and the nervous systems of animals. He begins his explanation of adaptive behaviour by thinking about what is required for a living system to continue its survival, and introduces the idea of essential variables [1]. Any living organism, even a single cell, will have a number of variables which we can observe and potentially measure. Of that large set of variables, some are free to change without harm to the organism, but some physiological variables are critical, or essential, to use Ashby's word. In animals, the essential variables include core body temperature, blood sugar level, and oxygen intake.
@@ -14,7 +17,9 @@ He defines the living system as being stable as long as it keeps those essential
 He defines adaptive behaviour as being the mechanistic behaviour which leads to such stability. In other words, for Ashby an adaptive system is simply a stable one.
 The early cyberneticians, in particular Rosenblueth, Wiener and Bigelow, were inspired by biological homeostasis when they were developing ideas around negative feedback loops and circular causality. Ashby was also inspired by homeostasis, and called his famous machine the Homeostat. However, Ashby's theory of ultrastable systems was based on more than negative feedback loops, and answered the question: how can a system remain adaptive in situations where simple negative feedback loops are insufficient to compensate for the disturbances the system encounters? Essentially, when an ultrastable system detects that it is no longer in a stable or viable state, it reorganises its behaviour, for example by adjusting some of its own parameters.
 
-Ashby's general theory of the ultrastable system is so general and so abstract that I tend to think of it less as a model, and more as a template which many models may be based on. Many kinds of adaptive, or self-adaptive, system can be described in terms of ultrastability - whether they are biological or human made. In the biological case, the essential variables are explicitly connected to survival. In the case of the a human-made ultrastable system, we are free to use either some physical limits or some measures of performance as being the essential variables, as we shall see in a demonstration after the lecture, and again in future lectures.
+Ashby's general theory of the ultrastable system is so general and so abstract that I tend to think of it less as a model, and more as a template which many models may be based on. Many kinds of adaptive, or self-adaptive, system can be described in terms of ultrastability - whether they are biological or human made. In the biological case, the essential variables are explicitly c
+
+</details>
 
 ---
 
@@ -29,15 +34,13 @@ Ashby's general theory of the ultrastable system is so general and so abstract t
 - [ ] [Lab 3 part 2 - Analysing Ashby's Homeostat](https://canvas.sussex.ac.uk/courses/31028/pages/lab-3-part-2-analysing-ashbys-homeostat?module_item_id=1500793)
 
 ## Readings
-- [Ashby Writtings](https://canvas.sussex.ac.uk/courses/31028/pages/cybernetics-resources)
-
-- [ ] [1] William Ross Ashby. Design for a brain : the origin of adaptive behaviour. Chapman, London, 2nd edition, 1960.
-- [ ] [2] William Ross Ashby. Adaptiveness and equilibrium. Journal of Mental Science, 86(362):478–483, 1940.
-- [ ] [3] Xabier E. Barandiaran and Matthew D. Egbert. Norm-establishing and norm-following in autonomous agency. Artificial Life, 20(1):5–28, 2014.
-- [ ] [7] Yoonsik Shim and Phil Husbands. Chaotic exploration and learning of locomotion behaviors. Neural computation, 24(8):2185–2222, 2012.
-- [ ] [8] Peter A Cariani. The homeostat as embodiment of adaptive control. International Journal of General Systems, 38(2):139–154, 2009.
-- [ ] [10] Strogatz, S. H., Abrams, D. M., McRobie, A., Eckhardt, B., & Ott, E. (2005). Crowd synchrony on the Millennium Bridge. Nature (London), 438(7064), 43–44. https://doi.org/10.1038/438043a
-- [ ] [11] Belykh, I., Bocian, M., Champneys, A. R., Daley, K., Jeter, R., Macdonald, J. H., & McRobie, A. (2021). Emergence of the London Millennium Bridge instability without synchronisation. Nature communications, 12(1), 7223.
-- [ ] [22] Miyashita, S., Guitron, S., Li, S., & Rus, D. (2017). Robotic metamorphosis by origami exoskeletons. Science Robotics, 2(10).
-- [ ] [23] Ashby W.R. (1958) Requisite variety and its implications for the control of complex systems, Cybernetica 1:2, p. 83-99.
-- [ ] [24] Astrom, K. J. (1987). Adaptive feedback control. Proceedings of the IEEE, 75(2), 185-217.
+- [ ] William Ross Ashby. Design for a brain : the origin of adaptive behaviour. Chapman, London, 2nd edition, 1960.
+- [ ] William Ross Ashby. Adaptiveness and equilibrium. Journal of Mental Science, 86(362):478–483, 1940.
+- [ ] Xabier E. Barandiaran and Matthew D. Egbert. Norm-establishing and norm-following in autonomous agency. Artificial Life, 20(1):5–28, 2014.
+- [ ] Yoonsik Shim and Phil Husbands. Chaotic exploration and learning of locomotion behaviors. Neural computation, 24(8):2185–2222, 2012.
+- [ ] Peter A Cariani. The homeostat as embodiment of adaptive control. International Journal of General Systems, 38(2):139–154, 2009.
+- [ ] Strogatz, S. H., Abrams, D. M., McRobie, A., Eckhardt, B., & Ott, E. (2005). Crowd synchrony on the Millennium Bridge. Nature (London), 438(7064), 43–44. https://doi.org/10.1038/438043a
+- [ ] Belykh, I., Bocian, M., Champneys, A. R., Daley, K., Jeter, R., Macdonald, J. H., & McRobie, A. (2021). Emergence of the London Millennium Bridge instability without synchronisation. Nature communications, 12(1), 7223.
+- [ ] Miyashita, S., Guitron, S., Li, S., & Rus, D. (2017). Robotic metamorphosis by origami exoskeletons. Science Robotics, 2(10).
+- [ ] Ashby W.R. (1958) Requisite variety and its implications for the control of complex systems, Cybernetica 1:2, p. 83-99.
+- [ ] Astrom, K. J. (1987). Adaptive feedback control. Proceedings of the IEEE, 75(2), 185-217.
