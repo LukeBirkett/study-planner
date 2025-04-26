@@ -4,7 +4,7 @@
 [Additional Reading](https://canvas.sussex.ac.uk/courses/31028/pages/reading-and-additional-information?module_item_id=1492560) /
 [Main Lab Page](https://canvas.sussex.ac.uk/courses/31028/pages/main-labs-page)
 
-# [Weeks](https://canvas.sussex.ac.uk/courses/31028/modules)
+# [Lectures](https://canvas.sussex.ac.uk/courses/31028/modules)
 - [Week 1 - Introduction](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_1)
 - [Week 2 - Systems](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_2)
 - [Week 3 - Cybernetics and Negative Feedback](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_3)
@@ -15,6 +15,10 @@
 - [Week 8 - Ashby & Ultrastable Systems](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_8)
 - [Week 9 - Evorobotics](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_9)
 
+---
+
+# [Labs](https://canvas.sussex.ac.uk/courses/31028/pages/main-labs-page?module_item_id=1498549)
+- [ ] []()
 
 --- 
 
