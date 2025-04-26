@@ -31,7 +31,6 @@
 - [ ] Beer (1995). On the dynamics of small continuous-time recurrent neural networks. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540067?wrap=1)
 - [ ] Kaneko Tsuda (2003). Chaotic itinerancy. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540229?wrap=1)
 - [ ] Shim and Husbands. (2012). Chaotic exploration and learning of locomotion behaviors. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540062?wrap=1)
-- [ ] William Ross Ashby. Design for a brain : the origin of adaptive behaviour. Chapman, London, 2nd edition, 1960.
 - [ ] Wilson (1976). The organization of colony defense in the ant Pheidole dentata Mayr. 
 - [ ] Holldobler and Wilson (2009). The superorganism: the beauty elegance and strangeness of insect societies.
 - [ ] Dorigo & Birattari & Stutzle (2006). Ant colony optimization. [Link Canvas](https://canvas.sussex.ac.uk/courses/31028/files/5540205?wrap=1)
