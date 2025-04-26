@@ -34,13 +34,7 @@ Ashby's general theory of the ultrastable system is so general and so abstract t
 - [ ] [Lab 3 part 2 - Analysing Ashby's Homeostat](https://canvas.sussex.ac.uk/courses/31028/pages/lab-3-part-2-analysing-ashbys-homeostat?module_item_id=1500793)
 
 ## Readings
-- [ ] William Ross Ashby. Design for a brain : the origin of adaptive behaviour. Chapman, London, 2nd edition, 1960.
-- [ ] William Ross Ashby. Adaptiveness and equilibrium. 1940.
-- [ ] Xabier E. Barandiaran and Matthew D. Egbert. Norm-establishing and norm-following in autonomous agency. 2014.
-- [ ] Yoonsik Shim and Phil Husbands. Chaotic exploration and learning of locomotion behaviors. 2012.
 - [ ] Peter A Cariani. The homeostat as embodiment of adaptive control. 2009.
-- [ ] Strogatz, S. H., Abrams, D. M., McRobie, A., Eckhardt, B., & Ott, E. (2005). Crowd synchrony on the Millennium Bridge.
-- [ ] Belykh, I., Bocian, M., Champneys, A. R., Daley, K., Jeter, R., Macdonald, J. H., & McRobie, A. (2021). Emergence of the London Millennium Bridge instability without synchronisation.
 - [ ] Miyashita, S., Guitron, S., Li, S., & Rus, D. (2017). Robotic metamorphosis by origami exoskeletons.
 - [ ] Ashby W.R. (1958) Requisite variety and its implications for the control of complex systems
 - [ ] Astrom, K. J. (1987). Adaptive feedback control.
