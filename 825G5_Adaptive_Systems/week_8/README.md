@@ -32,9 +32,3 @@ Ashby's general theory of the ultrastable system is so general and so abstract t
 #### Labs
 - [ ] [Lab 3 part 1 - Simulating Ashby's Homeostat](https://canvas.sussex.ac.uk/courses/31028/pages/lab-3-part-1-simulating-ashbys-homeostat?module_item_id=1500792)
 - [ ] [Lab 3 part 2 - Analysing Ashby's Homeostat](https://canvas.sussex.ac.uk/courses/31028/pages/lab-3-part-2-analysing-ashbys-homeostat?module_item_id=1500793)
-
-## Readings
-- [ ] Peter A Cariani. The homeostat as embodiment of adaptive control. 2009.
-- [ ] Miyashita, S., Guitron, S., Li, S., & Rus, D. (2017). Robotic metamorphosis by origami exoskeletons.
-- [ ] Ashby W.R. (1958) Requisite variety and its implications for the control of complex systems
-- [ ] Astrom, K. J. (1987). Adaptive feedback control.
