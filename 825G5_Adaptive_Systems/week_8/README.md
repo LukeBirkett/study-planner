@@ -25,7 +25,8 @@ Ashby's general theory of the ultrastable system is so general and so abstract t
 
 ## Content
 #### Slides
-- [ ] [Lecture_7 Slides: Ashby_Ultrastability](https://canvas.sussex.ac.uk/courses/31028/files/5629457?wrap=1) [Notes P1](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_8/ashby_ultrastability_p1.pdf)
+- [ ] [Lecture_7 Slides: Ashby_Ultrastability](https://canvas.sussex.ac.uk/courses/31028/files/5629457?wrap=1)
+- [x] [Notes P1](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_8/ashby_ultrastability_p1.pdf)
 #### Videos
 - [x] [Lecture 7 Rec: Ashby Ultrastability Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d77159fc-166c-4689-8bfd-b2ac00e7963b#:~:text=Lecture%20learning-,outcomes,-18%3A00)
 - [ ] [Lecture 7 Rec: Ashby Ultrastability Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7705af40-c56f-4a11-94a6-b2b1010bf813)
