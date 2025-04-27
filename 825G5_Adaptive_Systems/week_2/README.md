@@ -13,7 +13,3 @@
 - [x] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=85b59894-f072-4828-b5c5-b27b00e732ab)
 - [x] Lecture Notes [Part 1](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_2/AS_W2.pdf), [Part 2](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/week_2/AS_W2_P2.pdf)
 - [ ] [Seminar Reading](https://canvas.sussex.ac.uk/courses/31028/files/5558954?module_item_id=1492370)
-
-## Readings
-- [ ] Donella H Meadows. Thinking in Systems: A primer. Chelsea Green Publishing, 2008. [Link](https://sussex.primo.exlibrisgroup.com/permalink/44SUS_INST/p3abpr/alma991043450002461)
-
