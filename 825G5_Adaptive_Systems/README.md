@@ -15,6 +15,8 @@
 - [Week 7 - Introducing Ashby](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_7)
 - [Week 8 - Ashby & Ultrastable Systems](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_8)
 - [Week 9 - Evorobotics](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/week_9)
+- [Week 10 - Self Organising Systems]()
+- [Week 11 - Autopoiesis]()
 
 ---
 
