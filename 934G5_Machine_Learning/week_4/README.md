@@ -36,7 +36,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 
  ---
 
- #### Independant
+ #### Independent
  - [x] [3B1B Neural Network Series](https://www.3blue1brown.com/topics/neural-networks) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/3B1B_Neural_Nets.pdf)
  - [x] [First Principles of Computer Vision: Perceptron and Neural Networks](https://fpcv.cs.columbia.edu/) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/firsr_princ_of_CV_nn_series.pdf)
  - [x] [Assembly AI: Perceptron from Stratch](https://www.youtube.com/watch?v=aOEoxyA4uXU) [Code](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/perceptron_scratch.py) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/assembly_ai_perceptron_scratch.pdf)
