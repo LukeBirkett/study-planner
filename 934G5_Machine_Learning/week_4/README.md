@@ -42,4 +42,5 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  - [x] [Assembly AI: Perceptron from Stratch](https://www.youtube.com/watch?v=aOEoxyA4uXU) [Code](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/perceptron_scratch.py) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/assembly_ai_perceptron_scratch.pdf)
  - [x] [Samson Zhang NN from Scratch](https://www.youtube.com/watch?v=w8yWXqWQYmU) [Code](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/NN_Scratch.ipynb) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/samson_zhang_nn_scratch.pdf)
  - [x] [Bot Academy NN from Scretch](https://www.youtube.com/watch?v=9RN2Wr8xvro) [Code](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/botAcademy_NN.py) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/bot_aca_nn_scratch.pdf)
+ - [x] [Stat Quest NN Series](https://www.youtube.com/playlist?list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1)
 
