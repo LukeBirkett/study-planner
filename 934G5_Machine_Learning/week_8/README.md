@@ -32,4 +32,5 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  #### Independent
  - [x] [Stat Quest NN Series: CNN, RNN, LSTM NN](https://www.youtube.com/playlist?list=PLblh5JKOoLUI) [[Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_4/stats_quest_nn.pdf)]
  - [x] [EZlearn AI - Deep Learning 101](https://www.youtube.com/playlist?list=PLTD697RzZ-DoS9wLInbSEZ0jFSRnj1vxU) [[Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_8/ezlearnai_deep_learning.pdf)]
- - [ ] Computerphile: [[CNN Explained](https://www.youtube.com/watch?v=py5byOOHZM8), [Inside NN](https://www.youtube.com/watch?v=BFdMrDOx_CM)]
+ - [x] Computerphile: [[CNN Explained](https://www.youtube.com/watch?v=py5byOOHZM8), [Inside NN](https://www.youtube.com/watch?v=BFdMrDOx_CM)]
+ - [x] [Independent Code - CNN from Scratch Tutorial and Repo](https://www.youtube.com/watch?v=Lakz2MoHy6o)
