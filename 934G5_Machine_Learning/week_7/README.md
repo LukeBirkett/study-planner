@@ -13,7 +13,7 @@ By the end of this unit of teaching and learning, you will be more familiar with
  
 ## Readings
 - [ ] Pessach, D. and Shmueli, E. A review on fairness in machine learning. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020000002461?institute=44SUS_INST&auth=SAML)
-- [ ] Mohseni et al. 2021. A multidisciplinary survey and framework for design and evaluation of explainable AI systems. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020010002461?institute=44SUS_INST&auth=SAML)
+- [ ] Mohseni et al. 2021. A multidisciplinary survey and framework for design and evaluation of explainable AI systems. [Link](https://arxiv.org/pdf/1811.11839)
 - [ ] Capraro et al. 2024. The impact of generative artificial intelligence on socioeconomic inequalities and policy making. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22290284440002461?institute=44SUS_INST&auth=SAML)
 - [ ] MIT Technology Review. June 2019. Training a single AI model can emit as much carbon as five cars in their lifetimes. [Link](https://www.technologyreview.com/2019/06/06/239031/training-a-single-ai-model-can-emit-as-much-carbon-as-five-cars-in-their-lifetimes/)
 - [ ] Burton et al. 2024. How large language models can reshape collective intelligence. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22290284440002461?institute=44SUS_INST&auth=SAML)
