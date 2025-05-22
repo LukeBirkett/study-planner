@@ -16,6 +16,6 @@ By the end of this unit of teaching and learning, you will have learnt about:
 - [x] [Quiz: Model validation](https://canvas.sussex.ac.uk/courses/31315/quizzes/50391)
  
 ## Readings
-- [ ] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. [Chapter 11] [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML)
+- [x] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. [Chapter 11] [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019830002461?institute=44SUS_INST&auth=SAML)
 - [x] S Rogers, M Girolami. A first course in machine learning. 2017. [Section 5.4] [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019840002461?institute=44SUS_INST&auth=SAML)
 - [ ] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. [Chapters 4, 10] [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019860002461?institute=44SUS_INST&auth=SAML)
