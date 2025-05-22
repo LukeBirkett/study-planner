@@ -14,9 +14,9 @@ By the end of this unit of teaching and learning, you will be more familiar with
 ## Readings
 - [ ] Pessach, D. and Shmueli, E. A review on fairness in machine learning. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020000002461?institute=44SUS_INST&auth=SAML)
 - [x] Mohseni et al. 2021. A multidisciplinary survey and framework for design and evaluation of explainable AI systems. [Link](https://arxiv.org/pdf/1811.11839)
-- [x] Capraro et al. 2024. The impact of generative artificial intelligence on socioeconomic inequalities and policy making. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22290284440002461?institute=44SUS_INST&auth=SAML)
+- [ ] Capraro et al. 2024. The impact of generative artificial intelligence on socioeconomic inequalities and policy making. [Link](https://academic.oup.com/pnasnexus/article/3/6/pgae191/7689236)
 - [x] MIT Technology Review. June 2019. Training a single AI model can emit as much carbon as five cars in their lifetimes. [Link](https://www.technologyreview.com/2019/06/06/239031/training-a-single-ai-model-can-emit-as-much-carbon-as-five-cars-in-their-lifetimes/)
-- [ ] Burton et al. 2024. How large language models can reshape collective intelligence. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22290284440002461?institute=44SUS_INST&auth=SAML)
+- [x] Burton et al. 2024. How large language models can reshape collective intelligence. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22290284440002461?institute=44SUS_INST&auth=SAML)
 - [ ] Guardian. Oct 2023. How Hollywood writers triumphed over AI – and why it matters. [Link](https://www.theguardian.com/culture/2023/oct/01/hollywood-writers-strike-artificial-intelligence)
 - [ ] Financial Times. Dec 2023. New York Times sues Microsoft and OpenAI in copyright case. [Link](https://www.ft.com/content/23c15ce1-16c5-4b2f-804e-2c0da64e1972)
 - [ ] BBC. Nov 2023. AI chief quits over 'exploitative' copyright row. [Link](https://www.bbc.co.uk/news/technology-67446000)
