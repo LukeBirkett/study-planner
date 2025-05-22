@@ -14,7 +14,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_8/ML_Week_8_AdvancedNN.pdf)
 - [ ] [Lab]() [(Solutions)]()
 - [ ] [Ungraded Assignment]()
-- [ ] [Quiz: CNNs, RNNs](https://canvas.sussex.ac.uk/courses/31315/quizzes/50390)
+- [x] [Quiz: CNNs, RNNs](https://canvas.sussex.ac.uk/courses/31315/quizzes/50390)
  
 ## Readings
 #### Compulsory
