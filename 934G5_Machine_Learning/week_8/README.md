@@ -39,6 +39,3 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  - [x] [Build a Deep CNN Image Classifier with ANY Images (TensorFlow)](https://www.youtube.com/watch?v=jztwpsIzEGc)
  - [x] [ResNet (actually) explained in under 10 minutes](https://www.youtube.com/watch?v=o_3mboe1jYI)
  - [x] [Residual Networks (ResNet) Physics Informed Machine Learning](https://www.youtube.com/watch?v=w1UsKanMatM)
-
-
-[Bommasani, R., Hudson, D. A., Adeli, E., Altman, R., Arora, S., von Arx, S., … et al. (2021). On the opportunities and risks of foundation models. ArXiv:2108.07258.]()
