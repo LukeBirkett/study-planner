@@ -18,7 +18,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  
 ## Readings
 #### Compulsory
-- [ ] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. (Reading List Link) [Chapters 7, 8, 9] [10] [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML)
+- [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. (Reading List Link) [Chapters 7, 8, 9] [10] [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML)
 - [Zhang Chapter 8 Main References](https://docs.google.com/document/d/1Nesvkq66aaYJjHauWk_S1u5VLhOYGeb1CNNmXMP6WZI/edit?tab=t.0)
 - [Zhang All Book Interesting References](https://docs.google.com/document/d/1gAZZqDQhaVcT_5Vg6iM6848ZFcOQwz58s0VaUYNgW8A/edit?tab=t.0)
 
