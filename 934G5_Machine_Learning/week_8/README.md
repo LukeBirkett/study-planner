@@ -23,7 +23,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [Zhang All Book Interesting References](https://docs.google.com/document/d/1gAZZqDQhaVcT_5Vg6iM6848ZFcOQwz58s0VaUYNgW8A/edit?tab=t.0)
 
 #### Additional
-- [ ] Y LeCun. Generalization and network design strategies. Connectionism in perspective, 19. 1989. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020020002461?institute=44SUS_INST&auth=SAML)
+- [x] Y LeCun. Generalization and network design strategies. Connectionism in perspective, 19. 1989. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020020002461?institute=44SUS_INST&auth=SAML)
 - [ ] S Hochreiter, J Schmidhuber. Long short-term memory. Neural computation 9, no. 8: 1735-1780. 1997. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020030002461?institute=44SUS_INST&auth=SAML)
 - [ ] FA Gers, J Schmidhuber, F Cummins. Learning to forget: Continual prediction with LSTM. Neural computation 12, no. 10: 2451-2471. 2000. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020040002461?institute=44SUS_INST&auth=SAML)
 - [x] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Chapters 9, 10] [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML)
