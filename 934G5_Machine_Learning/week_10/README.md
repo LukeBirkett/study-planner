@@ -10,7 +10,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5344202?wrap=1)
 - [x] [Guest Slides](https://canvas.sussex.ac.uk/courses/31315/files/5638722?wrap=1)
 - [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=795b8ade-8bcb-4bc1-9002-b2b100e4c2a3)
-- [ ] [Lecture Notes]()
+- [x] [Lecture Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_10/ML_W10_Attention.pdf)
  
 ## Readings
 #### Additional
