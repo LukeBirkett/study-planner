@@ -11,7 +11,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 ## Content
 - [x] [Slides](https://canvas.sussex.ac.uk/courses/31315/files/5628513?wrap=1)
 - [x] [Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b006cc39-79c1-4836-a9d5-b2aa00f79d97)
-- [ ] [Lecture Notes]()
+- [x] [Lecture Notes]()
 - [ ] [Lab]() [(Solutions)]()
  
 ## Readings
