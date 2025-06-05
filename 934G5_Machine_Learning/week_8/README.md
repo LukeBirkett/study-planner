@@ -40,3 +40,4 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  - [x] [ResNet (actually) explained in under 10 minutes](https://www.youtube.com/watch?v=o_3mboe1jYI)
  - [x] [Residual Networks (ResNet) Physics Informed Machine Learning](https://www.youtube.com/watch?v=w1UsKanMatM)
  - [x] [The moment we stopped understanding AI [AlexNet]](https://www.youtube.com/watch?v=UZDiGooFs54&t=4s)
+ - [x] [Why CNN is better than MLP for Image processing tasks?](https://www.youtube.com/shorts/IsFjwXxyRKI)
