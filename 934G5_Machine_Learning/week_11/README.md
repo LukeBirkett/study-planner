@@ -15,3 +15,8 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 #### Additional
 - [ ] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/23771559330002461?institute=44SUS_INST&auth=SAML) [Chapter 17]
 - [ ] RS Sutton, AG Barto. Reinforcement Learning: An Introduction. 2018. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/23771559350002461?institute=44SUS_INST&auth=SAML) [Chapters 1, 2, 3, 16]
+
+#### Self
+- [ ] [StatsQuest - Reinforcement Learning with Neural Networks: Essential Concepts](https://www.youtube.com/watch?v=9hbQieQh7-o&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=25)
+- [ ] [StatsQuest - Reinforcement Learning with Neural Networks: Mathematical Details](https://www.youtube.com/watch?v=DVGmsnxB2UQ&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=26)
+- [ ] [StatsQuest - Reinforcement Learning with Human Feedback (RLHF)](https://www.youtube.com/watch?v=qPN_XZcJf_s&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=27)
