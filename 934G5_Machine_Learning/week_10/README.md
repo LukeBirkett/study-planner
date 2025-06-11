@@ -22,3 +22,10 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [ ] [Neural Machine Translation by Jointly Learning to Align and Translate](https://readinglists.sussex.ac.uk/leganto/nui/citation/23771559560002461?institute=44SUS_INST&auth=SAML)
 - [ ] [Attention is all you need](https://readinglists.sussex.ac.uk/leganto/nui/citation/23771559550002461?institute=44SUS_INST&auth=SAML)
 - [ ] [Zero-Shot Text-to-Image Generation](https://proceedings.mlr.press/v139/ramesh21a/ramesh21a.pdf)
+
+#### Self
+- [ ] [Sequence-to-Sequence (seq2seq) Encoder-Decoder Neural Networks](https://www.youtube.com/watch?v=L8HKweZIOmg&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=20)
+- [ ] [Attention for Neural Networks](https://www.youtube.com/watch?v=PSs6nxngL6k&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=21&t=9s)
+- [ ] [Transformer Neural Networks](https://www.youtube.com/watch?v=zxQyTK8quyY&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=22)
+- [ ] [Decoder-Only Transformers](https://www.youtube.com/watch?v=bQ5BoolX9Ag&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=23)
+- [ ] [Encoder-Only Transformers](https://www.youtube.com/watch?v=GDN649X_acE&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=24)
