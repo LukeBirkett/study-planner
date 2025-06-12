@@ -2,7 +2,7 @@
 [Recordings](https://sussex.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?embedded=1#folderID=%22ca5456ad-2433-44f9-96d6-b0c200ed5a77%22)
 
 # [Weeks](https://canvas.sussex.ac.uk/courses/30891/modules)
-- [Week 1 - Getting Comfy](https://canvas.sussex.ac.uk/courses/30891/modules)
+- [Week 1 - Getting Comfy](https://canvas.sussex.ac.uk/courses/30891/modules#:~:text=1%3A%20getting%20comfy-,Week,-1%3A%20getting%20comfy)
 - [Week 2 - ]()
 - [Week 3 - ]()
 - [Week 4 - ]()
