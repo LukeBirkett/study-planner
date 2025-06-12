@@ -30,3 +30,8 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 #### Optional 
 - [ ] [Kornblith et al. 2019. Do better ImageNet models transfer better?](https://openaccess.thecvf.com/content_CVPR_2019/papers/Kornblith_Do_Better_ImageNet_Models_Transfer_Better_CVPR_2019_paper.pdf)
 - [ ] [Saeed et al. 2019. Multi-task self-supervised learning for human activity detection.](https://dl.acm.org/doi/abs/10.1145/3328932?casa_token=1EnL2mdW-S4AAAAA:a8iw9lXhn4k0lgRY9ZRyk3WixVuYK45F5SZBf-J7JlSA61StzvM4D41Y1fz8Aby5bTRBiZ1AhW8)
+
+#### Self 
+- [x] [Encoder Decoder Network - Computerphile](https://www.youtube.com/watch?v=1icvxbAoPWc)
+- [x] [Generative Adversarial Networks (GANs) - Computerphile](https://www.youtube.com/watch?v=Sw9r8CL98N0)
+- [x] [Vectoring Words (Word Embeddings) - Computerphile](https://www.youtube.com/watch?v=gQddtTdmG_8)
