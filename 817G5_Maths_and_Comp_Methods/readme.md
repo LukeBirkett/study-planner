@@ -1,8 +1,7 @@
-[Canvas]() /
-[Module Info]() /
-[Recordings]()
+[Canvas](https://canvas.sussex.ac.uk/courses/30891) /
+[Recordings](https://sussex.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?embedded=1#folderID=%22ca5456ad-2433-44f9-96d6-b0c200ed5a77%22)
 
-# [Weeks]()
+# [Weeks](https://canvas.sussex.ac.uk/courses/30891/modules)
 - [Week 1 - ]()
 - [Week 2 - ]()
 - [Week 3 - ]()
