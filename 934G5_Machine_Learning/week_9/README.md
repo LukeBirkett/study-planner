@@ -16,7 +16,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  
 ## Readings
 #### Compulsory
-- [ ] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) [Sections 14, 15, 20.10.3, 20.10.4]
+- [x] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) [Sections 14, 15, 20.10.3, 20.10.4]
 - [x] C Doersch. Tutorial on variational autoencoders. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22361945760002461?institute=44SUS_INST&auth=SAML)
 - [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Chapter 20]
 
