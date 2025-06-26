@@ -24,8 +24,8 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [ ] [Zero-Shot Text-to-Image Generation](https://proceedings.mlr.press/v139/ramesh21a/ramesh21a.pdf)
 
 #### Self
-- [x] [Sequence-to-Sequence (seq2seq) Encoder-Decoder Neural Networks](https://www.youtube.com/watch?v=L8HKweZIOmg&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=20) [Notes]()
-- [x] [Attention for Neural Networks](https://www.youtube.com/watch?v=PSs6nxngL6k&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=21&t=9s) [Notes]()
-- [x] [Transformer Neural Networks](https://www.youtube.com/watch?v=zxQyTK8quyY&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=22) [Notes]()
-- [x] [Decoder-Only Transformers](https://www.youtube.com/watch?v=bQ5BoolX9Ag&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=23) [Notes]()
-- [x] [Encoder-Only Transformers](https://www.youtube.com/watch?v=GDN649X_acE&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=24) [Notes]()
+- [x] [Sequence-to-Sequence (seq2seq) Encoder-Decoder Neural Networks](https://www.youtube.com/watch?v=L8HKweZIOmg&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=20) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_10/encoder-decoder.pdf)
+- [x] [Attention for Neural Networks](https://www.youtube.com/watch?v=PSs6nxngL6k&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=21&t=9s) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_10/attention.pdf)
+- [x] [Transformer Neural Networks](https://www.youtube.com/watch?v=zxQyTK8quyY&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=22) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_10/transformers.pdf)
+- [x] [Decoder-Only Transformers](https://www.youtube.com/watch?v=bQ5BoolX9Ag&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=23) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_10/decoder.pdf)
+- [x] [Encoder-Only Transformers](https://www.youtube.com/watch?v=GDN649X_acE&list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1&index=24) [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_10/encoder.pdf)
