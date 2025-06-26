@@ -14,7 +14,7 @@
 - [Week 9 - Beyond Supervised Learning](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_9)
 - [Week 10 - Attention](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_10)
 - [Week 11 - Reinforcement Learning](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_11)
-- [Assessment]()
+- [Assessment](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/assessment)
 
 ---
 
