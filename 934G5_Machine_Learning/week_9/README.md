@@ -25,7 +25,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [x] I Goodfellow, J Pouget-Abadie, M Mirza, B Xu, D Warde-Farley, S Ozair, A Courville, Y Bengio. Generative adversarial nets. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020050002461?institute=44SUS_INST&auth=SAML)
 - [x] M Mirza, S Osindero. Conditional generative adversarial nets. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22358019480002461?institute=44SUS_INST&auth=SAML)
 - [ ] J Zhu, T Park, P Isola, AA Efros. Unpaired image-to-image translation using cycle-consistent adversarial networks. 2017. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020080002461?institute=44SUS_INST&auth=SAML)
-- [ ] M Arjovsky, S Chintala, L Bottou. Wasserstein generative adversarial networks. 2017. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020070002461?institute=44SUS_INST&auth=SAML)
+- [x] M Arjovsky, S Chintala, L Bottou. Wasserstein generative adversarial networks. 2017. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020070002461?institute=44SUS_INST&auth=SAML)
 
 #### Optional 
 - [ ] [Kornblith et al. 2019. Do better ImageNet models transfer better?](https://openaccess.thecvf.com/content_CVPR_2019/papers/Kornblith_Do_Better_ImageNet_Models_Transfer_Better_CVPR_2019_paper.pdf)
