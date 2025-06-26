@@ -21,7 +21,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
 - [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Chapter 20]
 
 #### Additional
-- [ ] DP Kingma, M Welling. Auto-encoding variational Bayes. 2013. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020090002461?institute=44SUS_INST&auth=SAML)
+- [x] DP Kingma, M Welling. Auto-encoding variational Bayes. 2013. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020090002461?institute=44SUS_INST&auth=SAML)
 - [ ] I Goodfellow, J Pouget-Abadie, M Mirza, B Xu, D Warde-Farley, S Ozair, A Courville, Y Bengio. Generative adversarial nets. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020050002461?institute=44SUS_INST&auth=SAML)
 - [ ] M Mirza, S Osindero. Conditional generative adversarial nets. 2014. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/22358019480002461?institute=44SUS_INST&auth=SAML)
 - [ ] J Zhu, T Park, P Isola, AA Efros. Unpaired image-to-image translation using cycle-consistent adversarial networks. 2017. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811020080002461?institute=44SUS_INST&auth=SAML)
