@@ -16,7 +16,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  
 ## Readings
 #### Compulsory
-- [x] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML) [Sections 14, 15, 20.10.3, 20.10.4]
+- [x] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019820002461?institute=44SUS_INST&auth=SAML)
  - [Section 14: Autoencoders](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_9/autoencoders_goodfellow.pdf)
  - [Section 15: Represationation Learning](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_9/respresentation_learning_goodfellow.pdf)
  - [Section 20: GANs & VAEs](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_9/ch20_gans_vaes_goodfellow.pdf)
