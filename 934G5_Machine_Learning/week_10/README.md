@@ -14,7 +14,7 @@ By the end of this unit of teaching and learning, you will know the fundamentals
  
 ## Readings
 #### Additional
-- [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Chapter 11]
+- [x] A Zhang, ZC Lipton, M Li, AJ Smola. Dive into Deep Learning. 2021. [Link](https://readinglists.sussex.ac.uk/leganto/nui/citation/20811019870002461?institute=44SUS_INST&auth=SAML) [Chapter 11] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/week_10/zhang_attention.pdf)
 
 #### Optional 
 - [ ] [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165)
