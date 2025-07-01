@@ -28,7 +28,6 @@
 - [Lab 4](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_4)
 - [Lab 5](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_5)
 - [Lab 6](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_6)
-- [Lab Reflections](https://canvas.sussex.ac.uk/courses/31028/discussion_topics/429261)
 - [Intro to Mesa Game](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=934ca0eb-2901-4c54-8e72-b289007fa5e5)
 
 ---
