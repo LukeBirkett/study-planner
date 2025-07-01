@@ -1,1 +1,3 @@
-
+- [Lab 3 part 1 - Simulating Ashby's Homeostat](https://canvas.sussex.ac.uk/courses/31028/pages/lab-3-part-1-simulating-ashbys-homeostat)
+- [Lab 3 part 2 - Analysing Ashby's Homeostat](https://canvas.sussex.ac.uk/courses/31028/pages/lab-3-part-2-analysing-ashbys-homeostat)
+- [Reflections on Lab 3](https://canvas.sussex.ac.uk/courses/31028/pages/reflections-on-lab-3)
