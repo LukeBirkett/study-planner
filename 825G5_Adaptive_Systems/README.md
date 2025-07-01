@@ -33,6 +33,3 @@
 - [Week 3 Seminar](https://canvas.sussex.ac.uk/courses/31028/pages/week-3-seminar?module_item_id=1496359)
 - [Braitenberg Vech Reading](https://canvas.sussex.ac.uk/courses/31028/files/5539766?wrap=1)
 - [Intro to Mesa Game](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=934ca0eb-2901-4c54-8e72-b289007fa5e5)
-- https://canvas.sussex.ac.uk/courses/31028/pages/lab-0-negative-feedback-control
-- [Lab 1 Demo](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6d694ae1-9822-4056-8051-b28e00deae69)
-- [Lab 1 Reflections](https://canvas.sussex.ac.uk/courses/31028/pages/lab-1-adapting-braitenbergs-vehicles-in-sandbox)
