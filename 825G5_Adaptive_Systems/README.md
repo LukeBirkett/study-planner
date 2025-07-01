@@ -29,7 +29,11 @@
 - [Lab 5](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_5)
 - [Lab 6](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_6)
 - [Lab Reflections](https://canvas.sussex.ac.uk/courses/31028/discussion_topics/429261)
+- [Intro to Mesa Game](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=934ca0eb-2901-4c54-8e72-b289007fa5e5)
+
+---
+
+# Seminars
 - [Week 2 Seminar Reading](https://canvas.sussex.ac.uk/courses/31028/files/5558954?module_item_id=1492370)
 - [Week 3 Seminar](https://canvas.sussex.ac.uk/courses/31028/pages/week-3-seminar?module_item_id=1496359)
 - [Braitenberg Vech Reading](https://canvas.sussex.ac.uk/courses/31028/files/5539766?wrap=1)
-- [Intro to Mesa Game](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=934ca0eb-2901-4c54-8e72-b289007fa5e5)
