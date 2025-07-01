@@ -15,15 +15,9 @@
 - [Week 10 - Attention](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_10)
 - [Week 11 - Reinforcement Learning](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/week_11)
 - [Assessment](https://github.com/LukeBirkett/study-planner/tree/main/934G5_Machine_Learning/assessment)
+- [Labs 1, 2, 3, 8. 9]()
 
 ---
-
-# Labs [1, 2, 3, 8, 9]
-- [ ] [Week 1]()
-- [ ] [Week 2]()
-- [ ] [Week 3]()
-- [ ] [Week 8]()
-- [ ] [Week 9]()
 
 #### Set New Venv
 
