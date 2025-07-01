@@ -1,2 +1,3 @@
 - [Lab 2 - The Extended Braitenberg Architecture](https://canvas.sussex.ac.uk/courses/31028/pages/lab-2-the-extended-braitenberg-architecture)
 - [Lab 2 Part 2](https://canvas.sussex.ac.uk/courses/31028/pages/lab-2-part-2)
+- [Lab 2 Reflections](https://canvas.sussex.ac.uk/courses/31028/pages/reflections-on-lab-2)
