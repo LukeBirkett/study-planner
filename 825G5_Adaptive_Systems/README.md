@@ -29,5 +29,6 @@
 - [Lab 5](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_5)
 - [Lab 6](https://github.com/LukeBirkett/study-planner/blob/main/825G5_Adaptive_Systems/lab_6)
 - [Lab Reflections](https://canvas.sussex.ac.uk/courses/31028/discussion_topics/429261)
+- [Week 2 Seminar Reading](https://canvas.sussex.ac.uk/courses/31028/files/5558954?module_item_id=1492370)
 
 [Lab 1 Demo](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6d694ae1-9822-4056-8051-b28e00deae69) [Intro to Mesa Game](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=934ca0eb-2901-4c54-8e72-b289007fa5e5)
