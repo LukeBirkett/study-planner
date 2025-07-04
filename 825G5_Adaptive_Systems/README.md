@@ -24,10 +24,10 @@
 - [x] [Lab 0 Negative feedback control](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_0)
 - [ ] [Lab 1 Adapting Braitenberg's vehicles in Sandbox](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_1) (Week 4 After Seminars)
 - [ ] [Lab 2 The Extended Braitenberg Architecture](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_2)
-- [ ] [Lab 3](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_3)
-- [ ] [Lab 4](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_4)
-- [ ] [Lab 5](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_5)
-- [ ] [Lab 6](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_6)
+- [ ] [Lab 3 Simulated Homeostat](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_3)
+- [ ] [Lab 4 Adapting to disturbances](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_4)
+- [ ] [Lab 5 Creating disturbances](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_5)
+- [ ] [Lab 6 Evolutionary adaptations](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_6)
 
 ---
 
