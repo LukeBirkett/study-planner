@@ -20,6 +20,14 @@
 
 ---
 
+# Seminars
+- [ ] [Mesa Seminar](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/mesa)
+- [ ] [Week 2 Seminar Reading](https://canvas.sussex.ac.uk/courses/31028/files/5558954?module_item_id=1492370)
+- [ ] [Week 3 Seminar](https://canvas.sussex.ac.uk/courses/31028/pages/week-3-seminar?module_item_id=1496359)
+- [ ] [Braitenberg Vech Reading](https://canvas.sussex.ac.uk/courses/31028/files/5539766?wrap=1) (Prep for Lab 1)
+
+--- 
+
 # [Labs](https://canvas.sussex.ac.uk/courses/31028/pages/main-labs-page?module_item_id=1498549)
 - [x] [Lab 0 Negative feedback control](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_0)
 - [ ] [Lab 1 Adapting Braitenberg's vehicles in Sandbox](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_1) (Week 4 After Seminars)
@@ -28,11 +36,3 @@
 - [ ] [Lab 4 Adapting to disturbances](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_4)
 - [ ] [Lab 5 Creating disturbances](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_5)
 - [ ] [Lab 6 Evolutionary adaptations](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_6)
-
----
-
-# Seminars
-- [ ] [Mesa Seminar](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/mesa)
-- [ ] [Week 2 Seminar Reading](https://canvas.sussex.ac.uk/courses/31028/files/5558954?module_item_id=1492370)
-- [ ] [Week 3 Seminar](https://canvas.sussex.ac.uk/courses/31028/pages/week-3-seminar?module_item_id=1496359)
-- [ ] [Braitenberg Vech Reading](https://canvas.sussex.ac.uk/courses/31028/files/5539766?wrap=1) (Prep for Lab 1)
