@@ -21,8 +21,8 @@
 ---
 
 # [Labs](https://canvas.sussex.ac.uk/courses/31028/pages/main-labs-page?module_item_id=1498549)
-- [x] [Lab 0](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_0)
-- [ ] [Lab 1 (Week 4)](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_1)
+- [x] [Lab 0 Negative feedback control](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_0)
+- [ ] [Lab 1 Adapting Braitenberg's vehicles in Sandbox](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_1) (Week 4 After Seminars)
 - [ ] [Lab 2](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_2)
 - [ ] [Lab 3](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_3)
 - [ ] [Lab 4](https://github.com/LukeBirkett/study-planner/tree/main/825G5_Adaptive_Systems/lab_4)
