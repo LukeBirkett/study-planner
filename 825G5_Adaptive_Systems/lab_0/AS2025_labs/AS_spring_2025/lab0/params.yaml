@@ -1,7 +1,7 @@
 gain: 10
-disturbance_strength: 0
+disturbance_strength: 20
 pattern: 0
-mass: 100
+mass: 10
 main_plot: 0
 # too much mass - motor cannot supply enough torque
 # - fails in region where gravity has most effect
