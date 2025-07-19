@@ -19,4 +19,6 @@
 ---
 
 #### Data
-
+- [Metadata](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Metadata_VARIABLES.xlsx)
+- [Curated 1 Month](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/curated_data_1month_2010-2022_nonans.csv)
+- [Curated 12 Month](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/curated_data_24month_2010-2022_nonans.csv)
