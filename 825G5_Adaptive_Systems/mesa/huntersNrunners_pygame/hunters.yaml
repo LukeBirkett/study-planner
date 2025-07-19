@@ -10,4 +10,4 @@ y2: 37
 x3: 16
 y3: 37
  
-movelist: [E, E, E, W, R, W, W,W,W,E,E]
+movelist: [E, E, E, W, W, W]
