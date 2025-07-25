@@ -5,7 +5,7 @@
 
 **Lab 3:** [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Week%203.ipynb) / [Solutions](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Week%203_with%20solutions.ipynb) / [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/notes/lab_3_notes.pdf)
 
-**Lab 4:** [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Week%204.ipynb)/ [Solutions](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Week%204_with%20solutions.ipynb) / [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/notes/lab_4_notes.pdf)
+**Lab 4:** [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Week%204.ipynb) / [Solutions](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Week%204_with%20solutions.ipynb) / [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/notes/lab_4_notes.pdf)
 
 **Lab 8:** [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Week%208.ipynb) / [Solutions](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/Week%208_with%20solutions.ipynb) / [Notes](https://github.com/LukeBirkett/study-planner/blob/main/934G5_Machine_Learning/labs/notes/lab_8_notes.pdf)
 
