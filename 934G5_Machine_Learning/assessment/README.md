@@ -11,7 +11,7 @@
 - [ ] Go through weekly lectures/notes and create summary of content into markdown
 - [ ] Go through lab notes and create summary of content into markdown
 - [ ] Put a reading list into markdown
-- [ ] Create a course profile
+- [ ] Create a course profile [Link](https://docs.google.com/document/d/1M5U9Fl0LJ6jS16RgmCIwWdp-g025YvmKCLUSyJ2ALik/edit?tab=t.0)
 - [ ] Create a writting profile
 - [ ] Create a list of topics/specifics that need to be included in project ranging from basic to advanced. Maybe write a markdown for each topic and build out some information
 - [ ] Make sure everything in the initial notes file has been read and tended too
