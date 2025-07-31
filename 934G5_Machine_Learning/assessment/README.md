@@ -15,6 +15,6 @@
 - [ ] Put a reading list into markdown [link](https://docs.google.com/document/d/1laU_0XpEIzPEswVTl5A10RjO0cGMNsMDhWbibV9sBBI/edit?tab=t.0)
 - [ ] Create a course profile [Link](https://docs.google.com/document/d/1M5U9Fl0LJ6jS16RgmCIwWdp-g025YvmKCLUSyJ2ALik/edit?tab=t.0)
 - [ ] Key topics list [link](https://docs.google.com/document/d/1BL_AGXsyjieJOKM9x8NoqFsuSe3fnt53ybBvkd8Fjfg/edit?tab=t.0)
-- [ ] Make sure everything in the initial notes file has been read and tended too
+- [ ] Make sure everything in the initial notes file has been read and tended too [Link](https://docs.google.com/document/d/1MLYUr_0Yb0xiqF3I3tocWhxhGTOgY-LIeBmbxTpyKLw/edit?tab=t.0)
 - [ ] Write up an initial draft
 - [ ] Ask Claude to review but make sure it has access to all of the context information above
