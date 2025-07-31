@@ -17,4 +17,5 @@
 - [ ] Key topics list [link](https://docs.google.com/document/d/1BL_AGXsyjieJOKM9x8NoqFsuSe3fnt53ybBvkd8Fjfg/edit?tab=t.0)
 - [ ] Make sure everything in the initial notes file has been read and tended too [Link](https://docs.google.com/document/d/1MLYUr_0Yb0xiqF3I3tocWhxhGTOgY-LIeBmbxTpyKLw/edit?tab=t.0)
 - [ ] Write up an initial draft
+- [ ] Create an md document explaining the path and context of each file
 - [ ] Ask Claude to review but make sure it has access to all of the context information above
