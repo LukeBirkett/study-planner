@@ -12,6 +12,7 @@
 [Template](https://docs.google.com/document/d/1oJZ5BUoGid1fuYhMeK6yRya98U1xAkt3sRK9uYwwKGM/edit?tab=t.0#heading=h.ki23zlscyv2k) 
 [1](https://docs.google.com/document/d/1XDbG7T04sl4Dg6ptbuKy-UNqujxEH3OAb7WGDbAZoxk/edit?tab=t.0#heading=h.wgn3201bobq) 
 [2](https://docs.google.com/document/d/1svibZjH2Jba5pkMIu9WLPd-UF1koyBH5H2fHmfinF8o/edit?tab=t.0)
+[3](https://docs.google.com/document/d/1NLP_8LyEnk8XchZcPxh52fG5GsTiFFxV8IehpxU2cNU/edit?tab=t.0)
 - [ ] Put a reading list into markdown [link](https://docs.google.com/document/d/1laU_0XpEIzPEswVTl5A10RjO0cGMNsMDhWbibV9sBBI/edit?tab=t.0)
 - [ ] Create a course profile [Link](https://docs.google.com/document/d/1M5U9Fl0LJ6jS16RgmCIwWdp-g025YvmKCLUSyJ2ALik/edit?tab=t.0)
 - [ ] Key topics list [link](https://docs.google.com/document/d/1BL_AGXsyjieJOKM9x8NoqFsuSe3fnt53ybBvkd8Fjfg/edit?tab=t.0)
