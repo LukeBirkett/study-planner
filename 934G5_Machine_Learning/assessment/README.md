@@ -17,6 +17,7 @@
 [5](https://docs.google.com/document/d/1mGaOpm0h2ySJecRgFsZM1sfssnHLNs2LdP6svvvfsJc/edit?tab=t.0)
 [6](https://docs.google.com/document/d/1hQix_nGSveGP2zNeMjQVTXC0X1f8lUdNpBbjutJVdps/edit?tab=t.0)
 [8](https://docs.google.com/document/d/1PgZ-DQr7EY0BhZGynjpgoQRPJkT_MWc9Qb4HO-VjxYc/edit?tab=t.0)
+[9](https://docs.google.com/document/d/1vL6ub640a4jdp4QqI2J83GvdX4Px6FeOHs38941AmSo/edit?tab=t.0)
 - [ ] Put a reading list into markdown [link](https://docs.google.com/document/d/1laU_0XpEIzPEswVTl5A10RjO0cGMNsMDhWbibV9sBBI/edit?tab=t.0)
 - [ ] Create a course profile [Link](https://docs.google.com/document/d/1M5U9Fl0LJ6jS16RgmCIwWdp-g025YvmKCLUSyJ2ALik/edit?tab=t.0)
 - [ ] Key topics list [link](https://docs.google.com/document/d/1BL_AGXsyjieJOKM9x8NoqFsuSe3fnt53ybBvkd8Fjfg/edit?tab=t.0)
