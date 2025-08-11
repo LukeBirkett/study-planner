@@ -35,14 +35,6 @@ Scikit-learn, PyTorch, TensorFlow. However, you must only use standard libraries
 
 3. You are NOT permitted to use or submit someone else’s code, output, or report as yours. You are only allowed to use code snippets from the lab materials given by the tutor, from software library documentations as stated in #2 above, or from recommended textbooks
 
-4. You must NOT use generative artificial intelligence (AI) to generate any materials or content for your assessment
-submissions.
-
-Note that:
-- The baseline position at the University is Sussex is that the use of generative AI material in assessment submissions is prohibited, unless explicitly permitted by the module convenor.
-- Students registered with the Disability Advice team and in receipt of reasonable adjustments are still permitted to use other assistive technology as required.
-- If in any doubt about what is permissible, students should check with the module convenor.
-
 # Link to learning outcomes
 
 This assessment is designed to evaluate how well you have achieved the module’s learning outcomes,
