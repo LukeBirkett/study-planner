@@ -1,78 +1,156 @@
-The task at hand is to predict rain or no rain in 7 days time given upto X date
+# Data Processing Notes - ML Coursework 2025A3
 
-The ML Coursework 2025A3 dataset was created for the A3 assessment of the 2025 Machine Learning module. It is made up of data extracted from the NASA database.
+## Overview
+The task is to predict rain or no rain in 7 days time given data up to a specific date.
 
-The dataset contains 132 csv, each covering parameter for a given month
+## Dataset Description
 
-In total there are 11 parameters and the time scale covers Mar 2024 to Feb 2025
+### Source
+The ML Coursework 2025A3 dataset was created for the A3 assessment of the 2025 Machine Learning module. It contains data extracted from the NASA database.
 
-12 months * 11 params = 132 files
+### Structure
+- **Total Files**: 132 CSV files
+- **Coverage**: March 2024 to February 2025 (12 months)
+- **Parameters**: 11 weather parameters
+- **Calculation**: 12 months × 11 parameters = 132 files
 
-Within each file there 6 common static parameters: longitude, latitude, year, month, day, hour
+### Static Parameters (6 common parameters)
+Each file contains these 6 static parameters in `var_name/Full Name/Unit/Resolution` format:
 
-The following 6 lines describe the static parameters in var_name/Full Name/Unit/Resolution format:
-- [longitude, Longitude, Degrees East, 1.0 degree]
-- [latitude, Latitude, Degrees North, 1.0 degree]
-- [year, Year, 1, 1 year]
-- [month, Month in year, 1, 1 month]
-- [day, Day in the month, 1, 1 day]
-- [hour, Hour in the day, 1, 3 hours]
+| Parameter | Full Name | Unit | Resolution |
+|-----------|-----------|------|------------|
+| `longitude` | Longitude | Degrees East | 1.0 degree |
+| `latitude` | Latitude | Degrees North | 1.0 degree |
+| `year` | Year | 1 | 1 year |
+| `month` | Month in year | 1 | 1 month |
+| `day` | Day in the month | 1 | 1 day |
+| `hour` | Hour in the day | 1 | 3 hours |
 
-Months 1, 2, 3 always correspond to Jan, Feb, March
+**Note**: Months 1, 2, 3 always correspond to Jan, Feb, March
 
-The following 11 lines describe the parameters in var_name/Full Name/Unit/Resolution format:
-- [AvgSurfT_inst, Average surface skin temperature, Kelvin, per longitude and latitude pair every three hours]
-- [CanopInt_inst, Plant canopy surface water, Kilogram per metre, per longitude and latitude pair every three hours]
-- [LWdown_f_tavg, Downward longwave radiation flux, Watt per metre, per longitude and latitude pair every three hours]
-- [Psurf_f_inst, Watt per metre, Pascal, per longitude and latitude pair every three hours]
-- [Qair_f_inst, Specific humidity, Kilogram per kilogram]
-- [Rainf_tavg, Rain precipitation rate, Kilogram per squared metre per second]
-- [SnowDepth_inst, Snow depth, Metre]
-- [SWdown_f_tavg, Downward shortwave radiation flux, Watt per squared metre]
-- [Tair_f_inst, Air temperature, Kelvin]
-- [TVeg_tavg, Transpiration, Watt per squared metre]
-- [Wind_f_inst, Wind speed, Metre per second]
+### Weather Parameters (11 parameters)
+The following parameters are available in `var_name/Full Name/Unit/Resolution` format:
 
-The field Rainf_tavg will be used as the label vector leaving only 10 parameters 
+| Parameter | Full Name | Unit | Resolution |
+|-----------|-----------|------|------------|
+| `AvgSurfT_inst` | Average surface skin temperature | Kelvin | per longitude and latitude pair every three hours |
+| `CanopInt_inst` | Plant canopy surface water | Kilogram per metre | per longitude and latitude pair every three hours |
+| `LWdown_f_tavg` | Downward longwave radiation flux | Watt per metre | per longitude and latitude pair every three hours |
+| `Psurf_f_inst` | Surface pressure | Pascal | per longitude and latitude pair every three hours |
+| `Qair_f_inst` | Specific humidity | Kilogram per kilogram | per longitude and latitude pair every three hours |
+| `Rainf_tavg` | Rain precipitation rate | Kilogram per squared metre per second | per longitude and latitude pair every three hours |
+| `SnowDepth_inst` | Snow depth | Metre | per longitude and latitude pair every three hours |
+| `SWdown_f_tavg` | Downward shortwave radiation flux | Watt per squared metre | per longitude and latitude pair every three hours |
+| `Tair_f_inst` | Air temperature | Kelvin | per longitude and latitude pair every three hours |
+| `TVeg_tavg` | Transpiration | Watt per squared metre | per longitude and latitude pair every three hours |
+| `Wind_f_inst` | Wind speed | Metre per second | per longitude and latitude pair every three hours |
 
-This field needs to be well understood so that it can correctly be utilised as the target label. For example, depending on the structure of the task, this field may need to be converted into a categorical or one-hot encoded variable. Additionally, the data comes on a very granular basis meaning the field will be need to be aggregated up to a suitable level. 
+## Target Variable
 
-Note that params should be checked for correlations and potentially not used. For example, Plant canopy surface water and Transpiration may simply be copies of the label data. This is known as data leakage and can potentially lead to overfitting the training data and having poor generalization 
+### Primary Label
+- **Field**: `Rainf_tavg` (Rain precipitation rate)
+- **Remaining Parameters**: 10 (after excluding the target)
 
-Routes to deal with: Use domain knowledge, visualisation, statistical correlations, hypothesis creation
+### Important Considerations
+The target field needs to be well understood for proper utilization:
+- May need conversion to categorical or one-hot encoded variables
+- Data comes at very granular basis (3-hourly) and needs aggregation to suitable level
+- Requires careful handling to avoid data leakage
 
-All of the data is given at (3) hourly rate. This granularity is unnessecary. Daily is preferred. Can be converted to daily using aggregation. Will need to decide how metrics need to be aggreggated. Normally sum or average.
+## Data Leakage Prevention
 
-Data comes as seperate CSV files per parameter. 
+### Risk Areas
+Some parameters may have high correlations with the target:
+- Plant canopy surface water (`CanopInt_inst`) and Transpiration (`TVeg_tavg`) may be copies of label data
+- This can lead to overfitting and poor generalization
 
-To organise/access the data create a base table which holds all of the desired combinations of dates and locations (long/lat). The desired data will be then joined to this base table. This will have two other uses: firstly, it will make it eaiser to highlight missing data as joins will not take place and the data will be null. secondly, index can be applied to this base table for the train/test/valid as well as batch processing. 
+### Detection Methods
+1. **Domain Knowledge**: Understanding of weather/climate relationships
+2. **Visualization**: Graphical analysis of parameter relationships
+3. **Statistical Correlations**: Quantitative correlation analysis
+4. **Hypothesis Creation**: Testing assumptions about parameter independence
 
-Conceptually, the first step in collecting all of the data together is to create tabular dataset starting with the base table which joins in all of the parameter data for a given date. 
+## Data Processing Strategy
 
-That is to say, given a row which denoted the long-lat 10:10 for the year-month-day 2024-01-01, the param AvgSurfT_inst will be joined column wise so that the left most entry represents the value for the 2024-01-01 date and then every right sided column represents an a subsequent day with N number of columns - where N is yet to be decided. This process will be repeated for every parameter so that data set will have (N * Number of Parameters) number of columns in total (in addition to that static parameters). These columns represent the time-series structure of the dataset.
+### 1. Temporal Aggregation
+- **Current Granularity**: 3-hourly data
+- **Target Granularity**: Daily (preferred)
+- **Method**: Aggregation using sum or average (decision needed)
+- **Benefit**: Reduces unnecessary granularity
 
-Following the establishment of this comprehensive tabular dataset 2 transformation will take place: 
+### 2. Data Organization Approach
+- **Current State**: Separate CSV files per parameter
+- **Solution**: Create a base table with all desired date/location combinations
+- **Benefits**:
+  - Easier to identify missing data (null values from failed joins)
+  - Enables index application for train/test/validation splits
+  - Facilitates batch processing
 
-1. The static parameters columns will be sliced off from the dataset and retained as its own stand alone dataset with the order retained
-2. The remaining dataset will be stacked per param taking it from a 2D tabular dataset of (Number of data instances * number of joined param columns) into a 3D dataset of (Instances * N Time Series Joins * Params) where by the params are access via the 3D tensor dimension.
+### 3. Comprehensive Dataset Creation
+Create a tabular dataset starting with the base table and joining all parameter data:
 
-This second transformation is important as it is the understand input format for CNN and RNN
+**Example Structure**:
+- **Row**: longitude-latitude 10:10 for date 2024-01-01
+- **Columns**: 
+  - Leftmost: value for 2024-01-01
+  - Right columns: subsequent days (N columns, where N is to be determined)
+  - **Total Columns**: (N × Number of Parameters) + static parameters
 
-The data in transformation 1 is static and repeating. Hence doesnt make sense to go into CNN and RNN as temporal relationships aren't a relevant factor here. Instead it will be linked back into the pipeline at the fully connected stage in accordance to its batch/instance
+### 4. Data Transformation
 
-The result is 3 datasets:
-1. 2D static dataset
-2. 3D timeseries parameter dataset
-3. 1D vector of rain labels
+#### Transformation 1: Static Data Separation
+- Slice off static parameter columns
+- Retain as standalone dataset with preserved order
+- **Result**: 2D static dataset
 
-All 3 datasets are in the same order and will be accessed together as a batch/instance
+#### Transformation 2: Time-Series Restructuring
+- Stack remaining dataset per parameter
+- **Input**: 2D tabular dataset (Instances × Parameter Columns)
+- **Output**: 3D dataset (Instances × N Time Series Joins × Parameters)
+- **Purpose**: Compatible with CNN and RNN input formats
 
-The testing and build out of this data process should be first iterated on reduced Location/Data sample, 1-2 params and lower timeseries N so that the code/process can be inspected and tested
+### 5. Final Dataset Structure
+Three coordinated datasets:
+1. **2D Static Dataset**: Static parameters (longitude, latitude, year, month, day, hour)
+2. **3D Time-Series Dataset**: Temporal parameter data
+3. **1D Rain Labels**: Target variable vector
 
-After completed and comfortable with the outcomes, a method should be created to process the data on batches. This is because the data in total is vast and holding it all in memory would be slow and costly
+**Important**: All three datasets maintain the same order for batch/instance access.
 
-Note, this document only focuses on restructuring the raw data into the correct form. It has not touched preprocessing steps needed for the modelling such as normalizing, scaling and augmenting. 
+## Implementation Approach
 
-In additional to this, the data will need checking for NULLs and broken values. If these exist then there need to be a proccess for the data to be corrected
+### Phase 1: Testing and Validation
+- **Scope**: Reduced location/data sample
+- **Parameters**: 1-2 parameters initially
+- **Time Series**: Lower N value
+- **Purpose**: Code inspection and process testing
 
-These two points should not be done until the data is split into train/test/validation in order to avoid data leakage
+### Phase 2: Full Implementation
+- **Method**: Batch processing capability
+- **Reason**: Total data volume is vast
+- **Benefit**: Avoids memory issues and improves performance
+
+## Preprocessing Considerations
+
+### Data Quality Checks
+- **NULL Values**: Identify and handle missing data
+- **Broken Values**: Detect and correct corrupted data
+- **Timing**: Perform after train/test/validation split to avoid data leakage
+
+### Data Preparation Steps
+- **Normalization**: Scale data appropriately
+- **Scaling**: Ensure consistent value ranges
+- **Augmentation**: Enhance training data if needed
+
+**Note**: These preprocessing steps should NOT be performed until after data splitting to prevent data leakage.
+
+## Summary
+
+This document focuses on restructuring raw data into the correct format for machine learning models. The process involves:
+1. Creating a comprehensive base table
+2. Joining parameter data with time-series structure
+3. Separating static and temporal data
+4. Transforming to 3D format for deep learning models
+5. Ensuring proper data organization for batch processing
+
+The approach prioritizes data integrity, prevents leakage, and creates a structure suitable for CNN/RNN architectures while maintaining scalability for large datasets.
