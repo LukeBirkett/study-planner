@@ -4,7 +4,7 @@
 Please place your data specification document in this folder.
 
 ## Expected Files
-- [ ] Data specification document
+- [x] Data specification document
 - [ ] Dataset file(s)
 - [ ] Any additional data documentation
 
@@ -22,4 +22,3 @@ Please place your data specification document in this folder.
 - [ ] Document any data transformations needed
 
 ---
-*Place your data specification document above this line* 

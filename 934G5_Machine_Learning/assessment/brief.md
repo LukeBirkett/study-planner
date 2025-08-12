@@ -28,7 +28,7 @@ You are to submit 3 separate documents as specified below. Do NOT submit them as
 
 # Other Important Notice
 
-1. Your report must NOT be longer than 10 pages. Also, it must have NOT more than 3 tables and 2 figures. Nothing after p. 10 in the report will be read or marked. Also, tables after the first 3 and figures after the first 2 will be ignored.
+1. Your report must NOT be longer than 10 pages or 3000 words. Also, it must have NOT more than 3 tables and 2 figures. Nothing after p. 10 in the report will be read or marked. Also, tables after the first 3 and figures after the first 2 will be ignored.
 
 2. You are not required to code algorithms from scratch. You can use standard libraries including
 Scikit-learn, PyTorch, TensorFlow. However, you must only use standard libraries

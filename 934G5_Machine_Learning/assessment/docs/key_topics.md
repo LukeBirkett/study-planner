@@ -1,0 +1,243 @@
+Week 1:
+- Output/Labels vs Input/Features
+- Training Data vs Unseen
+- Linear Model
+- Optimization and (minimizing) Loss Functions (finding best w and b)
+- Generalization
+- Bias-Variances Trade-Off (Underfit vs Overfit)
+- Regularization 
+- Mathematical Notation (Models, Loss Functions, Datasets/Sets)
+- Matrix Notation
+- Regression vs Classification 
+- Activation Function
+
+Week 2: 
+- Decision Trees
+- KNN
+- Distance metrics
+- Ensemble: Bagging, Boosting
+- Entropy as measure of uncertainty
+- Random seed 
+- Hyperparameters & Tuning/Optimizing
+- Data Split: Train, Test, Validation
+- Parametric/Non-Parametric
+- K-Cross Validation (Hyperparameter Tuning)
+- Mixtures of experts
+
+Week 3:
+- Support vector machines
+- Naïve Bayes classifier
+- Logistic regression
+- Hyperplanes
+- Linearable Seperable
+- Bayes Rule
+- Cross Entropy Loss
+- Gradient Descent Algorithm
+- Learning Rate
+- Exploratory Data Analysis (EDA)
+- Data Skew
+- Validation Set for Hyperpara Training
+- Grid Search Method (Hyperparams)
+- Scaling/Normalization
+- Scaling Methods
+- StandardScaler
+- Activation Functions
+- Data Leakage
+- Apply scaling fit to training data and distribute to other sets
+- Output label splitting/categorization
+- Evaluation Metrics
+- F1, confusion matrix, precision, recall
+
+Week 4:
+- Classification Loss Functions; Hinge or Cross Ent
+- Sigmoid, Tanh, Relu, Leaky Relu, Expo Lin Unit, Softmax
+- Stochastic gradient descent (SGD)
+- Mini Batch GD
+- Whole GD
+- Perceptron convergence theorem
+- Fully connected (dense) layers
+- Hidden layers and hidden units
+- Feedforward network 
+- Computational Graph/Network (Nodes and Edges)
+- Backpropagation
+- Chain Rule
+- Learning Rate
+- Learning Rate Decay
+- Epochs
+- MLP Hyperparams; Hidden layers, units, loss function, activations, batch size, GD epochs, learning rate
+- Splitting target label
+- Weight and bias (param) init
+- Network matching input and output layers
+- Gradient descent method
+- Gradient decent alternative methods: AdaGrad, Adam
+- Recoding Data
+- Pytorch random number generator for seeding
+- Early Stopping to avoid overfit
+- Validation vs Training performance (validation starts to diverge)
+- Performance Plotting
+- Validation decides best model
+- Network output dimensions
+- Softmax output activation
+- Hyperparameter tuning
+- Hot one encoding
+- Global minima
+- Visualising weights
+- Negative gradient of the cost function is used to update weights and biases
+- Softmax and Cross Ent Relationship (bounded)
+
+Week 5:
+- Data preparation & preprocessing
+- Data extraction
+- Input scaling
+- Missing data
+- Data augmentation
+- Label imbalance
+- Scaling
+- Standard Scaling
+- Min-Max Scaling
+- Missing Data: Discard, impute, surrogacy 
+- Augmentation = random transformations to training data
+- Jittering, Time warming, Timereversal, Jigsaw, Dropout
+- Imbalance: under or oversample, duplicate w/ augmentation, penalization
+- Loss Functions with additional penalization
+
+Week 6:
+- The Model-Selection Curve (Valid vs Train)
+- Dimension Reduction
+- Handcrafting features
+- Evaluation Metrics
+- Accuracy
+- Confusion matrix
+- Precision, Recall, F1 score
+- ROC Curve
+- Correlation metrics - e.g. Intraclass correlation, Spearman’s correlation
+- Evaluation Strategies
+- Hold-out validation
+- 𝑘-fold cross-validation
+- leave-one-out crossvalidation (LOOCV)
+- Reporting metrics for cross-validation
+- gridsearch optimization for hyperpatameters
+- Early stopping
+
+Week 8
+- CNN
+- Spatial Features
+- Neighbouring Values
+- Kernels (Weights, Size and Amount of)
+- Weight Sharing (Reduces weights)
+- Stride
+- Feature Map (2D)
+- Padding
+- Activation Functions 
+- Pooling Layers
+- Visualising CNN Layers
+- 1D Convolution 
+- RNN
+- Temporal Features
+- Recurrance
+- LSTM
+- Sigmoid and Tahn activations
+- Hidden stage
+- Backprop Through time
+- SGD
+- Vanishing Gradient 
+- Exploding Gradients
+- Control Gates
+- Forget gate, Input gate, Output gate, Cell update 
+- Cell State
+- Cell State Pathway/Edge
+- Weight Sharing Across Time
+- Restructing Data Shape
+- Calculating Number of Params
+- Augmentation: dropout along the time dimension 
+- Augmentation: dropout along the variable dimension 
+- Augmentation: random noise along the time dimension
+- Receptive Field
+- AlexNet Evidence of Deep Networks
+- VGG Blocks Paradigm
+- GoogLeNet Mutli-Branch
+- Residual Blocks
+- Representation Learning
+- ReLU
+- Dropout
+- Pre-tained Model
+- Foundational Model
+- 3x3 Conv Stacking
+- Sim & Zisserman (2014) Deep and Narrow Networks
+- 1x1 conv
+- Stem (ingestion), Body (data process), Head (prediction)
+- Multi-Branch for kernel hyperparams
+- Inception Blocks
+- Batch Normalization Layers (parameters)
+- Unrolling
+- Time Step Dependance
+- Latent (hidden) model: ht
+- Hidden States
+- Current Time Step Input
+- RNN params: weights of input, weights of hidden state, bias of current input
+- Shared Weights (reuse)
+- LSTM
+- GRU
+- Stacking/Deep RNNs within cells
+- Context Vector
+
+Week 9 
+- Low-level, general representations
+- High-level, task specific information representations
+- Target task layers (supervised)
+- Representation learning
+- Pre-text task (learning features)
+- Representations/Features/Embeddings/Encoding/Latent Vars
+- Supervised 
+- Self-supervised (autoencoders)
+- Regularized Autoencoders
+- Sparse Autoencoders
+- Denoising Autoencoders
+- Transfer Learning (re-using encoder)
+- Pre-training to learn representations
+- Frozen Weights
+- Fine-tuned
+- Foundational Models
+- Standard Autoencoders (Deterministic)
+- Variational Autoencoders (Probabilistic)
+- Representative probability distribution 
+- Recoding Labels
+- Label/Class Frequencies
+- Scale vs Normalize
+- Undercomplete Autoencoder
+- Salient Features
+- Bottleneck/Dimension reduction
+- Overcomplete Autoencoder (more dimensions)
+- Regularized Autoencoders
+- Deep models = more complex relationships
+- Sparse Autoencoders
+- Universal Approx Theorem
+- Deep = less params
+- Layers = Features
+- Layers as modular and reusable 
+- Good representation makes subsequent tasks easier
+- Start, middle, end of network
+- Hidden layers = representations
+- Small labeled data = overfitting
+- semi-supervised = unlabeled 
+- Pretraining as regularizer and generalizer
+- Parameter initialization
+- Simple fine-tune (freeze pretrain and train task)
+- Complex fine-tune (train whole network)
+- Access local minimas through pretrain init
+- Pretraining as representation
+- Regularizers biasing towards a simple function
+- NNs are non-deterministic
+- Halt at small gradient
+- Learning clues
+- Regularization as priors and clues
+- L1 some features are irrelevant
+- L2 functions are smooth
+- L2 large weights cause sensitivities 
+- Dropout belief that no single feature or neuron is too important
+- Architecture as beliefs 
+- Translation invariables
+- Pixel localities
+- Variation Autoencoders
+- Weak assumptions
+- Learning a distribution 
