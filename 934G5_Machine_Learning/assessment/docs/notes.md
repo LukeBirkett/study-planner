@@ -1,0 +1,1 @@
+Data loader shows no data quality issues in terms of empty rows or invalid coordinates
