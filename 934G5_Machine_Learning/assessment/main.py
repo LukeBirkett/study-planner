@@ -8,8 +8,8 @@ def read_csv(filename: str) -> pd.DataFrame:
 
 PARAMS = [
     'AvgSurfT_inst',
-    # 'CanopInt_inst',
-    # 'LWdown_f_tavg',
+    'CanopInt_inst',
+    'LWdown_f_tavg',
     # 'Psurf_f_inst',
     # 'Qair_f_inst',
     # 'SnowDepth_inst',
@@ -18,7 +18,21 @@ PARAMS = [
     # 'TVeg_tavg',
     # 'Wind_f_inst',
     # 'Rainf_tavg'
-]    
+]   
+
+AGGREGATION = {
+        'Rainf_tavg': 'sum',        # Rain accumulates over time
+        'SnowDepth_inst': 'sum',    # Snow accumulation over time  
+        'CanopInt_inst': 'sum',     # Water accumulation over time
+        'Tair_f_inst': 'mean',      # Daily average temperature
+        'AvgSurfT_inst': 'mean',    # Daily average surface temperature
+        'Psurf_f_inst': 'mean',     # Daily average pressure
+        'Qair_f_inst': 'mean',      # Daily average humidity
+        'Wind_f_inst': 'mean',      # Daily average wind speed
+        'LWdown_f_tavg': 'mean',    # Daily average longwave radiation
+        'SWdown_f_tavg': 'mean',    # Daily average shortwave radiation
+        'TVeg_tavg': 'mean'         # Daily average transpiration
+    }
 
 DATES = [
     '2024_March',
@@ -73,7 +87,7 @@ for parameter in PARAMS:
 
         # Aggregate 3-hourly data to daily
         daily_df = df.groupby(['longitude', 'latitude', 'year', 'month', 'day']).agg({
-            final_col: 'mean'  # Average the weather parameter for the day
+            final_col: AGGREGATION.get(parameter, 'mean')
         }).reset_index()
     
         print(f"Original shape: {df.shape}")
@@ -84,9 +98,11 @@ for parameter in PARAMS:
         print("-" * 50)
     
     if monthly_daily_dfs:
+
         consolidated_df = pd.concat(monthly_daily_dfs, ignore_index=True)
         print(f"Shape: {consolidated_df.shape}")
         print(f"Columns: {list(consolidated_df.columns)}")
+
         output_path = f"{INTERIM_DIR}/{parameter}.csv"
         consolidated_df.to_csv(output_path, index=False)
         print(f"{parameter}: {consolidated_df.shape} -> {output_path}")
