@@ -1,3 +1,5 @@
+# This script is used to aggregate the raw data into daily data.
+
 import pandas as pd
 from pathlib import Path
 
@@ -10,14 +12,14 @@ PARAMS = [
     'AvgSurfT_inst',
     'CanopInt_inst',
     'LWdown_f_tavg',
-    # 'Psurf_f_inst',
-    # 'Qair_f_inst',
-    # 'SnowDepth_inst',
-    # 'SWdown_f_tavg',
-    # 'Tair_f_inst',
-    # 'TVeg_tavg',
-    # 'Wind_f_inst',
-    # 'Rainf_tavg'
+    'Psurf_f_inst',
+    'Qair_f_inst',
+    'SnowDepth_inst',
+    'SWdown_f_tavg',
+    'Tair_f_inst',
+    'TVeg_tavg',
+    'Wind_f_inst',
+    'Rainf_tavg'
 ]   
 
 AGGREGATION = {
@@ -89,6 +91,8 @@ for parameter in PARAMS:
         daily_df = df.groupby(['longitude', 'latitude', 'year', 'month', 'day']).agg({
             final_col: AGGREGATION.get(parameter, 'mean')
         }).reset_index()
+
+        # TODO: A check should be made that all aggregations had the same number of inputs
     
         print(f"Original shape: {df.shape}")
         print(f"Daily aggregated shape: {daily_df.shape}")
