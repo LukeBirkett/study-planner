@@ -2,7 +2,6 @@ import pandas as pd
 from pathlib import Path
 from datetime import timedelta
 import numpy as np
-import time
 
 def read_reference_table() -> pd.DataFrame:
     """Read the reference table CSV and return a pandas DataFrame."""
@@ -11,41 +10,57 @@ def read_reference_table() -> pd.DataFrame:
 
 def main():
 
-    # ===============================
-
     # Read the reference table
     ref_table = read_reference_table()
-    print(f"Reference table loaded: {ref_table.shape}")
-    
-    # Convert year, month, day to integers to avoid float formatting issues
-    ref_table['year'] = ref_table['year'].astype(int)
-    ref_table['month'] = ref_table['month'].astype(int)
-    ref_table['day'] = ref_table['day'].astype(int)
-    
-    # Extract specific instance: longitude=-179.5, latitude=68.5, year=2024, month=11, day=1
-    target_instance = ref_table[
-        (ref_table['longitude'] == -179.5) & 
-        (ref_table['latitude'] == 68.5) & 
-        (ref_table['year'] == 2024) & 
-        (ref_table['month'] == 11) & 
-        (ref_table['day'] == 1)
-    ].copy()
+    print(f"\nReference table loaded: {ref_table.shape}")
 
-    print(f"target instance:")
-    print(target_instance)
+    # batch = ref_table.iloc[0:1000000].copy()
+    batch = ref_table.copy()
 
-    # ===============================
-    
-    # Read in AvgSurfT data from interim folder
-    print(f"Loading AvgSurfT data...")
-    avgsurft_file = Path('data/interim/AvgSurfT_inst.csv')
-    
-    avgsurft_df = pd.read_csv(avgsurft_file)
-    print(f"AvgSurfT data loaded: {avgsurft_df.shape}")
-    print(f"Columns: {list(avgsurft_df.columns)}")
-    
-    # ===============================
+    print(f"\ntarget batch:")
+    print(batch.head())
+    print(batch.shape)
 
+    PARAMS = [
+    'AvgSurfT_inst',
+    # 'CanopInt_inst',
+    # 'LWdown_f_tavg',
+    # 'Psurf_f_inst',
+    # 'Qair_f_inst',
+    # 'SnowDepth_inst',
+    # 'SWdown_f_tavg',
+    # 'Tair_f_inst',
+    # 'TVeg_tavg',
+    # 'Wind_f_inst',
+    # 'Rainf_tavg'
+]  
+    
+    for param in PARAMS:
+
+        # Read in data from interim folder
+        print(f"\nLoading {param} data...")
+        file = Path(f'data/interim/{param}.parquet')
+        
+        df = pd.read_parquet(file)
+        print(f"{param} data loaded: {df.shape}")
+        
+        # Join the parameters to the reference table
+        print(f"\nJoining parameters to reference table...")
+        
+        # First, join the param data
+        print(f"Joining {param} data...")
+        joined_df = batch.merge(
+            df, 
+            on=['longitude', 'latitude', 'year', 'month', 'day'],
+            how='left'
+        )
+        print(f"After joining {param}: {joined_df.shape}")
+        
+        # Final data quality check
+        print(f"\nFinal joined dataset:")
+        print(f"Shape: {joined_df.shape}")
+        print(f"Memory usage: {joined_df.memory_usage(deep=True).sum() / 1024 / 1024:.2f} MB")
+        
     
 
 
