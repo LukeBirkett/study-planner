@@ -1,28 +1,3 @@
-# Dataset Information
-
-## Data Specification
-Please place your data specification document in this folder.
-
-## Expected Files
-- [x] Data specification document
-- [ ] Dataset file(s)
-- [ ] Any additional data documentation
-
-## Data Structure Notes
-- **Target Variable**: Binary classification (rain vs no rain)
-- **Prediction Horizon**: 1 week ahead
-- **Available Data**: Up to 17 June 2036
-- **Target Date**: 24 June 2036
-
-## Data Preprocessing Checklist
-- [ ] Examine data structure and format
-- [ ] Identify features and target variables
-- [ ] Check for missing values and data quality
-- [ ] Understand temporal aspects of the data
-- [ ] Document any data transformations needed
-
----
-
 # Data Specification
 
 The ML Coursework 2025A3 dataset was created for the A3 assessment of the 2025 Machine Learning module. It is made up of data extracted from the NASA database.
