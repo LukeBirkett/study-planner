@@ -6,6 +6,12 @@ data/raw/**/*.csv
 data/processed/
 data/interim/
 data/external/
+data/daily/
+data/daily_split/
+data/raw/
+data/references/
+data/fixed_length/
+data/varied_length/
 
 # Python
 __pycache__/
