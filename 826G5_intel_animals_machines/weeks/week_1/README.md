@@ -24,4 +24,4 @@ Seminar will entail a chat about the module, its themes, and the key ideas. Then
 | New Approaches to Robotics | Article | Essential | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/23770971050002461?institute=44SUS_INST&auth=SAML) |  |
 | Plant Intelligence | Article | Further | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/24520949760002461?institute=44SUS_INST&auth=SAML) |  |
 | Slime Mold Cognition | Article | Further | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/24520950510002461?institute=44SUS_INST&auth=SAML) |  |
-| Vehicles, experiments in synthetic psychology | Books | Further | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/23770971060002461?institute=44SUS_INST&auth=SAML) |  |
+| Vehicles, experiments in synthetic psychology | Books | Further | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/23770971060002461?institute=44SUS_INST&auth=SAML) | 1-28/1-14 |
