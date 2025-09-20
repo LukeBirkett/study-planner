@@ -6,3 +6,12 @@ In the first topic we will focus on definitions of intelligence, why many defini
 - Define intelligence in a way that is inclusive of animals.
 - Explain the problems of defining intelligence in a way that ends up with semantic arguments.
 - Explain where behaviour comes from and show how it ‘emerges’ from the interaction of brain, body and environment.
+
+# Lecture 
+TBC
+
+# Seminar 
+Seminar will entail a chat about the module, its themes, and the key ideas. Then there will be large-group, small-group discussions about the reading. 
+
+ - [ ] Shettleworth (2010) Clever animals and killjoy explanations in comparative psychology
+ - [ ] Guest and Martin (2021) How Computational Modeling Can Force Theory Building in Psychological Science
