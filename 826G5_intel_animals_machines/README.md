@@ -3,7 +3,7 @@
 [Reading List](https://sussex.leganto.exlibrisgroup.com/leganto/nui/lists/23770970950002461?auth=SAML) /
 [Assessment Page](https://canvas.sussex.ac.uk/courses/34991/pages/assessments-and-feedback-2)
 
-# Timetabling
+# Timetable
 
 | Type | Day | Freq | Amount | Time | Location | 
 |---|---|---|---|---|---|
