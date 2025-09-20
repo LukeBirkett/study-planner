@@ -11,9 +11,9 @@ This module will develop understanding of what it means for an animal or a machi
 
 | Type | Day | Freq | Amount | Time | Location | Who | 
 |---|---|---|---|---|---|---|
-| Lecture | Monday | Weekly | 9 | 3pm-5pm | Pevensey 1 1A7 | Paul Graham | 
-| Seminar | Tuesday | Bi-Weekly | 6 (1, 3, 5, 7, 9, 11)| 11am-1pm | Pevensey 1 2D11 | Maxine Sherman |
-| Lab | Thursday | Bi-Weekly | 4 (2, 4, 6, 8) | 11am-1pm | Chichester 1 CHI 014/015 | Maxine Sherman |
+| Lecture | Monday | Weekly | 9 [1, 2, 3, 4, 5, 6, 7, 9, 10] | 3pm-5pm | Pevensey 1 1A7 | Paul Graham | 
+| Seminar | Tuesday | Bi-Weekly | 6 [1, 3, 5, 7, 9, 11]| 11am-1pm | Pevensey 1 2D11 | Maxine Sherman |
+| Lab | Thursday | Bi-Weekly | 4 [2, 4, 6, 8] | 11am-1pm | Chichester 1 CHI 014/015 | Maxine Sherman |
 
 # Assessments
 
