@@ -5,13 +5,18 @@
 
 # Timetabling
 
-| Type | Day | Freq | Amount | Time | Location
+| Type | Day | Freq | Amount | Time | Location | 
 |---|---|---|---|---|---|
 | Lecture | Monday | Weekly | 9 | 3pm-5pm | Pevensey 1 1A7 |
 | Seminar | Tuesday | Bi-Weekly | 6 (1, 3, 5, 7, 9, 11)| 11am-1pm | Pevensey 1 2D11 |
 | Lab | Thursday | Bi-Weekly | 4 (2, 4, 6, 8) | 11am-1pm | Chichester 1 CHI 014/015 |
 
 # Assessments
+
+| Type | Link | Weighting | Words |
+|---|---|---|---|
+| Modelling Report 1 | [Page](https://canvas.sussex.ac.uk/courses/34991/pages/assignment-1-details-worth-20-percent-modelling-report-option?module_item_id=1509121) | 20% | 1000 |
+| Modelling Report 2 | [Page](https://canvas.sussex.ac.uk/courses/34991/pages/assignment-2-details-worth-80-percent-modelling-report-option?module_item_id=1509123) | 80% | 2500 |
 
 # [Weeks]()
 - [] [Week 1 - ]()
