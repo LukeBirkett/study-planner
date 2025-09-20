@@ -23,5 +23,5 @@ This module will develop understanding of what it means for an animal or a machi
 | Modelling Report 2 | [Page](https://canvas.sussex.ac.uk/courses/34991/pages/assignment-2-details-worth-80-percent-modelling-report-option?module_item_id=1509123) | 80% | 2500 |
 
 # [Weeks]()
-- [] [Week 1 - ]()
+- [ ] [Week 1 - What is intelligence and does it need a brain?](https://github.com/LukeBirkett/study-planner/tree/main/826G5_intel_animals_machines/weeks/week_1)
 
