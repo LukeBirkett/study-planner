@@ -16,3 +16,12 @@ Seminar will entail a chat about the module, its themes, and the key ideas. Then
 
  - [ ] **Seminar**: Shettleworth (2010) Clever animals and killjoy explanations in comparative psychology [[Link](https://github.com/LukeBirkett/study-planner/blob/main/826G5_intel_animals_machines/weeks/week_1/readings/shettleworth_2010_killjoy_explanations.pdf), [GS](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Clever+animals+and+killjoy+explanations+in+comparative+psychology&btnG=)]
  - [ ] **Additional**: Guest and Martin (2021) How Computational Modeling Can Force Theory Building in Psychological Science [[Link](https://github.com/LukeBirkett/study-planner/blob/main/826G5_intel_animals_machines/weeks/week_1/readings/guest_martin_2021_how_computational_modeling.pdf), [GS](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=How+Computational+Modeling+Can+Force+Theory+Building+in+Psychological+Science&btnG=)]
+
+# Reading List
+
+| Name | Type | Category | Link | Additional | 
+|---|---|---|---|---|
+| New Approaches to Robotics | Article | Essential | [Page](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971050002461?auth=SAML) |  |
+| Plant Intelligence | Article | Further | [Page](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/24520949760002461?auth=SAML) |  |
+| Slime Mold Cognition | Article | Further | [Page](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/24520950510002461?auth=SAML) |  |
+| Vehicles, experiments in synthetic psychology | Books | Further | [Page](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971060002461?auth=SAML) |  |
