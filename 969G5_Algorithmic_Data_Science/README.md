@@ -1,7 +1,7 @@
-[Module Page]() /
-[Recordings]() /
-[Reading List]() /
-[Assessment Page]()
+[Module Page](https://canvas.sussex.ac.uk/courses/35221) /
+[Recordings](https://sussex.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?embedded=1&nomobileprompt=true#folderID=%22b624258e-4c26-45d0-9897-b22600c4706d%22) /
+[Reading List](https://sussex.leganto.exlibrisgroup.com/leganto/nui/lists/23771532240002461?auth=SAML) /
+[Assessment Page](https://canvas.sussex.ac.uk/courses/35221/pages/assessments-and-feedback-2)
 
 # Module Outline
 
