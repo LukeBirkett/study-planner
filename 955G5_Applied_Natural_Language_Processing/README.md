@@ -4,7 +4,7 @@
 [Assessment Page](https://canvas.sussex.ac.uk/courses/35030/pages/assessments-and-feedback-2)
 
 # Module Outline
-
+On this module, you will learn about Natural Language Processing (NLP) applications while also learning about existing technology, problems and potential solutions.  Alongside learning the Python programming language, you will gain hands-on practical experience with off-the-shelf technology and carry out empirical investigations into its effectiveness.   You will develop an appreciation of the challenges in NLP along with an awareness of what is and is not currently possible.
 
 # Timetable
 
