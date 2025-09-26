@@ -4,7 +4,7 @@
 [Assessment Page](https://canvas.sussex.ac.uk/courses/35221/pages/assessments-and-feedback-2)
 
 # Module Outline
-
+This module focuses on how data are represented and manipulated to achieve good performance on large data sets. In lectures, students will learn about data structures and algorithms and how to analyse them for efficiency. Algorithms for sorting, computing similarity, manipulating matrices and analysing networks are considered. Introductions are given to parallel and distributed computing and databases. In laboratory sessions, students will develop their Python programming skills, work with a variety of data sets including large data sets from real world applications, and investigate the impact on run-time of their algorithmic choices. 
 
 # Timetable
 
