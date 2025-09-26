@@ -36,7 +36,6 @@ TBC
 | Type | Link | Weighting | Words |
 |---|---|---|---|
 |  | [Page]() |  |  |
-|  | [Page]() |  |  |
 
 # [Weeks]()
 - [ ] [Week 1 - Introduction]()
