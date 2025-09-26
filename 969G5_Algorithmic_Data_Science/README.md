@@ -10,9 +10,10 @@
 
 | Type | Day | Freq | Amount | Time | Location | Who | 
 |---|---|---|---|---|---|---|
-| Lecture |  |  |  |  |  |  | 
-| Seminar |  |  |  |  |  |  |
-| Lab     |  |  |  |  |  |  |
+| Lecture | Thursday  | Weekly | 11 | 9am-11am  | A02 (278)   | Adam Barrett | 
+| Lab     | Monday    | Weekly | 11 | 11am-1pm  | CHI1-014/15 | Adam Barrett |
+| Lab     | Wednesday | Weekly | 11 | 10am-12pm | CHI1-014/15 | Adam Barrett |
+| Lab     | Thursday  | Weekly | 11 | 11am-1pm  | CHI1-016    | Adam Barrett |
 
 <details>
   <summary>Detailed Timetable...</summary>
