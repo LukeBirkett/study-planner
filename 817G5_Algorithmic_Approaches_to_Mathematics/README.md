@@ -10,9 +10,10 @@ You are a student. You cannot hope to eat all the mathematics in this world. One
 
 | Type | Day | Freq | Amount | Time | Location | Who | 
 |---|---|---|---|---|---|---|
-| Lecture | Friday    | Weekly | 10 | 3pm-5pm  | RICH-AS3 (201) | Druva Raman | 
-| Lab     | Wednesday | Weekly | 11 | 11am-1pm | CHI1-016/17/18 | Druva Raman |
-| Lab     | Friday    | Weekly | 11 | 9am-11am | CHI1-016/17/18 | Druva Raman |
+| Lecture | Friday    | Weekly | 10 | 3pm-5pm   | RICH-AS3 (201) | Druva Raman | 
+| Lab     | Wednesday | Weekly | 11 | 11am-1pm  | CHI1-016/17/18 | Druva Raman |
+| Lab     | Friday    | Weekly | 11 | 9am-11am  | CHI1-016/17/18 | Druva Raman |
+| Office?  | Friday   | Weekly | 11 | 10am-12am | ? | Druva Raman |
 
 <details>
   <summary>Detailed Timetable...</summary>
