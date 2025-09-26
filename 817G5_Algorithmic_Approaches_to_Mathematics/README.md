@@ -1,4 +1,4 @@
-[Module Page]([817G5_Algorithmic_Approaches_to_Mathematics](https://canvas.sussex.ac.uk/courses/34902)) /
+[Module Page](https://canvas.sussex.ac.uk/courses/34902) /
 [Recordings](https://sussex.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?embedded=1&nomobileprompt=true#folderID=%224f3553dc-dee8-49b9-b742-b22100a4a310%22) /
 [Reading List](https://sussex.leganto.exlibrisgroup.com/leganto/nui/lists/23770772470002461?auth=SAML) /
 [Assessment Page](https://canvas.sussex.ac.uk/courses/34902/pages/assessments-and-feedback-2-2)
