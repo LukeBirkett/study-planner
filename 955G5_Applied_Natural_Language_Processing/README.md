@@ -36,8 +36,8 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 
 | Type | Link | Weighting | Words |
 |---|---|---|---|
-| Coursework | [Page]() |  |  |
-| Exame      | [Page]() |  |  |
+| Coursework     | [Page]() | 30% |  |
+| Computer Exam  | [Page]() | 70% |  |
 
 # [Weeks]()
 - [ ] [Week 0 - ]()
