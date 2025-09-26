@@ -42,5 +42,5 @@ TBC
 |  | [Page]() |  |  |
 
 # [Weeks]()
-- [ ] [Week 0 - ]()
+- [ ] [Week 0 - Crash Course](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_0)
 - [ ] [Week 1 - ]()
