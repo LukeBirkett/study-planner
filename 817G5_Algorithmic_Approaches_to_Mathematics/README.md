@@ -27,8 +27,6 @@ You are a student. You cannot hope to eat all the mathematics in this world. One
   | 14-15  |--- |--- |---    |---  |---      |
   | 15-16  |--- |--- |---    |---  | Lecture |
   | 16-17  |--- |--- |---    |---  | Lecture |
-  | 17-18  |--- |--- |---    |---  |---      |
-  | 18-19  |--- |--- |---    |---  |---      |
 
 </details>
 
