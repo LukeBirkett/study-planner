@@ -10,9 +10,10 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 
 | Type | Day | Freq | Amount | Time | Location | Who | 
 |---|---|---|---|---|---|---|
-| Lecture |  |  |  |  |  |  | 
-| Seminar |  |  |  |  |  |  |
-| Lab     |  |  |  |  |  |  |
+| Lecture      |  |  |  |  |  |  | 
+| Seminar      |  |  |  |  |  |  |
+| Lab          |  |  |  |  |  |  |
+| Office Hours | Friday | Weekly | 11 | 1pm-3pm | Chi 1 215 | Jeff Mitchell |
 
 <details>
   <summary>Detailed Timetable...</summary>
@@ -39,7 +40,7 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 | Coursework     | [Page]() | 30% |  |
 | Computer Exam  | [Page]() | 70% |  |
 
-# [Weeks]()
+# [Weeks](https://canvas.sussex.ac.uk/courses/35030/pages/module-content)
 - [ ] [Week 0 - ]()
 - [ ] [Week 1 - ]()
 
