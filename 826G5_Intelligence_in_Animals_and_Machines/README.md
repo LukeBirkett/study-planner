@@ -46,4 +46,3 @@ This module will develop understanding of what it means for an animal or a machi
 # [Weeks]()
 - [ ] [Week 0 - Preliminary](https://github.com/LukeBirkett/study-planner/tree/main/826G5_intel_animals_machines/weeks/week_0)
 - [ ] [Week 1 - What is intelligence and does it need a brain?](https://github.com/LukeBirkett/study-planner/tree/main/826G5_intel_animals_machines/weeks/week_1)
-t
