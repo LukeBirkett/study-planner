@@ -10,4 +10,9 @@ This week we will be looking at some of the standard data structures which can b
 - [ ] [Solutions]()
 
 # Reading
-Cormen et al: Chapter 10 (Elementary data structures), Chapter 11 (Hash tables), Chapter 12 (Binary Search trees)
+- [ ] [Cormen et al:](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/24386287590002461?auth=SAML)
+  - [ ] Chapter 10 (Elementary data structures),
+  - [ ] Chapter 11 (Hash tables),
+  - [ ] Chapter 12 (Binary Search trees)
+
+
