@@ -10,26 +10,26 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 
 | Type | Day | Freq | Amount | Time | Location | Who | 
 |---|---|---|---|---|---|---|
-| Lecture      |  |  |  |  |  |  | 
-| Seminar      |  |  |  |  |  |  |
-| Lab          |  |  |  |  |  |  |
-| Office Hours | Friday | Weekly | 11 | 1pm-3pm | Chi 1 215 | Jeff Mitchell |
+| Lecture      | Thursday | Weekly | 11 | 4pm-6pm  | RICH-AS3 (201) | Jeff Mitchell  | 
+| Lab 2        | Tuesday  | Weekly | 11 | 9am-11am | CHI1-016/17/18 | Jeff Mitchell  |
+| Lab 1        | Tuesday  | Weekly | 11 | 1pm-3pm  | CHI1-016/17/18 | Jeff Mitchell  |
+| Office Hours | Friday   | Weekly | 11 | 1pm-3pm  | CHI1-215       | Jeff Mitchell |
 
 <details>
   <summary>Detailed Timetable...</summary>
 
   |   | Mon | Tue | Wed | Thurs | Fri |
   |---|---|---|---|---|---|
-  | 09-10  |---      |---      |---|---  |---|
-  | 10-11  |---      |---      |---|---  |---|
-  | 11-12  |---      |---      |---|---  |---|
-  | 12-13  |---      |---      |---|---  |---|
-  | 13-14  |---      |---      |---|---  |---|
-  | 14-15  |---      |---      |---|---  |---|
-  | 15-16  |---      |---      |---|---  |---|
-  | 16-17  |---      |---      |---|---  |---|
-  | 17-18  |---      |---      |---|---  |---|
-  | 18-19  |---      |---      |---|---  |---|
+  | 09-10  |--- | Lab 2   |---|---      |---     |
+  | 10-11  |--- | Lab 2   |---|---      |---     |
+  | 11-12  |--- |---      |---|---      |---     |
+  | 12-13  |--- |---      |---|---      |---     |
+  | 13-14  |--- | Lab 1   |---|---      | Office |
+  | 14-15  |--- | Lab1    |---|---      | Office |
+  | 15-16  |--- |---      |---|---      |---     |
+  | 16-17  |--- |---      |---| Lecture |---     |
+  | 17-18  |--- |---      |---| Lecture |---     |
+  | 18-19  |--- |---      |---|---      |---     |
 
 </details>
 
