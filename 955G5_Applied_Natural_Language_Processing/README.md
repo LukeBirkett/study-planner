@@ -36,8 +36,8 @@
 
 | Type | Link | Weighting | Words |
 |---|---|---|---|
-|  | [Page]() |  |  |
-|  | [Page]() |  |  |
+| Coursework | [Page]() |  |  |
+| Exame      | [Page]() |  |  |
 
 # [Weeks]()
 - [ ] [Week 0 - ]()
