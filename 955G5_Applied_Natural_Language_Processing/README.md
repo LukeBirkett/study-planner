@@ -41,6 +41,6 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 | Computer Exam  | [Page]() | 70% |  |
 
 # [Weeks](https://canvas.sussex.ac.uk/courses/35030/pages/module-content)
-- [ ] [Week 0 - ]()
-- [ ] [Week 1 - ]()
+- [ ] [Week 1 - Intro to ANLP and Python]()
+- [ ] [Week 2 - Text Documents and Preprocessing]()
 
