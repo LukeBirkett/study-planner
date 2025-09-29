@@ -1,0 +1,55 @@
+# ------------------------------------
+# 1. DEPENDENCIES & ENVIRONMENTS
+# ------------------------------------
+# Virtual environments
+.venv/
+venv/
+env/
+myenv/
+*/.venv/
+
+# Dependencies installed by package managers
+node_modules/
+bower_components/
+
+# ------------------------------------
+# 2. COMPILED & BUILD FILES
+# ------------------------------------
+# Python
+__pycache__/
+*.pyc
+*.pyd
+*.so
+dist/
+build/
+.pytest_cache/
+
+# Java/Maven/Gradle (if applicable)
+/target/
+/bin/
+
+# ------------------------------------
+# 3. OPERATING SYSTEM & EDITOR FILES
+# ------------------------------------
+# macOS/Linux
+.DS_Store
+*.swp
+*~
+
+# Windows
+Thumbs.db
+
+# IDEs (VS Code, JetBrains, etc.)
+.vscode/
+.idea/
+
+# ------------------------------------
+# 4. DATA AND LOGS
+# ------------------------------------
+# Log files
+*.log
+
+# Temporary/Output Data
+data/raw/
+data/references/
+
