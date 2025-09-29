@@ -3,7 +3,7 @@
 #### Set New Venv
 
 ```
-python -m venv [myenv]
+python -m venv [myenv_venv]
 source [myenv]/bin/activate
 pip install ipykernel
 python -m ipykernel install --user --name=[myenv]
@@ -26,7 +26,16 @@ jupyter kernelspec uninstall myenv
 ```
 touch my_script.py
 ```
+
 ```
 pip freeze > requirements.txt
+```
+
+```
+touch .gitignore
+vim .gitignore
+# --- New Wildcard Rule for Future Environments ---
+# Ignores any directory named 'venv_' followed by any characters, anywhere in the repo.
+venv_*/
 ```
 
