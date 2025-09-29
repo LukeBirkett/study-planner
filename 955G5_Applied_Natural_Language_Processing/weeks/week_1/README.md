@@ -15,12 +15,15 @@ You might also:
 - develop an awareness of more advanced concepts such as classes and lazy generators
 
 # Lecture 
-- [ ] []()
+- [ ] [Lecture Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/Lec1.pdf)
+- [ ] [Quiz](https://canvas.sussex.ac.uk/courses/35030/quizzes/56818)
 
-# Seminar 
-- [ ] []()
+# Lab 
+- [ ] [Lab Folder](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/lab)
+- [ ] [Getting Started Tutorial](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=dcae896f-3482-49fe-a19c-b08b01158653&start=0)
 
 # Reading
 
-| Name | Type | Category | Link | Additional | 
-|---|---|---|---|---|
+| Name | Type | Link | Additional |
+|---|---|---|---|
+| Jurafsky et al (2009) Speech and Language Processing | Textbook | [Link](undefined), [PDF](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/JurafskyMartinSpeechAndLanguageProcessing2ed_draft%202007.pdf) | Chapter 1 |
