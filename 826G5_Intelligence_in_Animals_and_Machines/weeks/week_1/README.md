@@ -13,11 +13,11 @@ TBC
 # Seminar 
 Seminar will entail a chat about the module, its themes, and the key ideas. Then there will be large-group, small-group discussions about the reading. 
 
+ - [ ] [Seminar Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/IAM_week1_seminar.pdf)
+ - [ ] **Seminar Reading**: Shettleworth (2010) Clever animals and killjoy explanations in comparative psychology [[Link](https://github.com/LukeBirkett/study-planner/blob/main/826G5_intel_animals_machines/weeks/week_1/readings/shettleworth_2010_killjoy_explanations.pdf), [GS](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Clever+animals+and+killjoy+explanations+in+comparative+psychology&btnG=)]
+ - [ ] **Additional Reading**: Guest and Martin (2021) How Computational Modeling Can Force Theory Building in Psychological Science [[Link](https://github.com/LukeBirkett/study-planner/blob/main/826G5_intel_animals_machines/weeks/week_1/readings/guest_martin_2021_how_computational_modeling.pdf), [GS](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=How+Computational+Modeling+Can+Force+Theory+Building+in+Psychological+Science&btnG=)]
 
- - [ ] **Seminar**: Shettleworth (2010) Clever animals and killjoy explanations in comparative psychology [[Link](https://github.com/LukeBirkett/study-planner/blob/main/826G5_intel_animals_machines/weeks/week_1/readings/shettleworth_2010_killjoy_explanations.pdf), [GS](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Clever+animals+and+killjoy+explanations+in+comparative+psychology&btnG=)]
- - [ ] **Additional**: Guest and Martin (2021) How Computational Modeling Can Force Theory Building in Psychological Science [[Link](https://github.com/LukeBirkett/study-planner/blob/main/826G5_intel_animals_machines/weeks/week_1/readings/guest_martin_2021_how_computational_modeling.pdf), [GS](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=How+Computational+Modeling+Can+Force+Theory+Building+in+Psychological+Science&btnG=)]
-
-# Reading List
+# Reading
 
 | Name | Type | Category | Link | Additional | 
 |---|---|---|---|---|
