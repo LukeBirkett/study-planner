@@ -8,7 +8,7 @@ In the first topic we will focus on definitions of intelligence, why many defini
 - Explain where behaviour comes from and show how it ‘emerges’ from the interaction of brain, body and environment.
 
 # Lecture 
-TBC
+- [ ] [Lecture Slides - No Brains](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/IAM%20Lecture%201%20No%20Brains%202025.pdf)
 
 # Seminar 
 Seminar will entail a chat about the module, its themes, and the key ideas. Then there will be large-group, small-group discussions about the reading. 
