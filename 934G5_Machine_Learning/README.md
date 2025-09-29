@@ -37,6 +37,10 @@ pip install numpy
 pip install matplotlib
 pip install scikit-learn
 ```
+```
+jupyter kernelspec list
+jupyter kernelspec uninstall myenv
+```
 
 ```
 touch my_script.py
