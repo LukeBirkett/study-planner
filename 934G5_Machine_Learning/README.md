@@ -30,6 +30,8 @@ pip install notebook
 jupyter notebook
 ```
 
+The Kernel is a Persistent Pointer. This means if you call all envs the same name (myenv) the kernel will always point to the most recently created kernel
+
 ```
 pip install numpy
 pip install matplotlib
