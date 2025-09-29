@@ -26,4 +26,7 @@ jupyter kernelspec uninstall myenv
 ```
 touch my_script.py
 ```
+```
+pip freeze > requirements.txt
+```
 
