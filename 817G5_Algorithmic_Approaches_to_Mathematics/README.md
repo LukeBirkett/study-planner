@@ -1,4 +1,4 @@
-[Module Page](817G5_Algorithmic_Approaches_to_Mathematics) /
+[Module Page](https://canvas.sussex.ac.uk/courses/34902) /
 [Recordings](https://sussex.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?embedded=1&nomobileprompt=true#folderID=%224f3553dc-dee8-49b9-b742-b22100a4a310%22) /
 [Reading List](https://sussex.leganto.exlibrisgroup.com/leganto/nui/lists/23770772470002461?auth=SAML) /
 [Assessment Page](https://canvas.sussex.ac.uk/courses/34902/pages/assessments-and-feedback-2-2)
@@ -10,9 +10,10 @@ You are a student. You cannot hope to eat all the mathematics in this world. One
 
 | Type | Day | Freq | Amount | Time | Location | Who | 
 |---|---|---|---|---|---|---|
-| Lecture | Friday    | Weekly | 10 | 3pm-5pm  | RICH-AS3 (201) | Druva Raman | 
-| Lab     | Wednesday | Weekly | 11 | 11am-1pm | CHI1-016/17/18 | Druva Raman |
-| Lab     | Friday    | Weekly | 11 | 9am-11am | CHI1-016/17/18 | Druva Raman |
+| Lecture | Friday    | Weekly | 10 | 3pm-5pm   | RICH-AS3 (201) | Druva Raman | 
+| Lab     | Wednesday | Weekly | 11 | 11am-1pm  | CHI1-016/17/18 | Druva Raman |
+| Lab     | Friday    | Weekly | 11 | 9am-11am  | CHI1-016/17/18 | Druva Raman |
+| Office?  | Friday   | Weekly | 11 | 10am-12am | ? | Druva Raman |
 
 <details>
   <summary>Detailed Timetable...</summary>

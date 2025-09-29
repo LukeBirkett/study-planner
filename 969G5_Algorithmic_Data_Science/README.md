@@ -10,21 +10,23 @@ This module focuses on how data are represented and manipulated to achieve good 
 
 | Type | Day | Freq | Amount | Time | Location | Who | 
 |---|---|---|---|---|---|---|
-| Lecture | Thursday  | Weekly | 11 | 9am-11am  | A02 (278)   | Adam Barrett | 
-| Lab     | Monday    | Weekly | 11 | 11am-1pm  | CHI1-014/15 | Adam Barrett |
-| Lab     | Wednesday | Weekly | 11 | 10am-12pm | CHI1-014/15 | Adam Barrett |
-| Lab     | Thursday  | Weekly | 11 | 11am-1pm  | CHI1-016    | Adam Barrett |
+| Lecture | Thursday   | Weekly | 11 | 9am-11am  | A02 (278)   | Adam Barrett | 
+| Lab     | Monday     | Weekly | 11 | 11am-1pm  | CHI1-014/15 | Adam Barrett |
+| Lab     | Wednesday  | Weekly | 11 | 10am-12pm | CHI1-014/15 | Adam Barrett |
+| Lab     | Thursday   | Weekly | 11 | 11am-1pm  | CHI1-016    | Adam Barrett |
+| Office  | Mon/Thurs  | Weekly | 11 | 10-11/2-3 | ???         | Adam Barrett |
 
 <details>
   <summary>Detailed Timetable...</summary>
 
   |   | Mon | Tue | Wed | Thurs | Fri |
   |---|---|---|---|---|---|
-  | 09-10  |---    |---   |---   |Lecture |---|
-  | 10-11  |---    |---   |Lab 2 |Lecture |---|
-  | 11-12  |Lab 1  |---   |Lab 2 |Lab 3   |---|
-  | 12-13  |Lab 1  |---   |---   |Lab 3   |---|
-  | 13-14  |---    |---   |---   |---     |---|
+  | 09-10  |---     |---   |---    | Lecture |---|
+  | 10-11  | Office |---   | Lab 2 | Lecture |---|
+  | 11-12  | Lab 1  |---   | Lab 2 | Lab 3   |---|
+  | 12-13  | Lab 1  |---   |---    | Lab 3   |---|
+  | 13-14  |---     |---   |---    |---      |---|
+  | 14-15  |---     |---   |---    | Office  |---|
 
 </details>
 
@@ -38,4 +40,4 @@ TBC
 
 # [Weeks]()
 - [ ] [Week 0 - Crash Course](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_0)
-- [ ] [Week 1 - ]()
+- [ ] [Week 1 - Data Structures and Data Formats](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_1)
