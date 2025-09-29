@@ -11,7 +11,11 @@ w2env/
 w3env/
 w4/
 ml_labs/
-nlp_w1/
+*env/
+
+# --- New Wildcard Rule for Future Environments ---
+# Ignores any directory named 'venv_' followed by any characters, anywhere in the repo.
+venv_*/
 
 
 # Dependencies installed by package managers
