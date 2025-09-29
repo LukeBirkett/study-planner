@@ -7,6 +7,12 @@ venv/
 env/
 myenv/
 */.venv/
+w2env/
+w3env/
+w4/
+ml_labs/
+nlp_w1/
+
 
 # Dependencies installed by package managers
 node_modules/
