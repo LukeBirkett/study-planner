@@ -38,4 +38,6 @@ vim .gitignore
 # Ignores any directory named 'venv_' followed by any characters, anywhere in the repo.
 venv_*/
 ```
+test
+
 
