@@ -9,7 +9,7 @@ In the first topic we will focus on definitions of intelligence, why many defini
 
 # Lecture 
 - [x] [Lecture Slides - No Brains](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/IAM%20Lecture%201%20No%20Brains%202025.pdf)
-- [x] [Lecture Recording]()
+- [x] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d0401628-f318-4746-8e0a-b3680094a55d)
 - [ ] [Rough Notes]()
 
 # Seminar 
