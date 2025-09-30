@@ -19,8 +19,8 @@ You might also:
 - [ ] [Quiz](https://canvas.sussex.ac.uk/courses/35030/quizzes/56818)
 
 # Lab 
-- [ ] [Lab Folder](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/lab)
-- [ ] [Getting Started Tutorial](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=dcae896f-3482-49fe-a19c-b08b01158653&start=0)
+- [x] [Lab Folder](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/lab)
+- [x] [Getting Started Tutorial](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=dcae896f-3482-49fe-a19c-b08b01158653&start=0)
 
 # Reading
 
