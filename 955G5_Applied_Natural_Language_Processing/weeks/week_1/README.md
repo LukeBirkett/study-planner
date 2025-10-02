@@ -15,7 +15,7 @@ You might also:
 - develop an awareness of more advanced concepts such as classes and lazy generators
 
 # Lecture 
-- [ ] [Lecture Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/Lec1.pdf)
+- [x] [Lecture Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/Lec1.pdf)
 - [ ] [Quiz](https://canvas.sussex.ac.uk/courses/35030/quizzes/56818)
 
 # Lab 
