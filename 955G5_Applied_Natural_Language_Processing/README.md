@@ -35,10 +35,10 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 
 # Assessments
 
-| Type | Link | Weighting | Words | Due |
-|---|---|---|---|---|
-| Coursework     | [Page](https://canvas.sussex.ac.uk/courses/35030/pages/assessments-and-feedback-2#:~:text=Assessments%20%26%20Feedback-,Coursework,-The%20first%20assessment) | 30% |  | 20 Nov |
-| Computer Exam  | [Page](https://canvas.sussex.ac.uk/courses/35030/pages/assessments-and-feedback-2#:~:text=technology%20as%20required.-,Computer,-Based%20Exam) | 70% |  | TBC |
+| Type | Link | Weighting | Due |
+|---|---|---|---|
+| Coursework     | [Page](https://canvas.sussex.ac.uk/courses/35030/pages/assessments-and-feedback-2#:~:text=Assessments%20%26%20Feedback-,Coursework,-The%20first%20assessment) | 30% | 20 Nov |
+| Computer Exam  | [Page](https://canvas.sussex.ac.uk/courses/35030/pages/assessments-and-feedback-2#:~:text=technology%20as%20required.-,Computer,-Based%20Exam) | 70% | TBC |
 
 # [Weeks](https://canvas.sussex.ac.uk/courses/35030/pages/module-content)
 - [ ] [Week 1 - Intro to ANLP and Python](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_1)
