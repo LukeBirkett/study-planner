@@ -35,10 +35,10 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 
 # Assessments
 
-| Type | Link | Weighting | Words |
-|---|---|---|---|
-| Coursework     | [Page]() | 30% |  |
-| Computer Exam  | [Page]() | 70% |  |
+| Type | Link | Weighting | Words | Due |
+|---|---|---|---|---|
+| Coursework     | [Page]() | 30% |  | 20 Nov |
+| Computer Exam  | [Page]() | 70% |  | TBC |
 
 # [Weeks](https://canvas.sussex.ac.uk/courses/35030/pages/module-content)
 - [ ] [Week 1 - Intro to ANLP and Python](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_1)
