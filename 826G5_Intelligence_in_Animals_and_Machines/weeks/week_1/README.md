@@ -24,5 +24,5 @@ In the first topic we will focus on definitions of intelligence, why many defini
 | How Computational Modeling Can Force Theory Building in Psychological Science (Guest and Martin, 2021) | Seminar Extra | Article | [Link](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/readings/guest_martin_2021_how_computational_modeling.pdf) | |---|
 | New Approaches to Robotics (Brooks, 1991) | Article | Essential | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/23770971050002461?institute=44SUS_INST&auth=SAML) |  |  |
 | Plant Intelligence (Trewavas, 2016) | Article | Further | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/24520949760002461?institute=44SUS_INST&auth=SAML) |||
-| Slime Mold Cognition | Article | Further | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/24520950510002461?institute=44SUS_INST&auth=SAML) |||
+| Slime Mold Cognition (Reid, 2023) | Article | Further | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/24520950510002461?institute=44SUS_INST&auth=SAML) |||
 | Vehicles, experiments in synthetic psychology (Braitenberg, 1984) | Books | Further | [Page](https://readinglists.sussex.ac.uk/leganto/nui/citation/23770971060002461?institute=44SUS_INST&auth=SAML) | 1-28/1-14 ||
