@@ -40,7 +40,7 @@ Adpative behaviour leads to an increase of fitness and survival
 
 Intelligence is what organisms do
 
-One issue to think about is whether there is exists an intelligent vs unintelligence way to produce an output. This concept is explores in the article [SLIME MOULD]()
+One issue to think about is whether there is exists an intelligent vs unintelligence way to produce an output. This concept is explores in the article [Slime Mold Cognition (Reid, 2023)](https://readinglists.sussex.ac.uk/leganto/nui/citation/24520950510002461?institute=44SUS_INST&auth=SAML)
 
 ## Where Does Behaviour Come From?
 
