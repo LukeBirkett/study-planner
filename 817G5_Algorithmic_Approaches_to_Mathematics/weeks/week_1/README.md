@@ -8,4 +8,4 @@
 
 ## Lab
 - [ ] [Lab](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/lab)
-- [ ] Install Julia and get a Pluto notebook running
+- [ ] [Julia Setup](https://algorithmic-approaches-to-mathematics.github.io/prerequisites/installation/)
