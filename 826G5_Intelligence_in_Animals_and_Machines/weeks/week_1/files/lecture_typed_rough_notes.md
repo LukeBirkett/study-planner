@@ -50,7 +50,7 @@ Thinking about a car/vehcicle, speed emerges through interaction with the enviro
 
 Behaviour is something that emerges
 
-[ARTICLE: Braitenburg Vehicles]()
+[Vehicles, experiments in synthetic psychology (Braitenberg, 1984)](https://readinglists.sussex.ac.uk/leganto/nui/citation/23770971060002461?institute=44SUS_INST&auth=SAML&continue=)
 
 A thought experiement, think about behaviour of agents with simple mechanisms, the compexity of an envirorment and how the agent interacts
 
