@@ -26,7 +26,7 @@ This is seen as a **top-down** approach to intelligence where we start with huma
 
 This module focuses on a **bottom-up** approach. This is where we observe basic, rudimentary beahvours which peice together to create complex outputs 
 
-ARTICLE REFERENCE []()
+[Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/readings/shettleworth_2010_killjoy_explanations.pdf)
 
 Note, the terms "bottom-up" and "top-down" are used many times through various branches of liturature with varying definitions. The defintition we are working from are governed by the above article
 
