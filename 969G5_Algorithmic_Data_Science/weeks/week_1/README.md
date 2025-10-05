@@ -7,8 +7,9 @@ This week we will be looking at some of the standard data structures which can b
 - Be able to manipulate lists and dictionaries in Python, and time operations.
 
 # Lecture
-- [ ] [Slides]()
-- [ ] [Recording]()
+- [x] [Slides](https://canvas.sussex.ac.uk/courses/35221/files/6105324?module_item_id=1574668)
+- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b465a734-4e68-4cb3-ac96-b36a008524e2)
+- [ ] [Notes]()
 
 # Lab
 - [ ] [Notebook]()
