@@ -14,7 +14,7 @@ In the first topic we will focus on definitions of intelligence, why many defini
 
 # Seminar 
  - [x] [Seminar Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/files/IAM_week1_seminar.pdf)
- - [ ] [Seminar Rough Notes]()
+ - [x] [Seminar Rough Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/files/seminar_typed_rough_notes.md)
 
 # Reading
 
