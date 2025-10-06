@@ -18,5 +18,5 @@ By the end of this unit of teaching and learning, you will be able to:
 # Readings:
 - Braitenberg
 - [Animal cognition (Gould, 2004)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971080002461?auth=SAML)
-- Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010)
-- Arthropod intelligence? The case for Portia (Cross et al, 2020)
+- [Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971090002461?auth=SAML)
+- [Arthropod intelligence? The case for Portia (Cross et al, 2020)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971100002461?auth=SAML)
