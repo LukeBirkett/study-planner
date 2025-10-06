@@ -13,3 +13,8 @@ By the end of this unit of teaching and learning, you will be able to:
 - [ ] [Notes]()
 
 # Lab - Braitenberg Vehicles
+
+
+# Readings
+- Braitenberg
+- 
