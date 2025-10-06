@@ -17,4 +17,6 @@ By the end of this unit of teaching and learning, you will be able to:
 
 # Readings
 - Braitenberg
-- 
+– Gould, J. L. (2004). Animal cognition. Current biology, 14(10), R372-R375.
+– Shettleworth, S. J. (2010). Clever animals and killjoy explanations in comparative psychology. Trends in cognitive sciences, 14(11), 477-481.
+– Cross, F. R., Carvell, G. E., Jackson, R. R., & Grace, R. C. (2020). Arthropod intelligence? The case for Portia. Frontiers in Psychology, 11, 2573.
