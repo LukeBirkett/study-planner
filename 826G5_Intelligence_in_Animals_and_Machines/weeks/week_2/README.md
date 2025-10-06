@@ -10,7 +10,7 @@ By the end of this unit of teaching and learning, you will be able to:
 # Lecture 
 - [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/IAM%20Lecture%202%20Unexpected%20Cleverness%202025-1.pdf)
 - [ ] [Recording]()
-- [ ] [Notes]()
+- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/lecture_notes.md)
 
 # Lab - Braitenberg Vehicles
 
