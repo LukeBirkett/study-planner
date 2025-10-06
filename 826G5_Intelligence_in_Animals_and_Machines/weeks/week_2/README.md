@@ -8,7 +8,7 @@ By the end of this unit of teaching and learning, you will be able to:
 - Explain how apparent smartness in invertebrates can be explained by their embodiment, situatedness and ecological niche.
 
 # Lecture 
-- [ ] [Slides]()
+- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/IAM%20Lecture%202%20Unexpected%20Cleverness%202025-1.pdf)
 - [ ] [Recording]()
 - [ ] [Notes]()
 
