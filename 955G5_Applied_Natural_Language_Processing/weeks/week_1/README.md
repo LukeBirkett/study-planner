@@ -24,6 +24,6 @@ You might also:
 
 # Reading
 
-| Name | Type | Link | Additional |
-|---|---|---|---|
+| Name | Type | Link | Additional | Read |
+|---|---|---|---|---|
 | Jurafsky et al (2009) Speech and Language Processing | Textbook | [Link](undefined), [PDF](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/JurafskyMartinSpeechAndLanguageProcessing2ed_draft%202007.pdf) | Chapter 1 |
