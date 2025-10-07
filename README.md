@@ -40,4 +40,9 @@ venv_*/
 ```
 test
 
+```
+import sys
+!{sys.executable} -m pip install matplotlib
+```
+
 
