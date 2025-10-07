@@ -42,5 +42,5 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 
 # [Weeks](https://canvas.sussex.ac.uk/courses/35030/pages/module-content)
 - [ ] [Week 1 - Intro to ANLP and Python](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_1)
-- [ ] [Week 2 - Text Documents and Preprocessing]()
+- [ ] [Week 2 - Text Documents and Preprocessing](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_2)
 
