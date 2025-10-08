@@ -1,4 +1,4 @@
-# Intro to ANLP and Python
+# [Intro to ANLP and Python](https://canvas.sussex.ac.uk/courses/35030/pages/week-1-intro-to-anlp-and-python)
 This week, we will begin with a general introduction to the field of Natural Language Processing.  We will consider what it is and why it is important.  We will also consider why it is not as straightforward as we might at first think! 
 
 More practically, we will introduce the Python programming language and Jupyter notebooks, which we will be using throughout the whole module to gain practical hands-on experience in Natural Language Engineering.  Most of both sessions this week will be spent on programming exercises, designed to give students knowledge and experience of key concepts in Python including types and variables, functions, lists and dictionaries.  More experienced Python programmers can explore more advanced material including classes, lazy generators and the PANDAS library.
