@@ -9,10 +9,11 @@ From a practical perspective, we will examine the why and how of carrying out se
 - [ ] [Notes]()
 
 # Lab
-- [ ] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/lab/NLE2023_lab_2_1.ipynb)
-- [ ] [Notebook 2](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/lab/NLE2023_lab_2_2.ipynb)
+- [x] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/lab/NLE2023_lab_2_1.ipynb)
+- [x] [Notebook 2](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/lab/NLE2023_lab_2_2.ipynb)
 - [ ] [Notebook 3](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/lab/NLE2023_lab_2_3.ipynb)
 
 # Reading
 - [ ] [J&M Chap 2: Regular expressions, normalization and text edit distance](https://web.stanford.edu/~jurafsky/slp3/2.pdf)
+
 
