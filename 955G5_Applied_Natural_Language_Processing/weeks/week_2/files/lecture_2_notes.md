@@ -64,3 +64,86 @@ the larger the corpa the more words we find
 # normalisation
 
 helps us reduce a corpus' variation
+
+#### case normalisation
+
+lower vs upper often considered as irrelevant
+
+normalisation allows us to reduce word count (type)
+
+downside is there is some examples where it is useful
+
+i.e. name Mark vs mark
+
+in python can chain .lower().split()
+
+# number normalisation
+
+how many numebrs are there? lots
+
+particulary in terms of types and unique numbers in a corpus
+
+often just replace any number with "num"
+
+# stopword removal 
+
+most freq words in english tend to be non-content brearing function words
+
+the, of, and, a  in, to, it, is, was, to
+
+often don't tell us about what happened but my hold content of some type
+
+significantly lowers tokens
+
+dont away throw stopwords, depends on use case
+
+stopwords generally removed for doc retrieval
+
+# stemming and lemmenisation
+
+morhology is the study of the way words are made up of smaller parts
+
+i.e. cat(s)
+
+if we want cats, we probaly just need cat
+
+ed, ing, un are example of other prefix and suffixes
+
+morphemes are the smallest meaningful unit of a word
+
+words have a root/stem that we affixes other information too 
+
+in english we have inflectional morphology
+
+number, sing vs plur
+gender
+tense
+person, 1st 2nd 3rd
+case, mark vs mark's
+
+stemming is removing unwanted affixes
+
+NLTK Porter Stemmer 
+
+nltk.stem.porter imort PorterStemmer
+
+relational > relat
+relate > relat
+
+note, this can easily make mistakes
+
+organization > organ
+
+this is rule based, not lexicon derived
+
+#### lemmenatistion 
+
+trys to be a bit smarts
+
+looks for dictionary words
+
+tends to have less impact then the stemmer 
+
+works by trying stemming and comparing to dictionary 
+
+
