@@ -24,7 +24,5 @@ You might also:
 - [x] [Getting Started Tutorial](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=dcae896f-3482-49fe-a19c-b08b01158653&start=0)
 
 # Reading
+- [x] [Jurafsky et al (2009) Speech and Language Processing (CH1) ](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/files/JurafskyMartinSpeechAndLanguageProcessing2ed_draft%202007.pdf)
 
-| Name | Type | Link | Additional | Read |
-|---|---|---|---|---|
-| Jurafsky et al (2009) Speech and Language Processing (CH1) | Textbook | [Link](undefined), [PDF](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/files/JurafskyMartinSpeechAndLanguageProcessing2ed_draft%202007.pdf) | Chapter 1 | ✓ |
