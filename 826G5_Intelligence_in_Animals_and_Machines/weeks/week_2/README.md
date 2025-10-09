@@ -1,4 +1,4 @@
-# Unexpected Cleverness
+# [Unexpected Cleverness](https://canvas.sussex.ac.uk/courses/34991/pages/week-2-unexpected-cleverness?module_item_id=1509126)
 This week's lecture has two main strands. The first is a fun historical tour of how people have viewed animal intelligence in the past. From this you will see a repeating pattern of over and under estimation of the intelligence of animals. We will then look at some specific case studies of behaviour that would be seem 'intelligent' and can be described as inteligent when we use anthropomorphic terms - but we will take a "Killjoy" approach to understand how those behaviours might come about.
 
 #### Learning outcomes
