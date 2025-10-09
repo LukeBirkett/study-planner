@@ -1,4 +1,4 @@
-# Week 1 - Data Structures and Data Formats
+# [Week 1 - Data Structures and Data Formats](https://canvas.sussex.ac.uk/courses/35221/modules#:~:text=and%20data%20formats-,Week,-1%20Lecture%20/%20Week)
 This week we will be looking at some of the standard data structures which can be used in the formulation and decomposition of big data. We will consider these data structures at both the interface and implementation level, comparing them in terms of their impact on space and time complexity and their suitability to different types of data or tasks. We will also relate them to different standard data formats for data storage.
 
 #### Learning outcomes
