@@ -7,7 +7,7 @@
 - [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/files/lecture_2_notes.md)
 
 # Lab
-- [ ] [Notebook]()
+- [ ] [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/lab/week3lab.ipynb)
 - [ ] [Solutions]()
 
 # Reading
@@ -15,6 +15,7 @@
   - [ ] Chapter 2 (),
   - [ ] Chapter 3 (),
   - [ ] Chapter 8 ()
+
 
 
 
