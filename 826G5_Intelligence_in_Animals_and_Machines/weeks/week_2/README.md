@@ -13,10 +13,11 @@ By the end of this unit of teaching and learning, you will be able to:
 - [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/lecture_notes.md)
 
 # Lab - Braitenberg Vehicles
-
+- [ ] [Lab Page](https://canvas.sussex.ac.uk/courses/34991/pages/lab-1-simulating-braitenbergs-vehicles?module_item_id=1509136)
+- [ ] [Paper Reading]()
 
 # Readings:
-- Braitenberg
+- [Braitenberg]()
 - [Animal cognition (Gould, 2004)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971080002461?auth=SAML)
 - [Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971090002461?auth=SAML)
 - [Arthropod intelligence? The case for Portia (Cross et al, 2020)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971100002461?auth=SAML)
