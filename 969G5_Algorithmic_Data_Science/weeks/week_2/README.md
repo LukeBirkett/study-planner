@@ -12,9 +12,10 @@
 
 # Reading
 - [ ] [Cormen et al:](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/24386287590002461?auth=SAML)
-  - [ ] Chapter 2 (),
-  - [ ] Chapter 3 (),
-  - [ ] Chapter 8 ()
+  - [ ] Chapter 2 (Getting Started),
+  - [ ] Chapter 3 (Running Times),
+  - [ ] Chapter 8 (Sorting in Linear Time)
+
 
 
 
