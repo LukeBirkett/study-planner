@@ -4,7 +4,7 @@
 - [ ] [Overview](https://canvas.sussex.ac.uk/courses/35221/pages/overview-and-reading-unit-2?module_item_id=1567831)
 - [ ] [Slides]()
 - [ ] [Recording]()
-- [ ] [Notes]()
+- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/files/lecture_2_notes.md)
 
 # Lab
 - [ ] [Notebook]()
@@ -15,6 +15,7 @@
   - [ ] Chapter 2 (),
   - [ ] Chapter 3 (),
   - [ ] Chapter 8 ()
+
 
 
 
