@@ -1,6 +1,13 @@
 import sys
 # relative path to folder which contains the Sandbox module
-sys.path.insert(1, '../..')
+# sys.path.insert(1, '../..')
+# from Sandbox import *
+
+from pathlib import Path
+current_file_path = Path(__file__).resolve()
+root_lab_path = current_file_path.parent.parent.parent.parent
+sandbox_v1_path = root_lab_path / "Sandbox_V1"
+sys.path.insert(0, str(sandbox_v1_path))
 from Sandbox import *
 
 #########################################################################
@@ -11,14 +18,16 @@ from Sandbox import *
 def aggressor(dt, inputs, params, state=[]) -> List[float]:
 
     # set left motor speed
-    left_speed_command = math.sin(4) + params[0]
+    left_speed_command = inputs[0]
+     
     # set right motor speed
-    right_speed_command = left_speed_command * params[0]
+    right_speed_command = inputs[1]
 
+    print(inputs)
     # return motor speeds to robot's controller
     return [left_speed_command, right_speed_command]
 
-aggressor_controller = BraitenbergController(step_fun=aggressor, gain=1)
+aggressor_controller = BraitenbergController(step_fun=aggressor, gain=0.5)
 
 def coward(dt, inputs, params, state=[]) -> List[float]:
 
@@ -35,9 +44,10 @@ coward_controller = BraitenbergController(step_fun=coward, gain=0.1)
 def lover(dt, inputs, params, state=[]) -> List[float]:
 
     # set left motor speed
-    left_speed_command = inputs[0] * math.cos(params[0])
+    left_speed_command = inputs[0] * 0.01
+
     # set right motor speed
-    right_speed_command = inputs[1] ** params[0] - inputs[0]
+    right_speed_command = inputs[1] * 0.01
 
     # return motor speeds to robot's controller
     return [left_speed_command, right_speed_command]
@@ -77,14 +87,16 @@ left_motor_noisemaker = NoiseMaker(white_noise_params=[max_white_noise, min_whit
 
 # select controller to use, from this list: [aggressor_controller, coward_controller, lover_controller, monocular_controller]
 controller = lover_controller
+
 # robot sensor parameters
 field_of_view = 0.9 * math.pi
 left_sensor_angle = np.pi/6
 right_sensor_angle = -np.pi/6
+
 # simulation run parameters
-screen_width = 700 # height and width of animation window, in pixels
-duration = 80 # number of simulation time units to simulate for
-n_runs = 10 # number of simulations to run
+screen_width =750 # height and width of animation window, in pixels
+duration = 250 # number of simulation time units to simulate for
+n_runs = 1 # number of simulations to run
 animate = True # whether or not to animate
 animation_frame_delay = 0 # the 10s of milliseconds to pause between frames
 
@@ -94,10 +106,13 @@ animation_frame_delay = 0 # the 10s of milliseconds to pause between frames
 
 # set up environment
 light_sources = [LightSource(0, 0)]
+
 # get robot
 robot = light_seeking_Robot(x=0, y=0, theta=0, light_sources=light_sources, controller=controller, left_motor_noisemaker=left_motor_noisemaker, FOV=field_of_view, left_sensor_angle=left_sensor_angle, right_sensor_angle=right_sensor_angle, left_motor_inertia=10, right_motor_inertia=10)
+
 # put robot into list of agents for Simulator
 agents=[robot]
+
 # In future labs, this list will not be empty - disturbances are going to be very important
 disturbances = []
 
