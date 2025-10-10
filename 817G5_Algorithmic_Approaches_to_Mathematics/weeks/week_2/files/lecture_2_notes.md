@@ -76,4 +76,6 @@ avoids real time conversions
 
 helps complier pre-allocate memory
 
+specify the type of int is good practise in stead of just int -> int64
+
 
