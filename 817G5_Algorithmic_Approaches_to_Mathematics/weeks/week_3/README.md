@@ -4,12 +4,16 @@
 - [ ] [Week 3 Summary](https://canvas.sussex.ac.uk/courses/34902/pages/week-3-summary-2?module_item_id=1565153)
 - [ ] [Week 4 Summary](https://canvas.sussex.ac.uk/courses/34902/pages/week-4-summary?module_item_id=1565156)
 - [ ] [Slides 1]()
+- [ ] [Slide 2]()
 - [ ] [Notes 1]()
+- [ ] [Notes 2]()
 - [ ] [Recording 1]()
+- [ ] [Recording 2]()
 - [ ] [Linear Algebra Cheatsheet]()
 
 ## Labs
-- [ ] [Notebook]()
+- [ ] [Notebook 1]()
+- [ ] [Notebook 2]()
 
 ## Extra Study
 - [ ] [3B Series](https://www.3blue1brown.com/topics/linear-algebra)
