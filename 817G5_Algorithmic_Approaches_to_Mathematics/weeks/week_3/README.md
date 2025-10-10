@@ -9,11 +9,11 @@
 - [ ] [Notes 2]()
 - [ ] [Recording 1]()
 - [ ] [Recording 2]()
-- [ ] [Linear Algebra Cheatsheet]()
+- [ ] [Linear Algebra Cheatsheet](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/LinearAlgebra_cheatsheet.pdf)
 
 ## Labs
-- [ ] [Notebook 1]()
-- [ ] [Notebook 2]()
+- [ ] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/labs/week3_all.jl)
+- [ ] [Notebook 2](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/labs/week_4_all.jl)
 
 ## Extra Study
 - [ ] [3B Series](https://www.3blue1brown.com/topics/linear-algebra)
