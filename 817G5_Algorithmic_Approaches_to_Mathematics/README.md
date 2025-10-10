@@ -40,4 +40,4 @@ TBC
 
 # Weeks
 - [ ] [Week 1 - Introduction](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1)
-
+- [ ] [Week 2 - Practising Programming](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_2)
