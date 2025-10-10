@@ -4,9 +4,9 @@ What exactly is text?  And what exactly is a word?   We will first define differ
 From a practical perspective, we will examine the why and how of carrying out sentence segmentation and tokenization.  Then, we will look at other standard pre-processing or text normalisation techniques including case normalisation, stopword and punctuation removal, stemming / lemmatisation / morphological analysis and the use of regular expressions.  More generally, we will introduce the application of information retrieval and consider the advantages and disadvantages of different pre-processing techniques.
 
 # Lecture 
-- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/files/Lec2.pdf)
+- [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/files/Lec2.pdf)
 - [ ] [Recording]()
-- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/files/lecture_2_notes.md)
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/files/lecture_2_notes.md)
 
 # Lab
 - [x] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/lab/NLE2023_lab_2_1.ipynb)
@@ -15,6 +15,7 @@ From a practical perspective, we will examine the why and how of carrying out se
 
 # Reading
 - [ ] [J&M Chap 2: Regular expressions, normalization and text edit distance](https://web.stanford.edu/~jurafsky/slp3/2.pdf)
+
 
 
 
