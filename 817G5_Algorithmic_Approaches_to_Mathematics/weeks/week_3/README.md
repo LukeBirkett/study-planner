@@ -17,3 +17,4 @@
 - [ ] [Computation Thinking, Module 1](https://computationalthinking.mit.edu/Fall24/)
 - [ ] [Deep Learning Book, Linear Algebra](https://www.deeplearningbook.org/contents/linear_algebra.html)
 - [ ] [Linear Algebra in 4 Pages](https://minireference.com/static/tutorials/linear_algebra_in_4_pages.pdf)
+- [ ] [Problem Sets](https://github.com/mitmath/1806?tab=readme-ov-file)
