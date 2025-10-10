@@ -5,7 +5,7 @@ From a practical perspective, we will examine the why and how of carrying out se
 
 # Lecture 
 - [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/files/Lec2.pdf)
-- [ ] [Recording]()
+- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a5d01d48-bfb5-43f8-8cb8-b37100f7da1b)
 - [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_2/files/lecture_2_notes.md)
 
 # Lab
@@ -15,6 +15,7 @@ From a practical perspective, we will examine the why and how of carrying out se
 
 # Reading
 - [ ] [J&M Chap 2: Regular expressions, normalization and text edit distance](https://web.stanford.edu/~jurafsky/slp3/2.pdf)
+
 
 
 
