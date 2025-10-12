@@ -21,3 +21,9 @@ By the end of this unit of teaching and learning, you will be able to:
 - [Animal cognition (Gould, 2004)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971080002461?auth=SAML)
 - [Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971090002461?auth=SAML)
 - [Arthropod intelligence? The case for Portia (Cross et al, 2020)](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23770971100002461?auth=SAML)
+
+| Name | Type | Category | Link | Additional | Notes |
+|---|---|---|---|---|---|
+| Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010) | Seminar | Article | [PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/readings/shettleworth_2010_killjoy_explanations.pdf) |||
+| Vehicles, experiments in synthetic psychology [1-28/1-14] (Braitenberg, 1984) | Books | Further | [PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/readings/braitenberg_1_28.pdf) |||
+| Animal cognition (Gould, 2004 | Article | Essential | [PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_0/files/animal_cognition.pdf) |  |
