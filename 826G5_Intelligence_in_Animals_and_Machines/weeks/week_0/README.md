@@ -1,4 +1,4 @@
-# Reading List
+# [Reading List](https://sussex.leganto.exlibrisgroup.com/leganto/nui/lists/23770970950002461)
 
 | Read | Name | Type | Category | Link | Additional | 
 |---|---|---|---|---|---|
