@@ -27,5 +27,5 @@ By the end of this unit of teaching and learning, you will be able to:
 | Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010) | Seminar | Article | [PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/readings/shettleworth_2010_killjoy_explanations.pdf) |||
 | Vehicles, experiments in synthetic psychology (Braitenberg, 1984) | Books | Further | [PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/readings/braitenberg_1_28.pdf) |||
 | Animal cognition (Gould, 2004) | Article | Essential | [PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_0/files/animal_cognition.pdf) |||
-| Arthropod Intelligence? The Case for Portia (Cross et al. 2020) | Article | Essential | [PDF]() | | |
+| Arthropod Intelligence? The Case for Portia (Cross et al. 2020) | Article | Essential | [PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/arthropod_portia.pdf) | | |
 
