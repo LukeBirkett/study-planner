@@ -8,13 +8,13 @@ By the end of this unit of teaching and learning, you will be able to:
 - Explain how apparent smartness in invertebrates can be explained by their embodiment, situatedness and ecological niche.
 
 # Lecture 
-- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/IAM%20Lecture%202%20Unexpected%20Cleverness%202025-1.pdf)
-- [ ] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0ad2cebc-2325-49b6-93aa-b36f00967950)
-- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/lecture_notes.md)
+- [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/IAM%20Lecture%202%20Unexpected%20Cleverness%202025-1.pdf)
+- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0ad2cebc-2325-49b6-93aa-b36f00967950)
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2/files/lecture_notes.md)
 
 # Lab - Braitenberg Vehicles
-- [ ] [Lab Page](https://canvas.sussex.ac.uk/courses/34991/pages/lab-1-simulating-braitenbergs-vehicles?module_item_id=1509136)
-- [ ] [Paper Reading]()
+- [x] [Lab Page](https://canvas.sussex.ac.uk/courses/34991/pages/lab-1-simulating-braitenbergs-vehicles?module_item_id=1509136)
+- [x] [Paper Reading]()
 
 # Readings:
 - [Braitenberg]()
