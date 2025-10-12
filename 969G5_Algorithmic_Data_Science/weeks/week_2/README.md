@@ -3,7 +3,7 @@
 # Lecture
 - [x] [Overview](https://canvas.sussex.ac.uk/courses/35221/pages/overview-and-reading-unit-2?module_item_id=1567831)
 - [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/files/lecture2.pdf)
-- [x] [Recording]()
+- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=14a567d9-f2bd-4f7e-8534-b37100840cfb)
 - [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/files/lecture_2_notes.md)
 
 # Lab
@@ -15,6 +15,7 @@
   - [ ] Chapter 2 (Getting Started),
   - [ ] Chapter 3 (Running Times),
   - [ ] Chapter 8 (Sorting in Linear Time)
+
 
 
 
