@@ -3,7 +3,7 @@
 #### Set New Venv
 
 ```
-python -m venv [myenv_venv]
+python -m venv [algo_w1_venv]
 source [myenv]/bin/activate
 pip install ipykernel
 python -m ipykernel install --user --name=[myenv]
