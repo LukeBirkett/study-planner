@@ -7,15 +7,18 @@ In Lecture 3, we will look at Collective Intelligence, looking at specific case-
 - Evaluate the properties of biological swarm systems and why they are desirable to engineers
 
 # Lecture 
+- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/IAM%20Lecture%203%20Collective%20Behaviour%202025-1.pdf)
+- [ ] [Recording]()
+- [ ] [Notes]()
 
 
 # Seminar 
 This week we're going to cover 2 papers, so please read both. They're a really nice pair, and are related to your your Week 2 Unexpected Cleverness lecture. The first one describes a study purporting to show that bees can do arithmetic and can therefore represent numbers.The second paper argues that numerical cognition is not needed for the bees to perform that task, and supported that argument by building a neural network model that does not have numerical cognition yet can still "do the sums"
-- [ ] Numerical cognition in honeybees enables addition and subtraction [(Howard et al, 2019)]()
-- [ ] Non-numerical strategies used by bees to solve numerical cognition tasks [(Maboudi et al 2021)]()
+- [ ] Numerical cognition in honeybees enables addition and subtraction [(Howard et al, 2019)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/numerical_cognition_honeybess.pdf)
+- [ ] Non-numerical strategies used by bees to solve numerical cognition tasks [(Maboudi et al 2021)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/non_numerical_strategies.pdf)
 
 
 # Reading
-- [ ] [A Review of Collective Robotic Construction]()
-- [ ] [Swarm intelligence in animals and humans]()
-- [ ] [Swarm Robotics: Past, Present, and Future]()
+- [ ] [A Review of Collective Robotic Construction](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/review_collective_robitics.pdf)
+- [ ] [Swarm intelligence in animals and humans](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/swarm_intelligence.pdf)
+- [ ] [Swarm Robotics: Past, Present, and Future](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/swarm_robotics.pdf)
