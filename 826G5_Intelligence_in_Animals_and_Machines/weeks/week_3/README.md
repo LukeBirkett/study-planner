@@ -16,3 +16,6 @@ This week we're going to cover 2 papers, so please read both. They're a really n
 
 
 # Reading
+- [ ] [A Review of Collective Robotic Construction]()
+- [ ] [Swarm intelligence in animals and humans]()
+- [ ] []()
