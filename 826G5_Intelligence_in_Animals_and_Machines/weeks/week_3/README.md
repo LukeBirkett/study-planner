@@ -16,6 +16,7 @@ In Lecture 3, we will look at Collective Intelligence, looking at specific case-
 This week we're going to cover 2 papers, so please read both. They're a really nice pair, and are related to your your Week 2 Unexpected Cleverness lecture. The first one describes a study purporting to show that bees can do arithmetic and can therefore represent numbers.The second paper argues that numerical cognition is not needed for the bees to perform that task, and supported that argument by building a neural network model that does not have numerical cognition yet can still "do the sums"
 - [x] Numerical cognition in honeybees enables addition and subtraction [(Howard et al, 2019)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/numerical_cognition_honeybess.pdf)
 - [x] Non-numerical strategies used by bees to solve numerical cognition tasks [(Maboudi et al 2021)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/non_numerical_strategies.pdf)
+- [x] [Seminar Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/seminar_notes.md)
 
 
 # Reading
