@@ -7,9 +7,9 @@ In Lecture 3, we will look at Collective Intelligence, looking at specific case-
 - Evaluate the properties of biological swarm systems and why they are desirable to engineers
 
 # Lecture 
-- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/IAM%20Lecture%203%20Collective%20Behaviour%202025-1.pdf)
-- [ ] [Recording]()
-- [ ] [Notes]()
+- [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/IAM%20Lecture%203%20Collective%20Behaviour%202025-1.pdf)
+- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b15ff702-4331-49bb-b96e-b376008c9de5)
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3/files/lecture_3_notes.md)
 
 
 # Seminar 
