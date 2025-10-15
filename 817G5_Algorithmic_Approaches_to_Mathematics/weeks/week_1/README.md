@@ -45,3 +45,10 @@
 -  $A \cap B$ means: the intersection of sets $A$ and $B$. 	
 -  $A^c$ means: the complement of $A$. IE the set of things **not** in $A$.
 
+-
+
+- Injective: A function that maps every element of its domain to a unique element of the range is injective. In other words, no two elements in the domain map to the same element of the range.
+- Surjective: A surjective function maps something in the domain onto every element of the range.
+- Bijective: Injective and Surjective. If a function has an inverse, it will be bijective
+
+
