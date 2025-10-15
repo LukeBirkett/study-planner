@@ -1,9 +1,9 @@
 ### [OpenCV Master](https://opencv.org/university/cvdl-master/) / [Course Dashboard](https://courses.opencv.org/dashboard)
 
-- [ ] [MOCV](https://courses.opencv.org/courses/course-v1:OpenCV+101+Beginners/course/) - Mastering OpenCV with Python
-- [ ] [CVIP](https://courses.opencv.org/courses/course-v1:OpenCV.org+OpenCV-103+2019_T1/course/) - Fundamentals of computer vision & image processing 
-- [ ] [DLAP](https://courses.opencv.org/courses/course-v1:OpenCV+OpenCV-105+2019_T1/course/) - Computer Vision and Deep Learning Applications **(OUTDATED)**
-- [ ] [DLPT](https://courses.opencv.org/courses/course-v1:OpenCV+OpenCV-106+2019_T1/course/) - Deep Learning with PyTorch (or [DLTK](https://courses.opencv.org/courses/course-v1:OpenCV+107+Tensorflow/course/))
-- [ ] [AI Art Generation for Everyone](https://courses.opencv.org/courses/course-v1:AIArtGeneration+Everyone+101/course/)
-- [ ] [Advanced AI Art Generation](https://courses.opencv.org/courses/course-v1:AIArtGeneration+Advanced+102/course/)
-- [ ] [Advanced Vision Applications with Deep Learning & Transformers](https://courses.opencv.org/courses/course-v1:AIArtGeneration+Everyone+101/course/)
+- [ ] [MOCV](https://github.com/LukeBirkett/study-planner/tree/main/open-cv/mocv) - Mastering OpenCV with Python
+- [ ] [CVIP](https://github.com/LukeBirkett/study-planner/tree/main/open-cv/cvip) - Fundamentals of computer vision & image processing 
+- [ ] [DLAP]() - Computer Vision and Deep Learning Applications **(OUTDATED)**
+- [ ] [DLPT]() - Deep Learning with PyTorch 
+- [ ] [AI Art Generation for Everyone](https://github.com/LukeBirkett/study-planner/tree/main/open-cv/ai_art_1)
+- [ ] [Advanced AI Art Generation](https://github.com/LukeBirkett/study-planner/tree/main/open-cv/ai_art_2)
+- [ ] [Advanced Vision Applications with Deep Learning & Transformers](https://github.com/LukeBirkett/study-planner/tree/main/open-cv/transformer)
