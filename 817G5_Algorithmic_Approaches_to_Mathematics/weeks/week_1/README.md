@@ -9,8 +9,8 @@
 - [ ] [Latex Writting Converter](https://detexify.kirelabs.org/classify.html)
 
 ## Lab
-- [ ] [Lab](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/lab)
-- [ ] [Julia Setup](https://algorithmic-approaches-to-mathematics.github.io/prerequisites/installation/)
+- [x] [Lab](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/lab)
+- [x] [Julia Setup](https://algorithmic-approaches-to-mathematics.github.io/prerequisites/installation/)
 
 ---
 
