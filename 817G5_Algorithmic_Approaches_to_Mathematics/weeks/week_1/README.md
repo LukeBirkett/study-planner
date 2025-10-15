@@ -5,6 +5,8 @@
 - [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/files/Week_1.pdf)
 - [x] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2220220c-19c8-4ea9-8f7e-b36b0108142d)
 - [ ] [Introductory Cheatsheet](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/files/Introductory_cheatsheet.pdf)
+- [ ] [Latex Cheatsheet](https://quickref.me/latex.html)
+- [ ] [Latex Writting Converter](https://detexify.kirelabs.org/classify.html)
 
 ## Lab
 - [ ] [Lab](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/lab)
