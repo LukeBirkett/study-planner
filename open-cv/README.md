@@ -1,4 +1,4 @@
-[OpenCV Master](https://opencv.org/university/cvdl-master/)
+### [OpenCV Master](https://opencv.org/university/cvdl-master/) / [Course Dashboard](https://courses.opencv.org/dashboard)
 
 - [ ] [MOCV](https://courses.opencv.org/courses/course-v1:OpenCV+101+Beginners/course/) - Mastering OpenCV with Python
 - [ ] [CVIP](https://courses.opencv.org/courses/course-v1:OpenCV.org+OpenCV-103+2019_T1/course/) - Fundamentals of computer vision & image processing 
