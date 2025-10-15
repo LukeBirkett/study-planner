@@ -1,0 +1,1 @@
+# [Module 1 - Neural Networds and Classification](https://courses.opencv.org/courses/course-v1:Advanced-Vision-Applications+Deep-Learning+Transformers/course/#:~:text=Introduction-,Module,-1%20%2D%20Neural%20Networks)
