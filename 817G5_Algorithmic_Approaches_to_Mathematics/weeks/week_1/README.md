@@ -1,9 +1,9 @@
-# Week 1 - Intro and getting setup
+# [Week 1 - Intro/Setup](https://canvas.sussex.ac.uk/courses/34902/pages/week-1-summary?module_item_id=1565137)
 
 ## Lecture
 - [x] [Week 1 Intructions/Summary](https://canvas.sussex.ac.uk/courses/34902/pages/week-1-summary?module_item_id=1565137)
 - [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/files/Week_1.pdf)
-- [ ] [Lecture Recording]()
+- [x] [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2220220c-19c8-4ea9-8f7e-b36b0108142d)
 - [ ] [Introductory Cheatsheet](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/files/Introductory_cheatsheet.pdf)
 
 ## Lab
