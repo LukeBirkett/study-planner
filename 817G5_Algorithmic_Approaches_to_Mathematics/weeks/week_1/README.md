@@ -28,3 +28,20 @@
 | $\exists$ | there exists  |
 | $\in$ | is a member of, e.g. $3 \in \mathbb{N}$  |
 | $!$ | unique, e.g. $\exists! x \in \mathbb{N}: x > 3 \land x < 5$  |
+
+--- 
+
+-  $\mathbb{N}$: the natural numbers.
+-  $\mathbb{Z}$: the integers. 
+-  $\mathbb{Q}$: the rational numbers 
+-  $\mathbb{R}$: the real numbers 
+-  $\mathbb{C}$: the complex numbers
+
+--- 
+-  $\subset$ means: "is a subset of"
+-  $\subseteq$ means "is a subset of, and may be the entire set"
+-  $\in$ means: is a member of
+-  $A\cup B$ means: the union of sets $A$ and $B$.
+-  $A \cap B$ means: the intersection of sets $A$ and $B$. 	
+-  $A^c$ means: the complement of $A$. IE the set of things **not** in $A$.
+
