@@ -7,4 +7,4 @@
 - [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d75dc2b0-536b-4295-b9e5-b37201087487)
 
 ## Lab
-- [ ] [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_2/lab/Week_2_all.jl)
+- [x] [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_2/lab/Week_2_all.jl)
