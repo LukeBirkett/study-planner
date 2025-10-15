@@ -1,2 +1,10 @@
 ## [Advanced Vision Applications with Deep Learning & Transformers](https://courses.opencv.org/courses/course-v1:Advanced-Vision-Applications+Deep-Learning+Transformers/course/)
 
+- [ ] [Module 1 - Neural Networds and Classification]()
+- [ ] [Module 2 - Objection Detection]()
+- [ ] [Module 3 - Text Detection and Recognition (OCR)]()
+- [ ] [Module 4 - Segmentionation]()
+- [ ] [Module 5 - Tracking]()
+- [ ] [Module 6 - Key Point Estimation]()
+- [ ] [Module 7 - Face Recognition and Applications]()
+- [ ] [Module 8 - Vision Language Models (VLM)]()
