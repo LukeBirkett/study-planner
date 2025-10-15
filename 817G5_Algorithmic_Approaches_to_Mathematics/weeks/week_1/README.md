@@ -11,3 +11,20 @@
 ## Lab
 - [ ] [Lab](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_1/lab)
 - [ ] [Julia Setup](https://algorithmic-approaches-to-mathematics.github.io/prerequisites/installation/)
+
+---
+
+| **Symbol**  | **Explanation**  |
+|---|---|
+| $$a \Rightarrow b$$  | a implies b   |
+| $$a \Leftarrow b$$  | a is implied by b   |
+| $$a \Leftrightarrow b$$  | a is equivalent to b   |
+| $$a^c$$  | The negation (opposite) of a  |
+| $$\therefore$$  | Therefore  |
+| $a \land b$  | a and b  |
+| $a \lor b$  | a or b  |
+| $\forall$  | for all or for each  |
+| $:$  | such that  |
+| $\exists$ | there exists  |
+| $\in$ | is a member of, e.g. $3 \in \mathbb{N}$  |
+| $!$ | unique, e.g. $\exists! x \in \mathbb{N}: x > 3 \land x < 5$  |
