@@ -120,7 +120,7 @@ md"""
 """
 
 # ╔═╡ efe36c0b-7ffa-47d5-8b7d-07fbab22c5e5
-y = 4
+y = 3
 
 # ╔═╡ b61c093a-7961-45be-9cd1-367c6b1e08ec
 x + y 
@@ -148,12 +148,6 @@ md"""
 
 # ╔═╡ a5d65532-f1ea-46e3-a7a1-9baf5bd41a9f
 tip(md"""use `begin ... end` blocks as below to enclose multiple lines of code in one cell. what happens if you put the two lines of code below into separate blocks, and why?""")
-
-# ╔═╡ a97f5d6f-5cca-4dbc-a17b-37c53d689f95
-begin
-	z = 3
-	z = z + y
-end
 
 # ╔═╡ d5c1013d-a63f-4d7a-9ed9-9b913638223a
 md"""## Logic
@@ -271,7 +265,7 @@ md"""
 """
 
 # ╔═╡ 21991df6-74e8-49a3-bf58-ab76f0d6024f
-(x == 2) && (print("hi"))
+(x == 1) && (print("hi"))
 
 # ╔═╡ e17ae741-e9b0-4ca1-8fe4-3f839571ca3c
 ==(x, 1) == (x == 1) # make sure you understand this code
@@ -539,6 +533,9 @@ What does this mean?
 
 """
 
+# ╔═╡ 6452467b-9713-43d5-ac5b-753e9cd1ad97
+
+
 # ╔═╡ 2ad2413e-0b22-41a7-adc0-46acba8ddfbf
 md"""
 !!! info "Question" 
@@ -715,7 +712,10 @@ The notation `x::T` ensures that the variable `x` is of type `T`.
 """
 
 # ╔═╡ 8d58b868-3444-4867-93cc-e0f203453683
-1::Number
+1::Int64
+
+# ╔═╡ d6debcf6-e78a-4bf9-92a0-dcb9fb8bc387
+
 
 # ╔═╡ 5d86058f-586f-47cb-bb81-92d87a2293b8
 md"""
@@ -1193,6 +1193,25 @@ hint(md"""
 $\mathbb{F}_p$ is the set consisting of $\{0, 1,2, 3, \dots, p-1\}$, where $p$ is a prime number. It is always a field, as long as $p$ is prime. If you'd like a challenge, prove that such sets are always field! (You'll need Euclid's algorithm, which you could also try and prove)
 """)
 
+# ╔═╡ a3fc2dd7-f4ce-4f13-8b6c-66e9d87aa4d5
+begin
+	z = 3
+end
+
+# ╔═╡ a97f5d6f-5cca-4dbc-a17b-37c53d689f95
+# ╠═╡ disabled = true
+#=╠═╡
+begin
+	z = 3
+	z = z + y
+end
+  ╠═╡ =#
+
+# ╔═╡ 48228495-59de-41b5-b6cf-09b7afc9c48e
+begin
+	z = z + y
+end
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -1208,9 +1227,9 @@ PlutoUI = "~0.7.71"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.7"
+julia_version = "1.12.0"
 manifest_format = "2.0"
-project_hash = "30f4a38dfcda7a14871c6ceb44e827f4b01e87ec"
+project_hash = "6fe0cc3f236252012249fb5623ef281bc738780f"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -1235,17 +1254,15 @@ deps = ["FixedPointNumbers", "Random"]
 git-tree-sha1 = "67e11ee83a43eb71ddc950302c53bf33f0690dfe"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.12.1"
+weakdeps = ["StyledStrings"]
 
     [deps.ColorTypes.extensions]
     StyledStringsExt = "StyledStrings"
 
-    [deps.ColorTypes.weakdeps]
-    StyledStrings = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
-
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.1.1+0"
+version = "1.3.0+1"
 
 [[deps.Dates]]
 deps = ["Printf"]
@@ -1319,6 +1336,11 @@ git-tree-sha1 = "4255f0032eafd6451d707a51d5f0248b8a165e4d"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "3.1.3+0"
 
+[[deps.JuliaSyntaxHighlighting]]
+deps = ["StyledStrings"]
+uuid = "ac6e5ff7-fb65-4e79-a425-ec3bc9c03011"
+version = "1.12.0"
+
 [[deps.LaTeXStrings]]
 git-tree-sha1 = "dda21b8cbd6a6c40d9d02a73230f9d70fed6918c"
 uuid = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
@@ -1348,24 +1370,24 @@ uuid = "b27032c2-a3e7-50c8-80cd-2d36dbcbfd21"
 version = "0.6.4"
 
 [[deps.LibCURL_jll]]
-deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll", "Zlib_jll", "nghttp2_jll"]
+deps = ["Artifacts", "LibSSH2_jll", "Libdl", "OpenSSL_jll", "Zlib_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
-version = "8.6.0+0"
+version = "8.11.1+1"
 
 [[deps.LibGit2]]
-deps = ["Base64", "LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
+deps = ["LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 version = "1.11.0"
 
 [[deps.LibGit2_jll]]
-deps = ["Artifacts", "LibSSH2_jll", "Libdl", "MbedTLS_jll"]
+deps = ["Artifacts", "LibSSH2_jll", "Libdl", "OpenSSL_jll"]
 uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
-version = "1.7.2+0"
+version = "1.9.0+0"
 
 [[deps.LibSSH2_jll]]
-deps = ["Artifacts", "Libdl", "MbedTLS_jll"]
+deps = ["Artifacts", "Libdl", "OpenSSL_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
-version = "1.11.0+1"
+version = "1.11.3+1"
 
 [[deps.Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
@@ -1374,7 +1396,7 @@ version = "1.11.0"
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-version = "1.11.0"
+version = "1.12.0"
 
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
@@ -1391,14 +1413,9 @@ uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
 version = "0.5.16"
 
 [[deps.Markdown]]
-deps = ["Base64"]
+deps = ["Base64", "JuliaSyntaxHighlighting", "StyledStrings"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 version = "1.11.0"
-
-[[deps.MbedTLS_jll]]
-deps = ["Artifacts", "Libdl"]
-uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
-version = "2.28.6+0"
 
 [[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
@@ -1406,16 +1423,21 @@ version = "1.11.0"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
-version = "2023.12.12"
+version = "2025.5.20"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
-version = "1.2.0"
+version = "1.3.0"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
-version = "0.3.27+1"
+version = "0.3.29+0"
+
+[[deps.OpenSSL_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
+version = "3.5.1+0"
 
 [[deps.OrderedCollections]]
 git-tree-sha1 = "05868e21324cede2207c6f0f466b4bfef6d5e7ee"
@@ -1431,7 +1453,7 @@ version = "2.8.3"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.11.0"
+version = "1.12.0"
 
     [deps.Pkg.extensions]
     REPLExt = "REPL"
@@ -1504,6 +1526,10 @@ version = "1.11.1"
     [deps.Statistics.weakdeps]
     SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
+[[deps.StyledStrings]]
+uuid = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
+version = "1.11.0"
+
 [[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
@@ -1541,22 +1567,22 @@ version = "1.11.0"
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
-version = "1.2.13+1"
+version = "1.3.1+2"
 
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-version = "5.11.0+0"
+version = "5.13.1+1"
 
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
-version = "1.59.0+0"
+version = "1.64.0+1"
 
 [[deps.p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
-version = "17.4.0+2"
+version = "17.5.0+2"
 """
 
 # ╔═╡ Cell order:
@@ -1580,6 +1606,8 @@ version = "17.4.0+2"
 # ╟─7764d0ba-df04-4776-b27d-3032ecb82692
 # ╟─a5d65532-f1ea-46e3-a7a1-9baf5bd41a9f
 # ╠═a97f5d6f-5cca-4dbc-a17b-37c53d689f95
+# ╠═a3fc2dd7-f4ce-4f13-8b6c-66e9d87aa4d5
+# ╠═48228495-59de-41b5-b6cf-09b7afc9c48e
 # ╟─d5c1013d-a63f-4d7a-9ed9-9b913638223a
 # ╟─be21a94e-875f-4789-93f9-a6f4bdad58bb
 # ╟─cb733e61-62fe-4977-a066-66c180140919
@@ -1626,6 +1654,7 @@ version = "17.4.0+2"
 # ╟─46c53268-bce5-4707-8999-cf5f33032de3
 # ╟─fc72a5d0-3520-468a-af38-533768e331dc
 # ╟─027ec3b8-a637-4c56-8663-738fe468a7e4
+# ╠═6452467b-9713-43d5-ac5b-753e9cd1ad97
 # ╟─2ad2413e-0b22-41a7-adc0-46acba8ddfbf
 # ╟─c8d3abc8-89e2-4f63-9c92-c5061bd7bab6
 # ╟─d6772dc2-20ff-4741-865f-d98295322764
@@ -1657,6 +1686,7 @@ version = "17.4.0+2"
 # ╠═69a5924e-6005-4728-a4e3-c43f433de800
 # ╟─7fdd6846-1eef-413a-8614-e4adeb3dfcf3
 # ╠═8d58b868-3444-4867-93cc-e0f203453683
+# ╠═d6debcf6-e78a-4bf9-92a0-dcb9fb8bc387
 # ╟─5d86058f-586f-47cb-bb81-92d87a2293b8
 # ╠═e11d53a2-5401-45b4-8ae8-ff4758d3faea
 # ╠═d08d181d-484f-4113-937b-2e87a78bdfa0
@@ -1703,7 +1733,7 @@ version = "17.4.0+2"
 # ╟─eade2c67-b4ec-4d2d-abcb-a4380674e106
 # ╟─bab4e011-f2a6-4793-93de-be1b953fa580
 # ╟─9c585825-0919-4b88-a5bc-daf41ee5980b
-# ╟─7691b66e-bd79-47f3-a199-85702cae2bff
+# ╠═7691b66e-bd79-47f3-a199-85702cae2bff
 # ╟─4b547e32-694f-4e44-9bdf-54ab6260deff
 # ╟─022974ad-ea41-46fb-8b8d-773caab50631
 # ╟─38ee915e-caf0-48b9-b457-64d5a4b247fe
