@@ -3,8 +3,8 @@
 ## Lectures
 - [ ] [Week 3 Summary](https://canvas.sussex.ac.uk/courses/34902/pages/week-3-summary-2?module_item_id=1565153)
 - [ ] [Week 4 Summary](https://canvas.sussex.ac.uk/courses/34902/pages/week-4-summary?module_item_id=1565156)
-- [ ] [Slides 1]()
-- [ ] [Slide 2]()
+- [ ] [Slides Part 1](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/lec3.pdf)
+- [ ] [Slide Part 2](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/Linear%20Algebra2_slides.pdf)
 - [ ] [Notes 1]()
 - [ ] [Notes 2]()
 - [ ] [Recording 1]()
