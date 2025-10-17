@@ -24,5 +24,4 @@ vector = 1d array, 1 index, [n], row or col
 matrix = 2d array, 2 indices, [n,m], rows and cols
 tensor = 3d array, 3 indiex, [n,m,l], the 3rd dimension is a layer
 
-:wq
 
