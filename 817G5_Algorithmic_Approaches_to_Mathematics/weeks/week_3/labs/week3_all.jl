@@ -58,8 +58,8 @@ md"""
 Here are examples of two matrices:
 """
 
-# ╔═╡ 7bcd2490-3543-4e6a-9e53-df37783b52ea
-A = [1;4;;5;7]
+# ╔═╡ dc8c3f5d-ec59-431a-8c92-9b3573fc1be9
+
 
 # ╔═╡ 11f93907-9037-4d15-ac6e-d2b00dbe039e
 tip(md"""
@@ -69,12 +69,6 @@ Dimension and size are often used interchangeably! One person might say a $4 \ti
 
 Just note the potential for confusion!
 """)
-
-# ╔═╡ b385d533-0775-4693-b2d2-eaddcaba22b7
-A[1,2] # access a matrix element using 2 indices
-
-# ╔═╡ 1837a32f-378a-4e47-a8bb-5229a074d2b8
-size(A)
 
 # ╔═╡ 1c848b46-6ea8-44a3-84d4-2619f724375e
 question_box(md"""
@@ -87,11 +81,29 @@ question_box(md"""
 # ╔═╡ ef0939b4-2abd-4dd3-aae5-ba816a4460d0
 my_tensor = [1;2;1;2;;;;3;4;3;4;;;;5;6;5;6;;;;7;8;7;8]
 
+# ╔═╡ 436ab7ae-8151-4aff-b65f-a620e6909a54
+size(my_tensor)
+
+# ╔═╡ c4d42ce3-430b-4262-8771-f942ee3ec67e
+my_tensor_ = [1;2;1;2;;3;4;3;4]
+
+# ╔═╡ 3f25ca78-a996-46f8-a0bd-14668747b08f
+size(my_tensor_)
+
+# ╔═╡ b385d533-0775-4693-b2d2-eaddcaba22b7
+A[1,2] # access a matrix element using 2 indices
+
+# ╔═╡ 1837a32f-378a-4e47-a8bb-5229a074d2b8
+size(A)
+
 # ╔═╡ 40adf4f6-4608-4417-988a-4dac780bd1ef
 begin # different ways to do the same thing
-	C = reshape(A, (4,)) #(4,) is the desired size
+	# C = reshape(A, (4,)) #(4,) is the desired size
 	C = reshape(A, :) # look on live docs for reshape, paragraph 2 if you want to understand this one
 end
+
+# ╔═╡ 9b8ef00e-9439-4c28-8803-6665e11a451b
+md""" : colapses the input down into a single vector"""
 
 # ╔═╡ b524f9a0-4b27-4bbe-bcd5-5c807a1940dc
 prod(size(A)) == prod(size(C)) # invariant to reshaping. equals the total number of elements in the array.
@@ -269,6 +281,33 @@ img = load(download("https://i.pinimg.com/originals/e9/84/90/e98490ea3dc49e5c326
 fieldnames(eltype(img)) # The more obvious way is to look up the fields of the RGB struct in the live docs. This is a quick way to get a list of the fields.
 
 #All computer colours are additive combinations of the three primary colours Red, Green, and Blue.  Thes fields correspond to the R,G,B values of the im.  To learn more about how images are built from RGB values, consult https://en.wikipedia.org/wiki/RGB_color_model
+
+# ╔═╡ ee16d749-3538-45c6-892a-b5fd422861da
+function greet(name)
+    # The 'return' keyword is optional; Julia returns the result of the last expression
+    message = "Hello, $name! Welcome to Julia."
+    return message
+end
+
+# ╔═╡ 24a40056-2a63-4dd7-9983-4a107916db89
+size(img) # rows, cols
+
+# ╔═╡ 9f390b83-774f-4470-894b-cde96d432378
+begin 
+	new_img = []
+	for col in size(img)[2]
+		push!(new_img, img[:, 681-col])
+	end
+end
+
+# ╔═╡ 0efda5e9-38c8-411c-90a4-94c7c3ed6146
+vcat(new_img...)
+
+# ╔═╡ 021c4085-55dc-4e50-a7ad-2bb730927318
+
+
+# ╔═╡ dabc51ff-a723-40d3-a91d-b27d4151fa9c
+
 
 # ╔═╡ 5a42850c-ed87-486f-934b-3fb05c6eeeb0
 answer_box(md"""
@@ -539,6 +578,9 @@ end
 
 # ╔═╡ 09583ece-8ce7-45f1-94fb-5bcb96747aca
 another_tensor = [a + b + c*d for a in 1:3, b in 1:2, c in 1:4, d in 1:3];
+
+# ╔═╡ 8953d669-2088-42f7-a420-f699f58d6c84
+size(another_tensor)
 
 # ╔═╡ 1a01e5d6-753f-491a-bcb5-5c893ab1f48f
 my_func(i::Integer) = 2i
@@ -1579,6 +1621,15 @@ A
 
 # ╔═╡ e7f21084-847c-42c5-b95e-27b7029e7bc0
 B
+
+# ╔═╡ ff884dff-d125-4d6a-ad44-25aba33511b2
+A = [1;4;;5;7]
+
+# ╔═╡ 7bcd2490-3543-4e6a-9e53-df37783b52ea
+# ╠═╡ disabled = true
+#=╠═╡
+A = [1;4;;5;7]
+  ╠═╡ =#
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -3282,6 +3333,7 @@ version = "4.1.0+0"
 # ╟─aa5a077d-552e-4922-a5ac-cf8607f0781d
 # ╟─82850d96-02f9-4825-bcf0-84af3a039f89
 # ╠═7bcd2490-3543-4e6a-9e53-df37783b52ea
+# ╠═dc8c3f5d-ec59-431a-8c92-9b3573fc1be9
 # ╠═66e96c23-33d2-4337-9c30-0b3170288ed2
 # ╟─11f93907-9037-4d15-ac6e-d2b00dbe039e
 # ╠═b385d533-0775-4693-b2d2-eaddcaba22b7
@@ -3290,7 +3342,13 @@ version = "4.1.0+0"
 # ╠═b9ed6c20-8a58-461c-b5b3-75d133858098
 # ╠═ef0939b4-2abd-4dd3-aae5-ba816a4460d0
 # ╠═09583ece-8ce7-45f1-94fb-5bcb96747aca
+# ╠═436ab7ae-8151-4aff-b65f-a620e6909a54
+# ╠═8953d669-2088-42f7-a420-f699f58d6c84
+# ╠═c4d42ce3-430b-4262-8771-f942ee3ec67e
+# ╠═3f25ca78-a996-46f8-a0bd-14668747b08f
+# ╠═ff884dff-d125-4d6a-ad44-25aba33511b2
 # ╠═40adf4f6-4608-4417-988a-4dac780bd1ef
+# ╟─9b8ef00e-9439-4c28-8803-6665e11a451b
 # ╠═b524f9a0-4b27-4bbe-bcd5-5c807a1940dc
 # ╟─6af9cb07-aa2e-4757-b188-d248f054e8ed
 # ╟─aa8d4c23-7a89-40d7-a4ba-1ce53079ba2e
@@ -3315,6 +3373,12 @@ version = "4.1.0+0"
 # ╟─a538110d-6e14-4589-8301-2e9b08814c88
 # ╟─693e420d-2b36-4698-ae98-89eb98b525f6
 # ╠═86e90680-ad1b-4e39-93b0-919869fb187a
+# ╠═ee16d749-3538-45c6-892a-b5fd422861da
+# ╠═24a40056-2a63-4dd7-9983-4a107916db89
+# ╠═9f390b83-774f-4470-894b-cde96d432378
+# ╠═0efda5e9-38c8-411c-90a4-94c7c3ed6146
+# ╠═021c4085-55dc-4e50-a7ad-2bb730927318
+# ╠═dabc51ff-a723-40d3-a91d-b27d4151fa9c
 # ╟─5a42850c-ed87-486f-934b-3fb05c6eeeb0
 # ╟─893d9277-384c-4125-9e71-c6e4bd1f362d
 # ╟─2fac2250-f530-4b43-a67d-999383491db6
