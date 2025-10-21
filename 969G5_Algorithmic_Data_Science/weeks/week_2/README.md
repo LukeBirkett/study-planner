@@ -7,11 +7,12 @@
 - [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/files/lecture_2_notes.md)
 
 # Lab
-- [ ] [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/lab/week3lab.ipynb)
-- [ ] [Solutions]()
+- [x] [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/lab/week3lab.ipynb)
+- [x] [Solutions](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/lab/week%203%20lab%20-Solutions.ipynb)
 
 # Reading
 - [ ] [Cormen et al:](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/24386287590002461?auth=SAML)
   - [ ] [Chapter 2 (Getting Started)](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/files/ch2_intro.pdf)
   - [ ] [Chapter 3 (Running Times)](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/files/ch3_running_times.pdf)
   - [ ] [Chapter 8 (Sorting in Linear Time)](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/files/ch8_sorting_linear_time.pdf)
+
