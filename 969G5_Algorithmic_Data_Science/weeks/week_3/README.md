@@ -17,5 +17,5 @@ This week we will be looking at matrix algebra. We will start with basic matrix 
 
 # Reading
 Cormen et al:
-- [ ] Chapter 4 Strassen's algorithm
-- [ ] Chapter 28 Matrix operations
+- [ ] [Chapter 4 Strassen's algorithm](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_3/files/chapter_4_divide_conquer.pdf)
+- [ ] [Chapter 28 Matrix operations](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_3/files/chapter_28_matrix_ops.pdf)
