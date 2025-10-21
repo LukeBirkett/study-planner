@@ -7,13 +7,13 @@ This week we will be looking at matrix algebra. We will start with basic matrix 
 - Do some basic matrix manipulations in Python and empirically examine their time complexity.
 
 # Lecture 
-- [ ] [Overview](https://canvas.sussex.ac.uk/courses/35221/pages/overview-and-reading-unit-3?module_item_id=1567836)
-- [ ] [Slides]()
-- [ ] [Recording]()
-- [ ] [Notes]()
+- [x] [Overview](https://canvas.sussex.ac.uk/courses/35221/pages/overview-and-reading-unit-3?module_item_id=1567836)
+- [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_3/files/lecture3.pdf)
+- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9df3f3cc-7945-4180-9578-b37800840b12)
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_3/files/lecture_notes.md)
 
 # Lab 
-- [ ] [Notebook]()
+- [x] [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_3/lab/week4%20lab.ipynb)
 
 # Reading
 Cormen et al, Chapters 4 (Strassen's algorithm), 28 (Matrix operations).
