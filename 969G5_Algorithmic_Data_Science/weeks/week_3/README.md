@@ -16,4 +16,6 @@ This week we will be looking at matrix algebra. We will start with basic matrix 
 - [x] [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_3/lab/week4%20lab.ipynb)
 
 # Reading
-Cormen et al, Chapters 4 (Strassen's algorithm), 28 (Matrix operations).
+Cormen et al:
+- [ ] Chapter 4 Strassen's algorithm
+- [ ] Chapter 28 Matrix operations
