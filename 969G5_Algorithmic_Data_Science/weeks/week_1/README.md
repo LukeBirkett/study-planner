@@ -13,7 +13,7 @@ This week we will be looking at some of the standard data structures which can b
 
 # Lab
 - [x] [Notebook](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_1/lab/week2lab.ipynb)
-- [ ] [Solutions]()
+- [x] [Solutions]()
 
 # Reading
 - [ ] [Cormen et al:](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/24386287590002461?auth=SAML)
