@@ -6,19 +6,16 @@ Lecture 4 is about the mechanisms by which agents control "movements through the
 - Discuss the successes and failures of biorobotics projects inspired by insect sensori-motor circuits. 
 
 # Lecture 
-- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/lec4_moving_through.pdf)
-- [ ] [Recording]()
-- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/lectures_notes.md)
-
+- [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/lec4_moving_through.pdf)
+- [x] [Recording]()
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/lectures_notes.md)
 
 # Lab
 - [ ] [Lab Reading](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/lab/EMDs.pdf)
 - [ ] [Lab Page](https://canvas.sussex.ac.uk/courses/34991/pages/lab-2-elementary-motion-detection)
 - [ ] [Lab Code](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/labs/IAM_Sussex_labs/lab2)
 
-
 # Reading
-- [ ] []()
-- [ ] []()
-- [ ] []()
-
+- [ ] [The role of behavioural ecology in the design of bio-inspired technology](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/role_of_behavioural_ecology.pdf)
+- [ ] [Vision and Action](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/vision_and_action.pdf)
+- [ ] [Vision, perception, navigation and ‘cognition’ in honeybees and applications to aerial robotics](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/vision_perception_navigation.pdf)
