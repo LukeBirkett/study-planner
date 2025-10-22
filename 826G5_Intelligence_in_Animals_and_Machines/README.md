@@ -38,10 +38,10 @@ This module will develop understanding of what it means for an animal or a machi
 
 # Assessments
 
-| Type | Link | Weighting | Words |
-|---|---|---|---|
-| Modelling Report 1 | [Page](https://canvas.sussex.ac.uk/courses/34991/pages/assignment-1-details-worth-20-percent-modelling-report-option?module_item_id=1509121) | 20% | 1000 |
-| Modelling Report 2 | [Page](https://canvas.sussex.ac.uk/courses/34991/pages/assignment-2-details-worth-80-percent-modelling-report-option?module_item_id=1509123) | 80% | 2500 |
+| Type | Link | Weighting | Words | Due |
+|---|---|---|---|---|
+| Modelling Report 1 | [Page](https://canvas.sussex.ac.uk/courses/34991/pages/assignment-1-details-worth-20-percent-modelling-report-option?module_item_id=1509121) | 20% | 1000 | 27 Nov | 
+| Modelling Report 2 | [Page](https://canvas.sussex.ac.uk/courses/34991/pages/assignment-2-details-worth-80-percent-modelling-report-option?module_item_id=1509123) | 80% | 2500 | 15 Jan |
 
 # [Weeks]()
 - [ ] [Week 0 - Preliminary](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_0)
