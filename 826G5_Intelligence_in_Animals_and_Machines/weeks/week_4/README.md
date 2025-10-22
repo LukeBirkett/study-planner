@@ -6,9 +6,9 @@ Lecture 4 is about the mechanisms by which agents control "movements through the
 - Discuss the successes and failures of biorobotics projects inspired by insect sensori-motor circuits. 
 
 # Lecture 
-- [ ] [Slides]()
+- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/lec4_moving_through.pdf)
 - [ ] [Recording]()
-- [ ] [Notes]()
+- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4/files/lectures_notes.md)
 
 
 # Lab
@@ -21,3 +21,4 @@ Lecture 4 is about the mechanisms by which agents control "movements through the
 - [ ] []()
 - [ ] []()
 - [ ] []()
+
