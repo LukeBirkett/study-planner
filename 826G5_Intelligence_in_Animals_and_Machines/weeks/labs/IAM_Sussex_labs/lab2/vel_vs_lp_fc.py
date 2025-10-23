@@ -131,7 +131,7 @@ lp_fcs = np.linspace(1, 100, l_n)
 # - if all are false, then a sweep over velocites and corner frequencies will be run
 # - if not, then the first option set to True will be selected
 # run once
-single_run = True
+single_run = False
 # sweep over velocities with a fixed LPF corner frequency
 sweep_vels = False
 # sweep over LPF corner frequencies with a fixed velocity
@@ -162,7 +162,7 @@ if __name__ == '__main__':
         n2 = 2000
         n2 += n1
         # run smulation once
-        ts, corr, wall, bee = run_once(y_vel=20, lp_fc=10)
+        ts, corr, wall, bee = run_once(y_vel=10, lp_fc=20)
 
         # open axes for plots
         fig, ax = plt.subplots()
@@ -206,10 +206,10 @@ if __name__ == '__main__':
 
         # not particularly worth looking at most of the time, so you may want to
         # comment these lines out
-        fig5, ax5 = plt.subplots()
-        ax5.plot(bee.xs, bee.ys)
-        bee.draw(ax5)
-        wall.draw(ax5)
+        #fig5, ax5 = plt.subplots()
+        #ax5.plot(bee.xs, bee.ys)
+        #bee.draw(ax5)
+        #wall.draw(ax5)
 
     elif sweep_vels:
 
@@ -289,6 +289,11 @@ if __name__ == '__main__':
         ax.tick_params(axis='both', which='major', labelsize=font_size)
 
     else:
+        print("this one")
+        print("v_n:", v_n)
+        print("l_n:", l_n)
+        print("vels:", vels)
+        print("lp_fcs:", lp_fcs)
 
         # used to measure time to run all simulations
         t_start = time()
