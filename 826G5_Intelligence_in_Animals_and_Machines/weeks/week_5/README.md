@@ -9,7 +9,7 @@ In the navigation lecture, we will look at the strategies that are common to dif
 # Lecture 
 - [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/files/lec_5_navigation.pdf)
 - [ ] [Recording]()
-- [ ] [Notes]()
+- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/files/lecture_5_notes.md)
 
 # Seminar
 n the first half of the seminar I'll explain Assessment 1 and we'll go over any questions you have
@@ -23,5 +23,6 @@ Then, we will be discussing a simple computational model describing how house hu
 - [ ] [Do animals have cognitive maps? (Bennett, 2011)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/files/animals_cog_maps.pdf)
 - [ ] [Spatial Cognition in Bats and Rats (Geva-Sagiv, 2015)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/files/spatial_cognition_bats_rats.pdf)
 - [ ] [Insect Navigation (Paul Graham, 2010)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/files/insect_navigation.pdf)
+
 
 
