@@ -44,3 +44,4 @@ TBC
 - [ ] [Week 2 - Algorithmic Complexity Sorting](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_2/README.md)
 - [ ] [Week 3 - Matrices: Manipulation and Computation](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_3)
 - [ ] [Week 4 - Processes and Concurrency](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_4)
+- [ ] [Week 5 - Distributed Computation]()
