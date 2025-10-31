@@ -6,7 +6,7 @@ We will briefly consider heaps for process queuing, and compare CPUs and GPUs fo
 - Understand the basic principles and uses of hashing and encryption in cybersecurity.
 
 # Lecture 
-- [ ] [Overview](https://canvas.sussex.ac.uk/courses/35221/pages/overview-week-5-2?module_item_id=1567846)
+- [x] [Overview](https://canvas.sussex.ac.uk/courses/35221/pages/overview-week-5-2?module_item_id=1567846)
 - [ ] [Slides]()
 - [ ] [Recording]()
 - [ ] [Notes]()
@@ -18,3 +18,4 @@ NO LAB
 Silberschatz, Galvin and Gagne, 
 - Chapters 16 and 17 (Security),
 - Chapter 19 (Networks and distributed systems)
+
