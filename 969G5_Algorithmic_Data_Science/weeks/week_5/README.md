@@ -7,9 +7,9 @@ We will briefly consider heaps for process queuing, and compare CPUs and GPUs fo
 
 # Lecture 
 - [x] [Overview](https://canvas.sussex.ac.uk/courses/35221/pages/overview-week-5-2?module_item_id=1567846)
-- [ ] [Slides]()
-- [ ] [Recording]()
-- [ ] [Notes]()
+- [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_5/files/lec_5.pdf)
+- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5ef786d2-b828-4178-8b35-b386009481e6)
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_5/files/lecture_notes.md)
 
 # Lab 
 NO LAB
@@ -18,4 +18,5 @@ NO LAB
 Silberschatz, Galvin and Gagne, 
 - Chapters 16 and 17 (Security),
 - Chapter 19 (Networks and distributed systems)
+
 
