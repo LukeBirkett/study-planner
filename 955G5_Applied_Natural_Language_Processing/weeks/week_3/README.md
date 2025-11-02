@@ -8,8 +8,8 @@ In the context of a sentiment analysis task, we will consider different methods 
 
 # Lecture 
 - [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/files/Lec3.pdf)
-- [ ] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b581d7d0-0e42-40a9-8b82-b37800f7ea24)
-- [ ] [Notes]()
+- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b581d7d0-0e42-40a9-8b82-b37800f7ea24)
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/files/lecture_notes.md)
 
 # Lab
 - [x] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/lab/Lab_3_1_redo.ipynb)
