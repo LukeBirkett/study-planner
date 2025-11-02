@@ -4,13 +4,14 @@ We have spent the last couple of weeks thinking about document classification.  
 # Lecture 
 - [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_5/files/Lec5.pdf)
 - [ ] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7a3e6d3-ac12-436e-90fd-b38601088f73)
-- [ ] [Notes]()
+- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_5/files/lec_5_notes.md)
 
 # Lab
 - [ ] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_5/lab/Lab_5_1.ipynb)
 
 # Reading
 No reading
+
 
 
 
