@@ -3,7 +3,7 @@ We have spent the last couple of weeks thinking about document classification.  
 
 # Lecture 
 - [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_5/files/Lec5.pdf)
-- [ ] [Recording]()
+- [ ] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7a3e6d3-ac12-436e-90fd-b38601088f73)
 - [ ] [Notes]()
 
 # Lab
@@ -11,5 +11,6 @@ We have spent the last couple of weeks thinking about document classification.  
 
 # Reading
 No reading
+
 
 
