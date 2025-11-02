@@ -17,7 +17,7 @@ You might also:
 # Lecture 
 - [x] [Lecture Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/files/Lec1.pdf)
 - [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c04e911c-5d80-4b39-a8f7-b36a00f87e65)
-- [ ] [Quiz](https://canvas.sussex.ac.uk/courses/35030/quizzes/56818)
+- [x] [Quiz](https://canvas.sussex.ac.uk/courses/35030/quizzes/56818)
 
 # Lab 
 - [x] [Lab Folder](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/lab)
