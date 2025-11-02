@@ -4,7 +4,7 @@ This week, we will continue looking at the area of document classification.   Th
 # Lecture 
 - [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_4/files/Lec4.pdf)
 - [ ] [Recording]()
-- [ ] [Notes]()
+- [ ] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_4/files/lecture_4_notes.md)
 
 # Lab
 - [ ] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_4/lab/Lab_4_1.ipynb)
@@ -12,6 +12,7 @@ This week, we will continue looking at the area of document classification.   Th
 
 # Reading
 No reading
+
 
 
 
