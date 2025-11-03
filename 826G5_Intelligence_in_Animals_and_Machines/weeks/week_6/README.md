@@ -16,9 +16,15 @@ The topic for the Week 6 lecture is Motor Control. The major learning points are
 - [ ] [Lab PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/lab/IAM_lab_3.pdf)
 - [ ] [Lab Code](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/labs/IAM_Sussex_labs/lab_3_robinson)
 
+#### Lab Reading (last week)
+- [ ] [Main: A Simple Threshold Rule Is Sufficient to Explain Sophisticated Collective Decision-Making](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/seminar/rob_2011_simple_threshold.pdf)
+- [ ] [Extra I: Supplementary Methods](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/seminar/rob_2011_sup_methods.doc)
+- [ ] [Extra II: Do Ants Make Direct Comparisoins](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/seminar/rob_2011_ants_direct.pdf)
+
 # Reading
 - [ ] []()
 - [ ] []()
 - [ ] []()
+
 
 
