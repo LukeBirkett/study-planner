@@ -4,7 +4,7 @@
 - [ ] [Summary]()
 - [ ] [Slide]()
 - [ ] [Notes]()
-- [ ] [Recordings]()
+- [ ] [Recordings](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=bf583b6e-ef88-4ddc-860f-b387011a164f)
 
 ## Labs
 - [ ] [Notebook 5]()
@@ -17,3 +17,4 @@
 <br>
   - [ ] 
 </details>
+
