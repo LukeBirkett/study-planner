@@ -1,0 +1,24 @@
+# [Week 6 - Motor Control](https://canvas.sussex.ac.uk/courses/34991/pages/week-6-motor-control?module_item_id=1509130)
+The topic for the Week 6 lecture is Motor Control. The major learning points are that Motor Control is very difficult, but there are design principles that can simplify the process. The basic difficulty is because of inverse kinematics - namely that there are an infinite number of ways that a limb can be moved to a target position. However, life can be made simple by utilising embodiment, synergies, reflexes, compliance and feedback. Across all of these, examples from nature and robotics work well together in making the point about adaptive control principles.
+
+#### Learning outcomes 
+- Understand just how difficult it is to control a body
+- Describe some of the adaptove principles of biological systems that simplify the motor control problem
+- Describe how these adaptive principles are also useful when designing robots
+
+# Lecture 
+- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/files/2025%20IAM%20Lecture%206%20Movement%20and%20Motor%20Systems-1.pdf)
+- [ ] [Recording]()
+- [ ] [Notes]()
+
+# Lab
+- [ ] [Lab Page](https://canvas.sussex.ac.uk/courses/34991/pages/lab-3-monte-carlo-simulation-of-collective-behaviour)
+- [ ] [Lab PDF](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/lab/IAM_lab_3.pdf)
+- [ ] [Lab Code](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/labs/IAM_Sussex_labs/lab_3_robinson)
+
+# Reading
+- [ ] []()
+- [ ] []()
+- [ ] []()
+
+
