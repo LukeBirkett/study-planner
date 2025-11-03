@@ -22,10 +22,6 @@ The topic for the Week 6 lecture is Motor Control. The major learning points are
 - [ ] [Extra II: Do Ants Make Direct Comparisoins](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/seminar/rob_2011_ants_direct.pdf)
 
 # Reading
-- [ ] []()
-- [ ] []()
-- [ ] []()
-
-
-
-
+- [ ] [ESSENTIAL: David W. Franklin; Daniel M. Wolpert (2011) Computational Mechanisms of Sensorimotor Control]()
+- [ ] [REC: Ijspeert (2014) Biorobotics: Using robots to emulate and investigate agile locomotion]()
+- [ ] [OPTIONAL: Binyamin Hochner (2012) An Embodied View of Octopus Neurobiology]()
