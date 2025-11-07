@@ -1,10 +1,10 @@
 # Week 3/4 - Linear Algegra I & II
 
 ## Lectures
-- [ ] Summaries: [[Week 3](https://canvas.sussex.ac.uk/courses/34902/pages/week-3-summary-2?module_item_id=1565153) / [Week 4](https://canvas.sussex.ac.uk/courses/34902/pages/week-4-summary?module_item_id=1565156)]
-- [ ] Slides: [[Part 1](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/lec3.pdf) / [Part 2](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/Linear%20Algebra2_slides.pdf)]
-- [ ] [Notes]()
-- [ ] Recordings [[1](), [2]()]
+- [x] Summaries: [[Week 3](https://canvas.sussex.ac.uk/courses/34902/pages/week-3-summary-2?module_item_id=1565153) / [Week 4](https://canvas.sussex.ac.uk/courses/34902/pages/week-4-summary?module_item_id=1565156)]
+- [x] Slides: [[Part 1](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/lec3.pdf) / [Part 2](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/Linear%20Algebra2_slides.pdf)]
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/linear_algebra_lecture_notes.md)
+- [x] Recordings [[1](), [2]()]
 - [ ] [Linear Algebra Cheatsheet](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3/files/LinearAlgebra_cheatsheet.pdf)
 
 ## Labs
