@@ -16,7 +16,5 @@ NO LAB
 
 # Reading
 Silberschatz, Galvin and Gagne, 
-- Chapters 16 and 17 (Security),
-- Chapter 19 (Networks and distributed systems)
-
-
+- [ ] Chapters 16 and 17 (Security),
+- [ ] Chapter 19 (Networks and distributed systems)
