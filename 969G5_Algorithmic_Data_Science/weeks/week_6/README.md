@@ -14,7 +14,7 @@ Then we will introduce the technique of minhashing, which reduces the size of re
 # Lecture 
 - [ ] [Overview](https://canvas.sussex.ac.uk/courses/35221/pages/overview-and-reading-unit-6?module_item_id=1567850)
 - [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/969G5_Algorithmic_Data_Science/weeks/week_6/files/lecture6.pdf)
-- [ ] [Recording]()
+- [ ] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=21c07ff3-32c1-49b3-973f-b38d00984b17)
 - [ ] [Notes]()
 
 # Lab 
