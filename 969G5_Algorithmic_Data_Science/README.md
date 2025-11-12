@@ -45,3 +45,4 @@ TBC
 - [ ] [Week 3 - Matrices: Manipulation and Computation](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_3)
 - [ ] [Week 4 - Processes and Concurrency](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_4)
 - [ ] [Week 5 - Distributed Computation](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_5)
+- [ ] [Week 6 - Similarity](https://github.com/LukeBirkett/study-planner/tree/main/969G5_Algorithmic_Data_Science/weeks/week_6)
