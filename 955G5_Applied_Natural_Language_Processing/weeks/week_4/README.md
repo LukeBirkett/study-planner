@@ -9,7 +9,9 @@ This week, we will continue looking at the area of document classification.   Th
 # Lab
 - [ ] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_4/lab/Lab_4_1.ipynb) ([Solutions](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_4/lab/Lab_4_1_SOLUTIONS.ipynb))
 - [ ] [Notebook 2](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_4/lab/Lab_4_2.ipynb) ([Solutions](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_4/lab/Lab_4_2-SOLUTIONS.ipynb))
+- [ ] [Lab Walk Through Videos](https://canvas.sussex.ac.uk/courses/35030/pages/week-4?module_item_id=1558664)
 
 # Reading
 No reading
+
 
