@@ -12,8 +12,8 @@ In the context of a sentiment analysis task, we will consider different methods 
 - [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/files/lecture_notes.md)
 
 # Lab
-- [x] [Notebook 1](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/lab/Lab_3_1_redo.ipynb)
-- [ ] [Notebook 2](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/lab/Lab_3_2.ipynb)
+- [x] [Notebook 1: Word Lists](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/lab/Lab_3_1_redo.ipynb)
+- [ ] [Notebook 2: Evals](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/lab/Lab_3_2.ipynb)
 
 # Reading
 - [ ] [J&M Chap 4:](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_3/files/j_m_chapter_4.pdf)
