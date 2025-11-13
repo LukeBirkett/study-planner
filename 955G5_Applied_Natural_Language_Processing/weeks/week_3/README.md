@@ -1,4 +1,4 @@
-# [Week 2: Document Classification](https://canvas.sussex.ac.uk/courses/35030/pages/week-3-document-classification)
+# [Week 3: Document Classification](https://canvas.sussex.ac.uk/courses/35030/pages/week-3-document-classification)
 This week we will begin looking at the application of document classification.  We will consider different scenarios including the classification of:
 - topic
 - sentiment
