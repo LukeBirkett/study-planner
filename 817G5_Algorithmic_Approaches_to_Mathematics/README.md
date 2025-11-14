@@ -44,3 +44,4 @@ TBC
 - [ ] [Week 3 & 4 - Linear Algebra](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_3)
 - [ ] [Week 5 - Probability](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_5)
 - [ ] [Week 6 - Calculus](https://github.com/LukeBirkett/study-planner/blob/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_6/README.md)
+- [ ] [Week 7 - Optimization](https://github.com/LukeBirkett/study-planner/tree/main/817G5_Algorithmic_Approaches_to_Mathematics/weeks/week_7)
