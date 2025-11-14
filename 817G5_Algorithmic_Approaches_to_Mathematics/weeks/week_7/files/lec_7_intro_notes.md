@@ -192,4 +192,33 @@ end
 
 ```
 
+## Infeasilbity
+
+[REWATCH AND TAKE NOTES OF THIS BIT]
+
+
+# Quadratic (least-squares) programs
+
+\underline{x}^T Q \underline{x} = \begin{bmatrix} x_1 & x_2 \end{bmatrix} \begin{bmatrix} 1 & 3 \\ 2 & 5 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+
+recall LA is done rigght to left
+
+this will result in a sclar
+
+matrix by vector = vector
+
+vect by vect = scalar
+
+\underline{x}^T Q \underline{x} = \sum_{i=1, j=1}^n Q_{ij} x_i x_j
+
+This is a quadratic form
+
+it always gives a sclar output 
+
+only always for degree two elements ??
+
+
+\min_{\underline{x}} f(\underline{x}) = \underline{x}^T Q \underline{x} + \underline{c}^T \underline{x}
+
+subject to $\underline{A\underline{x} \leq \underline{b}}$
 
