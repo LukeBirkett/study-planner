@@ -129,19 +129,31 @@ important skill for optimization
 
 ## Code example
 
-\text{Factory makes products } A \text{ ($\pounds30$ profit) and } B \text{ ($\pounds20$ profit)} \\
-\begin{itemize}
-    \item A: 2 \text{ hours of labour, } 1\text{kg of material}
-    \item B: 1 \text{ hour of labour, } 2\text{kg of material}
-\end{itemize}
-\text{Maximise profit in one day (8 hours) with } 8\text{kg material} \\
-\vspace{0.5em}
-\text{Maximise } \begin{bmatrix} 30 & 20 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} \quad \text{subject to} \\
-\begin{align*}
+**Problem Description** 🏭
+
+A factory makes products **A** (£30 profit) and **B** (£20 profit).
+* **Product A:** 2 hours of labour, 1kg of material.
+* **Product B:** 1 hour of labour, 2kg of material.
+* **Availability:** 8 hours of labour and 8kg of material per day.
+
+---
+
+**Optimization Problem (The Mathematical Model)**
+
+The objective is to maximise profit, subject to the resource constraints.
+
+$$
+\text{Maximize } \begin{bmatrix} 30 & 20 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+$$
+
+**Subject to:**
+$$
+\begin{aligned}
 2x_1 + x_2 &\leq 8 \quad & \text{(Labour Constraint)} \\
 x_1 + 2x_2 &\leq 8 \quad & \text{(Material Constraint)} \\
-x_1, x_2 &\geq 0 \quad & \text{(Non-negativity Constraint)}
-\end{align*}
+x_1, x_2 &\geq 0 \quad & \text{(Non-negativity)}
+\end{aligned}
+$$
 
 
 ```
