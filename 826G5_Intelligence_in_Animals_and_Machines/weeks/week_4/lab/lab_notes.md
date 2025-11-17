@@ -93,3 +93,33 @@ Note, it is often better to sweep over two parameters at together as you may dis
 ### Robustness 
 
 Individual simulations may be misleading and suggest things are better than they are. We can introduce various types of noise into our simulations to test robustness.
+
+### Getting Started with the Code
+
+The script is `vel_vs_lp_fc.py`. It initalizes a simulated agent based on a bee. It flies in a striaght line parallel to a vertically alligned wall with alternative stripes. The bee has sensors which detect patterns in view as either 1 (black) or 0 (white). If all parameters are set to false (default) then it will sweep over two parameter lists for velocity and corner frequency (this is the param for low-pass filter). If the outut is higher then more motion is detected
+
+- line 119: Patch Height, `patch_h = 20`
+- line 134-140: `single_run`, `sweep_vels`, `sweep_fcs`, `mutli_vels`. These are all boolean and false by default. 
+
+### Comprehensive vs Resolution Trade off
+
+Ideally we want to make the resolution as rich and detailed as possible: `v_n` & `l_n` (these are the param lists to loop through). But may be very time and comutationally expensive. Although PCs are fast and cabable today so this is not as much of an issue. 
+
+### Tasks:
+
+Experiment with simulations by sweeping over parameters and graps how simulation ouputs change with parameters
+
+#### 1. Effect of Initial Conditions
+
+`lines 151-121`, if `single_run = true` (134)
+
+#### 2. Effect of Bee Speed
+
+Run a 1D parameter sweep over velocity (fixing LPF corner frequency)
+
+Code that control this found in `lines 214-233`, `elif sweep_vels`
+
+Increasing bee velocity seems increase average correlation but reduce smoothness of the line. More simiulations might be needed to average out the noise.  Also means it has an optimial delay time
+
+#### 3. The Effect of LPF Corner Frequency
+
