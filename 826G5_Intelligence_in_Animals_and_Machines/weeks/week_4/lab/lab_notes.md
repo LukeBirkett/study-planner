@@ -138,3 +138,14 @@ The peak is where the LPF is allowing the temporary delay to exactly match. It i
 
 ## Task 4: Simulating Corridor Centering Bees
 
+Scripted used `bee_corridor.py`
+
+In task 3, we simulated 1 wall + pair of sensors
+
+Task we implement the full experiement. A pair of sensor on each side of the agent and a wall each side.
+
+Honey bees centre their flight trajectories in the corridor/tunnel by balancing the optic flow on two side of their visual fieldds
+
+Simulated bee. If the average outputs of the EMD are equal then the bee must be flying in the center
+
+If the outputs are unbalanced then the bee shoudl steer towards the lower EMD to rebalance itself
