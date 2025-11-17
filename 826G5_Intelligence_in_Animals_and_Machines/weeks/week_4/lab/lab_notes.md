@@ -115,11 +115,26 @@ Experiment with simulations by sweeping over parameters and graps how simulation
 
 #### 2. Effect of Bee Speed
 
-Run a 1D parameter sweep over velocity (fixing LPF corner frequency)
-
-Code that control this found in `lines 214-233`, `elif sweep_vels`
+Run a 1D parameter sweep over velocity (fixing LPF corner frequency). Code that control this found in `lines 214-233`, `elif sweep_vels`
 
 Increasing bee velocity seems increase average correlation but reduce smoothness of the line. More simiulations might be needed to average out the noise.  Also means it has an optimial delay time
 
 #### 3. The Effect of LPF Corner Frequency
+
+1D sweep for LPF with fixed velocity, `lines 235-254`
+
+- 0 LPF has very little correlation
+- Rapidly increases almost vertically until 5
+- then drops and very slowly trails out
+- If the filter is lower then it is more smooth
+- If higher then less smooth, it lets through more of the HPF without changing it
+
+- 0 has flat signal hence no correlation. It introduces and very long temporal delay
+- Large LPF values will introduce almost no delay
+
+The sudden rise and peak of the LPF parameter implies that it has an optimial level that we can fix at and focus on exploring other paramters in the ystem
+
+The peak is where the LPF is allowing the temporary delay to exactly match. It is the optimla point for the volocity fixed at. 
+
+## Task 4: Simulating Corridor Centering Bees
 
