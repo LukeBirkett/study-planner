@@ -51,3 +51,45 @@ R&P EMD is independant of contrast. It words by normalising the inputs and compu
 3. Sensor 1 (H, L), Sensor 2 (H) -> Passed into mutliplier unit
 
 ### What do high pass filters do?
+
+The HPF allows for decay and phasing of a signal as it apporaches and passes. In the simple EMD, signal is oeither on or off. The mechanism does this by detecting edges. It does not change the temporal different between sensors (lag)
+
+### What does the Low Pass Filter do?
+
+LPF smooths and phase shifts the signal. Phase shift may give the signals more overlap. There is a param to control this. The smaller the param, the larger the smoothing and pase-shift efect. 
+
+### What does the mutlipler do?
+
+Recall, S1(H,L) and S2(H) are passed to a mutliplier. This gives the strength of the match. If both are higher then the signal will be very high. If they are opposites then the EMD will be negative.
+
+## Task 2 Download the Code
+
+## Task 3 - Run a Parameter Sweep
+
+The advantage of "in silico" experiements is that you can run the simulation many times with different starting conditions. Complex systems tend to depend heavily on the initial conditions. Best way to unpack and learn the behaviour of a compled system is to simulate many times from an ensemable of intital conditions and compare results.
+
+We can investigate this systematically by performing a parameter sweep. A parameter sweep is a methodical technique used in modeling, simulation, and optimization to test a system's behavior across a range of input values for one or more parameters. The primary goal is to understand the sensitivity of the system's output (or performance) to changes in its inputs, and to identify optimal or critical parameter settings.
+
+### Parameter sweeps are essential for:
+- Optimization: Finding the best configuration for a system.
+- Robustness Analysis: Determining how resilient a system is to variations in its environment or inputs.
+- Validation: Confirming that a model behaves as expected across its entire intended operational space.
+
+In our experiment, we can investigate this systemmatically by performing a parameter sweep. We will run a simulation many times while manipulating a parameter in order to see how robust or stable the behaviour of a system is. Or when it breaks.
+
+### Key things to examine are:
+- How strongly the system depends on parameter values
+- How combinations of parametetrs work together
+
+This is known as **sensitivity analysis**. If a system is very sensitive to a parameter changing or a particular range of parameters then this may highlight an issue
+
+### The general approach is:
+1. Start with a range of parameter values, e.g. [1, 5, 7, 10] or (0 to 100)
+2. Run a simulation for each value and record some important metric
+3. Plot results over the range for analysis
+
+Note, it is often better to sweep over two parameters at together as you may discover if paramters are independent or conencted in some way. 
+
+### Robustness 
+
+Individual simulations may be misleading and suggest things are better than they are. We can introduce various types of noise into our simulations to test robustness.
