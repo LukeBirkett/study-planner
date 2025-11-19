@@ -140,12 +140,96 @@ The peak is where the LPF is allowing the temporary delay to exactly match. It i
 
 Scripted used `bee_corridor.py`
 
-In task 3, we simulated 1 wall + pair of sensors
+In task 3, we simulated 1 wall + pair of sensors. Task we implement the full experiement. A pair of sensor on each side of the agent and a wall each side.
 
-Task we implement the full experiement. A pair of sensor on each side of the agent and a wall each side.
+- Real Honey bees centre their flight trajectories in the corridor/tunnel by balancing the optic flow on two side of their visual fields
+- For out simulated bee. If the average outputs of the EMD are equal then the bee must be flying in the center. If the outputs are unbalanced then the bee should steer towards the lower EMD to rebalance itself. In the code, the walls are technically visual only. The "bee" could fly through them if it wanted it, though it is programmed not to
 
-Honey bees centre their flight trajectories in the corridor/tunnel by balancing the optic flow on two side of their visual fieldds
+Recall that is it Kirchner and Srinivasan hypothesis that bees centre themsevles when flying through a corridor or tunnel using optic flow on the two sides of their visual fields. The simulated bee should be capable of this because it has two sensors with associated EMDs on each side of its body. Though the behaviour requires the parameters to be set well
 
-Simulated bee. If the average outputs of the EMD are equal then the bee must be flying in the center
+In inputs to the system are very simple:
+- 4 binary signals
+- 2 sensors on each EMD
+- Input to sensor is either white or black
 
-If the outputs are unbalanced then the bee shoudl steer towards the lower EMD to rebalance itself
+If the signals from the EMDs are equal then the bee must be flying in the middle of the corridor. If the average output is higher on the left than the right, then the bee shoud steer more to the right. Being higher on the left then it must be closer to the wall meaning the signals between black and white will be closer due to perspective
+
+### The Code
+
+#### Moving Averages
+
+Under the parameter sweeps we took the average EMD output from all of the interations simulations. For a real-time implementation, we need to know how much optic flow the EMD is detecting right now. Actually, in practice, we want to get an idea of what the optic flow decected has been like recently. This is because the instantaneous output of an EMD can vary greatly. An easy solution is to use a moving average of a recent (short) time window. When using a moving average, the window is the most recent interval of time. The effect of a moving average is much like the smooth effect of an LPF. A small moving average window does not average much as the result will be more similar to the instantaneous output of an EMD.If the window is too large, then the signals will be smoothed too much and the system will be not recognise EMD changes quick enough meaning it is respond slowly, lagged o r just not at all
+
+Window size is one of the parameters we are going to investigate and is set by `window_n` on `line 102`
+
+`controller = OpticFlowController(vel=50, margin=0.0075, window_n=200)`
+
+
+#### The Controller
+
+The bee's controller has very simple principles:
+- If the bees average EMD outputs are close enough together then the bee will just fly forward
+- "Close Enough" is determined by `margin` also on `line 102` with the `OpticFlowController()`
+- If the EMD is greater on the left, then the bee will steer right
+- If the EMD is great on the right, then the bee will steer left
+- The angle by which steering takes place is set on line `line 59`
+
+The controller has 3 parameters will are set in `OpticFlowController()` on `line 102`:
+- `vel`: the bee's linear speed, which will be constant over the entire simulation
+- `margin`: the margin within which the EMDs' average values are considered similar enough for the bee to be in the centre of the corridor
+- `window_n`: the number of simulation steps which will be used in computing the moving averages of the EMD outputs.
+
+#### Ensemble of initial conditions
+
+- The number of times a simulation is run is set with `n` on `line 85`
+- Every simulation will start at the same y-coordinate in space
+- But the x-coordinate will vary each time (lateral space)
+- This is so we can confirm that the results are robust as there isn't some specially starting sweet spot that allows for certain behaviour and completions
+- The path taken during each path will be plot on the graph in a different colour
+- The bee traverses foward in the y-direciton using angle changes to center itself
+
+## THE TASKS
+
+The main aim of the task is to investigate the idea that corridor centring can occur by balancing optic flow. 
+
+We want to play with and test things with the hope of understanding how the system works
+
+also to know its limits: how does it work, and how, when and why does it fail?
+
+
+### 1. Experiment with the window size for the moving average.
+
+How small or large does it need to be to make the controller fail? 
+
+Does it fail in the same way for very large and very small windows, or do they cause different problems? Why?
+
+
+
+
+### 2. Experiment with the margin size.
+
+How small or large does it need to be to make the controller fail? 
+
+Does it fail in the same way for very large and very small margins, or do they cause different problems? Why?
+
+
+
+
+### 3. Experiment with speed
+
+For higher and lower speeds, repeat steps 1 and 2.
+
+How do the different combinations of parameters combine to affect the bee's behaviour? 
+
+Are there speeds that break the corridor centring response? If so, is this a problem for the theory/model or not?
+
+
+
+
+### 4. Experiment with the environment
+
+Try making the corridor wider or more narrow, by increasing or decreasing w on line 90 of the script.
+
+How does changing the width of the corridor affect the bee's behaviour? Why?
+
+
