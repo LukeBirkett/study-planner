@@ -148,4 +148,65 @@ Honey bees centre their flight trajectories in the corridor/tunnel by balancing 
 
 Simulated bee. If the average outputs of the EMD are equal then the bee must be flying in the center
 
-If the outputs are unbalanced then the bee shoudl steer towards the lower EMD to rebalance itself
+If the outputs are unbalanced then the bee should steer towards the lower EMD to rebalance itself
+
+In the code, the walls are technically visual only. The "bee" could fly through them if it wanted it, though it is programmed not to
+
+Recall that is it Kirchner and Srinivasan hypothesis that bees centre themsevles when flying through a corridor or tunnel using optic flow on the two sides of their visual fields
+
+The simulated bee should be capable of this because it has two sensors with associated EMDs on each side of its body. 
+
+Though the behaviour requires the parameters to be set well
+
+In inputs to the system are very simple:
+- 4 binary signals
+- 2 sensors on each EMD
+- Input to sensor is either white or black
+
+If the signals from the EMDs are equal then the bee must be flying in the middle of the corridor
+
+If the average output is higher on the left than the right, then the bee shoud steer more to the right. 
+
+Being higher on the left then it must be closer to the wall meaning the signals between black and white will be closer due to perspective
+
+### The Code
+
+#### Moving Averages
+
+Under the parameter sweeps we good the average EMD output from all of the interations simulations
+
+For a real-time implementation, we need to know how much optic flow the EMD is detecting right now
+
+Actually, in practice, we want to get an idea of what the optic flow decected has been like recently
+
+This is because the instantaneous output of an EMD can vary greatly
+
+An easy solution is to use a moving average of a recent (short) time window
+
+When using a moving average, the window is the most recent interval of time
+
+The effect of a moving average is much like the smooth effect of an LPF
+
+A small moving average window does not average much as the result will be more similar to the instantaneous output of an EMD
+
+If the window is too large, then the signals will be smoothed too much and the system will be not recognise EMD changes quick enough meaning it is respond slowly, lagged o r just not at all
+
+Window size is one of the parameters we are going to investigate and is set by `window_n` on `line 102`
+
+`controller = OpticFlowController(vel=50, margin=0.0075, window_n=200)`
+
+
+#### The Controller
+
+The bee's controller has very simple principles:
+- If the bees average EMD outputs are close enough together then the bee will just fly forward
+- "Close Enough" is determined by `margin` also on `line 102` with the `OpticFlowController()`
+- If the EMD is greater on the left, then the bee will steer right
+- If the EMD is great on the right, then the bee will steer left
+- The angle by which steering takes place is set on line `line 59`
+
+The controller has 3 parameters will are set in `OpticFlowController()` on `line 102`:
+- `vel`: the bee's linear speed, which will be constant over the entire simulation
+- `margin`: the margin within which the EMDs' average values are considered similar enough for the bee to be in the centre of the corridor
+- `window_n`: the number of simulation steps which will be used in computing the moving averages of the EMD outputs.
+
