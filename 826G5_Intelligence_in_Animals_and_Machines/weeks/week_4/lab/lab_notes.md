@@ -210,3 +210,57 @@ The controller has 3 parameters will are set in `OpticFlowController()` on `line
 - `margin`: the margin within which the EMDs' average values are considered similar enough for the bee to be in the centre of the corridor
 - `window_n`: the number of simulation steps which will be used in computing the moving averages of the EMD outputs.
 
+#### Ensemble of initial conditions
+
+- The number of times a simulation is run is set with `n` on `line 85`
+- Every simulation will start at the same y-coordinate in space
+- But the x-coordinate will vary each time (lateral space)
+- This is so we can confirm that the results are robust as there isn't some specially starting sweet spot that allows for certain behaviour and completions
+- The path taken during each path will be plot on the graph in a different colour
+- The bee traverses foward in the y-direciton using angle changes to center itself
+
+#### THE TASKS
+
+The main aim of the task is to investigate the idea that corridor centring can occur by balancing optic flow. 
+
+We want to play with and test things with the hope of understanding how the system works
+
+also to know its limits: how does it work, and how, when and why does it fail?
+
+
+##### 1. Experiment with the window size for the moving average.
+
+How small or large does it need to be to make the controller fail? 
+
+Does it fail in the same way for very large and very small windows, or do they cause different problems? Why?
+
+
+
+
+##### 2. Experiment with the margin size.
+
+How small or large does it need to be to make the controller fail? 
+
+Does it fail in the same way for very large and very small margins, or do they cause different problems? Why?
+
+
+
+
+##### 3. Experiment with speed
+
+For higher and lower speeds, repeat steps 1 and 2.
+
+How do the different combinations of parameters combine to affect the bee's behaviour? 
+
+Are there speeds that break the corridor centring response? If so, is this a problem for the theory/model or not?
+
+
+
+
+##### 4. Experiment with the environment
+
+Try making the corridor wider or more narrow, by increasing or decreasing w on line 90 of the script.
+
+How does changing the width of the corridor affect the bee's behaviour? Why?
+
+
