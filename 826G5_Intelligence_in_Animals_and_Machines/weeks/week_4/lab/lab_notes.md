@@ -188,7 +188,7 @@ The controller has 3 parameters will are set in `OpticFlowController()` on `line
 - The path taken during each path will be plot on the graph in a different colour
 - The bee traverses foward in the y-direciton using angle changes to center itself
 
-#### THE TASKS
+## THE TASKS
 
 The main aim of the task is to investigate the idea that corridor centring can occur by balancing optic flow. 
 
@@ -197,7 +197,7 @@ We want to play with and test things with the hope of understanding how the syst
 also to know its limits: how does it work, and how, when and why does it fail?
 
 
-##### 1. Experiment with the window size for the moving average.
+### 1. Experiment with the window size for the moving average.
 
 How small or large does it need to be to make the controller fail? 
 
@@ -206,7 +206,7 @@ Does it fail in the same way for very large and very small windows, or do they c
 
 
 
-##### 2. Experiment with the margin size.
+### 2. Experiment with the margin size.
 
 How small or large does it need to be to make the controller fail? 
 
@@ -215,7 +215,7 @@ Does it fail in the same way for very large and very small margins, or do they c
 
 
 
-##### 3. Experiment with speed
+### 3. Experiment with speed
 
 For higher and lower speeds, repeat steps 1 and 2.
 
@@ -226,7 +226,7 @@ Are there speeds that break the corridor centring response? If so, is this a pro
 
 
 
-##### 4. Experiment with the environment
+### 4. Experiment with the environment
 
 Try making the corridor wider or more narrow, by increasing or decreasing w on line 90 of the script.
 
