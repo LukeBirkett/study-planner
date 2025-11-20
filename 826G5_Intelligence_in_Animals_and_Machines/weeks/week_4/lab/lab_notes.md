@@ -212,7 +212,33 @@ How small or large does it need to be to make the controller fail?
 
 Does it fail in the same way for very large and very small margins, or do they cause different problems? Why?
 
+`line 102` changing `margin` in `OpticFlowController()`
 
+#### Staring point, `margin = 0.0075`
+
+#### Average Output
+
+The average outputs appears to start at a larger value for both left and right. 
+
+The signal values are pretty similar for each side as each point in time but the right side appears to be slightly more.
+
+They spike and oscialate over time, with the spikes gradually becoming less severe as the average output stabilises near 0.2
+
+Then the stabilse, the right side which was always marginally more is now marginally less
+
+##### Sensor output
+
+The "curve" in this graph is a percectly stepped with only horizonatal and vertical lines
+
+The front and back line are almost perfectly matched. Infact you can barely see the front (blue) line being the back (orange) line
+
+At each t step the singal output is either 0 or 1 (white or black) 
+
+There is a chart for each sensor (side). Both are the same here
+
+##### Correlator Outputs
+
+The correlation
 
 
 ### 3. Experiment with speed
