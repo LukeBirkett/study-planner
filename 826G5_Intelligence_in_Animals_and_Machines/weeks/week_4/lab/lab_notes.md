@@ -238,7 +238,62 @@ There is a chart for each sensor (side). Both are the same here
 
 ##### Correlator Outputs
 
-The correlation
+The entire mechanism relies on the relationship between Optic Flow (the apparent angular speed of the world) and the Distance to an object.
+
+The magnitude of the EMD output ($\mathbf{R}$) is proportional to the angular velocity ($\mathbf{\omega}$) of the visual pattern across the sensor.
+
+The angular velocity (1$\omega$) is governed by the bee's forward velocity (2$\mathbf{V}$) and the distance (3$\mathbf{d}$) to the wall:4$$\mathbf{R} \propto \omega \propto \frac{\mathbf{V}}{\mathbf{d}}$$
+
+If the wall is closer, ${\mathbf{d}}$ is smaller and therefore $\mathbf{R}$ (EMD) is higher 
+
+If the wall is further away, ${\mathbf{d}}$ is bigger and therefore $\mathbf{R}$ (EMD) is lower
+
+The goal is to make the optic flow from each sensor equal (enough) 
+
+The output of the EMD (magnitude), which is the same as the angular velocity, much match enough on each sensor
+
+In the code there is a left (blue) and right (organge) line which is the instantanous (probably the moving average?) for each sensor 
+
+It mostly shows spikes but has some diagonal lines which is where the bee is redirecting its trajectory
+
+The output of each EMD is called the correlator as it combined the 2 lagged into inputs. but these are the instaneous values
+
+There is a green line which is just calculated (right minus left)
+
+This is instaneous control errror
+
+Or, the raw, unfiltered difference in perceived optic flow between the two sides.
+
+It is calculated on `line 146` using `np.array(bee.controller.right_corr.outputs) - np.array(bee.controller.left_corr.outputs)`
+
+A positive peak means the right side had a stronger instantaneous flow (closer wall), suggesting a need to steer left.
+
+A negative trough means the left side had a stronger instantaneous flow (closer wall), suggesting a need to steer right.
+
+This graph is showing the raw instantaneous output. Its value is to basically tell us why the bee and control system don't use the data in its raw form because it is so noisy
+
+The graph oscilates wildly between positive and negative because of the optic flow structure
+
+It is switching when viewing white-black or black-white which each have different values
+
+black-white positive, white-black negative
+
+Since the colours are oscialating the outputs oscilate
+
+This rapid, noisy oscillation is why the controller never uses this instantaneous value to steer the bee.
+
+The bee will steer based on the moving average with smoothes out the oscilations.
+
+Allows the bee to move slower and more deliberatrly than is it somehow had to respond to these rapid movements
+
+The bee starts off centre to the oscilations are large and rapid. Over time they decay as a result of the moving average steering
+
+After a while, the bee stabilites enough. The spikes on this graph keep oscilatiing due to the colours but because the walls are perceived to be equi-distances now, the spikes mignatiude will be the same. 
+
+##### Bee Heading (Radians)
+
+##### Bee Trajectories
+
 
 
 ### 3. Experiment with speed
