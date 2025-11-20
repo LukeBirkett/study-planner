@@ -188,153 +188,100 @@ The controller has 3 parameters will are set in `OpticFlowController()` on `line
 - The path taken during each path will be plot on the graph in a different colour
 - The bee traverses foward in the y-direciton using angle changes to center itself
 
-## THE TASKS
+# The Tasks
 
-The main aim of the task is to investigate the idea that corridor centring can occur by balancing optic flow. 
+The main aim of the task is to investigate the idea that corridor centring can occur by balancing optic flow. We want to play with and test things with the hope of understanding how the system works. Also to know its limits: how does it work, and how, when and why does it fail?
 
-We want to play with and test things with the hope of understanding how the system works
+## Interpretting the output 
 
-also to know its limits: how does it work, and how, when and why does it fail?
+ Staring point, `vel = `, `margin = 0.0075`, `window_n = `
 
-### Interpretting the output 
+ There are 5 plots to look at:
+ - Average Output
+ - Sensor Output
+ - Correlator Output
+ - Bee Heading (Radians)
+ - Bee Trajectories
 
-#### Staring point, `margin = 0.0075`
-
-#### Average Output
-
-The average outputs appear to start at a larger value for both left and right. 
-
-The signal values are pretty similar for each side as each point in time but the right side appears to be slightly more.
-
-They spike and oscialate over time, with the spikes gradually becoming less severe as the average output stabilises near 0.2
-
-Then the stabilse, the right side which was always marginally more is now marginally less
-
-![Alt Text](images/screenshot.png)
-
-##### Sensor output
-
-The "curve" in this graph is a percectly stepped with only horizonatal and vertical lines
-
-The front and back line are almost perfectly matched. Infact you can barely see the front (blue) line being the back (orange) line
-
-At each t step the singal output is either 0 or 1 (white or black) 
-
-There is a chart for each sensor (side). Both are the same here
+### Average Output
+- The average outputs appear to start at a larger value for both left and right.
+- The signal values are pretty similar for each side as each point in time but the right side appears to be slightly more.
+- They spike and oscialate over time, with the spikes gradually becoming less severe as the average output stabilises near 0.2
+- Then the stabilse, the right side which was always marginally more is now marginally less
 
 ![Alt Text](images/screenshot.png)
 
-##### Correlator Outputs
+### Sensor output
 
-The entire mechanism relies on the relationship between Optic Flow (the apparent angular speed of the world) and the Distance to an object.
-
-The magnitude of the EMD output ($\mathbf{R}$) is proportional to the angular velocity ($\mathbf{\omega}$) of the visual pattern across the sensor.
-
-The angular velocity (1$\omega$) is governed by the bee's forward velocity (2$\mathbf{V}$) and the distance (3$\mathbf{d}$) to the wall:4$$\mathbf{R} \propto \omega \propto \frac{\mathbf{V}}{\mathbf{d}}$$
-
-If the wall is closer, ${\mathbf{d}}$ is smaller and therefore $\mathbf{R}$ (EMD) is higher 
-
-If the wall is further away, ${\mathbf{d}}$ is bigger and therefore $\mathbf{R}$ (EMD) is lower
-
-The goal is to make the optic flow from each sensor equal (enough) 
-
-The output of the EMD (magnitude), which is the same as the angular velocity, much match enough on each sensor
-
-In the code there is a left (blue) and right (organge) line which is the instantanous (probably the moving average?) for each sensor 
-
-It mostly shows spikes but has some diagonal lines which is where the bee is redirecting its trajectory
-
-The output of each EMD is called the correlator as it combined the 2 lagged into inputs. but these are the instaneous values
-
-There is a green line which is just calculated (right minus left)
-
-This is instaneous control errror
-
-Or, the raw, unfiltered difference in perceived optic flow between the two sides.
-
-It is calculated on `line 146` using `np.array(bee.controller.right_corr.outputs) - np.array(bee.controller.left_corr.outputs)`
-
-A positive peak means the right side had a stronger instantaneous flow (closer wall), suggesting a need to steer left.
-
-A negative trough means the left side had a stronger instantaneous flow (closer wall), suggesting a need to steer right.
-
-This graph is showing the raw instantaneous output. Its value is to basically tell us why the bee and control system don't use the data in its raw form because it is so noisy
-
-The graph oscilates wildly between positive and negative because of the optic flow structure
-
-It is switching when viewing white-black or black-white which each have different values
-
-black-white positive, white-black negative
-
-Since the colours are oscialating the outputs oscilate
-
-This rapid, noisy oscillation is why the controller never uses this instantaneous value to steer the bee.
-
-The bee will steer based on the moving average with smoothes out the oscilations.
-
-Allows the bee to move slower and more deliberatrly than is it somehow had to respond to these rapid movements
-
-The bee starts off centre to the oscilations are large and rapid. Over time they decay as a result of the moving average steering
-
-After a while, the bee stabilites enough. The spikes on this graph keep oscilatiing due to the colours but because the walls are perceived to be equi-distances now, the spikes mignatiude (height) will be the same. 
+- The "curve" in this graph is a percectly stepped with only horizonatal and vertical lines
+- The front and back line are almost perfectly matched. Infact you can barely see the front (blue) line being the back (orange) line
+- At each t step the singal output is either 0 or 1 (white or black)
+- There is a chart for each sensor (side). Both are the same here
 
 ![Alt Text](images/screenshot.png)
 
-##### Bee Heading (Radians)
+### Correlator Outputs
 
-This plot shows the bees sterring decision at each point in randians back on the output of the EMD controller 
+- The entire mechanism relies on the relationship between Optic Flow (the apparent angular speed of the world) and the Distance to an object.
+- The magnitude of the EMD output ($\mathbf{R}$) is proportional to the angular velocity ($\mathbf{\omega}$) of the visual pattern across the sensor.
+- The angular velocity ($\omega$) is governed by the bee's forward velocity ($\mathbf{V}$) and the distance ($\mathbf{d}$) to the wall: $$\mathbf{R} \propto \omega \propto \frac{\mathbf{V}}{\mathbf{d}}$$
+- If the wall is closer, ${\mathbf{d}}$ is smaller and therefore $\mathbf{R}$ (EMD) is higher
+- If the wall is further away, ${\mathbf{d}}$ is bigger and therefore $\mathbf{R}$ (EMD) is lower
+- The goal is to make the optic flow from each sensor equal (enough)
+- The output of the EMD (magnitude), which is the same as the angular velocity, much match enough on each sensor
+- In the code there is a left (blue) and right (organge) line which is the instantanous (probably the moving average?) for each sensor
+- It mostly shows spikes but has some diagonal lines which is where the bee is redirecting its trajectory
+- The output of each EMD is called the correlator as it combined the 2 lagged into inputs. but these are the instaneous values
+- There is a green line which is just calculated (right minus left)
+- This is instaneous control errror
+- Or, the raw, unfiltered difference in perceived optic flow between the two sides.
+- It is calculated on `line 146` using `np.array(bee.controller.right_corr.outputs) - np.array(bee.controller.left_corr.outputs)`
+- A positive peak means the right side had a stronger instantaneous flow (closer wall), suggesting a need to steer left.
+- A negative trough means the left side had a stronger instantaneous flow (closer wall), suggesting a need to steer right.
+- This graph is showing the raw instantaneous output. Its value is to basically tell us why the bee and control system don't use the data in its raw form because it is so noisy
+- The graph oscilates wildly between positive and negative because of the optic flow structure
+- It is switching when viewing white-black or black-white which each have different values
+- black-white positive, white-black negative
+- Since the colours are oscialating the outputs oscilate
+- This rapid, noisy oscillation is why the controller never uses this instantaneous value to steer the bee.
+- The bee will steer based on the moving average with smoothes out the oscilations.
+- Allows the bee to move slower and more deliberatrly than is it somehow had to respond to these rapid movements
+- The bee starts off centre to the oscilations are large and rapid. Over time they decay as a result of the moving average steering
+- After a while, the bee stabilites enough. The spikes on this graph keep oscilatiing due to the colours but because the walls are perceived to be equi-distances now, the spikes mignatiude (height) will be the same. 
 
-It is the bee's instantaneous direction of travel (its heading angle) at every time step $t$, measured in radians.
+![Alt Text](images/screenshot.png)
 
-The middle red dashed line is given by $\mathbf{\pi / 2}$ radians.
+### Bee Heading (Radians)
 
-a heading of $\pi/2$ (or $90^\circ$) means the bee is flying perfectly straight ahead up the x-axis
+- This plot shows the bees sterring decision at each point in randians back on the output of the EMD controller
+- It is the bee's instantaneous direction of travel (its heading angle) at every time step $t$, measured in radians.
+- The middle red dashed line is given by $\mathbf{\pi / 2}$ radians.
+- a heading of $\pi/2$ (or $90^\circ$) means the bee is flying perfectly straight ahead up the x-axis
+- The system only allows for the bee to have 3 directions: left, right or centre
+- This is why the graph only have steps throughout
+- One the bee stabilizing in the margin it enters something called Active Centering.
+- On this graph is looks like it continues shift between left and right
+- But it is actually just doing very feint oscilations within the margin
+- If the solution has N=10 runs then the graph shows only the final bees actions
 
-The system only allows for the bee to have 3 directions: left, right or centre
+### Bee Trajectories
 
-This is why the graph only have steps throughout
-
-One the bee stabilizing in the margin it enters something called Active Centering. 
-
-On this graph is looks like it continues shift between left and right 
-
-But it is actually just doing very feint oscilations within the margin
-
-If the solution has N=10 runs then the graph shows only the final bees actions
-
-##### Bee Trajectories
-
-The final plot is each bee's path taken. 
-
-They all start from the same y-axis point but variable a-axis
-
-At end time step a bee moves forward either redirecting itself or continuing perfectly in the x-axis if it doesn't wish to make adjustments
-
-In these plots, the a-axis is the distance travelled, not time
-
-The bee travels at a constant forward velocity (vel) of 50 units per second.
-
-$$T = \frac{\text{Distance}}{\text{Velocity}} = \frac{1400 \text{ units}}{50 \text{ units/second}} = \mathbf{28 \text{ seconds}}$$
-
-The number of timesteps ($N$) is the total time divided by the simulation's time step size (dt), which is set to 0.01 seconds:
-
-$$N = \frac{T}{dt} = \frac{28 \text{ seconds}}{0.01 \text{ seconds/timestep}} = \mathbf{2800 \text{ timesteps}}$$
-
-Therefore, the simulation actually runs for roughly 2800 timesteps to cover the 1400 units of distance, not 1400 timesteps. The y-axis shows space, while the $t$ on your other plots (like the heading plot) shows time (which relates to the number of timesteps).
-
-In the simulations, "data" is captured upto a certain distance, i.e. when they get to a certain mark in corridor
-
-In this plot they all reach the same distance even if they took different or less optimal paths
-
-But a plot with more diagnoals with have a longer path and have taken longer to get to the end point
-
-conversely, a straighter path will be quicker and have a shorter route
-
-Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation.
-
-$$\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$$
-
-A wobbly bee that travels a longer total path distance must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
+- The final plot is each bee's path taken.
+- They all start from the same y-axis point but variable a-axis
+- At end time step a bee moves forward either redirecting itself or continuing perfectly in the x-axis if it doesn't wish to make adjustments
+- In these plots, the a-axis is the distance travelled, not time
+- The bee travels at a constant forward velocity (vel) of 50 units per second.
+- $$T = \frac{\text{Distance}}{\text{Velocity}} = \frac{1400 \text{ units}}{50 \text{ units/second}} = \mathbf{28 \text{ seconds}}$$
+- The number of timesteps ($N$) is the total time divided by the simulation's time step size (dt), which is set to 0.01 seconds:
+- $$N = \frac{T}{dt} = \frac{28 \text{ seconds}}{0.01 \text{ seconds/timestep}} = \mathbf{2800 \text{ timesteps}}$$
+- Therefore, the simulation actually runs for roughly 2800 timesteps to cover the 1400 units of distance, not 1400 timesteps. The y-axis shows space, while the $t$ on your other plots (like the heading plot) shows time (which relates to the number of timesteps).
+- In the simulations, "data" is captured upto a certain distance, i.e. when they get to a certain mark in corridor
+- In this plot they all reach the same distance even if they took different or less optimal paths
+- But a plot with more diagnoals with have a longer path and have taken longer to get to the end point
+- conversely, a straighter path will be quicker and have a shorter route
+- Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation.
+- $$\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$$
+- A wobbly bee that travels a longer total path distance must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
 
 ### 1. Experiment with the window size for the moving average.
 
