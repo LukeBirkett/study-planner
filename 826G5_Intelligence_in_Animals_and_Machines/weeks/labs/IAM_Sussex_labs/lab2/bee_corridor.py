@@ -77,7 +77,7 @@ rc('axes', linewidth=2)
 font_size = 18
 
 # open axes for plotting
-fig, ax = plt.subplots()
+ig, ax = plt.subplots()
 fig2, ax2 = plt.subplots()
 fig3, ax3 = plt.subplots()
 
