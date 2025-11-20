@@ -172,7 +172,7 @@ The bee's controller has very simple principles:
 - "Close Enough" is determined by `margin` also on `line 102` with the `OpticFlowController()`
 - If the EMD is greater on the left, then the bee will steer right
 - If the EMD is great on the right, then the bee will steer left
-- The angle by which steering takes place is set on line `line 59`
+- The angle by which steering takes place is set on `line 59`, `d`
 
 The controller has 3 parameters will are set in `OpticFlowController()` on `line 102`:
 - `vel`: the bee's linear speed, which will be constant over the entire simulation
