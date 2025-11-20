@@ -202,7 +202,7 @@ also to know its limits: how does it work, and how, when and why does it fail?
 
 #### Average Output
 
-The average outputs appears to start at a larger value for both left and right. 
+The average outputs appear to start at a larger value for both left and right. 
 
 The signal values are pretty similar for each side as each point in time but the right side appears to be slightly more.
 
@@ -276,21 +276,71 @@ Allows the bee to move slower and more deliberatrly than is it somehow had to re
 
 The bee starts off centre to the oscilations are large and rapid. Over time they decay as a result of the moving average steering
 
-After a while, the bee stabilites enough. The spikes on this graph keep oscilatiing due to the colours but because the walls are perceived to be equi-distances now, the spikes mignatiude will be the same. 
+After a while, the bee stabilites enough. The spikes on this graph keep oscilatiing due to the colours but because the walls are perceived to be equi-distances now, the spikes mignatiude (height) will be the same. 
 
 ![Alt Text](images/screenshot.png)
 
 ##### Bee Heading (Radians)
 
+This plot shows the bees sterring decision at each point in randians back on the output of the EMD controller 
+
+It is the bee's instantaneous direction of travel (its heading angle) at every time step $t$, measured in radians.
+
+The middle red dashed line is given by $\mathbf{\pi / 2}$ radians.
+
+a heading of $\pi/2$ (or $90^\circ$) means the bee is flying perfectly straight ahead up the x-axis
+
+The system only allows for the bee to have 3 directions: left, right or centre
+
+This is why the graph only have steps throughout
+
+One the bee stabilizing in the margin it enters something called Active Centering. 
+
+On this graph is looks like it continues shift between left and right 
+
+But it is actually just doing very feint oscilations within the margin
+
+If the solution has N=10 runs then the graph shows only the final bees actions
+
 ##### Bee Trajectories
 
+The final plot is each bee's path taken. 
+
+They all start from the same y-axis point but variable a-axis
+
+At end time step a bee moves forward either redirecting itself or continuing perfectly in the x-axis if it doesn't wish to make adjustments
+
+In these plots, the a-axis is the distance travelled, not time
+
+The bee travels at a constant forward velocity (vel) of 50 units per second.
+
+$$T = \frac{\text{Distance}}{\text{Velocity}} = \frac{1400 \text{ units}}{50 \text{ units/second}} = \mathbf{28 \text{ seconds}}$$
+
+The number of timesteps ($N$) is the total time divided by the simulation's time step size (dt), which is set to 0.01 seconds:
+
+$$N = \frac{T}{dt} = \frac{28 \text{ seconds}}{0.01 \text{ seconds/timestep}} = \mathbf{2800 \text{ timesteps}}$$
+
+Therefore, the simulation actually runs for roughly 2800 timesteps to cover the 1400 units of distance, not 1400 timesteps. The y-axis shows space, while the $t$ on your other plots (like the heading plot) shows time (which relates to the number of timesteps).
+
+In the simulations, "data" is captured upto a certain distance, i.e. when they get to a certain mark in corridor
+
+In this plot they all reach the same distance even if they took different or less optimal paths
+
+But a plot with more diagnoals with have a longer path and have taken longer to get to the end point
+
+conversely, a straighter path will be quicker and have a shorter route
+
+Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation.
+
+$$\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$$
+
+A wobbly bee that travels a longer total path distance must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
 
 ### 1. Experiment with the window size for the moving average.
 
 How small or large does it need to be to make the controller fail? 
 
 Does it fail in the same way for very large and very small windows, or do they cause different problems? Why?
-
 
 
 
