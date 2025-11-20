@@ -196,23 +196,7 @@ We want to play with and test things with the hope of understanding how the syst
 
 also to know its limits: how does it work, and how, when and why does it fail?
 
-
-### 1. Experiment with the window size for the moving average.
-
-How small or large does it need to be to make the controller fail? 
-
-Does it fail in the same way for very large and very small windows, or do they cause different problems? Why?
-
-
-
-
-### 2. Experiment with the margin size.
-
-How small or large does it need to be to make the controller fail? 
-
-Does it fail in the same way for very large and very small margins, or do they cause different problems? Why?
-
-`line 102` changing `margin` in `OpticFlowController()`
+### Interpretting the output 
 
 #### Staring point, `margin = 0.0075`
 
@@ -226,6 +210,8 @@ They spike and oscialate over time, with the spikes gradually becoming less seve
 
 Then the stabilse, the right side which was always marginally more is now marginally less
 
+![Alt Text](images/screenshot.png)
+
 ##### Sensor output
 
 The "curve" in this graph is a percectly stepped with only horizonatal and vertical lines
@@ -235,6 +221,8 @@ The front and back line are almost perfectly matched. Infact you can barely see 
 At each t step the singal output is either 0 or 1 (white or black) 
 
 There is a chart for each sensor (side). Both are the same here
+
+![Alt Text](images/screenshot.png)
 
 ##### Correlator Outputs
 
@@ -290,9 +278,29 @@ The bee starts off centre to the oscilations are large and rapid. Over time they
 
 After a while, the bee stabilites enough. The spikes on this graph keep oscilatiing due to the colours but because the walls are perceived to be equi-distances now, the spikes mignatiude will be the same. 
 
+![Alt Text](images/screenshot.png)
+
 ##### Bee Heading (Radians)
 
 ##### Bee Trajectories
+
+
+### 1. Experiment with the window size for the moving average.
+
+How small or large does it need to be to make the controller fail? 
+
+Does it fail in the same way for very large and very small windows, or do they cause different problems? Why?
+
+
+
+
+### 2. Experiment with the margin size.
+
+How small or large does it need to be to make the controller fail? 
+
+Does it fail in the same way for very large and very small margins, or do they cause different problems? Why?
+
+`line 102` changing `margin` in `OpticFlowController()`
 
 
 
