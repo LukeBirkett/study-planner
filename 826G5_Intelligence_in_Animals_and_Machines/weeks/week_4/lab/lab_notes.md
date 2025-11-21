@@ -207,6 +207,47 @@ The main aim of the task is to investigate the idea that corridor centring can o
 
 - This plot is just showing 1 simulation. The N-1 (last) simulation
 - This represents the only reliable indicator of a bee success.
+- These are the values uses to decide the Bee Heading Radians
+- The bee only flys straight up the y-axis when the differential between the means is less than the margin
+- When the bee is travelling diagonally it is impacting the optic flow. The lag between the strips becomes lesser when it travelling diagonally, that is to say the 2 second arrives quicker.
+- The high pass filter Acts as an edge detector. It removes the stable DC component and emphasizes the rapid intensity change (the black-to-white or white-to-black edge).
+- The low pass filter Introduces a necessary time delay and phase shift. The delayed front signal will only correlate (match) with the current back signal if there is motion.
+- Mutlipler The instantaneous Optic Flow output (the raw, noisy signal from your Plot 3). The magnitude of this correlated signal is proportional to the speed of the pattern across the sensors.
+- $$\mathbf{R_{instantaneous}} \propto \mathbf{V/d}$$
+- The bee's forward velocity ($\mathbf{V}$) is constant. Therefore, the optic flow signal ($\mathbf{R}$) is inversely proportional to the distance ($\mathbf{d}$).
+- The raw EMD output (Plot 3) is too noisy to use for steering. This is where the Controller Correlator Moving Averages (Plot 1) come in:
+- What it is: A simple average of the last $\mathbf{window\_n}$ instantaneous EMD outputs.
+- The Interpretation: The moving average filters out the noise and provides a stable signal that represents the average perceived motion on that side.
+- The bee interprets:
+- High Average Optic Flow $\rightarrow$ Wall is Closer
+- Low Average Optic Flow $\rightarrow$ Wall is Further
+- The bee's "interpretation" of the wall is simply: "How high is the moving average on this side relative to the other?" It never needs to know the actual distance, only the imbalance between the two optic flow signals.
+- The margin is introduced specifically to manage the imperfectness of the control loop, allowing the system to achieve practical stability (the stable zigzag) instead of chasing impossible perfection.
+- The bee's steering is not a perfect, smooth action; it is a fixed-step, on-off control system—it can only turn by a fixed angle $\mathbf{d}$ or fly straight.
+- Problem: Because the steering is aggressive ($\mathbf{R \propto 1/d}$), any correction almost always overshoots the point of perfect optical balance.
+- The bee's true steady-state behavior is a continuous cycle of over-correction, brief coasting, and then re-correction, known as Limit Cycling (or "hunting"). This is the zigzagging you see in the "Bee Heading" plot after $t \approx 15$.
+- The margin parameter (set to $\mathbf{0.0075}$ in your script) is the mechanism that tames this hunting behavior. It creates a "dead zone" where the controller is deactivated.
+- Without a Margin: If $\mathbf{margin = 0}$, the controller would theoretically demand perfect equality ($\mathbf{R_{Left\ Mean} = R_{Right\ Mean}}$). Since the simulation has noise and discrete steps, the flow would almost never be exactly zero. The bee's heading would switch violently at every single time step, leading to a massive, chaotic crash.
+- The margin ensures that the bee's optical imbalance must grow to a noticeable degree before a new correction is triggered. This prevents the heading from switching wildly and forces the bee into a stable, low-amplitude zigzag that successfully keeps it centered.
+- "Perfect Convergence" ($\mathbf{R_{L} = R_{R}}$): This is the condition that triggers the "Fly Straight" command ($\mathbf{\pi/2}$ radians).
+- "Fly Straight" Command: This command means zero turning effort (no new lateral velocity). It does not stop the existing diagonal coasting movement that was already in progress from the previous turn.
+
+```
+# Code snippet from bee_corridor.py (Controller logic)
+if abs(left_mean - right_mean) < self.margin:
+    # 1. Fly Straight
+    heading = math.pi/2
+elif left_mean > right_mean:
+    # 2. Steer Left (Optic flow on left is greater -> Left wall is closer)
+    heading = math.pi/2 + d
+else:
+    # 3. Steer Right (Optic flow on right is greater -> Right wall is closer)
+    heading = math.pi/2 - d
+```
+
+- However it is dependant on the margin so the values can be very similar but still output side of the margin bounds
+
+
 - Plot 1 shows the history of self.left_means and self.right_means. This plot represents the filtered optical flow and is the only signal the bee's controller uses to make steering decisions.
 - It is filter by the HPF and LPF so it will be smooths and window averaged
 - Plot 1 is the output of a temporal filter applied to the signals in Plot 3.
