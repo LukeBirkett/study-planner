@@ -233,7 +233,7 @@ The main aim of the task is to investigate the idea that corridor centring can o
 - But then the rapid steering away from the wall will change the perspective and balance the optic flows
 - The bee can then coast in a diagonal position
 
-![Alt Text](images/screenshot.png)
+![Original Controller Correlator Moving Average Plot](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_6_Controller_Correlator_Moving_Average.png)
 
 ### Sensor output
 
@@ -242,7 +242,8 @@ The main aim of the task is to investigate the idea that corridor centring can o
 - At each t step the singal output is either 0 or 1 (white or black)
 - There is a chart for each sensor (side). Both are the same here
 
-![Alt Text](images/screenshot.png)
+![Original Right Sensor Outputs](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_5_Right_Sensor_Outputs.png)
+![Original Left Sensor Ouputs](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_4_Left_Sensor_Outputs.png)
 
 ### Correlator Outputs
 
@@ -273,7 +274,7 @@ The main aim of the task is to investigate the idea that corridor centring can o
 - The bee starts off centre to the oscilations are large and rapid. Over time they decay as a result of the moving average steering
 - After a while, the bee stabilites enough. The spikes on this graph keep oscilatiing due to the colours but because the walls are perceived to be equi-distances now, the spikes mignatiude (height) will be the same. 
 
-![Alt Text](images/screenshot.png)
+![Original Instantaneous Correlators Output](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_3_Correlators_Output.png)
 
 ### Bee Heading (Radians)
 
@@ -287,6 +288,8 @@ The main aim of the task is to investigate the idea that corridor centring can o
 - On this graph is looks like it continues shift between left and right
 - But it is actually just doing very feint oscilations within the margin
 - If the solution has N=10 runs then the graph shows only the final bees actions
+
+![Original Bee Heading](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_2_Bee_Heading.png)
 
 ### Bee Trajectories
 
@@ -306,6 +309,9 @@ The main aim of the task is to investigate the idea that corridor centring can o
 - Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation.
 - $$\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$$
 - A wobbly bee that travels a longer total path distance must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
+
+![Original Bee Trajectories](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_1_Bee_Trajectories.png)
+
 
 ### 1. Experiment with the window size for the moving average.
 
