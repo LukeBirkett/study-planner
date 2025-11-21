@@ -205,30 +205,19 @@ The main aim of the task is to investigate the idea that corridor centring can o
 
 ### Average Output
 
-- This plot is just showing 1 simulation. The N-1 (last) simulation
-- This represents the only reliable indicator of a bee success.
-- These are the values uses to decide the Bee Heading Radians
-- The bee only flys straight up the y-axis when the differential between the means is less than the margin
-- When the bee is travelling diagonally it is impacting the optic flow. The lag between the strips becomes lesser when it travelling diagonally, that is to say the 2 second arrives quicker.
-- The high pass filter Acts as an edge detector. It removes the stable DC component and emphasizes the rapid intensity change (the black-to-white or white-to-black edge).
-- The low pass filter Introduces a necessary time delay and phase shift. The delayed front signal will only correlate (match) with the current back signal if there is motion.
-- Mutlipler The instantaneous Optic Flow output (the raw, noisy signal from your Plot 3). The magnitude of this correlated signal is proportional to the speed of the pattern across the sensors.
-- $$\mathbf{R_{instantaneous}} \propto \mathbf{V/d}$$
-- The bee's forward velocity ($\mathbf{V}$) is constant. Therefore, the optic flow signal ($\mathbf{R}$) is inversely proportional to the distance ($\mathbf{d}$).
-- The raw EMD output (Plot 3) is too noisy to use for steering. This is where the Controller Correlator Moving Averages (Plot 1) come in:
-- What it is: A simple average of the last $\mathbf{window\_n}$ instantaneous EMD outputs.
-- The Interpretation: The moving average filters out the noise and provides a stable signal that represents the average perceived motion on that side.
-- The bee interprets:
-- High Average Optic Flow $\rightarrow$ Wall is Closer
-- Low Average Optic Flow $\rightarrow$ Wall is Further
-- The bee's "interpretation" of the wall is simply: "How high is the moving average on this side relative to the other?" It never needs to know the actual distance, only the imbalance between the two optic flow signals.
-- The margin is introduced specifically to manage the imperfectness of the control loop, allowing the system to achieve practical stability (the stable zigzag) instead of chasing impossible perfection.
-- The bee's steering is not a perfect, smooth action; it is a fixed-step, on-off control system—it can only turn by a fixed angle $\mathbf{d}$ or fly straight.
-- Problem: Because the steering is aggressive ($\mathbf{R \propto 1/d}$), any correction almost always overshoots the point of perfect optical balance.
-- The bee's true steady-state behavior is a continuous cycle of over-correction, brief coasting, and then re-correction, known as Limit Cycling (or "hunting"). This is the zigzagging you see in the "Bee Heading" plot after $t \approx 15$.
-- The margin parameter (set to $\mathbf{0.0075}$ in your script) is the mechanism that tames this hunting behavior. It creates a "dead zone" where the controller is deactivated.
-- Without a Margin: If $\mathbf{margin = 0}$, the controller would theoretically demand perfect equality ($\mathbf{R_{Left\ Mean} = R_{Right\ Mean}}$). Since the simulation has noise and discrete steps, the flow would almost never be exactly zero. The bee's heading would switch violently at every single time step, leading to a massive, chaotic crash.
-- The margin ensures that the bee's optical imbalance must grow to a noticeable degree before a new correction is triggered. This prevents the heading from switching wildly and forces the bee into a stable, low-amplitude zigzag that successfully keeps it centered.
+The "Controller correlator moving averages" is the filtered and actionable optical flow signal. It respresents the bee's interpetation of **average** visual motion from the walls. Offically, the Optic Flow is the direct signal from the EMD which has the fundmenetioal function of measuring motion/optic flow. If a bee's velocity is constant `vel = 50` then the magniute of the optic flow is inversely proporitional to the distance from the wall. Hence, the EMD signal (magnitutde) can be used to proxy closness to the wall. The Moving Average is the filtered instantanous output of the EMD. The raw signal would be to noisy for control. The moving averge smooths out the abtruptness of white and black signals, leaving behind a stable underlying signal that refelcts average perceived visual motion. This is the true optic flow which a controller can use for steering decisions. 
+
+This plot only shows the last [N-1] simulation. It respresents the only reliable indicator of a bee's success and it is the inputs used to determine the bee's heading direction. A moving average is calculated for both `left` and `right` sensor with the differential between them being used to determine behaviour. The `margin` is a buffer where the differential tells the bee just to fly forward up the y-axis. 
+
+The bee has an internal desire to balance the optic flows. If they are not balanced then it uses its steering behaviour to balance them. A bee travelling diagonally is impacting its optic flow. The lab between sensing the black/white strips becomes less when travelling in the direction of a wall, and more when travelling away. 
+
+The raw EMD output in Plot 3 is related to this plot but instead is shows us that it is too noisey and spikey for steering. The Controller Correlator Moving Averages are an average of N previous instantaneous EMD output. The moving average filters out the noise and provides a stable signal that represents the average perceived motion on that side.
+
+A higher Average Optic flow tells the bee is is closer to a wall, and lower that is it further away. The bee never actually knows how far away a wall is, just the imbalance between optic flow signals. 
+
+The `margin` is used to manage the imperfect nature of the control loop, allowing the system to acheive practical stability instead of changing impossible perfection. Recall that the bee's steering is a simple on-off system, not a smooth tailored action. Because the steering is aggressive a correction is likely to overshoot points of perfect balance. The final "balanced" behaviour is known as Limit Cycling and the space within the `margin` is called a "dead zone". Without a margin the controller would demand perfect equality ($\mathbf{R_{Left\ Mean} = R_{Right\ Mean}}$) but there is noise in the any system so this will never happen even if the balancing mechanism was perfect. 
+
+The bee essentially has two behavioural mechanisms:
 - "Perfect Convergence" ($\mathbf{R_{L} = R_{R}}$): This is the condition that triggers the "Fly Straight" command ($\mathbf{\pi/2}$ radians).
 - "Fly Straight" Command: This command means zero turning effort (no new lateral velocity). It does not stop the existing diagonal coasting movement that was already in progress from the previous turn.
 
