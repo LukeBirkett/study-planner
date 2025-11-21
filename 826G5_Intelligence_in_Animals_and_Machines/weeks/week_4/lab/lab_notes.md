@@ -194,7 +194,7 @@ The main aim of the task is to investigate the idea that corridor centring can o
 
 ## Interpretting the output 
 
- Staring point, `vel = `, `margin = 0.0075`, `window_n = `
+ Staring point, `vel = 50`, `margin = 0.0075`, `window_n 200= `
 
  There are 5 plots to look at:
  - Average Output
@@ -204,10 +204,33 @@ The main aim of the task is to investigate the idea that corridor centring can o
  - Bee Trajectories
 
 ### Average Output
+
+- This represents the only reliable indicator of a bee success.
+- Plot 1 shows the history of self.left_means and self.right_means. This plot represents the filtered optical flow and is the only signal the bee's controller uses to make steering decisions.
+- It is filter by the HPF and LPF so it will be smooths and window averaged
+- Plot 1 is the output of a temporal filter applied to the signals in Plot 3.
+- The bee's controller cannot use the raw signal in Plot 3 because the extreme oscillations would cause it to steer wildly and crash almost immediately. The moving average (Plot 1) is used specifically to smooth out this noise, revealing the stable, underlying visual speed signal that accurately reflects the bee's distance from the wall.
+- The height of each line (the average output) is proportional to the optic flow perceived on that side.
+- Recall that in this default run, the walls themselves are identifcal. Any difference in perceived flow is caused by distance from a wall
+- Since optic flow is inversely related to distance ($\mathbf{R \propto V/d}$)
+- Higher Average Output ($\mathbf{R_{mean}}$) means the wall on that side is closer (stronger perceived motion).
+- Lower Average Output ($\mathbf{R_{mean}}$) means the wall on that side is further away (weaker perceived motion).
+- An off center starting point will create a Feedback Loop and Overshoot effect
+- The bee's control logic is fundamentally simple: Eliminate the difference between the two moving averages.\
+
 - The average outputs appear to start at a larger value for both left and right.
 - The signal values are pretty similar for each side as each point in time but the right side appears to be slightly more.
 - They spike and oscialate over time, with the spikes gradually becoming less severe as the average output stabilises near 0.2
 - Then the stabilse, the right side which was always marginally more is now marginally less
+
+- Optic flow ($\mathbf{R}$) is proportional to $\mathbf{1/\text{Distance}}$ ($\mathbf{R \propto V/d}$).
+- The bee's controller is designed to achieve:$$\mathbf{R_{Left\ Mean}} = \mathbf{R_{Right\ Mean}}$$
+- When this condition is met, the controller issues the Fly Straight command.
+
+- The bee will use its steering to balances its optic flow.
+- Being close to a way will put the signal out of sync
+- But then the rapid steering away from the wall will change the perspective and balance the optic flows
+- The bee can then coast in a diagonal position
 
 ![Alt Text](images/screenshot.png)
 
