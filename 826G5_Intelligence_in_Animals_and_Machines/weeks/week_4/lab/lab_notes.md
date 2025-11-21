@@ -205,6 +205,7 @@ The main aim of the task is to investigate the idea that corridor centring can o
 
 ### Average Output
 
+- This plot is just showing 1 simulation. The N-1 (last) simulation
 - This represents the only reliable indicator of a bee success.
 - Plot 1 shows the history of self.left_means and self.right_means. This plot represents the filtered optical flow and is the only signal the bee's controller uses to make steering decisions.
 - It is filter by the HPF and LPF so it will be smooths and window averaged
