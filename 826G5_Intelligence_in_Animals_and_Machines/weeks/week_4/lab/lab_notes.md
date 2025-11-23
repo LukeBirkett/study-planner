@@ -279,22 +279,11 @@ This plot shoes the bee's steering deicsions at each time point in radians based
 
 ### Bee Trajectories
 
-- The final plot is each bee's path taken.
-- They all start from the same y-axis point but variable a-axis
-- At end time step a bee moves forward either redirecting itself or continuing perfectly in the x-axis if it doesn't wish to make adjustments
-- In these plots, the a-axis is the distance travelled, not time
-- The bee travels at a constant forward velocity (vel) of 50 units per second.
-- $$T = \frac{\text{Distance}}{\text{Velocity}} = \frac{1400 \text{ units}}{50 \text{ units/second}} = \mathbf{28 \text{ seconds}}$$
-- The number of timesteps ($N$) is the total time divided by the simulation's time step size (dt), which is set to 0.01 seconds:
-- $$N = \frac{T}{dt} = \frac{28 \text{ seconds}}{0.01 \text{ seconds/timestep}} = \mathbf{2800 \text{ timesteps}}$$
-- Therefore, the simulation actually runs for roughly 2800 timesteps to cover the 1400 units of distance, not 1400 timesteps. The y-axis shows space, while the $t$ on your other plots (like the heading plot) shows time (which relates to the number of timesteps).
-- In the simulations, "data" is captured upto a certain distance, i.e. when they get to a certain mark in corridor
-- In this plot they all reach the same distance even if they took different or less optimal paths
-- But a plot with more diagnoals with have a longer path and have taken longer to get to the end point
-- conversely, a straighter path will be quicker and have a shorter route
-- Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation.
-- $$\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$$
-- A wobbly bee that travels a longer total path distance must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
+This plot compiles the exact path, in terms of y-axis and a-axis coordinates, that each bee simulation took. 
+
+In these plots, the y-axis is distance travelled, not time as it is in all the others. That being said, velocity is fixed at 50 units per second and $T = \frac{\text{Distance}}{\text{Velocity}} = \frac{1400 \text{ units}}{50 \text{ units/second}} = \mathbf{28 \text{ seconds}}$. The number of timesteps ($N$) is the total time divided by the simulation's time step size (dt), which is set to 0.01 seconds: $N = \frac{T}{dt} = \frac{28 \text{ seconds}}{0.01 \text{ seconds/timestep}} = \mathbf{2800 \text{ timesteps}}$. Therefore, the simulation actually runs for roughly 2800 timesteps to cover the 1400 units of distance, not 1400 timesteps. 
+
+In the simulations, "data" is captured upto a certain distance, i.e. when they get to a certain mark in corridor. In this plot they all reach the same distance even if they took different or less optimal paths. A plot with more diagonals will have a longer path and therefore taken longer to get to the same distance. Conversely, a straighter path will be quicker and have a shorter route. Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation $\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$. A wobbly bee, that travels a longer total path, must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
 
 ![Original Bee Trajectories](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_1_Bee_Trajectories.png)
 
