@@ -205,13 +205,13 @@ The main aim of the task is to investigate the idea that corridor centring can o
 
 ### Average Output
 
-The "Controller correlator moving averages" is the filtered and actionable optical flow signal. It respresents the bee's interpetation of **average** visual motion from the walls. Offically, the Optic Flow is the direct signal from the EMD which has the fundmenetioal function of measuring motion/optic flow. If a bee's velocity is constant `vel = 50` then the magniute of the optic flow is inversely proporitional to the distance from the wall. Hence, the EMD signal (magnitutde) can be used to proxy closness to the wall. The Moving Average is the filtered instantanous output of the EMD. The raw signal would be to noisy for control. The moving averge smooths out the abtruptness of white and black signals, leaving behind a stable underlying signal that refelcts average perceived visual motion. This is the true optic flow which a controller can use for steering decisions. 
+The "Controller correlator moving averages" is the filtered and actionable Optic Flow signal. It respresents the bee's interpetation of **average** visual motion from the walls. Offically, the Optic Flow is the direct signal from the EMD which has the fundemental function of measuring motion/Optic Flow. If a bee's velocity is constant `vel = 50` then the **magniute of the Optic Flow is inversely proporitional to the distance from the wall**. Hence, the EMD signal (magnitutde) can be used to proxy closness to the wall. The Moving Average is the filtered **instantanous output** of the EMD. The raw signal would be too noisy for governing control and movements. The moving average smooths out the abruptness of the white and black signals, leaving behind a stable underlying signal that reflects average perceived visual motion where by the average is calculate by a size of `window_n`. This is the true optic flow which a controller can use for steering decisions. 
 
-This plot only shows the last [N-1] simulation. It respresents the only reliable indicator of a bee's success and it is the inputs used to determine the bee's heading direction. A moving average is calculated for both `left` and `right` sensor with the differential between them being used to determine behaviour. The `margin` is a buffer where the differential tells the bee just to fly forward up the y-axis. 
+This plot only shows the **last** [N-1] simulation. It respresents the only reliable indicator of a bee's success and it is the inputs used to determine the bee's heading direction. A moving average is calculated for both `left` and `right` sensor with the differential between them being used to determine behaviour. The `margin` is a buffer where the differential tells the bee just to fly forward up the y-axis. 
 
 The bee has an internal desire to balance the optic flows. If they are not balanced then it uses its steering behaviour to balance them. A bee travelling diagonally is impacting its optic flow. The lab between sensing the black/white strips becomes less when travelling in the direction of a wall, and more when travelling away. 
 
-The raw EMD output in Plot 3 is related to this plot but instead is shows us that it is too noisey and spikey for steering. The Controller Correlator Moving Averages are an average of N previous instantaneous EMD output. The moving average filters out the noise and provides a stable signal that represents the average perceived motion on that side.
+The raw EMD output in Plot 3 is related to this plot but instead is shows us that it is too noisy and spikey for steering. The Controller Correlator Moving Averages are an average of N=`window_n` previous instantaneous EMD outputs. The moving average filters out the noise and provides a stable signal that represents the average perceived motion on that side. As the value is a time stepped average, it will have a lag when adapting to new stimuli, it is this feature that provides the agent with stability. 
 
 A higher Average Optic flow tells the bee is is closer to a wall, and lower that is it further away. The bee never actually knows how far away a wall is, just the imbalance between optic flow signals. 
 
@@ -233,19 +233,14 @@ else:
     # 3. Steer Right (Optic flow on right is greater -> Right wall is closer)
     heading = math.pi/2 - d
 ```
+#### What are we actually seeing in Plot 1?
 
-- However it is dependant on the margin so the values can be very similar but still output side of the margin bounds
+It is the history of both left and right means at each point in time. It is the filtered Optical Flow as induced by the High-Pass and Low-Pass filtered. It can be thought of as the output of a temporal filter being applied to the signals of Plot 3 which itself with its extreme osciallations is too noisey to respond responably to. Plot 1 reveals the stable underlying Optic Flow signal that accurately reflects the bee's distances from the wall. The height of each line ay any point t is proporitional to the Optic Flow on each side. Recall, that in the default run, the walls themselves are identical meaning any different in percieved flow is caused by distance from the wall. The Averaged Output depends on distance since Optic Flow. The relationship is inverse so a higher Average Output means a smaller (closer) distance from the wall and a Lower Average Output means the wall is further away (large distance value). 
 
+##### Results in The Default Run
 
-- Plot 1 shows the history of self.left_means and self.right_means. This plot represents the filtered optical flow and is the only signal the bee's controller uses to make steering decisions.
-- It is filter by the HPF and LPF so it will be smooths and window averaged
-- Plot 1 is the output of a temporal filter applied to the signals in Plot 3.
-- The bee's controller cannot use the raw signal in Plot 3 because the extreme oscillations would cause it to steer wildly and crash almost immediately. The moving average (Plot 1) is used specifically to smooth out this noise, revealing the stable, underlying visual speed signal that accurately reflects the bee's distance from the wall.
-- The height of each line (the average output) is proportional to the optic flow perceived on that side.
-- Recall that in this default run, the walls themselves are identifcal. Any difference in perceived flow is caused by distance from a wall
-- Since optic flow is inversely related to distance ($\mathbf{R \propto V/d}$)
-- Higher Average Output ($\mathbf{R_{mean}}$) means the wall on that side is closer (stronger perceived motion).
-- Lower Average Output ($\mathbf{R_{mean}}$) means the wall on that side is further away (weaker perceived motion).
+To start the we see a complete mismatch in the in terms of the bee's centeredness. 
+ 
 - An off center starting point will create a Feedback Loop and Overshoot effect
 - The bee's control logic is fundamentally simple: Eliminate the difference between the two moving averages.\
 
