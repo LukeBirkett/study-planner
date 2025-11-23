@@ -273,16 +273,7 @@ Ignoring the switching of the spikes in this plot, the magnitude of the spikes s
 
 ### Bee Heading (Radians)
 
-- This plot shows the bees sterring decision at each point in randians back on the output of the EMD controller
-- It is the bee's instantaneous direction of travel (its heading angle) at every time step $t$, measured in radians.
-- The middle red dashed line is given by $\mathbf{\pi / 2}$ radians.
-- a heading of $\pi/2$ (or $90^\circ$) means the bee is flying perfectly straight ahead up the x-axis
-- The system only allows for the bee to have 3 directions: left, right or centre
-- This is why the graph only have steps throughout
-- One the bee stabilizing in the margin it enters something called Active Centering.
-- On this graph is looks like it continues shift between left and right
-- But it is actually just doing very feint oscilations within the margin
-- If the solution has N=10 runs then the graph shows only the final bees actions
+This plot shoes the bee's steering deicsions at each time point in radians based on the output of EMD controller differentials. It is the bee's instantaneous direction of travel (its heading angle) measured in radians. The middle red dashed line is given by $\mathbf{\pi / 2}$ radians. It shows the direction perfectly up the y-axis. In this system, the bee only have 3 directions, left, right or centre. This is why the graph is stepped like so. Once the bee has centered it can enter a phase called active centering where it coodinates a pattern of alternating direction switches to keep it in the `margin`. The fact that it makes any direction change, other than centre/straight, means that it is momentary falling out of the `margin`. If the solution has N=10 runs then the graph shows only the final bees simulation results.
 
 ![Original Bee Heading](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_2_Bee_Heading.png)
 
