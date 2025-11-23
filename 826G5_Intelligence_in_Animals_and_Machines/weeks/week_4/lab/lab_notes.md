@@ -239,24 +239,7 @@ It is the history of both left and right means at each point in time. It is the 
 
 ##### Results in The Default Run
 
-To start the we see a complete mismatch in the in terms of the bee's centeredness. 
- 
-- An off center starting point will create a Feedback Loop and Overshoot effect
-- The bee's control logic is fundamentally simple: Eliminate the difference between the two moving averages.\
-
-- The average outputs appear to start at a larger value for both left and right.
-- The signal values are pretty similar for each side as each point in time but the right side appears to be slightly more.
-- They spike and oscialate over time, with the spikes gradually becoming less severe as the average output stabilises near 0.2
-- Then the stabilse, the right side which was always marginally more is now marginally less
-
-- Optic flow ($\mathbf{R}$) is proportional to $\mathbf{1/\text{Distance}}$ ($\mathbf{R \propto V/d}$).
-- The bee's controller is designed to achieve:$$\mathbf{R_{Left\ Mean}} = \mathbf{R_{Right\ Mean}}$$
-- When this condition is met, the controller issues the Fly Straight command.
-
-- The bee will use its steering to balances its optic flow.
-- Being close to a way will put the signal out of sync
-- But then the rapid steering away from the wall will change the perspective and balance the optic flows
-- The bee can then coast in a diagonal position
+To start the we see a complete mismatch in the in terms of the bee's centeredness. The bee's control logic is very simple, eleminate the different between the two moving averages. We see this happen almost straight away but to an imperfect degree, that is to say the looks pretty similar but to exact. This is where the `margin` comes in, is the differece is not in the margin the bee's continues correcting. This results in a feedback loop whereby the bee is continually correcting resulting in an Overshoot Effect. Remember, the bee's signal is an Moving Average, meaning that the very first point that the bee meets the centre will be lost to group voting-esqe nature of the average. It will overshoot the centre and start to correct in the opposite direction to compensate. This can be validated in Bee Heading plot that shows the first change in movement after the inital flow of sustain corrections is in the opposite direction, not vertically up the y-axis which would be the case if the bee had centered. Depending the parameters, the bee with switch between its corrections before it settled into the `margin` and starts to osicilate gently to keep itself centered. 
 
 ![Original Controller Correlator Moving Average Plot](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_6_Controller_Correlator_Moving_Average.png)
 
