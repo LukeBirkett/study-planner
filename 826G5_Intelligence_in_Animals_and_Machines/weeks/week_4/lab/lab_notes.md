@@ -288,7 +288,7 @@ In the simulations, "data" is captured upto a certain distance, i.e. when they g
 ![Original Bee Trajectories](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_1_Bee_Trajectories.png)
 
 
-### 1. Experiment with the window size for the moving average.
+## 1. Experiment with the window size for the moving average.
 
 How small or large does it need to be to make the controller fail? 
 
@@ -384,16 +384,12 @@ At large values, the filter is strong giving a very smooth signal. However, this
 
 There appear to be some optimal window's (e.g., 160, 150, 120, 75). These are the poitns where the window was large enought to filter out the high frequency noise but small enough to avoid excessive time lag that destabilize the control ability. These regions are characteristics by learning the ability to travel in long diagonal directions followed by travelling perfectly straight or tight and stable Limit Cycling. 
 
-The key here seems to be balancing the time constraights of the visual input with the moving average.
+The key here seems to be balancing the time constraights of the visual input with the moving average. We can call this harmonic matching. The instantaneous EMD output is an oscillating signal whereby the frequency and amplitude depend on the wall pattern, velocity and distance from the wall. Resultingly, there will be a pre-detmerined average time that is takes for the bee to cycle through a patter (white-black). If the window size correlates the the number of time steps then we can interpret this as effectively cancelling out the noisy oscialating signal leading to much cleaner and stable signal for the controller to work from. This is why we can see large improvements in behaviour as we traverse the window lengths, instead of a linear decrease in peformance. Conversely, instead of smoothing, the windows may actually be inducing noise, or cutting of good signals from being accessed in whole. 
 
-The instantaneous EMD output is an oscillating signal whereby the frequency and amplitude depend on the wall pattern, velocity and distance from the wall.
+When setting the window size, there is a trade-off between smoothing out noise and introducing a time lag. This balance will almost certainly be dependant on other parameters such as velocity and the setup of the walls. 
 
-Something that is likely happening here is harmonic matching between the window and the frequencies. Given the constant velocity and colour switching of the walls (frequencies) there will be an average time that is takes for the bee to cycle though a pattern (white-black) or collection of patterns (white-black-white-black). This could effectly be interpretted at cancelling out the noisy, or dramatically reducing, leading to much cleaner and stable signal for the controller to work from. This is why we can see large improvements in behaviour as we traverse the window lengths, instead of a linear decrease in peformance. Conversely, instead of smoothing, the windows may actually be inducing noisey, or cutting of good signals from being accessed in whole. 
-
-When setting the trade off, there is a trade-off between smoothing out noise and introducing a time lag. This balance will almost certainly be dependant on other parameters such as velocity and the setup of the walls. 
-
-Sometimes the underlying pattern, i.e. rapidly switching between white and black, is called a dominanty oscillation frequency:
-
+#### Dominant Oscillation Frequency
+Sometimes the underlying pattern, i.e. rapidly switching between white and black, is called a dominant oscillation frequency:
 - Bee Velocity ($\mathbf{V}$): How fast the bee is flying forward.
 - Stripe Width ($\mathbf{w_{stripe}}$): The width of the black and white stripes.
 - Distance to Wall ($\mathbf{d}$): How far the bee is from the wall.
@@ -405,28 +401,13 @@ A Moving Average can be known as a type of finite impulse response (FIR) filter.
 There is something called the first 'null' or zero-point frequency point:
 
 $$\mathbf{f_{null}} = \frac{f_s}{\mathbf{N}}$$
+- Where $f_s$ is the signal samples
 
-Where $f_s$ is the signal samples
+If the value of N is perfectly poise it can completely cut off and nullify a singal. Imagine 2 time steps passed where the agent crosses a white (1) and black (-1) stimuli. If averaged over a window of 2 the signal is 0. This helps to explain the periods for substantial improvement as we decrease the in-window, e.g. when we moved from 170 to 160. 
 
-If the value of N is perfectly poise it can completely cut off and nullify a singal. 
+Each simulation will be characterised by periods of wall-induced oscialisation determined by the fixed velocity, corridor dimensions and patters. The result will be that full cycles occur when a given number of simulation steps have occured. When the window_n matches this number, the controller will be fed high quality, clean signals during the run, resulting in good centering behaviour and direct diagonal paths. 
 
-Imagine 2 time steps passed where the agent crosses a white (1) and black (-1) stimuli. If averaged over a window of 2 the signal is 0.
-
-This helps to explan the periods for substantial improvement as we decrease the in-window, e.g. when we moved from 170 to 160. 
-
-Each simulation will be characterstics by periods of wall-induces oscialisation determined by the fixed velocity, corridor dimensions and patters. The result will be that full cycles occur as a given number of simulation steps, on average. When the window_n matches this number, the controller will be fed high quality, clean signals during the run, resulting in good centering behaviour and direct diagonal paths. 
-
-
-
-
-
-
-
-
-
-
-
-### 2. Experiment with the margin size.
+## 2. Experiment with the margin size.
 
 How small or large does it need to be to make the controller fail? 
 
