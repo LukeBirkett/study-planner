@@ -430,8 +430,7 @@ Starting value is `0.0075` and the `window_n=200`
 - Some fly stright but the y-axis but others limit cycle
 - The limit cycling is noticable but fairly narrow
 
-
-### Decreasing The Margin Value
+<details> <summary><code>Decreasing The Margin Value</code></summary>
 
 #### margin = 0.005
 - Inital repath phase is similar to 0.0075
@@ -450,13 +449,13 @@ Starting value is `0.0075` and the `window_n=200`
 - Some limit cycles arent oscilating around the centre. Often spending an extended amount of time on one side of the margin before switching back over
 - Some agents do lock onto a vertical path. Though they all happen at different y-axis and a-axis values
 
-
 #### margin = 0.001
 - Same as 0.0025 but even more extreme
 - The convergance into divergance can also be seen in the moving average lines
 
+</details>
 
-### Increasing The Margin Value
+<details> <summary><code>Increasing The Margin Value</code></summary>
 
 #### margin = 0.01
 - Similar re-pathing start to 0.0075 
@@ -473,6 +472,9 @@ Starting value is `0.0075` and the `window_n=200`
 #### margin = 0.05
 - No centering
 - Agents zig zag momentarily before just flying straight from near enough where ever they started
+
+
+</details>
 
 ## Analysis
 
