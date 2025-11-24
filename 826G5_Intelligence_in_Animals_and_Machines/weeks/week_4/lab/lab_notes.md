@@ -374,13 +374,51 @@ What we have essentitally done here is a parameter sween for the moving average 
 
 The agent's performance appears to rally through periods of improvement with degragation period inbetween before eventually breaking at the lower `window_n` values. 
 
-The obersation is the performance doesn't degrade linearly. This type of behaviour is consistent with the nature of control systems - espeically those using filtering and feedback loops.
+The obersation is the performance doesn't degrade linearly. This type of behaviour is consistent with the nature of control systems - espeically those using filtering and feedback loops. This is a non-linear feedback system.
 
 A moving average window is a low-pass, temoral filter on the noisy, instantaneous EMD ouput. It allows the system to produce a smooth, actional input for use by the controller. 
 
 At small window_w vaues (e.g. 20-40) the filter has less or weak impact. The outputted avergae singal is still noisey and prone to spikes. As a result, the controller engages on radpid Bee Heading direction changes and obtains behaviour of veering off and loosing a desirable trend. 
 
 At large values, the filter is strong giving a very smooth signal. However, this introduces time lags whereby the average smooths why instantaneous information that would be valuable for centering movements. The bee is more responding to where it has been rather than where it is. This creates that long cycle overshooting behaviour where it has to gentle limit cycle to keep itself in the margin. It is perputially correcting on outdate informaiton. 
+
+There appear to be some optimal window's (e.g., 160, 150, 120, 75). These are the poitns where the window was large enought to filter out the high frequency noise but small enough to avoid excessive time lag that destabilize the control ability. These regions are characteristics by learning the ability to travel in long diagonal directions followed by travelling perfectly straight or tight and stable Limit Cycling. 
+
+The key here seems to be balancing the time constraights of the visual input with the moving average.
+
+The instantaneous EMD output is an oscillating signal whereby the frequency and amplitude depend on the wall pattern, velocity and distance from the wall.
+
+Something that is likely happening here is harmonic matching between the window and the frequencies. Given the constant velocity and colour switching of the walls (frequencies) there will be an average time that is takes for the bee to cycle though a pattern (white-black) or collection of patterns (white-black-white-black). This could effectly be interpretted at cancelling out the noisy, or dramatically reducing, leading to much cleaner and stable signal for the controller to work from. This is why we can see large improvements in behaviour as we traverse the window lengths, instead of a linear decrease in peformance. Conversely, instead of smoothing, the windows may actually be inducing noisey, or cutting of good signals from being accessed in whole. 
+
+When setting the trade off, there is a trade-off between smoothing out noise and introducing a time lag. This balance will almost certainly be dependant on other parameters such as velocity and the setup of the walls. 
+
+Sometimes the underlying pattern, i.e. rapidly switching between white and black, is called a dominanty oscillation frequency:
+
+- Bee Velocity ($\mathbf{V}$): How fast the bee is flying forward.
+- Stripe Width ($\mathbf{w_{stripe}}$): The width of the black and white stripes.
+- Distance to Wall ($\mathbf{d}$): How far the bee is from the wall.
+
+$$\mathbf{f_{osc}} \propto \frac{\text{Angular Velocity}}{\text{Stripe Width}} \propto \frac{\mathbf{V}}{\mathbf{d} \cdot \mathbf{w_{stripe}}}$$
+
+A Moving Average can be known as a type of finite impulse response (FIR) filter. 
+
+There is something called the first 'null' or zero-point frequency point:
+
+$$\mathbf{f_{null}} = \frac{f_s}{\mathbf{N}}$$
+
+Where $f_s$ is the signal samples
+
+If the value of N is perfectly poise it can completely cut off and nullify a singal. 
+
+Imagine 2 time steps passed where the agent crosses a white (1) and black (-1) stimuli. If averaged over a window of 2 the signal is 0.
+
+This helps to explan the periods for substantial improvement as we decrease the in-window, e.g. when we moved from 170 to 160. 
+
+Each simulation will be characterstics by periods of wall-induces oscialisation determined by the fixed velocity, corridor dimensions and patters. The result will be that full cycles occur as a given number of simulation steps, on average. When the window_n matches this number, the controller will be fed high quality, clean signals during the run, resulting in good centering behaviour and direct diagonal paths. 
+
+
+
+
 
 
 
