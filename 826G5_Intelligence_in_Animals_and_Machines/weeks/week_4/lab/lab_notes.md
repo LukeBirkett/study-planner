@@ -421,6 +421,58 @@ Does it fail in the same way for very large and very small margins, or do they c
 
 `line 102` changing `margin` in `OpticFlowController()`
 
+Starting value is `0.0075` and the `window_n=200`
+
+### 0.0075 <- Starting Parameter value
+- Agents start with clear approach to repathing towards center
+- Some sense of diagonal travel but jagged in nature with many turns
+- Agents tend to reach some sense of "centre" around step 600
+- Some fly stright but the y-axis but others limit cycle
+- The limit cycling is noticable but fairly narrow
+
+
+### Decreasing The Margin Value
+
+#### margin = 0.005
+- Inital repath phase is similar to 0.0075
+- Some concept of centre is reaching earlier at approx 350
+- No agents fly straight vertically up the y-axis
+- All agents limit cycle
+- The limit cycling is much wider than 0.0075
+- Consistently overshooting the margin and having to correct
+- But then always overshooting the correction too
+- Feedback loop is too delayed for the small target
+
+#### margin = 0.0025
+- Converge to some notion of centre very soon around 300
+- The period after the inital centre is characterised by a wave rather than any sense of straight
+- The wave breaks out into a wider version of limit cycling
+- Some limit cycles arent oscilating around the centre. Often spending an extended amount of time on one side of the margin before switching back over
+- Some agents do lock onto a vertical path. Though they all happen at different y-axis and a-axis values
+
+
+#### margin = 0.001
+- Same as 0.0025 but even more extreme
+- The convergance into divergance can also be seen in the moving average lines
+
+
+### Increasing The Margin Value
+
+#### margin = 0.01
+- Similar re-pathing start to 0.0075 
+- Quickly find a concept of centre around 400
+- Very short period of limit cycling
+- At 500 all agents reach a perfectly straight vertical path
+- Though there is a breadth of x-axis finished on
+
+#### margin = 0.025
+- Converge to centre at 500 but no limit cycling.
+- all agents find perfectly centred and fly straight
+- Alot of spacing between x-axis paths
+
+#### margin = 0.05
+- No centering
+- Agents zig zag momentarily before just flying straight from near enough where ever they started
 
 
 ## 3. Experiment with speed
