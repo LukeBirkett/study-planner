@@ -476,7 +476,7 @@ Starting value is `0.0075` and the `window_n=200`
 
 </details>
 
-## Analysis
+### Analysis
 
 The margin parameter is what determines the dead zone where agents fly vertically
 
