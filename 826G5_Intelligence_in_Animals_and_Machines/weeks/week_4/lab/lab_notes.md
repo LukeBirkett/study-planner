@@ -294,6 +294,84 @@ How small or large does it need to be to make the controller fail?
 
 Does it fail in the same way for very large and very small windows, or do they cause different problems? Why?
 
+`line 102` changing `window_n` in `OpticFlowController()`
+
+##### window_n = 200
+
+1. Mismatch start, closely align, high spikes, decay and settle
+2. Matched, oscillating steps
+3. Large alternating spikes, decay and settle
+4. Period of alternativing zigzags, periods of 1 direction, final gentle adjustments with straght sections
+
+#### window_n = 190
+
+Appears to be very sensitive to the number of windows. At a loss of 10 windows, the moving average match capability is vastly reduced. It still have the coordination of matching but the difference is clearly off. Additionally, at smaller values, the smooth effect is depreciated. There are fluttering, short-term spikes within the seconds themsevles.
+
+The bee heading doesn't look too illogical. It goes through chunks of single direction corrections. Within the chunks, the bee is not that stable in its actions. It rapidly switches between turning and perfectly straight and these changes are not uniformly spaced
+
+The initial trajectory paths don't look too disimilar the mid range of the journeys looks much less stable. It would appear that the bees are continually over shooting the centre's margin and having to recorrect. Those over time this correction continues and the overshooting is much less sevre and more like Limit Cycling, although no bees every fly perfectly straight
+
+#### window_n = 180
+
+Similar, more rearratic bee headings and never truly centering
+
+
+#### window_n = 160, 150
+
+Absurdly better performance, bee centres much quicker, uses fewer turns and all bees truely centre
+
+Aquires behaviour of long diagonal periods
+
+#### window_n = 140
+
+Seems to fall out of this "perfect" behavior. The moving average looks more like n=200
+
+The bee heading behaviour is new. Initially it rapidly oscialtes between left and right before settling into directional chunks. but it looses the clean diagonal behaviour, the chunk use rapid shifting from a directionl side to just straight
+
+The beginging phase looks similar to n=200, jaggedly centering. but this window size never truely centres. It has longer-term overshooting waves which are comrised of rapid, non=smooth trajectories
+
+# window_n = 130
+
+Similr to 130 but regains ability to center more clearly
+
+# window_n = 120
+
+falls back into a window of much better performance similar to 160, 150
+
+# window = 100
+
+very similar to n=200
+
+# window_n = 75
+
+Seems to quickly lock onto periods of strong corrections resulting in centering quickly
+
+The centering is never truely straight but the Limit Cycling is very tight around the centre
+
+# window_n = 50
+
+very similar to 75
+
+# window_n = 40
+
+a strange jagged arcing correction in the initial phase not see in any other windows but centers clearly in the mid range and in many cases perfectly
+
+# window_n = 30 
+
+Very rapid direction shifting through out the paths. Unusual curves and kinks in the paths but generally centers to very tight Limit Cycling range. Although the lines are centered, they are not straight, maintining long flows in the curves on top of the short term jaggedness
+
+# window_n = 20
+
+Very rapid direction shifting through out the paths. Often the long-term trend doesn't appear to be aheading towards the centre. Though often corrects, somehow appearing somewhat near the centre at the end of the timesteps (1400). Though it never in any form travels but the y-axis.
+
+# window_n = 10 
+
+behaviour is broken, entirely veers off to the side out of the plots view. 
+
+
+
+
+
 
 
 ### 2. Experiment with the margin size.
