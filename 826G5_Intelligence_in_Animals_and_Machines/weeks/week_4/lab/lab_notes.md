@@ -379,11 +379,9 @@ behaviour is broken, entirely veers off to the side out of the plots view.
 
 ### How to Intepret this Behaviour?
 
-What we have essentitally done here is a parameter sween for the moving average window size for the Hassenstein-Reichardt Detector (HRD) model
+What we have essentitally done here is a parameter sween for the moving average window size for the Hassenstein-Reichardt Detector (HRD) model. The agent's performance appears to rally through periods of improvement with degragation period inbetween before eventually breaking at the lower `window_n` values. 
 
-The agent's performance appears to rally through periods of improvement with degragation period inbetween before eventually breaking at the lower `window_n` values. 
-
-The obersation is the performance doesn't degrade linearly. This type of behaviour is consistent with the nature of control systems - espeically those using filtering and feedback loops. This is a non-linear feedback system.
+We can observe that the performance isn't degrading linearly. This type of behaviour is consistent with the nature of control systems - espeically those using filtering and feedback loops. This is a non-linear feedback system.
 
 A moving average window is a low-pass, temoral filter on the noisy, instantaneous EMD ouput. It allows the system to produce a smooth, actional input for use by the controller. 
 
