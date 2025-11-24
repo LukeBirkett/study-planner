@@ -474,6 +474,24 @@ Starting value is `0.0075` and the `window_n=200`
 - No centering
 - Agents zig zag momentarily before just flying straight from near enough where ever they started
 
+## Analysis
+
+The margin parameter is what determines the dead zone where agents fly vertically
+
+Decreasing the margin value results in instability and high sensitivity. The agents struggle to find the dead zone and the lagged feedback loop means they are constantly overshooting it. 
+
+As the target becomes smaller, the demands on the system for perfection are increasing. The result is increased sensitivty of optic flow perceptions. Small changes in Optic Flow result in differential values that switch the sign of `right_mean - left_mean` from which heading direction is determined. This results in aggressive steering which in turn causes the overshoots
+
+The underlying window is set to 200 which is a fairly large window. It allows for smoothing but also induces a time lag. By the time the moving average of `right_mean - left_mean` has signal to the bee to move, it is already too late, causing an overshoot and the requirement for a correction, which will also be signaled late. 
+
+The default margin showed some pretty accurate and robust behaviour. The bees were able to centre themselves and often meet the dead zone. Increasing the margin improved on this behaviour, acheiving centre more efficently. 
+
+However, as the margin become too big the controller lots the ability to generate signals and shutdown, eventually the bees just few straight from where ever they started.
+
+As the increase the margin, the controller gains more tolerance to error. This allows it to find or settle for some notion of centre, even if it isn't truely the centre. A margin which is too large leads to inaccuracy
+
+Where as decreasing the margin causes instability with over exagurated levels of correction and wide limit cycling due to oversensitivity and time lags.
+
 
 ## 3. Experiment with speed
 
