@@ -192,7 +192,7 @@ The controller has 3 parameters will are set in `OpticFlowController()` on `line
 
 The main aim of the task is to investigate the idea that corridor centring can occur by balancing optic flow. We want to play with and test things with the hope of understanding how the system works. Also to know its limits: how does it work, and how, when and why does it fail?
 
-## Interpretting the output 
+## Interpretting the Starting Output 
 
  Staring point, `vel = 50`, `margin = 0.0075`, `window_n 200= `
 
@@ -205,13 +205,13 @@ The main aim of the task is to investigate the idea that corridor centring can o
 
 ### Average Output
 
-The "Controller correlator moving averages" is the filtered and actionable optical flow signal. It respresents the bee's interpetation of **average** visual motion from the walls. Offically, the Optic Flow is the direct signal from the EMD which has the fundmenetioal function of measuring motion/optic flow. If a bee's velocity is constant `vel = 50` then the magniute of the optic flow is inversely proporitional to the distance from the wall. Hence, the EMD signal (magnitutde) can be used to proxy closness to the wall. The Moving Average is the filtered instantanous output of the EMD. The raw signal would be to noisy for control. The moving averge smooths out the abtruptness of white and black signals, leaving behind a stable underlying signal that refelcts average perceived visual motion. This is the true optic flow which a controller can use for steering decisions. 
+The "Controller correlator moving averages" is the filtered and actionable Optic Flow signal. It respresents the bee's interpetation of **average** visual motion from the walls. Offically, the Optic Flow is the direct signal from the EMD which has the fundemental function of measuring motion/Optic Flow. If a bee's velocity is constant `vel = 50` then the **magniute of the Optic Flow is inversely proporitional to the distance from the wall**. Hence, the EMD signal (magnitutde) can be used to proxy closness to the wall. The Moving Average is the filtered **instantanous output** of the EMD. The raw signal would be too noisy for governing control and movements. The moving average smooths out the abruptness of the white and black signals, leaving behind a stable underlying signal that reflects average perceived visual motion where by the average is calculate by a size of `window_n`. This is the true optic flow which a controller can use for steering decisions. 
 
-This plot only shows the last [N-1] simulation. It respresents the only reliable indicator of a bee's success and it is the inputs used to determine the bee's heading direction. A moving average is calculated for both `left` and `right` sensor with the differential between them being used to determine behaviour. The `margin` is a buffer where the differential tells the bee just to fly forward up the y-axis. 
+This plot only shows the **last** [N-1] simulation. It respresents the only reliable indicator of a bee's success and it is the inputs used to determine the bee's heading direction. A moving average is calculated for both `left` and `right` sensor with the differential between them being used to determine behaviour. The `margin` is a buffer where the differential tells the bee just to fly forward up the y-axis. 
 
 The bee has an internal desire to balance the optic flows. If they are not balanced then it uses its steering behaviour to balance them. A bee travelling diagonally is impacting its optic flow. The lab between sensing the black/white strips becomes less when travelling in the direction of a wall, and more when travelling away. 
 
-The raw EMD output in Plot 3 is related to this plot but instead is shows us that it is too noisey and spikey for steering. The Controller Correlator Moving Averages are an average of N previous instantaneous EMD output. The moving average filters out the noise and provides a stable signal that represents the average perceived motion on that side.
+The raw EMD output in Plot 3 is related to this plot but instead is shows us that it is too noisy and spikey for steering. The Controller Correlator Moving Averages are an average of N=`window_n` previous instantaneous EMD outputs. The moving average filters out the noise and provides a stable signal that represents the average perceived motion on that side. As the value is a time stepped average, it will have a lag when adapting to new stimuli, it is this feature that provides the agent with stability. 
 
 A higher Average Optic flow tells the bee is is closer to a wall, and lower that is it further away. The bee never actually knows how far away a wall is, just the imbalance between optic flow signals. 
 
@@ -234,124 +234,186 @@ else:
     heading = math.pi/2 - d
 ```
 
-- However it is dependant on the margin so the values can be very similar but still output side of the margin bounds
+#### What are we actually seeing in Plot 1?
 
+It is the history of both left and right means at each point in time. It is the filtered Optical Flow as induced by the High-Pass and Low-Pass filtered. It can be thought of as the output of a temporal filter being applied to the signals of Plot 3 which itself with its extreme osciallations is too noisey to respond responably to. Plot 1 reveals the stable underlying Optic Flow signal that accurately reflects the bee's distances from the wall. The height of each line ay any point t is proporitional to the Optic Flow on each side. Recall, that in the default run, the walls themselves are identical meaning any different in percieved flow is caused by distance from the wall. The Averaged Output depends on distance since Optic Flow. The relationship is inverse so a higher Average Output means a smaller (closer) distance from the wall and a Lower Average Output means the wall is further away (large distance value). 
 
-- Plot 1 shows the history of self.left_means and self.right_means. This plot represents the filtered optical flow and is the only signal the bee's controller uses to make steering decisions.
-- It is filter by the HPF and LPF so it will be smooths and window averaged
-- Plot 1 is the output of a temporal filter applied to the signals in Plot 3.
-- The bee's controller cannot use the raw signal in Plot 3 because the extreme oscillations would cause it to steer wildly and crash almost immediately. The moving average (Plot 1) is used specifically to smooth out this noise, revealing the stable, underlying visual speed signal that accurately reflects the bee's distance from the wall.
-- The height of each line (the average output) is proportional to the optic flow perceived on that side.
-- Recall that in this default run, the walls themselves are identifcal. Any difference in perceived flow is caused by distance from a wall
-- Since optic flow is inversely related to distance ($\mathbf{R \propto V/d}$)
-- Higher Average Output ($\mathbf{R_{mean}}$) means the wall on that side is closer (stronger perceived motion).
-- Lower Average Output ($\mathbf{R_{mean}}$) means the wall on that side is further away (weaker perceived motion).
-- An off center starting point will create a Feedback Loop and Overshoot effect
-- The bee's control logic is fundamentally simple: Eliminate the difference between the two moving averages.\
+#### Results in The Default Run
 
-- The average outputs appear to start at a larger value for both left and right.
-- The signal values are pretty similar for each side as each point in time but the right side appears to be slightly more.
-- They spike and oscialate over time, with the spikes gradually becoming less severe as the average output stabilises near 0.2
-- Then the stabilse, the right side which was always marginally more is now marginally less
-
-- Optic flow ($\mathbf{R}$) is proportional to $\mathbf{1/\text{Distance}}$ ($\mathbf{R \propto V/d}$).
-- The bee's controller is designed to achieve:$$\mathbf{R_{Left\ Mean}} = \mathbf{R_{Right\ Mean}}$$
-- When this condition is met, the controller issues the Fly Straight command.
-
-- The bee will use its steering to balances its optic flow.
-- Being close to a way will put the signal out of sync
-- But then the rapid steering away from the wall will change the perspective and balance the optic flows
-- The bee can then coast in a diagonal position
+To start the we see a complete mismatch in terms of the bee's centeredness. The bee's control logic is very simple, eleminate the different between the two moving averages. We see this happen almost straight away but to an imperfect degree, that is to say the looks pretty similar but not exact. This is where the `margin` comes in, if the differece is not within the margin the bee continues correcting. This results in a feedback loop whereby the bee is continually correcting resulting in an Overshoot Effect. Remember, the bee's signal is an Moving Average, meaning that the very first point that the bee meets the centre will be lost to group voting-esqe nature of the average. It will overshoot the centre and start to correct in the opposite direction to compensate. This can be validated in Bee Heading plot that shows the first change in movement after the inital flow of sustain corrections is in the opposite direction, not vertically up the y-axis which would be the case if the bee had centered. You can also see it very slighly in this Moving Average plot as `t=7` where the very slight peaks which from blue (left) to orange (right). Depending on the parameters, the bee will switch between its corrections before it settles into the `margin` and starts to oscillate gently in each direction to keep itself centered. 
 
 ![Original Controller Correlator Moving Average Plot](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_6_Controller_Correlator_Moving_Average.png)
 
 ### Sensor output
 
-- The "curve" in this graph is a percectly stepped with only horizonatal and vertical lines
-- The front and back line are almost perfectly matched. Infact you can barely see the front (blue) line being the back (orange) line
-- At each t step the singal output is either 0 or 1 (white or black)
-- There is a chart for each sensor (side). Both are the same here
+The "curves" in these grapgs are perfectly stepped jumps with only horizontal and vertical lines. The front and back sensor lines are almost perfectly matched given the resolution of the graph. This stepped structure is given because the signal output is either 0 or 1 (white or black). 
 
 ![Original Right Sensor Outputs](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_5_Right_Sensor_Outputs.png)
 ![Original Left Sensor Ouputs](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_4_Left_Sensor_Outputs.png)
 
 ### Correlator Outputs
 
-- The entire mechanism relies on the relationship between Optic Flow (the apparent angular speed of the world) and the Distance to an object.
-- The magnitude of the EMD output ($\mathbf{R}$) is proportional to the angular velocity ($\mathbf{\omega}$) of the visual pattern across the sensor.
-- The angular velocity ($\omega$) is governed by the bee's forward velocity ($\mathbf{V}$) and the distance ($\mathbf{d}$) to the wall: $$\mathbf{R} \propto \omega \propto \frac{\mathbf{V}}{\mathbf{d}}$$
-- If the wall is closer, ${\mathbf{d}}$ is smaller and therefore $\mathbf{R}$ (EMD) is higher
-- If the wall is further away, ${\mathbf{d}}$ is bigger and therefore $\mathbf{R}$ (EMD) is lower
-- The goal is to make the optic flow from each sensor equal (enough)
-- The output of the EMD (magnitude), which is the same as the angular velocity, much match enough on each sensor
-- In the code there is a left (blue) and right (organge) line which is the instantanous (probably the moving average?) for each sensor
-- It mostly shows spikes but has some diagonal lines which is where the bee is redirecting its trajectory
-- The output of each EMD is called the correlator as it combined the 2 lagged into inputs. but these are the instaneous values
-- There is a green line which is just calculated (right minus left)
-- This is instaneous control errror
-- Or, the raw, unfiltered difference in perceived optic flow between the two sides.
-- It is calculated on `line 146` using `np.array(bee.controller.right_corr.outputs) - np.array(bee.controller.left_corr.outputs)`
-- A positive peak means the right side had a stronger instantaneous flow (closer wall), suggesting a need to steer left.
-- A negative trough means the left side had a stronger instantaneous flow (closer wall), suggesting a need to steer right.
-- This graph is showing the raw instantaneous output. Its value is to basically tell us why the bee and control system don't use the data in its raw form because it is so noisy
-- The graph oscilates wildly between positive and negative because of the optic flow structure
-- It is switching when viewing white-black or black-white which each have different values
-- black-white positive, white-black negative
-- Since the colours are oscialating the outputs oscilate
-- This rapid, noisy oscillation is why the controller never uses this instantaneous value to steer the bee.
-- The bee will steer based on the moving average with smoothes out the oscilations.
-- Allows the bee to move slower and more deliberatrly than is it somehow had to respond to these rapid movements
-- The bee starts off centre to the oscilations are large and rapid. Over time they decay as a result of the moving average steering
-- After a while, the bee stabilites enough. The spikes on this graph keep oscilatiing due to the colours but because the walls are perceived to be equi-distances now, the spikes mignatiude (height) will be the same. 
+The systems mechanism relies on the relationship between Optic Flow (speed of the world) and the distance to an object (wall). The magnitutde of the EMD output ${\mathbf{R}}$  is proportional to the Optic Flow ($\omega$) (angular velocity) of the visual pattern across the sensor.  
+
+The Optic Flow ($\omega$) is dependant on the forward velocity ($\mathbf{V}$) and the distance ($\mathbf{d}$) to the wall: $$\mathbf{R} \propto \omega \propto \frac{\mathbf{V}}{\mathbf{d}}$$
+
+If the wall is closer, ${\mathbf{d}}$ is smaller and therefore $\mathbf{R}$ (EMD) is higher. If the wall is further away, ${\mathbf{d}}$ is bigger and therefore $\mathbf{R}$ (EMD) is lower.
+
+The goal is to make the optic flow from each sensor equal (enough). The magnitude output of the EMD, which is the same as the Optic Flow, must match (enough) on each sensor.  In the code, there is a left (blue) and right (orange) line which is the instantanous for each sensor. The output of each EMD is called the collelator as it combines the lagged stimulis. The plot mostly shows spikes but has some diagonal lines which is where the bee is redirecting its trajectory. 
+
+The green line is just the right minus left, the instantaneous differental between sensors, or control error. It is the raw, unfiltered difference in percieved optic flow. Calculated on `line 146` using `np.array(bee.controller.right_corr.outputs) - np.array(bee.controller.left_corr.outputs)`.  A positive peak means at time `t` the right side has a stronger instantaneous flow (closer wall), suggesting a need to steer left. A negative trough means the left side had a stronger instantaneous flow (closer wall), suggesting a need to steer right.
+
+Clearly, this graph is too noisey and erractic for the bee to safely coordinate against. The point of this plot to tells us why the bee actually increase used something more like the Moving Average (Plot 1). 
+
+This plot whilst oscilates between positive and negative because of the environment comprising of only white and black signals. Since the colours are switching the outputs oscilate. The bee cannot use this and instead operates on the Moving Average with smooth out the oscilations allowing the be to react slower and more deliberately.
+
+Ignoring the switching of the spikes in this plot, the magnitude of the spikes start off large start before decaying over time as the bee centers itself. 
 
 ![Original Instantaneous Correlators Output](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_3_Correlators_Output.png)
 
 ### Bee Heading (Radians)
 
-- This plot shows the bees sterring decision at each point in randians back on the output of the EMD controller
-- It is the bee's instantaneous direction of travel (its heading angle) at every time step $t$, measured in radians.
-- The middle red dashed line is given by $\mathbf{\pi / 2}$ radians.
-- a heading of $\pi/2$ (or $90^\circ$) means the bee is flying perfectly straight ahead up the x-axis
-- The system only allows for the bee to have 3 directions: left, right or centre
-- This is why the graph only have steps throughout
-- One the bee stabilizing in the margin it enters something called Active Centering.
-- On this graph is looks like it continues shift between left and right
-- But it is actually just doing very feint oscilations within the margin
-- If the solution has N=10 runs then the graph shows only the final bees actions
+This plot shoes the bee's steering deicsions at each time point in radians based on the output of EMD controller differentials. It is the bee's instantaneous direction of travel (its heading angle) measured in radians. The middle red dashed line is given by $\mathbf{\pi / 2}$ radians. It shows the direction perfectly up the y-axis. In this system, the bee only have 3 directions, left, right or centre. This is why the graph is stepped like so. Once the bee has centered it can enter a phase called active centering where it coodinates a pattern of alternating direction switches to keep it in the `margin`. The fact that it makes any direction change, other than centre/straight, means that it is momentary falling out of the `margin`. If the solution has N=10 runs then the graph shows only the final bees simulation results.
 
 ![Original Bee Heading](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_2_Bee_Heading.png)
 
 ### Bee Trajectories
 
-- The final plot is each bee's path taken.
-- They all start from the same y-axis point but variable a-axis
-- At end time step a bee moves forward either redirecting itself or continuing perfectly in the x-axis if it doesn't wish to make adjustments
-- In these plots, the a-axis is the distance travelled, not time
-- The bee travels at a constant forward velocity (vel) of 50 units per second.
-- $$T = \frac{\text{Distance}}{\text{Velocity}} = \frac{1400 \text{ units}}{50 \text{ units/second}} = \mathbf{28 \text{ seconds}}$$
-- The number of timesteps ($N$) is the total time divided by the simulation's time step size (dt), which is set to 0.01 seconds:
-- $$N = \frac{T}{dt} = \frac{28 \text{ seconds}}{0.01 \text{ seconds/timestep}} = \mathbf{2800 \text{ timesteps}}$$
-- Therefore, the simulation actually runs for roughly 2800 timesteps to cover the 1400 units of distance, not 1400 timesteps. The y-axis shows space, while the $t$ on your other plots (like the heading plot) shows time (which relates to the number of timesteps).
-- In the simulations, "data" is captured upto a certain distance, i.e. when they get to a certain mark in corridor
-- In this plot they all reach the same distance even if they took different or less optimal paths
-- But a plot with more diagnoals with have a longer path and have taken longer to get to the end point
-- conversely, a straighter path will be quicker and have a shorter route
-- Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation.
-- $$\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$$
-- A wobbly bee that travels a longer total path distance must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
+This plot compiles the exact path, in terms of y-axis and a-axis coordinates, that each bee simulation took. 
+
+In these plots, the y-axis is distance travelled, not time as it is in all the others. That being said, velocity is fixed at 50 units per second and $T = \frac{\text{Distance}}{\text{Velocity}} = \frac{1400 \text{ units}}{50 \text{ units/second}} = \mathbf{28 \text{ seconds}}$. The number of timesteps ($N$) is the total time divided by the simulation's time step size (dt), which is set to 0.01 seconds: $N = \frac{T}{dt} = \frac{28 \text{ seconds}}{0.01 \text{ seconds/timestep}} = \mathbf{2800 \text{ timesteps}}$. Therefore, the simulation actually runs for roughly 2800 timesteps to cover the 1400 units of distance, not 1400 timesteps. 
+
+In the simulations, "data" is captured upto a certain distance, i.e. when they get to a certain mark in corridor. In this plot they all reach the same distance even if they took different or less optimal paths. A plot with more diagonals will have a longer path and therefore taken longer to get to the same distance. Conversely, a straighter path will be quicker and have a shorter route. Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation $\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$. A wobbly bee, that travels a longer total path, must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
 
 ![Original Bee Trajectories](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_1_Bee_Trajectories.png)
 
 
-### 1. Experiment with the window size for the moving average.
+## 1. Experiment with the window size for the moving average.
 
-How small or large does it need to be to make the controller fail? 
+**How small or large does it need to be to make the controller fail?**
 
-Does it fail in the same way for very large and very small windows, or do they cause different problems? Why?
+**Does it fail in the same way for very large and very small windows, or do they cause different problems? Why?**
+
+`line 102` changing `window_n` in `OpticFlowController()`
+
+<details> <summary><code>window_n = 200</code></summary>
+1. Mismatch start, closely align, high spikes, decay and settle
+2. Matched, oscillating steps
+3. Large alternating spikes, decay and settle
+4. Period of alternativing zigzags, periods of 1 direction, final gentle adjustments with straght sections
+</details>
+
+<details> <summary><code>window_n = 190</code></summary>
+ Appears to be very sensitive to the number of windows. At a loss of 10 windows, the moving average match capability is vastly reduced. It still have the coordination of matching but the difference is clearly off. Additionally, at smaller values, the smooth effect is depreciated. There are fluttering, short-term spikes within the seconds themsevles.
+
+The bee heading doesn't look too illogical. It goes through chunks of single direction corrections. Within the chunks, the bee is not that stable in its actions. It rapidly switches between turning and perfectly straight and these changes are not uniformly spaced
+
+The initial trajectory paths don't look too disimilar the mid range of the journeys looks much less stable. It would appear that the bees are continually over shooting the centre's margin and having to recorrect. Those over time this correction continues and the overshooting is much less sevre and more like Limit Cycling, although no bees every fly perfectly straight
+</details>
 
 
+<details> <summary><code>window_n = 180</code></summary>
 
-### 2. Experiment with the margin size.
+Similar, more erratic bee headings and never truly centreing.
+
+</details>
+
+
+<details> <summary><code>window_n = 160, 150</code></summary>
+
+Absurdly better performance, bee centres much quicker, uses fewer turns and all bees truely centre
+
+Aquires behaviour of long diagonal periods
+
+</details>
+
+
+<details> <summary><code>window_n = 140</code></summary>
+ Seems to fall out of this "perfect" behavior. The moving average looks more like n=200
+
+The bee heading behaviour is new. Initially it rapidly oscialtes between left and right before settling into directional chunks. but it looses the clean diagonal behaviour, the chunk use rapid shifting from a directionl side to just straight
+
+The beginging phase looks similar to n=200, jaggedly centering. but this window size never truely centres. It has longer-term overshooting waves which are comrised of rapid, non=smooth trajectories
+</details>
+
+
+<details> <summary><code>window_n = 130</code></summary>
+ Similr to 130 but regains ability to center more clearly
+</details>
+
+
+<details> <summary><code>window_n = 120</code></summary>
+falls back into a window of much better performance similar to 160, 150
+</details>
+
+<details> <summary><code>window_n = 100</code></summary>
+ very similar to n=200
+</details>
+
+<details> <summary><code>window_n = 75</code></summary>
+Seems to quickly lock onto periods of strong corrections resulting in centering quickly
+
+The centering is never truely straight but the Limit Cycling is very tight around the centre
+</details>
+
+<details> <summary><code>window_n = 50</code></summary>
+ very similar to 75
+</details>
+
+<details> <summary><code>window_n = 40</code></summary>
+a strange jagged arcing correction in the initial phase not see in any other windows but centers clearly in the mid range and in many cases perfectly
+</details>
+
+<details> <summary><code>window_n = 30</code></summary>
+Very rapid direction shifting through out the paths. Unusual curves and kinks in the paths but generally centers to very tight Limit Cycling range. Although the lines are centered, they are not straight, maintining long flows in the curves on top of the short term jaggedness
+</details>
+
+<details> <summary><code>window_n = 20</code></summary>
+Very rapid direction shifting through out the paths. Often the long-term trend doesn't appear to be aheading towards the centre. Though often corrects, somehow appearing somewhat near the centre at the end of the timesteps (1400). Though it never in any form travels but the y-axis.
+</details>
+
+<details> <summary><code>window_n = 10 </code></summary>
+behaviour is broken, entirely veers off to the side out of the plots view. 
+</details>
+
+
+### How to Intepret this Behaviour?
+
+What we have essentitally done here is a parameter sween for the moving average window size for the Hassenstein-Reichardt Detector (HRD) model. The agent's performance appears to rally through periods of improvement with degragation period inbetween before eventually breaking at the lower `window_n` values. 
+
+We can observe that the performance isn't degrading linearly. This type of behaviour is consistent with the nature of control systems - espeically those using filtering and feedback loops. This is a non-linear feedback system.
+
+A moving average window is a low-pass, temoral filter on the noisy, instantaneous EMD ouput. It allows the system to produce a smooth, actional input for use by the controller. 
+
+At small window_w vaues (e.g. 20-40) the filter has less or weak impact. The outputted avergae singal is still noisey and prone to spikes. As a result, the controller engages on radpid Bee Heading direction changes and obtains behaviour of veering off and loosing a desirable trend. 
+
+At large values, the filter is strong giving a very smooth signal. However, this introduces time lags whereby the average smooths why instantaneous information that would be valuable for centering movements. The bee is more responding to where it has been rather than where it is. This creates that long cycle overshooting behaviour where it has to gentle limit cycle to keep itself in the margin. It is perputially correcting on outdate informaiton. 
+
+There appear to be some optimal window's (e.g., 160, 150, 120, 75). These are the poitns where the window was large enought to filter out the high frequency noise but small enough to avoid excessive time lag that destabilize the control ability. These regions are characteristics by learning the ability to travel in long diagonal directions followed by travelling perfectly straight or tight and stable Limit Cycling. 
+
+The key here seems to be balancing the time constraights of the visual input with the moving average. We can call this harmonic matching. The instantaneous EMD output is an oscillating signal whereby the frequency and amplitude depend on the wall pattern, velocity and distance from the wall. Resultingly, there will be a pre-detmerined average time that is takes for the bee to cycle through a patter (white-black). If the window size correlates the the number of time steps then we can interpret this as effectively cancelling out the noisy oscialating signal leading to much cleaner and stable signal for the controller to work from. This is why we can see large improvements in behaviour as we traverse the window lengths, instead of a linear decrease in peformance. Conversely, instead of smoothing, the windows may actually be inducing noise, or cutting of good signals from being accessed in whole. 
+
+When setting the window size, there is a trade-off between smoothing out noise and introducing a time lag. This balance will almost certainly be dependant on other parameters such as velocity and the setup of the walls. 
+
+#### Dominant Oscillation Frequency
+Sometimes the underlying pattern, i.e. rapidly switching between white and black, is called a dominant oscillation frequency:
+- Bee Velocity ($\mathbf{V}$): How fast the bee is flying forward.
+- Stripe Width ($\mathbf{w_{stripe}}$): The width of the black and white stripes.
+- Distance to Wall ($\mathbf{d}$): How far the bee is from the wall.
+
+$$\mathbf{f_{osc}} \propto \frac{\text{Angular Velocity}}{\text{Stripe Width}} \propto \frac{\mathbf{V}}{\mathbf{d} \cdot \mathbf{w_{stripe}}}$$
+
+A Moving Average can be known as a type of finite impulse response (FIR) filter. 
+
+There is something called the first 'null' or zero-point frequency point, where $f_s$ is the signal samples:
+
+$$\mathbf{f_{null}} = \frac{f_s}{\mathbf{N}}$$
+
+If the value of N is perfectly poise it can completely cut off and nullify a singal. Imagine 2 time steps passed where the agent crosses a white (1) and black (-1) stimuli. If averaged over a window of 2 the signal is 0. This helps to explain the periods for substantial improvement as we decrease the in-window, e.g. when we moved from 170 to 160. 
+
+Each simulation will be characterised by periods of wall-induced oscialisation determined by the fixed velocity, corridor dimensions and patters. The result will be that full cycles occur when a given number of simulation steps have occured. When the window_n matches this number, the controller will be fed high quality, clean signals during the run, resulting in good centering behaviour and direct diagonal paths. 
+
+## 2. Experiment with the margin size.
 
 How small or large does it need to be to make the controller fail? 
 
@@ -359,23 +421,215 @@ Does it fail in the same way for very large and very small margins, or do they c
 
 `line 102` changing `margin` in `OpticFlowController()`
 
+Starting value is `0.0075` and the `window_n=200`
+
+### 0.0075 <- Starting Parameter value
+- Agents start with clear approach to repathing towards center
+- Some sense of diagonal travel but jagged in nature with many turns
+- Agents tend to reach some sense of "centre" around step 600
+- Some fly stright but the y-axis but others limit cycle
+- The limit cycling is noticable but fairly narrow
+
+<details> <summary><code>Decreasing The Margin Value</code></summary>
+
+#### margin = 0.005
+- Inital repath phase is similar to 0.0075
+- Some concept of centre is reaching earlier at approx 350
+- No agents fly straight vertically up the y-axis
+- All agents limit cycle
+- The limit cycling is much wider than 0.0075
+- Consistently overshooting the margin and having to correct
+- But then always overshooting the correction too
+- Feedback loop is too delayed for the small target
+
+#### margin = 0.0025
+- Converge to some notion of centre very soon around 300
+- The period after the inital centre is characterised by a wave rather than any sense of straight
+- The wave breaks out into a wider version of limit cycling
+- Some limit cycles arent oscilating around the centre. Often spending an extended amount of time on one side of the margin before switching back over
+- Some agents do lock onto a vertical path. Though they all happen at different y-axis and a-axis values
+
+#### margin = 0.001
+- Same as 0.0025 but even more extreme
+- The convergance into divergance can also be seen in the moving average lines
+
+</details>
+
+<details> <summary><code>Increasing The Margin Value</code></summary>
+
+#### margin = 0.01
+- Similar re-pathing start to 0.0075 
+- Quickly find a concept of centre around 400
+- Very short period of limit cycling
+- At 500 all agents reach a perfectly straight vertical path
+- Though there is a breadth of x-axis finished on
+
+#### margin = 0.025
+- Converge to centre at 500 but no limit cycling.
+- all agents find perfectly centred and fly straight
+- Alot of spacing between x-axis paths
+
+#### margin = 0.05
+- No centering
+- Agents zig zag momentarily before just flying straight from near enough where ever they started
 
 
-### 3. Experiment with speed
+</details>
 
-For higher and lower speeds, repeat steps 1 and 2.
+### Analysis
 
-How do the different combinations of parameters combine to affect the bee's behaviour? 
+The margin parameter is what determines the dead zone where agents fly vertically
 
-Are there speeds that break the corridor centring response? If so, is this a problem for the theory/model or not?
+Decreasing the margin value results in instability and high sensitivity. The agents struggle to find the dead zone and the lagged feedback loop means they are constantly overshooting it. 
+
+As the target becomes smaller, the demands on the system for perfection are increasing. The result is increased sensitivty of optic flow perceptions. Small changes in Optic Flow result in differential values that switch the sign of `right_mean - left_mean` from which heading direction is determined. This results in aggressive steering which in turn causes the overshoots
+
+The underlying window is set to 200 which is a fairly large window. It allows for smoothing but also induces a time lag. By the time the moving average of `right_mean - left_mean` has signal to the bee to move, it is already too late, causing an overshoot and the requirement for a correction, which will also be signaled late. 
+
+The default margin showed some pretty accurate and robust behaviour. The bees were able to centre themselves and often meet the dead zone. Increasing the margin improved on this behaviour, acheiving centre more efficently. 
+
+However, as the margin become too big the controller lots the ability to generate signals and shutdown, eventually the bees just few straight from where ever they started.
+
+As the increase the margin, the controller gains more tolerance to error. This allows it to find or settle for some notion of centre, even if it isn't truely the centre. A margin which is too large leads to inaccuracy
+
+Where as decreasing the margin causes instability with over exagurated levels of correction and wide limit cycling due to oversensitivity and time lags.
+
+
+## 3. Experiment with speed
+
+**For higher and lower speeds, repeat steps 1 and 2.**
+
+**How do the different combinations of parameters combine to affect the bee's behaviour?**
+
+**Are there speeds that break the corridor centring response? If so, is this a problem for the theory/model or not**
+
+
+- Default: OpticFlowController(vel=50, margin=0.0075, window_n=200) -> vel=75
+
+### Experimental Notes
+
+<details> <summary><code>Increasing the Velocity</code></summary>
+
+#### Increase vel to 75
+
+OpticFlowController(vel=75, margin=0.0075, window_n=200)
+
+- Increase vel from 50 to 75
+- Increase to 75 appears to induce the mid-range wave effect that we saw when decreasing the margin
+- This might make sense when increasing the velocity because the position change per direction change is increased.
+- This means that the feedback loop, which causes the overshooting, is amplified causing mutliple overshoots that in the long term trend look like a wave.
+- Despite the short wave period, all agents found a route to travel directly straight up the y-axis. No limit cycling took place around the margin. I am not sure how to explain this
+
+#### Increase vel to 100
+
+- This creates entirely new behaviour.
+- Instead of repathing from the start, all agents zigzag around their starting point before hitting a strong diagonal and reaching a point where they all fly vertical straight.
+- The x-axis values of each agent are pretty spread out. The spread almost looks wider than the margin if this is possible. It is wider that the default runs Limit cyling
+
+</details>
+
+
+<details> <summary><code>Decreasing the Velocity</code></summary>
+ 
+#### Decrease vel to 25
+
+- Appears to vastly improve performance.
+- All bee's repath in diagonal trends to the centre
+- All bee's tightly limit cycle around the centre
+- Does appear to be a slight wobble in 'straight' trajectory
+- I am not sure why faster bees can meet a vertical path but slower bees limit cycle tightly
+
+#### Decrease vel to 10
+
+- Very similar to before in terms of behaviour and performance. However, all bees meet a vertical path this time
+- Also, the simulations took much longer to run
+
+</details>
+
+## Analysis
+
+Velocity is the main parameter in determining Optic Flow meaning the bee's mechanism is fundementally changed by altering this parameter.
+
+$$\mathbf{R} \propto \frac{\mathbf{V}}{\mathbf{d}}$$
+
+- High Velocity ($\mathbf{V}$): Increases the Optic Flow $\mathbf{R}$
+- Low Velocity ($\mathbf{V}$): Decreases the Optic Flow $\mathbf{R}$
+
+
+<details> <summary><code>Increasing the Velocity</code></summary>
+
+### Initial Rapid Zig-Zagging
+
+Increasing the velocity means that the baseline perceived Optic Flow signals are increased. Even slight changes in perception are amplifed and fed into the $\mathbf{R_{Left} - R_{Right}}$ calcuations. This is what causes the initial zig-zagging and wave behaviour. The controller is off-center by a large amount and is aggressively steering and trying to rapidly correct but the amplified signals are causing an overcorrection. Additionally, the `window_n` is still building up cumulative windows here meaning the first 200 steps will be disproportionately noisy, reactive with less time lag as they arent averaged by 200 windows yet.  
+
+### Vertical Flying, Residual Error and Margin
+
+Once the smoothing effect of the 200 windows has kicked in we see a new behaviour in the system which makes it appear more "accurate". Technically, the system becomes better at flying straight, not truely centering which is why we see a spread of vertical paths on the x-axis. 
+
+This observation is derived from the interaction between the **residual error** and `margin`. 
+
+Recall, that our smoothing mechanism isn't perfect. Noise is caused by the frequencies of white-black and black-white oscilations as demonstrated in Plot 3. The Moving Average helps to smooth and normalise the magnitude of the signals but the `window_n` is unlikely to perfectly match the frequency timestep, e.g. A window might average 200 timesteps but it only takes 160 to move over white-black-white black meaning averaged signal is incomplete and contains un-actionable **noise**. 
+
+Initally, it might be easy to think that increase the velocity will amplify the noise. However, it actually increases the functionality of the moving average. By moving faster, more frequencies will be taken in as stimuli and the same window will now be averaging over more timesteps. The un-actionable, partial signals are now connected to the rest of their signal and the new partial signals now represents a smaller relative size to the overall signal received is averaged
+
+For example, lets image the `window_n = 200` picks up a signal of `white-black-partial white`. With high velocity it may pick up `white-black-white-black-white-black-part white`. This means the evidence to determine actions from is much higher compared to the residual noise which tells us nothing. Additionally, the partial signal, the noise, is now seen against a backdrop of 6 full colour signals meaning it is obsurces less of the underyling signal. 
+
+Then, once the smoothing has kicked in and some of the time lagged oscillations/waves/cycling has taken place, the agent should be faced with a `left_average` and `right_average` that are remarkably similar. Similar because the signal is very strong and therefore accurate.  
+
+At a high enough velocity, the residual error can be knocked down to it's floor. This is the lowest level that the error can reach meaning the noise is reduced to it minimum. If this floor is lower than the margin, which is an absolute value not relative, then a will functioning controller will be able to match the left and right signals with ease and find the dead zone where it can fly straight
+
+If the `margin` dictates the systems capacity to tolerate noise then stronger, more accurate Optic Flow signals with cause the prevailing noise to be less. 
+
+### Vertical Spread, Less Precise
+
+An interesting piece of behavour here is that a high-speed system is categorically less accurate at finding the absolute centre because its movements are less precise. The increase in velocity means that any change in direction pushes the agent further than before. This is why we see a spread of vertical paths setlted on. 
+
+The form of stability that I high-speed system takes is in its ability to find a stable enough path by matching signals which are strong and of high information quality from the improved Optic Flow signal.
+
+</details>
 
 
 
+<details> <summary><code>Decreasing the Velocity</code></summary>
 
-### 4. Experiment with the environment
+### Weak Signals, Less Freqiences, Worse Infomation
+Decreasing the velocity has the opposite effect, a weakening off the Optic Flow signal. In almost all instances we can expect to receive a small error in the signal because there isn't enough information to be gathered by the sensors. Even if the bee is widly off centre, the error will be comparatively small to previous simulations. The Moving Average window is seeing less frequencies, this is less information encoded. 
 
-Try making the corridor wider or more narrow, by increasing or decreasing w on line 90 of the script.
+### Error to Steering Ratio
+Additionally, we have a new parameter interaction to account for. Error to steering/direction ratio. The steering is a limited, fixed system. This means the direction changes are perceived more aggressive inrelation to the information given to the controller. Weak signals turn the same as a strong signals. This is known as a low-speed system with a high-gain (correction) amplifier. A smaller error will lead to an aggressive correction.
 
-How does changing the width of the corridor affect the bee's behaviour? Why?
+### Low-Speed, Gentle Stability, Narrow Limit Cycling
+However, the low-speed system does itself counter act this. Because the velocity is lower, the distance travelling in the redirection will be shorter. Leading to stability in gentleness. The combination of all these parts is what gives way to the narrow Limit Cycling. At lower velocities, the agents has enough signal to accurately and often diagonally centre itself. But when it gets to the centre its averaged windows are subject to noise and lag. Additionally, the magnitude of the error is small due to the weak signals. In conjunction with a small margin, the error can hover around the margin, and the noise slowly is able to easy the agent outside of the margin with help of the time lag. Eventually, the agent reactions to this redirection the path back intowards the margin. 
 
+### Perpetual Overshooting
+This is where the disproportionately strong steering reactions come in. The error will be tiny but the redirection set it in a direction that will not just bring it back inside the margin but overshoot it and meanser outside of the marign on the other side. Due to the weak error and lag, it will be too late before the agent realised this and the same process will perpetually repeat, giving away to Limit Cycling. The cyling will be very narrow due to the low velocity, it will not veer to far off centre but it does not have the mechanism or information to avoid the overshooting
 
+</details>
+
+### Summary
+
+- Fast bees have a small error through signal strength and therefore accuracy.
+- Slow bees have a small error through weak signal and there inaccuracy
+- Fast bees find **stability** through accuracy which enables them to find a **vertical path**
+- Slow bees luckily find the margin, hence can fall out and inherently fall into **Limit Cycling**
+
+The high-speed system is "easier" to stabilize because the ratio of the fixed margin to the residual noise is larger than in the low-speed case, where the controller is constantly fighting to push the signal into the margin.
+
+Each velocity has a unique interaction with the Moving Average window as it alters how much information is passed into the window and determines the strength of the noise in a system. 
+
+The fixed steering mechanism is a severe limitation for the system and imposes specific behaviours on the be depending on whether velocity is high or low
+
+The size of the margin functions different depending on wether the agent is fast or slow. A fast agent uses it as threshold for error where as the slow agents use it as a guide to cycle around the centre. 
+
+## 4. Experiment with the environment
+
+**Try making the corridor wider or more narrow, by increasing or decreasing w on line 90 of the script.**
+
+**How does changing the width of the corridor affect the bee's behaviour? Why?**
+
+This will behave much the same as velocity as it is impacting the agents percieved Optic Flow signals. 
+
+$$\mathbf{R} \propto \frac{\mathbf{V}}{\mathbf{d}}$$
+
+- Wider Corridor ($\mathbf{d}$): Decreases the Optic Flow $\mathbf{R}$
+- Narrower Corridor ($\mathbf{d}$): Increases, the Optic Flow $\mathbf{R}$. Possibly amplifies if really small values are permitted in the system
