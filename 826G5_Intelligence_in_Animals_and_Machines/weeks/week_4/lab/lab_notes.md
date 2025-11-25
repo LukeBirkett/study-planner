@@ -506,48 +506,45 @@ Where as decreasing the margin causes instability with over exagurated levels of
 
 - Default: OpticFlowController(vel=50, margin=0.0075, window_n=200) -> vel=75
 
-### Increase Speed in the Default Set Up
+### Experimental Notes
+
+<details> <summary><code>Increasing the Velocity</code></summary>
 
 #### Increase vel to 75
 
 OpticFlowController(vel=75, margin=0.0075, window_n=200)
 
-Increase vel from 50 to 75
-
-Increase to 75 appears to induce the mid-range wave effect that we saw when decreasing the margin
-
-This might make sense when increasing the velocity because the position change per direction change is increased.
-
-This means that the feedback loop, which causes the overshooting, is amplified causing mutliple overshoots that in the long term trend look like a wave. 
-
-Despite the short wave period, all agents found a route to travel directly straight up the y-axis. No limit cycling took place around the margin. I am not sure how to explain this
-
+- Increase vel from 50 to 75
+- Increase to 75 appears to induce the mid-range wave effect that we saw when decreasing the margin
+- This might make sense when increasing the velocity because the position change per direction change is increased.
+- This means that the feedback loop, which causes the overshooting, is amplified causing mutliple overshoots that in the long term trend look like a wave.
+- Despite the short wave period, all agents found a route to travel directly straight up the y-axis. No limit cycling took place around the margin. I am not sure how to explain this
 
 #### Increase vel to 100
 
-This creates entirely new behaviour.
+- This creates entirely new behaviour.
+- Instead of repathing from the start, all agents zigzag around their starting point before hitting a strong diagonal and reaching a point where they all fly vertical straight.
+- The x-axis values of each agent are pretty spread out. The spread almost looks wider than the margin if this is possible. It is wider that the default runs Limit cyling
 
-Instead of repathing from the start, all agents zigzag around their starting point before hitting a strong diagonal and reaching a point where they all fly vertical straight. 
+</details>
 
-The x-axis values of each agent are pretty spread out. The spread almost looks wider than the margin if this is possible. It is wider that the default runs Limit cyling
 
+<details> <summary><code>Decreasing the Velocity</code></summary>
+ 
 #### Decrease vel to 25
 
-Appears to vastly improve performance. 
-
-All bee's repath in diagonal trends to the centre
-
-All bee's tightly limit cycle around the centre
-
-Does appear to be a slight wobble in 'straight' trajectory
-
-I am not sure why faster bees can meet a vertical path but slower bees limit cycle tightly
+- Appears to vastly improve performance.
+- All bee's repath in diagonal trends to the centre
+- All bee's tightly limit cycle around the centre
+- Does appear to be a slight wobble in 'straight' trajectory
+- I am not sure why faster bees can meet a vertical path but slower bees limit cycle tightly
 
 #### Decrease vel to 10
 
-Very similar to before in terms of behaviour and performance. However, all bees meet a vertical path this time
+- Very similar to before in terms of behaviour and performance. However, all bees meet a vertical path this time
+- Also, the simulations took much longer to run
 
-Also, the simulations took much longer to run
+</details>
 
 ## Analysis
 
