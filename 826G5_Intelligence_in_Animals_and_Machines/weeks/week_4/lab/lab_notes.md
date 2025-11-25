@@ -192,7 +192,7 @@ The controller has 3 parameters will are set in `OpticFlowController()` on `line
 
 The main aim of the task is to investigate the idea that corridor centring can occur by balancing optic flow. We want to play with and test things with the hope of understanding how the system works. Also to know its limits: how does it work, and how, when and why does it fail?
 
-## Interpretting the output 
+## Interpretting the Starting Output 
 
  Staring point, `vel = 50`, `margin = 0.0075`, `window_n 200= `
 
