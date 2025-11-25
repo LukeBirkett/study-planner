@@ -543,11 +543,144 @@ Does appear to be a slight wobble in 'straight' trajectory
 
 I am not sure why faster bees can meet a vertical path but slower bees limit cycle tightly
 
-# Decrease vel to 10
+#### Decrease vel to 10
 
 Very similar to before in terms of behaviour and performance. However, all bees meet a vertical path this time
 
 Also, the simulations took much longer to run
+
+## Analysis
+
+One really important thing to remember here is that velocity is a key parameter to determining Optic Flow means the bee's mechanism is fundementally changed by altering this parameter
+
+$$\mathbf{R} \propto \frac{\mathbf{V}}{\mathbf{d}}$$
+
+- High Velocity ($\mathbf{V}$): Increases the Optic Flow $\mathbf{R}$
+- Low Velocity ($\mathbf{V}$): Decreases the Optic Flow $\mathbf{R}$
+
+The controller/bee uses the `window_n` parameter to interpret Optic Flow and the heading direciton  as an output decision from this interpetation 
+
+### Initial Rapid Zig-Zagging
+
+Increasing the velocity means that the baseline perceived Optic Flow signals are increased. Even slight changes in perception are amplifed and fed into the $\mathbf{R_{Left} - R_{Right}}$ calcuations. This is what causes the initial zig-zagging and wave behaviour. The controller is off-center but a large amount and is aggressively steering and trying to rapidly correct but the amplified signals are causing an overcorrection. Additionally, the `window_n` is still building up cumulative windows here meaning the first 200 steps will be disproportionately noisy, reactive and less time lag as they arent averaged by 200 windows yet.  
+
+### Vertical Flying, Residual Error and Margin
+
+Once the smoothing effect of the 200 windows has kicked in we see a new behaviour in the system which makes it appear more "accurate". Technically, the system becomes better at flying straight, not truely centering which is why we see a spread of vertical paths on the x-axis. 
+
+This observation is derived from the interaction between the residual error and margin. 
+
+Recall, that our smoothing mechanism isn't perfect. Noise is caused by the frequencies of white-black and black-white oscilations as marked by Plot 3. The Moving Average helps to smooth and normalise the magnitue of the signals but the `window_n` is unlikely to perfectly match the frequency timestep, e.g. A window might average 200 timesteps but it only takes 160 to move over white-black-white black meaning averaged signal is incomplete and contains un-actionable **noise**. 
+
+Initally, it might be easy to think that increase the velocity will amplify the noise. However, it actually increases the ability of the moving average. By moving faster, more frequencies will be taken in an stimuli and the same window will now be averaging over more timesteps. The un-actionable, part signals are now connected to the rest of their signal and the new end part-signal now represents a smaller relative size to the overall signal received and averaged
+
+For example, lets image the `window_n = 200` picks up a signal of `white-black-part white` but as a high velocity it picks up `white-black-white-black-white-black-part white` the evidence to determine actions from is much higher compared to the residual noise which tells us nothing 
+
+There, once the smoothing has kicked in and some of the time lagged oscillations/waves/cycling has taken place, the agent should be faced with a `left_average` and `right_average` that are remarkably similar. 
+
+At a high enough velocity, the residual error can be knocked down to it's floor. This is the lowest level that the error can reach. If this floor is lower than the margin, which is an absolute value not relative, then the controller will easily find a dead zone where the two singals match enough to fly straight
+
+The margin is noise capturer and the signal of the Optic Flow signals renders the noise, or error, relevatively less. 
+
+### Vertical Spread, Less Precise
+
+What is interesting about this behavour is that a high-speed system is categorically less accurate at finding the absolute centre because its movements are less precise, this is why we see a spread of vertical paths. But it is more stable in finding a stable path by matching the signals as the strength and quality of the optic flow signal is imporved.
+
+
+
+
+
+The high-speed system is less accurate at finding the absolute center (as evidenced by the wide spread of final x-positions) but more stable in the final straight path.
+
+1. High-Speed Scenario (Stable Straight Path)
+At high speed ($\mathbf{V} \uparrow$), the Optic Flow $\mathbf{R}$ is strong (a large "Signal").
+Fixed Margin, Fixed Noise:$\mathbf{Margin}$ (Tolerance) = 0.0075Residual Noise (Fluctuation) $\approx \pm 0.003$
+
+The Crucial SNR: When the bee gets close to the center, the absolute error $|\mathbf{R}_{\text{Left}} - \mathbf{R}_{\text{Right}}|$ is quickly reduced to the noise floor, $\approx 0.003$.The Safety Buffer: The entire noise band ($\pm 0.003$) fits comfortably inside the margin ($0.003 < 0.0075$).Result: Stable Flight. The noise-induced wiggles are smaller than the controller's tolerance. The controller sees no need to steer, and the bee flies straight. The $\mathbf{margin}$ acts as a perfect noise filter.
+
+The high-speed system is "easier" to stabilize because the ratio of the fixed margin to the residual noise is larger than in the low-speed case, where the controller is constantly fighting to push the signal into the margin.
+
+You are seeing the effect of a fixed, non-adjustable $\mathbf{margin}$ applied to a system whose signal strength is variable (via $\mathbf{V}$). High $\mathbf{V}$ gives you a high-quality signal that makes the margin work efficiently as a dead zone. Low $\mathbf{V}$ gives you a weak signal that forces the dead zone into a constant fight, resulting in limit cycling.
+
+These are two fundamental concepts in signal processing and control systems, and they are critical to understanding why your bee stops steering at high speeds but limit cycles at low speeds.
+
+The key to understanding both concepts is realizing that the "noise" in your simulation is the unwanted high-frequency oscillation generated by the walls, and the "signal" is the desired, smooth trend of the Optic Flow difference.
+
+The Noise Floor is the measure of the total power of all unwanted background signal a system can pick up. It represents the minimum level of signal (or fluctuation) that the system registers when no useful signal is present.
+
+The Noise Floor of your system is set by the inherent limitations of the EMD and the Moving Average filter:Imperfect Filtering: The window_n=200 moving average filter is trying to smooth the EMD's high-frequency oscillation (the "raw noise").The Floor: Even when the bee is perfectly centered and should have a flow difference of zero, the moving average signal is never perfectly flat. It always has a small, unavoidable fluctuation caused by the filter's time lag and the continuous oscillation of the input.Magnitude: This baseline fluctuation is the $\approx \pm 0.003$ I estimated. This is the Noise Floor—the system simply cannot deliver a cleaner signal than this.
+
+Any attempt to center the bee using a tolerance (margin) smaller than this floor would result in the controller constantly steering (limit cycling) because the noise itself would be big enough to exceed the tolerance.
+
+Residual Noise is the portion of the raw, unwanted signal that remains after you have applied a filter or correction. It's what the filter failed to completely eliminate.
+
+The Residual Noise is the small fluctuation you see on the mean Optic Flow (Plot 1) even when the bee is flying centered.
+
+Raw Input: The EMD output (Plot 3) is the raw noise (the severe high-frequency oscillation).
+
+The Filter: The window_n=200 moving average filter removes most of the raw oscillation.
+
+The Residual: The small oscillation that is left over after the moving average is the Residual Noise. As noted before, this noise is primarily due to the time lag introduced by the filter.
+
+primary source of the residual noise is precisely the mismatch between the filter's averaging period ($\mathbf{window\_n}$) and the period of the input signal's high-frequency oscillation (the time it takes to pass a complete pattern cycle).
+
+The high-frequency fluctuation in the raw Optic Flow (the raw noise) is caused by the bee passing the vertical stripes. This fluctuation has a fixed time period ($\mathbf{T_{\text{osc}}}$) for a fixed velocity and stripe width.
+
+Perfect Harmonic Match: If your $\mathbf{window\_n}$ is set such that the averaging time ($\mathbf{T_{\text{window}}}$) is exactly equal to the signal's oscillation period ($\mathbf{T_{\text{osc}}}$), the cancellation is perfect.
+
+Averaging a Full Cycle: Over one full cycle, the oscillation signal goes up, then down, then perfectly returns to its starting point. The mathematical average of one complete, symmetrical cycle is zero (relative to the baseline).
+
+Result: When $\mathbf{window\_n}$ perfectly matches $\mathbf{T_{\text{osc}}}$, the filter eliminates the oscillation entirely, leaving an incredibly smooth signal. The residual noise would theoretically be zero. (This is why $n=160$ and $n=150$ suddenly performed "Absurdly better"—they were closer to this ideal match).
+
+The Leftover Bias: Those 10 extra steps will always have a net positive or negative value, causing the averaged output to be slightly biased and perpetually fluctuating as the window slides.
+
+The Fluctuation: This continuous, small fluctuation—the part of the oscillation that the filter failed to cancel out—is the residual noise.
+
+The reason the residual noise does not increase proportionally (or destabilizingly) with velocity is due to two critical factors: the moving average filter's fixed time window and the changing frequency of the signal.
+
+When you increase the bee's velocity ($\mathbf{V}$), you are not just making the image brighter (stronger amplitude); you are making the image move faster.
+
+The frequency of the high-frequency oscillation (the raw noise) is dictated by how quickly the black and white stripes pass the sensor.
+
+When you increase $\mathbf{V}$ and the signal amplitude rises, the overall magnitude of the raw noise does increase. However, the moving average filter is highly effective at cancelling the high-frequency components, regardless of their amplitude, provided the signal is symmetrical.
+
+When the signal frequency increases (high $\mathbf{V}$), the filter's fixed time window of 200 steps might now cover even more oscillation cycles than it did at low velocity. Averaging over multiple full cycles is highly effective at driving the mean oscillation toward zero.
+
+The residual noise is the portion that leaks through due to the imperfect match (as discussed previously).
+
+Low Velocity: $\mathbf{window\_n}$ (200 steps) might cover $1.05$ oscillation cycles. The $0.05$ leftover creates a certain amount of residual noise.
+
+High Velocity: $\mathbf{window\_n}$ (200 steps) might now cover, say, $1.25$ oscillation cycles, or perhaps $2.05$ cycles. While the raw amplitude is much larger, the filter is still performing an almost-perfect cancellation over the many full cycles it now captures.
+
+The absolute magnitude of the leftover signal (the residual noise) might be slightly larger than at low speed, but it does not scale proportionally with the overall signal strength because the filter is simultaneously becoming more effective at averaging out the faster, higher-frequency components.
+
+The key takeaway is that the increase in signal strength (what the bee uses to correct) far outpaces the minimal increase in residual noise (what the fixed $\mathbf{window\_n}$ fails to eliminate). This dramatically improves the Signal-to-Noise Ratio (SNR), making the final centered flight far more stable and easily contained by the fixed $\mathbf{margin}$ of $0.0075$.
+
+That is the most crucial distinction in this control system: the difference between the initial transient response (the chaos) and the final steady-state response (the stable path).
+
+The high-speed bee's initial zigzagging and waving are caused by three factors acting together: High Error Magnitude, Fixed Steering, and Time Lag.
+
+When the bee starts the simulation, it is typically slightly off-center, leading to a large difference between $\mathbf{R}_{\text{Left}}$ and $\mathbf{R}_{\text{Right}}$ (a large error signal).
+
+Because your velocity ($\mathbf{V}$) is high, the overall Optic Flow magnitude ($\mathbf{R}$) is amplified ($\mathbf{R} \propto \mathbf{V}/\mathbf{d}$). This means the initial off-center position creates an enormous absolute difference in the flow signals.
+
+B. Fixed, Aggressive Steering (The Over-Correction)Your controller uses a simple on-off (bang-bang) steering mechanism with a fixed, aggressive steering angle ($\mathbf{d}$).The steering angle does not scale with the size of the error. It's the same angle for a tiny error as it is for the huge initial error.The large error immediately triggers the aggressive, fixed turn.
+
+The $\mathbf{window\_n=200}$ filter introduces a fixed time delay into the signal.The bee starts turning, but the feedback signal that says "Hey, you're centering now!" is delayed by 200 time steps.The bee continues its aggressive turn for too long, past the center point, because it's reacting to old, large error information.
+
+The combination of the initial huge error and the delayed, aggressive correction causes the bee to overshoot the center severely, flip the steering command, and immediately overshoot the other side. This creates the large, characteristic zigzag or wave that lasts until the bee has successfully damped the initial energy out of the system.
+
+The chaos stops because the bee eventually gets close enough to the center that the system switches from being dominated by overshooting to being dominated by stability.
+
+The initial chaos is the consequence of the control loop trying to correct a large error with a delayed, fixed-magnitude response. The final straight path is the consequence of the control loop's large tolerance (margin) effectively ignoring the small error (residual noise) once the primary job is done.
+
+That is a fundamental question about how a digital filter initializes, and the answer is yes, your system absolutely starts by building up the 200-step window.
+
+This means that the output of your moving average filter for the first 200 timesteps is not representative of a true 200-step average. This significantly impacts the bee's behavior during the initial transient phase.
+
+Only at timestep 200 does the system finally calculate the average over a full window of 200 data points. From this point forward (the steady-state), the average is always calculated over the last 200 points, meaning the time lag stabilizes.
+
+Low Lag (High Responsiveness): In the first few steps, the filter has almost zero time lag. It is reacting almost instantaneously to the raw, high-frequency oscillation of the EMD output.
 
 
 
