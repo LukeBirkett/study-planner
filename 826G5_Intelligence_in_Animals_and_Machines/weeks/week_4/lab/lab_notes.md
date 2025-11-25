@@ -557,7 +557,8 @@ $$\mathbf{R} \propto \frac{\mathbf{V}}{\mathbf{d}}$$
 
 The controller/bee uses the `window_n` parameter to interpret Optic Flow and the heading direciton  as an output decision from this interpetation 
 
-## Increasing the Velocity
+
+<details> <summary><code>Increasing the Velocity</code></summary>
 
 ### Initial Rapid Zig-Zagging
 
@@ -587,7 +588,11 @@ An interesting piece of behavour here is that a high-speed system is categorical
 
 The form of stability that I high-speed system takes is in its ability to find a stable enough path by matching signals which are strong and of high information quality from the improved Optic Flow signal.
 
-## Decreasing the Velocity
+</details>
+
+
+
+<details> <summary><code>Decreasing the Velocity</code></summary>
 
 ### Weak Signals, Less Freqiences, Worse Infomation
 Decreasing the velocity has the opposite effect, a weakening off the Optic Flow signal. In almost all instances we can expect to receive a small error in the signal because there isn't enough information to be gathered by the sensors. Even if the bee is widly off centre, the error will be comparatively small to previous simulations. The Moving Average window is seeing less frequencies, this is less information encoded. 
@@ -600,6 +605,8 @@ However, the low-speed system does itself counter act this. Because the velocity
 
 ### Perpetual Overshooting
 This is where the disproportionately strong steering reactions come in. The error will be tiny but the redirection set it in a direction that will not just bring it back inside the margin but overshoot it and meanser outside of the marign on the other side. Due to the weak error and lag, it will be too late before the agent realised this and the same process will perpetually repeat, giving away to Limit Cycling. The cyling will be very narrow due to the low velocity, it will not veer to far off centre but it does not have the mechanism or information to avoid the overshooting
+
+</details>
 
 ## Summary
 
