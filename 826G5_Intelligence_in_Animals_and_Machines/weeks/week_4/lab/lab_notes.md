@@ -560,6 +560,8 @@ $$\mathbf{R} \propto \frac{\mathbf{V}}{\mathbf{d}}$$
 
 The controller/bee uses the `window_n` parameter to interpret Optic Flow and the heading direciton  as an output decision from this interpetation 
 
+## Increasing the Velocity
+
 ### Initial Rapid Zig-Zagging
 
 Increasing the velocity means that the baseline perceived Optic Flow signals are increased. Even slight changes in perception are amplifed and fed into the $\mathbf{R_{Left} - R_{Right}}$ calcuations. This is what causes the initial zig-zagging and wave behaviour. The controller is off-center but a large amount and is aggressively steering and trying to rapidly correct but the amplified signals are causing an overcorrection. Additionally, the `window_n` is still building up cumulative windows here meaning the first 200 steps will be disproportionately noisy, reactive and less time lag as they arent averaged by 200 windows yet.  
@@ -586,6 +588,40 @@ The margin is noise capturer and the signal of the Optic Flow signals renders th
 
 What is interesting about this behavour is that a high-speed system is categorically less accurate at finding the absolute centre because its movements are less precise, this is why we see a spread of vertical paths. But it is more stable in finding a stable path by matching the signals as the strength and quality of the optic flow signal is imporved.
 
+## Decreasing the Velocity
+
+- Weak signal
+- Small error - and even off centre
+- fixed steering gives disprop response compared to error - particular compared to fast velocity
+- Ratio strong:fixed steer to weak:fixer steer is the same
+- low-speed system with high gain aimplifier
+- Small error aggressive correction
+- Slow speed
+- Tight limit cycling
+- Small error, small margin
+- Overshoot, correct lag, overshoot but slow
+- Very low speed means so weak that error is easily below the margin, looses centre abilities
+- + moving average makes it incredly smooth so no movements
+- Why tight limit cycle
+- control theory = if correction (gain is strong relative to error signal
+- system becomes prone to overshooting
+- but because the speed is low provides sense of stability, i.e. not overshooting off course
+- angle is agrresive but distance and speed is not
+- why cycle? weak signal causes a small erorr
+- if margin is also small it will be hovering around the margin with not much prevailing accuracy
+- perpetually causes a cycle where the weak optic flow and therefore signal cause it to slip out and correct as the slowness hasnt taken it too far.
+- summary is that the angle of fixed so the steering is aggressive for this excperiement ratio
+
+
+## Summary
+
+Fast bees have a small error through signal strength and therefore accuracy.
+
+Slow bees have a small error through weak signal and there inaccuracy
+
+Fast bees accuracy find the vertical path
+
+Slow bees luckily find the margin, hence can fall out and have limit cycle around
 
 
 
