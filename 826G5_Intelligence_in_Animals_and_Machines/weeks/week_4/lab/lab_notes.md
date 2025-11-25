@@ -548,14 +548,12 @@ OpticFlowController(vel=75, margin=0.0075, window_n=200)
 
 ## Analysis
 
-One really important thing to remember here is that velocity is a key parameter to determining Optic Flow means the bee's mechanism is fundementally changed by altering this parameter
+Velocity is the main parameter in determining Optic Flow meaning the bee's mechanism is fundementally changed by altering this parameter.
 
 $$\mathbf{R} \propto \frac{\mathbf{V}}{\mathbf{d}}$$
 
 - High Velocity ($\mathbf{V}$): Increases the Optic Flow $\mathbf{R}$
 - Low Velocity ($\mathbf{V}$): Decreases the Optic Flow $\mathbf{R}$
-
-The controller/bee uses the `window_n` parameter to interpret Optic Flow and the heading direciton  as an output decision from this interpetation 
 
 
 <details> <summary><code>Increasing the Velocity</code></summary>
@@ -608,7 +606,7 @@ This is where the disproportionately strong steering reactions come in. The erro
 
 </details>
 
-## Summary
+### Summary
 
 - Fast bees have a small error through signal strength and therefore accuracy.
 - Slow bees have a small error through weak signal and there inaccuracy
