@@ -610,10 +610,16 @@ This is where the disproportionately strong steering reactions come in. The erro
 
 - Fast bees have a small error through signal strength and therefore accuracy.
 - Slow bees have a small error through weak signal and there inaccuracy
-- Fast bees accuracy find the vertical path
-- Slow bees luckily find the margin, hence can fall out and have limit cycle around
+- Fast bees find **stability** through accuracy which enables them to find a **vertical path**
+- Slow bees luckily find the margin, hence can fall out and inherently fall into **Limit Cycling**
 
 The high-speed system is "easier" to stabilize because the ratio of the fixed margin to the residual noise is larger than in the low-speed case, where the controller is constantly fighting to push the signal into the margin.
+
+Each velocity has a unique interaction with the Moving Average window as it alters how much information is passed into the window and determines the strength of the noise in a system. 
+
+The fixed steering mechanism is a severe limitation for the system and imposes specific behaviours on the be depending on whether velocity is high or low
+
+The size of the margin functions different depending on wether the agent is fast or slow. A fast agent uses it as threshold for error where as the slow agents use it as a guide to cycle around the centre. 
 
 ## 4. Experiment with the environment
 
