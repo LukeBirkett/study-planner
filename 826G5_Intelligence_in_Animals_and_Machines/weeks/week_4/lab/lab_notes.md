@@ -592,13 +592,17 @@ The form of stability that I high-speed system takes is in its ability to find a
 
 ## Decreasing the Velocity
 
+### Weak Signals, Less Freqiences, Worse Infomation
 Decreasing the velocity has the opposite effect, a weakening off the Optic Flow signal. In almost all instances we can expect to receive a small error in the signal because there isn't enough information to be gathered by the sensors. Even if the bee is widly off centre, the error will be comparatively small to previous simulations. The Moving Average window is seeing less frequencies, this is less information encoded. 
 
-Additionally, we have a new parameter interaction to account for. Error to steering/direction ration. The steering is a limited, fixed system. This means the direction changes are perceived more aggressive inrelation to the information given to the controller. Weak signals turn the same as a strong signals. This is known as a low-speed system with a high-gain (correction) amplifier. A smaller error will lead to an aggressive correction.
+### Error to Steering Ratio
+Additionally, we have a new parameter interaction to account for. Error to steering/direction ratio. The steering is a limited, fixed system. This means the direction changes are perceived more aggressive inrelation to the information given to the controller. Weak signals turn the same as a strong signals. This is known as a low-speed system with a high-gain (correction) amplifier. A smaller error will lead to an aggressive correction.
 
+### Low-Speed, Gentle Stability, Narrow Limit Cycling
 However, the low-speed system does itself counter act this. Because the velocity is lower, the distance travelling in the redirection will be shorter. Leading to stability in gentleness. The combination of all these parts is what gives way to the narrow Limit Cycling. At lower velocities, the agents has enough signal to accurately and often diagonally centre itself. But when it gets to the centre its averaged windows are subject to noise and lag. Additionally, the magnitude of the error is small due to the weak signals. In conjunction with a small margin, the error can hover around the margin, and the noise slowly is able to easy the agent outside of the margin with help of the time lag. Eventually, the agent reactions to this redirection the path back intowards the margin. 
 
-This is where the dispropotionatly strong steering reactions come in. The error will be tiny but the redirection set it in a direction that will not just bring it back inside the margin but overshoot it and meanser outside of the marign on the other side. Due to the weak error and lag, it will be too late before the agent realised this and the same process will perpetually repeat, giving away to Limit Cycling. The cyling will be very narrow due to the low velocity, it will not veer to far off centre but it does not have the mechanism or information to avoid the overshooting
+### Perpetual Overshooting
+This is where the disproportionately strong steering reactions come in. The error will be tiny but the redirection set it in a direction that will not just bring it back inside the margin but overshoot it and meanser outside of the marign on the other side. Due to the weak error and lag, it will be too late before the agent realised this and the same process will perpetually repeat, giving away to Limit Cycling. The cyling will be very narrow due to the low velocity, it will not veer to far off centre but it does not have the mechanism or information to avoid the overshooting
 
 ## Summary
 
