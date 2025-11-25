@@ -99,7 +99,8 @@ for i in tqdm(range(n)):
         y3 += white_space + black_space
 
     # construct controller
-    controller = OpticFlowController(vel=50, margin=0.0075, window_n=200)
+    controller = OpticFlowController(vel=25, margin=0.0075, window_n=200)
+
 
     # sensor parameters
     fov = math.pi / 120
