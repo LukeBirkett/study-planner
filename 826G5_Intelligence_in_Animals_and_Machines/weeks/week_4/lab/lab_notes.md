@@ -623,8 +623,13 @@ The size of the margin functions different depending on wether the agent is fast
 
 ## 4. Experiment with the environment
 
-Try making the corridor wider or more narrow, by increasing or decreasing w on line 90 of the script.
+**Try making the corridor wider or more narrow, by increasing or decreasing w on line 90 of the script.**
 
-How does changing the width of the corridor affect the bee's behaviour? Why?
+**How does changing the width of the corridor affect the bee's behaviour? Why?**
 
+This will behave much the same as velocity as it is impacting the agents percieved Optic Flow signals. 
 
+$$\mathbf{R} \propto \frac{\mathbf{V}}{\mathbf{d}}$$
+
+- Wider Corridor ($\mathbf{d}$): Decreases the Optic Flow $\mathbf{R}$
+- Narrower Corridor ($\mathbf{d}$): Increases, the Optic Flow $\mathbf{R}$. Possibly amplifies if really small values are permitted in the system
