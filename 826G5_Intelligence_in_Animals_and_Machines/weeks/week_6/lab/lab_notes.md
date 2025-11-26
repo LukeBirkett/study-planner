@@ -11,8 +11,8 @@ Lab 3 goes thourgh the code which will be the same code for the assessment. The 
 
 #### Resources to Work Through
 - Lab Page: Intro, Setup, Model, Tasks
-- Lab PDF: Code details
-- Lab Additonal: More code details
+- Lab PDF: Code details TODO: LINK
+- Lab Additonal: More code details TODO: LINK
 
 ## Introduction
 
@@ -36,6 +36,14 @@ The correct methodology to be able to explain why a certain peice of informaiton
 
 The code provides us a tool to look at ant behaviour. It is our job to explain the aggregate behaviours and how many parameter changes relate to such. 
 
+### Origins of the Code
+
+Robinson et al. included MATLAB code for simulating their module in the supplementary information for their paper. The lecturer updated their code for use on this module, making two important additions:
+- He added a limit to the number of steps the simulation will run for. This precludes the possibility of the simulation loop continuing to run indefinitely in the case where an ant does not select a nest site.
+- For students' convenience, he added code to save simulation data to an Excel file, to make analysis easier.
+
+In recent years, students have increasingly tended to prefer Python over other programming languages, so last year the university ported the simulation to Python. In the interests of continuity, I made the Python code as similar as possible to the lecturers MATLAB code.
+
 ## Setting Up
 
 Execute the file by running `ExampleUsingRobinsonCode.py`
@@ -47,6 +55,9 @@ Execute the file by running `ExampleUsingRobinsonCode.py`
 There will be 2 graphical outputs:
 
 ### Ant x Route
+
+TODO: image output
+
 a. site {0, 1, 2} x num steps
 b. site x time
 
@@ -56,6 +67,8 @@ A site can be assessed mutliple times
 
 ### Summary Graphic 
 
+TODO: image output
+
 Aggregate steps for all ants 
 
 1. num ants x chosen site
@@ -64,6 +77,8 @@ Aggregate steps for all ants
 4. mean num visits x site
 
 ### Excel Dump
+
+TODO: example output of excel
 
 This has no quality related data, just raw paths, sites and times
 
