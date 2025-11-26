@@ -7,9 +7,9 @@ The topic for the Week 6 lecture is Motor Control. The major learning points are
 - Describe how these adaptive principles are also useful when designing robots
 
 # Lecture 
-- [ ] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/files/2025%20IAM%20Lecture%206%20Movement%20and%20Motor%20Systems-1.pdf)
+- [x] [Slides](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/files/2025%20IAM%20Lecture%206%20Movement%20and%20Motor%20Systems-1.pdf)
 - [ ] [Recording]()
-- [ ] [Notes]()
+- [x] [Notes](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/files/lec_6_notes.md)
 
 # Lab
 - [ ] [Lab Page](https://canvas.sussex.ac.uk/courses/34991/pages/lab-3-monte-carlo-simulation-of-collective-behaviour)
@@ -26,5 +26,6 @@ The topic for the Week 6 lecture is Motor Control. The major learning points are
 - [ ] [ESSENTIAL: David W. Franklin; Daniel M. Wolpert (2011) Computational Mechanisms of Sensorimotor Control](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/files/comp_mechans_sensori_control.pdf)
 - [ ] [REC: Ijspeert (2014) Biorobotics: Using robots to emulate and investigate agile locomotion](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/files/robots_agile_animal_loco.pdf)
 - [ ] [OPTIONAL: Binyamin Hochner (2012) An Embodied View of Octopus Neurobiology](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/files/embodied_octopus_neuro.pdf)
+
 
 
