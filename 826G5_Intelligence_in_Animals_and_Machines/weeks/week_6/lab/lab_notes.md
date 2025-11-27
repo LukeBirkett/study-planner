@@ -110,3 +110,70 @@ an array of the path taken (shows that if not at 1 or 2 then the site = 0, would
 
 ## The Model 
 
+### Searching Nests
+
+Robinson et al model how anys find a new nest after the old one is damaged
+
+The individual ant do not interact in the system. They are simulated individually. 
+
+Ants assess the sites they arrive at using an acceptance threshold
+
+The old nest (0) cannot be chosen
+
+### The Model Parameters
+
+#### Acceptance Threshold Distribution
+
+Normally distributed, `mean = 5`, `standard_deviation = 1`
+
+The Threshold is centered around the average of nest qualitites, i.e. s1=4, s2=6, threshold=5
+
+NOTE: is this a fair **assumption**? implies thresold is evolved based on the data of enviroment as any given time, and therefore adaptive. This opposied to a hardcoded, intrinistic meansure of quality. i.e. birds are hardcoded to make nests a certain way, would ants also be hardcoded to like X?
+
+Every ant is allocated its own threshold 
+
+#### Nest Quality
+
+old: -inf, site_1 = 1, site_2 = 6
+
+#### Assessment Error
+
+Normal distribution, `mean=0`, `sd=1`
+
+Every any is assigned its down assessment error
+
+### Setting Parameters in the Code
+
+- `line 25 quals` = nest values
+- `line 30 qual_stddev` = standard deviation of nest perception
+- `line 38 threshold_mean` = ants assessment threshold
+- `line 39 threshold_stddev` = ant assessment threshold standard deviation
+
+### Moving Around
+
+Within the system, an evironment is set up that resembles a recentagle with dimensions of 18cm by 180cm
+
+Within this spaces, subspaces are allocated with respresent nests
+
+A matrix is setup that maps the probabilites of travelling between nests
+
+[not sure how this is derived, perhaps through its own MCP?]
+
+The columns represent starting points
+
+Each column will sum to 1 meaning each row is an option given a starting point
+
+The highest probability is the current nest, no journey
+
+The experiement is setup so nests further away are less likely to be visited
+
+This is an **assumption** and may not be true IRL. For example, there may be obstracles blocking the nearest nest
+
+The probabilities of the matrix are fixed
+
+But there is amean travel time matrix. These are variable sbecause there is a given SD to sample from the mean
+
+In the code the 2 matrices are hardcoded probabilites
+
+
+
