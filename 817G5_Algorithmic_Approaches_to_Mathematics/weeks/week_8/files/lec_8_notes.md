@@ -333,4 +333,187 @@ gradient = zero dot product with level set direction by definition
 
 geo metrically gradient vector is right angle to elvel set
 
- 
+# Week 9 Continuation
+
+## Finding Level Set Direction
+
+the dir of a coutnour line
+
+the f(x) does not change all, all the same
+
+partital deriviate of the function
+
+these are the slopes in x1 and x2 dir
+
+partial derivs paclages up are gradients
+
+the graident is a vector valued function
+
+it is still also a function (why?????)
+
+0 dot product with gradient is at right angle to the point you were at
+(level set conditon)
+
+if two things dp is 0 then they are orthogonal
+
+we want it to be zero along a level set
+
+# grad is dir of slop
+
+grad is steepest upward slode
+
+it is orthogonal to the level set
+
+exactly perpendic
+
+cutting through lines
+
+sortest route through the contours
+
+level set condition [rewatch the lecture here for clarification]
+
+[follows up with gradient defintion too]
+
+grad dir = right angle to level set
+
+## gradiant is dir of slope
+
+anothet way of of explaining
+
+dot prod same as [in sert alt equ here] 
+
+mags by cos(0) 
+
+how big things are times by the angle between them
+
+if they are at 90 degs cos(0) = 0  so dot prod is 0
+
+max of cos(x) is 1 (or -1) so dp is as big as it can get given the vectors values
+
+is dp is 0 = orthog
+
+## math justifying grad desc
+
+[gd formula] 
+
+[ dir deriv formula]
+
+[something about subs]
+
+[refollow this part of the lecture]
+
+it is linear function
+
+easy to find decreeasing dir
+
+gd we want to min f hence decrease
+
+easiest way is to just minus the gradient
+
+## more generally
+
+[some good equations]
+
+## summary 
+
+sum of gd
+
+choose a learn rate
+
+small steps in negative slope
+
+gd only makes sense if we can efficently csalc graidents
+
+lin alg makes it easy and quick 
+
+-> auto diff
+
+## forward mode AD
+
+[review all of this again]
+
+[all v important]
+
+dispearing ep^2
+
+new way of representing numbers
+
+walks through route to getting deriv using dual number represation
+
+dual (x lots of, infindes)
+
+if we do this with numbers, not symbols we get [re do this part]
+
+[do this whole section again]
+
+[follow through all examples paper expanding with dual rep]
+
+shows how product rule can be done via autodiff and dual rep
+
+dual num algebra encodes the product rule
+
+# Todays Lecture
+
+## unconstrained recap
+
+second partial deriv test to check for negative flat zone
+
+this is to check for curviture, min will be u, max will be n
+
+stuff about eigens
+
+## equality constraints
+
+='s not <='s
+
+covert into
+
+take the prev contour function that we have already calc erivs for
+
+[in sert eq]
+
+objective [eq]
+
+constraint [eq]
+
+graph rep of adding a constraint [add picture]
+
+represents the constraint function
+
+## cross section along consrtiaght
+
+plotting hthe bottom
+
+## zoom in
+
+[something about guessing and constra line]
+
+guess replates to cross section graph above
+
+## another situ
+
+parrall to level set (on it)
+
+can't move anywhere else
+
+both dirs are moving up off level set
+
+it looks like constrianed min
+
+## express mathematically
+
+[review this seciton]
+
+## nes cond on min 
+
+[rev]
+
+lagrange mutlis
+
+## back to exmple
+
+## lag nec cond on opt
+
+[review all slides on lagrange]
+
+
