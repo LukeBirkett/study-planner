@@ -29,10 +29,10 @@ Overall, we want to investigate how a model is implementing. If it meets out exp
 ### Origins of the Code
 
 Robinson et al. included MATLAB code for simulating their module in the supplementary information for their paper. The lecturer updated their code for use on this module, making two important additions:
-- He added a limit to the number of steps the simulation will run for. This precludes the possibility of the simulation loop continuing to run indefinitely in the case where an ant does not select a nest site.
-- For students' convenience, he added code to save simulation data to an Excel file, to make analysis easier.
 
-In recent years, students have increasingly tended to prefer Python over other programming languages, so last year the university ported the simulation to Python. In the interests of continuity, I made the Python code as similar as possible to the lecturers MATLAB code.
+- Added a limit to the number of steps the simulation will run for. This precludes the possibility of the simulation loop continuing to run indefinitely in the case where an ant does not select a nest site.
+- For students' convenience, he added code to save simulation data to an Excel file, to make analysis easier.
+- Adapted from MATLAB to Python
 
 ## Setting Up
 
