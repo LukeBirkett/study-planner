@@ -51,7 +51,10 @@ There will be 2 graphical outputs:
 
 ### Ant x Route
 
-TODO: image output
+![Ant Route Image](screenshots/single_ant_route.png)
+
+![Ant Route Image](study-planner/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/lab/screenshots
+/single_ant_route.png)
 
 a. site {0, 1, 2} x num steps
 b. site x time
