@@ -112,13 +112,13 @@ The graphic itself has 4 sub-plots:
 - Mean Number of Visits. This has mean counts on the y-axis and site number on the x-axis.
 
 <p align="center">
-  <img src="screenshots/summary_ant_routes.png" alt="Summary Image" width="50%" />
+  <img src="screenshots/summary_ant_routes.png" alt="Summary Image" width="50%"/>
 </p>
 
 ### Excel Dump
 
 <p align="center">
-  <img src="screenshots/routes_excel_dump.png" alt="Excel Output" width="50%" />
+  <img src="screenshots/routes_excel_dump.png" alt="Excel Output" width="100%" />
 </p>
 
 This has no quality related data, just raw paths, sites and times
