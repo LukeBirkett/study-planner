@@ -49,19 +49,19 @@ Robinson et al. included MATLAB code for simulating their module in the suppleme
 
 There will be 2 graphical outputs:
 
-### Ant x Route
+### A Single Ants Route
 
-![Ant Route Image](screenshots/single_ant_route.png)
+The programme iteratively plays through an ants journey. You can press `enter` to follow it through or `1` to complete the whole route at once. For each single ants run, it is allocated a `threshold` value which remains fixed for the duration of the run. The number of `steps` is recorded for each iteration and well as the cumuliative `time`. 
 
-![Ant Route Image](study-planner/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6/lab/screenshots
-/single_ant_route.png)
+The chance of leaving the current nest and arriving at another is pre-determined give the matrix. Additionally, the time it takes to get between the given nests is also pre-determined in another matrix. When the ant does arrive at a new nest, a `Perceived quality` is computed and recorded. The ant can and will compute a different quality for the same nest in different steps, including the next step where it hasn't actually left the nest. Given the default set, the ant will generally remain at a nest for a prolonged period due to the probabiltiy matrix. This means it will rank the nest many times and one may eventually go over the `threshold`.
 
-a. site {0, 1, 2} x num steps
-b. site x time
+When not at `site 1` or `site 2` the ant will be at `site 0`, I am not yet clear if this means that the ant has returned to the original site or if it means that the ant is just travelling somewhere in the land. Either way, these `site_0` occurances do not record a quality and just rank as `-INF`
 
-Each walk has a threshold and perceived quality metric when a site is reached 
+If the `quality` does not exceed the `threshold` then the graphic and programme will record `NOT SELECTED` and/if it does exceed then it will record `SELECTED`
 
-A site can be assessed mutliple times
+<p align="center">
+  <img src="screenshots/single_ant_route.png" alt="Ant Route Image" width="50%" />
+</p>
 
 ### Summary Graphic 
 
