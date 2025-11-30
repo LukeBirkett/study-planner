@@ -93,16 +93,27 @@ If the `quality` does not exceed the `threshold` then the graphic and programme 
   <img src="screenshots/single_ant_route.png" alt="Ant Route Image" width="50%" />
 </p>
 
-### Summary Graphic 
+### N Ants Summary Graphic
 
-TODO: image output
+Pressing `0` when starting a simulation will skip to the summary graphic for the number of ants `n`
 
-Aggregate steps for all ants 
+```
+34 # set the number of ants
+35 n = 27
+```
 
-1. num ants x chosen site
-2. num ants x time till dec
-3. mean time x site
-4. mean num visits x site
+The plotting functions from the file `PlotSummaryDataRobinson.py` and are imported into `ExampleUsingRobinsonCode.py`. It captures `current_time, accepts, discovers, visits, Ants` variables which are derived by running the main `rc.RobinsonCode`
+
+The graphic itself has 4 sub-plots:
+
+- Final Site counter. This has number of ants on the y-axis and site number on the x-axis.
+- Time till final decision. This also has number of ants on the y-axis but cumaltive time taken till `SELECTED` decision on the x-axis
+- Mean Site Discovery time. This has mean time on the y-axis and site number on the x-axis.
+- Mean Number of Visits. This has mean counts on the y-axis and site number on the x-axis.
+
+<p align="center">
+  <img src="screenshots/summary_ant_routes.png" alt="Ant Route Image" width="50%" />
+</p>
 
 ### Excel Dump
 
