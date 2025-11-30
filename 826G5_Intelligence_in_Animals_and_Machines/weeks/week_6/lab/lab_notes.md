@@ -43,6 +43,10 @@ Robinson et al. included MATLAB code for simulating their module in the suppleme
 ## Setting Up
 
 - Execute the file by running `ExampleUsingRobinsonCode.py`
+- This file imports files `RobinsonCode`, `PlotSummaryDataRobinson` and `OutputRobinsonDataExcel`
+- `RobinsonCode` contains the main functions for the system
+- `ExampleUsingRobinsonCode` sets the parameters for the experiement
+- `PlotSummaryDataRobinson` and `OutputRobinsonDataExcel` allow us to capture, present and summarizes the outputs of the experiment.
 - `enter` to iterate through steps within a simualtion
 - `1` to complete an ants route
 - `0` to complete all ants and skip to the summary graphic
