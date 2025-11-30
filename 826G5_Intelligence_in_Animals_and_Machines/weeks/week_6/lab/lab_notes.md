@@ -36,11 +36,9 @@ Robinson et al. included MATLAB code for simulating their module in the suppleme
 
 ## Setting Up
 
-Execute the file by running `ExampleUsingRobinsonCode.py`
-
-`enter` to iterate through steps within a simualtion
-
-`1` to complete an ants route
+- Execute the file by running `ExampleUsingRobinsonCode.py`
+- `enter` to iterate through steps within a simualtion
+- `1` to complete an ants route
 
 There will be 2 graphical outputs:
 
