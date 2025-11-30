@@ -5,6 +5,12 @@ Focus on lab house hunting derived from Robinsons Work:
 - [Paper's supplementary info](https://canvas.sussex.ac.uk/courses/34991/files/5740842?wrap=1)
 - [How collective comparisons emerge without individual comparisons of the options (Robinson et al. 2014](https://canvas.sussex.ac.uk/courses/34991/files/5740820?wrap=1)
 
+# Paper Breakdown
+
+Some sort of notes, breakdown or essays about the original paper
+
+NotebookLM
+
 # Lab 3: Monte Carlo simulation of collective behaviour
 
 Lab 3 goes thourgh the code which will be the same code for the assessment. The tasks explored may be used for assignment topics.
