@@ -53,9 +53,39 @@ There will be 2 graphical outputs:
 
 The programme iteratively plays through an ants journey. You can press `enter` to follow it through or `1` to complete the whole route at once. For each single ants run, it is allocated a `threshold` value which remains fixed for the duration of the run. The number of `steps` is recorded for each iteration and well as the cumuliative `time`. 
 
-The chance of leaving the current nest and arriving at another is pre-determined give the matrix. Additionally, the time it takes to get between the given nests is also pre-determined in another matrix. When the ant does arrive at a new nest, a `Perceived quality` is computed and recorded. The ant can and will compute a different quality for the same nest in different steps, including the next step where it hasn't actually left the nest. Given the default set, the ant will generally remain at a nest for a prolonged period due to the probabiltiy matrix. This means it will rank the nest many times and one may eventually go over the `threshold`.
+The chance of leaving the current nest and arriving at another is pre-determined given the `probs` matrix. Additionally, the time it takes to get between the given nests is also pre-determined in the `time_means`.
 
-When not at `site 1` or `site 2` the ant will be at `site 0`, I am not yet clear if this means that the ant has returned to the original site or if it means that the ant is just travelling somewhere in the land. Either way, these `site_0` occurances do not record a quality and just rank as `-INF`
+```
+14 # these parameters are for the first experiment
+15 #
+16 # probabilities of visiting each site from each other
+17 probs = np.array([[0.91, 0.15, 0.03], [0.06, 0.8, 0.06], [0.03, 0.05, 0.91]])
+```
+
+```
+ 19 # mean time to get between each nest
+ 20 time_means = np.array([[1, 36, 143], [36, 1, 116], [143, 116, 1]])
+ 21 # standard deviation of time to get between each nest
+ 22 time_stddevs = time_means / 5
+```
+
+When the ant does arrive at a new nest, a `Perceived quality` is computed and recorded. It does this by drawing from a distribution (i think this is set as normal). Each nest it pre-assigned a mean quality in `quals` and has a standard deviation assigned to it, which in the default run is `1` for all nests but this can be changed. 
+
+Given the default structure of `probs` an ant generally stays at a nest for several steps. At each step it draws from the distribution meaning it ranks the nest slightly different each time. Even if several assessments have already been under the `threshold`, one sample may be over and the nest will be `SELECTED`
+
+```
+ 24 # mean quality of each nest. Note home is -infinity so it never gets picked
+ 25 quals = np.array([-np.inf, 4, 6])
+ 26 
+ 27 # standard deviation of quality: essentially this controls
+ 28 # how variable the ants assessment of each nest is. This is currently set
+ 29 # as in the 1st experiment where the variability is the same for each nest
+ 30 qual_stddev = np.array([1, 1, 1])
+ 31 # However, if you want to change is so nests perceived w different accuracy
+ 32 # you could do eg qual_stddev = [1, 1, 4]
+```
+
+When an ant is not at `site 1` or `site 2` the ant will be at `site 0`, I am not yet clear if this means that the ant has returned to the original site or if it means that the ant is just travelling somewhere in the land. Either way, these `site_0` occurances do not record a quality and just rank as `-INF`
 
 If the `quality` does not exceed the `threshold` then the graphic and programme will record `NOT SELECTED` and/if it does exceed then it will record `SELECTED`
 
