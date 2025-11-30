@@ -22,25 +22,9 @@ Lab 3 goes thourgh the code which will be the same code for the assessment. The 
 
 ## Introduction
 
-The purpose of this lab is to get an introduction into Biological Modelling. 
+The purpose of this lab is to get an introduction into Biological Modelling. We can explore whether an experiements outcomes can be explained using the threshold rule as introduced by Robinson et al. (2011). Another purpose is to gain a technical understanding on how to use Monte-Carlo modelling. We will begin testing models and explore how results varying with respect to changes in different parameters, i.e. parameter sensitivity. This style of modelling can be used in our assignment so extending an investigation from the lab may form the basis of project.
 
-We can explore whether an experiements outcomes can be explained using the threshold rule. 
-
-Another purpose is to gain a technical understanding on how to use Monte-Carlo modelling. 
-
-Begin testing models and explore how results varying with respect to changes in different parameters, i.e. parameter sensitivity. 
-
-We can choose to use this style of modelling in our assignment so extending an investigation from the lan may form the basis of project.
-
-Overall, we want to investigate how a model is implementing. If it meets out expecations and is plausible.
-
-May choose to remove elemetns or add more capabilities.
-
-The idea is probe and stress test the assumptions and investigate results to seem odd and to not follow intuition.
-
-The correct methodology to be able to explain why a certain peice of informaiton occurs after a parameter change occurs.
-
-The code provides us a tool to look at ant behaviour. It is our job to explain the aggregate behaviours and how many parameter changes relate to such. 
+Overall, we want to investigate how a model is implementing. If it meets out expecations and is plausible. We may choose to remove elements or add more capabilities. The idea is probe and stress test the assumptions and investigate results to seem odd and to not follow intuition. The correct methodology to be able to explain why a certain piece of information occurs after a parameter change occurs. The code provides us a tool to look at ant behaviour. It is our job to explain the aggregate behaviours and how many parameter changes relate to such. 
 
 ### Origins of the Code
 
