@@ -121,11 +121,11 @@ The graphic itself has 4 sub-plots:
 
 ### Excel Dump
 
+The Excel Dump provides a granular but raw breakdown of each ants (rows) path, sites and times broken down into steps (columns). It has no assesment quality related data but does hold the threshold allocated to each ants simulation. Each row relates to a different ants simulation and the columns are a mix of outcomes, aggregrate metric and at the end a column break down of each step taken and where the ant was. For this final section, the number of columns of variable for each row and depends on the route the ant took. 
+
 <p align="center">
   <img src="screenshots/routes_excel_dump.png" alt="Excel Output" width="100%" />
 </p>
-
-The Excel Dump provides a granular but raw breakdown of each ants (rows) path, sites and times broken down into steps (columns). It has no assesment quality related data but does hold the threshold allocated to each ants simulation. Each row relates to a different ants simulation and the columns are a mix of outcomes, aggregrate metric and at the end a column break down of each step taken and where the ant was. For this final section, the number of columns of variable for each row and depends on the route the ant took. 
 
 ##### Excel Dump Columns
 
@@ -144,32 +144,29 @@ The Excel Dump provides a granular but raw breakdown of each ants (rows) path, s
 | visits to site 2       | Count of visits to `site 2`. |
 | Path           | This is the final named column but has trailing columns with no header. It represents an array of the route that an ant took. Each column is a time step and the value within the cell is the site that an ant is currently at. In the default run, each array starts at 0 but can also revert back to being 0 after site 1 or 2 have been reached. It's not clear to me whether these subsequent 0 vists mean the ant has returned back to site 0 or it means that the ant is travelling somewhere in the environment. |
 
-
-
-
 ## The Model 
 
 ### Searching Nests
 
-Robinson et al model how anys find a new nest after the old one is damaged
+The premise of Robinson et al is to model how ants find new nests after the old one is damanged. In the model, individual ats do not interact with each other, they are simulated individually. Ant assess the sites they arrive at, derividing a quality metric which they then compare against a pre-determined acceptance threshold. If it exceed then they stay in the nest, otherwise they continue searching. The original nest `0` cannot be settled upon, the mechanism to enforce if to to programme the quality of the nest as `-INF`. 
 
-The individual ant do not interact in the system. They are simulated individually. 
+##### Model Schematics
 
-Ants assess the sites they arrive at using an acceptance threshold
+- Arrive at and assess a nest
+- If the assessed quality $(b_i)$ plus some assessment error $(\varepsilon)$ is less than the threshold $a$ then reject the nest: $b_i + \varepsilon \le a$
+- If the assessed quality $(b_i)$ plus some assessment error $(\varepsilon)$ is more than the threshold $a$ then reject the nest: $b_i + \varepsilon > a$
 
-The old nest (0) cannot be chosen
+### Model Parameters
 
-### The Model Parameters
+The model params are the key tool to affect ants' decisions. In the default example run, the mean of the acceptance threshold is set specificly (hardcoded) as the middle value of the two sites. But this experiement doesn't need to be run this way. All params can be changed. In fact, it may be quite a poor assumption to encode into to the system. It implies that an ants thresholding mechanism has a somewhat accurate grasp of the nests it expects to encounter and is "happy" with something in the middle. I think we would often except biological creatures to rationally wish to maximise their comfort, particularly for their homes, based on some preconceived personal notion of quality - though it would be true that this also would have to be relational to the environment it lives in. Additionally, I would also expect some sort of fall back mechanism that entails something like "the best of a bad bunch" whereby a local, assecible selection is of lower quality than the overall global average quality. 
 
-#### Acceptance Threshold Distribution
+| Parameter Name | Parameter Sign | Values | Line Set |
+| :--- | :--- | :--- | :--- |
+| Acceptance Threshold | $a$             | Normal Distribution; `mean = 5`, `sd = 1`   | `mean`=`line 38`, `sd`=`line 39` |
+| Nest Qualities       | $b$             | `site_0 = -inf`, `site_1 = 4`, `site_2 = 6` | `line 25`, `quals` |
+| Assessment Error     | $(\varepsilon)$ | Normal Distribution; `mean = 0`, `sd = 1`   | `line 30`, `qual_stddev`, this can be set different for each nest |
 
-Normally distributed, `mean = 5`, `standard_deviation = 1`
 
-The Threshold is centered around the average of nest qualitites, i.e. s1=4, s2=6, threshold=5
-
-NOTE: is this a fair **assumption**? implies thresold is evolved based on the data of enviroment as any given time, and therefore adaptive. This opposied to a hardcoded, intrinistic meansure of quality. i.e. birds are hardcoded to make nests a certain way, would ants also be hardcoded to like X?
-
-Every ant is allocated its own threshold 
 
 #### Nest Quality
 
@@ -187,6 +184,11 @@ Every any is assigned its down assessment error
 - `line 30 qual_stddev` = standard deviation of nest perception
 - `line 38 threshold_mean` = ants assessment threshold
 - `line 39 threshold_stddev` = ant assessment threshold standard deviation
+
+
+
+
+
 
 ### Moving Around
 
