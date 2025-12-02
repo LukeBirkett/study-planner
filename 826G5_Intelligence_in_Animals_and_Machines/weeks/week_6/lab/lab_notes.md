@@ -175,25 +175,16 @@ This humans and all other creatures, the ability to assess something is not a pe
 
 An environment is set up that resembles a rectangle with dimensions 18cm x 180cm (long and thin). Within this space, subspaces are allocated which respresent nests. A matrix is setup/computed that maps the probabilities of travelling between nests. The columns represent the starting nest and the rows the destination nest. Each column will sum to 1 as it represents all travel options. The highest probability will always be the current nest, no journey, this is because the ants stay in one place for a period and assessment mutliple times. Embedded into the probabilities is the notion that nests further away are less likely to be visited. Though this is an assumpt as IRL obstacles may block nearer nests making the travel time longer. The probabilites are fixed and hardcoded on `line 17`, `probs`
 
-$$
-\begin{pmatrix}
-\text{Old} & \text{A} & \text{B} \\
-\text{Old} & 0.91 & 0.15 & 0.03 \\
-\text{A} & 0.06 & 0.80 & 0.06 \\
-\text{B} & 0.03 & 0.05 & 0.91
-\end{pmatrix}
-$$
+| | Old | A | B |
+| :--- | :---: | :---: | :---: |
+| Old | 0.91 | 0.15 | 0.03 |
+| A | 0.06 | 0.80 | 0.06 |
+| B | 0.03 | 0.05 | 0.91 |
 
 In additional to this, there is a mean travel time matrix. This too is a hardcoded matrix set on `line 20`, `time_means`. The difference is that these values represent a mean to be samples from and is actually re-calculated and different for every trip. On `line 22`, `time_stddevs` computes this variability. 
 
-$$
-\begin{pmatrix}
-1 & 36 & 143 \\
-36 & 1 & 116 \\
-143 & 116 & 1
-\end{pmatrix}
-$$
-
-
-
-
+| | Old | A | B |
+| :--- | :---: | :---: | :---: |
+| Old  | 1   | 36  | 143 |
+| A    | 36  | 1   | 116 |
+| B    | 143 | 116 | 1   |
