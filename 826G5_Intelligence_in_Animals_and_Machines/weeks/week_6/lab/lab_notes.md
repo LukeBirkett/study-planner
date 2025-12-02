@@ -125,33 +125,27 @@ The graphic itself has 4 sub-plots:
   <img src="screenshots/routes_excel_dump.png" alt="Excel Output" width="100%" />
 </p>
 
-This has no quality related data, just raw paths, sites and times
+The Excel Dump provides a granular but raw breakdown of each ants (rows) path, sites and times broken down into steps (columns). It has no assesment quality related data but does hold the threshold allocated to each ants simulation. Each row relates to a different ants simulation and the columns are a mix of outcomes, aggregrate metric and at the end a column break down of each step taken and where the ant was. For this final section, the number of columns of variable for each row and depends on the route the ant took. 
 
-1 row for each ant
+##### Excel Dump Columns
 
-ant number # 
+| Column Name | Column Description |
+| :--- | :--- |
+| Ant/Row Number         | Just a row label for the order of simulations |
+| Threshold              | The quality threshold assigned to the ant at the start of the simulation |
+| Final Site             | This is the final site that the ant selected |
+| Selected               | This appears to be a binary marker to say if a nest was selected. All simulation in my default example were `1` implying that a nest was selected but maybe there are some instants where it doesn't select a nest |
+| end time               | Looks to be the cumulative time take to find a nest |
+| time site 0 discovered | Entry values are all `-1` for the default run, I assume this is because it is the starts here |
+| time site 1 discovered | The cumulative time it took to discover `site 1`. It can be zero meaning the site was never visited |
+| time site 2 discovered | The cumulative time it took to discover `site 2`. It can be zero meaning the site was never visited  |
+| visits to site 0       | Count of visits to `site 0`. It correlates to counting the number of `0` entries in the `Path` array. Again not sure if the mid array `0` means `site 0` or travelling |
+| visits to site 1       | Count of visits to `site 1`. |
+| visits to site 2       | Count of visits to `site 2`. |
+| Path           | This is the final named column but has trailing columns with no header. It represents an array of the route that an ant took. Each column is a time step and the value within the cell is the site that an ant is currently at. In the default run, each array starts at 0 but can also revert back to being 0 after site 1 or 2 have been reached. It's not clear to me whether these subsequent 0 vists mean the ant has returned back to site 0 or it means that the ant is travelling somewhere in the environment. |
 
-threshold (varies per ant)
 
-final site
 
-selected (all 1's?) deicison made?
-
-end time
-
-time site 0 discovered (all -1 = start point?)
-
-time site 1 discovered
-
-time site 2 discovered
-
-visits to site 0
-
-visits to site 1
-
-visits to site 2
-
-an array of the path taken (shows that if not at 1 or 2 then the site = 0, would imply site 0 is interpretted by the system as no site, i.e. travelling, just somewhere)
 
 ## The Model 
 
