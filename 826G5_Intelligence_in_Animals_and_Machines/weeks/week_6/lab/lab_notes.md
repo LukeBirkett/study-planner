@@ -162,11 +162,9 @@ The model params are the key tool to affect ants' decisions. In the default exam
 
 | Parameter Name | Parameter Sign | Values | Line Set |
 | :--- | :--- | :--- | :--- |
-| Acceptance Threshold | $a$             | Normal Distribution; `mean = 5`, `sd = 1`   | `mean`=`line 38`, `sd`=`line 39` |
+| Acceptance Threshold | $a$             | Normal Distribution; `mean = 5`, `sd = 1`   | `threshold_mean`=`line 38`, `threshold_stddev`=`line 39` |
 | Nest Qualities       | $b$             | `site_0 = -inf`, `site_1 = 4`, `site_2 = 6` | `line 25`, `quals` |
 | Assessment Error     | $(\varepsilon)$ | Normal Distribution; `mean = 0`, `sd = 1`   | `line 30`, `qual_stddev`, this can be set different for each nest |
-
-
 
 #### Nest Quality
 
@@ -174,9 +172,7 @@ old: -inf, site_1 = 1, site_2 = 6
 
 #### Assessment Error
 
-Normal distribution, `mean=0`, `sd=1`
-
-Every any is assigned its down assessment error
+This humans and all other creatures, the ability to assess something is not a perfectly mapped deterministic process. Our decision making processes can be heavily influced by other factors. In this system, this is captured using the assessment error $(\varepsilon)$. Every decision made is impacted by an the assessment error. This error is drawn from a Normal Distribution and the Standard Deviation is set for each site, though the default values are 1 for all. It should be noted that the probability of an ant select a nest is function of two distributions; The distribution to draw the overall acceptance threshold and the distribution to draw each steps assessment error.
 
 ### Setting Parameters in the Code
 
