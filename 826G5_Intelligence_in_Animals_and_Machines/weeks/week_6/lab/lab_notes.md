@@ -146,7 +146,7 @@ The Excel Dump provides a granular but raw breakdown of each ants (rows) path, s
 
 ## The Model 
 
-### Searching Nests
+### 1. Searching Nests
 
 The premise of Robinson et al is to model how ants find new nests after the old one is damanged. In the model, individual ats do not interact with each other, they are simulated individually. Ant assess the sites they arrive at, derividing a quality metric which they then compare against a pre-determined acceptance threshold. If it exceed then they stay in the nest, otherwise they continue searching. The original nest `0` cannot be settled upon, the mechanism to enforce if to to programme the quality of the nest as `-INF`. 
 
@@ -156,7 +156,7 @@ The premise of Robinson et al is to model how ants find new nests after the old 
 - If the assessed quality $(b_i)$ plus some assessment error $(\varepsilon)$ is less than the threshold $a$ then reject the nest: $b_i + \varepsilon \le a$
 - If the assessed quality $(b_i)$ plus some assessment error $(\varepsilon)$ is more than the threshold $a$ then reject the nest: $b_i + \varepsilon > a$
 
-### Model Parameters
+#### Model Parameters
 
 The model params are the key tool to affect ants' decisions. In the default example run, the mean of the acceptance threshold is set specificly (hardcoded) as the middle value of the two sites. But this experiement doesn't need to be run this way. All params can be changed. In fact, it may be quite a poor assumption to encode into to the system. It implies that an ants thresholding mechanism has a somewhat accurate grasp of the nests it expects to encounter and is "happy" with something in the middle. I think we would often except biological creatures to rationally wish to maximise their comfort, particularly for their homes, based on some preconceived personal notion of quality - though it would be true that this also would have to be relational to the environment it lives in. Additionally, I would also expect some sort of fall back mechanism that entails something like "the best of a bad bunch" whereby a local, assecible selection is of lower quality than the overall global average quality. 
 
@@ -166,51 +166,34 @@ The model params are the key tool to affect ants' decisions. In the default exam
 | Nest Qualities       | $b$             | `site_0 = -inf`, `site_1 = 4`, `site_2 = 6` | `line 25`, `quals` |
 | Assessment Error     | $(\varepsilon)$ | Normal Distribution; `mean = 0`, `sd = 1`   | `line 30`, `qual_stddev`, this can be set different for each nest |
 
-#### Nest Quality
-
-old: -inf, site_1 = 1, site_2 = 6
-
 #### Assessment Error
 
 This humans and all other creatures, the ability to assess something is not a perfectly mapped deterministic process. Our decision making processes can be heavily influced by other factors. In this system, this is captured using the assessment error $(\varepsilon)$. Every decision made is impacted by an the assessment error. This error is drawn from a Normal Distribution and the Standard Deviation is set for each site, though the default values are 1 for all. It should be noted that the probability of an ant select a nest is function of two distributions; The distribution to draw the overall acceptance threshold and the distribution to draw each steps assessment error.
 
-### Setting Parameters in the Code
 
-- `line 25 quals` = nest values
-- `line 30 qual_stddev` = standard deviation of nest perception
-- `line 38 threshold_mean` = ants assessment threshold
-- `line 39 threshold_stddev` = ant assessment threshold standard deviation
+### 2. Moving Around
 
+An environment is set up that resembles a rectangle with dimensions 18cm x 180cm (long and thin). Within this space, subspaces are allocated which respresent nests. A matrix is setup/computed that maps the probabilities of travelling between nests. The columns represent the starting nest and the rows the destination nest. Each column will sum to 1 as it represents all travel options. The highest probability will always be the current nest, no journey, this is because the ants stay in one place for a period and assessment mutliple times. Embedded into the probabilities is the notion that nests further away are less likely to be visited. Though this is an assumpt as IRL obstacles may block nearer nests making the travel time longer. The probabilites are fixed and hardcoded on `line 17`, `probs`
 
+$$
+\begin{pmatrix}
+\text{Old} & \text{A} & \text{B} \\
+\text{Old} & 0.91 & 0.15 & 0.03 \\
+\text{A} & 0.06 & 0.80 & 0.06 \\
+\text{B} & 0.03 & 0.05 & 0.91
+\end{pmatrix}
+$$
 
+In additional to this, there is a mean travel time matrix. This too is a hardcoded matrix set on `line 20`, `time_means`. The difference is that these values represent a mean to be samples from and is actually re-calculated and different for every trip. On `line 22`, `time_stddevs` computes this variability. 
 
+$$
+\begin{pmatrix}
+1 & 36 & 143 \\
+36 & 1 & 116 \\
+143 & 116 & 1
+\end{pmatrix}
+$$
 
-
-### Moving Around
-
-Within the system, an evironment is set up that resembles a recentagle with dimensions of 18cm by 180cm
-
-Within this spaces, subspaces are allocated with respresent nests
-
-A matrix is setup that maps the probabilites of travelling between nests
-
-[not sure how this is derived, perhaps through its own MCP?]
-
-The columns represent starting points
-
-Each column will sum to 1 meaning each row is an option given a starting point
-
-The highest probability is the current nest, no journey
-
-The experiement is setup so nests further away are less likely to be visited
-
-This is an **assumption** and may not be true IRL. For example, there may be obstracles blocking the nearest nest
-
-The probabilities of the matrix are fixed
-
-But there is amean travel time matrix. These are variable sbecause there is a given SD to sample from the mean
-
-In the code the 2 matrices are hardcoded probabilites
 
 
 
