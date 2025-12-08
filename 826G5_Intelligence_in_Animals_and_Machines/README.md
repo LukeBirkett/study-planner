@@ -44,15 +44,26 @@ This module will develop understanding of what it means for an animal or a machi
 | Modelling Report 2 | [Page](https://canvas.sussex.ac.uk/courses/34991/pages/assignment-2-details-worth-80-percent-modelling-report-option?module_item_id=1509123) | 80% | 2500 | 15 Jan |
 
 # [Weeks]()
-- [ ] [Week 0 - Preliminary](weeks/week_0/README.md)
-- [ ] [Week 1 - What is intelligence and does it need a brain?](weeks/week_1/README.md)
-- [ ] [Week_2 - Unexpected Cleverness](weeks/week_2/README.md)
-- [ ] [Week 3 - Collective Intelligence](weeks/week_3/README.md)
-- [ ] [Week 4 - Moving Through the World](weeks/week_4/README.md)
-- [ ] [Week 5 - Navigation](weeks/week_5/README.md)
-- [ ] [Week 6 - Motor Control](weeks/week_6/README.md)
-- [ ] [Week 7 - Tool Used](weeks/week_7/README.md)
-- [ ] [Week 8 - Social Intelligence](weeks/week_8/README.md)
-- [ ] [Week 9 - Seminar Only (Foundational Models)](weeks/week_9/README.md)
-- [ ] [Week 10 - Brain Size](weeks/week_10/README.md)
-- [ ] [Week 11 - Seminar Only (Debate)](weeks/week_11/README.md)
+[Week 0 - Preliminary](weeks/week_0/README.md)
+
+[Week 1 - What is intelligence and does it need a brain?](weeks/week_1/README.md)
+
+[Week_2 - Unexpected Cleverness](weeks/week_2/README.md)
+
+[Week 3 - Collective Intelligence](weeks/week_3/README.md)
+
+[Week 4 - Moving Through the World](weeks/week_4/README.md)
+
+[Week 5 - Navigation](weeks/week_5/README.md)
+
+[Week 6 - Motor Control](weeks/week_6/README.md)
+
+[Week 7 - Tool Used](weeks/week_7/README.md)
+
+[Week 8 - Social Intelligence](weeks/week_8/README.md)
+
+[Week 9 - Seminar Only (Foundational Models)](weeks/week_9/README.md)
+
+[Week 10 - Brain Size](weeks/week_10/README.md)
+
+[Week 11 - Seminar Only (Debate)](weeks/week_11/README.md)
