@@ -13,8 +13,10 @@
 
 ### Lab Readings (last week)
 
-[Main: A Simple Threshold Rule Is Sufficient to Explain Sophisticated Collective Decision-Making](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/seminar/rob_2011_simple_threshold.pdf)
+[Main: A Simple Threshold Rule Is Sufficient to Explain Sophisticated Collective Decision-Making](a_simple_threshold_rule.pdf)
 
-[Extra I: Supplementary Methods](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/seminar/rob_2011_sup_methods.doc)
+[Extra I: Supplementary Methods](threshold_supplmentary.pdf)
 
-[Extra II: Do Ants Make Direct Comparisoins](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_5/seminar/rob_2011_ants_direct.pdf)
+[Extra II: Do Ants Make Direct Comparisoins](do_ants_make_direct_comparisons.pdf)
+
+[Collective Comparison](collective_comparisons_without_individual_comparisons.pdf)
