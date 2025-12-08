@@ -173,7 +173,14 @@ This humans and all other creatures, the ability to assess something is not a pe
 
 ### 2. Moving Around
 
-An environment is set up that resembles a rectangle with dimensions 18cm x 180cm (long and thin). Within this space, subspaces are allocated which respresent nests. A matrix is setup/computed that maps the probabilities of travelling between nests. The columns represent the starting nest and the rows the destination nest. Each column will sum to 1 as it represents all travel options. The highest probability will always be the current nest, no journey, this is because the ants stay in one place for a period and assessment mutliple times. Embedded into the probabilities is the notion that nests further away are less likely to be visited. Though this is an assumpt as IRL obstacles may block nearer nests making the travel time longer. The probabilites are fixed and hardcoded on `line 17`, `probs`
+An environment is set up that resembles a rectangle with dimensions 18cm x 180cm (long and thin). 
+
+<p align="center">
+  <img src="screenshots/rect_env.png" alt="Env Nest" width="100%" />
+</p>
+
+
+Within this space, subspaces are allocated which respresent nests. A matrix is setup/computed that maps the probabilities of travelling between nests. The columns represent the starting nest and the rows the destination nest. Each column will sum to 1 as it represents all travel options. The highest probability will always be the current nest, no journey, this is because the ants stay in one place for a period and assessment mutliple times. Embedded into the probabilities is the notion that nests further away are less likely to be visited. Though this is an assumpt as IRL obstacles may block nearer nests making the travel time longer. The probabilites are fixed and hardcoded on `line 17`, `probs`
 
 | | Old | A | B |
 | :--- | :---: | :---: | :---: |
@@ -188,3 +195,23 @@ In additional to this, there is a mean travel time matrix. This too is a hardcod
 | Old  | 1   | 36  | 143 |
 | A    | 36  | 1   | 116 |
 | B    | 143 | 116 | 1   |
+
+# Tasks
+
+### 1. Running the Model
+
+Start by running the model, seeing how it works, and seeing if you can replicate the behaviour seen in the paper
+
+### 2. Changing Parameters
+
+You can then see how the behaviour of the model changes when you change parameters. An obvious starting point is the value of thresholds vs the qualities of the nest: Can you generate ‘odd’ results or even ‘break’ the model? How much can you change parameters until the behaviour changes (sensitivity analysis)?
+
+As noted, the key is to look at both the behaviour of individual ants and the aggregate results so you can explain why the change you made gives rise to the behaviour you see. You can then decide if this is an issue for the model
+
+### 3. Ants Sensing
+
+You could instead investigate the sensing of the ants: For the Robinson paper, a starting point is how variable/uncertain the ants quality judgments are. What if they are more uncertain (noisy) than the original model assumes? How much can you change this factor until the model breaks (sensitivity analysis again)?
+
+### 4. Chaning the Environment
+
+A final idea is to see what happens in other experimental situations eg changing the number/arrangement etc of nests. The m-file ExampleUsingRobinsonCode4Nests.m shows how you would set up the 4-nest example they use
