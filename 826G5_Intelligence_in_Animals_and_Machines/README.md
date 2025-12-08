@@ -45,7 +45,7 @@ This module will develop understanding of what it means for an animal or a machi
 
 # [Weeks]()
 - [ ] [Week 0 - Preliminary](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_0)
-- [ ] [Week 1 - What is intelligence and does it need a brain?](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1)
+- [ ] [Week 1 - What is intelligence and does it need a brain?](weeks/week_1/README.md)
 - [ ] [Week_2 - Unexpected Cleverness](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_2)
 - [ ] [Week 3 - Collective Intelligence](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_3)
 - [ ] [Week 4 - Moving Through the World](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_4)
