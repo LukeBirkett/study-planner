@@ -212,6 +212,10 @@ As noted, the key is to look at both the behaviour of individual ants and the ag
 
 You could instead investigate the sensing of the ants: For the Robinson paper, a starting point is how variable/uncertain the ants quality judgments are. What if they are more uncertain (noisy) than the original model assumes? How much can you change this factor until the model breaks (sensitivity analysis again)?
 
-### 4. Chaning the Environment
+### 4. Changing the Environment
 
 A final idea is to see what happens in other experimental situations eg changing the number/arrangement etc of nests. The m-file ExampleUsingRobinsonCode4Nests.m shows how you would set up the 4-nest example they use
+
+### 5. Parameter Sweep
+
+Like the earlier MATLAB implementations, ExampleUsingRobinsonCode.py is a script, which runs the simulation once for a given number of ants. If we want to run a parameter sweep (e.g. for sensitivity analysis), we need a way to automate running the simulation multiple times with different parameters. I have given an example of how to do this in ExampleUsingRobinsonCode_func.py, where the script has been turned into a function, which takes one parameter and returns one of the values which result from running the simulation - more parameters and returns could easily be added to do something more useful. param_sweep_test.py shows how to call the function from ExampleUsingRobinsonCode_func.py to conduct a simple parameter sweep.
