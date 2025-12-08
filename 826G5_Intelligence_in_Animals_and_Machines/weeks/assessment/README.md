@@ -13,10 +13,10 @@
 
 ### Lab Readings (last week)
 
-[Main: A Simple Threshold Rule Is Sufficient to Explain Sophisticated Collective Decision-Making](a_simple_threshold_rule.pdf)
+[A Simple Threshold Rule Is Sufficient to Explain Sophisticated Collective Decision-Making (Robinson et al, 2014)](a_simple_threshold_rule.pdf)
 
-[Extra I: Supplementary Methods](threshold_supplmentary.pdf)
+[Supplementary Model Information](threshold_supplmentary.pdf)
 
-[Extra II: Do Ants Make Direct Comparisoins](do_ants_make_direct_comparisons.pdf)
+[Do Ants Make Direct Comparisons (Robinson et al, 2009)](do_ants_make_direct_comparisons.pdf)
 
 [How collective comparisons emerge without individual comparison of the options (Robinson et al, 2014)](collective_comparisons_without_individual_comparisons.pdf)
