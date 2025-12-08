@@ -53,3 +53,6 @@ This module will develop understanding of what it means for an animal or a machi
 - [ ] [Week 6 - Motor Control](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_6)
 - [ ] [Week 7 - Tool Used](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_7)
 - [ ] [Week 8 - Social Intelligence](https://github.com/LukeBirkett/study-planner/tree/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_8)
+- [ ] [Week 9 - Seminar Only (Foundational Models)]()
+- [ ] [Week 10 - Brain Size]()
+- [ ] [Week 11 - Seminar Only (Debate)]()
