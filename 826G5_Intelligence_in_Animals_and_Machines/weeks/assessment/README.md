@@ -19,4 +19,4 @@
 
 [Extra II: Do Ants Make Direct Comparisoins](do_ants_make_direct_comparisons.pdf)
 
-[Collective Comparison](collective_comparisons_without_individual_comparisons.pdf)
+[How collective comparisons emerge without individual comparison of the options (Robinson et al, 2014)](collective_comparisons_without_individual_comparisons.pdf)
