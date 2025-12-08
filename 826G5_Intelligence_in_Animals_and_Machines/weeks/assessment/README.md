@@ -3,11 +3,13 @@
 
 [Canvas Lab 4: Guided Notes](https://canvas.sussex.ac.uk/courses/34991/pages/lab-4-guided-tasks)
 
-[Lab 3 PDF](weeks/assessment/IAM_lab_3.pdf)
+[Lab 3 PDF](IAM_lab_3.pdf)
 
 [Lab Code](weeks/labs/IAM_Sussex_labs/lab_3_robinson)
 
-[Lab Working File](weeks/assessment/lab_notes.md)
+[Lab Working File](lab_notes.md)
+
+
 
 ### Lab Readings (last week)
 
