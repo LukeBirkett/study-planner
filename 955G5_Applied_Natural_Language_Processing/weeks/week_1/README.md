@@ -15,14 +15,14 @@ You might also:
 - develop an awareness of more advanced concepts such as classes and lazy generators
 
 # Lecture 
-- [x] [Lecture Slides](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/files/Lec1.pdf)
-- [x] [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c04e911c-5d80-4b39-a8f7-b36a00f87e65)
-- [x] [Quiz](https://canvas.sussex.ac.uk/courses/35030/quizzes/56818)
+- [Lecture Slides](weeks/week_1/files/Lec1.pdf)
+- [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c04e911c-5d80-4b39-a8f7-b36a00f87e65)
+- [Quiz](https://canvas.sussex.ac.uk/courses/35030/quizzes/56818)
 
 # Lab 
-- [x] [Lab Folder](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_1/lab)
-- [x] [Getting Started Tutorial](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=dcae896f-3482-49fe-a19c-b08b01158653&start=0)
+- [Lab Folder](weeks/week_1/lab)
+- [Getting Started Video Tutorial](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=dcae896f-3482-49fe-a19c-b08b01158653&start=0)
 
 # Reading
-- [x] [Jurafsky et al (2009) Speech and Language Processing (CH1) ](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/files/JurafskyMartinSpeechAndLanguageProcessing2ed_draft%202007.pdf)
+- [Jurafsky et al (2009) Speech and Language Processing (CH1) ](https://github.com/LukeBirkett/study-planner/blob/main/955G5_Applied_Natural_Language_Processing/weeks/files/JurafskyMartinSpeechAndLanguageProcessing2ed_draft%202007.pdf)
 
