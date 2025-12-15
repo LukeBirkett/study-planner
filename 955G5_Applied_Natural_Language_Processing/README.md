@@ -47,3 +47,7 @@ On this module, you will learn about Natural Language Processing (NLP) applicati
 - [ ] [Week 4 - Further Document Classification](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_4)
 - [ ] [Week 5 - Document Similarity and Clustering](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_5)
 - [ ] [Week 6 - Lexical Semantics and Word Senses](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_6)
+- [ ] [Week 7 - Distributional Semantics](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_7)
+- [ ] [Week 8 - Part-of-Speech Tagging and Hidden Markov Models](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_8)
+- [ ] [Week 9 - Named Entity Recognition (NER) and Information Extraction (IE)](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_9)
+- [ ] [Week 10 - Question Answering (QA)](https://github.com/LukeBirkett/study-planner/tree/main/955G5_Applied_Natural_Language_Processing/weeks/week_10)
