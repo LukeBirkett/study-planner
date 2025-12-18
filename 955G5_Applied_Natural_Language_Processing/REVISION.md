@@ -4,6 +4,8 @@ This is the markdown file that will hold all of the resources used to revise and
 
 ## Contents
 * [Week 1 Intro to ANLP and Python](#week-1---intro-to-anlp-and-python)
+    - [Lab Session](#lab-session)
+    - [Code Snippets](#code-snippets)
 
 ---
 
