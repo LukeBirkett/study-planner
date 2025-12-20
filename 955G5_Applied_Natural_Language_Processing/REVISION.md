@@ -2,14 +2,21 @@
 
 This is the markdown file that will hold all of the resources used to revise and prepare for the exam. It will include notes of each weeks lecture, a breakdown of import code & concepts from the labs and possibly notes from any additional reading. 
 
-## Contents
-* [Week 1 Intro to ANLP and Python](#week-1---intro-to-anlp-and-python)
-    - [Lab Session](#lab-session)
-    - [Code Snippets](#code-snippets)
-
+## Contents for Whole Document
+1. [Week 1 - Intro to ANLP and Python](#week-1---intro-to-anlp-and-python)
+    - [Lecture Notes](#week-1-lecture-notes)
+    - [Lab Session](#week-1-lab-session)
+    - [Code Snippets](#week-1-code-snippets)
+2. [Week 2 - Text Documents and Preprocessing](#week-2---text-documents-and-preprocessing)
 ---
 
 # Week 1 - Intro to ANLP and Python
+
+1. [Lecture Notes](#lecture-notes)
+2. [Lab Session](#lab-session)
+3. [Code Snippets](#code-snippets)
+
+## Week 1 Lecture Notes
 
 Largely an intro class to the module. Light on content that will directly applied in the exam. More preliminary and base content. 
 
@@ -27,7 +34,7 @@ Largely an intro class to the module. Light on content that will directly applie
 
 **Functions**: apply code again, call on some arguments, return a value
 
-## Lab Session
+## Week 1 Lab Session
 
 `NLE2023_lab_1_1_SOLUTIONS.ipynb`
 `NLE2023_lab_1_2_SOLUTIONS.ipynb`
@@ -37,7 +44,7 @@ The lab for this week was generally an intro session for people unfamilar with p
 
 Below are some code snippets, functions and attributes taken from the notebook that tend to be things that slip out of my mind sometimes. 
 
-## Code Snippets
+## Week 1 Code Snippets
 
 #### `.split()`
 
@@ -133,9 +140,148 @@ Works left to right in terms of hierarchy:
 
 ---
 
+# Week 2 - Text Documents and Preprocessing
 
+- Defining different units of text; characters, lemmas, words, sentences, paragraphs, documents, corpora. 
+- Bag of Words: Treating a unit of text as a colleciton without order or perhaps frequency.
+- Sentence segmentation and tokenization
+- Standard pre-processing or text normalisation techniques: case normalisation, stopword and punctuation removal, stemming, lemmatisation, morphological analysis, Regex
 
+1. [Lecture Notes](#week-2-lecture-notes)
+    - [Introduction to the Document Retrieval](#introduction-to-the-document-retrieval)
+    - [Segmentation and Tokenization](#segmentation-and-tokenization)
+    - [How many words are there?](#how-many-words-are-there)
+    - [Normalisation](#normalisation)
+    - [Punctuaton and Stopword Removal](#punctuaton-and-stopword-removal)
+    - [Stemming and Lemmatisation](#stemming-and-lemmatisation)
+2. [Lab Session]()
 
+# Week 2 Lecture Notes
 
+## Introduction to the Document Retrieval
 
+A large digital collection of documents is refered to a corpus. Docuement Retreival refers to the task of finding specific documents in a corpus given a goal. The goal might be that it contains a given word. To start, a computer sees a corpus as a sequence of characters but a human will automatically break down a corpus into its components. Thinking hierachrically: Documents, Paragraphs, Sentances, Words, Morhpemes/Syllables, Characters. Stop words are high frequency words that don't carry much information. Removing these is atype of text normalisation
+
+## Segmentation and Tokenization
+
+A corpus is a collection of documents that could be anything: News Articles, Essays, Books, Web Pages, Tweets.
+
+There is no pre-determined structure of a corpus but its important to understand the structure of the corpus you are working with. 
+
+Common structures are: one document per file; one single file were documents are sperated with delimiters; and single file with one document per line.
+
+Documents have no fixed length and vary wildly between types and even within the same type, i.e. 5 word tweet vs 1000 word tweet. Therefore it is useful to break them down further
+
+Something really important that we always need to do when working with text is to segment the sentance. 
+
+This is a non-trival task because although words seperated by spaced seem easy to identify it because more different when the word is at the start of a sentance, at the end or used near punctuation. 
+
+All componentents need to be identified and seperated because they all hold important context as to what is being said. 
+
+This process of segmentation is known as tokenization
+
+State-of-the-art methods will using classifers to work out difficult as aspects such as weather a `.` is a full stop or part of an acronym.
+
+Natural Language Toolkit (NLTK) is a common tool for working with text in Python. It is originaly from Kiss and Strunk (2006)
+
+```
+from nltk.tokenize import sent_tokenize
+sent_tokenize(testtext)
+```
+
+Tokenization is the task of segmenting text into "words". 
+
+Includes more than just words. Puncutation, capitalisation, numbers, word parts, start of sentence and end of sentence
+
+Python has a `.split() function that breakdown text into a list of words but it is very basic and doesn't account for punctuation. 
+
+Instead we tend to use `word_tokenize()` from the `nltk.tokenize` pakage.
+
+Another option is to right custom rules Regex but this is not directly tested for on this course. 
+
+## How many words are there?
+
+**Types** are the number of distinct words in a corpus. If set of workds is *V*, the nymber of types is *|V|*
+
+**Tokens** are total number N of running words
+
+Tokens will be more than types
+
+Shakespeare: Tokens = 884k, Types = 31k
+
+Herdan-Heaps Law: The larger the corpora, the more word types we find. 
+
+According to HH law, the average type frequency in 1M word corpus is 30. 
+
+But the frequency distribution of word types is not uniform or even normal. It is **Zipifan**. Half of all types will only occur once, hapax legomena. 
+
+Zipf's Law Sates that "the product of a word's frequency and its rank frequency is approximately constant. i.e. if most frequent word occurrs 100 times, the second will occur 50, 3rd 33. And so on. 
+
+## Normalisation
+
+**Case Normalisation:** In document retreival, case is often considered irrelevant and in speech recognition it doesn't exist. Removing case reduces the number of types and increases the frequence of each type, i.e. types of the same words aren't split into capitalised vs not. Although removing case introduces ambiguity, particuarly where a word can be used to dicate a name or a thing. 
+
+Python uses `.lower()` to remove case
+
+**Number Normalisation:** The exact number(s) used in a corpus are often unique and therefore represent a rare type with low frequency, i.e. the exact year of someones birth is likely to only come up once and in the context of explaining birthday. Typically, the exact number used is irrelevant so a common practice is to replace any numbers with `NUM`
+
+`["NUM" if token.isdigit() else token for token in tokens]`
+
+Normalisation can be framed around remove rare "words" where the types have low frequency. For words that aren't captured through normailsation, it is common to just ignore them. 
+
+The two main methods of "ignoring" are by either using a threshold, i.e. if less then x number of times then remove, or by only considering the n more frequent words, thus ommiting the low frequency words. 
+
+## Punctuaton and Stopword Removal
+
+The most frequent words in English are non-context bearing function words, in NLP these are known as stop words. In any application, such as document retreival, stopwords are removed along with punctuation. This has the benefit of reducing the size of the document and doesn't decrease functions such as word search capabilities. 
+
+`the`, `of`, `and`, `a`, `in`, `to`, `it`, `is`, `was`, `to`
+
+## Stemming and Lemmatisation
+
+Morphology is the study how words are made up of smaller parts. For example, `cats` is `cat` and its plural `s`. In NLP application was probably want to capture all words with the base of `cat` (where cat refers to the animal).
+
+Other common morpology includes: `ed`, `ing`, `un`, `anti`
+
+Derivational Morphology is the process of creating a new work from an existing words with the use of affixes. 
+
+`start`, `starter`, `restart`, `restartable`
+
+The affixes no only create a new word but change to a different part of speech, i.e. noun to verb. 
+
+**Stemming* is the process of removing unwanted affixes so we can focus on the base content of the word. 
+
+The `nltk` package has some built in functions for this. 
+
+```
+from nltk.stem.porter import PorterStemmer
+st = PorterStemmer()
+words = [list of words]
+stems = [st.stem(word) for word in words]
+```
+
+This will output a list of stems. You could `zip` this together with the original list and iterate. 
+
+Some examples of stems include, `relational : relat`, `relate : relat`, `hopeful : hope`
+
+**Lemmatisation:** Replace a word with its dictionary head word. It derives this relationship from an existing knowledge source such as a lexicono or dictionary. Commonly used is WordNet which holds a tree based knowledge of inflectional morpopolgy, i.e. where words and their peices derive from. 
+
+The `nltk` implementation of lemmatisation is as follows: 
+
+```
+from nltk.stem.wordnet import WordNetLemmatiser
+st = WordNetLemmatsier
+words = [list of words]
+lemmas = [st.lematize(word for word in words]
+for w,s in zip(words, lemmas):
+    print(w,s)
+```
+
+The general workflow of lemmatisation is: apply stemming rules, is the outputcome is in the WordNet dictionary then keep it else just keep the orginal word with no changes. 
+
+Lemmatization is another method for removing the number of types in a corpus. We group words by their inflections meaning several words are to be analyzed as one single item, i.e. dimension reduction. 
+
+It is generally seen as an improvement on Stemming as the output combines vocabuluary (knowledge) with morpological analysis. 
+
+For search tasks, the recall (relevant results) should be increased when using Lemmatisation, or Stemming, as all directly related words can be returned. `battery`, `batteries`
 
