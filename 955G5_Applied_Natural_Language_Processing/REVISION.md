@@ -154,7 +154,7 @@ Works left to right in terms of hierarchy:
     - [Normalisation](#normalisation)
     - [Punctuaton and Stopword Removal](#punctuaton-and-stopword-removal)
     - [Stemming and Lemmatisation](#stemming-and-lemmatisation)
-2. [Lab Session]()
+2. [Lab Session](#week-2-lab-session)
 
 # Week 2 Lecture Notes
 
@@ -176,11 +176,7 @@ Something really important that we always need to do when working with text is t
 
 This is a non-trival task because although words seperated by spaced seem easy to identify it because more different when the word is at the start of a sentance, at the end or used near punctuation. 
 
-All componentents need to be identified and seperated because they all hold important context as to what is being said. 
-
-This process of segmentation is known as tokenization
-
-State-of-the-art methods will using classifers to work out difficult as aspects such as weather a `.` is a full stop or part of an acronym.
+All componentents need to be identified and seperated because they all hold important context as to what is being said. This process of segmentation is known as tokenization. State-of-the-art methods will using classifers to work out difficult as aspects such as weather a `.` is a full stop or part of an acronym.
 
 Natural Language Toolkit (NLTK) is a common tool for working with text in Python. It is originaly from Kiss and Strunk (2006)
 
@@ -189,13 +185,9 @@ from nltk.tokenize import sent_tokenize
 sent_tokenize(testtext)
 ```
 
-Tokenization is the task of segmenting text into "words". 
+Tokenization is the task of segmenting text into "words". Includes more than just words. Puncutation, capitalisation, numbers, word parts, start of sentence and end of sentence
 
-Includes more than just words. Puncutation, capitalisation, numbers, word parts, start of sentence and end of sentence
-
-Python has a `.split() function that breakdown text into a list of words but it is very basic and doesn't account for punctuation. 
-
-Instead we tend to use `word_tokenize()` from the `nltk.tokenize` pakage.
+Python has a `.split()` function that breakdown text into a list of words but it is very basic and doesn't account for punctuation. Instead we tend to use `word_tokenize()` from the `nltk.tokenize` pakage.
 
 Another option is to right custom rules Regex but this is not directly tested for on this course. 
 
@@ -205,13 +197,9 @@ Another option is to right custom rules Regex but this is not directly tested fo
 
 **Tokens** are total number N of running words
 
-Tokens will be more than types
+Tokens will be more than types. For example in Shakespeare: Tokens = 884k, Types = 31k
 
-Shakespeare: Tokens = 884k, Types = 31k
-
-Herdan-Heaps Law: The larger the corpora, the more word types we find. 
-
-According to HH law, the average type frequency in 1M word corpus is 30. 
+Herdan-Heaps Law: The larger the corpora, the more word types we find. According to HH law, the average type frequency in 1M word corpus is 30. 
 
 But the frequency distribution of word types is not uniform or even normal. It is **Zipifan**. Half of all types will only occur once, hapax legomena. 
 
@@ -239,19 +227,11 @@ The most frequent words in English are non-context bearing function words, in NL
 
 ## Stemming and Lemmatisation
 
-Morphology is the study how words are made up of smaller parts. For example, `cats` is `cat` and its plural `s`. In NLP application was probably want to capture all words with the base of `cat` (where cat refers to the animal).
+Morphology is the study how words are made up of smaller parts. For example, `cats` is `cat` and its plural `s`. In NLP application was probably want to capture all words with the base of `cat` (where cat refers to the animal). Other common morpology includes: `ed`, `ing`, `un`, `anti`.
 
-Other common morpology includes: `ed`, `ing`, `un`, `anti`
+Derivational Morphology is the process of creating a new work from an existing words with the use of affixes. `start`, `starter`, `restart`, `restartable`. The affixes not only create a new word but change to a different part of speech, i.e. noun to verb. 
 
-Derivational Morphology is the process of creating a new work from an existing words with the use of affixes. 
-
-`start`, `starter`, `restart`, `restartable`
-
-The affixes no only create a new word but change to a different part of speech, i.e. noun to verb. 
-
-**Stemming* is the process of removing unwanted affixes so we can focus on the base content of the word. 
-
-The `nltk` package has some built in functions for this. 
+**Stemming* is the process of removing unwanted affixes so we can focus on the base content of the word. The `nltk` package has some built in functions for this. 
 
 ```
 from nltk.stem.porter import PorterStemmer
@@ -272,7 +252,7 @@ The `nltk` implementation of lemmatisation is as follows:
 from nltk.stem.wordnet import WordNetLemmatiser
 st = WordNetLemmatsier
 words = [list of words]
-lemmas = [st.lematize(word for word in words]
+lemmas = [st.lematize(word) for word in words]
 for w,s in zip(words, lemmas):
     print(w,s)
 ```
@@ -285,3 +265,4 @@ It is generally seen as an improvement on Stemming as the output combines vocabu
 
 For search tasks, the recall (relevant results) should be increased when using Lemmatisation, or Stemming, as all directly related words can be returned. `battery`, `batteries`
 
+# Week 2 Lab Session
