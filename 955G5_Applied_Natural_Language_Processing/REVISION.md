@@ -12,9 +12,9 @@ This is the markdown file that will hold all of the resources used to revise and
 
 # Week 1 - Intro to ANLP and Python
 
-1. [Lecture Notes](#lecture-notes)
-2. [Lab Session](#lab-session)
-3. [Code Snippets](#code-snippets)
+1. [Lecture Notes](#week-1-lecture-notes)
+2. [Lab Session](#week-1-lab-session)
+3. [Code Snippets](#week-1-code-snippets)
 
 ## Week 1 Lecture Notes
 
@@ -158,6 +158,13 @@ Works left to right in terms of hierarchy:
 
 # Week 2 Lecture Notes
 
+- [Introduction to the Document Retrieval](#introduction-to-the-document-retrieval)
+- [Segmentation and Tokenization](#segmentation-and-tokenization)
+- [How many words are there?](#how-many-words-are-there)
+- [Normalisation](#normalisation)
+- [Punctuaton and Stopword Removal](#punctuaton-and-stopword-removal)
+- [Stemming and Lemmatisation](#stemming-and-lemmatisation)
+
 ## Introduction to the Document Retrieval
 
 A large digital collection of documents is refered to a corpus. Docuement Retreival refers to the task of finding specific documents in a corpus given a goal. The goal might be that it contains a given word. To start, a computer sees a corpus as a sequence of characters but a human will automatically break down a corpus into its components. Thinking hierachrically: Documents, Paragraphs, Sentances, Words, Morhpemes/Syllables, Characters. Stop words are high frequency words that don't carry much information. Removing these is atype of text normalisation
@@ -273,6 +280,15 @@ There are 3 notebooks for this lab:
 - `NLE2023_lab_2_3_SOLUTIONS.ipynb`
 
 ## Preprocessing Text (Part 1)
+
+* [Overview](#overview-of-lab-21)
+* [Sentence Segmenter](#sentence-segmenter)
+* [Python's Split Tokenizer](#pythons-split-tokenizer)
+* [NLTK Regex Tokenizer](#nltk-regex-tokenizer)
+* [NLTK Built-in Corpora](#nltk-built-in-corpora)
+* [Random Sampling of Sentences](#random-sampling-of-sentences)
+
+### Overview of Lab 2.1
 
 This section refer to notebook: `NLE2023_lab_2_1_SOLUTIONS.ipynb`
 
