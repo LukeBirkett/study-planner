@@ -140,6 +140,8 @@ Works left to right in terms of hierarchy:
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 # Week 2 - Text Documents and Preprocessing
 
 - Defining different units of text; characters, lemmas, words, sentences, paragraphs, documents, corpora. 
