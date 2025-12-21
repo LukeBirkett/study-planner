@@ -148,12 +148,6 @@ Works left to right in terms of hierarchy:
 - Standard pre-processing or text normalisation techniques: case normalisation, stopword and punctuation removal, stemming, lemmatisation, morphological analysis, Regex
 
 1. [Lecture Notes](#week-2-lecture-notes)
-    - [Introduction to the Document Retrieval](#introduction-to-the-document-retrieval)
-    - [Segmentation and Tokenization](#segmentation-and-tokenization)
-    - [How many words are there?](#how-many-words-are-there)
-    - [Normalisation](#normalisation)
-    - [Punctuaton and Stopword Removal](#punctuaton-and-stopword-removal)
-    - [Stemming and Lemmatisation](#stemming-and-lemmatisation)
 2. [Lab Session](#week-2-lab-session)
 
 # Week 2 Lecture Notes
@@ -275,9 +269,9 @@ For search tasks, the recall (relevant results) should be increased when using L
 # Week 2 Lab Session
 
 There are 3 notebooks for this lab:
-- `NLE2023_lab_2_1_SOLUTIONS.ipynb`
-- `NLE2023_lab_2_2_SOLUTIONS.ipynb`
-- `NLE2023_lab_2_3_SOLUTIONS.ipynb`
+- [Preprocessing Text (Part 1)](#preprocessing-text-part-1) `NLE2023_lab_2_1_SOLUTIONS.ipynb`
+- []() `NLE2023_lab_2_2_SOLUTIONS.ipynb`
+- []() `NLE2023_lab_2_3_SOLUTIONS.ipynb`
 
 ## Preprocessing Text (Part 1)
 
