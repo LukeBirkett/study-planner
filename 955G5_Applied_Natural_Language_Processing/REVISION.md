@@ -373,6 +373,17 @@ split_toks = testsentence.split() # run split
 pd.DataFrame(list(zip_longest(nltk_toks,split_toks)),columns=["NLTK", "SPLIT"])
 ```
 
+Here is an example of using the tokenizer on a corpus where the sentance lists do not come pre-tokenized. This is the twitter corpus which start off as just strings. A sentence segmenter is applied and then the tokenizer is applied to the sentences. The result is a list of lists which hold tokens. This structure is the general baseline for working with docuements and text:
+
+```
+from nltk.corpus import twitter_samples
+
+mysample=sample_sentences(twitter_samples.strings(),sample_size)
+
+tokenised=[word_tokenize(sent) for sent in mysample]
+tokenised
+```
+
 ### NLTK Built-in Corpora
 
 NTLK has some arge collections of documents known as corpora that can be used for NLP applications. 
@@ -396,6 +407,14 @@ for s in sents[1:10]:
 ```
 
 The actual output `sents` is a type called `ConcatenatedCorpusView` but in practice it can be considered as a list of lists. The entire lists is the corpus, the sub-lists are sentences, and each element of the sentances is a token. With the `ConcatenatedCorpusView` type the entire corpus is not held in memory at once so is more efficent as the corpora are very large. Elements of `sents` can be accessed just like a list: `sents[0:10]`
+
+Most of the corpora come pre-tokenized, however, some like the twitter corpus do not and need some extract pre-processing:
+
+```
+reuterssample=sample_sentences(reuters.sents(),samplesize)
+gutenbergsample=sample_sentences(gutenberg.sents(),samplesize)
+twittersample=[word_tokenize(s) for s in sample_sentences(twitter_samples.strings(),samplesize)]
+```
 
 ### Random Sampling of Sentences
 
