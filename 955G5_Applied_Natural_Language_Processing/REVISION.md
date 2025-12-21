@@ -266,3 +266,153 @@ It is generally seen as an improvement on Stemming as the output combines vocabu
 For search tasks, the recall (relevant results) should be increased when using Lemmatisation, or Stemming, as all directly related words can be returned. `battery`, `batteries`
 
 # Week 2 Lab Session
+
+There are 3 notebooks for this lab:
+- `NLE2023_lab_2_1_SOLUTIONS.ipynb`
+- `NLE2023_lab_2_2_SOLUTIONS.ipynb`
+- `NLE2023_lab_2_3_SOLUTIONS.ipynb`
+
+## Preprocessing Text (Part 1)
+
+This section refer to notebook: `NLE2023_lab_2_1_SOLUTIONS.ipynb`
+
+Any document starts of as just a sequence of characters. There are a number of basic steps that are either always or often carried out to make the document easier to work with and extract more context/information. This lab covered the main tools to be used. 
+
+- **Sentence Segmentation:** grouping characters into sentences
+- **Tokenisation:** grouping characters into "words"
+- **Case Normalisation:** converting into lower case
+- **Stemming:** removing a words inflections to obtain the stem
+- **Punctuation and Stopword Removal:** removal of common and therefore low context tokens.
+
+In addition to working with these methods, we will be learning to work with the NLTK package which provides as way to use these methods but also more generally allows use to smoothly work with corpora and text. 
+
+Some common imports before setting off:
+
+```
+import sys
+import re
+import pandas as pd
+from itertools import zip_longest
+```
+
+### Sentence Segmenter
+
+There specific type of segmeneter that `NLTK` uses is called `Punkt Segmenter`, this needs importing. 
+
+```
+pip install nltk
+import nltk
+nltk.download('punkt_tab')
+# nltk.download('punkt')
+# nltk.download()
+```
+
+The exact function to be used is `from nltk.tokenize import sent_tokenize`.
+It's input is just a string which will respresent a document or collection of documents. It will return a list of strings whereby the individual strings should be a sentence. 
+
+```
+#some text to segment stored in testtext
+testtext="I went to Portsmouth last week.  Don't you remember?  I saw H.M.S. Victory in Portsmouth.  I want to go to the U.S.A. next Summer."
+#call the function sent_tokenize on the value of testtext
+sent_tokenize(testtext)
+```
+
+The output will look like:
+
+```
+['I went to Portsmouth last week.',
+ "Don't you remember?",
+ 'I saw H.M.S.',
+ 'Victory in Portsmouth.',
+ 'I want to go to the U.S.A. next Summer.']
+ ```
+
+### Python's Split Tokenizer
+
+Python has a very basic built in method called `.split()` which behaves as a tokenizer. 
+
+```
+
+opening_line="It was the best of times, it was the worst of times."
+tokens=opening_line.split()
+vocab=set(tokens)
+print(vocab)
+
+{'worst', 'best', 'the', 'of', 'was', 'It', 'it', 'times,', 'times.'}
+
+```
+
+The issue is that it is very naive and does not have the ability to seperate out words and punctuation so its applications are limited but can be useful for quick tests on santitisted test data. 
+
+### NLTK Regex Tokenizer
+
+`NLTK` has its own tokenizer which is derived from Regex logic: `from nltk.tokenize import word_tokenize`. The function takes an argument which is a string and returns a list of strings where each string is a token/word from within the input string (sentence)
+
+```
+test_sentence="The cat sat on the mat."
+word_tokenize(test_sentence) 
+
+['The', 'cat', 'sat', 'on', 'the', 'mat', '.']
+```
+
+It has a few specifc rules:
+- Punctuation is split from adjoining words
+- Opening quotes are changed to two single forward quotes to denote the start
+- Closing quotes are changed to two single backwards quotes to denote the end
+- Genitive nouns are split from their component parts: `children's` becomes `children` `'s`
+- Contractions are split into parts: `won't` becomes `wo` and `n't`
+
+Here is a snippet to compare how tokenizing increases the nuber of tokens in a corpus compared to a naive method like `.split()`. Note however, that the number of unique types will be reduced dramatically. This is because different variations of the same word will now be complied into one, i.e. `boy`, `boys` both categorized as `boy` and the connective `'s` is common is unlikely to add to the type count:
+
+```
+testsentence = "After saying \"I won't help, I'm gonna leave!\", on his parents' arrival, the boy's behaviour improved."
+
+nltk_toks = word_tokenize(testsentence) # run the nltk tokeniser
+split_toks = testsentence.split() # run split
+
+pd.DataFrame(list(zip_longest(nltk_toks,split_toks)),columns=["NLTK", "SPLIT"])
+```
+
+### NLTK Built-in Corpora
+
+NTLK has some arge collections of documents known as corpora that can be used for NLP applications. 
+
+- Gutenburg books (25k books `from nltk.corpus import gutenburg`)
+- Reuters articles (~11k news articles `from nltk.corpus import reuters`)
+- Twitter posts (20k tweets `from nltk.corpus import twitter_samples`)
+- Brown corpus (the first 1 million word corpus made by Brown University in 1961, `from nltk.corpus import brown`)
+- Plus many others: http://www.nltk.org/nltk_data/
+
+Each corpus is a class and has slightly different functionality and methods but the `reuters` text can be access like this:
+
+```
+from nltk.corpus import reuters
+
+sents = reuters.sents()
+sample_size = 10
+
+for s in sents[1:10]:
+    print(len(s))
+```
+
+The actual output `sents` is a type called `ConcatenatedCorpusView` but in practice it can be considered as a list of lists. The entire lists is the corpus, the sub-lists are sentences, and each element of the sentances is a token. With the `ConcatenatedCorpusView` type the entire corpus is not held in memory at once so is more efficent as the corpora are very large. Elements of `sents` can be accessed just like a list: `sents[0:10]`
+
+### Random Sampling of Sentences
+
+For most analysis and applications is want to be able to take an unbiased random sample from a corpus. This function uses the `random` package to create a list of indexes to draw from the main corpus. The output will be a list of `n=sample_size` **sentences**. Note: there is no handle of the length of the sentences. 
+
+```
+import random
+
+def sample_sentences(corpus,sample_size):
+    
+    size=len(corpus)
+    ids=random.sample(range(size),sample_size)
+    sample=[corpus[i] for i in ids] 
+    return sample
+
+random.seed(33)
+
+sample=sample_sentences(sents,10)
+print(sample)
+```
