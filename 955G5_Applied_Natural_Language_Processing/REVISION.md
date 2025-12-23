@@ -618,3 +618,79 @@ This section refer to notebook: `NLE2023_lab_2_3_SOLUTIONS.ipynb`
 This section is entirely an optional extension for this module as Regular Expression/REGEX will not be tested or required for the exam. Due to this, no notes will made about this notebook. The file will be kept in the repository for reference but unlikely to be referenced during the exam.
 
 <div style="page-break-after: always;"></div>
+
+# Week 3 - Document Classification
+
+A common task in NLP is to classify a document. This lecture covers 3 types of classification: topic, sentiment nad relevancy. The basis of this work is classification, this week we will look at how to do classification from pre-constructed words lists and next week we will take this to a more advanced level facilitating it via machine learning, specificly Naive Bayes. Additionally, we will cover how to evaluate metrics through accuracy, precision, recall and f-score. Inconjuction with evaluation we will understand why hold-out and unseen data is so important.  
+
+**Document Classification:** Feature extraction, word list classifier.
+
+**Evaluation:** accuracy and error rate, confusion matrix, precision, recall and F-1 score. 
+
+1. [Lecture Notes](#week-3---lecture-notes)
+2. [Lab Session](#week-3---lab-session)
+
+## Week 3 - Lecture Notes
+
+* []()
+* []()
+
+### Feature Extraction
+
+In a document or corpus, words are a our most basic feature. Word along can give us an idea of what class something belongs to for all topic, sentiment and relevancy classification. 
+- Excellent = positive review (sentiment)
+- Bitcoin = may indicate email is spam (sentiment, topic)
+- lemma = article is about NLP (relevancy, topic)
+
+One of the most simple ways to compile the words (features) of a document is to treat it as a **bag-of-words**
+
+A BoW ignores order and grammatrical structure and just log the frequency of each word. Sometimes even frequency is ignored as we just compile the mere occurance of words. Note, preprocessing is really important here because recall that when we talk about "words" we normally mean tokens and our preprocessing handles what a token is. 
+
+There are a number of difference structures and ways to represent features. A frequency BoW would be numerical `D1 = {cats: 1, Mice:2, chase: 3}`. If we are ignoring frequency then the approach can be binary valued `D1 = {cats: TRUE, mice:TRUE}`
+
+Note that using a python dictionary to represent data like this is known as a sparse vector respresentation. It is sparse because most of the memory is empty and there is no default value for key/features no present (0 or FALSE). There are many (endless) words that could be mapped but we have only mapped 3. The opposite approach would be a dense vector. Here, N values are stored in memory wether they occur or not. 
+
+Dense vectors are generally stored as vectors and matrices. Length of each vector may be the total types of a vocabulary. In terms of document analysis, this will inherently lead to sparsity and a lot of zeros as a single document cannot possibly match an entire lexicon. 
+
+### World List Classifiers
+
+Word lists can be either be handcrafted or automatically derived from vobaculary lists. 
+
+In order to classify documents, we need to score them. Recall we can treat a document as a bag-of-words. If taking a frequency approach, we count the number of times a word `w` from list L occurs `d` in a document count: `count(d,w)`
+
+If scoring for sentiment analysis we would have two lists: positive or negative. Therefore we acrue two counts: `count(d, positive_list)` and `count(d, negative_list)`
+
+To detemine the class, we say the outcome is positive if the counts for the `positive_list > negative_list`
+
+$$class(d) = 
+\begin{cases} 
+positive & \text{if } count(d, L_+) > count(d, L_-) \\
+negative & \text{if } count(d, L_-) > count(d, L_+) 
+\end{cases}$$
+
+That being said, there are generally 3 approaches to scoring words in a document:
+- Frequency (as seen above)
+- Uniform. 1 if it occurs at all, otherwise 0
+- Weighted by importance of word. This is similar to frequency but includes a mutliplier for each word, usually between 0 and 1. However, this adds another layer of complexity whereby there needs to be a proccess of calculating word importance. 
+
+The easiest way to approach a word list classifer is to use a hand-crafted list. However this comes with a number of problems:
+- Each list will be bias and specific to the person(s) creating the list
+- It is hard and expensive (time) to create a comprehensive list
+- Lists often become unbalanced due to bias or approach taken
+- Lists will vary accross domains
+
+Therefore, a more scienticially solid way to construct a list is by automatically deriving one.  
+
+The golden standard for achieving something like this would be through a supervised machine learning approach. However, this relies on labelled data which is expensive and often required human input to label it which is what we want to avoid. 
+
+There are two go to "naive" methods that form the basis for automatically constructing word lists:
+
+**Most Frequent Items:** Simply put, we take the top `N` occuring words as use this as our lists. FOr example, given a positive corpora, the most frequent words would become the `positive_list` and the same for the negative corpora and list. 
+
+**Greatest Frequency Difference:** Here, you look at the differential counts between the labelled corpora. The highest differences are considered to be the words most appropriate for each list. Still requires a cutt off point which can either be a fixed `N` for by a threshold which could be a raw numerical value or percentage. 
+
+### Evaluating Classifiers
+
+REDUCE NOISE OF LECTURE, MOSTLY JUST NOTE THE TYPE EVALS, THEIR EQUATIONS WRITTIN IN LATEX AND POS/NEGS WHERE POSSIBLE.
+
+## Week 3 - Lab Session 
