@@ -10,6 +10,8 @@ This is the markdown file that will hold all of the resources used to revise and
 2. [Week 2 - Text Documents and Preprocessing](#week-2---text-documents-and-preprocessing)
 ---
 
+<div style="page-break-after: always;"></div>
+
 # Week 1 - Intro to ANLP and Python
 
 1. [Lecture Notes](#week-1-lecture-notes)
@@ -34,6 +36,8 @@ Largely an intro class to the module. Light on content that will directly applie
 
 **Functions**: apply code again, call on some arguments, return a value
 
+<div style="page-break-after: always;"></div>
+
 ## Week 1 Lab Session
 
 `NLE2023_lab_1_1_SOLUTIONS.ipynb`
@@ -43,6 +47,8 @@ Largely an intro class to the module. Light on content that will directly applie
 The lab for this week was generally an intro session for people unfamilar with python. I am already familiar with Python so I won't do a full breakdown of the code in this section, where as for the notes on later weeks I will. However, when doing the assignment exam it will be important to reference these lab files to ensure good practice has been implemented in the code. There also may be some good tricks layed out in these notebooks. 
 
 Below are some code snippets, functions and attributes taken from the notebook that tend to be things that slip out of my mind sometimes. 
+
+<div style="page-break-after: always;"></div>
 
 ## Week 1 Code Snippets
 
@@ -139,6 +145,8 @@ Works left to right in terms of hierarchy:
 - `item` main part of comp references the most granular item accessed
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 # Week 2 - Text Documents and Preprocessing
 
@@ -266,12 +274,14 @@ It is generally seen as an improvement on Stemming as the output combines vocabu
 
 For search tasks, the recall (relevant results) should be increased when using Lemmatisation, or Stemming, as all directly related words can be returned. `battery`, `batteries`
 
+<div style="page-break-after: always;"></div>
+
 # Week 2 Lab Session
 
 There are 3 notebooks for this lab:
 - [Preprocessing Text (Part 1)](#preprocessing-text-part-1) `NLE2023_lab_2_1_SOLUTIONS.ipynb`
-- []() `NLE2023_lab_2_2_SOLUTIONS.ipynb`
-- []() `NLE2023_lab_2_3_SOLUTIONS.ipynb`
+- [Preprocessing Text (Part 2)](#preprocessing-text-part-2) `NLE2023_lab_2_2_SOLUTIONS.ipynb`
+- [DIY Tokenisation with Regular Expressions](#diy-tokenisation-with-regular-expressions) `NLE2023_lab_2_3_SOLUTIONS.ipynb`
 
 ## Preprocessing Text (Part 1)
 
@@ -445,3 +455,167 @@ random.seed(33)
 sample=sample_sentences(sents,10)
 print(sample)
 ```
+
+<div style="page-break-after: always;"></div>
+
+## Preprocessing Text (Part 2)
+
+* [Overview](#overview-of-lab-22)
+* []()
+* []()
+* []()
+* []()
+* []()
+
+### Overview of Lab 2.2
+
+This notebook continues looking at the pre-processing steps that can be applied to raw text documents. In the previous notebook we looked at tokenization and segmentation. This notebook looks at case normalisation, stemming and stopworld/punctuation removal. 
+
+### Number and Case Normalisation
+
+One of the way a corporas types are increased is through capitalisation, e.g. "help" and "Help". In most situations, there are not different between these two word hence we want to normalise the case to be all lower. Additionally, numbers, in particular years, provide any types but often the mere context that a number/year is given is all we need, though this is less true that for the capitalisation point because sometimes the exact number or year is very important. 
+
+The main way of acheiving such normalisation tasks is through list comprehensions where by we loop through and filter items. As well as, built in python functions/methods that manipulate data. Note that normalisation techniques generally assume pre-tokenized inputs. 
+
+Normalisation will heavily reduce the size of the vocabulary. It is often good practice to demonstrate and print out the reductions in the running of the code.
+
+```
+tokens = ["The","cake","is","a","LIE"] 
+print([token.lower() for token in tokens])
+
+numbers = ['in', 'the', 'year', '120', 'of', 'the', 'fourth', 'age', ',', 'after', '120', 'years', 'as', 'king', ',' , 'aragorn', 'died', 'at', 'the', 'age', 'of', '210']
+print(["NUM" if token.isdigit() else token for token in numbers])
+```
+
+Code wrapped into a function. Also ability to process `th`, `rd`, `nd` affixes though the use of `.endswith()` and `.isdigit()` python methods and slicing `[:-2]`:
+
+```
+tokens = ["Within","5","minutes",",","the", "1st", "and", "2nd", "placed", "runners", "lapped", "the", "5th","."]
+def number_normalise(tokens):
+    normalised=["Nth" if (token.endswith(("nd","st","th")) and token[:-2].isdigit()) else token for token in tokens]
+    normalised=["NUM" if token.isdigit() else token for token in normalised]
+    return normalised
+
+print(number_normalise(tokens))
+```
+
+### Stemming 
+
+A huge amount of variation in vocabularies is due to morphological variation in which the stem of the word provides the bulk of information that most applications desire. This is particular true for topic evaluation and keyword searching. We remove this variation using a stemmer. The `NLTK` has a number of stemmers in the `nltk.stemmer` package. A common one used is the `from nltk.stem.porter import PorterStemmer`. It is initalised `st = PorterStemmer()` and then used via `st.stem(token)`, its output is just another token which is sometimes unchanged. 
+
+The Porter Stemmer algorithm (originally published by Martin Porter in 1980) is based on a specific set of rules (or "phases") that look for patterns at the ends of words. It's rules aggressively strip suffixes to the extent that it often results in outputs that are not real dictionary words/stems - this is a reason why Lemmatizers were developed. Porters algoritm also has lower case normalisation integrated as the algorithm is directed to look for lowercase words. 
+
+```
+from nltk.stem.porter import PorterStemmer
+ 
+st = PorterStemmer()
+
+sample_size = 10
+
+tokenised_sentences = sample_sentences(reuters.sents(),sample_size)
+
+for sentence in tokenised_sentences:
+  df = pd.DataFrame(list(zip_longest(sentence,[st.stem(token) for token in sentence])),columns=["BEFORE","AFTER"])
+  display(df)
+```
+
+Here is a neat block of code that applies several preproccesing steps including Stemming and measures the change in vocabulary:
+
+```
+sample_size=10000
+tokenised_sentences = sample_sentences(reuters.sents(),sample_size)
+normalised_sentences=[number_normalise(sentence) for sentence in tokenised_sentences]
+stemmed_sentences = [[st.stem(token) for token in sentence] for sentence in normalised_sentences]
+raw_vocab_size = vocabulary_size(tokenised_sentences)
+stemmed_vocab_size = vocabulary_size(stemmed_sentences)
+print("Stemming produced a {0:.2f}% reduction in vocabulary size from {1} to {2}".format(
+    100*(raw_vocab_size - stemmed_vocab_size)/raw_vocab_size,raw_vocab_size,stemmed_vocab_size))
+```
+
+### Lemmatizer
+
+A Lemmatizer is an NLP tool to reduce a word to its lemma. This is its canonical, dictionary-standard form of the word. Where Stemming just chops off things it thinks are suffixes, a Lemmatizer uses an understanding of a langugages vocabulary and grammar to deduce it's lemma which will always be a real word. It can also use Part-of-Speech (noun, verb etc) to determine the type of word it should be searching through. Lemmatizer is more accurate but much slower, so its applications should be restricted to applications where meaning and grammatical correctness of the root word matter most such as Sentiment Analysis or Chatbots. Modern technology also means that the historical slowness of Lemmatizing will be negated to an extent. 
+
+```
+from nltk.stem.wordnet import WordNetLemmatizer
+nltk.download('wordnet')
+```
+
+WordNet is a large, publicly available lexical database (essentially a "smart" dictionary) of the English language, developed by Princeton University. Unlike a standard dictionary where words are listed alphabetically, WordNet organizes words based on their semantic relationships—how they relate to each other in meaning. 
+
+The core building block of WordNet is the "synset" (synonym set). Each synset represents a specific concept. For example, the word "bank" would belong to different synsets depending on whether you mean a "financial institution" or the "edge of a river.
+
+"Relationship Mapping: WordNet connects these synsets using specific linguistic relationships:
+- Hypernyms: "A is a type of B" (e.g., Salmon $\rightarrow$ Fish).
+- Hyponyms: "B is a specific instance of A" (e.g., Fish $\rightarrow$ Salmon).
+- Meronyms: "A is a part of B" (e.g., Wheel $\rightarrow$ Car).
+
+Machine Readability: It is designed to be easily navigated by computers, which is why it is the "gold standard" resource for Lemmatizers and other NLP tools to understand context.
+
+
+A Lemmatizer is more or less implemented in the exact same way as a Stemmer but the reduction in the output vocabulary should be much less. This is mostly due to the Stemmers aggressivness but also due to the Lemmatizer's use of Part-of-Speech which pre-categorizes words into their types resulting in similar words reducing to different Lemmas, which contextually is more accurate.
+
+```
+sample_size=10000
+lemm = WordNetLemmatizer()
+tokenised_sentences = sample_sentences(reuters.sents(),sample_size)
+normalised_sentences=[number_normalise(sentence) for sentence in tokenised_sentences]
+stemmed_sentences = [[lemm.lemmatize(token) for token in sentence] for sentence in normalised_sentences]
+raw_vocab_size = vocabulary_size(tokenised_sentences)
+stemmed_vocab_size = vocabulary_size(stemmed_sentences)
+print("Lemmatizing produced a {0:.2f}% reduction in vocabulary size from {1} to {2}".format(
+    100*(raw_vocab_size - stemmed_vocab_size)/raw_vocab_size,raw_vocab_size,stemmed_vocab_size))
+```
+
+### Punctuation and Stopword Removal
+
+A stop word is a word that occurs so often in a vocabulary that it has little to no information and is just used for grammatical connectivity. By removing these words we make our courpus smaller and therefore more efficent but also concetrate the information availble in our corpus which is better for analysis. Punctuation is often treated the same way as stopwords. 
+
+Typically, to remove stopwords we need a pre-existing word list to compare against. This can be generated from the corpus by compliling the most common words but `NLTK` also have a built in list that can be loaded in.
+
+```
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+```
+
+Like most over pre-processing steps, removal is most easily acheived using a list comprehension. 
+
+```
+stop = stopwords.words('english')
+tokens="The cat , which is really fat , sat on the mat".lower().split()
+filtered_tokens = [w for w in tokens if w.isalpha() and w not in stop]
+print(tokens)
+print(filtered_tokens)
+```
+
+Recall that `.isalpha()` only returns true when all characters are alphabet letters. If you want to account for letters and/or numbers then use `.isalnum()`.
+
+A simple stopword reduction counter:
+
+```
+num_stopwords = 0
+num_tokens = 0
+for sentence in tokenised_sentences:
+    for token in sentence:
+        num_tokens += 1
+        if token in stop:
+            num_stopwords += 1
+
+print("Stopword removal produced a {0:.2f}% reduction in number of tokens from {1} to {2}".format(
+    100*(num_tokens - num_stopwords)/num_tokens,num_tokens,num_stopwords))
+```
+
+##### Tokens vs Types
+
+The issue with stopwords is the sheer number of times they occur in a corpus. Relevatively speaking the length of the stopword list is quite small. Therefore, removing stopwords which has a huge effect on the number of tokens but not so much on the number of types in a corpus.
+
+
+<div style="page-break-after: always;"></div>
+
+## DIY Tokenisation with Regular Expressions
+
+This section refer to notebook: `NLE2023_lab_2_3_SOLUTIONS.ipynb`
+
+This section is entirely an optional extension for this module as Regular Expression/REGEX will not be tested or required for the exam. Due to this, no notes will made about this notebook. The file will be kept in the repository for reference but unlikely to be referenced during the exam.
+
+<div style="page-break-after: always;"></div>
