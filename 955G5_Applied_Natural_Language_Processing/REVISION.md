@@ -461,11 +461,10 @@ print(sample)
 ## Preprocessing Text (Part 2)
 
 * [Overview](#overview-of-lab-22)
-* []()
-* []()
-* []()
-* []()
-* []()
+* [Number and Case Normalisation](#number-and-case-normalisation)
+* [Stemming](#stemming)
+* [Lemmatizer](#lemmatizer)
+* [Punctuation/Stopword Removal](#punctuationstopword-removal)
 
 ### Overview of Lab 2.2
 
@@ -567,7 +566,7 @@ print("Lemmatizing produced a {0:.2f}% reduction in vocabulary size from {1} to 
     100*(raw_vocab_size - stemmed_vocab_size)/raw_vocab_size,raw_vocab_size,stemmed_vocab_size))
 ```
 
-### Punctuation and Stopword Removal
+### Punctuation/Stopword Removal
 
 A stop word is a word that occurs so often in a vocabulary that it has little to no information and is just used for grammatical connectivity. By removing these words we make our courpus smaller and therefore more efficent but also concetrate the information availble in our corpus which is better for analysis. Punctuation is often treated the same way as stopwords. 
 
