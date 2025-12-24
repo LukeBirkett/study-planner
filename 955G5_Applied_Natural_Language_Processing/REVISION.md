@@ -632,8 +632,13 @@ A common task in NLP is to classify a document. This lecture covers 3 types of c
 
 ## Week 3 - Lecture Notes
 
-* []()
-* []()
+* [Feature Extraction](#feature-extraction)
+* [World List Classifiers](#world-list-classifiers)
+* [Evaluating Classifiers](#evaluating-classifiers)
+    - [Accuracy and Error Rate](#accuracy-and-error-rate)
+    - [Confusion Matrix](#confusion-matrix)
+    - [Precision and Recall](#precision-and-recall)
+    - [F1-Score](#f1-score)
 
 ### Feature Extraction
 
