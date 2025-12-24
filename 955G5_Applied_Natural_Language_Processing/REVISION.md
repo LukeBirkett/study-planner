@@ -40,9 +40,10 @@ Largely an intro class to the module. Light on content that will directly applie
 
 ## Week 1 Lab Session
 
-`NLE2023_lab_1_1_SOLUTIONS.ipynb`
-`NLE2023_lab_1_2_SOLUTIONS.ipynb`
-`NLE2023_lab_1_3_SOLUTIONS.ipynb`
+There are 3 labs for week 1:
+* `Lab_1_1_SOLUTIONS.ipynb`
+* `Lab_1_2_SOLUTIONS.ipynb`
+* `Lab_1_3_SOLUTIONS.ipynb`
 
 The lab for this week was generally an intro session for people unfamilar with python. I am already familiar with Python so I won't do a full breakdown of the code in this section, where as for the notes on later weeks I will. However, when doing the assignment exam it will be important to reference these lab files to ensure good practice has been implemented in the code. There also may be some good tricks layed out in these notebooks. 
 
@@ -278,7 +279,7 @@ For search tasks, the recall (relevant results) should be increased when using L
 
 # Week 2 Lab Session
 
-There are 3 notebooks for this lab:
+There are 3 notebooks for lab 2:
 - [Preprocessing Text (Part 1)](#preprocessing-text-part-1) `NLE2023_lab_2_1_SOLUTIONS.ipynb`
 - [Preprocessing Text (Part 2)](#preprocessing-text-part-2) `NLE2023_lab_2_2_SOLUTIONS.ipynb`
 - [DIY Tokenisation with Regular Expressions](#diy-tokenisation-with-regular-expressions) `NLE2023_lab_2_3_SOLUTIONS.ipynb`
@@ -766,4 +767,177 @@ $$F1 = 2 \cdot \frac{Precision \times Recall}{Precision + Recall}$$
 
 Any classifer has a decison boundry. By manipluating the boundry we can changes tightly contested instances outcome. This therefore impacts precision and recall. Whether or not we choose to do this will be based on the domain topic. For example, in medial applications, it is normally imperative that the Recall is as high as possible or even perfect, if someone is positive it must be caught. As a result precision can be traded off until the model behaves well enough in recall. This might result in more patients being marked as positive who are negative but in this domain they would be screened further or possibly rules out by an ensemble of models. 
 
+<div style="page-break-after: always;"></div>
+
 ## Week 3 - Lab Session 
+
+There are 2 notebooks for lab 3:
+- [Basic Document Classification (Part 1)](#basic-document-classification-part-1) `Lab_3_1_SOLUTIONS.ipynb`
+- []() `Lab_3_2_SOLUTIONS.ipynb`
+
+## Basic Document Classification (Part 1)
+
+This weeks lab focuses on sentiment analysis. The corpus we are working with is movie reviews and we want to be able to classifc the sentiment of a movie review, either positive or negative. We will build a world list classifer, a naive bayes classifers and compare them both to the NLTK Naive Bayes implementation. 
+
+* []()
+
+### Movie Review Corpus
+
+This is how to import the corpus:
+
+```
+import nltk
+nltk.download('movie_reviews')
+```
+
+This corpus has a number of useful methods: `.categories()`, `fileids()` and `.words()`. This corpus is prelabelled and `.categories()` gives us the labels used in the corpus which is `['neg', 'pos']`. `fileids()` give us all of a particular category: `movie_reviews.fileids('pos')`. Finally, using `.words()` with an `id` returns a review: `movie_reviews.words(pos_review_ids[0])`.
+
+The item returned by `.words()` looks and behaves like a list but it is actually called `SteamBackCorpusView`. It can be converted to a list which will allow you to see the whole review `list(movie_reviews.words(pos_review_ids[0]))`. The review comes as a tokenized list. 
+
+### Creating Test and Training Sets
+
+Recall that is is imperative to split the data into test and train whenever building any sort of model or classifer. There are many ways to split a dataset but the following presents a function which generates a list of indices using the `random` package and uses a list comprehensive to extact the entries into `train` or `test`
+
+```
+import random 
+
+def split_data(data, ratio=0.7):
+    """
+    Given collection of items and ratio:
+     - partitions the collection into training and testing, where the proportion in training is ratio,
+
+    :param data: A list (or generator) of documents or doc ids
+    :param ratio: The proportion of training documents (default 0.7)
+    :return: a pair (tuple) of lists where the first element of the 
+            pair is a list of the training data and the second is a list of the test data.
+    """
+    
+    n = len(data) 
+    train_indices = random.sample(range(n), int(n * ratio))        
+    test_indices = list(set(range(n)) - set(train_indices))
+ 
+    train = [data[i] for i in train_indices]
+    test = [data[i] for i in test_indices]
+ 
+    return (train, test) 
+```
+
+Here is the implementaiton: 
+
+```
+random.seed(41)  #set the random seeds so these random splits are always the same
+pos_train_ids, pos_test_ids = split_data(pos_review_ids)
+neg_train_ids, neg_test_ids = split_data(neg_review_ids)
+```
+
+With this dataset, the key to pairing up a review with its label to obtain the ids for `pos` or `neg` using `movie_reviews.fileids('pos')` and then manually code in it's label. Note, it is important to also apply the same processing to the training and test set:
+
+```
+training = [(movie_reviews.words(f),'pos') for f in pos_train_ids]+[(movie_reviews.words(f),'neg') for f in neg_train_ids]
+
+testing = [(movie_reviews.words(f),'pos') for f in pos_test_ids]+[(movie_reviews.words(f),'neg') for f in neg_test_ids]
+``
+
+### Document Representations
+
+The current structure of this review data, as with most of the preprocessed data we have been working on in previous labs, is an ordered list of tokens (words). Often the order of words in a document is deemed irrelevant as the most importance is on the words themselves. This is particular true for sentiment analysis as words like `terrible` in a review almost certianly mean it is negative regardless of where they are in a document or string. 
+
+With this in mind, we can reconstruct the list of tokens into a bag-of-words. This can be manually done using a python dictionary to iteratively create a sparse vector of frequncies or booleans. However, `NLTK` has a built in method for this exact thing called `FreqDist`: from nltk.probability import FreqDist. This behave the same as a dictionary but has some built in methods that allow easier manilpluation, adding and subtracting of the data. Here is an example where we add a review (without the label) into a `FreqDist` stored in a variable called `doc1`:
+
+```
+from nltk.probability import FreqDist
+
+doc1 = FreqDist(training[0][0])
+doc1
+```
+
+The output looks like:
+
+```
+FreqDist({',': 24, '.': 18, 'and': 11, 'a': 9, 'to': 8, 'the': 7, 'melvin': 6, 'his': 6, "'": 6, 's': 6, ...})
+```
+
+Here an implementation of turning a test and training set into a `FreqDist` format whilst retaining the `(review, label)` structure:
+
+```
+training_basic=[(FreqDist(wordlist),label) for (wordlist,label) in training]
+testing_basic=[(FreqDist(wordlist),label) for (wordlist,label) in testing]
+```
+
+One thing that is important to remember is that most preprocessing steps are easier to apply in the original wordlist format rather than to the `FreqDist` itself. 
+
+### Creating Word Lists
+
+This section focuses on creating a manual sentiment classifers that used nothing more than a pre-existing wordlist to determine its decisions. We need to construct to worldlists, a postivie and negative one. The classifer words by counting the number of instances its sees of the postive or negative word lists in a document. The list with the most entries is the decision. Although slightly more complicated rulings such as weighted or thresholding can be implemented too. The postive or negative word lists can be handcrafted or automatically generated. 
+
+A `FreqDist` or Python Dictionary can gain be used to hold the counts for each label seen in the document's training data:
+
+```
+pos_freq_dist=FreqDist()
+neg_freq_dist=FreqDist()
+
+for reviewDist,label in training_norm:
+    if label=='pos':
+        pos_freq_dist+=reviewDist
+    else:
+        neg_freq_dist+=reviewDist
+        
+pos_freq_dist
+```
+
+The words from the wordlists can then be checked in the counts: 
+
+```
+words=['bad']
+
+for word in words:
+    diff=pos_freq_dist[word]-neg_freq_dist[word]
+    print(word,diff)
+```
+
+Note, that just because a word itself infers a certain sentiment it can still show up in either type of review. Because of this it important to check the difference between the counts in each sentiment. The words that appears disproportionatly in either category can then be compliles and extracted as automatically derived wordlists. Additionally, the magnitude of the difference can be converted into some sort of weighting mechanism. 
+
+The most common rules for constructing automatric wordlists are `n` most frequent words or thresholding. 
+
+For the former, we pre-determine that we are looking for `n` most popular words for each sentimal. We calculate the differences as above and order by highest differences. The top `n` are out words. 
+
+For the later, we start of doing the same thing and sort the list. This time the length of the list can be variable. We just want all entries that obtained a different more than `x`. 
+
+A good trick to remeber is that `FreqDists` can be added or subtracted from eachother resulting in the difference between sets: `posdiff=pos_freq_dist-neg_freq_dist`
+
+Additonally, `FreqDist` allows you to ge the counts of specific entries using `.get()`: `posdiff.get('excellent',0)` and simply return a list of the most common words using `posdiff.most_common()`
+
+Here is function that combines the above functionality to get the top `k` most frequent words:
+
+```
+def most_frequent_words(posfreq,negfreq,topk):
+    difference=posfreq-negfreq
+    sorteddiff=difference.most_common()
+    justwords=[word for (word,freq) in sorteddiff[:topk]]
+    return justwords
+```
+
+Note that the order that the `FreqDist` are passed here determined the top list that is outputted:
+
+```
+top_pos=most_frequent_words(pos_freq_dist,neg_freq_dist,50)
+print(top_pos)
+
+top_neg=most_frequent_words(neg_freq_dist,pos_freq_dist,50)
+print(top_neg)
+```
+
+Here is a function to give a thresholded list:
+
+```
+def above_threshold(posfreq,negfreq,threshold):
+  difference=posfreq-negfreq
+  sorteddiff=difference.most_common()
+  filtered=[w for (w,f) in sorteddiff if f>threshold]
+  return filtered
+```
+
+```
+above100pos = above_threshold(pos_freq_dist,neg_freq_dist,100)
+print(above100pos)
+```
