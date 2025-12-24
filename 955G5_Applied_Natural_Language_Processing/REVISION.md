@@ -691,6 +691,74 @@ There are two go to "naive" methods that form the basis for automatically constr
 
 ### Evaluating Classifiers
 
-REDUCE NOISE OF LECTURE, MOSTLY JUST NOTE THE TYPE EVALS, THEIR EQUATIONS WRITTIN IN LATEX AND POS/NEGS WHERE POSSIBLE.
+Evaluating a classifer tells us how well it willl do on unseen documents. Through comparing evulation metrics accross models, or even parameter settings, we can select for the best performing one. In order to do evaluation we need a labelled dataset that has not been trained on. This means we have to partition our data into into test and training before anything else takes place. 
+
+Often we partition into 3 sets: training, tests and development. The development set is also a hold-out set that the training process doesn't seen but it is used to tests different parameter settings. Generally, settings are compared on the development set, then the model + the settings are sent to the test set for the final evaluation. The ability to use a development set is often determined by how much data is available. 
+
+#### Accuracy and Error Rate
+
+Accuracy is a simple metric that measures the proportion of items in the test set that were classified correctly. Conversely, the error rate would be the proporition iof items classifed incorrectly. 
+
+$$accuracy = \frac{|\{i | prediction(i) = label(i)\}|}{|\{i\}|}$$
+
+$$error \ rate = \frac{|\{i \mid prediction(i) \neq label(i)\}|}{|\{i\}|}$$
+
+Accuracy is an intutative metric but can provide misleading results, particularly when the underlying dataset is imbalanced. For example, if the class if split 99% negative and 1% positive then a classifer that only predicts negative for every instance will have an accuracy of 99% despite missing every positive instance. Additionally, it weights all errors the same, however, in practice we have False Positives and False Negatives. A False Positive might be incorrectly flagging a card transaction as fraud when it is legitimate. A False Negative could be missing a present disease. Clearly these errors are not equal and accuracy would have no way of balancing these. 
+
+#### Confusion Matrix 
+
+The confusion matrix is a performance measurement tool and that makes it quick and easy to compare between actual and predict values. The 4 quarters of TP, FP, RN and FN can be combined to create different metrics. Additionally, it is useful by its self as it allows to see a breakdown of not just how many errors there were but which classes are a symptom of the errors. In this way, it is an improvement on Accuracy. 
+
+- True Positives (TP): The model correctly predicted the "Positive" class.
+- True Negatives (TN): The model correctly predicted the "Negative" class.
+- False Positives (FP): The model predicted "Positive," but it was actually "Negative" (Type I Error).
+- False Negatives (FN): The model predicted "Negative," but it was actually "Positive" (Type II Error)
+
+$$\begin{array}{|c|c|c|}
+\hline
+& \text{Predicted +ve} & \text{Predicted -ve} \\ \hline
+\text{True +ve} & \text{True Positives (TP)} & \text{False Negatives (FN)} \\ \hline
+\text{True -ve} & \text{False Positives (FP)} & \text{True Negatives (TN)} \\ \hline
+\end{array}$$
+
+* Total Samples ($n$): $TP + TN + FP + FN$
+
+* Accuracy: $\frac{TP + TN}{n}$ (Correct predictions / Total)
+
+* Error Rate: $\frac{FP + FN}{n}$ (Incorrect predictions / Total)
+
+* Precision: $\frac{TP}{TP + FP}$
+
+* Recall: $\frac{TP}{TP + FN}$
+
+* F1-Score: $2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}$
+
+#### Precision and Recall
+
+Recall is proportion of actual positive documents that are predicted correctly. To get this you need to compile all of the positive documents which from the confusion matrix will be the $TP$ and $FN$ (False Negatives are documents that were true but predicts false). The $TP$ is then taken as a ratio of this number. 
+
+$$\frac{TP}{TP + FN}$$
+
+Precision is the proportion of positive predictions that are correct. This looks as how many instances the model predicted to be true and then identifies the actual proportion of this number that were offically true. The metric complies the $TP$ and $FP$ on the denominator and creates a ratio with the $TP$.
+
+$$\frac{TP}{TP + FP}$$
+
+Recall is concerned with actual positives
+
+Precision is concerned with modelled positives
+
+#### F1-Score
+
+In an ideal world we want high precision and high recall. The F1-score is a metric that combines the two. It is the harmonic mean or balance of the precision and recall. Because it is the harmonic mean and not the arithmetic mean is skews towards which ever input metric is lower. A harmonic mean punishes difference between two inputs and is sensitive to the minimum value. If one input was to be 0% the F1 would be 0%. 
+
+Shorthand: 
+$$F1 = \frac{2PR}{P + R}$$
+
+Longform:
+$$F1 = 2 \cdot \frac{Precision \times Recall}{Precision + Recall}$$
+
+#### Precision, Recall Tradeoff
+
+Any classifer has a decison boundry. By manipluating the boundry we can changes tightly contested instances outcome. This therefore impacts precision and recall. Whether or not we choose to do this will be based on the domain topic. For example, in medial applications, it is normally imperative that the Recall is as high as possible or even perfect, if someone is positive it must be caught. As a result precision can be traded off until the model behaves well enough in recall. This might result in more patients being marked as positive who are negative but in this domain they would be screened further or possibly rules out by an ensemble of models. 
 
 ## Week 3 - Lab Session 
