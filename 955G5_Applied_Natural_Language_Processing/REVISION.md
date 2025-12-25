@@ -773,13 +773,17 @@ Any classifer has a decison boundry. By manipluating the boundry we can changes 
 
 There are 2 notebooks for lab 3:
 - [Basic Document Classification (Part 1)](#basic-document-classification-part-1) `Lab_3_1_SOLUTIONS.ipynb`
-- []() `Lab_3_2_SOLUTIONS.ipynb`
+- [Document Classification (Part 2)](#document-classification-part-2) `Lab_3_2_SOLUTIONS.ipynb`
 
 ## Basic Document Classification (Part 1)
 
 This weeks lab focuses on sentiment analysis. The corpus we are working with is movie reviews and we want to be able to classifc the sentiment of a movie review, either positive or negative. We will build a world list classifer, a naive bayes classifers and compare them both to the NLTK Naive Bayes implementation. 
 
-* []()
+* [Movie Review Corpus](#movie-review-corpus)
+* [Creating Test and Training Sets](#creating-test-and-training-sets)
+* [Document Representations](#document-representations)
+* [Creating Word Lists](#creating-word-lists)
+* [Creating a Word List Based Classifer](#creating-a-word-list-based-classifer)
 
 ### Movie Review Corpus
 
@@ -836,7 +840,7 @@ With this dataset, the key to pairing up a review with its label to obtain the i
 training = [(movie_reviews.words(f),'pos') for f in pos_train_ids]+[(movie_reviews.words(f),'neg') for f in neg_train_ids]
 
 testing = [(movie_reviews.words(f),'pos') for f in pos_test_ids]+[(movie_reviews.words(f),'neg') for f in neg_test_ids]
-``
+```
 
 ### Document Representations
 
@@ -940,4 +944,184 @@ def above_threshold(posfreq,negfreq,threshold):
 ```
 above100pos = above_threshold(pos_freq_dist,neg_freq_dist,100)
 print(above100pos)
+```
+
+### Creating a Word List Based Classifer
+
+Now that we have a way to construct word lists, we can use them to create a classifer. Below is a basic Class which contains a word list classifer. It inherits from `from nltk.classify.api import ClassifierI` which does not do anything itself but is instead a template. The main benefit of using this is that it ensures that your classifer/model is compatible with the rest of the `NLTK` ecosystem and can seemlessly use other `NLTK` elements such as evaluation tools and batch proccessing methods. Additionally, by inherting this class, you are conceptually agreeing to structure your class as per standard practice. Namely the structure expects `classify(featureset)` which returns the most likely label/decision for a input and `prob_classify(featureset)` which returns a probability distribution on how confident the model is on each label. Additionally, the inherited class as a few automated methods which are included. Once you create the `classify()` and `prob_classify()` you are given `classify_many()` and `prob_classify_many()` which allow you to loop through a list of inputs as a batch. As for evaluation methods, your model can be plugged direction into NLTK functionality: `nltk.classify.accuracy(classifier, test_set)`
+
+```
+from nltk.classify.api import ClassifierI
+import random
+
+class SimpleClassifier(ClassifierI): 
+
+    def __init__(self, pos, neg): 
+        self._pos = pos 
+        self._neg = neg 
+
+    def classify(self, doc): 
+        #doc is a FreqDist
+        score = 0
+        
+        # add code here that assigns an appropriate value to score
+        for word,value in doc.items():
+            if word in self._pos:
+                score+=value
+            if word in self._neg:
+                score-=value
+        
+        return "neg" if score < 0 else "pos" 
+
+    def labels(self): 
+        return ("pos", "neg")
+
+#Example usage:
+
+classifier = SimpleClassifier(my_positive_word_list, my_negative_word_list)
+classifier.classify(FreqDist("This movie was dreadful".split()))
+```
+
+When thinking about train and test sets, it is often more intuative to think about more complex ML and statical methods when there the training set is used to instantiate some sort of model or respresentation that can then be applied to the test set to be evaluated. With wordlist classifers, the training can be thought of as the task of building the worldlist. Better wordlists will perform better on the test set. The code below demonstrates a way of automatically deriving `pos` and `neg` word lists from the training set:
+
+```
+class SimpleClassifier_mf(SimpleClassifier):
+    
+    def __init__(self,k):
+        self._k=k
+    
+    def train(self,training_data):
+        
+        pos_freq_dist=FreqDist()
+        neg_freq_dist=FreqDist()
+
+        for reviewDist,label in training_data:
+            if label=='pos':
+                pos_freq_dist+=reviewDist
+            else:
+                neg_freq_dist+=reviewDist
+                
+        self._pos=most_frequent_words(pos_freq_dist,neg_freq_dist,self._k)
+        self._neg=most_frequent_words(neg_freq_dist,pos_freq_dist,self._k)
+```
+
+``` 
+movieclassifier=SimpleClassifier_mf(100)
+movieclassifier.train(training_norm)
+
+testing,labels=zip(*testing_norm)
+movieclassifier.classify_many(testing)
+```
+
+<div style="page-break-after: always;"></div>
+
+## Document Classification (Part 2)
+
+This lab again builds on sentiment analysis. There will be a closer focus on evaluation metrics and impact of training data size. This lab picks up functions build in previous labs using a `utils.py` file. The file is manually updated with whatver was personally written in previous labs. 
+
+* [Evalution Metrics for Classifer Performance](#evalution-metrics-for-classifer-performance)
+* [Investigating the Impact of the Quantity of Training Data](#investigating-the-impact-of-the-quantity-of-training-data)
+
+### Evalution Metrics for Classifer Performance
+
+#### Accuracy
+
+Accuracy is the proportion of documents that are classifed correctly. The function below evaluates can entire classifer inconjection with a specified test set. Note, this function requires all the previous steps where we split the data, constructed world lists and built a classifer.
+
+```
+def classifier_evaluate(cls, test_data):
+    '''
+    cls: an instance of a classifier object which has a classify method which returns "pos" or "neg"
+    test_data: a list of pairs where each pair is a FreqDist rep of a doc and its label
+  
+    returns: float point number which is the accuracy of the classifier on the test data provided 
+    '''
+    acc = 0
+    docs,goldstandard=zip(*test_data) #note this neat pythonic way of turning a list of pairs into a pair of lists
+    #pass all of the docs to the classifier and get back a list of predictions
+    predictions=cls.classify_many(docs)
+    #zip the predictions with the goldstandard labels and compare
+    for prediction,goldlabel in zip(predictions,goldstandard):
+        if prediction==goldlabel:
+            acc+=1
+    
+    return acc / (len(test_data))
+```
+
+```
+#Create a new classifier
+#Make sure you have updated the code in utils.py to contain your WordList Classifier
+#If you update the utils.py code mid-session, you will need to restart the runtime / kernel in order to force it to import the new updated code
+movie_classifier2 = SimpleClassifier_mf(100)
+#train it
+movie_classifier2.train(training)
+#evaluate it on the test data
+score=classifier_evaluate(movie_classifier2,testing)
+print(score)
+```
+
+#### Precision, Recall, F1 Score
+
+When classes are unbalnced, accuracy can be misleading. Precision, Recall and F1 Scores are better measures as they allow us to distinguish between different types of errors
+
+Recall:
+- Recall is concerned with actual positives. This means that the True Positives are taken as a ratio of the actual positives (even if they were predicted as negative, False Negative)
+- Precision is concerned with modelled positives. This means it takes the True Positives as a ratio of all of the instances tha the model labelled as True (even if they were wrong)
+- F1-Score is the harmonic mean of the two and the harmonic mean means that it skews towards the lower value and difference between the two are penalised. Harmonic means are sensntive to the minimum. 
+
+There code below constructs a class that builds out a Confusion Matrix. The confusion matrix allows use to easy compute several evaluation metrics from its outputs. This class computes precision, recall and f1:
+
+```
+class ConfusionMatrix:
+    def __init__(self,predictions,goldstandard,classes=("pos","neg")):
+    
+        (self.c1,self.c2)=classes
+        #self.predictions=predictions
+        self.TP=0
+        self.FP=0
+        self.FN=0
+        self.TN=0
+        for p,g in zip(predictions,goldstandard):
+            if g==self.c1:
+                if p==self.c1:
+                    self.TP+=1
+                else:
+                    self.FN+=1
+        
+            elif p==self.c1:
+                self.FP+=1
+            else:
+                self.TN+=1
+        
+    
+    def precision(self):
+        p=0
+        #put your code to compute precision here
+        p = self.TP / (self.TP + self.FP)
+    
+        return p
+  
+    def recall(self):
+        r=0
+        #put your code to compute recall here
+    
+        return r
+  
+    def f1(self):
+        f1=0
+        #put your code to compute f1 here
+        p=self.precision()
+        r=self.recall()
+        f1=p*r/()
+        return f1 
+
+
+#docs will contain the documents to classify, labels contains the corresponding gold standard labels
+docs,labels=zip(*testing)
+senti_cm=ConfusionMatrix(movie_classifier1.classify_many(docs),labels)
+print(senti_cm.TP)
+print(senti_cm.FP)
+print(senti_cm.TN)
+print(senti_cm.FN)
+senti_cm.precision()
 ```
