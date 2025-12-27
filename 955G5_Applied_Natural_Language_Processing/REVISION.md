@@ -1124,9 +1124,22 @@ senti_cm.precision()
 
 This week continues to look into document classifcation. It starts with some probability theory which lays the ground to move into Machine Learning classification, specifically Naive Bayes. One of the main issues when applying ML to Natural Language problems is data sparisty. Word do not occur that often relative to the number of words used in a document. Also, in terms of an entire vocabulary, document use very few features/words. In the context of Naive Bayes, this lab looks into "add-one-smoothing" to address the 0 counts of features. 
 
+1. [Lecture Notes](#week-4---lecture-notes)
+2. [Lab Session](#week-4---lab-session)
+
+## Week 4 - Lecture Notes
+
 * [Probability Theory](#probability-theory)
 * [Naive Bayes Classification](#naive-bayes-classification)
-* [Precision and Recall (Again)](#precision-and-recall-again)
+    * [Instantiating the Problem](#instantiating-the-problem)
+    * [Bayes Rule](#bayes-rule)
+    * [Naive Assumption](#naive-assumption)
+    * [Training a Naive Bayes](#training-a-naive-bayes)
+    * [Calculating Conditional Probabilities ](#calculating-conditional-probabilities)
+        * [Multi-variate Bernoulli Model](#multi-variate-bernoulli-model)
+        * [Multinomial Model](#multinomial-model)
+        * [Multinomial Model Truncated to 1](#multinomial-model-truncated-to-1)
+    * [Smoothing](#laplace-smoothing)
 
 ## Probability Theory
 
@@ -1225,7 +1238,7 @@ One thing that is important to point out is that the evidence is a normalization
 
 Also remember that the definition of the posterior is the the final "updated" belief. It answers the question: "Now that I've seen these specific words (features), what is the probability that this article belongs to the Sports category?"
 
-### Naive Assumpion
+### Naive Assumption
 
 Now, at this one, one really important thing to consider is the feature vector. In order to carry out this bayes calculation we need to work out the exact probability of our sentence occuring given all of the features (words) in a vocabulary. This would result in a miniscule probability as a single sentence will be a very sparse vector. This is know as a curse of dimensionality. Additionally, if we assume a dependendancy relationship between words, then we need to work out dependancies for all combinations of words. If we have a 10k word vocab then this results in a model will billions of parameters. 
 
@@ -1271,7 +1284,7 @@ $$P(f_j|c) = \frac{count(f_j, c)}{\sum_{f \in V} count(f, c)}$$
 
 An extension of the mutlinomial model is the truncated to 1 version. In this, each documents occurance of a word is truncted to 1. This is true for the numerator and denomenators. The numerator is capped at the number of documents, i.e. a particular word comes up in all of them. The denominator is the sum of each documents vocab/types $|V|$. It is similar to Bernoulli in the sense that the feature representation are binary but different at the denomenator will be much larger. It may improve on the general mutlinomial as documents with a high properotion of a single word cannot bias the learned parameters (conditional probabilities). 
 
-#### Laplace Smoothing
+### Laplace Smoothing
 
 An issue that keep reoccuring for out NLP tasks is sparseness. Words are sparse and sentences or bag-of-word combinations are even sparser. For our naive assumption where we focus on individual words, a huge issue arises when a word comes up in the test set that was not in the training set, this is known as the Zero Frequency problem. A word exists and was seen in the training set, however, is was only seen in a certain context. Perhaps in postive or negative sentiment analysis, it was only seen in the positive class, hence, the model knows it exists but doesn't know how to assign a value to it for a certain class. Given that Naive Bayes is a product model, anything assigned a 0 probability will result in the model producing a 0 probability overall. 
 
@@ -1290,5 +1303,7 @@ Imagine a "Spam" class that has seen 1,000 total words during training. You see 
 
 Sometimes "Add-One" is too much (it gives too much weight to rare words). In those cases, people use Lidstone Smoothing, where instead of adding $1$, you add a smaller fraction like $\alpha = 0.1$.
 
+<div style="page-break-after: always;"></div>
 
-## Precision and Recall (Again)
+## Week 4 - Lab Session
+
