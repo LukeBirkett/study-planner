@@ -1307,3 +1307,452 @@ Sometimes "Add-One" is too much (it gives too much weight to rare words). In tho
 
 ## Week 4 - Lab Session
 
+There are 2 notebooks for lab 4:
+- [Naive Bayes Classification]() `Lab_4_1_SOLUTIONS.ipynb`
+- [Naive Bayes Classification (Part 2)]() `Lab_4_2_SOLUTIONS.ipynb`
+
+## Naive Bayes Classification (Part 1)
+
+This lab again focuses on sentiment analysis but builds on the Word List classifers by developing a Naive Bayes classifer.
+
+* [How a Naive Bayes Classifer Works](#how-a-naive-bayes-classifer-works)
+* [Conditional Probabilities](#conditional-probabilities)
+* [Feature Probabilities](#feature-probabilities)
+* [Naive Bayes Classify](#naive-bayes-classify)
+* [Add One Smoothing and Known Vocab](#add-one-smoothing-and-known-vocab)
+* [Out-of-Vocabulary words (OOV)](#out-of-vocabulary-words-oov)
+* [Underflow](#underflow)
+* [Complete Naive Bayes Classifer Class](#complete-naive-bayes-classifer-class)
+
+This labs starts by building a very basic classifier that determins if the input is about the weather or football. All inputs into the model will be one of the topics. 
+
+```
+weather_sents_train = [
+    "today it is raining",
+    "looking cloudy today",
+    "it is nice weather",
+]
+
+football_sents_train = [
+    "city looking good",
+    "advantage united",
+]
+```
+
+Recall that the independence assumption of Naive Bayes means that the input into the model will be that of a Bag-of-Words. The structure within the BoW can either be Bernoulli where words either appear or not in a documunent or Multinomial where the frequency of words is taken into account. The example given will use Mutlinomial events.
+
+This is how we will set the data up: 
+
+```
+from nltk.probability import FreqDist
+
+weather_data_train=[(FreqDist(sent.split()),"weather") for sent in weather_sents_train]
+
+football_data_train=[(FreqDist(sent.split()),"football") for sent in football_sents_train]
+
+football_data_train=[(FreqDist(sent.split()),"football") for sent in football_sents_train]
+```
+
+The output is structued like this. It is a list of BoW's from each sentence with their label attached within a tuple. A list of tuples with a dict and string nested:
+
+```
+[(FreqDist({'is': 1, 'it': 1, 'raining': 1, 'today': 1}), 'weather'),
+ (FreqDist({'cloudy': 1, 'looking': 1, 'today': 1}), 'weather'),
+ (FreqDist({'is': 1, 'it': 1, 'nice': 1, 'weather': 1}), 'weather'),
+ (FreqDist({'city': 1, 'good': 1, 'looking': 1}), 'football'),
+ (FreqDist({'advantage': 1, 'united': 1}), 'football')]
+```
+
+### How a Naive Bayes Classifer Works
+
+In order to classify a document we need to be able to work out which classes probabilty is greater:
+
+$$P(\text{weather} \mid d) \quad \text{versus} \quad P(\text{football} \mid d)$$
+
+$d$ is the input sentence are for a single instance passed into the model, the same sentence's probability will be computed for each class:
+
+$$P(\text{weather} \mid \text{``today is looking cloudy''}) \quad \text{versus} \quad P(\text{football} \mid \text{``today is looking cloudy''})$$
+
+The idea is that the sentence which is most suited to a topic will have a higher probability for that class. The english translation of what is written is the "probability of this (weather or football) being class given that we have seen the input sentence"
+
+To build out a Naive Bayes classifer you start with the Bayes Rule: 
+
+$$P(X|Y) = \frac{P(Y|X)\cdot P(X)}{P(Y)}$$
+
+This leads to the following comparison: 
+
+$$\frac{P(d \mid \text{weather}) \cdot P(\text{weather})}{P(d)} \quad \text{versus} \quad \frac{P(d \mid \text{football}) \cdot P(\text{football})}{P(d)}$$
+
+Because both side are divided by the same thing we can drop/cancel out the denominator. Though note, that doing this means the output will not be a true probabiliy, however, the magnitute of the numbers will still be true, i.e. a higher number is more probable, which is all we need to execture a Naive Bayes, though is we need true probabilities for another reason then we cannot use this simplification: 
+
+$$P(d \mid \text{weather}) \cdot P(\text{weather}) \quad \text{versus} \quad P(d \mid \text{football}) \cdot P(\text{football})$$
+
+This is what each of the probabilities mean in isolation:
+
+1. $P(\,d\,|\,\text{weather}\,)$: this is the probability of a document in the `weather` category being the document $d$
+
+2. $P(\,d\,|\,\text{football}\,)$: this is the probability of a document in the `football` category being the document $d$
+
+3. $P(\,\text{weather}\,)$: this is the probability of a randomly selected document being of category `weather`.
+
+4. $P(\,\text{football}\,)$: this is the probability of a randomly selected document being of category `football`.
+
+$P(\,\text{weather}\,)$ and $P(\,\text{football}\,)$ are really important piece of information we need to calculate and are know as the class prior. They represent out knowledge prior to adding any addition information, which in our case will be the input sentnece. The prior are the class wide distributions. 
+
+Prior are simple to calculate and are the ratio of documents list with class $n$ against call documents: 
+
+$$P(\text{weather})=\frac{n_1}{n_1+n_2} \qquad \text{and} \qquad P(\text{football})=\frac{n_2}{n_1+n_2}$$
+
+The code below is a basic function to calculate prior for any number of given classes. It works by initalizing a dictionary with will be filled interatively with the number of times a class is seen connected to a document. With this function, it doesn't actually matter what format the document is in, list vs BoW, just that the training data takes the structure of a tuple with `(document, label)` whereby the label can be accessed. In the middle of this function, after all the class instances can be counted, the total number of documents is counted. Finally, the dict keys (classed) are loop through and the counts are update to be a ratio based on the total value. The output is a dict of classes with their respective prior probability value:
+
+```
+def class_priors(training_data):
+    priors={}
+    for (doc,label) in training_data:
+        priors[label]=priors.get(label,0)+1
+    total=sum(priors.values())
+    for key,value in priors.items():
+        priors[key]=value/total
+    return priors
+
+class_priors(train_data)
+
+{'football': 0.4, 'weather': 0.6}
+```
+
+### Conditional Probabilities
+
+Next the task is calculate the conditional probabilities which is $P(\,d\,|\,\text{weather}\,)$ and $P(\,d\,|\,\text{football}\,)$. That is the probability of seeing some  document $d$ given that we have observed a class. 
+
+The problem is that a documents are long sequence of words and are generally unique, that means we won't have been the exact document in the training data. Remember, a document is just any text based thing. It can be an entire magazine or just a sentence on twitter, but even then most tweet have some variation in words and grammar even if thay are saying thr same thing. 
+
+To address this, the Naive Bayes makes a simplifying assumption of independance. Each word in a document is an independant feature and comes with its own probability of occuring. In reality, words used are related, domain words used together and certain words lead to other words being used. However, the assumption allows us to practically execture the model and gives us an approximation. The result is the the previous calcuation of $P(\,\text{"today is looking cloudy"}\,|\,\text{weather}\,)$ now becomes that of a joint probability product:
+
+$$
+P(\,\text{"today"}\,|\,\text{weather}\,)\times P(\text{"is"}\,|\,\text{weather}\,)\times P(\text{"looking"}\,|\,\text{weather}\,)\times P(\text{"cloudy"}\,|\,\text{weather}\,)
+$$
+
+For the general case, with class $c$ and document $d=\{w_1,\ldots,w_n\}$, we have:
+
+$$
+\begin{aligned}
+P(\,d\,|\,c\,) &=& P(\,\{w_1,\ldots,w_n\}\,|\,c\,)\\
+&=& \prod_{i=1}^n P(\,w_i\,|\,c\,)
+\end{aligned}
+$$
+
+### Feature Probabilities
+
+In order to exectute these conditional probabiltiy calculations we need to derive estimates of the probabilities for each word/feature. $P(\,\text{"cloudy"}\,|\,\text{weather}\,)$, $P(\text{"is"}\,|\,\text{weather}\,)$, $P(\text{"today"}\,|\,\text{weather}\,)$, and $P(\text{"looking"}\,|\,\text{weather}\,)$.
+
+To start, you look into the training data and find all of the documents that are labelled `weather` and compile a count of all the documents tokens, e.g. 12 tokens with 8 types. 
+
+- the probability of seeing "today" in a `weather` document is $\frac{2}{11}$
+i.e. $P(\text{"today"}\,|\,\text{weather})=\frac{2}{11}$;
+- the probability of seeing "it" in a `weather` document is $\frac{2}{11}$ 
+i.e. $P(\text{"it"}\,|\,\text{weather})=\frac{2}{11}$;
+- the probability of seeing "is" in a `weather` document is $\frac{2}{11}$
+
+You repeat this for all of the words (types) and the condiitional probabilites will sum to 1. You sent do the same thing for the other class(es) and in the end you have a respository for all words seen with respect to a class. 
+
+The function outlines a way to calculate the conditional probabilities from the training data. It starts by initalizing a dictionary to hold the probabilities. The training data is looped through in `(doc, label)` tuple format. A variable called `classcond` is created which holds a copy of the `label` if it exists in `conds` otherwise just holds an empty dictionary. Then the items of the `doc`, with is in `FreqDist` BoW form, are looped through. The words from the `doc` are added to the `classcond` dict, if they already exist their freqency is located using `.get()` and the additional frequency from the current BoW is added, otherwise if it a new entry just the new frequency is added. Finally, within each iteration of the loop, the `classcond` dictionary which holds the counts is called to `conds` where the key is the label. This line is within the loop so it may look like it is overwritting the label key for each document but it is important to notice that `classcond` is always either a fresh empty dictionary or an ongoing version to be updated which is pulled in on each document using `.get(label,{})` so `conds[label]` is overwritting the key but with an updated version of the existing value. Finally, after all documents are looped through, the `conds` dict is looped through extracting `label,dist`, remember this dict as the `label` as the key. For each label at total feature count is computed using `sum(dist.values())` and then within the `cond` the `dist` dictionary which holds the feature and frequencies is updated so that frequences are a ratio against the total features `value/total`: 
+
+```
+def cond_probs(training_data):
+    conds={}
+    for(doc,label) in training_data:
+        classcond=conds.get(label,{})
+        for word,value in doc.items():
+            classcond[word]=classcond.get(word,0)+value
+        
+        conds[label]=classcond
+    print(conds)
+    for label,dist in conds.items():
+        total=sum(dist.values())
+        conds[label]={key:value/total for (key,value) in dist.items()}
+        
+    return conds
+
+cond_probs(train_data)
+
+# this the printed version of the counts
+{'weather': {'today': 2, 'it': 2, 'is': 2, 'raining': 1, 'looking': 1, 'cloudy': 1, 'nice': 1, 'weather': 1}, 'football': {'city': 1, 'looking': 1, 'good': 1, 'advantage': 1, 'united': 1}}
+
+# this is the outputted conditional probabilities for each word
+{'football': {'advantage': 0.2,
+  'city': 0.2,
+  'good': 0.2,
+  'looking': 0.2,
+  'united': 0.2},
+ 'weather': {'cloudy': 0.09090909090909091,
+  'is': 0.18181818181818182,
+  'it': 0.18181818181818182,
+  'looking': 0.09090909090909091,
+  'nice': 0.09090909090909091,
+  'raining': 0.09090909090909091,
+  'today': 0.18181818181818182,
+  'weather': 0.09090909090909091}}
+
+```
+
+### Naive Bayes Classify
+
+Now we have the functions to compute prior and conditional probabiltiies which makes up the components of a naive bayes classifer:
+
+```
+c_priors = class_priors(train_data)
+c_probs = cond_probs(train_data)
+```
+
+Now these two functions can easily be wrapped into a `classify` function, or method to fit into the classes we made earlier: `classify(doc,priors,c_probs)`. The logic would involve using functions outputs to calculate a probability for each class based on the input `doc`. Remeber, this will take the form of the `product of the join prob for all tokens` * `prior for the class`, then we just take the highest of the two.
+
+```
+c_priors = class_priors(train_data)
+c_probs = cond_probs(train_data)
+sent = "looking cloudy today"
+doc = FreqDist(sent.split())
+classify(doc,c_priors,c_probs) # need to write a function with logic for computation
+```
+
+This follow function works by taking a copy of the `prior` under the variable `doc_probs` and updating the prior for each work in a document using a loop which updates and overwrittes `doc_probs` each iteration in th end `doc_probs` holds two probabilties which we can select for the highest:
+
+```
+def classify(doc,priors,c_probs):
+
+    #<put your definition of classify here>
+    doc_probs=priors
+    for word in doc.keys():            
+        doc_probs={classlabel:sofar*c_probs[classlabel].get(word,0) for (classlabel,sofar) in doc_probs.items()}
+
+    highprob=max(doc_probs.values())
+    print(doc_probs.values())
+    print(highprob)
+    classes=[c for c in doc_probs.keys() if doc_probs[c]==highprob]
+    print(classes)
+    return random.choice(classes)
+```
+
+### Add One Smoothing and Known Vocab
+
+One large issue with the implementation shown is that is does not handle the problem of sparsity, particularly where in the training data a word shows up in one class and not the other. This is a huge issue because we need to calculate the probabilties for both classes. If a word never came up in one class, when we go to look up its conditional probability then we won't get anything. As we are using a Naive solituion we take the product of all the conditional probabilities. The solution to this is "Add One Smoothing" which will allow us to avoid zero probabiltiies by adding a 1 count to every word in the vocab. The easiest way to acheive this is to make a copy of the known vocabulary found in the training data. Remember the classifer can only learn about features found in the training data. The function below creates a known vocabilary set from a inputted training data:
+
+```
+def known_vocabulary(training_data):
+    known=set()
+    for doc,label in training_data:
+        for word in list(doc.keys()):
+          known.add(word)
+    return known
+
+vocab=known_vocabulary(train_data)
+
+len(vocab)
+
+"12"
+
+vocab
+
+{'advantage',
+ 'city',
+ 'cloudy',
+ 'good',
+ 'is',
+ 'it',
+ 'looking',
+ 'nice',
+ 'raining',
+ 'today',
+ 'united',
+ 'weather'}
+```
+
+Now for each word in the known vocabulary and for every class, we need to add one extract count to the records. Below is an updated version of the `cond_probs` function we made earlier.  In the middle of the function the `known_vocabulary` function is invoked. Then, once we are upacking the `conds` labels, we loop through the vocab set. We check if a word exists in the labels `classcond` if it does we `+1`, if it doesn't we instantiate a record and `+1`. Aside from these steps, the `cond_probs` function is the same as before: 
+
+```
+def cond_probs(training_data):
+    conds={}
+    for(doc,label) in training_data:
+        classcond=conds.get(label,{})
+        for word,value in doc.items():
+            classcond[word]=classcond.get(word,0)+value
+        
+        conds[label]=classcond
+
+    vocab=known_vocabulary(training_data)
+    for label, classcond in conds.items():
+        for word in vocab:
+        
+            classcond[word]=classcond.get(word,0)+1
+        conds[label]=classcond
+            
+    for label,dist in conds.items():
+        total=sum(dist.values())
+        conds[label]={key:value/total for (key,value) in dist.items()}
+        
+    return conds
+```
+
+### Out-of-Vocabulary words (OOV)
+
+Something we haven't covered so far is Out-of-Vocabulary words. These are words at arise in the test set or IRL once the model is deployed and were not in the training set. Because they were not in the training set, the model did not learn how to process these words, hence, the model will break or return a `0` probability. The code below makes use for the `known_vocab` function and whilst looping through a document checks if the word exists in the vocab, if it doesn't then it isn't processed. 
+
+```
+def classify(doc,priors,c_probs,known):
+
+    doc_probs=priors
+    for word in doc.keys():
+        if word in known:
+            doc_probs={classlabel:sofar*c_probs[classlabel].get(word,0) for (classlabel,sofar) in doc_probs.items()}
+    print(doc_probs)
+    highprob=max(doc_probs.values())
+    classes=[c for c in doc_probs.keys() if doc_probs[c]==highprob]
+    print(classes)
+    return random.choice(classes)
+        
+c_priors = class_priors(train_data)
+c_probs = cond_probs(train_data)
+sent = "looking cloudy today"
+doc = FreqDist(sent.split())
+classify(doc,c_priors,c_probs,known_vocabulary(train_data))
+```
+
+```
+sent = "looks cloudy today"
+doc = FreqDist(sent.split())
+classify(doc,c_priors,c_probs,known_vocabulary(train_data))
+
+{'weather': 0.006805293005671077, 'football': 0.001384083044982699}
+['weather']
+'weather'
+```
+
+### Underflow
+
+Recall the Naive product implementation we went through earlier:
+
+$$
+\begin{align}
+P(\,d\,|\,c\,) &=& P(\,\{w_1,\ldots,w_n\}\,|\,c\,)\\
+&=& \prod_{i=1}^n P(\,w_i\,|\,c\,)
+\end{align}
+$$
+
+This tells that in order to derive the probability for some document, we need to mutliply all of the conditional probabilies for each word to get the joint probability. 
+
+This has been fine for the example toy sentence we have been working with but when we start to work with whole files and documents we find ourselves with a situation where we are mutliplying where large numbers of words which have very small probabilties. This leads to the underflow probablem where the computed probabilities are tiny, basically 0. 
+
+To avoid this, insread of taking the product of conditional probabilties, we will ADD the log of the probabilties. This is fundamental property of logarithms: the log of a product is equal to the sum of the logs. 
+
+In Naive Bayes, you are trying to calculate the likelihood of a document ($d$) given a class ($c$). When you take the log of both sides, the multiplication symbols literally "turn into" addition symbols. Since the logarithm is a monotonically increasing function (meaning if 2$x > y$, then 3$\log(x) > \log(y)$), the "winner" stays the same.4 The class that has the highest product will also have the highest sum of logs. 
+
+Now, the practicle reason we are doing this in NLP is because the product approach will give us a number that is so tiny e.g. $10^{-150}$. that a computer’s memory cannot store it accurately. It rounds down to exactly 0.0, which ruins your calculation. This is called Arithmetic Underflow.
+
+ Logarithms convert these tiny decimals into manageable negative numbers (e.g., $\log(0.0001) = -4$). Adding $-4 + (-4) + (-4)$ is numerically stable and will never cause your computer to round to zero.
+
+$$
+\begin{align}
+\log(P(\,d\,|\,c\,)) &=& \log(P(\,\{w_1,\ldots,w_n\}\,|\,c\,))\\
+&=& \sum_{i=1}^n \log(P(\,w_i\,|\,c\,))
+\end{align}
+$$
+
+Below is an updated `classfiy` function that stores the probabilities as `log()` values and implements a summation rather than product: 
+
+```
+import math
+def classify(doc,priors,c_probs,known):
+
+    doc_probs={key:math.log(value) for (key,value) in priors.items()}
+    #<put your definition of classify here>
+    for word in doc.keys():
+        if word in known:
+            doc_probs={classlabel:sofar+math.log(c_probs[classlabel].get(word,0)) for (classlabel,sofar) in doc_probs.items()}
+
+    highprob=max(doc_probs.values())
+    classes=[c for c in doc_probs.keys() if doc_probs[c]==highprob]
+    return random.choice(classes)
+        
+c_priors = class_priors(train_data)
+c_probs = cond_probs(train_data)
+sent = "looking cloudy today"
+doc = FreqDist(sent.split())
+classify(doc,c_priors,c_probs,known_vocabulary(train_data))
+```
+
+### Complete Naive Bayes Classifer Class
+
+```
+from nltk.classify.api import ClassifierI
+
+class NBClassifier(ClassifierI):
+    
+    def __init__(self):
+        
+        pass
+    
+    def _set_known_vocabulary(self,training_data):
+        #add your code here
+        known=[]
+        for doc,label in training_data:
+            known+=list(doc.keys())
+        self.known= set(known)
+    
+    def _set_priors(self,training_data):
+        #add your code here 
+        priors={}
+        for (doc,label) in training_data:
+            priors[label]=priors.get(label,0)+1
+        total=sum(priors.values())
+        for key,value in priors.items():
+            priors[key]=value/total
+        self.priors=priors
+        
+    def _set_cond_probs(self,training_data):       
+        #add your code here
+        conds={}
+        for(doc,label) in training_data:
+            classcond=conds.get(label,{})
+            for word in doc.keys():
+                classcond[word]=classcond.get(word,0)+1
+        
+            conds[label]=classcond
+    
+        for label, classcond in conds.items():
+            for word in self.known:
+        
+                classcond[word]=classcond.get(word,0)+1
+            conds[label]=classcond
+            
+        for label,dist in conds.items():
+            total=sum(dist.values())
+            conds[label]={key:value/total for (key,value) in dist.items()}
+        
+        self.conds=conds
+    
+    def train(self,training_data):
+        self._set_known_vocabulary(training_data)
+        self._set_priors(training_data)
+        self._set_cond_probs(training_data)
+    
+    def classify(self,doc):
+        #add your code here
+        doc_probs={key:math.log(value) for (key,value) in self.priors.items()}
+        for word in doc.keys():
+            if word in self.known:
+                doc_probs={classlabel:sofar+math.log(self.conds[classlabel].get(word,0)) for (classlabel,sofar) in doc_probs.items()}
+
+        highprob=max(doc_probs.values())
+        classes=[c for c in doc_probs.keys() if doc_probs[c]==highprob]
+        return random.choice(classes)
+```
+
+```
+myclassifier=NBClassifier()
+myclassifier.train(train_data)
+myclassifier.classify_many(doc for (doc,label) in test_data)
+```
+
+<div style="page-break-after: always;"></div>
+
+## Naive Bayes Classification (Part 2)
+
