@@ -4,10 +4,8 @@ This is the markdown file that will hold all of the resources used to revise and
 
 ## Contents for Whole Document
 1. [Week 1 - Intro to ANLP and Python](#week-1---intro-to-anlp-and-python)
-    - [Lecture Notes](#week-1-lecture-notes)
-    - [Lab Session](#week-1-lab-session)
-    - [Code Snippets](#week-1-code-snippets)
 2. [Week 2 - Text Documents and Preprocessing](#week-2---text-documents-and-preprocessing)
+3. [Week 3 - Document Classification](#week-3---document-classification)
 ---
 
 <div style="page-break-after: always;"></div>
@@ -203,17 +201,9 @@ Another option is to right custom rules Regex but this is not directly tested fo
 
 ## How many words are there?
 
-**Types** are the number of distinct words in a corpus. If set of workds is *V*, the nymber of types is *|V|*
+**Types** are the number of distinct words in a corpus. If set of workds is *V*, the nymber of types is *|V|*. **Tokens** are total number N of running words. Tokens will be more than types. For example in Shakespeare: Tokens = 884k, Types = 31k
 
-**Tokens** are total number N of running words
-
-Tokens will be more than types. For example in Shakespeare: Tokens = 884k, Types = 31k
-
-Herdan-Heaps Law: The larger the corpora, the more word types we find. According to HH law, the average type frequency in 1M word corpus is 30. 
-
-But the frequency distribution of word types is not uniform or even normal. It is **Zipifan**. Half of all types will only occur once, hapax legomena. 
-
-Zipf's Law Sates that "the product of a word's frequency and its rank frequency is approximately constant. i.e. if most frequent word occurrs 100 times, the second will occur 50, 3rd 33. And so on. 
+Herdan-Heaps Law: The larger the corpora, the more word types we find. According to HH law, the average type frequency in 1M word corpus is 30. But the frequency distribution of word types is not uniform or even normal. It is **Zipifan**. Half of all types will only occur once, hapax legomena. Zipf's Law Sates that "the product of a word's frequency and its rank frequency is approximately constant. i.e. if most frequent word occurrs 100 times, the second will occur 50, 3rd 33. And so on. 
 
 ## Normalisation
 
@@ -241,7 +231,7 @@ Morphology is the study how words are made up of smaller parts. For example, `ca
 
 Derivational Morphology is the process of creating a new work from an existing words with the use of affixes. `start`, `starter`, `restart`, `restartable`. The affixes not only create a new word but change to a different part of speech, i.e. noun to verb. 
 
-**Stemming* is the process of removing unwanted affixes so we can focus on the base content of the word. The `nltk` package has some built in functions for this. 
+**Stemming** is the process of removing unwanted affixes so we can focus on the base content of the word. The `nltk` package has some built in functions for this. 
 
 ```
 from nltk.stem.porter import PorterStemmer
@@ -1020,9 +1010,11 @@ movieclassifier.classify_many(testing)
 This lab again builds on sentiment analysis. There will be a closer focus on evaluation metrics and impact of training data size. This lab picks up functions build in previous labs using a `utils.py` file. The file is manually updated with whatver was personally written in previous labs. 
 
 * [Evalution Metrics for Classifer Performance](#evalution-metrics-for-classifer-performance)
-* [Investigating the Impact of the Quantity of Training Data](#investigating-the-impact-of-the-quantity-of-training-data)
 
 ### Evalution Metrics for Classifer Performance
+
+* [Accuracy](#accuracy)
+* [Precision, Recall, F1-Score](#precision-and-recall)
 
 #### Accuracy
 
@@ -1125,3 +1117,178 @@ print(senti_cm.TN)
 print(senti_cm.FN)
 senti_cm.precision()
 ```
+
+<div style="page-break-after: always;"></div>
+
+# Week 4 - Further Document Classification
+
+This week continues to look into document classifcation. It starts with some probability theory which lays the ground to move into Machine Learning classification, specifically Naive Bayes. One of the main issues when applying ML to Natural Language problems is data sparisty. Word do not occur that often relative to the number of words used in a document. Also, in terms of an entire vocabulary, document use very few features/words. In the context of Naive Bayes, this lab looks into "add-one-smoothing" to address the 0 counts of features. 
+
+* [Probability Theory](#probability-theory)
+* [Naive Bayes Classification](#naive-bayes-classification)
+* [Precision and Recall (Again)](#precision-and-recall-again)
+
+## Probability Theory
+
+A Random Variable has a predefined range of values. For example, is the RV is "a student lives on campus" then the range of values are `{true, false}`. The sum of all the possible RV values will sum to 1: $ \sum_{v} P(X = v) = 1 $
+
+The probability that X has some value **v** is written as: $P(X=v)$. For example, $P(C=true) = \frac{100}{250} = 0.4$.
+
+In the case of the living on campus question, the two outcomes are dependent. They cannot occur at the same time. However, we could look at two events that are independent. `a = living on campus = C = True` and `b = regularly late for class = L = true`.
+
+This $ P(b|a) $ is the way to present conditional probability. It is the probability of `b` occuring given that `a` has already occured. In the case of independent events, the probability is the same as $ P(b) $: $ P(b|a) = P(b) $. If this is true then it means that the event events are completely unrelated and there is no association between them both. For this example example, that probably isn't true as living on campus would make it easier to be on time for class. 
+
+Conditional probability is an important concept and its equation is made up of different parts. The conditional probability of two events is equal to the ratio of the joint probability to the marginal probability
+
+$$P(A|B) = \frac{P(A \cap B)}{P(B)}$$
+
+Conditional probability is the likelihood of an event occurring given that another event has already happened. It allows us to update our beliefs or predictions based on new information.
+
+$P(A \cap B)$ is the joint probability (both happening). It is the intersection whereby two events occur. It can be written $P(A \cap B)$ or 5$P(A, B)$. If you draw a card from a deck, the joint probability of drawing a card that is both Red AND an Ace is $2/52$ (since there are only two red aces: Hearts and Diamonds).
+
+Marginal probability is the probability of a single event occurring, regardless of the outcome of any other variables. It "ignores" other information. Using the same deck of cards, the marginal probability of drawing a Red card is 13$26/52$ or 14$1/2$.15 We don't care if it’s an Ace, a King, or a 2—we only care that it is red.
+
+Bayes' Theorem (or Bayes' Law) is essentially a way to "reverse" conditional probability. It allows you to calculate the probability of a cause given its effect. It is derived directly from the definition of conditional probability.
+
+By rearranging the conditional probability equation for the joint probabiliy we find: 
+
+$$P(A \cap B) = P(A|B) \times P(B)$$
+
+However, the intersection is symmetrical ($A \cap B$ is the same as $B \cap A$). So we can also write:
+
+$$P(A \cap B) = P(B|A) \times P(A)$$
+
+Because both expressions equal 3$P(A \cap B)$, we can set them equal to each other:
+
+$$P(A|B) \times P(B) = P(B|A) \times P(A)$$
+
+By dividing both sides by $P(B)$, we get Bayes' Theorem:
+
+$$P(A|B) = \frac{P(B|A) \times P(A)}{P(B)}$$
+
+It should be noted that mathematically, Conditional Probability and Bayes' Theorm calcuation the same thing: $P(A|B)$. However, the Conditional Probability formula is more the mathmematical definition where by Bayes is the tool for inference when you don't have the full picture. 
+
+Conditional Probability could only be used when you how the full joint probability map. For exampe, you already know how many people are "Sick" and "Tested Positive" and you are just scoping into one specific part of the data. 
+
+With Bayes Theorm you might only have two pieces of information. Like the accuracy of a test and rarity of a disease and you are working backwards to derive the probabilty of something.
+
+Bayes is generally written using an Evidence (E) and Hypothesis (H) approach and have four parts. 
+
+1. **Prior: $P(H)$** This is your "Initial Gut Feeling." Before you even look at the email, what do you know about the world?
+    - Example: "I know that 80% of all emails sent globally are spam." Your starting point is $P(\text{Spam}) = 0.8$.
+
+2. **Likelihood: $P(E|H)$** This is the "Consistency Check." If the email really were spam, how likely is it that it would contain the word "WINNER"? 
+    - Example: "Spam emails use the word 'WINNER' all the time (maybe 60% of them)."
+
+3. **Evidence (Marginal): $P(E)$*** This is the "Uniqueness Check." How common is the word "WINNER" across all emails (both spam and regular)? 
+    - Example: "How often do my friends or boss send me the word 'WINNER'? Rarely. So the word 'WINNER' is pretty uncommon in total."
+    - Note: If the evidence is common (like the word "the"), it’s not a very helpful clue. If the evidence is rare, it’s a very strong clue!
+
+4. **Posterior: $P(H|E)$** This is your "Final Answer." You combine your gut feeling with the new clue to get a final probability. 
+    - Example: "Given that I saw the word 'WINNER', what is the updated probability that this is Spam?"
+
+$$P(H|E) = \frac{P(E|H) \cdot P(H)}{P(E)}$$
+
+## Naive Bayes Classification
+
+Recall the general architecture of document classification: 
+
+document -> feature extractor (vectorize) -> features (vector)
+
+The vector is passed into a classifer with consults a model, or ensemble of models, to detemined the mostly likely class given the features. 
+
+In Machine Learning, the model is trained on labeled data where the given features/vectors has a known outcome. The model learns which parameters in the features are important. From here the model can be applied to unlabelled data to work out what labelled the features should be assigned to. 
+
+### Instantiating the Problem
+
+The following bullet points instantiate the problem:
+
+* Any data instance is a tuple of features: $(f_1, f_2, ..., f_n)$. In NLP this would be something like either a list of words or a bag-of-words. Fpr shorthand, we write $f_1^2$.
+
+* The set of possible classes is C. If the input is sentences of 10 words then the set is all true sentence made up of 10 words. If there is no brief and it is just any sentence or document then the combination of features (words) will be unfathomamly large
+
+* A particular class is denoted by $c$ where $ c \in C $
+
+* The goal of a model is to take in a set of features $f_1^2$ and assign a class based on the features. The decision itself will be derived from a probability with the most likely class being selected. This is written: $P(c|f_1^2)$. The mathmatical way of writting to select the most probable class is $\mathop{\mathrm{argmax}}_{c} P(c|f_1^n)$
+
+### Bayes Rule
+
+We can put this into the Bayes Rule:
+
+$$\operatorname*{argmax}_{c} P(c|f_1^n) = \operatorname*{argmax}_{c} \frac{P(f_1^n|c) \cdot P(c)}{P(f_1^n)}$$
+
+In this example the prior is the distribution of the class as a whole and it is updated with the likelihood of the feature occuring given we know that the class has occured. This is over the evidence of the feature having occured. Finally giving us the posterior probabiltiy which tells use the probabilty that a class is belongs to this set of features. 
+
+(Likelihood * Prior) / Evidence
+
+One thing that is important to point out is that the evidence is a normalization term. It ensures that the outcome posterior probabilities all sum to 1 and therefore the output of each calculate is real probability. However, the calculation is repeated for each class andf the evidence is the same for each calculation. Therefore, the term can be dropped and the proportion of the outcomes is still valid. This means the `argmax` can still just look for the highest value and it will be still correct. We can simplify our calculations and workflow but at the trade of see the exact probabilities. It should be considered whether the use case requires the individual probablities or we just want to know the most likely. 
+
+Also remember that the definition of the posterior is the the final "updated" belief. It answers the question: "Now that I've seen these specific words (features), what is the probability that this article belongs to the Sports category?"
+
+### Naive Assumpion
+
+Now, at this one, one really important thing to consider is the feature vector. In order to carry out this bayes calculation we need to work out the exact probability of our sentence occuring given all of the features (words) in a vocabulary. This would result in a miniscule probability as a single sentence will be a very sparse vector. This is know as a curse of dimensionality. Additionally, if we assume a dependendancy relationship between words, then we need to work out dependancies for all combinations of words. If we have a 10k word vocab then this results in a model will billions of parameters. 
+
+There is a solution to this which is know as the Naive Bayes application. Here we assume that words are independanance features. This probably isn't true for words but it will get us a good enough answer. Instead of working out endless probabilitiy dependancies of each posssilbe comination of words, we just treat each word as independent feature with is own probablitily of occur. Then we take all the words that occured in a sentence and compute the joint probability: 
+
+$$ \operatorname*{argmax}_{c} P(c | f_1^n) \approx \operatorname*{argmax}_{c} \left( \prod_{i}^n P(f_i | c) \right) \cdot P(c) $$
+
+This is still a complex task as we need to know the probability of each word but is much more simple. Additionally, in practice this is easier to implement. It is actually just a boolean `FreqDist` approach that is passed into a model. This approach is known as Naive Bayes Classification as it implements as naive assumption of independence.
+
+### Training a Naive Bayes
+
+To train a naive bayes we need to work out two things which we learn from the labelled training data: 
+
+* The prior probabilities of each class, i.e. how much each class occurs in the training data: $P(c)$
+
+* The class conditional probabilities of each feature given a class: $P(f|c)$. That is the say the probability of a words occurance split down into class subsets. If this were sentiment analysis of good and bad, the word "terrible" should have a higher probability derived from the bad class. 
+
+Then with these parameters caclulated and learned, we can apply them to unlabelled features to determined what their most likely class is. 
+
+Calculating the probability of the prior is simple. We just look at the proportion of documents labelled `X` compared to the total number of documents. 
+
+### Calculating Conditional Probabilities 
+
+For the conditional probabilities we want to know the probability of the feature vectors occurance for each class. We know the label of each document and the features/words in each document. There are 3 approachs to calculating the conditional probabilites:
+
+* Multi-variate Bernoulli Model 
+* Multinomial Model 
+* Multinomial Model Truncated to 1
+
+#### Multi-variate Bernoulli Model 
+
+The Bernoulli model only considers whether a feature is in a document or not. It is equivelant to our boolean bag-of-words approach, it takes no consideration of frequency within the document. The maximum likelihood estimate for the conditional probability $P(f_j|c)$ is the proportion of documents labelled with class $c_i$ that have feature $f_j$. It be pretty easy to compute, if there at 100 documents with class positive and 80 have the word "amazing" then the calculation is $\frac{80}{100}$. The Bernoulli model only focuses on the presence or absense of a word from a document.
+
+$$ P(f_j|c) = \frac{|\{i | label(d_i) = c \text{ and } f_j \in feats(d_i)\}|}{|\{i | label(d_i) = c\}|} $$
+
+#### Multinomial Model 
+
+The Mutlinomal Naive Bayes Model shifts is focus to word counts (frequencies). This will be muc better for text application where occurance of a word mutliple times in a document will have signficance, assuming it is isnt a connective or stopword. This will look at the proportion of total words within a class. The numerator will count every single time the word $f_j$ appears across all documents in class $c$. If "amazing" appears twice in one positive document and three times in another, that counts as 5.  The denomenator counts the total number of words (the total length) of all documents in class $c$ combined.
+
+$$P(f_j|c) = \frac{count(f_j, c)}{\sum_{f \in V} count(f, c)}$$
+
+#### Multinomial Model Truncated to 1
+
+An extension of the mutlinomial model is the truncated to 1 version. In this, each documents occurance of a word is truncted to 1. This is true for the numerator and denomenators. The numerator is capped at the number of documents, i.e. a particular word comes up in all of them. The denominator is the sum of each documents vocab/types $|V|$. It is similar to Bernoulli in the sense that the feature representation are binary but different at the denomenator will be much larger. It may improve on the general mutlinomial as documents with a high properotion of a single word cannot bias the learned parameters (conditional probabilities). 
+
+#### Laplace Smoothing
+
+An issue that keep reoccuring for out NLP tasks is sparseness. Words are sparse and sentences or bag-of-word combinations are even sparser. For our naive assumption where we focus on individual words, a huge issue arises when a word comes up in the test set that was not in the training set, this is known as the Zero Frequency problem. A word exists and was seen in the training set, however, is was only seen in a certain context. Perhaps in postive or negative sentiment analysis, it was only seen in the positive class, hence, the model knows it exists but doesn't know how to assign a value to it for a certain class. Given that Naive Bayes is a product model, anything assigned a 0 probability will result in the model producing a 0 probability overall. 
+
+The solution is to simply add one when estimating the likelihood probabilities $p(f|c)$. You add 1 to all words in the vocab, this way all words are assigned a value for all classes. 
+
+In probability, if you've never seen a black swan, a "Maximum Likelihood" approach would say the probability of a black swan is $0$. Smoothing says, "I haven't seen one yet, but I'll reserve a tiny bit of probability space just in case one exists."
+
+Remember that when you add $+1$ to every word in the numerator, you are effectively adding "fake" counts to the model. If your vocabulary has 10,000 words, you've just added 10,000 fake observations. To keep the math honest, you must add that same 10,000 ($|V|$) to the denominator.
+
+Imagine a "Spam" class that has seen 1,000 total words during training. You see a new word "Urgent" in a test email.
+
+| Situation | Numerator | Denominator | Probability $P(\text{Urgent} |
+| :--- | :--- | :--- | :--- |
+| No Smoothing | 0 | 1,000 | $0.0$ (Crashes the whole model) |
+| Laplace Smoothing | $0 + 1$ | $1,000 + 20,000^*$ | $0.000047$ (Tiny, but safe) |
+
+Sometimes "Add-One" is too much (it gives too much weight to rare words). In those cases, people use Lidstone Smoothing, where instead of adding $1$, you add a smaller fraction like $\alpha = 0.1$.
+
+
+## Precision and Recall (Again)
