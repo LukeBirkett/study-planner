@@ -2362,3 +2362,43 @@ If you decide to use seeds that are a bit more "vague" to expand your search, tw
 Using the word "water" as a seed. While biological plants need water, a "cooling water" system in a factory might lead the computer to wrongly tag a factory as a biological organism.
 
 ## Week 6 - Lab Session
+
+Overview/Intro
+
+# Navigating WordNet
+NLTK WordNet, Navigation, Methods, Tools
+
+1.1 Words, Synsets, Part of Speech
+
+Lemmas(), Names(), Hyponyms(), Hypernyms()
+
+1.2 Distance to root, synset, traverse to root of tree, count steps
+
+# Semantic Similarity in WordNet
+
+Measure pathlength for similarity
+
+Info content
+
+built in nltk functions to compute these similarities
+
+Impossible to compare synsets of different part of speech using these methods becuase they are not connected via hyper
+
+2.1 
+
+he similarity of two **words** with a given part of speech is defined as the **maximum** similarity of all possible sense pairings.  If word A has 5 noun senses and word B has 4 noun senses than there are 20 possible sense pairings to check.
+
+Write a function which will compute the path_similarity of two nouns.
+
+2.2 Generalise function to use any similarity measure
+
+
+## Comparing WordNet Similarities with Human Synonymy Judgements
+
+uses extra csv
+
+3.1 wordnet path sim for pairs, connect to human, explore more similarities
+3.2 scatterplots, correlation
+3.3 
+    * Looking at the scatter plots and the correlation coefficients, what do you conclude about the different WordNet similarity measures?
+    * Do you have any reservations about your conclusions?
