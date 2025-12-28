@@ -1922,6 +1922,261 @@ An agglomerative technique which builds up clusters by repeatedly merging the cl
 
 The issue with this method is that it is computationally expensive to keep recomputing all the nearest neighbours. The runtime is $O(n^2 log n)$ where n is the number of data points. In comparison k-means is only $O(n*d*k*l)$ where k is the number of clusters and l is the number of iterations repeated. 
 
+## Week 5 - Lab Session
+
+There is only 1 notebooks for lab 5:
+- [Document Similarity]() `Lab_5_1_SOLUTIONS.ipynb`
+
+### Document Similarity
+
+In some applications it may be difficult to know and define the classes that we want to use in classification ahead of time. Or classes might be made up of various sub-classes which differ in terms of vocab used to get to the same undertanding. In both of these cases it might be more appropriate to think about Document Similarity. That is to say, given a new document, what is the most similar document(s) that we already have.
+
+### Week 5 Lab Setup
+
+For this lab we will be using the Gutenberg collection of books. We will get tokenized content of each book and store it in a dictionary:
+
+```
+from nltk.corpus import gutenberg
+book_ids=gutenberg.fileids()
+books={b:gutenberg.words(b) for b in book_ids}
+
+books[book_ids[0]]
+['[', 'Emma', 'by', 'Jane', 'Austen', '1816', ']', ...]
+
+books.keys()
+dict_keys(['austen-emma.txt', 'austen-persuasion.txt', 'austen-sense.txt', 'bible-kjv.txt', 'blake-poems.txt', 'bryant-stories.txt', 'burgess-busterbrown.txt', 'carroll-alice.txt', 'chesterton-ball.txt', 'chesterton-brown.txt', 'chesterton-thursday.txt', 'edgeworth-parents.txt', 'melville-moby_dick.txt', 'milton-paradise.txt', 'shakespeare-caesar.txt', 'shakespeare-hamlet.txt', 'shakespeare-macbeth.txt', 'whitman-leaves.txt'])
+```
+
+We can normalise the tokens in the document and construct a bag-of-words representation. The `normalise` function is not setup in the code below but can be filled with everything we did in the previous labs:
+
+```
+book_reps={key:FreqDist(normalise(book)) for key,book in books.items()}
+
+print(book_reps[book_ids[0]].items())
+dict_items([('emma', 865), ('jane', 301), ('austen', 1), ('volume', 3), ('chapter', 56), ('woodhouse', 313), ('handsome', 38), ('clever', 27), ('rich', 14), ('comfortable', 34), ('home', 130), ('happy', 125), ('disposition', 24), ('seemed', 141), ('unite', 3), ('best', 85), ('blessings', 6), ('existence', 8), ('lived', 25), ('nearly', 14), ('twenty', 30), ('one', 452), ('years', 57), ('world', 81), ('little', 359), ('distress', 19), ('vex', 1), ('youngest', 4), ('two', 178), ('daughters', 7), ('affectionate', 9), ('indulgent', 2), ('father', 207), ('consequence', 27) [...]
+
+book_reps[book_ids[0]]['indulgent']
+"0"
+```
+
+### Measuring Similarity
+
+We are going to use Cosine Similarity to measure how similar two books are. 
+
+$$
+\begin{align}
+\text{sim}_{\text{cosine}}(A,B) = \frac{A.B}{\sqrt{A.A \times B.B}}
+\end{align}
+$$
+
+The dot product of two vectors is defined as:
+
+$$
+\begin{align}
+A.B = \sum_{\text{f}} \text{weight}(A,f)\times \text{weight}(B,f) 
+\end{align}
+$$
+
+The weight is the measurement or value assigned to each word/feature in the vector (usually a BoWs). It could be:
+- Binary: 1 if the word is in the book, 0 if it isn't.
+- Term Frequency (TF): The raw count of how many times the word appears (as seen in your earlier formula).
+- TF-IDF: A more complex weight that gives higher value to words that are unique to that specific book and lower value to common words like "the" or "and".
+
+But the main thing to understand is that the dot product is taken of the vectors and this value is used to compute the cosine similarity.
+
+#### Dot Product
+
+The function below takes in two documents represented as Bag-of-Words in `FreqDist` or dict form and iternatively compute the dot product using the `key` to match the features from the dict's 
+
+```
+def dot(docA,docB):
+    the_sum=0
+    for (key,value) in docA.items():
+        the_sum+=value*docB.get(key,0) 
+    return the_sum
+
+testA=book_reps[book_ids[0]]    
+testB=book_reps[book_ids[1]]
+dot(testA, testB)
+
+"3882298"
+```
+
+#### Cosine Similarity
+
+From this we can easily extend our code to calculate Cosine Simialrity given the numerator is just the dot product. The denominator is the length of the vectors $\|A\|$ mutliplied together. In practice, this can be written as the square root of the dot product of the vector with itself. Note that the numerator give us most of the information we need, the demonenator is a normalizing factor. Bigger documents will have many more word counts resulting in a "longer" vector. Dividing by the product of vector lengths we normilise this parameter allowing us to just focus on the angle's information of similarity. 
+
+```
+import math
+
+def cos_sim(docA,docB):
+    sim=dot(docA,docB)/(math.sqrt(dot(docA,docA)*dot(docB,docB)))
+    return sim
+
+cos_sim(testA,testB)
+```
+
+#### Cosine Implementation
+
+The function below wraped our dot product and cosine functions into something we can deploy into documents. It takes two collections of document (equal length, can be itself) and loops through them in a nested loop to create a matrix where each document is compared with all documents in the other collection. The outcome is a similarty rating for each pair:
+
+```
+def all_pairs_sims(collectionA,collectionB):
+    sims={}
+    for keyA,docA in collectionA.items():
+        sims[keyA]={}
+        for keyB,docB in collectionB.items():
+            sim=cos_sim(docA,docB)
+            sims[keyA][keyB]=sim
+            
+    return sims
 
 
+allsims=all_pairs_sims(book_reps,book_reps)
+print(allsims)
+```
 
+Becuase it is a matrix, it can be presented in tabular formusing `pandas`:
+
+```
+import pandas as pd
+
+df = pd.DataFrame(allsims)
+df
+```
+
+### Beyond Frequency 
+
+Frequency is a word in a document is a very basic weight value because some words just occur frequently in all documents. If two rare words occur in a pair of documents that should highlight the two documents as being similar, rather than the matching common words found in both. 
+
+#### TFIDF
+
+A commonly used weight is TF-IDF which stands for term frequency, inverse document frequency. 
+
+$$
+\begin{align}
+\text{tfidf}(D_i,f) = tf(D_i,f) \times \text{idf}(D_i,f)
+\end{align}
+$$
+
+where $tf(D_i,f)$ is simply the frequency of feature f in document $D_i$
+and
+
+$$
+\begin{align}
+idf(D_i,f) = log \frac{N}{df(f)}
+\end{align}
+$$
+
+where $N$ is the total number of documents and $\text{df}(f)$ is the number of documents containing $f$:  
+
+$$
+\begin{align}
+df(f)=|\{i|\text{freq}(D_i,f)>0\}|
+\end{align}
+$$
+
+The code below takes a list of document (BoWs/Dicts) and computes the document frequency for each word/feature. The `.get(feat,0)+1` method means that if a word already exists in the `df` dict then the value is pulled in and updated, otherwise, it is initalised with a 0 and the first value count is added. Remeber the docuement frequency can only be as high as the number of documents, i.e. the word occur in all of them at least once.
+
+```
+def doc_freq(doclist):
+    df={}
+    for doc in doclist:
+        for feat in doc.keys():
+            df[feat]=df.get(feat,0)+1
+            
+    return df
+
+doc_freq(book_reps.values())
+
+{'emma': 2,
+ 'jane': 3,
+ 'austen': 3,
+ 'volume': 11,
+ 'chapter': 8,
+ ...
+}
+```
+
+The IDF takes the document list and counts the number of documents. Then for each feature it takes the `log()` of the number of documents over the features document count which was derived using the `doc_freq()` above. The result is an idf for each feature:
+
+```
+def idf(doclist):
+    N=len(doclist)
+    return {feat:math.log(N/v) for feat,v in doc_freq(doclist).items()}
+
+books_idf=idf(book_reps.values())
+books_idf
+
+{'emma': 2.1972245773362196,
+ 'jane': 1.791759469228055,
+ 'austen': 1.791759469228055,
+ 'volume': 0.49247648509779424,
+ 'chapter': 0.8109302162163288,
+ ...,
+}
+```
+
+The final goal is to get TF-IDF. Recall that TF is simply the terms frequency in the document. The count of the feature in a document over a count of all words in a document:
+
+$$tf(d, t) = \frac{\text{freq}(d, t)}{\sum_{t' \in d} \text{freq}(d, t')}$$
+
+In the following code, the functions first argument takes `docs` which is a dictionary of `book_ids` and a `FreqDist` representation of that book. The second argument `idfvalues` is a dictionary of computed inverse document (idf) values for each feature/word. 
+
+The goal to create a dict `converted` which holds an entry for every book_id and a nested dict which holds the `(feature, value)` pairs where the value will be updated from `idf` to `tf-idf`. 
+
+The `converted` dict has a nested list comprehension. The outer loops through the list of documents collecting the `key,value` pairs which are the `book_id` and the doc represenation. The `book_id` is assigned as the key of the `converted` dict and then the value instantiates nest dict. This dict triggers another loop which loops through the doc representation from the outer loop, meaning the inner `key,value` pair is `feature, frequency` (tf). From this the inner dict is constructed, where the key is the `feature` and the value is calculated as the `tf` from the value * the features value from the the `idfvalues`: `v*idfvalues.get(f,0) ` 
+
+```
+def convert_to_tfidf(docs,idfvalues):
+    converted={bookid:{f:v*idfvalues.get(f,0) for f,v in doc.items()} for bookid,doc in docs.items()}
+    return converted
+```
+
+```
+convert_to_tfidf(book_reps,books_idf)
+
+{'austen-emma.txt': {'emma': 1900.59925939583,
+  'jane': 539.3196002376445,
+  'austen': 1.791759469228055,
+  'volume': 1.4774294552933827,
+  'chapter': 45.41209210811441,
+  ...
+  }
+}
+```
+
+When use TF-IDF as a similiarty measure there will much less general similarity within collections, compared to just Term Frequency. This is because the overlap of commonly occuring words have been mitigated so similarities only arises through documents unique aspects. 
+
+#### Nearest Neighbour Implementation 
+
+Once we have a weighting metric which is robust and suitable for applications, we can use it to do more complex stuff such as for every book work out the book most similar to itself. 
+
+The code below implements a neighest neighbour from stratch using the `bookid` and similarity dictionary `simdict` (combined into a matrix called `simmatrix`). 
+
+Note that a dictionary where the `key,value` pair is an `id` and nested dictionary is a matrix. It is tabular in form because the `id`s make up the rows and the dict holds the column information. It can be passed directly into pandas and viewed as a tabular form: `df = pd.DataFrame.from_dict(docs, orient='index')`. But remember to fill in the blanks because dictionaries are sparse vectors with missing entries: `df.fillna(0)`. However, recall that the reason we use sparse data structures like dictionaries is because a dense respresentation will take up huge amounts of memory, so only convert to a tabular form if you are sure your respresentation is small enough. 
+
+```
+from operator import itemgetter
+import pandas as pd
+
+def nearestneighbours(simmatrix):
+    nn={}
+    for bookid,simdict in simmatrix.items():
+        ordered=sorted(simdict.items(),key=itemgetter(1),reverse=True)
+        nn[bookid]=ordered[1]
+    return nn
+        
+nn1=nearestneighbours(allsims)
+df = pd.DataFrame(nn1)
+df=df.transpose()
+df.columns=['nearest neighbour','similarity']
+df
+```
+
+The output would give something like this:
+
+| | nearest neighbour | similarity |
+| :--- | :----: | ---: |
+| austen-emma.txt | edgeworth-parents.txt | 0.076654 |
+| bible-kjv.txt | milton-paradise.txt | 0.201482 |
