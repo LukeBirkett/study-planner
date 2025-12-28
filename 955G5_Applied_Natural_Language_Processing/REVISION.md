@@ -1756,3 +1756,172 @@ myclassifier.classify_many(doc for (doc,label) in test_data)
 
 ## Naive Bayes Classification (Part 2)
 
+This lab build on all previous labs and is the stage of putting everything together. I won't go through everything in detail here but the file can be refered back to if required. 
+
+Below is a function design to bring in data from the NLTK movie_reviews corpus, split it, label it, normailse it and put it into `FreqDist` form ready to be used:
+
+```
+def get_train_test_data():
+    
+    #get ids of positive and negative movie reviews
+    pos_review_ids=movie_reviews.fileids('pos')
+    neg_review_ids=movie_reviews.fileids('neg')
+   
+    #split positive and negative data into training and testing sets
+    pos_train_ids, pos_test_ids = split_data(pos_review_ids)
+    neg_train_ids, neg_test_ids = split_data(neg_review_ids)
+    #add labels to the data and concatenate
+    training = [(movie_reviews.words(f),'pos') for f in pos_train_ids]+[(movie_reviews.words(f),'neg') for f in neg_train_ids]
+    testing = [(movie_reviews.words(f),'pos') for f in pos_test_ids]+[(movie_reviews.words(f),'neg') for f in neg_test_ids]
+    #now normalise and create bag-of-words FreqDist representations
+    training_norm=[(FreqDist(normalise(wordlist)),label) for (wordlist,label) in training]
+    testing_norm=[(FreqDist(normalise(wordlist)),label) for (wordlist,label) in testing]
+    return training_norm, testing_norm
+
+random.seed(67)
+training,testing=get_train_test_data()
+
+nb_classifier=NBClassifier()
+nb_classifier.train(training)
+
+docs,labels=zip(*testing)
+cm=ConfusionMatrix(nb_classifier.classify_many(docs),labels,classes=('pos','neg'))
+cm.precision()
+```
+
+In all of the previous labs we have mostly focused on building out our own classifer from scratch (mostly). But in practice, once the processes are understood it is generally easier to pick up a prebuilt model like those from `NLTK` or `sklearn` or `pytorch`
+
+```
+from nltk.classify import NaiveBayesClassifier
+
+#note that the NaiveBayesClassifier.train() method is a class method which returns the classifier object.
+#this is different to ours and other classifiers which are first instantiated and then trained via an object method
+nltk_nb=NaiveBayesClassifier.train(training)
+```
+
+<div style="page-break-after: always;"></div>
+
+# Week 5 - Document Similarity and Clustering
+
+The past few weeks have looked at Document Classification with is generally a supervised tasks working with labelled data. Clustering and similarity techniques typically are applied to unlabelled data and are a form of unsupervised learning. Goal is to find a way to link certain documents and say they are similar
+
+1. [Lecture Notes](#week-5---lecture-notes)
+2. [Lab Session](#week-5---lab-session)
+
+## Week 5 - Lecture Notes
+
+* [Document Similarity](#document-similarity)
+    * [Measuring Value of a Term ](#measuring-value-of-a-term)
+    * [Term Frequency Inverse Document Frequency (TFIDF)](#term-frequency-inverse-document-frequency-tfidf)
+    * [Vector Similarity](#vector-similarity)
+    * [Cosine Similarity](#cosine-similarity)
+* [Beyond Words](#beyond-words)
+    * [Collocations, Joint Probability, Independent Events](#collocations-joint-probability-independent-events)
+    * [Point-wise Mutual Information (PMI)](#point-wise-mutual-information-pmi)
+* [Clustering](#clustering)
+    * [K-Means](#k-means)
+    * [Agglomerative Hierachical Clustering](#agglomerative-hierachical-clustering)
+
+### Document Similarity
+
+With classification we had a fixed number of classes and we knew the classes in advance, i.e. postive or negative
+
+When dealing with similarity, we may not know any of the classes or how many there may be. Similarity as a measure is vague as documents in different classes may be similar in some ways but different in others to justify a different class. Similarity can work inconjeciton with classification. We have a large sample of unsupervised data, we can learn a way to split these by some sort of measure of similarity. Then we can take very small sample of labelled data and placed these into the learn splits. Through similarity, these small number of labelled points can detemined what true class the unsupervised splits belong to
+
+#### Measuring Value of a Term 
+
+We need to assign weight or value to a feature to reflect its importance within a document. There are generally two approaches: Term Frequency or Document Frequency
+
+With Term Frequency, we might infer that if a word occur a lot of times in a document then it is more important. However, high frequency words are not always discriminating, i.e. stopwords or domain specific words such as "country" within a travel book. 
+
+Document Frequency says that is a term occurs in less documents then it might hold some specific important context. For example, "Kenya" in a collection of document about travel would infer those documents will be about "Kenya" specifically. 
+
+#### Term Frequency Inverse Document Frequency (TFIDF)
+
+Term frequency is the number of occurances of a term in a document:
+
+$$ tf(d,t) $$
+
+Document frequency is the number of documents in which a term occurs:
+
+$$ df(t) $$
+
+If there are $N$ documents in total, inverse document frequency is given by: 
+
+$$ idf(t) = log(\frac{N}{df(t)}) $$
+
+The TFIDF is the product of the two:
+
+$$ tf-idf(d,t) = tf(d,t) * idf(t) $$
+
+The TFIDF may be adapted:
+* so the the TF is boolean meaning it either appears in a document or not: $tf(d,t) = 1 or 0$. 
+* Term frequency may be adjusted for document length to avoid long documents skewing the overally counts: $tf(d, t) = \frac{\text{freq}(d, t)}{\sum_{t' \in d} \text{freq}(d, t')}$
+* Logarithmically scalled frequency terms: $tf(d,t) = log(1 + freq(d,t))$
+
+#### Vector Similarity
+
+For NPL purposes, sentences are converted into feature vectors where indices represents words. Imagining a 2d vector space, we could measure the distance between vectors by their Euclidean distance. 
+
+#### Cosine Similarity
+
+A more practical and feasible approach would be Cosine Similarity where we measure the angle between two vectors: 
+* $cos(0) = 1$
+* $cos(90) = 0$
+
+Also, for unit vectors, the dot product is equal to the cosine of the angle between them.
+
+$$ \cos(\theta) = \frac{\mathbf{a} \cdot \mathbf{b}}{\|\mathbf{a}\| \|\mathbf{b}\|} $$
+
+The intuition of Cosine Similarity is that the dot product of two vectors is high when they are in the same direction. If they are in the same direction then the angle will be low(er)
+
+### Beyond Words
+
+So far we have assumed that features and topic terms are unigrams, this is single words. In reality, phases or mutliword terms make up the topic, know as n-grams. E.g. "hedge fund", "black hole", "surface to air missle". Taking any of these words individuals would be misleading or ambigous to the topic. We can apply TFIDF weighting to phrases. 
+
+Bigrams, and phrases of n length, will be much more than the number of unigrams. If there are 100,000 unigrams, there will be something like 100,000^2 bigrams which is because we are now look at ways to organise unigrams in a sequence. The question is how to find the useful combinations as "hole black" is not a useful phrase where as its opposite "black hole" is. 
+
+#### Collocations, Joint Probability, Independent Events
+
+Collocations are n-grams which occur togeether more often than by chance. Consider the bigram, "black" and "hole". How often to this unigrams occur? If we were to consider these words independent, how often would we expect these words to occur next to each other? Collociations are n-grams where the observed joint probability is more than the expected joint probability for independent events. 
+
+#### Point-wise Mutual Information (PMI)
+
+$$ PMI(w_1, w_2) = log(\frac{P(w_1, w_2)}{P(w_1).P(w_2)}) $$
+
+PMI tells how suprising it is that a phrase has occured as frequently as it has been observed. The numerator of the fraction is the observed joint probability and the denomenator is the expected joint probability assuming independence. This second part would be cacluated using the conditional probabilities that we created in the previous labs. 
+
+If the ratio is greater than 1, the PMI is positive and we have a collocation. It means that the words occur together more than we would expect if we were assuming independence. If PMI tells us how suprising it is that a phrase occurs together then `>1` is suprised. Otherwise, if it less than these words occur together as much as random chance would dictate.
+
+### Clustering
+
+Clustering is the task of grouping together instances in a way that objects within a group are similar to each other and distinctive compared to other clusters. There is never a correct way to cluster something, cluster will be different between algorithms and even within the same algo if tuned differently. Clustering algorithms generally have a similarity or distance measure which is what detmines how to cluster the feature vectors. 
+
+#### K-Means 
+
+This is the one of the omst simple models based on the idea of centroids or prototypes. Given a pre-set set number of points to look at, the centeroid (middle) of the group in a Euclidean space can found by taking the mean on every dimension. 
+
+$$ c_{d_j} = \frac{\sum_{i=0}^{n} p_{d_j, i}}{n} $$
+
+1. Select K points as initial centroids
+2. While controids changing:
+    1. Form K clusters by assigning each point to its nearest centroid
+    2. Recompute centroid of the cluster
+
+The issue with K-means is that you need to know the number of clusters that you want to compute in advance. Each point will only be assigned to a single cluster even if it matches to more than 1 semantically. The starting point may converge to a local minimum, though this can be overcome by randomising the start point and repeating. 
+
+#### Agglomerative Hierachical Clustering
+
+An agglomerative technique which builds up clusters by repeatedly merging the closest pair of clusters. There is no pre-determined number of clusters, the data determines what exists. Clusters are hierarchical, there can be a structure within the cluster. 
+
+1. Initalise n clusters as the n data starting data points 
+2. Find the closest pair $<p_i, p_j>$ of clusters with distance `d`
+3. while d < theshold:
+    1. Merge clusters $<p_i, p_j>$
+    2. Find closest pair $<p_i, p_j>$ with distance d
+
+The issue with this method is that it is computationally expensive to keep recomputing all the nearest neighbours. The runtime is $O(n^2 log n)$ where n is the number of data points. In comparison k-means is only $O(n*d*k*l)$ where k is the number of clusters and l is the number of iterations repeated. 
+
+
+
+
