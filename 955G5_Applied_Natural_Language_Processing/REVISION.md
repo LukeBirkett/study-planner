@@ -1922,10 +1922,21 @@ An agglomerative technique which builds up clusters by repeatedly merging the cl
 
 The issue with this method is that it is computationally expensive to keep recomputing all the nearest neighbours. The runtime is $O(n^2 log n)$ where n is the number of data points. In comparison k-means is only $O(n*d*k*l)$ where k is the number of clusters and l is the number of iterations repeated. 
 
+<div style="page-break-after: always;"></div>
+
 ## Week 5 - Lab Session
 
 There is only 1 notebooks for lab 5:
 - [Document Similarity]() `Lab_5_1_SOLUTIONS.ipynb`
+
+* [Document Similarity]()
+* [Week 5 Lab Setup]()
+* [Measuring Similarity]()
+    * [Dot Product]()
+    * [Cosine Similarity]()
+* [Beyond Frequency ]()
+    * [TFIDF]()
+    * [Nearest Neighbour Implementation ]()
 
 ### Document Similarity
 
@@ -1953,7 +1964,7 @@ We can normalise the tokens in the document and construct a bag-of-words represe
 book_reps={key:FreqDist(normalise(book)) for key,book in books.items()}
 
 print(book_reps[book_ids[0]].items())
-dict_items([('emma', 865), ('jane', 301), ('austen', 1), ('volume', 3), ('chapter', 56), ('woodhouse', 313), ('handsome', 38), ('clever', 27), ('rich', 14), ('comfortable', 34), ('home', 130), ('happy', 125), ('disposition', 24), ('seemed', 141), ('unite', 3), ('best', 85), ('blessings', 6), ('existence', 8), ('lived', 25), ('nearly', 14), ('twenty', 30), ('one', 452), ('years', 57), ('world', 81), ('little', 359), ('distress', 19), ('vex', 1), ('youngest', 4), ('two', 178), ('daughters', 7), ('affectionate', 9), ('indulgent', 2), ('father', 207), ('consequence', 27) [...]
+dict_items([('emma', 865), ('jane', 301), ('austen', 1), ('volume', 3), ('chapter', 56), ('woodhouse', 313), ('handsome', 38), ('clever', 27), ('rich', 14), ('comfortable', 34), ('home', 130), ('happy', 125), ('disposition', 24), ('seemed', 141), ('unite', 3), ('best', 85), ('blessings', 6), ('existence', 8), ('lived', 25), ('nearly', 14), ('twenty', 30), ('one', 452), ('years', 57), ('world', 81), ('little', 359), ('distress', 19), ('vex', 1), ('youngest', 4), ('two', 178), ('daughters', 7), ('affectionate', 9), ('indulgent', 2), ('father', 207), ('consequence', 27) [...]])
 
 book_reps[book_ids[0]]['indulgent']
 "0"
