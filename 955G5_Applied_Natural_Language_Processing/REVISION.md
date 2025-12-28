@@ -2191,3 +2191,174 @@ The output would give something like this:
 | :--- | :----: | ---: |
 | austen-emma.txt | edgeworth-parents.txt | 0.076654 |
 | bible-kjv.txt | milton-paradise.txt | 0.201482 |
+
+<div style="page-break-after: always;"></div>
+
+# Week 6 - Lexical Semantics and Word Senses
+
+This week scopes the focus down from documents to words. It introduces the area of Lexical Semantics (meaning of words) and Lexical Relationships including: 
+- synonymy, which is different words meaning the same thing
+- hyponymy, which is a word that is a member of a class defined by another word (Hypernym). The Hypernym might be fruit and Hyponymy may be apple. It is a lead into how language and words can be hierarchical.
+- antonymy, words that have opposite meanings, hot vs cold
+
+This week also looks into word sense ambiguity and introduces WordNet which is a natural language resource. 
+
+1. [Lecture Notes](#week-6---lecture-notes)
+2. [Lab Session](#week-6---lab-session)
+
+## Week 6 - Lecture Notes
+
+* [Lexical Semantics]()
+    * [WordNet]()
+* [Semantic Relationships]()
+* [Semantic Similarity]()
+* [Word Sense Disambigutation (WSD)]()
+    * [One Sense Per Collocation]()
+    * [One Sense Per Discourse]()
+    * [Approaches to WSD]()
+        * [Knowledge-based Methods]()
+        * [Supervised Corpus-Based Methods]()
+    * [Seed Collocates]()
+
+### Lexical Semantics
+
+Most NL applications care about the semantics, the meaning of words. In NLE, providing computers with rich represenations of lexical semantics should lead to more intelligent applications. 
+
+Words are often ambiguous and can often have multiple senses (meanings) depending on the context or where they are used in a sentence. 
+
+Lexicopgraphers produce dictionaries from which the purpose is to establish the all of the sense of a word (in 1 language), provide definitions of each sense and provide examples of how they should be used. In order to us these dictionaries in applications they need to be machine readable, and can even go as far and only being machine readable, i.e. the format doesn't need to be structure that we humans are used to.
+
+#### WordNet
+
+WordNet can be accessed via python NLTK using `from nltk.courpus import wordnet as wn`
+
+A synset is a group of words, a synonym set, that are considered semantically equivalent. For example, {bank, depository_financial_institution, banking_concern} — The financial entity. 
+
+`wn.sysnsets("plant")` returns all of the senses for a given word. That is the diffent way the word plant can be used. This is slightly different to the defintiion of synset. The returns are each synsets, so we are getting an idea of the different synsets a word is a part of. You can't just get a sysnet for a word because you first need to udnerstand the usage of the word, once you have that you can find the sysnet for the word in context. 
+
+It should be highlighted that different dictionaries have different definitions on a words sense. For example, for plant, WordNet has `noun:4, verb:6` where as Oxford as `noun:6, verb:11`. 
+
+Homonyn is what you call words that have the same word and spelling but a different meaning. They are different concepts that just happen to labelled with the same word. 
+
+A homograph is when a word has the same spelling but is pronounced different. It litterally means "same writing". These can be quite a big issue when working with text-to-speech applications. 
+
+Polysemy is when a word has many different meanings that can extended to nested fine-grained senses within meanings. The senses are often related but sligtly different. Book is a good example
+
+In WordNet sense defintions are extracted using `s.definition()`. 
+
+Monosemous is a word that only have one meaning. The literal meaning is "single sense". There are very few of these in the English language but some words may have a strong predominant sense - or may be monsemous in a specific domain. 
+
+### Semantic Relationships
+
+Synonym is for different words that share the same meaning. Two words are synonymous if they can be substitued in all possible contexts and allowing the meaning to be the same. True synonyms are rare but all possible contexts is very broad. The choice of synonym often gives us some subtle information about the speaker even if the meaning of the word and sentence doesn't change. 
+
+Antonymy is words of complete opposite meaning. Substituting one for the other would cause a contradiction to the orgininal sentence. Topic wise, Antonyms are very similar in meaning, most come in pairs and are adjectives, verbs or adverbs. 
+
+Hyponymy and Hypernymy capture the idea of class. A dog is a type of animal. Dog is a Hyponymy and Animal is the Hypernymy. Hyponyms are part of a hierachical structure. Often a word that is a Hypernymy to something is also a Hyponymy. `animal > dog > poddle`. Threse relationships can be visualed in a tree like structure with the most general at the top and most specific at the bottom. 
+
+The WordNet linguistic network is organised around synonymy and hyponymy. That is to say related word or meaning and then navigated through a hierarchical structure. 
+
+The core unit is the sysnet. A set og synonymous word senses. Items can be unigrams or bigrams. Each specific sysnet is associated with a single definition. Polysemous words will appear in mutliple synsets because they have multiple meanings.
+
+
+Each synset has a `.lemmas()` class which can though of an as sense. For example, for "cat" is will return `[cat, true_cat]` and `[guy, cat, hombre, bozo]` as well as others. `.definition()` then gets you the definition for the particular synset sense that you are looking at: 
+```
+for index,synset in enumerate(cat_synsets):
+    wordforms = [l.name() for l in synset.lemmas()]
+    print(index, wordforms, synset.definitions()))
+```
+
+
+Remember that a Hypernym is the root of a sense. A synset has a `.hypernyms()` which accesses the root. The root that is returns will be a another list of synset(s) as the root will also have multiple words. For example, `[cat, true_cat]` gets `[feline, felid]`:
+```
+for h in cat_synset[6].hypernyms():
+    h_words=[w.name() for w in h.lemmas()]
+    print(h.words, h.definition)
+```
+
+Hyponyms are the next branch down from a sense. This is accessed from a synset using `.hyponyms()`. Again it comes as a list but this can be very big, the cat example gets: `[cheetah, chetah]`, `[jaguar, panther]`,`[lion]`. Basically all different types of cat:
+
+```
+for hypo in cat_synset[6].hyponyms():
+    h_words=[w.name() for w in h.lemmas()]
+    print(h_words, h.definition())
+```
+
+### Semantic Similarity
+
+The intuition with WordNet is that similar concepts are closer together in the hierachy.
+
+One measure of closeness could be path length. The issue with this is that is doesn't not discriminate when pathways diverage in meaning, e.g. canine and verbebrate. Also as you go further up the tree, the concepts become less similar, where as lateral concepts may be connected but have a longer path, e.g. dog and cat are lateral. 
+
+Another version of similarity is Lowest Common Subsemer (LCS). It looks at what two concepts share. E.g. tabby and liger first share feline. The intution is that concepts which share a lower shared concept are more related than an higher one. We gain more info when two objects are carnivores than if they are vertebrates. This can be captured probabilitistically via the information content (IC). Annotate the hierarchy with the frquency of occurance of each concept in a document. Note, the occurance of a concept implies the occurance of all Hypernyms. 
+
+### Word Sense Disambigutation (WSD)
+
+WDS is about, how do we know the sense of a word. 
+
+#### One Sense Per Collocation
+
+Recall that a collocation is a pair, or group, of words wich frequently co-occur togeher in some defined relationship. Can be defined or identified as they occur more often than random chance. Yarowsky (1993) showed that, an ambigous word only have one sense in a given collocation with probability of 90% to 99%
+
+The word(s) aid/aide is an ambiguous homophobe. However, when paired with its collocations we start to see a clear distribution of usage:
+
+| Collocation | Aid Freq | Aide Freq |
+| :-- | :-- | :-- |
+| Foreign      | 718 | 1  |
+| Federal      | 297 | 0  |
+| Presidential | 0   | 63 |
+| Cheif        | 0   | 40 |
+
+#### One Sense Per Discourse
+
+Sense usage tends to clump to use cases and contexts. Gate et al (1992) demonstrated that there is a very strong tendancy for mutliple uses of the same word to share the same sense in a well written discourse. 
+
+### Approaches to WSD
+
+There is:
+* Knowledge-Based methods
+* Supervised Corpus-Based methods
+* Semi-supervised corpus-based methods (bootstrapping, active learning)
+* Unsupervised corupus-based methods
+
+#### Knowledge-based Methods
+
+These are methods that reply on dictionaries, thesauri and lexical knowledge bases without consulting the evidence of a corpus. Also known as dictionary methods. Includes: handcrafted disambigutaiton rules, comparing dictionary definitions to the context, use semantic similarity measures. 
+
+#### Supervised Corpus-Based Methods
+
+Requires "sense inventory", a pre-specified set of class labels for each word fo interest and training data, i.e. a corpus of examples annotated with the class labels. This is so a classifer can learn which features will be more likely to be assigned to which class. 
+
+#### Semi-Supervised Corpus-Based Methods
+
+No longer rely on annotated training - because of this may be refered to as unsupervised. However, they still require a sense inventory of classes and possibly some expert input to create the classes. 
+
+Bootstrapping comes from Yarowsky (1995). 
+
+1. Start with some seed collocoates for each ambiious word we are looking at which reliably disambiguate the word. 
+
+2. Find example in the corpus where these collocates occur and tag them accodingly
+
+3.  Use these tagged examples to find other collocates which relibably partition the tagged examples
+
+4. repeat
+
+e.g. plant, collocates with manufacturing and life. manufacturing plant collocates with computer, copper and company. Plant life collocates with mircoscopic, virus and animal. 
+
+### Seed Collocates
+
+Where might the initial seed collocates come from? 
+
+Hand-labeling: A human identifies a few very obvious words that only appear with one sense (e.g., "leaf" for the biological plant and "factory" for the industrial plant).
+
+Dictionary Definitions: Taking words directly from the WordNet "gloss" or definition for that specific synset.
+
+But you need to pick a good seed. To know if a seed is "good," you look at how often it appears with Sense A versus Sense B. A "reliable" seed is one that appears frequently with one sense but almost never with the other. "Chlorophyll" is a highly reliable seed for the biological sense of plant because it almost never appears in a sentence about a manufacturing plant. 
+
+If you decide to use seeds that are a bit more "vague" to expand your search, two things happen: 
+- Increased Recall: You will find and tag more instances of Sense A that you would have otherwise missed.
+- Decreased Precision: Because the seed isn't perfect, you will accidentally tag instances of Sense B as Sense A.
+
+Using the word "water" as a seed. While biological plants need water, a "cooling water" system in a factory might lead the computer to wrongly tag a factory as a biological organism.
+
+## Week 6 - Lab Session
