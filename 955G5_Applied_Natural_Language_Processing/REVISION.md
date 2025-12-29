@@ -2208,17 +2208,17 @@ This week also looks into word sense ambiguity and introduces WordNet which is a
 
 ## Week 6 - Lecture Notes
 
-* [Lexical Semantics]()
-    * [WordNet]()
-* [Semantic Relationships]()
-* [Semantic Similarity]()
-* [Word Sense Disambigutation (WSD)]()
-    * [One Sense Per Collocation]()
-    * [One Sense Per Discourse]()
-    * [Approaches to WSD]()
-        * [Knowledge-based Methods]()
-        * [Supervised Corpus-Based Methods]()
-    * [Seed Collocates]()
+* [Lexical Semantics](#lexical-semantics)
+    * [WordNet](#wordnet)
+* [Semantic Relationships](#semantic-relationships)
+* [Semantic Similarity](#semantic-similarity)
+* [Word Sense Disambigutation (WSD)](#word-sense-disambigutation-wsd)
+    * [One Sense Per Collocation](#one-sense-per-collocation)
+    * [One Sense Per Discourse](#one-sense-per-discourse)
+    * [Approaches to WSD](#approaches-to-wsd)
+        * [Knowledge-based Methods](#knowledge-based-methods)
+        * [Supervised Corpus-Based Methods](#supervised-corpus-based-methods)
+    * [Seed Collocates](#seed-collocates)
 
 ### Lexical Semantics
 
@@ -2294,7 +2294,7 @@ Another version of similarity is Lowest Common Subsemer (LCS). It looks at what 
 
 ### Word Sense Disambigutation (WSD)
 
-WDS is about, how do we know the sense of a word. 
+WDS is about, "how do we know the sense of a word" 
 
 #### One Sense Per Collocation
 
@@ -2669,3 +2669,186 @@ Additionally, you could compute the correleation, this would allow you to compar
 
 <div style="page-break-after: always;"></div>
 
+# Week 7 - Distributional Semantics
+
+Distributional semantics is based on the intuitively appealing hypothesis that words which mean similar things are used in similar ways.
+
+This is important because if we are able to identify which words are used in similar ways, we can build a stronger language model and discover similarity in meaning. This may allow us to automatically generate thesauruses. 
+
+To start, we look at representing vector respresentations of words based on their co-occurences with other words. Then we will consider different measures of association, that is how important the co-occurances are and then finally a measure of similarity between the vectors which will be derived from cosine similarity. 
+
+In the second session, we will consider intrinsic and extrinsic evaluation of distributional semantic methods.  In particular, we will focus on the commonly used intrinsic method using word-similarity tasks.  We will also discuss the main problems encountered when using distributional methods to automatically generate thesauruses, including:
+- word sense ambiguity
+- differentiation of lexical relations
+- data sparsity / frequency effects
+
+1. [Lecture Notes](#week-7---lecture-notes)
+2. [Lab Session](#week-7---lab-session)
+
+## Week 7 - Lecture Notes
+
+* [Distributional Semantics: Part 1](#distributional-semantics-part-1)
+    * [Meaning Features (Distributional vs Promiximity)](#meaning-features-distributional-vs-promiximity)
+    * [Similarity Measures](#similarity-measures)
+        * [Jaccard’s Measure](#jaccards-measure)
+        * [Cosine Similarity](#cosine-similarity-for-distributional-meaning)
+        * [Pointwise Mutual Information (PMI)](#pointwise-mutual-information-pmi)
+        * [ Positive PMI (PPMI)](#positive-pmi-ppmi)
+* [Distributional Semantics: Part 2](#distributional-semantics-part-2)
+    * [Automatic Thesaurus Generation](#automatic-thesaurus-generation)
+    * [Evaluation](#evaluation)
+        * [Intrinstic Evaluation](#intrinstic-evaluation)
+        * [Extrinsic Evaluation](#extrinsic-evaluation)
+        * [Absolute vs. Comparative Evaluation](#absolute-vs-comparative-evaluation)
+    * [Word Ambiguity in Distributional Semantics](#word-ambiguity-in-distributional-semantics)
+
+### Distributional Semantics: Part 1
+
+"you shall know a word by the company it keeps"
+
+What does tezguino mean? You can often derive a words meaning by the contexts it is used in:
+* A bottle of tezguino on the table. 
+* Everyone like tezguino
+* Tezguino makes you drink
+* We make tezguino out of corn 
+
+Without any prior info on Tezguino, the sentence contexts tell us that it is a kind of alcoholic beverage made from corn mash. By using a large corpora we can look at the words surround a word to learn its contexts. From that, we can compare other words with the same contexts and infer that the words are related and similar in some way. 
+
+The main application of distribution semantics is the automatic generation of thesaursus in any language, genre and domain where we have a corpus. It also allows to overcome data sparsness as we no longer require labelled training data which is expensive and slow to aquire. 
+
+Think about a Nauve Bayes classifer trained on 500 documents which is relatively small for NLP standards. A test document contains the word Tezuino which has not been seen in the training sample so it cannot contribute to the relevancy classifcation. By applying distribution semnatics, using a sperate very large unlablled corpus, we can infer that Tezuino is similar to beer. Beer is a common word and is likely seen in our training data of 500 documents. So we can assume that $P(tezuino|class) = P(beer|class)$
+
+### Meaning Features (Distributional vs Promiximity)
+
+If order to capture meaning we need to extract features that respresent meaning. Distributional Semenatics means that we look at the words around a word to capture its meaning. We can largely take two approaches: Dependency or Proximity. 
+
+Dependency is a grammatically approach. Instead is just acknowledging that "tiger" and "eats" are near eachother we record that "tiger" is the subject of eats. It is the tiger that eats, a tiger is something that can eat. It captures deep semantic roles. For example, "meat" and "banana" share a facet of meaning because they are both frequently the object of the verb "eat". This is technically difficult because it requires "dependency parsing"—software that can accurately map out the grammar of every sentence.
+
+Promiximity is much more naive approach. It looks at which words are physically close to each other. It words by using a window around the word, i.e +1 either side of the word. The sentence "The machine ate my credit card," the word "machine" has the features "the" and "ate". The results from the window would generally be stored in a sparse vector like a dict `{machine: 1, ate: 1}` This also means that there is hyperparameter which flexibile and can be optimized for use case. Additionally, unlike dependency parsing, it is very easy to compute and doesn't require outside inputs beyond the corpus. It gives the general topic similarity but might struggle on specific functional roles like the dependecy will give. 
+
+### Similarity Measures
+
+#### Jaccard’s Measure
+
+This measure comes from set theory. It calcualtes the amount of overlap between sets, i.e. the intersection. 
+
+The formula is the ratio of the intersection of the feature sets to their union and $T(w)$ represents the set of features for word $w$2. Remeber the features of a word are the words found in the context windows. These words could either be counted or in a simple case, boolean recorded. 
+
+$$\text{Jaccard}(w_1, w_2) = \frac{|T(w_1) \cap T(w_2)|}{|T(w_1) \cup T(w_2)|}$$
+
+The numerator looks at the intersection of the features, that is the one they have in common. It takes the minimum value from the two words, if "yellow" appears 10 times with "banana" and 2 times with "meat," the intersection value for that feature is 2.
+
+The denominator looks at the union and takes the maximum count founds in the overlap. Remember a word will have a set of features, so for each feature you take the max count.
+
+By using the minimum for intersection and maximum for union, you are effectively asking: "Of all the times this feature appeared for either word, what proportion was shared by both?". We are meaasuring the amount of overlap in the feature sets compared to their potential for overlap. 
+
+$$\text{Jaccard}(w_1, w_2) = \frac{\text{Intersection}}{\text{Union}}$$
+
+If there overlap is high and the ratio is therefore high, we are saying that the meaning of the words is very similar. The set of features surrounds the words are similar. 
+
+Note, just because two things are very similar in meaning does not mean they are synonyms. Words like "hot" or "cold" are Antonyms, so are used in the same context and sentence structure but not at all. You have co-hyponyms like "car" and "bus" will be used in many says the same way structurally but are different types of vehicles. Then you have words, that are simply very closely tried topically, like "doctor" and "hospital" these can never be used interchangable but the their features will be remarkebly similar. This latter is a big downside of promiximity features comapred to dsitributional. 
+
+#### Cosine Similarity for Distributional Meaning
+
+Cosine Similarity is a geometric measure that treats word representations as vectors in a multi-dimensional space. It measures the angle ($\theta$) between two vectors; the smaller the angle, the more similar the words are. It is calculated using the dot product of the vectors divided by the product of their magnitudes.
+
+$$\text{sim}(w_1, w_2) = \cos(\theta) = \frac{a \cdot b}{\|a\| \times \|b\|}$$
+
+When it comes to measuring the similarity, we construct a dense vector which made up of only the words that are found in both feature sets. If there are no features the similarity score is 0. In vector space, these two words with no matching features are orthogonal (at a 90-degree angle to each other). The cosine of 90 degrees is 0. 
+
+#### Pointwise Mutual Information (PMI)
+
+This measure is used to weight features because simple frequency or probability often fails to distinguish truly informative features from common, uninformative words like "the" or "is". PMI measures the amount of information gained by seeing a word and feature together. It quantifies how much more often a word and a feature co-occur than would be expected if they were independent.
+
+$$I(w, f) = \log \left( \frac{\text{freq}(f, w) \times \text{freq}(*,*)}{\text{freq}(f,*) \times \text{freq}(*, w)} \right)$$
+
+- $\text{freq}(f,*)$ is the row total
+- $\text{freq}(*, w)$ is the column total
+- $\text{freq}(*,*)$ is the grand total
+
+| Feature| banana | meat | credit | Total |
+| :--- | :--- | :--- | :--- | :--- |
+| yellow | 10  | 2   | 3   | 15  |
+| red    | 2   | 14  | 19  | 35  |
+| eat    | 20  | 9   | 1   | 30  |
+| spend  | 1   | 2   | 27  | 30  |
+| card   | 3   | 2   | 50  | 55  |
+| the    | 25  | 25  | 50  | 100 |
+| is     | 20  | 20  | 40  | 80  |
+| tiger  | 3   | 17  | 0   | 20  |
+| man    | 6   | 9   | 10  | 25  |
+| monkey | 10  | 0   | 0   | 10  |
+| Total  | 100 | 100 | 200 | 400 |
+
+$$I(w, f) = \log_2 \left( \frac{freq(w, f) \times freq(*, *)}{freq(w, *) \times freq(*, f)} \right)$$$$I(banana, yellow) = \log_2 \left( \frac{10 \times 400}{100 \times 15} \right) = \log_2(2.66) \approx 1.42$$
+
+The numerator is the total count of a word and features occurance mutlipled by the total occurance of all feature combinations. The numerator is designed to measure the observed co-occurrence between a specific word and a specific feature, scaled by the size of the entire corpus. It is scaled to boost the signficance of smaller numbers of pairs that do actually have important meaning. 
+
+The denomenator is the total occurance of the feature accross all words mutliplied by the total occurance of a word. The intuition behind the denominator is that it represents the expected co-occurrence of the word and the feature if they had no special relationship at all—essentially, if they were just paired together by random chance. By multiplying the total frequency of the word by the total frequency of the feature, the denominator creates a "score" for how much they should be seen together based purely on how common they are individually.
+
+#### Positive PMI (PPMI)
+
+A variation of PMI designed to handle the issue of zero co-occurrence frequencies. In standard PMI, a zero frequency results in negative infinity. PPMI replaces all negative PMI values with zero, focusing the similarity calculation on shared features rather than the sharing of "absent" features. 
+
+$$\text{PPMI}(w, f) = 
+\begin{cases} 
+I(w, f) & \text{if } I(w, f) > 0 \\
+0 & \text{otherwise}\end{cases}$$
+
+### Distributional Semantics: Part 2
+
+The second half of the slides shifts the focus from how we build the vectors to what we do with them and the advanced challenges involved. We are going to cover evaluation, word ambiguity, distinguiging semantic relationships and sparsenss. 
+
+#### Automatic Thesaurus Generation
+
+Based on all of the previous labs we now have the tooling to automatically generate Thesaurus:
+
+1. Extract feature respresentation based on corpus co-occurance frequence. (Proximity, Window)
+2. Convert the representations to PPMI. Instead of just using the count as a weight we maniplulte the figure to be a ratio of totals. Which is enriching the vector
+3. Use the vectors to calculate cosine similarities for all pairs. This is very expensive as we need to compare all pairs of words in the vocab. It would good if we has some method to reduce the number of words. 
+4. Find the nearest neigbours. This doesn't mean construct a clustering algoirthm. It means that the Cosine is our distance metric. We just sort the list to find the most similar word with the highest cosine similarity. 
+
+#### Evaluation 
+
+Now that we have these vectors and similarity scores, how do we know if they are actually any good? In NLP there are two types of evaluation, instrinstic and extrinsic. 
+
+##### Intrinstic Evaluation
+
+Intrinsic evaluation tests the model on its own, based on its internal logic, without plugging it into a larger application. The goal is to see how well the computer's "intuition" matches human intuition. There are pre-made lists of word pairs that humans have already judged:
+
+- WS-353 (WordSim-353): A famous dataset where humans rated pairs like (cat, dog) or (bank, money) on a scale of 1–10.
+- SimLex-999: A more modern dataset that strictly focuses on similarity (synonyms) rather than just relatedness (topically linked words).
+
+For intrinstic evaluation, we would calculate to cosine similarity for the same word pairs and then use a correlation method, such as Spearmans Rank, to assess how similar they are. The most similar the computer ranks are to the human, the better the model. 
+
+##### Extrinsic Evaluation
+
+Extrinsic evaluation (sometimes called "task-based" evaluation) measures the quality of your word vectors by seeing how much they improve a real-world NLP application. You take a complex system—like a Machine Translation engine, a Sentiment Analysis tool, or a Question Answering system—and "plug in" your word vectors. You measure the final accuracy of that system (e.g., "Did the translation get better when I used these PMI vectors?"). While this is the most "honest" test of a vector's value, it is very expensive and slow to run compared to intrinsic tests. 
+
+##### Absolute vs. Comparative Evaluation
+
+Absolute: You give your model a score (e.g., "My model has a 0.72 correlation on SimLex-999").
+
+Comparative: You run two different models (e.g., Jaccard vs. Cosine) on the same dataset and see which one performs better.
+
+This is all important because high cosine similarity score isn't "the truth"—it's just a prediction. To prove it works, you have to show it aligns with human "Gold Standards" or improves a "Downstream Task."
+
+#### Word Ambiguity in Distributional Semantics
+
+One of the biggest enemies of Distribution Semantics is words that have multiple meanings. We can take the noun word "bow" and automatically derive a distributional thesaurus using `nltk.lin_thesaurus` and the retuned with with most similarity will be a muddy select of words from different senses: ribbon, machete, scarf, rope. 
+
+This because Distributional Respresentaitons are of words not senses. It returns a mixture of sense in distributional neighbourhoods.  
+
+One possible solution is Word Sense Disambiguation (WSD). If the problem is that we have one vector per word, the WSD solution is to move toward one vector per word sense. WSD was covered in Week 6 and is concered with "how do we know the sense of a word". There were several approaches to it includes knowledge-based, supervised and unsupervised. 
+
+Finding your distibutional neighbours before doing WSD is more of a diagnositc steps. If you are returned as list with more an one sense you can see that actually you need to find a way to seperate the senses. 
+
+If finding the neighbours after WSD you should have already cleaned the data. "bank" might be turned into into bank_financial and bank_river and will recieve a neighrbour list for both. This is similar to how wordnet works. Banks is the hypernym and bank_financial/bank_river are the hyponyms. By working with these more granualr types we can ensure our neighbour lists will be more specific and less muddy. This is the goal of a high-quality automated thesaurus. It allows the system to provide accurate synonyms that don't confuse the different meanings of the word.
+
+WordNet is a tool that WSD use to put words into buckets. It is a lexical database that facilities WSD through two methods:
+- Knowledge-Based WSD (The Lesk Algorithm): This is a classic method. It looks at the dictionary definitions (glosses) in WordNet for every sense of "bank." It then looks at the words in your current sentence. Whichever WordNet definition has the most words in common with your sentence is the sense it picks.
+- Supervised WSD: Researchers use WordNet to label large bodies of text (corpora). They might hire humans to look at 1,000 sentences containing "bank" and tag them with the specific WordNet Sense ID. This "Gold Standard" data is then used to train machine learning models.
+
+<div style="page-break-after: always;"></div>
+
+## Week 7 - Lab Session 
