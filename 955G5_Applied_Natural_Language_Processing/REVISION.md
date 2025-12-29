@@ -1927,18 +1927,17 @@ The issue with this method is that it is computationally expensive to keep recom
 ## Week 5 - Lab Session
 
 There is only 1 notebooks for lab 5:
-- [Document Similarity]() `Lab_5_1_SOLUTIONS.ipynb`
+- [Document Similarity](#document-similarity-lab) `Lab_5_1_SOLUTIONS.ipynb`
 
-* [Document Similarity]()
-* [Week 5 Lab Setup]()
-* [Measuring Similarity]()
-    * [Dot Product]()
-    * [Cosine Similarity]()
-* [Beyond Frequency ]()
-    * [TFIDF]()
-    * [Nearest Neighbour Implementation ]()
+### Document Similarity Lab
 
-### Document Similarity
+* [Week 5 Lab Setup](#week-5-lab-setup)
+* [Measuring Similarity](#measuring-similarity)
+    * [Dot Product](#dot-product)
+    * [Cosine Similarity](#cosine-similarity)
+* [Beyond Frequency ](#beyond-frequency)
+    * [TFIDF](#tfidf)
+    * [Nearest Neighbour Implementation ](#nearest-neighbour-implementation)
 
 In some applications it may be difficult to know and define the classes that we want to use in classification ahead of time. Or classes might be made up of various sub-classes which differ in terms of vocab used to get to the same undertanding. In both of these cases it might be more appropriate to think about Document Similarity. That is to say, given a new document, what is the most similar document(s) that we already have.
 
@@ -2365,7 +2364,18 @@ Using the word "water" as a seed. While biological plants need water, a "cooling
 
 ## Week 6 - Lab Session
 
+There is only 1 notebooks for lab 6:
+- [Lexical Semantics](#lexical-semantics-lab) `Lab_6_1_SOLUTIONS.ipynb`
+
+## Lexical Semantics Lab
+
 This lab covered Lexical Semantics, that is to say, the meaning of words. We will be exploring the WordNet resource, learning about and traversing lexical relations (synonymy, hyponymy), quantifying semantic similarity via distance metrics applied to the WordNet hierarchy and comparing WordNet similar scores with human synonym judgements. 
+
+* [Navigating WordNet](#navigating-wordnet)
+* [Computing the Number of POS Senses a word has](#computing-the-number-of-pos-senses-a-word-has)
+* [Calculating Distance to the Root](#calculating-distance-to-the-root)
+* [Semantic Similarity in WordNet](#semantic-similarity-in-wordnet)
+* [Comparing WordNet Similarities with Human Synonymy Judgements](#comparing-wordnet-similarities-with-human-synonymy-judgements)
 
 ### Navigating WordNet
 
@@ -2852,3 +2862,8 @@ WordNet is a tool that WSD use to put words into buckets. It is a lexical databa
 <div style="page-break-after: always;"></div>
 
 ## Week 7 - Lab Session 
+
+INTRO 
+
+* []()
+
