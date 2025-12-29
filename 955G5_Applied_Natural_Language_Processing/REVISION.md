@@ -2361,44 +2361,311 @@ If you decide to use seeds that are a bit more "vague" to expand your search, tw
 
 Using the word "water" as a seed. While biological plants need water, a "cooling water" system in a factory might lead the computer to wrongly tag a factory as a biological organism.
 
+<div style="page-break-after: always;"></div>
+
 ## Week 6 - Lab Session
 
-Overview/Intro
+This lab covered Lexical Semantics, that is to say, the meaning of words. We will be exploring the WordNet resource, learning about and traversing lexical relations (synonymy, hyponymy), quantifying semantic similarity via distance metrics applied to the WordNet hierarchy and comparing WordNet similar scores with human synonym judgements. 
 
-# Navigating WordNet
+### Navigating WordNet
+
 NLTK WordNet, Navigation, Methods, Tools
 
-1.1 Words, Synsets, Part of Speech
+WordNet can be imported through the following:
+```
+#import nltk
+#nltk.download('wordnet')
+#nltk.download('wordnet_ic')
 
-Lemmas(), Names(), Hyponyms(), Hypernyms()
+from nltk.corpus import wordnet as wn
+from nltk.corpus import wordnet_ic as wn_ic
+```
+These two imports work together and hold different part of information. 
+
+`wn` is the tree structure itself, the semantic database, it holds the Synsets, definitions, examples, and the relationships between words (hypernyms, hyponyms, antonyms). It is used to find synonyms, traverse the hierarchy to find the roots or related connections of words (hypernyms) and check definitions. 
+
+`wc_ic` provides statistical data about word usage gathered from large bodies of text. It contains probability scores for how often a concept appears in a specific corpus, or frequency counts. It is a required input for certain similarity metrics, specifically Resnik (res), Lin (lin), and Jiang-Conrath (jcn). 
+
+The information is often used together. If you want to calculate how similar two words are, standard WordNet (wn) can tell you how many "steps" apart they are in the tree. However, many famous algorithms (like Lin Similarity) require wn_ic to weigh those steps based on how common the words are. 
+
+```
+# Load the Information Content from a specific corpus
+brown_ic = wn_ic.ic('ic-brown.dat')
+
+# You need 'wn' for the synsets and 'brown_ic' for the math
+dog = wn.synset('dog.n.01')
+cat = wn.synset('cat.n.01')
+
+# This similarity check requires the Information Content (wn_ic)
+score = dog.lin_similarity(cat, brown_ic)
+```
+
+The key function and starting point for WordNet is the idea of a synset. Words have senses and senses are grouped with synonymous senses in synsets. The `synsets()` function finds out which synset a word belongs to. 
+
+```
+from nltk.corpus import wordnet as wn
+wn.synsets("plant")
+
+[Synset('plant.n.01'),
+ Synset('plant.n.02'),
+ Synset('plant.n.03'),
+ Synset('plant.n.04'),
+ Synset('plant.v.01'),
+ Synset('implant.v.01'),
+ Synset('establish.v.02'),
+ Synset('plant.v.04'),
+ Synset('plant.v.05'),
+ Synset('plant.v.06')]
+```
+
+This output is a list of `Synset` objects where each has a unqiue identifer containing one of its words, its part of speech and a number. E.g. `Synset('book.n.01')` is the first noun sense of *book*. However the word book is also in `Synset('record.n.05')` which is the fifth noun sense of *record*
+
+We can scope down into one sense `book_synsets[2]` and look at various piece of information connected to this particular sense:
+
+```
+book_synsets=wn.synsets('book')
+recordn5=book_synsets[2]
+print(recordn5.lemma_names())  #get the words in the synset
+print(recordn5.definition())   #get the definition of the synset
+print(recordn5.examples())  #get examples of the words used in this sense
+```
+
+It can sometimes be useful to print out all of the available senses to determine the most suitable one: 
+
+```
+plant_synsets=wn.synsets('plant')
+for i,s in enumerate(plant_synsets):
+    print("{}:{}".format(i+1,s.definition()))
+```
+
+Sometimes you know the wider topics and context of what you are looking for so the only want to look at sysnets within a certain Part-of-Speech tag. The structure of the output will still be the same in terms of a list of objects but it may be filtered/smaller: 
+
+```
+#all of the WN POS tags
+parts_of_speech=[wn.NOUN,wn.VERB,wn.ADJ,wn.ADV]
+
+print(wn.synsets("red",parts_of_speech[0]))
+
+[Synset('red.n.01'), Synset('red.n.02'), Synset('bolshevik.n.01'), Synset('loss.n.06')]
+```
+
+### Computing the Number of POS Senses a word has
+
+By setting up lists for POS and Words, we can use a nested loop to extract the POS entries for each word within its synset using `wn.synset(word,pos)` with pos tag:
+
+```
+import pandas as pd
+parts_of_speech=[wn.NOUN,wn.VERB,wn.ADJ,wn.ADV]
+words=["book","chicken","counter","twig","fast","plant"]
+
+results=[[len(wn.synsets(word,pos)) for pos in parts_of_speech]for word in words]
+
+df =pd.DataFrame(results,index=words,columns=parts_of_speech)
+df
+```
+
+The `Synset` object also as a `lemmas()` method. A lemma is just a word so this method returns all of the words in a synset's sense, that is, the words that are synonymous and mean the same thing. 
+
+```
+for i,s in enumerate(plant_synsets):
+    print("{}:{}".format(i,s.lemmas()))
+
+0:[Lemma('plant.n.01.plant'), Lemma('plant.n.01.works'), Lemma('plant.n.01.industrial_plant')]
+1:[Lemma('plant.n.02.plant'), Lemma('plant.n.02.flora'), Lemma('plant.n.02.plant_life')]
+2:[Lemma('plant.n.03.plant')]
+...
+9:[Lemma('plant.v.06.plant'), Lemma('plant.v.06.implant')]
+```
+
+`lemmas()` returns the unique id form, though the word is also visible. But to just get the pure lemma/word you use `names()`: 
+
+```
+cat_synsets = wn.synsets("cat",wn.NOUN)
+for i,s in enumerate(cat_synsets):
+    wordforms=[l.name() for l in s.lemmas()]
+    print("{}:{}\n\t{}".format(i,wordforms,s.definition()))
+
+0:['cat', 'true_cat']
+	feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats
+1:['guy', 'cat', 'hombre', 'bozo']
+	an informal term for a youth or man
+2:['cat']
+	a spiteful woman gossip
+...
+7:['computerized_tomography', 'computed_tomography', 'CT', 'computerized_axial_tomography', 'computed_axial_tomography', 'CAT']
+	a method of examining body organs by scanning them with X rays and using a computer to construct a series of cross-sectional scans along a single axis
+```
+
+Remember that the other key dimension of WordNet, aside from synsets/synonyms, is the hierarchical structure around hyonymns and hypernyms. 
+
+The hyonymns of a word (from within a sense) are accessed using `.hyponyms()`. Hyonymns are the lower, more granular applications. Given the tree like structure, is often returns a lot. 
+
+```
+#iterating over the hyponyms of the 6th Synset in the list of synsets for cat
+for h in cat_synsets[6].hyponyms():
+    h_words=[w.name() for w in h.lemmas()]
+    print("{}:{}".format(h_words,h.definition()))
+
+
+['cheetah', 'chetah', 'Acinonyx_jubatus']:long-legged spotted cat of Africa and southwestern Asia having nonretractile claws; the swiftest mammal; can be trained to run down game
+['jaguar', 'panther', 'Panthera_onca', 'Felis_onca']:a large spotted feline of tropical America similar to the leopard; in some classifications considered a member of the genus Felis
+...
+['lion', 'king_of_beasts', 'Panthera_leo']:large gregarious predatory feline of Africa and India having a tawny coat with a shaggy mane in the male
+['tiglon', 'tigon']:offspring of a male tiger and a female lion
+```
+
+Conversely you can go the otherway to collect the `hypernyms()`. This list should almost always be smeller, unless we are at the bottom of the tree where there is no more branches. The very top of a tree is called the root and the hypernym list returned will be empty - this will also occur on the leaves at the bottom. Most nouns in WordNet share a common root which is known as their entity. 
+
+```
+##Iterating over the hypernyms of the 6th sense of cat and output lemma names and definition
+for h in cat_synsets[6].hypernyms():
+    h_words=[w.name() for w in h.lemmas()]
+    print("{}:{}".format(h_words,h.definition()))
+
+['feline', 'felid']:any of various lithe-bodied roundheaded fissiped mammals, many with retractile claws
+```
+
+The above it quite a long proccess because it involves calling `.lemmas()` and calleding `.names()` on that. This can be skipped by calling `lemma_names()`directly:
+
+```
+for h in recordn5.hypernyms():
+  print(h.lemma_names())
+```
+
+### Calculating Distance to the Root
+
+The first component to measuring distance between two words it to traverse up the tree. Below we build a function that traverses all the way to the root. This likely won't be part of a similarity metric exactly but it builds the knowledge and tools of how to traverse. The function below is a recurisve function that repeatedly calls itself until the root is found. 
+
+The function first exracts the `hypernyms()`. It check if the hypernyms are empty because it is we are at the root. If the number of hypernyms is more than 1 then it calls itself again to repeat the checks.
+
+
+```
+def distance_to_root(asynset): # passes just one sense from the synset, e.g. synset[1], not the list of sysnets
+    #print(asynset.lemma_names())
+    hypernyms=asynset.hypernyms()
+    if len(hypernyms)==0:
+        #reached the top and have to stop
+        return 0
+    else:
+        if len(hypernyms)>1:
+            print("Warning: multiple hypernyms")
+        return (distance_to_root(hypernyms[0])+1)
+    
+for asynset in wn.synsets('plant',wn.NOUN):
+    print(asynset.lemma_names(),distance_to_root(asynset))
+
+['plant', 'works', 'industrial_plant'] 7
+['plant', 'flora', 'plant_life'] 6
+Warning: multiple hypernyms
+['plant'] 7
+['plant'] 10
+```
+
+Note that the senses, depsite being the same word, can and often will have different roots. This is because they have different meanings. 
 
 1.2 Distance to root, synset, traverse to root of tree, count steps
 
-# Semantic Similarity in WordNet
+### Semantic Similarity in WordNet
 
-Measure pathlength for similarity
+The hierarchical structure of WordNet means that it lends itself to using PathLength measures to determine similarity.
 
-Info content
+$$
+\begin{align}
+\text{sim}(\text{synsetA},\text{synsetB})=\frac{1}{1+\text{lengthOfPath}(\text{synsetA},\text{synsetB})}
+\end{align}
+$$
 
-built in nltk functions to compute these similarities
+The lecture also introduced **information content**, i.e., the amount of information we receive when a word from a given synset is used (there is more information in being told that something is a *poodle* than in being told it is an *animal*).
 
-Impossible to compare synsets of different part of speech using these methods becuase they are not connected via hyper
+The `nltk.wn` module has built-in functions for computing these similarities between synsets. Note, in the code below, two explicity senses `books[0],books[1]` are being compared. `wn.path_similarity()` is a called directly. Where are Information Content requires a corpus as evidence to reference. The corpus is read in from the `wn_ic` imported at the start and uses `"ic-brown.dat"` as the corpus. The similarity measure itself comes from the `wn` package and a specific measure called `res_similarity` (resnik_similarity) is used. Again it takes two specific sense to compare but also the corpus `books[0],books[1],brown_ic`. Another similarity is also computed called the `lin_similarity`.
 
-2.1 
+```
+books=wn.synsets("book",wn.NOUN)
+print("path_similarity {}".format(wn.path_similarity(books[0],books[1])))
 
-he similarity of two **words** with a given part of speech is defined as the **maximum** similarity of all possible sense pairings.  If word A has 5 noun senses and word B has 4 noun senses than there are 20 possible sense pairings to check.
+brown_ic=wn_ic.ic("ic-brown.dat")
 
-Write a function which will compute the path_similarity of two nouns.
+print("resnik_similarity {}".format(wn.res_similarity(books[0],books[1],brown_ic)))
+print("lin_similarity {}".format(wn.lin_similarity(books[0],books[1],brown_ic)))
 
-2.2 Generalise function to use any similarity measure
+path_similarity 0.2
+resnik_similarity 5.454686565783099
+lin_similarity 0.7098990245459575
+```
+
+Note that the reason that the `book` variable specificies the `wn.NOUN` of the synset is because it is impossible to compare the synets of different parts of speech as they will be completely disconnected and have no mutual hyponymy/hypernymy root. 
+
+If you ever do need to compare a noun and a verb (e.g., the noun "payment" and the verb "pay"), you cannot use path-length. Instead, you have to use Derivational Morphology links. These are special pointers in WordNet that connect different parts of speech that share a root meaning.
 
 
-## Comparing WordNet Similarities with Human Synonymy Judgements
+The similarity of two **words** with a given part of speech is defined as the **maximum** similarity of all possible sense pairings.  If word A has 5 noun senses and word B has 4 noun senses than there are 20 possible sense pairings to check. This is because the computer doesn't know what sense of a word you mean it checks them all. It will also the outcome with the best similarity is the one you wanted.
 
-uses extra csv
+The function below computes the similarity of two nouns. It aquires the availble synsets for each work and then uses a nest loop to compare them all. It simply uses a pre-initalised variable `maxsofar` which it overwrites every time is sees a higher similarity:
+```
+def path_similarity(wordA,wordB,pos=wn.NOUN):
+    synsetsA=wn.synsets(wordA,pos)
+    synsetsB=wn.synsets(wordB,pos)
+    maxsofar=0
+    for synsetA in synsetsA:
+        for synsetB in synsetsB:
+            sim=wn.path_similarity(synsetA,synsetB)
+            if sim>maxsofar:
+                maxsofar=sim
+    return maxsofar
 
-3.1 wordnet path sim for pairs, connect to human, explore more similarities
-3.2 scatterplots, correlation
-3.3 
+path_similarity("chicken","car")
+```
+
+The structure of this function can easily be adpat to allow any similarity measure. Most measures need a corpus to that needs to be factor in. Otherwise it is just a case of adding a param for the type of measure and an `if/else` to pick the similarity functionality.
+
+```
+def word_similarity(wordA,wordB,pos=wn.NOUN,measure="path"):
+    synsetsA=wn.synsets(wordA,pos)
+    synsetsB=wn.synsets(wordB,pos)
+    maxsofar=0
+    brown_ic=wn_ic.ic("ic-brown.dat")
+    for synsetA in synsetsA:
+        for synsetB in synsetsB:
+            if measure=="path":
+                sim=wn.path_similarity(synsetA,synsetB)
+            elif measure=="res":
+                sim=wn.res_similarity(synsetA,synsetB,brown_ic)
+            elif measure=="lin":
+                sim=wn.lin_similarity(synsetA,synsetB,brown_ic)
+            
+            if sim>maxsofar:
+                maxsofar=sim
+    return maxsofar
+
+word_similarity("chicken","car",measure="lin")
+```
+
+### Comparing WordNet Similarities with Human Synonymy Judgements
+
+In order to compare with human judgements we are going to read in a `.csv` that contains 30 noun pairs descriptions. The headers are `["word1","word2","human similarity"]`. As it is a `.csv` and therefore tabular, we can use `pandas` and `.describe()` to create some exporatory analysis and summary stats. 
+
+The code below uses the `word_similarity` function we created above to create new column(s) for similarity which we can compare to the human similarity measure:
+
+```
+measures=["path","res","lin"]
+for measure in measures:
+    scores=[]
+
+    for triple in mcdata:
+        scores.append(word_similarity(triple[0],triple[1],measure=measure))
+    df[measure]=scores
+    
+df
+```
+
+One of the easiest way to visualise this data would be through a scattergraph and plotting human judgement against 1 type of similarity measure `df.plot.scatter("human similarity","res")`
+
+Additionally, you could compute the correleation, this would allow you to compare all measures at once and produce a correlation table: `df.corr(method='spearman')`
+
+
+
     * Looking at the scatter plots and the correlation coefficients, what do you conclude about the different WordNet similarity measures?
     * Do you have any reservations about your conclusions?
+
+<div style="page-break-after: always;"></div>
+
