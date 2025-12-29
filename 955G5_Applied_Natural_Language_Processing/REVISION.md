@@ -2863,7 +2863,308 @@ WordNet is a tool that WSD use to put words into buckets. It is a lexical databa
 
 ## Week 7 - Lab Session 
 
-INTRO 
+There is only 1 notebooks for lab 7:
+- [Distributional Semantics Lab](#distributional-semantics-lab) `Lab_7_1_SOLUTIONS.ipynb`
 
-* []()
+## Distributional Semantics Lab
 
+In a distributional model of meaning, words are respresented in terms of their co-occurences. This lab looks at how the definition of co-occurence used affects the nature of the similarity discovered. In particular, we are going to contrast *close proximity* co-occurrence (where words co-occur, say, next to each other) with more *distant proximity* (where words co-occur, say, within a window of 10 words).
+
+* [Lab 7 Set Up](#lab-7-set-up)
+* [Finding the Frequency Distribution of Words in Sample Sentences](#finding-the-frequency-distribution-of-words-in-sample-sentences)
+* [Generating Feature Respresentations](#generating-feature-respresentations)
+* [Postitive PMI (PPMI)](#positive-pmi-ppmi-lab)
+* [Word Similarity (Lab 7)](#word-similarity-lab-7)
+* [Nearest Neighbours (Lab 7)](#nearest-neighbours-lab-7)
+
+### Lab 7 Set Up
+
+This lab uses the Gutenberg fiction book corpus. 
+```
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('gutenberg')
+
+from nltk.corpus import gutenberg
+book_ids=gutenberg.fileids()
+books={b:gutenberg.words(b) for b in book_ids}
+len(books)
+
+books.keys()
+books['austen-emma.txt']
+```
+
+The code below collapesed the 18 book corpus into one huge list. I will contain over 2 milltion tokens:
+```
+gutenberg_corpus=[]
+for b in books.values():
+    gutenberg_corpus+=list(b)
+    
+len(gutenberg_corpus)
+```
+
+Whilst we don't care about where one book ends and another begins, we do want some structure to the tokens in the form of sentences. We build sentence segmenters in the early labs. Whilst doing this segmenting we will carry out the that standard normalisation techniques. Note, the output we want is normalised tokenized sentencesL
+
+```
+from nltk.tokenize import sent_tokenize, word_tokenize
+gutenberg_sentences=sent_tokenize(' '.join(gutenberg_corpus))
+tokenized1=[word_tokenize(sent) for sent in gutenberg_sentences]
+len(tokenized1)
+```
+
+Here is a boiler plate normailzation functions: 
+
+```
+def normalise(wordlist):
+    lowered=[word.lower() for word in wordlist]
+    normalised=["Nth" if (token.endswith(("nd","st","th")) and token[:-2].isdigit()) else token for token in lowered]
+    normalised=["NUM" if token.isdigit() else token for token in normalised]
+    filtered=[word for word in normalised if word.isalpha()]
+    return filtered
+
+normalised1=[normalise(sent) for sent in tokenized1]
+
+normalised1[0]
+```
+
+### Finding the Frequency Distribution of Words in Sample Sentences
+
+This once again utilises dictionaries `.get(token,0)+1` method which allows us to record and update frequencies:
+
+```
+def freq_dist(sentences):
+    mydict={}
+    for sentence in sentences:
+        for token in sentence:
+            mydict[token]=mydict.get(token,0)+1
+    return mydict
+
+def most_frequent(freqdist,k=100):
+    return sorted(freqdist.items(),key=operator.itemgetter(1),reverse=True)[:k]
+
+print(most_frequent(freq_dist(normalised2),5))
+```
+
+### Generating Feature Respresentations
+
+Remember the simplist method of constructing Distribution Feature Representations is to look at proximity within a two sided window around a word. 
+
+The code below shows how to iterate through a sentence, extracting the `n` words either side of a token. 
+
+```
+tokens=word_tokenize("the moon is blue and made of cheese")
+
+window=1
+
+for i,word in enumerate(tokens):
+    print(word,tokens[max(0,i-window):i]+tokens[i+1:i+window+1])
+```
+
+The code below takes a list of sentences and a window size and will output a dictionary of dictionaries. The key will be a word and itself dictionary will be the count for words that were found around it. Note, that the key is the cumlative counts for that word, so if "moon" comes up several times in a document the counts will summed. The code works by first looping through the sentences, then looping through the tokens. For each token, it checks/records and entry in the output dict, then it runs the window feature code to get the features. Then it loops through the features distributing them into the tokens nested dict and adding counts as it sees them:
+
+```
+def generate_features(sentences,window=1):
+    mydict={}
+    for sentence in sentences:
+        for i,token in enumerate(sentence):
+            current=mydict.get(token,{})
+            features=sentence[max(0,i-window):i]+sentence[i+1:i+window+1]
+            for feature in features:
+                current[feature]=current.get(feature,0)+1
+            mydict[token]=current
+    return mydict
+```
+
+```
+sents=["the moon is made of blue cheese",
+        "the really fat cat is eating blue cheese sitting on the mat"]
+tokenised_sentences=[word_tokenize(sent) for sent in sents]
+generate_features(tokenised_sentences,window=1)
+
+{'the': {'moon': 1, 'really': 1, 'on': 1, 'mat': 1},
+ 'moon': {'the': 1, 'is': 1},
+ 'is': {'moon': 1, 'made': 1, 'cat': 1, 'eating': 1},
+ 'made': {'is': 1, 'of': 1},
+ 'of': {'made': 1, 'blue': 1},
+ 'blue': {'of': 1, 'cheese': 2, 'eating': 1},
+ 'cheese': {'blue': 2, 'sitting': 1},
+ 'really': {'the': 1, 'fat': 1},
+ 'fat': {'really': 1, 'cat': 1},
+ 'cat': {'fat': 1, 'is': 1},
+ 'eating': {'is': 1, 'blue': 1},
+ 'sitting': {'cheese': 1, 'on': 1},
+ 'on': {'sitting': 1, 'the': 1},
+ 'mat': {'the': 1}}
+```
+
+### Positive PMI (PPMI) (Lab)
+
+So far we have generated representations which are simply the frequency of events occuring together. We can use PPMI to establish how significant a given frequency of co-occurence is.  
+
+If the words "player" and "tennis" are both very common words in their own independent right then their co-occuring 10 times together may be insignifciant. However, if they are rare words which co-occure 10 times then this should be considered more significant. 
+
+$$
+\begin{align}
+PMI(word,feat) = \frac{\text{freq}(word,feat) \times \Sigma_{w*,f*} \text{freq}(w*,f*)}{\Sigma_{f*} \text{freq}(word,f*) \times \Sigma_{w*} \text{freq}(w*,feat)}
+\end{align}
+$$
+
+There are a few things we need to execute this calculation:
+* the frequency of co-occurance between "word1" and "word2"
+* the total number of times "word1" has occur with any feature
+* the total number of times tennis has occured as a feature
+* the grand total of all possible co-occurances (based on how much they occured each)
+
+To do this we create a class called `WordVec`. This takes a list of sentences and a desired window size. The class has a method automatically called in this init function called `_generate_features`. This will gather the disributional features, calculate the word and feature total totals, all of this informatio will be stored in Instance Attributes created in the in init which can be used within the class or access from the inistnated class.
+
+```
+class WordVectors:
+    def __init__(self,sentences,window=3):
+        self.sentences=sentences
+        self.window=window
+        self.reps={}
+        self.wordtotals={}
+        self.feattotals={}
+        self._generate_features()
+        self.grandtotal=sum(self.wordtotals.values())
+    
+    def _generate_features(self):
+        for sentence in self.sentences:
+            for i,token in enumerate(sentence):
+                current=self.reps.get(token,{})
+                features=sentence[max(0,i-self.window):i]+sentence[i+1:i+self.window+1]
+                for feature in features:
+                    current[feature]=current.get(feature,0)+1
+                    self.feattotals[feature]=self.feattotals.get(feature,0)+1
+                self.wordtotals[token]=self.wordtotals.get(token,0)+len(features)
+                self.reps[token]=current
+```
+
+```
+vectors_3=WordVectors(normalised2)
+print(vectors_3.reps['house']['summer'])
+print(vectors_3.wordtotals['house'])
+print(vectors_3.feattotals['summer'])
+
+feattotals=FreqDist()
+for wordrep in vectors_3.reps.values():
+    feattotals.update(wordrep)
+list(feattotals.keys())
+
+feattotals['summer']
+```
+
+Now we want to convert the representations based on frequency into one based on PMI. 
+
+$$
+\begin{align}
+\text{PPMI}(word,feat)=
+\begin{cases}PMI(word,feat),& \text{if PMI}(word,feat)>0\\
+=0,& \text{otherwise}
+\end{cases}
+\end{align}
+$$
+
+We add to our class a way to pick up the items and the frequency and use the additional information we have calculated to invoke our PPMI calculaion:
+
+```
+def convert_to_ppmi(self):
+        self.ppmi={word:{feat:max(0,math.log((freq*self.grandtotal)/(self.wordtotals[word]*self.feattotals[feat]),2)) for (feat,freq) in rep.items()} for (word,rep) in self.reps.items()}
+```
+
+```
+vectors_3=WordVectors(normalised1)
+vectors_3.convert_to_ppmi()
+print(vectors_3.ppmi['house']['summer'])
+```
+
+Final Class: 
+
+```
+class WordVectors:
+    def __init__(self,sentences,window=3):
+        self.sentences=sentences
+        self.window=window
+        self.reps={}
+        self.wordtotals={}
+        self.feattotals={}
+        self.generate_features()
+        self.grandtotal=sum(self.wordtotals.values())
+    
+    def generate_features(self):
+        for sentence in self.sentences:
+            for i,token in enumerate(sentence):
+                current=self.reps.get(token,{})
+                features=sentence[max(0,i-self.window):i]+sentence[i+1:i+self.window+1]
+                for feature in features:
+                    current[feature]=current.get(feature,0)+1
+                    self.feattotals[feature]=self.feattotals.get(feature,0)+1
+                self.wordtotals[token]=self.wordtotals.get(token,0)+len(features)
+                self.reps[token]=current
+
+    def convert_to_ppmi(self):
+        self.ppmi={word:{feat:max(0,math.log((freq*self.grandtotal)/(self.wordtotals[word]*self.feattotals[feat]),2)) for (feat,freq) in rep.items()} for (word,rep) in self.reps.items()}
+```
+
+### Word Similarity (Lab 7)
+
+No that we have feature vectors that has been enriched with PPMI weights instead of frequences, we can use cosine similarity to compute the similiarty between two word vectors. 
+
+To reiterate, the words respresented by vectors which do not include the word themselve but area insteadare  the words surrounding the word of which the value has been enriched to highlight if the word surrounding pair is of statistical signficace or not. 
+
+Below is a boilerplate function for computing the dot product whihc cosine similarity uses: 
+
+```
+def dot(vecA,vecB):
+    the_sum=0
+    for (key,value) in vecA.items():
+        the_sum+=value*vecB.get(key,0)
+    return the_sum
+```
+
+Extending this, we can add another method into the class to compute the similarity between two words. This function picks up the `ppmi` dictionary created and uses the `dot` function to calculate a cosine similarity using this vector: 
+
+```
+ef similarity(self,word1,word2):
+        rep1=self.ppmi.get(word1,{})
+        rep2=self.ppmi.get(word2,{})
+        return dot(rep1,rep2)/math.sqrt(dot(rep1,rep1)*dot(rep2,rep2))
+```
+
+```
+vectors_3=WordVectors(normalised1)
+vectors_3.convert_to_ppmi()
+print(vectors_3.similarity('summer','winter'))
+
+0.0872055132966406
+```
+
+### Nearest Neighbours (Lab 7)
+
+Now we want to use this similarity metric to find the "nearest neighbours" to a given word. In order do do this we need to run `.similarity()` on all other words in a set of candidates (or the whole corpus). Then rank the outcomes by similarity. 
+
+The function below can be added to the `WordVectors` class to provide this functionality:
+
+```
+def nearest_neighbours(self,word1,n=1000,k=10):
+    candidates=sorted(self.wordtotals.items(),key=operator.itemgetter(1),reverse=True)[:n]
+    sims=[(cand,self.similarity(word1,cand)) for (cand,_) in candidates]
+    return sorted(sims,key=operator.itemgetter(1),reverse=True)[:k]
+
+vectors_1=WordVectors(normalised1,window=1)
+vectors_1.nearest_neighbours('summer',n=2000)
+
+[('summer', 1.0),
+ ('winter', 0.11408560697639314),
+ ('sabbath', 0.10343614608653066),
+ ('evening', 0.09953955510058124),
+ ('sunday', 0.09260322034936996),
+ ('supper', 0.09177689366961025),
+ ('watch', 0.08074545777876865),
+ ('season', 0.07798892936987538),
+ ('week', 0.07583785807132003),
+ ('walls', 0.06984271903761587)]
+```
+
+<div style="page-break-after: always;"></div>
