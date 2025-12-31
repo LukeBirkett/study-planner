@@ -3168,3 +3168,412 @@ vectors_1.nearest_neighbours('summer',n=2000)
 ```
 
 <div style="page-break-after: always;"></div>
+
+# Week 8 - Part-of-Speech Tagging and Hidden Markov Models
+
+This lecture has two parts. It is split into understanding what Part-of-Speech is and how it is useful and moves into methods to tag existing corpora and specifically looks into Hidden Markov Methods.
+
+The part-of-speech of a word determines the role it plays in the sentence; for example, whether it is a noun, a verb, an adjective, an adverb, a conjunction, a determiner ... 
+
+Many words, taken in isolation, are ambiguous as to their part of speech.  For example, the word book can be used as a noun or a verb.  Therefore, we tend to look at sequences of words when part-of-speech tagging:
+- I picked up the book from the library.
+- I want to book a table for this evening.
+
+The previous word gives a strong clue as to the POS tag of the word book.   Therefore, an effective method for POS tagging involves using Hidden Markov Models (HMMs). 
+
+1. [Lecture Notes](#week-8---lecture-notes)
+2. [Lab Session](#week-8---lab-session)
+
+## Week 8 - Lecture Notes
+
+* []()
+
+## Parts of Speech
+
+Words can be categorised according to how they behave grammatically. Traditionally, there are 9 or 10 lexical categories (PoS):
+- Noun
+- Verb
+- Adjective
+- Adverb
+- Auxilary Verb
+- Conjunction
+- Determiner
+- Interjection
+- Preposition
+- Pronoun
+
+Identifying PoS is a useful pre-processing step. It can help disambiguate word which is good for accuracy information retreival, text-to-speech and document classifcation. The context of what a word is can help us better understand what words are likely to occur nearby.  Adjectives are often followed by nouns "happy student", personal pronouns follows by verbs "you laugh". 
+
+### POS Definitions
+
+**Nouns and Pronouns**: used to identify people, places and things. Divided into Proper Nouns: "England", "Luke", "Microsoft". And Common Nouns: which too and split into Count Nouns: "window", "tyre" and Mass Nouns: "snow", "rice". Pronouns stand in place of a noun: "she", "you", "I"
+
+**Verbs and Auxiliary Verbs**: These are ations and processes: run, chase, say. Auxiliary verbs usually precede a main verb. "she **should** chase the thief".
+
+**Adjectives and Adverbs**: Adjectives are properties and qualities that modify nouns: green, small, clever. Adverbs usually modify verbs or verb phrases: slowly, now, unfortunantely. 
+
+**Determiners**: a modifying word that determins the kind of references a noun has. "i would like *a* cake" vs "i would like *the* cake". Also known as articles.
+
+**Preposition and Particles**: Preposition specific the relative position of two things. "I saw the boy UNDER the bridge". Particles are sometimes distinguished from prespositions, they modify a verb: "i tidied UP the room".
+
+**Conjunctions and Interjections**: Conjunctions join words and phrases together. "and, but, because, either". Interjections are exclamations with any gramatical connection to the other words "hey, ouch, darn". 
+
+### Open and Closed Classes
+
+The are two fundamental categories of parts of speech (PoS) based on how their vocabulary evolves over time and their role in a sentence. 
+
+Open classes are categories of words that are not fixed; they are constantly evolving as the language changes: 
+* New Additions: New words are added to these classes frequently (e.g., modern terms like "boop," "bussin’," and "AGI").
+* Archaic Words: Older words can also drop out of common usage and become archaic (e.g., "camelopard" or "sanative").
+* Content-bearing: These words carry the primary meaning or "content" of a sentence.
+* Typical Examples: Nouns, Verbs, Adjectives, and Adverbs
+
+Closed classes are fixed categories that rarely, if ever, change or accept new members.
+* Functional Role: These words are "functional" rather than "content-bearing"; they act as the "glue" that specifies how different concepts in a sentence relate to each other.
+* Characteristics: They are typically short in length and occur very frequently in text.
+* NLP Application: Because they are so common and often carry less specific "meaning" on their own, they are frequently treated as stopwords in various NLP applications.
+* Typical Examples: Determiners (e.g., a, the), Prepositions (e.g., on, under), Pronouns (e.g., she, you), and Conjunctions (e.g., and, but)
+
+Understanding this distinction is important because it explains why simple PoS taggers (like the Unigram Tagger) can often achieve high accuracy as many of the most frequent "closed class" words are rarely ambiguous, whereas "open class" words are where the complexity of language change and ambiguity typically resides.
+
+### Part-of-Speech Tagset
+
+A tagset is an inventory of labels, not a data collection itself. It provides the labels for marking different PoS classes, a list of codes like NN (Noun), VB (Verb), or JJ (Adjective). There are different decisions on how many tages there are which are derived from different corpora. For example, the Brown corpus uses a larger tagset (80 tags) compared to the Penn Treebank (45 tags), meaning it makes finer distinctions between word types. 
+
+The Penn Treebank Tagset is a widely used standard in Natural Language Processing for labeling parts of speech. t is significantly smaller and more condensed than other common tagsets, such as the Brown Corpus (80 tags) or the Susanne Corpus (350 tags). It is the standard used to evaluate modern PoS taggers; on well-formed text, state-of-the-art methods achieve an accuracy of 96–97% when using the Penn Treebank tagset. 
+
+### Part-of-Speech Tagging
+
+PoS tagging is the proccess of assigning a single PoS tag to each word and punctutation is some text. 
+
+PoS is generally a shallow form of processing. Is it 1:1 tags to per word, it doesn't try to understand the whole sentence or topic, it just wants to tag the individual word. Often it only looks at the word ahead so it is can tag for that. PoS is a non-trival task for computers because of ambiguity. The same word can function as different PoS depending on its neighbours. A good tagger must use the clues around the word to tag correctly. 
+
+### PoS Ambiguity
+
+In the Brown corpus 11.5% of word types and 40% of word tokens are ambiguous with respect to POS tag. That is, they could be labelled with mutliple tags. 
+
+Global ambiguity occurs when an entire sentence can be assigned multiple, completely different PoS tag sequences, each resulting in a different (but grammatically valid) meaning.
+
+"Fruit flies like a banana."
+
+Interpretation A (The "Insect" meaning):
+- Fruit (Noun/Adjective): A type of fruit.
+- flies (Noun): The insects.
+- like (Verb): To enjoy.
+Meaning: Insects called fruit flies have a preference for bananas.
+
+Interpretation B (The "Physics" meaning):
+- Fruit (Noun): The object.
+- flies (Verb): To move through the air.
+- like (Preposition): Similar to.
+Meaning: A piece of fruit is traveling through the air in the same manner as a banana travels.
+
+In global ambiguity, the context within the sentence itself is not enough to definitely pick one tag sequence over the other; you would need outside knowledge or broader paragraph context to know which is intended.
+
+Local ambiguity occurs when a word is ambiguous in isolation, but the surrounding words (local context) make only one PoS tag plausible.
+
+"Time always flies like an arrow."
+
+- The word "flies" is locally ambiguous (it could be a noun or a verb).
+- However, the presence of "Time" (Subject) and "always" (Adverb) before it "locks" "flies" into being a Verb.
+- The sequence "Noun + Adverb + Noun" (Time always insects...) would be ungrammatical in English, so a PoS tagger can use this local context to resolve the ambiguity.
+
+Simple models like the Unigram Tagger (Slide 28) fail at local ambiguity because they only look at the word itself, not the context. More advanced models like Hidden Markov Models (HMMs) (Slide 34) are designed specifically to solve local ambiguity by looking at the "Transition Probabilities"—the likelihood of one tag following another (e.g., how likely is a Verb to follow an Adverb?).
+
+### Evaluating Taggers
+
+This is how we determine the success of a tagging model. it's about comparing a machine's "guess" against a "ground truth."
+
+To evaluate a tagger, you need a Gold Standard—a corpus where every word has been manually labeled by expert linguists (e.g., the Penn Treebank or the Brown Corpus).
+
+We assume that if a tagger performs well on the gold standard (e.g., Wall Street Journal articles), it will perform similarly on other "similar" unlabelled text (like New York Times articles). However, if you move the tagger to a very different domain (like Tweets or medical journals), accuracy usually drops significantly.
+
+Accuracy (The Standard): This is the primary metric for PoS tagging. It is the simple proportion of tags that the model got right out of the total number of words.Calculation: $\frac{\text{Correct Tags}}{\text{Total Words}}$
+
+Precision (Per Class): While accuracy gives the "big picture," precision looks at individual tags. For example, if the model tags 100 words as VB (Verb), but only 80 of them were actually Verbs in the gold standard, the Precision for the Verb class is 80%. This is useful for identifying which specific grammatical categories the model is struggling with (e.g., it might be great at Nouns but terrible at Adverbs).
+
+The slide notes that state-of-the-art taggers achieve 96–97% accuracy on well-formed text. This number is significant because Inter-annotator agreement is also around 97%. This means that if you give the same sentence to two expert linguists, they will only agree on the tags about 97% of the time. Since humans don't agree 100% of the time, we cannot realistically expect a machine to hit 100% accuracy. A 97% accurate machine is essentially performing at the level of a human expert. 
+
+If a tagger is 97% accurate, it makes an error on 3% of words. If an average sentence is 15–20 words long, you can expect one incorrect tag roughly every 30–40 words. Most of these errors happen on locally ambiguous words (like the "flies" example on Slide 24) or on rare words that the model didn't see enough during training. 
+
+n PoS tagging, a confusion matrix is particularly useful for seeing which tags are being swapped—for example, a model might frequently "confuse" a Past Tense Verb (VBD) with a Past Participle (VBN).
+
+While there are roughly 9 or 10 basic categories (Noun, Verb, etc.), most NLP tasks use the Penn Treebank Tagset (45 tags). A $45 \times 45$ matrix is very common in research. It is useful because it reveals "fine-grained" errors that a simple accuracy score would hide: 
+
+- Tense Confusion: You might see a high number of errors where the model confuses VBD (verb, past tense) with VBN (verb, past participle). These are both "Verbs," but the matrix tells you exactly which grammatical distinction the model is failing to make.
+- Noun vs. Adjective: As mentioned in the Local vs. Global Ambiguity section (Slide 24), words like "building" are tricky. The confusion matrix will show if your tagger is systematically misidentifying nouns as adjectives when they appear before another noun.
+- Sparsity: In a large matrix, you will notice that most cells are zero. For example, a model is very unlikely to confuse a DT (Determiner like "the") with a VB (Verb like "run"). If you see numbers in that cell, it indicates a major flaw in your model's logic or training data.
+
+Accuracy tells you the overall performance. The Confusion Matrix allows you to calculate the Precision and Recall for specific tags.
+
+### Word Identities
+
+The word itself is the first and often biggest clue in identifying the PoS. A word may have many different possible PoS tags but they are generally not all equal it likelihood. Tag distributions often low entropy and one tag is far more likley then the others. Entropy is a measure that can be used for uncertainty in the tag distribution. 50:50 is high entropy, 90:10 is low entropy. Entropy and uncertainty can be used interchangably. 
+
+If we know the word is "book," even without looking at the sentence, we can guess it's a Noun and be right most of the time because it acts as a noun more frequently than a verb.
+
+Because most words have a dominant tag (low entropy), a tagger that only looks at the word identity and always picks the most frequent tag can achieve roughly 90% accuracy. The reason we can't get to 100% using word identities alone is because of those "High Entropy" moments where context is required to break the tie.
+
+This is the "baseline" of PoS tagging. Every advanced model (like an HMM) starts with this word identity information (Emission Probabilities) and then adds context (Transition Probabilities) to solve the remaining uncertainty.
+
+### A Unigram PoS Tagger 
+
+The logic of a unigram tagger is the most likely tag. For any given word, it always assigns the tag that was most frequent for that word in the training data. 
+
+It completely ignores the surrounding words. For example, if the word "flies" appeared as a Noun 60 times and a Verb 40 times in your training set, the unigram tagger will always label it as a Noun, even in the sentence "Time flies". To "learn," the tagger looks at a labeled corpus and builds a frequency table for every word. 
+
+$$tag(w) = \text{argmax}_t P(t|w)$$
+
+Despite its simplicity, this tagger usually achieves around 90% accuracy. This is because most words have a dominant meaning/tag. The tagger fails whenever a word is used in its "non-dominant" sense. It cannot solve Local Ambiguity because it doesn't look at the adjacent tags.
+
+Just as Naive Bayes used prior probabilities to make a "best guess" based on features, the Unigram Tagger uses the "prior" tag frequency for a specific word to make its guess.
+
+Hidden Markov Models (HMMs) bridge that final 6–7% gap by incorporating "Transition Probabilities"—looking at the tags of neighboring words.
+
+## Hidden Markov Models 
+
+A tagger takes an input of words: $w^2_1 = (w_1, w_2, ..., w_n)$ and outputs a sequence of tags $t^n_1 = (t_1, t_2, ..., t_n)$. Specifically, it finds the most probable PoS tag sequence. 
+
+In a Hidden Markov Mode, a sequence of observations is generated by a sequence of hidden states. There are two layers working together: The hidden states which are the underlying PoS tags, grammatical categories that generate words. And there are obversations, these are the words themsevles (may be presented as numbers or vectors). 
+
+Think of these structure and two layers of information chained together as a sentence.
+
+The Markov Assumption is that the "current state depends only on the previous state". It is the Horizontal Link. This means the probability of a word being a Verb depends only on the tag of the word immediately before it (e.g., if the previous tag was a Noun, a Verb is very likely). It's a "Markov Chain" because of this dependency, but it is "Hidden" because we only see the words, not the tags themselves.
+
+The Output Assumption is the vertical link between word and PoS (state). The "current output depends only on the current state". This means that once the model has decided a hidden state is a Noun, the specific word it "outputs" (like "dog" or "cat") depends only on that Noun tag, not on any previous words in the sentence. 
+
+Previously we saw that the Unigram Tagger is "context-free". By contrast, the HMM uses the Markov Assumption to bring in context. 
+
+If the model sees the word "flies" (which is ambiguous), but the previous state was "Fruit" (tagged as a Noun), the Markov Assumption helps the model realize that "flies" is much more likely to be a Verb in that specific sequence than a Noun.
+
+To make this work, the model needs two sets of probabilities which are detailed later in the lecture:
+* Transition Probabilities: How likely is one tag to follow another? (The Markov link) .
+* Emission Probabilities: How likely is a specific word to be generated by a specific tag? (The Output link)
+
+### HMMs for POS Tagging
+
+HMM is a "two-layer" architectural model. 
+
+The Hidden States ($\text{PoS tags}$): These are the grammatical categories like Noun, Verb, and Adjective. They are called "hidden" because when you read a book, you only see the ink of the words; the grammatical structure is an underlying mental or logical layer you have to infer
+
+The Observations ($\text{Words}$): These are the physical tokens you see in the sequence (e.g., "Every", "night", "I", "dream").
+
+HMM is a generative model. It imagines that the language was created in this order: Your brain picks a sequence of Tags based on grammar rules (e.g., "I need a Determiner, then a Noun, then a Verb"). Each of those Tags then "emits" a Word (e.g., the Determiner emits "The", the Noun emits "dog")
+
+The Markov Assumption (Horizontal Link): "Current PoS tag depends only on single previous tag". This means the model assumes English grammar is a "chain." To decide if the current word is a Verb, the model only looks at the tag of the word immediately before it. It doesn't look back at the start of the sentence. This is technically a "Bigram" model. 
+
+The Output Assumption (Vertical Link): "Word depends only on current PoS tag". This assumes that if the model is currently in a "Noun" state, the probability of it choosing the word "apple" is fixed. It doesn't care if the previous word was "eat" or "the." While this is a simplification (obviously "eat" makes "apple" more likely), it keeps the mathematics of the Viterbi Algorithm (Slide 47) efficient.
+
+An HMM models a sequence like "Every night I dream," you should explain that the model is trying to find the most likely path through the "hidden" tag states that could have produced those specific observed words. It does this by balancing:
+* Grammar: How likely is the tag sequence? (Markov Assumption) .
+* Vocabulary: How likely are these words to come from those tags? (Output Assumption).
+
+### Encoding the Assumptions Probabilistically
+
+Translting the conceptual logic of HMMs into mmathematical formulas used for calculation. 
+
+**The Markov Assumption (Horizontal Probability):**
+
+How to calculate the likelihood of a sequence of tags
+
+$P(t_i | t_1 \dots t_{i-1}) = P(t_i | t_{i-1})$
+
+ In a full probability model, the probability of the current tag would depend on every previous tag in the sentence. The HMM "simplifies" this by assuming the current tag $t_i$ only depends on the single previous tag $t_{i-1}$. This is called a First-Order Markov Assumption or a Bigram assumption. For example, the probability of the word "dream" being a Verb depends only on the fact that the previous word "I" was a Pronoun.
+
+ **The Output Assumption (Vertical Probability):**
+
+ Formalizes the likelihood of a word being "emitted" by a tag.
+
+ $$\P(w_1^n | t_1^n) = \prod_{i=1}^{n} P(w_i | t_i)$$
+
+ This says the probability of the entire sequence of words given a sequence of tags is simply the product ($\prod$) of the individual probabilities for each word given its tag.
+
+ It assumes the word $w_i$ depends only on its current tag $t_i$. It ignores the surrounding words. In the example "Every night I dream," the probability of the state Verb producing the word "dream" is independent of the fact that the word "night" appeared earlier.
+
+In Naive Bayes, we saw how we multiply probabilities together to get a final score. The HMM does the same thing. To find the probability of a specific "path" through the sentence, you multiply:
+* All the Transition Probabilities (Tag $\rightarrow$ Tag).
+* All the Emission Probabilities (Tag $\rightarrow$ Word).
+
+Markov: $P(t_i \mid t_{i-1})$ Probability of the next tag given the current one (Grammar)
+
+Output: $P(w_i \mid t_i)$ Probability of the tag producing that specific word (Vocabulary)
+
+### Parameters for an HMM
+
+These are the specific data points at HMM model needs to actually function. There are two essential parameters: Emission and Transition.  
+
+1. Emission (Observation) Probabilities: $P(w|t)$
+    * For every possible tag in your tagset, what is the likelihood that it "emits" a specific word?
+    * If the tag is NN (Noun), what is the probability the word is "dream" vs. "night"?
+    * This links the Hidden States to the Observations.
+2. Transition (Bigram) Probabilities: $P(t_j|t_i)$
+    * For every pair of tags, what is the probability that tag $t_j$ follows tag $t_i$5?
+    * How likely is a Verb to follow a Noun? Or a Determiner to follow another Determiner?
+    * This represents the "Grammar" of the model, moving horizontally across the Hidden States.
+
+There are two ways to get these probability tables: 
+- Supervised Approach: You calculate them directly from a pre-tagged corpus like the Penn Treebank. You simply count the occurrences (e.g., "How many times did a Verb follow a Noun?") and divide to get the probability.
+- Unsupervised Approach: If you only have raw text with no tags, you can use Expectation Maximization (EM) to "guess" the parameters that best fit the data
+
+The intitution behind the Transition and Emission calculations is:  
+- We use Transition Probabilities $P(t_i | t_{i-1})$ to determine how likely a tag is, given the previous tag. For the very first word in a sentence, we use a special "start" transition $P(t_1 | start)$. This is almost like a prior in Naive Bayes
+- Now give we have a set of probabilites for each state (class), we can compute the joint probability which is found in the probabiliy of a word occuring ever in that state, i.e. noun. This part is almost like updating the prior with the likelihood in Naive Bayes. 
+
+The slight different to Naive Bayes is that we don't run an argmax to select the highest value. This is because if we were to have a bad word select this would ruin the sequence. Instead we keep all of the computed values and contine a branch from all of them. The send goal is to find the route/sequence that resulted in the highest Total Joint Probability. Something called the Viterbi Algorithm is used to keep track of all routes. Note, HMMs are incredible computationally expensive, there are a lot of calculations made and stored.
+
+### Calculating Emissions
+
+Emissions are the probability of a word given a tag. To calculate this we rely on a pre-existing tagged dataset. We compile the word counts broken down into tag subsets and then store them as a ratio against total word list counts.
+
+The training set would look something like:
+```
+train = [
+    ('Pierre', 'NNP'),
+    ('Vinken', 'NNP'),
+    (',', ','),
+    ('61', 'CD'),
+    ('years', 'NNS'),
+    ('old', 'JJ'),
+    (',', ','),
+    ('will', 'MD'),
+    ('join', 'VB'),
+    ('the', 'DT'),
+    ('board', 'NN'),
+    ...
+]
+```
+
+The function below counts class occurances and normailzes them using the total token count within each subcless, not the overall training list count:
+```
+def calculate_emissions(trainlist):
+    # trainlist is a list of (word, tag) pairs
+    emissions = {}
+    for word, tag in trainlist:
+        current = emissions.get(tag, {})
+        current[word] = current.get(word, 0) + 1
+        emissions[tag] = current
+        
+    return {tag: {word: value/sum(worddist.values()) 
+                  for word, value in worddist.items()} 
+            for tag, worddist in emissions.items()}
+```
+
+The output would look something like this. NNP means Noun: Proper Noun meaning it is specific sub-class
+```
+{
+    'NNP': {
+        'Pierre': 6.613100552193897e-05,
+        'Vinken': 2.204366850731299e-05,
+        'Nov.': 0.0026231965523702454,
+        'Mr.': 0.04412040251738694,
+        'Elsevier': 1.1021834253656494e-05,
+        'N.V.': 0.0001432838452975344,
+        'Dutch': 8.817467402925195e-05,
+        'Rudolph': 8.817467402925195e-05,
+        'Agnew': 3.306550276096948e-05,
+        ...
+    }
+}
+```
+
+
+### Calculting Transitions
+
+Transistions are the probability of a tag given the previous tag. 
+
+This function iterates through the training list to count how often one tag follows another, starting with a special "start" tag for the beginning of the sequence. 
+
+Key Differences from Emissions
+* Normalization: Like the emission function, this normalizes by the total counts of the previous tag (the subclass). This ensures that for any given tag, the probabilities of all possible "next" tags sum to 1.0.
+* Context: While emissions link tags to words, transitions link tags to other tags, representing the "grammar" of the HMM
+
+```
+def calculate_transitions(trainlist):
+    # trainlist is a list of (word, tag) pairs
+    transitions = {}
+    previous = "start"
+    for _, tag in trainlist:
+        current_transitions = transitions.get(previous, {})
+        current_transitions[tag] = current_transitions.get(tag, 0) + 1
+        transitions[previous] = current_transitions
+        previous = tag
+        
+    return {previous: {tag: value/sum(tagdist.values()) 
+                       for tag, value in tagdist.items()} 
+            for previous, tagdist in transitions.items()}
+```
+
+### Forward Algorithm 
+
+This is what is used to calculate the Probability of a word sequence given a tag sequence. In the context of the larger HMM "Decoding" problem, this is a sub-step that uses the Output Assumption to calculate the vertical "emission" score for a full sentence. 
+
+The probability of a word sequence ($w_1^n$) given a tag sequence ($t_1^n$) as the product of the individual emission probabilities:
+
+$$P(w_1^n | t_1^n) = \prod_{i=1}^{n} P(w_i | t_i)$$
+
+Part of the intution here is that the transition probabilities have already been computed and we are left with many chains of sequences which are just PoS tags. We are now going to fill these tags by deriving the most expected words given the emmissions and calculating the joint probability.Given the Output Assumption the model assumes the current word depends only on its current tag and nothing else in the sequence.
+
+For an example, take an input sequence like "flies like flowers" and a proposed tag sequence of $N, V, N$ (Noun, Verb, Noun) 
+
+With an emissions table of:
+
+| Word ($w$) | $P(w|N)$ | $P(w|V)$ |
+| :--- | :--- | :--- |
+| flies | 0.025 | 0.015 |
+| like | 0.012 | 0.034 |
+| flowers | 0.05 | 0.005 |
+
+The calculating would look like:
+
+$$P(\text{flies like flowers} | N, V, N) = P(\text{flies}|N) \times P(\text{like}|V) \times P(\text{flowers}|N)$$$$= 0.025 \times 0.034 \times 0.05 = \mathbf{0.0000425}$$
+
+You can visualize the hidden states as a trellis or a network of all possible grammatical sequences. If you have a sentence of 3 words and a tagset of 45 tags, there are $45^3$ (91,125) possible "chains" or paths through the hidden states. Each link in the chain is governed by the Transition Probability $P(t_i | t_{i-1})$, which determines how likely that specific sequence is according to the rules of grammar. For every one of those possible chains, the HMM calculates how well the observed words "fit" that specific path using the Emission Probabilities $P(w_i | t_i)$. The goal of the HMM is to find the tag sequence ($T$) that maximizes the joint probability of the tags and the words together.
+
+$$\text{Best Path} = \operatorname*{argmax}_{t_1 \dots t_n} \prod_{i=1}^{n} \underbrace{P(t_i | t_{i-1})}_{\text{Grammar Chain}} \times \underbrace{P(w_i | t_i)}_{\text{Word Fit}}$$
+
+The intuition of "all possible chains" is theoretically correct, calculating every single one would be computationally impossible for long sentences (e.g., a 20-word sentence would have $45^{20}$ paths).
+
+Viterbi is the "shortcut" that allows us to find the best chain without actually computing every single possibility. It works by moving word-by-word and only keeping track of the best path leading into each tag at each step, effectively "pruning" the chains that are mathematically impossible to be the winner.
+
+
+### Deconding HMM
+
+We calculated the probability of a specific word sequence given a specific tag sequence. This is essentially an "evaluator"—if you tell the model exactly what the tags are, it can tell you how well the words fit those tags.
+
+In the real world, we don't know the tag sequence; we only have the words. Decoding is the process of working backward from the observed words to find the single most likely tag sequence (the "best path") out of every possible combination.
+
+Decoding is a very important topic. As discussed, for a sentence of length $n$ and a tagset of size $k$, there are $k^n$ possible tag sequences. If we used the logic from Slide 39 to evaluate every possible sequence to find the winner, it would be computationally impossible for standard sentences (e.g., $45^{20}$ combinations).
+
+We need to move from observing a sequence of words to identifying the single most probable sequence of tags.
+
+We are given a sequence of $n$ words ($w_1, w_2, \dots, w_n$). Our task is to find the sequence of $n$ tags ($t_1, t_2, \dots, t_n$) that is most likely to have generated those words.
+
+Among all possible combinations of tags, we are looking for the "Best" one, which is defined as the sequence that maximizes the joint probability of the words and tags together.
+
+$$\hat{t}_1^n = \operatorname*{argmax}_{t_1^n} P(t_1^n, w_1^n)$$
+
+* $\hat{t}_1^n$: This represents our chosen "best" sequence of tags.
+* $P(t_1^n, w_1^n)$: This is the joint probability of a specific tag sequence and the word sequence.
+
+In a Hidden Markov Model, we find this best sequence by multiplying together all the individual Transition Probabilities and Emission Probabilities that make up that specific path.
+
+Since it is difficult to calculate $P(t_1^n | w_1^n)$ directly (the probability of a tag sequence given the words), we apply Bayes' Rule to reverse the conditional probability.
+
+$$\hat{t}_1^n = \operatorname*{argmax}_{t_1^n} \frac{P(w_1^n | t_1^n) \times P(t_1^n)}{P(w_1^n)}$$
+
+To make the task easier we drop the denominator: 
+
+$$\hat{t}_1^n = \operatorname*{argmax}_{t_1^n} \underbrace{P(w_1^n | t_1^n)}_{\text{Likelihood (Emissions)}} \times \underbrace{P(t_1^n)}_{\text{Prior (Transitions)}}$$
+
+Finally, we substitute the HMM assumptions (Markov and Output assumptions) into this simplified Bayes equation:
+- Likelihood becomes the product of individual Emission Probabilities: $\prod P(w_i | t_i)$.
+- Prior becomes the product of individual Transition Probabilities: $\prod P(t_i | t_{i-1})$.
+
+The move into Bayes' Rule is essentially a way to turn a "Decoding" problem into a "Multiplication" problem. Instead of trying to guess tags from words, the model calculates:
+- Prior: How likely is this "chain" of tags grammatically?
+- Likelihood: How likely are these words to come from those specific tags?
+- The Answer: The path where the product of these two is the highest is your winner.
+
+$$t̂₁ⁿ = argmax_{t₁ⁿ} ∏_{i=1}^{n} P(tᵢ | tᵢ₋₁) * P(wᵢ | tᵢ)$$
+
+### Viterbi Algorithm
