@@ -3184,9 +3184,35 @@ The previous word gives a strong clue as to the POS tag of the word book.   Ther
 1. [Lecture Notes](#week-8---lecture-notes)
 2. [Lab Session](#week-8---lab-session)
 
+<div style="page-break-after: always;"></div>
+
 ## Week 8 - Lecture Notes
 
-* []()
+* [Parts of Speech](#parts-of-speech)
+    * [POS Definitions](#pos-definitions)
+    * [Open and Closed Classes](#open-and-closed-classes)
+    * [Part-of-Speech Tagset](#part-of-speech-tagset)
+    * [Part-of-Speech Tagging](#part-of-speech-tagging)
+    * [PoS Ambiguity](#pos-ambiguity)
+    * [Evaluating Taggers](#evaluating-taggers)
+    * [Word Identities](#word-identities)
+    * [A Unigram PoS Tagger ](#a-unigram-pos-tagger)
+* [Hidden Markov Models](#hidden-markov-models)
+    * [HMMs for POS Tagging](#hmms-for-pos-tagging)
+    * [Encoding the Assumptions Probabilistically](#encoding-the-assumptions-probabilistically)
+    * [Parameters for an HMM](#parameters-for-an-hmm)
+    * [Calculating Emissions](#calculating-emissions)
+    * [Calculting Transitions](#calculting-transitions)
+    * [Forward Algorithm](#forward-algorithm)
+    * [Decoding HMM](#decoding-hmm)
+    * [Viterbi Algorithm](#viterbi-algorithm)
+        * [Horiztonal Assumption](#horiztonal-assumption)
+        * [Vertical Assumption](#vertical-assumption)
+        * [Trellis Building](#trellis-building)
+        * [Assumption Summary Points](#assumption-summary-points)
+        * [Sub Problems](#sub-problems)
+        * [Recursive Step](#recursive-step)
+        * [Efficiency of Viterbi](#efficiency-of-viterbi)
 
 ## Parts of Speech
 
@@ -3536,7 +3562,7 @@ The intuition of "all possible chains" is theoretically correct, calculating eve
 Viterbi is the "shortcut" that allows us to find the best chain without actually computing every single possibility. It works by moving word-by-word and only keeping track of the best path leading into each tag at each step, effectively "pruning" the chains that are mathematically impossible to be the winner.
 
 
-### Deconding HMM
+### Decoding HMM
 
 We calculated the probability of a specific word sequence given a specific tag sequence. This is essentially an "evaluator"—if you tell the model exactly what the tags are, it can tell you how well the words fit those tags.
 
@@ -3612,7 +3638,7 @@ Remeber, there are two applications of HMMs. It is a generative tool but we are 
 
 To be clear, the way that the Viterbi leans on the vertical assumption is that it allows us to not need to do any combinational calculations, i.e. previous tag, tag, next word. We have a store of n-tag optimal sequences, we have a lookup table of tag-to-tag probabilities $P(t_i | t_{i-1})$ and then we have a look up of tag-to-word probabilities $P(w_i | t_i)$. With the latter point owing to the vertical assumptions isolation benefit.
 
-#### Trellis Building 
+#### Trellis Building
 
 When it comes to building the trellis we store the 45 top sequences at each word. This knows as the Forward Pass. Beside each score there will be a pointer saying "To get this high score, I came from Tag X in the previous column." By the time you reach the end of a 10-word sentence, you have a grid of $10 \times 45$ scores and $10 \times 45$ pointers. 
 
@@ -3627,8 +3653,6 @@ The Choice: We only make the "final" choice of the sequence once we reach the en
 The look up tables are: **A Transition Matrix (Tags $\times$ Tags)** and **Emission Matrix (Tags $\times$ Words)**. And the top previous sequences are stored in the "trellis memory". This is just the highest score achieved to reach a specific tag at the previous word. 
 
 The Viterbi Algorithm is using the HMM assumptions to partition down and therefore minimize the number calculation are each step by combining these 3 different ingredients, 2 of which are pre-calculated look ups. 
-
-
 
 #### Sub Problems
 
@@ -3696,7 +3720,7 @@ If you are asked to calculate the Viterbi value for a cell:
 4. Multiply that winner by the emission probability of the current word.
 5. Write that final number in the cell and record where you came from.
 
-#### Efficiency of Viterbi 
+#### Efficiency of Viterbi
 
 The efficiency gains of Viterbi are derived from its modularity and reduction in total calculations needed. 
 
@@ -3706,5 +3730,487 @@ If there are 8 positions in a sentence with 10 tags then the number of computati
 
 If we start looking at more realistic inputs, for example the 45 penn tags and 15 word sentences then it is impossible for computers to acheive this through brute force, i.e. $45^15$ 
 
+<div style="page-break-after: always;"></div>
+
+# Week 8 - Lab 
+
+* [Average PoS Tag Ambiguity](#average-pos-tag-ambiguity)
+* [Entrophy as a Measure of Tag Ambiguity](#entrophy-as-a-measure-of-tag-ambiguity)
+* [A Simple Unigram Tagger](#a-simple-unigram-tagger)
+* [Beyond Unigram Tagging](#beyond-unigram-tagging)
+* [HMM Emission and Transition Probabilities](#hmm-emission-and-transition-probabilities)
 
 
+## Average PoS Tag Ambiguity
+
+Word tag ambiguity occurs due to different ways a word can be applied. Word often have mutliple different meanings and these can vary out into different PoS types. Having a way to measure PoS tag ambiguity can be very helpful. Some words have a colleciton of senses that are all the same, meaning sense ambiguity does not impact tag ambiguity. However, types with a variety of tags are particularly challenging to deal with. 
+
+In this lab we are going to be considering two types of ambiguity: 
+- Simple approach that just counts the number of different tags that label a type. 
+- A more complex information-theorectic measure based on entropy
+
+The data we are going to use for this lab is from the Wall Street Journal courpus and has been hand-annotated with PoS tags. It is accessed via `nltk` via `from nltk.corpus import treebank` which gives a 10% sample to work with.
+
+
+The corpus allows with to directly access all tagged words. This is a completely token collection for the entire corpus with the tag given for each individual usage based on its surrounding context. There will be many instances of the same word and it can have serval different tags if appropriate:
+```
+from nltk.corpus import treebank
+
+taggedWSJ=treebank.tagged_words()
+
+taggedWSJ[0:10]
+
+
+[('Pierre', 'NNP'),
+ ('Vinken', 'NNP'),
+ (',', ','),
+ ('61', 'CD'),
+ ('years', 'NNS'),
+ ('old', 'JJ'),
+ (',', ','),
+ ('will', 'MD'),
+ ('join', 'VB'),
+ ('the', 'DT')]
+ ```
+
+```
+ len(taggedWSJ)
+ 
+ 100676
+```
+
+### Find the Distribution of Tags
+
+Here we are going to build a function `find_tag_distributions(tokentaglist)` which identifies the distribution of tags for every word in the input. It will take a list of pairs `(token, tag)` and return a dictionary of dictionaries whereby the nested dict will be a count of each tag used per word:
+
+```
+def find_tag_distributions(tokentaglist,num=-1):
+    tag_dists={}
+    for i,(token,tag) in enumerate(tokentaglist):
+        current=tag_dists.get(token,{})
+        current[tag]=current.get(tag,0)+1
+        tag_dists[token]=current
+        if num > 0 and i>num:
+            print("Max number exceeded")
+            break
+    return tag_dists
+
+distsWSJ=find_tag_distributions(taggedWSJ)
+```
+
+```
+distsWSJ['the']
+
+{'DT': 4038, 'NNP': 1, 'JJ': 5, 'CD': 1}
+```
+
+### Simple PoS Ambiguity Measure
+
+This is function that takes the tagged data with has been converted into dictionaries counts of tag types and counts the number of tags each word has. It words by looping through the dictionary and taking the len of the tag type nested dict. 
+
+```
+def simple_pos_ambiguity(tag_dists):
+    return {word:len(tag_dist.keys()) for word,tag_dist in tag_dists.items()}
+
+#wsjreader=WSJCorpusReader()
+#taggedWSJ=wsjreader.tagged_words()
+ambiguity=simple_pos_ambiguity(distsWSJ)
+words=['the','white','show']
+for word in words:
+    print("{}: {}".format(word,ambiguity[word]))
+```
+
+### Entrophy as a Measure of Tag Ambiguity
+
+Entrophy is a measure uncertainty. High entropy will occur when there is high, or equally high, number of count accross several tag types. This is uncertain because in terms of raw statistics there is good chance of it being several tags. In this scenario we could not just select for the highest probable tag and assume it will be right most of the time. A low entropy word will be one where there is a clear statistical winner in the distribution. 
+
+This is our mathmatical implementation of entrophy:
+
+$$H([x_1,\ldots,x_n])= - \sum_{i=1}^nP(x_i)\log_2 P(x_i)$$ 
+
+- $n$ is the number of PoS tags
+- $x_i$ is the number of times the word has been labelled with a particular PoS tag $i$
+
+Below is a function to calculate the entropy for a given word. It takes a list which holds the count occurances of tags. It does not care about the order, it just wants the count. The calculation starts with calculating the probability `p = i/total` and turns it into by multipling the informaiton which weights the probability. The information is the inverse of the probability. If something is very rare it carries a lot of information. The math.log(p, 2) part calculates this "surprisal" in bits. Because $p$ is a fraction (less than 1), the log is a negative number. 
+
+```
+def entropy(counts):
+    total = sum(counts)
+    if not total: return 0
+    entropy = 0
+    for i in counts:
+        p = i/total
+        try:
+            entropy += p * math.log(p,2)
+        except ValueError: pass  
+    return -entropy if entropy else entropy
+```
+
+``` 
+entropy([10,10,10])
+1.584962500721156
+```
+
+### Entrophy Ambiguity 
+
+This function starts to build a measure of ambiguity. It takes the tagged WSJ text list and returns a dicitonary where each word is assigned a measure of entrophy. The `entrophy` function above is simply fed by unpacking nested nest using `dist.values()`:
+
+```
+def entropy_ambiguity(tag_dists):
+    #tag_dists=find_tag_distributions(tokentaglist)
+    ent_ambiguity={key:entropy(dist.values()) for key,dist in tag_dists.items()}
+    return ent_ambiguity
+
+#wsjreader=WSJCorpusReader()
+#taggedWSJ=wsjreader.tagged_words()
+
+entropydict=entropy_ambiguity(distsWSJ)
+words=['white','show','the']
+for word in words:
+    print("{}: {}".format(word,entropydict.get(word,0)))
+
+white: 0.9182958340544896
+show: 1.419556298571613
+the: 0.020359443628112334
+```
+
+## A Simple Unigram Tagger
+
+A Unigram Tagger is the most simple tool for Part-of-Speech tagging. That is the problem of determining the correct tag for a given word token. In this section we will:
+- implement a unigram tagger
+- use an off-the-shelf POS tagger which uses information about the previous words or tags in the sequence. 
+
+In order to later test and evaluate a tagger we first need to split it into training and test:
+
+```
+def get_train_test_pos(split=0.7):
+
+    taggedWSJ=treebank.tagged_words()
+    #we don't want to randomly select data because we need to preserve sequence information
+    #so we are just going to take the first part as training and the second as test
+    n=int(len(taggedWSJ)*split)
+    return taggedWSJ[:n],taggedWSJ[n:]
+
+train, test = get_train_test_pos(split=0.8)
+```
+
+The first step is to calculate the tag distributions for each word:
+
+```
+unigram_model=find_tag_distributions(train)
+unigram_model.get('the',{})
+
+{'DT': 3265, 'NNP': 1, 'JJ': 5, 'CD': 1}
+```
+
+The following function builds a unigram part-of-speech tagger `uni_pos_tag()`. It takes two inputs: 
+- A list of tokens which represents a sentence
+- a unigram model which is stored a dictionary of dictionaries, i.e. the tag distribution for each word. 
+The function returns a tagged sequence of tokens, i.e. `(wordtoken1, pos_tag1)`
+
+The functionality is combined over two functions. `best_tag` implements the logic on 1 word and `uni_pos_tag` processes an entire sequence. 
+
+```
+def best_tag(word,unimodel):
+    dist=unimodel.get(word,{})
+    ordered=sorted(list(dist.items()),key=operator.itemgetter(1),reverse=True)
+    return ordered[0][0]
+
+def uni_pos_tag(words,unimodel):
+    return [(word,best_tag(word,unimodel)) for word in words]
+```
+
+``` 
+best_tag("show",unigram_model)
+`NN`
+```
+
+Now we have a functioning tagger we can training it on the training split and evaluate on the test split. A good trick to remember is that you can seperate a list of tuples into two lists: 
+
+``` 
+`train_toks,train_tags=zip(*train)`
+`test_toks,test_tags=zip(*test)`
+```
+
+Below we are implementing the tagger on the training split: 
+```
+train_toks,train_tags=zip(*train)
+uni_pos_tag(train_toks,unigram_model)
+
+[('Pierre', 'NNP'),
+ ('Vinken', 'NNP'),
+ (',', ','),
+ ('61', 'CD'),
+ ('years', 'NNS'),
+ ('old', 'JJ'),
+ (',', ','),
+ ('will', 'MD'),
+ ('join', 'VB'),
+ ('the', 'DT'),
+ ('board', 'NN'),
+ ...
+]
+
+```
+
+In order to produce something to test we just run the tagger on the test set. Remember the `unigram_model` which tolds the dict of frequences was constructed using the training set. Also note the previous function did not build anything to handle OOV words in the test set. 
+
+```
+test_toks,test_tags=zip(*test)
+uni_pos_tag(test_toks,unigram_model)
+```
+
+Also note the previous function did not build anything to handle OOV words in the test set. There are many ways of handling words like these. One strategy is the "Back-off". Here the first call is to check if the word is known from the training set. If it is isnt then we need to assign it a tag in order to allow the model flow through. Back-off assigns the tag value that is most likely to the entire corpus. That is statistically the most common tag in the corpus. It calculates the default tag. 
+
+```
+def back_off(unimodel):
+    #find which is the most frequent tag assigned to any type
+    combined={}
+    for adict in unimodel.values():
+        for (tag,value) in adict.items():
+            combined[tag]=combined.get(tag,0)+value
+    ordered=sorted(list(combined.items()),key=operator.itemgetter(1),reverse=True)
+    return ordered[0][0]
+
+back_off(unigram_model)
+```
+
+The tagging functions can then be updated to allow for a fall back when an unknown word is experienced:
+
+```
+def best_tag(word,unimodel,default='N'):
+    dist=unimodel.get(word,{default:1})
+    ordered=sorted(list(dist.items()),key=operator.itemgetter(1),reverse=True)
+    return ordered[0][0]
+
+def uni_pos_tag(words,unimodel):
+    default_tag=back_off(unimodel)
+    return [(word,best_tag(word,unimodel,default=default_tag)) for word in words]
+```
+
+```
+test_toks,test_tags=zip(*test)
+uni_pos_tag(test_toks,unigram_model)
+
+[('The', 'DT'),
+ ('Treasury', 'NNP'),
+ ('said', 'VBD'),
+ ('0', '-NONE-'),
+ ('the', 'DT'),
+ ('refunding', 'NN'),
+ ('is', 'VBZ'),
+ ('contingent', 'NN'),
+ ('upon', 'IN'),
+ ('congressional', 'JJ'),
+ ...
+]
+```
+
+Now that we have a tagged test list of words we can begin to evaluate. The following function will calculate the accuracy `evaluate_uni_pos_tag` . In order to do this it needs to have access to a goldstandard list of "correct" tags. In our case it is the human tagged sequences from treebank. The evaluation function takes in the `unigram_model` and the `goldstandard` list as arguements. 
+
+```
+def evaluate_uni_pos_tag(unigram_model,goldstandard):
+    goldtoks,goldtags=zip(*goldstandard)
+    pretoks,pretags=zip(*uni_pos_tag(goldtoks,unigram_model))
+    print(goldtags[:10])
+    print(pretags[:10])
+    n=len(pretags)
+    correct=0
+    for (pre,gold) in zip(pretags,goldtags):
+        if pre==gold:
+            correct+=1
+    return correct/n
+
+evaluate_uni_pos_tag(unigram_model,train)
+
+('NNP', 'NNP', ',', 'CD', 'NNS', 'JJ', ',', 'MD', 'VB', 'DT')
+('NNP', 'NNP', ',', 'CD', 'NNS', 'JJ', ',', 'MD', 'VB', 'DT')
+
+0.959709461137323
+```
+
+## Hidden Markov Model Tagging 
+
+State of the art POS taggers use information about likely sequences to get higher performance. In this section we are going to experiement with the pre-built HMM from NLTK. 
+
+In order to construct a HMM we need to work with input that are sentences, or at least resemble sentences. This is because the Viterbi Algorithm which will implement our HMM words by trying to find the best sequence of tags by considering the whole sentence as context. Given this we dont want to be working with seqeuences which are to long as this will be bad for efficency but also evaluation as we will have less to test on. 
+
+A very rudimentary way to do this is to split on the fullstops. This is the best but we actually want is a way to split up the input so the HMM doesn't view it as a really long string. So this is good enough
+
+```
+def sentence_split(labelledsequence):
+    #this is going to do a very rough job - just splitting on '.'
+    #due to the tags, we can't rejoin, use the sentence splitter and then re-tokenise
+    #we could do a better job than this, but don't really need to
+    #we just want to split the input up so that the HMM tagger doesn't view it as one long sequence which it needs to run Viterbi over
+    
+    sentences=[]
+    
+    sentence=[]
+    for token,tag in labelledsequence:
+        sentence.append((token,tag))
+        if tag=='.':
+            sentences.append(sentence)
+            sentence=[]
+    return sentences
+
+train_sentences=sentence_split(train)
+test_sentences=sentence_split(test)
+print("Number of training sentences: {}".format(len(train_sentences)))
+print("Number of testing sentences: {}".format(len(test_sentences)))
+```
+
+The pre-built library we are going to use is `nltk.tag.hmm`. We want to build a `HiddenMarkovModelTagger` but first we need to build a `HiddenMarkovModelTrainer`. The class has a built in `train_supervised()` method which takes in the split training sentences. It will compute the table of emissions and transistions. This is the pre-calculated look up tables that the Viterbi algo will use for its sub problem structure. The tables represents the training portion as they are constructed according to the evidence in the training data. The calculate parameters are retuned in a `HiddenMarkovModelTagger`. 
+
+```
+from nltk.tag import hmm
+hmmTrainer = hmm.HiddenMarkovModelTrainer([],[])
+hmmTagger =hmmTrainer.train_supervised(train_sentences)
+hmmTagger.test(train_sentences)
+hmmTagger.test(test_sentences)
+```
+
+Note that off the bat the HMM will do a great job at predicting on the training set but poorly on the unseen test set. This is because of the small size of the training sample meaning there are lots of tokens and tag transitions in the test sample that were not seen in the training sample. 
+
+We can improve this by smoothing the probablilty estimates. By default, the `train_supervised` method uses a plain Maximum Likelihood Estimator to convert the observed frequency distributions into probability distributions. We can use a different estimator which will carry out the smoothing for us. Below we use the `LidstoneProbDist` which will "add-gamma" to all of the counts. Gamma is just a small number.  
+
+``` 
+from nltk.probability import MLEProbDist,LidstoneProbDist
+
+#this is the default estimator used by HiddenMarkovModelTrainer.trained_supervised
+default_estimator = lambda fdist, bins: MLEProbDist(fdist,bins)
+
+#we are going to replace it with this
+gamma=1
+smoothed_estimator = lambda fdist, bins: LidstoneProbDist(fdist,gamma,bins)
+```
+
+```
+hmmTagger_smooth =hmmTrainer.train_supervised(train_sentences,estimator=smoothed_estimator)
+hmmTagger_smooth.test(train_sentences)
+hmmTagger_smooth.test(test_sentences)
+```
+
+This change will slightly reduce the train accuracy but increase the test accuracy a lot. It is possible that we can play with the gamma to improve the results. 
+
+However, first we need build our over evaluator as the built in `.test()` only prices accuracy and does not return it for future use. 
+
+```
+def evaluate(labelledsequences,tagger=hmmTagger):
+    count=0
+    correct=0
+    for sequence in labelledsequences:
+        goldtoks,goldtags=zip(*sequence)
+        goldtoks=list(goldtoks)
+        #print(goldtoks)
+        predictions=tagger.tag(goldtoks)
+        predtoks,predtags=zip(*predictions)
+        for g,p in zip(goldtags,predtags):
+            if g==p:
+                correct+=1
+            count+=1
+    return correct/count
+evaluate(test_sentences)
+```
+
+Below we are going to by playing with gamma as a hyperparameter. Hyperparameters should be tuned on the trainng set and "tested" on a validation set which can be created by splitting the training set. Ideally, you should conduct a number of runs with different training and validation splits. Once the hyperparameters are tuned you can test from on the training data using the optimal value of gamma, but no changes should take place after this otherwise the tagger is being trained on the test set. 
+
+Below is function to create train and validation (dev) splits on the fly. 
+
+```
+def random_split(labelledsequences,ratio=0.8):
+    n=len(labelledsequences)
+    tr_indices=set(random.sample(range(n),int(n*ratio)))
+    test_indices=set(range(n))-tr_indices
+    train=[labelledsequences[i] for i in tr_indices]
+    dev=[labelledsequences[i] for i in test_indices]
+    return train,dev
+    
+train,dev=random_split(train_sentences)
+print(dev[0])
+```
+
+Below is a looping implementation of a hyperparameter tuner. A list of gramma values are initalised to test and loop is set up to run through them. The loop is nested because the outer layer allows for `n` number of runs to be constructed and the results to be averaged. 
+
+```
+#this will take some time to run
+
+gamma_values=[0,0.001,0.01,0.05,0.1,0.2,0.4,0.5,0.75,1,2]
+#gamma_values=[0,1]
+number_of_runs=3
+
+train_accs={}
+dev_accs={}
+
+for run in range(number_of_runs):
+    train,dev=random_split(train_sentences)
+    
+    for gamma in gamma_values:
+        smoothed_estimator = lambda fdist, bins: LidstoneProbDist(fdist,gamma,bins)
+        hmmTagger_smooth =hmmTrainer.train_supervised(train,estimator=smoothed_estimator)
+        train_acc=evaluate(train,hmmTagger_smooth)
+        dev_acc=evaluate(dev,hmmTagger_smooth)
+        print("{}: {}: {}".format(gamma,train_acc,dev_acc))
+        train_accs[gamma]=train_accs.get(gamma,0)+train_acc/number_of_runs
+        dev_accs[gamma]=dev_accs.get(gamma,0)+dev_acc/number_of_runs
+        
+print(train_accs)
+print(dev_accs)
+```
+
+The results can then be plotted ot easily understand the best performing values:
+```
+import pandas as pd
+results=[]
+for key,value in train_accs.items():
+    results.append((key,value,dev_accs.get(key,0)))
+accuracy_df=pd.DataFrame(results,columns=['gamma','training_acc','dev_acc'])
+accuracy_df.plot(x='gamma')
+```
+
+From this you look the best gamma value and then re-run on the whole training set to reconstruct the transition and emission lookup tables
+
+```
+gamma=0.01
+smoothed_estimator = lambda fdist, bins: LidstoneProbDist(fdist,gamma,bins)
+hmmTagger_smooth =hmmTrainer.train_supervised(train_sentences,estimator=smoothed_estimator)
+hmmTagger_smooth.test(train_sentences)
+hmmTagger_smooth.test(test_sentences)
+```
+
+## HMM Emission and Transition Probabilities
+
+Here is the code used to manaully calculate Emissions and Transitions probabilities. 
+
+```
+def calculate_emissions(trainlist):
+    #trainlist is a list of (word,tag) pairs
+    emissions={}
+    for word,tag in trainlist:
+        current=emissions.get(tag,{})
+        current[word]=current.get(word,0)+1
+        emissions[tag]=current
+    return {tag:{word:value/sum(worddist.values()) for word,value in worddist.items()} 
+            for tag,worddist in emissions.items()}
+```
+
+```
+calculate_emissions(train)
+```
+
+```
+def calculate_transitions(trainlist):
+    transitions={}
+    previous="start"
+    for _, tag in trainlist:
+        current=transitions.get(previous,{})
+        current[tag]=current.get(tag,0)+1
+        transitions[tag]=current
+        previous =tag
+    return {previous:{tag:value/sum(tagdist.values()) for tag,value in tagdist.items()} 
+            for previous,tagdist in transitions.items()}
+```
+
+```
+calculate_transitions(train)
+```
