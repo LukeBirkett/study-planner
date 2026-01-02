@@ -3732,14 +3732,13 @@ If we start looking at more realistic inputs, for example the 45 penn tags and 1
 
 <div style="page-break-after: always;"></div>
 
-# Week 8 - Lab 
+# Week 8 - Lab Session
 
 * [Average PoS Tag Ambiguity](#average-pos-tag-ambiguity)
 * [Entrophy as a Measure of Tag Ambiguity](#entrophy-as-a-measure-of-tag-ambiguity)
 * [A Simple Unigram Tagger](#a-simple-unigram-tagger)
 * [Beyond Unigram Tagging](#beyond-unigram-tagging)
 * [HMM Emission and Transition Probabilities](#hmm-emission-and-transition-probabilities)
-
 
 ## Average PoS Tag Ambiguity
 
@@ -4214,3 +4213,20 @@ def calculate_transitions(trainlist):
 ```
 calculate_transitions(train)
 ```
+
+<div style="page-break-after: always;"></div>
+
+# Week 9 - Named Entity Recognition (NER) and Information Extraction (IE)
+
+This week looks at the tasks of Named Entity Recognition (NER) and Information Extraction (IE). NER requires us to recognise spans of text which refer to real world entities and to determine their type e.g., PERSON, ORGANISATION or PLACE.  Depending on the task, we may also want to be able to link information in the text, where a named entity is mentioned, to information about known real world entities in a database.  When extracting information from text, we also want to be able to extract relationships between real world entities e.g., that PERSON X is the manager of ORGANISATION Y.
+
+NER, and IE more generally, is challenging due to:
+* ambiguity: the same string can refer to different real world entities which may even be of different types (e.g., JFK can refer to a person or an airport). 
+* variation: the same real world entity can be referred to in many different ways (e.g., John F. Kennedy, JFK, J.F.K. etc.)
+
+We will see how NER can be viewed as a sequence labelling problem which makes it possible to borrow techniques and methodology from POS tagging.  However, due to the richness of the feature space available in NER, we move away from generative models (which require features to be independent) to discriminative models (which do not require features to be independent).
+
+1. [Lecture Notes](#week-9---lecture-notes)
+2. [Lab Session](#week-9---lab-session)
+
+<div style="page-break-after: always;"></div>
