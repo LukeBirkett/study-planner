@@ -3577,3 +3577,134 @@ The move into Bayes' Rule is essentially a way to turn a "Decoding" problem into
 $$t̂₁ⁿ = argmax_{t₁ⁿ} ∏_{i=1}^{n} P(tᵢ | tᵢ₋₁) * P(wᵢ | tᵢ)$$
 
 ### Viterbi Algorithm
+
+The Viterbi Algorithm is our tool for finding the besr tag sequence without having to compute all possibilities as that would result in an unfathomable number. The algorithm inherently occupies the HMM assumptions to make the simplificaiton of calculations possible. 
+
+#### Horiztonal Assumption
+
+The Horizontal Assumption says that the probability of a tag occuring depends only on the sequences previous tag $P(t_i | t_{i-1})$. The next tag does not care about the combination of the sequence that pertained to the previous tag. 
+
+Imagine you are at tag 3 in a sentence, you have the word flies and are considering the tag "Verb". If there are 45 tags, that will be many (e.g. 100) theoretically possible tag sequences that allow for Verb in position 3. In an exhaustive approach where you calculate every possible path and select for the highest, you would need to keep all 100 in memory and calculate for position 4. 
+
+The Viterbi Algoritm recognises that for any future tags in this sequence, the only thing that matters is the position 3 is a verb. Therefore, it only needs to remember the one single best path out of those 100 that reached the "Verb" state at word 3. This intuition would be true for every class at word 3. Hence only 45* sequencies would be stored and carried over to word 4 for calculation. 
+
+As a result, the calculation take at section 4 would look something like: $(Previous Path Probability) $\times$ (Transition Probability) $\times$ (Emission Probability)$
+
+By throwing away all suboptimal paths at every step, the algorithm prevents the search space from exploding exponentially ($k^n$). Instead of $45 \times 45 \times 45 \dots$ (growing forever), it effectively resets the search at every word. At any given word $i$, you are only ever keeping track of $k$ paths (one for each possible tag in the tagset).
+
+This turns a "Global" search for the best sequence into a series of "Local" decisions that are guaranteed to lead to the global optimum. Without the Markov assumption (if $t_i$ depended on every previous tag), you couldn't throw those paths away, and the Viterbi algorithm wouldn't work.
+
+#### Vertical Assumption 
+
+The HMM assumes that the current observed word ($w_i$) depends only on its current hidden PoS tag ($t_i$). The model acts as if the tag "emits" the word in a vacuum. It assumes that if the tag is Noun, the probability of the word being "flies" is the same regardless of whether the previous word was "Fruit" or "Time". This assumption says there are no diagonal links between a word and previous or future tags.
+
+Because of this vertical isolation, the Viterbi algorithm can perform local multiplication. When the algorithm is filling in a cell in the trellis (calculating the score for a specific tag at a specific word), it only needs two local numbers to update the path:
+* The Transition Probability ($P(t_i | t_{i-1})$): The horizontal "grammar" score.
+* The Emission Probability ($P(w_i | t_i)$): The vertical "vocabulary" score.
+
+$$\text{New Score} = (\text{Best Previous Path Score}) \times P(t_i | t_{i-1}) \times \mathbf{P(w_i | t_i)}$$
+
+Because $P(w_i | t_i)$ is independent of everything else, Viterbi can pre-calculate or simply look up the tag-word value in a pre-calculateed table and apply it instantly to every incoming path.
+
+If the word ($w_i$) depended on the previous tag ($t_{i-1}$) or the previous word ($w_{i-1}$), the number of combinations would explode. You would have to track every possible word-tag-word triplet. By exploiting the output assumption the algorithm only has to perform one vertical lookup per cell. This keeps the "Emission" part of the calculation at a constant cost, contributing to the overall $O(k^2 \times n)$ efficiency.
+
+Remeber, there are two applications of HMMs. It is a generative tool but we are using it is a context of POS tagging so we already have the sequence, we just want to generative the POS tags. The Task is "Inference" (Decoding). 
+
+To be clear, the way that the Viterbi leans on the vertical assumption is that it allows us to not need to do any combinational calculations, i.e. previous tag, tag, next word. We have a store of n-tag optimal sequences, we have a lookup table of tag-to-tag probabilities $P(t_i | t_{i-1})$ and then we have a look up of tag-to-word probabilities $P(w_i | t_i)$. With the latter point owing to the vertical assumptions isolation benefit.
+
+#### Trellis Building 
+
+When it comes to building the trellis we store the 45 top sequences at each word. This knows as the Forward Pass. Beside each score there will be a pointer saying "To get this high score, I came from Tag X in the previous column." By the time you reach the end of a 10-word sentence, you have a grid of $10 \times 45$ scores and $10 \times 45$ pointers. 
+
+To get the correct sequence you do a backpass. Here you follow the breadcrumb pointers back picking up the tags and contructing the POS tag sequence which most likely matches the input sentence.
+
+The Trellis Memory: Is a cumulative "map" of the best ways to reach every possible tag at every possible word.
+
+The Choice: We only make the "final" choice of the sequence once we reach the end of the sentence and work backward.
+
+#### Assumption Summary Points
+
+The look up tables are: **A Transition Matrix (Tags $\times$ Tags)** and **Emission Matrix (Tags $\times$ Words)**. And the top previous sequences are stored in the "trellis memory". This is just the highest score achieved to reach a specific tag at the previous word. 
+
+The Viterbi Algorithm is using the HMM assumptions to partition down and therefore minimize the number calculation are each step by combining these 3 different ingredients, 2 of which are pre-calculated look ups. 
+
+
+
+#### Sub Problems
+
+The key to Viterbi's functionality is that is it able to break things down into sub problems. 
+
+The structure of the subproblem is given by the format: $V(n,tag)$
+- V means Viterbi
+- $n$ is the iteration of the sub-problems based on the position of the sentence being docoded. The first poisiton is 1. 
+- $t$$ is is the type of speech being investigated. 
+
+If there are 10 words in a sentence and 45 tags then `n=10` and `t=45`. It should be noted that conceptually, these sub-problems are what we used to compute and store the trellis table. At each sub problem, we will calculate 45 best sequences which will use the previous 45 as input to the calculations. 
+
+If we have an input sequence $w_1^n$, we break down into sub-problems using the pairwise $(n,t)$. We want to work out what the most probable tag is in each position. 
+
+`"flies like flowers"`
+
+if "flies" (the word) is the noun, what is the most probable tag sequence to produce it? and then repeat for all tags, e.g. verb. 
+
+The start of the Viterbi is easy because the first position has no preceeding sequence to make into account, just start of sentence. So we just take the tag with the highest probability. The values determined for each tag are stored in the first trellis table column. 
+
+In the next position, `n=2`= `V(2,tag)` we first look at the sub-problem as `n=1`. If `n=2` the word is `like` and we want to work out the probability that it is a `NOUN` = `V(2,NOUN)` we need to consult all 45 possible sequences from `n=1` and identify the highest probability. We then need to cycle through every tag, repeating the same function. This is where Viterbi's recursive nature is shown. It also highlights the modularity of the problems. Finally, 45 best probability sequences will be calculated for each tag which will each consult on and draw on a sequence from the previous position. These 45 will be stored in the next column of the trellis table with each row having a pointer to the previous positons entry that it carried on from. 
+
+For an example of the structure of the calculations/equations taken. 
+
+The first because there is only 1 previous position to consult which is the start:
+
+$$sb_1^n: V(1,noun) = P(t_1 = N) = P(flies|N)*P(N|start)$$
+
+$$sb_1^v: V(1,verb) = P(t_1 = V) = P(flies|V)*P(V|start)$$
+
+The second becomes more complicated.
+
+Here would be the calculations needed to work out if the 2nd position word is going ot be a noun:
+
+Here the probability of position 2 being a NOUN is calculated using `V(1,N)`, and there uses the look up `P(N|N)` in its calculation: 
+
+$$sb_2^n: V(2,NOUN) = P(t_2 = N) = V(1,N) * P(N|N) * P(word|N)$$
+
+Here we are still working out the probability of it being a NOUN but instead it consultes `V(1,V)` from the trellis and `P(N|V)` for the look up:
+
+$$sb_2^n: V(2,NOUN) = P(t_2 = N) = V(1,V) * P(N|V) * P(word|N)$$
+
+These calculations are repeated recurisively for all tags, e.g. 45, and then the highest probability is selected as the route for NOUN in position two for which a row entry is may for position 2 trellis column. In code, the recurive nature of the function might have the functionaily to process, if `if prev was tag` etc to pickup the correct values from the tables. 
+
+#### Recursive Step
+
+The middle of Viterbi is a recursive and acts as the main engine. his is where the "work" happens for every word between the first and the last. The Viterbi Algorithim is simply one calculation repeated over and over. For every possible Tag at the current Word, we want to find the single best path that could have led to it. We represent this as a value in a cell: $v_t(j)$ (The Viterbi value for Tag $j$ at time $t$).
+
+To fill in a single cell, the algorithm looks at the previous column and performs this "Local Winner" calculation:
+
+$$v_t(j) = \underbrace{\max_{i=1}^{k} \left[ v_{t-1}(i) \cdot P(t_j | t_i) \right]}_{\text{The Horizontal Winner}} \cdot \underbrace{P(w_t | t_j)}_{\text{The Vertical Toll}}$$
+
+* $v_{t-1}(i)$: The "Inherited Wealth." This is the best score of a tag in the previous column.
+* $P(t_j | t_i)$: The "Grammar Cost." The probability of moving from the previous tag $i$ to the current tag $j$.
+* $P(w_t | t_j)$: The "Observation Evidence." How well the current word matches the current tag.
+
+We calculate the product for all $k$ previous tags and only keep the highest number. This number is stored in the trellis cell. It represents the "best case scenario" probability. While we are finding that "Max" number, we also note which tag $i$ produced it. We store that tag's identity in a separate "Backpointer" table. 
+
+Think of 45 different paths all trying to enter the "Verb" state at Word 3.Without Viterbi, you’d have to keep all 45 paths alive. With Viterbi's recursive step, those 45 paths merge into one. Only the strongest path survives. By the time you move to Word 4, you aren't dealing with a history of 45 paths; you are just dealing with one number that represents the best possible history.
+
+If you are asked to calculate the Viterbi value for a cell:
+1. Look at the previous column's scores.
+2. Multiply each by its specific transition to your current tag.
+3. Pick the winner.
+4. Multiply that winner by the emission probability of the current word.
+5. Write that final number in the cell and record where you came from.
+
+#### Efficiency of Viterbi 
+
+The efficiency gains of Viterbi are derived from its modularity and reduction in total calculations needed. 
+
+If there `n` words in a sentence and `k` then for each position we need to calculate `k*n` probabilities, that is `V(n,t)` as each sub-problem's POS tag. However, based on the HMM horizontal assumption, for each tag in the sub-problem, we need consult all `k` previous tags, meaning the complexity becomes `k^2 * n`
+
+If there are 8 positions in a sentence with 10 tags then the number of computations is: $10^2 * 8 = 800$. If we needed to explicity keep track of every sequence ever produced then at the final sub-problem we would need to calculate the 10 tags at position 8 against every sequence from the previous 8 words which would be $10^8$ which is $100,000,000$ calculations at that position alone, not including the previous positions. 
+
+If we start looking at more realistic inputs, for example the 45 penn tags and 15 word sentences then it is impossible for computers to acheive this through brute force, i.e. $45^15$ 
+
+
+
