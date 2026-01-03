@@ -4388,3 +4388,214 @@ Note, that while Naive Bayes is common, its strict independence assumptions are 
 
 # Week 9 - Lab Session
 
+* [Week 9 Lab Setup](#week-9-lab-setup)
+* [Book Format Cleanup](#book-format-cleanup)
+* [SpaCy](#spacy)
+* [SpaCy Tag Extraction](#spacy-tag-extraction)
+* [Extracting Entities](#extracting-entities)
+
+## Week 9 Lab Setup 
+
+This week we are going to looking at named entity recognition in the fiction genre. In doing so we will introduce the spaCy library (https://spacy.io/) which provides a number of very fast, state-of-the-art accuracy tools for carrying out NLP tasks including part-of-speech tagging, dependency parsing and named entity recognition.
+
+This lag uses the Gutenberg corpus which around 25,000 books.
+
+```
+import nltk
+nltk.download('gutenberg')
+
+from nltk.corpus import gutenberg
+gutenberg.fileids()
+```
+
+```
+emma=gutenberg.raw('austen-emma.txt')
+emma[:500]
+
+"[Emma by Jane Austen 1816]\n\nVOLUME I\n\nCHAPTER I\n\n\nEmma Woodhouse, handsome, clever, and rich, with a comfortable home\nand happy disposition, seemed to unite some of the best blessings\nof existence; and had lived nearly twenty-one years in the world\nwith very little to distress or vex her.\n\nShe was the youngest of the two daughters of a most affectionate,\nindulgent father; and had, in consequence of her sister's marriage,\nbeen mistress of his house from a very early period.  Her mother\nhad died t"
+```
+
+## Book Format Cleanup
+
+The function below uses regex to clean out some of the corpuras text formatting. Of note it removes newline `\n` strings which do note provide context and removes page formmating headers such as `VOLUME` and `CHAPTER`
+
+```
+import re
+def clean_text(astring):
+    #replace newlines with space
+    newstring=re.sub("\n"," ",astring)
+    #remove title and chapter headings
+    newstring=re.sub("\[[^\]]*\]"," ",newstring)
+    newstring=re.sub("VOLUME \S+"," ",newstring)
+    newstring=re.sub("CHAPTER \S+"," ",newstring)
+    newstring=re.sub("\s\s+"," ",newstring)
+    #return re.sub("([^\.|^ ])  +",r"\1 .  ",newstring).lstrip().rstrip()
+    return newstring.lstrip().rstrip()
+
+clean_emma=clean_text(emma)
+print(len(emma))
+print(len(clean_emma))
+clean_emma[:500]
+```
+
+## SpaCy
+
+SpaCy is the package we are going be using for our models:
+
+```
+pip install spacy
+python -m spacy download en_core_web_sm
+
+import spacy
+#nlp=spacy.load('en')
+nlp=spacy.load('en_core_web_sm')
+type(nlp)
+```
+
+Now we can run any text string through the language processing pipeline stored in `nlp`
+This next cell might take a few minutes to run since it carries out all of the SpaCy NLP functionality on the input text.  It will return a SpaCy `Doc` object which contains the text plus various annotations.
+
+```
+nlp_emma=nlp(clean_emma)
+```
+
+For example, it includes a sentence segmenter:
+
+```
+ for s in nlp_emma.sents:
+    print(s)
+    break
+```
+
+The sentences are tokenizes so we can access each easily:
+
+```
+emma_sents=list(nlp_emma.sents)
+print(emma_sents[0])
+```
+
+## SpaCy Tag Extraction
+
+The package enables us to access many of the tags and information have discussed in previous weeks. We get the token using `.text`, normalise for case using `.lower_`, the lemma of the word using `.lemma_`, Part-of-Speech using `.pos_` and the entity type using `t.ent_type_`.
+```
+def display_sent(asent):
+    headings=["token","lower","lemma","pos","NER"]
+    info=[]
+    for t in asent:
+        info.append([t.text,t.lower_,t.lemma_,t.pos_,t.ent_type_])
+    return(pd.DataFrame(info,columns=headings))
+        
+display_sent(emma_sents[3])
+```
+
+The function `make_tag_lists()` below takes a list sentences as input and for each sentence returns a corresponding list for tokens, POS tags and Named Entity tags. Note, that the input sentence shoud already be tokenized. The return format is just 3 long lists, the sentence structure is not retained. Think of this return as a corpus of tagged items which can be accessed using the index. This is much like the tagged treebank corpus, although that was access via a list of tuples. 
+
+```
+def make_tag_lists(sents):
+    tokens=[]
+    pos_tags=[]
+    ner_tags=[]
+    for sent in sents:
+        for t in sent:
+            tokens.append(t.text)
+            pos_tags.append(t.pos_)
+            ner_tags.append(t.ent_type_)
+    return tokens,pos_tags,ner_tags
+toks,pos,ner=make_tag_lists(emma_sents)
+```
+
+## Extracting Entities
+
+The following function `extract_entities()`, takes a list of tokens, a list of tags and a variable tag-type (i.e. w of the lists we created above), and return a dictionary of all the chunks which have the given tag-type as well as their frequency in thext. The assumption made is that two consecutive tokens with ther same tag are part of the same chunk. 
+
+```
+def extract_entities(tokenlist,taglist,tagtype):
+    
+    entities={}
+    inentity=False
+    for i,(token,tag) in enumerate(zip(tokenlist,taglist)):
+        if tag==tagtype:
+            if inentity:
+                entity+=" "+token
+            else:
+                entity=token
+                inentity=True
+        elif inentity:
+            entities[entity]=entities.get(entity,0)+1
+            inentity=False
+    return entities  
+```    
+
+The outcome will look something like. This sais "Anne Cox" is tagged twice as a named entity of PERSON.
+
+
+ ```python
+[ ] extract_entities(toks,ner,"PERSON")
+```
+
+```
+    {':-- Robert Martin': 1,
+     ';"--': 1,
+     'A. W. "': 1,
+     'Absurd': 1,
+     'Adair': 1,
+     'Anne': 1,
+     'Anne Cox': 2,
+     ...
+```
+
+These counts can be used to interogate data and asnwer questions. For example we can take a book and identify the top 20 people or places references in the book:
+
+```
+people=extract_entities(toks,ner,"PERSON")
+top_people=sorted(people.items(),key=operator.itemgetter(1),reverse=True)[:100]
+print(top_people)
+```
+
+```
+places=extract_entities(toks,ner,"GPE")
+top_places=sorted(places.items(),key=operator.itemgetter(1),reverse=True)[:20]
+print(top_places)
+```
+
+Taking a `set()` of the `ner` list we can see all of the NER tag we have from a book:
+
+```
+set(ner)
+
+{'',
+ 'CARDINAL',
+ 'DATE',
+ 'EVENT',
+ 'FAC',
+ 'GPE',
+ 'LANGUAGE',
+ 'LOC',
+ 'MONEY',
+ 'NORP',
+ 'ORDINAL',
+ 'ORG',
+ 'PERSON',
+ 'PRODUCT',
+ 'QUANTITY',
+ 'TIME',
+ 'WORK_OF_ART'}
+```
+
+<div style="page-break-after: always;"></div>
+
+# Week 10 - Question answering (QA)
+
+INTRO
+
+1. [Lecture Notes](#week-10---lecture-notes)
+2. [Lab Session](#week-10---lab-session)
+
+<div style="page-break-after: always;"></div>
+
+# Week 10 - Lecture Notes
+
+* []()
+
+# Week 10 - Lab Session
+
