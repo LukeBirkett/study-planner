@@ -3735,10 +3735,14 @@ If we start looking at more realistic inputs, for example the 45 penn tags and 1
 # Week 8 - Lab Session
 
 * [Average PoS Tag Ambiguity](#average-pos-tag-ambiguity)
+* [Find the Distribution of Tags](#find-the-distribution-of-tags)
+* [Simple PoS Ambiguity Measure](#simple-pos-ambiguity-measure)
 * [Entrophy as a Measure of Tag Ambiguity](#entrophy-as-a-measure-of-tag-ambiguity)
+* [Entrophy Ambiguity](#entrophy-ambiguity)
 * [A Simple Unigram Tagger](#a-simple-unigram-tagger)
-* [Beyond Unigram Tagging](#beyond-unigram-tagging)
+* [Hidden Markov Model Tagging ](#hidden-markov-model-tagging)
 * [HMM Emission and Transition Probabilities](#hmm-emission-and-transition-probabilities)
+
 
 ## Average PoS Tag Ambiguity
 
@@ -3825,7 +3829,7 @@ Entrophy is a measure uncertainty. High entropy will occur when there is high, o
 
 This is our mathmatical implementation of entrophy:
 
-$$H([x_1,\ldots,x_n])= - \sum_{i=1}^nP(x_i)\log_2 P(x_i)$$ 
+$$ H([x_1,\ldots,x_n])= - \sum_{i=1}^nP(x_i)\log_2 P(x_i) $$
 
 - $n$ is the number of PoS tags
 - $x_i$ is the number of times the word has been labelled with a particular PoS tag $i$
@@ -3850,7 +3854,7 @@ entropy([10,10,10])
 1.584962500721156
 ```
 
-### Entrophy Ambiguity 
+### Entrophy Ambiguity
 
 This function starts to build a measure of ambiguity. It takes the tagged WSJ text list and returns a dicitonary where each word is assigned a measure of entrophy. The `entrophy` function above is simply fed by unpacking nested nest using `dist.values()`:
 
@@ -4230,3 +4234,157 @@ We will see how NER can be viewed as a sequence labelling problem which makes it
 2. [Lab Session](#week-9---lab-session)
 
 <div style="page-break-after: always;"></div>
+
+# Week 9 - Lecture Notes
+
+* [Information Extraction](#information-extraction)
+* [Chunking](#chunking)
+* [Named Entity Recognition](#named-entity-recognition)
+* [Co-reference Resolution](#co-reference-resolution)
+* [Entity Linking](#entity-linking)
+* [Relation Extraction](#relation-extraction)
+
+## Information Extraction
+
+This is the proccess of turning unstructed informaiton founds in text into structured information that may be stored and access from a database. For example, a given text text extract "Mrs May spoke to Spanish Prime Minister Pedro Sanchez on Wednesday evening", the information to be extracted is {Country:Spain, Role: Prime Minister, Person: Pedro Sanchez}. All of this information is explicity in this sentence but in future sentences something might just say "The Spanish Prime Minister", from this the database can be consulted and the model will have access to knowing that the person not explicity names is Pedro Sanchez. 
+
+There are number of different applications for Information Extraction
+
+**Text Chunking**: A simplified form of parsing that groups tokens into syntactically correlated phrases, like Noun Phrases (NPs) and Verb Phrases (VPs).
+
+**Named Entity Recognition (NER)**: finds and classifies strings of tokens that mention named entities. 
+
+**Coreference Resolution**: Linking different mentions in a document that refer to the same entity (e.g., linking "Lorenzo Pellegrini" to "he")
+
+**Entity Linking**: Associating a mention with a specific entry in a knowledge base like Wikipedia.
+
+**Relation Recognition**: Finding and classifying relationships between entities (e.g., "Jose Mourinho" is the "boss-of" "Manchester United").
+
+**Event Recognition**: finds and classifes events and the entities in roles associated with the event
+
+## Chunking
+
+Syntactic chunking is the task of grouping tokens into syntactically correlated phrases (chunks). Usually the goal is to distinguish between noun phrases (NPs) or verb phrases (VPs). Generally, you can replace NP with another NP and grammatically, the sentence will still make sense. 
+
+While Parsing determines the complete hierarchical structure of a sentence, Chunking is easier, more efficient, and more robust. Parsing can be presented as a tree of the syntatic structure and indentifies how phrases combine to make other words. Chunking maintained the structure of a full sentences but segments it down into its parts. It is easier, more efficent and robust to unexpected input. In terms of detail, is it seen as the good enough approach. 
+
+IOB labels are the tools used to indicidate chunk boundaries. It is much like PoS tagging but insteads instead labels a sequence. It can be acheived using the same process such as Hidden Markov Models:
+* B-NP: Beginning of a Noun Phrase.
+* I-NP: Inside a Noun Phrase.
+* B-VP: Beginning of Verb Prase
+* O: Outside any chunk
+
+$$ Raw Text > Tokeniser > Token Seqeuence > HMM POS Labeller > PoS Sequence > HMM IOB Labeller > IOB Sequence $$
+
+IOB labeling happens after PoS tagging and essentially treats the PoS tags as its primary input. The logic is that syntactic patterns (like Noun Phrases) are much easier to see in PoS tags than in raw words. There are millions of English words. It's hard for a model to learn that "The shiny new bicycle" is a chunk just by looking at the specific words. It is much easier for the model to learn a rule like: DET + ADJ + ADJ + N usually equals one NP (Noun Phrase). 
+
+
+
+## Named Entity Recognition
+
+NER is the detection and classification of named entities in a text. A names entity is anything which can be refered to with a proper noun, e.g. Boris Johnson, England, Facebook, Uni of Sussex, Bright and Hove Albion.
+
+While basic Chunking relies heavily on PoS tags, in Named Entity Recognition (NER), we often use a "richer" set of features. For NER, the model might look at the PoS tags AND the original words (Word identity), as well as things like capitalization. 
+
+Named entities are chunks of tokens, usually. The individual words within the sequence may be tagged as "Proper Nouns". These words may be capitalised. The full sequence may have been recognised as Noun Phrase (NP). 
+
+The type/class of the Named Entity make vary accross domains. Common classed include: People (PER), Organization (ORG), Location (LOC), Geo-Political Entity (GPE), Facility (FAC), Vehcicles (VEH). But the list is almost infinite as there will be nouns for any topic you can think of. 
+
+One of the issues with entities is variation, a person may be refered to is several different way. Dr Jeff Mitchell, Dr Mitchcell, Dr J Mitched etc. Variants often follow orthographic riles but sometimes may be completely different: Manchester United, Man Utd, United, Red Devils. These variants make named entity linking difficult. It usually requires a knowledge source compliling known named entities. 
+
+Ambiguity too poises an issue for naming entitys when the same name, word or phrase refers to different things. For example, there are multiple Manchesters in the world (LOC) and people often has the same name "John Smith". This makes both type classification and named entity linking difficult. 
+
+NER is gernally seen as a sequence labelling task. The detection and classification steps are usually carried out simultaneously. Each token in a sequence/sentnece is tagged with the named entity type associated with it. This means NER can be performed the same way as POS tagging.
+
+Typically, we want to find chunks of consecutive tags that make up an NER. Not just it seperate tags. This is where IOB encoding comes in, we wish to tag the Inside, Outside and Beginning of a NER phrase. Not all NER systems use this technology but it is useful to avoid possible ambiguity between tokens. 
+
+The main features for NER are order identity, tag sequence, capitalization, POS tags and chunks. These features can then be placed into a classifer to identify the NER tag. 
+
+For POS tagging we used Hidden Markov Models. This method worked on a strict assumption of independence, an observation (a word) only depends on the current state (the tag). With Vertical Efficiency, the HMM assumes that features don't interact with each other or with previous/future words in complex ways. 
+
+This assumption poses an issue for NER recognition and the construction of feature sets. Identifying a name like the company "Apple" requires looking at many clues simultaneously: Is it capitalized? Is the previous word "at"? Is it tagged as a Proper Noun? These features are rich and overlapping. For example, "Capitalization" and "PoS=Proper Noun" are highly correlated; they aren't independent. Using these features in an HMM violates the model's fundamental math (the independence assumptions).
+
+The sequencing models for NERs tend ot be variants/extensions of HMMs with less stricture feature independence assumptions.
+* Maximum Entropy Markov Models (MEMMs): These allow the model to look at multiple features (capitalization, PoS, etc.) for the current word more flexibly than an HMM.
+* Conditional Random Fields (CRFs): These go a step further by removing the "directionality" of HMMs, allowing every tag in the sequence to influence every other tag more globally.
+* Neural Networks: Modern systems use deep learning to learn these complex feature relationships automatically.
+
+If an exam asks "Why is an HMM not ideal for NER?", your answer should be:
+
+"NER requires a rich set of overlapping features (like capitalization, word identity, and context windows) that violate the strict feature independence assumptions of a standard HMM."
+
+## Co-reference Resolution
+
+Co-reference Resolution is the task of identifying which different mentions in a document refer to the same real-world entity. While NER identifies that a word is a "Person," Co-reference Resolution connects that person to every other time they are mentioned in the text, even if they are referred to by a different name or a pronoun. The goal is to link all mentions that "co-refer" to the same thing.
+
+In the sentence "Lorenzo Pellegrini's agent shuts down Manchester United links... his agent says," Co-reference resolution links the word "his" back to "Lorenzo Pellegrini".It allows the computer to understand that "his," "Pellegrini," "The 22-year-old Italy international," and "Lorenzo Pellegrini" are all the same person.
+
+Like most other Information Extraction tasks we have the issue of variability and ambiguity again. 
+* Variation: The same entity is called many different things (e.g., "Manchester United," "Man Utd," "The Red Devils").
+* Ambiguity: A pronoun like "it" could refer to many different objects mentioned earlier in the paragraph.
+
+Think of Co-reference resolution as the "Glue" of Information Extraction:
+1. NER finds the entities in isolation.
+2. Co-reference Resolution clusters them together within a document so you don't think "Pellegrini" and "him" are two different people.
+3. Entity Linking (the next step) then takes that cluster and connects it to a single Knowledge Base entry, like a Wikipedia page.
+
+## Entity Linking
+
+After establishing NERs and their referencing clusters we need to identify which real world entity they refer to. The challenges will ambiguit and variation. Simply identifying the different names that someone goes by isn't enough because those names can be shared among other people
+
+The formulation of the Named Entity linking problem goes as follows where a problem instance consists of:
+* A knowledge base (KB) such as Wikipedia.
+* A entity mention in a text with surrounding context. 
+
+The goal will be to return a KB canonical entry of the entity being mention (nor NIL if the enity does not have a KB entry). In the context of Entity Linking, a canonical entry is the unique, standardized "official" record of an entity in a Knowledge Base (KB). Since the same person or thing can be referred to by many different names (variation), the system needs one single point of reference to represent that entity in a structured database. If you are using Wikipedia as your Knowledge Base, the title of the Wikipedia page is typically considered the canonical way of naming that entity. A problem instance of Entity Linking is considered successful when the system takes a mention from a text and returns the correct canonical entry from the KB. If the entity does not exist in the KB, the system should return "NIL".
+
+The technique for entity linking is 2 step proccess:
+1. Find candidates in the KB for given entity mention
+2. Rank candidates to find the most probable
+
+Generating candidates is a trade of between precision and recall. We need high recall to assure that the right entity is among the candidates. But too many candidates hurts precision and efficent. 
+
+Strategies for generating the correct candidates include: 
+* Exact Matching: Finding a mention that is an identical match with the title of a Wikipedia page (e.g., "Bill Clinton").
+* Substring Matching: Identifying if a mention is a part of a Wikipedia page title or vice-versa (e.g., "Clinton" or "Mr Bill Clinton").
+* Acronym Matching: Linking a mention that is an acronym of a page title (e.g., "B.C." or "UoS" for University of Sussex).
+* Known Aliases: Using information extracted from redirects and disambiguation pages to find alternative names (e.g., "William Clinton").
+* String Similarity: Using measures like Levenshtein Distance (Minimum Edit Distance) to find page titles that are spelled similarly to the mention.
+
+String similarity (specifically measures like Levenshtein Distance) is primarily used to catch variations in spelling, typos, and slight orthographic differences. This measures the number of insertions, deletions, and substitutions needed to turn one string into another. While great for spelling, string similarity is bad at identifying aliases that look nothing like the original name. Using string similarity is a "High Recall" strategy: It ensures you don't miss "Clinten" but if you set the "similarity" threshold too low, you might accidentally link "Bill Clinton" to "Bill Clintons" (a different entity) or "Hillary Clinton" because they are spelled similarly. 
+
+Once you have the candidates you need to rank them. There 3 main approaches to gathing features:
+- **Co-occurence** of entity mentions. If another version of the names entity is found in the same documents.
+- **Local Context** of a mention. This is taking into account the context of the neighbouring words. 
+- **Global Context** of an entity mention. This looks at the entity mention in term of the whole document. It takes a Bag-of-Word apporach. 
+
+Then the stategies for ranking include:
+* Entity Relatedness: The system asks if other entities mentioned in the text (e.g., "Pedro Sánchez") typically link to similar or related Knowledge Base pages (e.g., "Spain").
+* Query Relevance: The system checks if the candidate's Knowledge Base page contains tokens that match the local context of the mention in the text.
+* Document Similarity: The system performs a bag-of-words comparison to see if the candidate's Knowledge Base page has a high similarity to the global context of the document.
+
+This ranking process can be treated as a Disambiguation problem, similar to Word Sense Disambiguation (WSD). The candidates produced each time a string for a named entity is seen are the same. Each candiate is a possible sense of the named entity mention. You can train a supervised ML classifier (like Naive Bayes) using an annotated corpus. The classifier uses vectors representing the local context, global context, and co-occurring entities to make the final ranking decision. 
+
+## Relation Extraction
+
+Relation Extraction is the final stage of the Information Extraction pipeline. It focuses on discovering and classifying binary relationships between the named entities you have already detected and linked. Relation extraction turns a sentence into a structured "triple" consisting of two entities and the relationship between them. Most systems focus on binary relations (pairs), which are considered fundamental to the meaning of the text. From the text "Jose Mourinho boss of Manchester United," the system extracts: `{Entity 1: Jose Mourinho, Relationship: boss-of, Entity 2: Manchester United}`
+
+ust like Named Entities (PER, ORG), relationships can be organized into classes with different levels of detail: Specific: "star-of" or "plays-for". General: "works-for" or "is-associated-with".
+
+A standard machine learning approach to solving this:
+- Find a pair of entities ($e_1, e_2$) that appear together and decide if any relationship is being asserted between them.
+- If a relationship exists, determine which specific type it is (e.g., is it "boss-of" or "works-for"?).
+
+To train a classifer, such as Naive Bayes, you need a feature representation which captures potential relationships between paired entities: 
+* Entity Types: Knowing if the entities are (PER, ORG) vs (LOC, LOC) helps predict the relation.
+* Distance: How many words or other entities sit between the two targets?.
+* Contextual "Bags": The words and tags separating the entities (local context) or surrounding them (global context).
+
+Note, that while Naive Bayes is common, its strict independence assumptions are often violated. If the goal is accurate probability estimates, other models might be better:
+* Logistic Regression (Maximum Entropy classifiers).
+* Advanced Models: These are discussed further in more advanced modules.
+
+<div style="page-break-after: always;"></div>
+
+# Week 9 - Lab Session
+
