@@ -4595,7 +4595,548 @@ INTRO
 
 # Week 10 - Lecture Notes
 
-* []()
+This week continues on the topic of Information Retreival (IR). However, we move beyond the notion of Document Retreival, i.e finding documents that match a query, and considering factoid question answering. For example, given a query such as "Where was Isaac Newton born?", a system should attempt to return the correct answer (or at least sentences which contain an answer to the question) rather than returning documents about Isaac Newton and which may or may not somewhere contain the answer to the specific question posed. There are two main approaches: IR-based factoid question answering and Knowledge-based question answering  
+
+* [Question Answering (QA)](#question-answering-qa)
+* [Information Retrieval](#information-retrieval)
+    * [Boolean Retrieval](#boolean-retrieval)
+        * [The Inverted Index](#the-inverted-index)
+        * [The Intersection Algorithm](#the-intersection-algorithm)
+    * [Ranked Retrieval](#ranked-retrieval)
+    * [Query Expansion](#query-expansion)
+* [IR-Based and Knowledge-Based Quesiton Answering ](#ir-based-and-knowledge-based-quesiton-answering)
+* [The IR-based Factoid QA Pipeline ](#the-ir-based-factoid-qa-pipeline)
+    * [Step 1: Question Processing](#step-1-question-processing)
+    * [Step 2: Passage Retrieval](#step-2-passage-retrieval)
+    * [Step 3: Answer Processing / Extraction](#step-3-answer-processing--extraction)
+* [Mean Reciprocal Rank (MRR) Evaluation](#mean-reciprocal-rank-mrr-evaluation)
+
+## Question Answering (QA)
+
+Focuses on factiod quesiton answering which means the answer should be a NOUN. They will be answers that can be answered with a simple fact expression in short text, or just a singluar word/token. THe answers will be objectively right or wrong. Many are concerns with the relatioinship between named entities. 
+
+There are two paradigms of question answering 
+
+Information Retrieval (IR) uses retrieval technquies to find relevant documents and passages. It is also know as document retrieval. It uses reading comprehension algorithms to draw an answer from relevant spans of text. 
+
+Knowledge-Based builds a sematnic or logical representation of the query. It uses the representations to query a database of factos. Information extraciton techniques might be used to build or update the database
+
+## Information Retrieval 
+
+Information Retrieval (IR) is defined as the process of obtaining information resources that are relevant to a specific "information need" from a large collection of those resources.
+
+These are the components of IR:
+
+- Information Resources: These are typically unstructured data, such as text documents.
+- Large Collection: This refers to the scale of the data being searched, with the most common example being the World Wide Web.
+- Information Need: This is the underlying requirement of the user, which is expressed through a query.
+    * Queries: An information need can be communicated to the system in several ways:
+    * A set of query terms, such as specific words or phrases.
+    * An expression using a special-purpose query language (like Boolean operators).
+    * An expression formulated in natural language (like a full question).
+
+The issues with IR are:
+* Accuracy: Ensuring the system actually finds "what should be found".
+* Efficiency: Finding the correct information reasonably quickly, which is a significant challenge at "web-scale".
+* Relevance Ranking: Presenting the results in a manageable order so that the user finds the best information without having to look through many pages of results.
+
+The of information retrieval is to identify relevant documents. These could be documents containing the query term or documents satisfying the query expression. There are two main types of retrieval: Boolean and Ranked. 
+
+### Boolean Retrieval
+
+Boolean Retrieval makes no attempt to rank revtrieved documents by any measure of relevance. It just returns the results if they qualify. Ranked Retrieval ranks them by relevance. 
+
+Through techniques such as, or derived from, Bag-of-Words. Documents can be represented as a set of keywords. There, a query searching the documents can be expressed as a Boolean combination of keyword connected by logical operators `AND`, `OR`, `NOT`. and brackets can be used to indicate scope. 
+
+$$ (((bank OR saving) AND account) and (NOT river)) $$
+
+The output is a set of qualifiying documents. There are no partial matches and no ranking of suitability. 
+
+In order to conduct Boolean retrieval we need to apply the stard canonicalisation of terms, i.e. case norm, number norm, stopword removal, stemming/lemmatistion. Any changes made must be applied to the documents and the queries. These steps reduct the term vocabulary which improves efficency and often performance too. 
+
+To measure the performance of IR we need to compare retrieved to relevant. However, remember that $recall = tp/tp+fn$ but for modern collections such as the web this is impossible. We can't possible know or collect all relevant documents. 
+
+#### The Inverted Index
+
+If you have a collection of millions of documents (like the web), it is very inefficient to search through every single word of every document every time a user types a query. You need a way to jump straight to the documents that matter. nstead of a list of documents where each contains a list of words, we "invert" that relationship. We create a map where each term (word) points to a posting list—a list of IDs for every document that contains that word. This is also made even more efficent through Canonicalisation. 
+
+| Term ID |	Posting List (Document IDs) |
+| ---: | ---: |
+| 1 (e.g., "Python") | 	2, 8, 14, 23 |
+| 2 (e.g., "Code") | 	5, 6, 9, 12, 15, 19 |
+| 3 (e.g., "Lab") | 	1, 6, 18 |
+
+An IR system can use the inverted index to answer a users request. The process follows a logical sequence to move from a raw query to a final list of documents: 
+1. Logical Formulation: The system views a query as a collection of keywords connected by logical operators (AND, OR, NOT).
+2. Dictionary Lookup: The system looks up each term from the query in the inverted index to retrieve its specific posting list (the list of document IDs where that word appears).
+3. Successive Computation: The system starts with the first posting list and performs mathematical operations (intersections for AND, unions for OR) with the subsequent lists in the query.
+4. Final Output: Once all posting lists have been processed through these logical operations, the system returns the resulting set of document IDs to the user.
+
+#### The Intersection Algorithm
+
+The Intersection Algorithm (also known as the merge function) is the mechanical heart of Boolean retrieval. It is designed to find common elements between two sorted posting lists efficiently. The algorithm uses a "two-pointer" approach to scan both lists simultaneously without ever needing to "look back". It starts with two pointers (usually called pointer1 and pointer2) set to index 0 of both lists. It compares the document IDs at the current pointer positions. If $list1[p1] == list2[p2]$, the ID is added to the results. Both pointers advance by one. If the ID in list 1 is smaller, it moves pointer1 forward to try and "catch up" to the value in list 2. If the ID in list 2 is smaller, it moves pointer2 forward. The loop ends as soon as one list is exhausted, because an intersection is impossible if one side has no more items.
+
+We have a query and keywords from the query are extracted and turned into a Boolean loopup. We look up these words ID's and then use the ID in the inverted index which stores lists of documents. If the query used an AND we have two IDs to loos up and compare. We look at the look at the lists in the inverted index and look for documents which intersect both lists. Those documents can then be interogated for the answer to our query. 
+
+1. Extracting Keywords (Question Processing): The system analyzes the natural language question to pull out search terms. It also often detects the Answer Type (e.g., if the question is "Who...", the answer type is PERSON).
+2. Inverted Index Lookup: The system looks up each keyword in the Inverted Index. This index maps each word ID to a Posting List of document IDs where that word appears.
+3. Intersection (Boolean Retrieval): If the query uses AND, the system uses the Intersection Algorithm (the merge function you studied) to find document IDs that exist in both lists.
+4. Interrogation (Answer Extraction): Once you have those relevant documents, the system doesn't just hand them to the user. It "interrogates" them by:
+    * Passage Retrieval: Dividing the documents into smaller chunks (like paragraphs).
+    * Answer Extraction: Using a Named Entity Tagger (from Lecture 9) to find strings that match the expected Answer Type (like finding a person's name in the text).
+
+If there are more than 2 posting lists (for a query like $term1 AND term2 AND term3$), to work through them repeat the intersection steps with each list in turn. The algorithm doesn't try to look at all three lists at once. Instead, it breaks the problem into a sequence of pair-wise intersections. Intersect List 1 and List 2 using the standard two-pointer merge algorithm. Take the result of that first intersection and intersect it with List 3. The final list contains only the document IDs that appeared in all three original lists. It is most efficient to start with the shortest list first. The time complexity of an intersection is linear—proportional to the sum of the lengths of the two lists being merged ($O(n+m)$). 
+
+In a real system, the code would often look like this:
+1. Collect all posting lists for the query terms.
+2. Sort the lists by their length (using len()).
+3. Use a loop to call the merge function repeatedly until only one list remains.
+
+### Ranked Retrieval
+
+Boolean Retrieval is often usless because it returns too many matching documents. To be used there would be need ot be a ranked degree of relevance. A simple approach is to consider when less common query terms occur more frequently in certain document then they are likely to be more relevant to the domain. 
+
+To understand Relevance Scoring, we have to move beyond Boolean logic. While Boolean retrieval tells you if a document contains a word, Relevance Scoring tells you how well that document matches your query. The most standard way to calculate this score is by using tf-idf and/or Cosine Similarity.
+
+The tf-idf (Term Frequency-Inverse Document Frequency) score is a product of two different measurements:
+* Term Frequency (tf): This measures how many times the query word appears in the document. If a document mentions "Newton" 50 times, it is likely more relevant than one that mentions him only once.
+* Inverse Document Frequency (idf): This measures how "unique" or "rare" a word is across the entire collection.
+
+To calculate a final score, IR systems treat documents and queries as vectors in a high-dimensional space:
+* Each unique word in the collection is an "axis" or dimension.
+* The position of a document on that axis is determined by its tf-idf score for that word.
+* the Vector Space Model is the framework that organizes all those individual scores into a single geometric shape (a vector).
+* Imagine your entire document collection (or "universe" of words) only contains 50,000 unique words after canonicalization. Every vector in your system—whether it is for a 500-page book or a 3-word query—will have exactly 50,000 dimensions. Each dimension (or "slot" in the vector) corresponds to one specific word in that 50,000-word vocabulary.
+* This results in a "sparse" vector where most values are zero, but the total length is always 50,000.
+* Because both vectors represent the same vocabulary in the same order, they are now the same size ($N$ dimensions)
+
+The system calculates the Cosine Similarity between the query vector and each document vector.
+* This measures the angle between the two vectors.
+* If the angle is small (cosine is close to 1), the document and query are very similar in content.
+* The system then ranks the documents from highest to lowest similarity score so the user sees the most relevant ones first.
+* If the document has high tf-idf scores in the same slots where the query has non-zero values, the vectors will point in a similar direction, resulting in a high relevance score.
+* Cosine Similiary is very robust to sparsness and 0 entries. It doesn't matter than a document vector will be vastly more populated than a query vector, it is able to focus on the matching values. This is because the normalization term on the calculation means that length and large vectors do not matter. This prevents long documents from getting a higher score just because they contain more words. It measures the direction of the vectors (the relative proportions of words) rather than the raw quantity of words. 
+* Cosine Works for IR because it only cares about the words the user actually typed, i.e. the query. 
+* The thousands of zeros in the query don't penalize the document; they just act as "neutral" space.
+* Because it uses tf-idf values within the vector, a document that matches a "rare" query word (high idf) will have a vector pointing much closer to the query than a document matching a "common" word
+
+### Query Expansion
+
+Query Expansion is a technique used to improve the Recall of an Information Retrieval (IR) system by ensuring that the search doesn't rely solely on an exact match between the user's words and the words in a document.
+
+Users often describe an information need using different terms than the author of a document. Examples from the slide include:
+* Spelling variations or errors: A user might type a typo or use British vs. American spelling.
+* Synonyms: A user might search for "car" while the document uses "automobile".
+* Language register: A user might use informal language for a topic that a document describes using technical language.
+
+The system uses a thesaurus to find "nearest neighbors"—words with similar meanings—and automatically adds them to the user's original query. There are two main ways to find these neighbors:
+* Hand-crafted thesauri: Using human-curated databases like WordNet.
+* Distributional thesauri: Using computational methods to find words that appear in similar contexts.
+
+This has two outcomes: 
+- Increases Recall: You find more relevant documents because you are catching synonyms and variations the user didn't think of.
+- Damages Precision: It often introduces "noise". For example, if you expand the query "bank" to include "river side," you might retrieve documents about geography when the user was looking for financial information.
+
+While Normalisation (like stemming or case folding) also helps bridge the gap between query and document, Query Expansion goes a step further by bridging the gap between different concepts (synonyms).
+
+## IR-Based and Knowledge-Based Quesiton Answering 
+
+Part 2 of the lecture shifts from general Information Retrieval to the specific application of Factoid Question Answering (QA). The flow moves from high-level paradigms down through the three specific stages of an IR-based QA pipeline.
+
+## The IR-based Factoid QA Pipeline 
+
+### Step 1: Question Processing
+
+Answer Type Detection: Predicting the Named Entity type of the expected answer (e.g., "Who..." implies a HUMAN answer).
+
+Query Formulation: Selecting the best keywords from the question to send to the search engine.
+
+E.g. What are the two states you could be reentering if you're crossing Florida's northern border:
+* Answer type: US state
+* Query: two states, border, Floria, north
+* Focus: the two states
+* Relations: borders(Florida, x, north)
+
+### Step 2: Passage Retrieval
+The system uses the formulated query to retrieve documents, segments them into paragraphs (passages), and ranks them based on features like the density of query words.
+
+1. IR engine retreives documents using query terms from quesiton processing
+2. Segment the documents into shorter units like paragraphs
+3. Passage Ranking. Use the answer typ to help rerank passages.
+
+### Step 3: Answer Processing / Extraction
+Extraction: Running an NER tagger on the passages to find strings that match the predicted Answer Type.
+
+Ranking: If multiple names appear, the system uses machine learning features (like distance between the name and query keywords) to pick the final answer.
+
+## Mean Reciprocal Rank (MRR) Evaluation
+
+As a basic measure we have accuracy, does the answer exactly match the gold-labeled answer. 
+
+Mean Reciprocal Rank (MRR) is a metric used to evaluate systems that provide a ranked list of potential answers to a query. It is particularly useful in Factoid Question Answering because it measures how "far down" the list a user has to look to find the first correct answer
+
+The system returns a ranked list of $M$ candidate answers for a query. The score for that specific query is calculated as $1/Rank$, where $Rank$ is the position of the first correct answer found
+
+* Rank 1: If the first answer is correct, the score is $1/1 = 1$.
+* Rank 2: If the second answer is the first correct one, the score is $1/2 = 0.5$.
+* Rank 3: If the third answer is the first correct one, the score is $1/3 \approx 0.33$.
+* None correct: If none of the $M$ candidates are correct, the score for that query is $0$.
+
+To get the final MRR for the entire system, you take the mean (average) of these individual scores over all $N$ queries in your evaluation set:
+
+$$MRR = \frac{1}{N} \sum_{i=1}^{N} \frac{1}{rank_i}$$
+
+Why use MRR?
+
+**Focus on the Top**: It heavily rewards the system for getting the correct answer at the very top of the list.
+
+**Diminishing Returns**: The difference between being 1st and 2nd is a massive drop (0.5), while the difference between being 20th and 21st is negligible. This reflects real-world behavior, where users rarely look past the first few results.
+
+**Single Answer focus**: Unlike precision or recall, MRR is specifically designed for tasks where there is typically only one correct answer (like a factoid question) and you want to see how high it is ranked
+
+<div style="page-break-after: always;"></div>
 
 # Week 10 - Lab Session
 
+This lab looks at the task of information retrieval and question answering. In particular it looks at finding relevant documents in relation to a given query expressed in terms of keywords. A sub-task of this is to extract keywords from queries.  
+
+Preliminary imports:
+```
+import pandas as pd
+from itertools import zip_longest
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+import re
+import math
+import operator
+
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+```
+
+For this lab we will be using the Standford Question Answering Dataset (SQUAD). The dataset is provided as 2 json files, one for devlepment and one for training. The dev dataset is the smaller of the 2: 
+
+```
+import json
+
+filename="Week11Labs/Squad/dev-v2.0.json"
+with open(filename,'r') as inputstream:
+    devdata=json.load(inputstream)
+```
+
+The dataset is returned as a deeply-nested dict. To access the data, you call the key `devdata['data']`, this returns a list of dictionaries, one dict for each of the docuents in the dataset. Within each document, there are two keys `['title', 'paragraphs']`. The paragraphs field is another list of paragraphs. 
+
+```
+len(devdata['data'])
+
+list(devdata['data'][0].keys())
+['title', 'paragraphs']
+
+len(devdata['data'][0]['paragraphs'])
+39
+```
+
+Within the `paragraphs` key, there is a further 2 keys `['qas', 'context']`. The `context` field contains the text of the paragraph as a string (not tokenized).
+
+```
+list(devdata['data'][0]['paragraphs'][0].keys())
+['qas', 'context']
+
+devdata['data'][0]['paragraphs'][0]['context']
+'The Normans (Norman: Nourmands; French: Normands; Latin: Normanni) were the people ...'
+```
+
+The `qas` is a list of dictionaries where each dict is a question with a list of possible answers within found wthin the paragraph. Possible fields as `question`, `id`, `answers` and `is_impossible`.
+
+```
+[{'question': 'In what country is Normandy located?',
+  'id': '56ddde6b9a695914005b9628',
+  'answers': [{'text': 'France', 'answer_start': 159},
+   {'text': 'France', 'answer_start': 159},
+   {'text': 'France', 'answer_start': 159},
+   {'text': 'France', 'answer_start': 159}],
+  'is_impossible': False},
+  ...
+]
+```
+
+To make make the data a little easier to work with, below we set up a function which will extract the `context` and `qas` into two lists and flatten the nested structure. The matching contents will still be accessed together using the same index. 
+
+```
+def get_text_qas(dataset):
+    textlist=[]
+    qalist=[]
+    for document in dataset['data']:
+        for para in document['paragraphs']:
+            textlist.append(para['context'])
+            qalist.append(para['qas'])
+    
+    
+    return textlist,qalist
+    
+textlist,qalist=get_text_qas(devdata)
+```
+
+```
+print(textlist[1:2])
+print(qalist[1:2])
+
+['The Norman dynasty had a major political, cultural and military impact on medieval Europe and even the Near East. The Normans were famed for their martial spirit and eventually...
+
+[[{'question': 'Who was the duke in the battle of Hastings?', 'id': '56dddf4066d3e219004dad5f', 'answers': [{'text': 'William the Conqueror', 'answer_start': 1022}, {'text': 'William the Conqueror', 'answer_start': 1022}, {'text': 'William the Conqueror', 'answer_start':...
+```
+
+## Keyword Search
+
+Here we need to create an inverted index. This is required to conduct keyword search from the query to documents. The index itself is a mapping from keywords to document_ids, this way we can identify keywords in the query and use the keywords to lookup document_ids from which we process to extract possible answers. In the code below, we will consider each paragraph to be an individual document and we just extract its index position in the list to be the ID. 
+
+First we are going to create a function all `extract_keywords()`. It's important to understand the query needs to be canonicalised/normailsed just like the documents do. Additionally, they both need to be canonicalised/normailsed the same way to its important we create modular, robust functions that can be reused for both purposes. 
+
+```
+def normalise(tokenlist):
+    tokenlist=[token.lower() for token in tokenlist]
+    tokenlist=["NUM" if token.isdigit() else token for token in tokenlist]
+    tokenlist=["Nth" if (token.endswith(("nd","st","th")) and token[:-2].isdigit()) else token for token in tokenlist]
+    tokenlist=["NUM" if re.search("^[+-]?[0-9]+\.[0-9]",token) else token for token in tokenlist]
+    return tokenlist
+
+def filter_stopwords(tokenlist):
+    stop = stopwords.words('english')
+    return [w for w in tokenlist if w.isalpha() and w not in stop]
+
+def stem(tokenlist):
+    st=PorterStemmer()
+    return [st.stem(token) for token in tokenlist]
+
+ from nltk.stem import WordNetLemmatizer
+
+def lemmatize(tokenlist):
+    wnl = WordNetLemmatizer()
+    return [wnl.lemmatize(token) for token in tokenlist]
+
+def make_bow(somestring):
+    rep=word_tokenize(somestring)  #step 1
+    rep=normalise(rep)   #step 2
+    rep=stem(rep)   #step 3
+    rep=filter_stopwords(rep)  #step 4
+    dict_rep={}
+    for token in rep:
+        dict_rep[token]=dict_rep.get(token,0)+1  #step 5
+    return(dict_rep)
+```
+
+The canonicalised/normailsed functions are wrapped inside of the Bag-of-words function `make_bow()`. This function is then called by `extract_keywords()` which can then just simply pull out the `.keys()`. Note, these functions use a stemmer which may or may not be desirable depending on the application. 
+
+```
+def extract_keywords(somestring):
+    return set(make_bow(somestring).keys())
+
+extract_keywords(textlist[1])
+
+{'accomplish',
+ 'adopt',
+ 'adventur',
+ 'africa',
+ 'antioch',
+ 'architectur',
+ 'assimil',
+ 'battl',
+ 'becom',
+ 'behalf',
+ ...
+}
+```
+
+Next we want to create an inverted index. The keys for the dictionary will be the words and the values will be list references the documents that use this word. In our application we are currently just keeping the words as strings but they too could be converted to IDs. The function loops through the paragraphs we have and `enumerate` pulls out the index, this is what we use as the ID to reference the parapgraph. If a word doesn't yet exist in the inverted index, it is initalised using `.get(word,[])`.
+
+```
+def create_index(stringlist):
+    index={}
+    for i,para in enumerate(stringlist):
+        words=extract_keywords(para)
+        for word in words:
+            current=index.get(word,[])
+            current.append(i)
+            index[word]=current
+    return index
+
+ind=create_index(textlist)
+
+ind.get('hast',[])
+
+[1, 16]
+```
+
+The following class `docsearch` is initalised with a list of strings (the corpus). It will store the corpus and initalised an index `self.index()` using the `create_index()` function we created above. It will also hold a method that allows us to search the indexed corpus for keywords using `search()`. The search function uses the keyword to get the list of docuement ids `self.index.get(keyword,[])` and then access the document with `self.docs[index]`. 
+
+``` 
+class docssearch():
+    
+    def __init__(self,docs):
+        self.docs=docs
+        self.index=create_index(docs)        
+
+    def search(self,keyword):
+        return [self.docs[index] for index in self.index.get(keyword,[])]
+```
+
+The result will be a list of strings where each string is a document, or a paragraph in our example. The code below has been sliced to just return the first `[:5]`
+
+```
+paras=docssearch(textlist)
+paras.search('norman')[:5]
+```
+
+As covered in the lecture, we will typically have 2 or more keywords returning their own lists and we want to identify the documents which are intersects of the keyword returns. The function below is based off the mergesort algorithm. This will only work if the Document ID lists are in order from smallest to largest. This is because it iterates through the two lists by comparing the pointers position. If the ID's move past eachother the algo knows to move on the position as the ability to intersect has passed:
+
+```
+def merge(list1,list2):
+    '''
+    function to intersect 2 sorted lists
+    '''
+    pointer1=0
+    pointer2=0
+    merged=[]
+    while pointer1<len(list1) and pointer2<len(list2):
+        if list1[pointer1]==list2[pointer2]:
+            merged.append(list1[pointer1])
+            pointer1+=1
+            pointer2+=1
+            
+        elif list1[pointer1]<list2[pointer2]:
+            pointer1+=1
+        else:
+            pointer2+=1
+            
+    return merged
+
+merge([1,5,7,8],[3,6,7,8,15])
+```
+
+Below we add a method to the class that takes a list of keywords, i.e. more than 1, and returns a list of paragraphs that contain them. This function also remembers to apply pre-processing steps. 
+
+```
+def listsearch(self,keywordlist):
+        keywordlist=stem(filter_stopwords(normalise(keywordlist)))
+        if len(keywordlist)>0:
+            selected =self.index.get(keywordlist[0],[])
+            for keyword in keywordlist[1:]:
+                selected=merge(selected,self.index.get(keyword,[]))
+        return [self.docs[index] for index in selected]
+```
+
+```
+paras=docssearch(textlist)
+paras.listsearch(['norman','duke'])
+```
+
+## Ranking Documents
+
+A rank for a document can be composed using the sum or product of the `tf-idf` scores for each word in the query found in the documents.  
+
+Weighting by tf-idf (Term Frequency-Inverse Document Frequency) is superior to simple word counting because it balances the local importance of a word with its global uniqueness:
+* Term Frequency (tf): This ensures that documents that mention a query term more frequently are prioritized, as high frequency usually indicates the document is "about" that topic.
+* Inverse Document Frequency (idf): This "penalizes" words that appear in almost every document (like "the" or "said") and "rewards" rare, highly descriptive words (like "Normandy" or "dynasty").
+* Result: Without tf-idf, a document that happens to use the word "the" 100 times might outrank a document that uses a specific, rare technical term the user actually searched for.
+
+The choice between sum and product significantly changes how the system treats "missing" terms or "uneven" matches:
+* Summation ($\sum$):Intuition: It acts like an "accumulation of evidence".Behavior: A document can get a very high score by matching one query word extremely well (high frequency), even if it is missing other query words entirely. It is more "forgiving.
+* "Product ($\prod$):Intuition: It acts like a "strict intersection" requirement.Behavior: Because multiplying by zero results in zero, this method heavily penalizes documents that are missing even one query term.Balance: It favors documents that contain all query words with moderate frequency over documents that contain only one query word with very high frequency.
+
+The lab also asks what information Cosine Similarity incorporates that these simple measures ignore:
+* Length Normalization: Cosine similarity accounts for document length.
+* The Issue: A very long document (like a whole book) naturally has more chances to repeat a word than a short paragraph. Simple sums or products might bias the system toward longer documents.
+* The Solution: Cosine similarity normalizes the vectors, ensuring that a short, highly focused paragraph can outrank a long, rambling document that mentions the keywords just as many times
+
+First we need to constucut a way to compute the `tf-idf` for a document. This means if we put forward a keyword, or group of keywords such as `[political, conquered]`, what does a given document score. `tf-idf` is made up of several parts so we need to build these up
+
+First we want to count how many documents each word turns up in. Because we are using `.keys()` we are only looping through unique words in a document, hence, the max freq can only ever match the number of documents in the `doclist`
+```
+def doc_freq(doclist):
+    df={}
+    for doc in doclist:
+        for feat in doc.keys():
+            df[feat]=df.get(feat,0)+1
+            
+    return df
+```
+
+After we convert this into idf (inverse doc freq) by taking it as a ratio against all documents. The `idf` function uses the `doc_freq` function within it:
+```
+def idf(doclist):
+    N=len(doclist)
+    return {feat:math.log(N/v) for feat,v in doc_freq(doclist).items()}
+```
+
+Finally we take in the documents and their idf values and convert to `tf-idf` which returns a list of all documents `tf-idf` values.
+```
+def convert_to_tfidf(docs,idfvalues):
+    converted=[{f:v*idfvalues.get(f,0) for f,v in doc.items()} for doc in docs]
+    return converted
+```
+
+We can now wrapped this all into the class. Remember the class takes in a list of strings where each string is a paragrpah/document. In this initalisation `self.bow` is created which applies all of the cannon/norms. A new attribute called `self.tfidf` is created with picks up the BoW, calculates the `idf()` and passes it into `convert_to_tfidf()`. The result is a list of `tf-idf` which matches the indices of the input document list. 
+
+```
+class docssearch():
+    
+    def __init__(self,docs):
+        self.docs=docs
+        self.index=create_index(docs)        
+        self.bow=[make_bow(doc) for doc in self.docs]
+        self.tfidf=convert_to_tfidf(self.bow,idf(self.bow))
+```
+
+This is the final form of the class. `listsearch()` takes in a list of keywords of which cannon and normailsation are applied which should be the same as the BoW applications. 
+
+Next we start this merge proccess, we will pick up the first index list to start with and merge this successively with all over lists. Note, that in the code we just pick up the first list as it comes. It a proper appliction we would start the process with the shortest list and work through them in order by how short they are, i.e. we would need ot short keywordlist by order of how long their document lists are. 
+
+We work iteratively through the lists, each time updating the `selected` list and merging it with a new `keywordlist`. Remember, `selected` is a list of document indexes. So after we have merged we take the list of indexes can compute the `tf-idf` score for each document. 
+
+The `tf-idf` scores for each word in a document are pre-caculated in the class init but we create a method `score()` which takes the indicies and the keyword list, extracts the scores and computes a document score. 
+
+First `tfidfs=self.tfidf[ind]` picks up the document using its id/index. It inits a variable `thesum` to keep track of the soon to be calculated score for the whole document. Then it loops through the keywords, if a keyword is found in a document it picks up its `tf-idf` and applies it to the document score. Note, the implementation used product. This means that if a word from the keyword list is not found then the document will have a 0 `tf-idf` score which will cause it to be completely rejected. 
+
+Next `scored` is created which is a list of tuples. the tuplie is the document id/index coupled with its score.
+
+Then this `scored` list is ordered by the `tf-idf` score which is held in the `[1]` index of the tuple `sorted(scored,key=operator.itemgetter(1),reverse=True)`
+
+Finally, a list of document is returned using the informaiton held in the ranked list, i.e. indexes in the sorted order. These result will be a list of documents like before but the top ones will be the most important. 
+```
+class docssearch():
+    
+    def __init__(self,docs):
+        self.docs=docs
+        self.index=create_index(docs)        
+        self.bow=[make_bow(doc) for doc in self.docs]
+        self.tfidf=convert_to_tfidf(self.bow,idf(self.bow))
+        
+    def search(self,keyword):
+        return [self.docs[index] for index in self.index.get(keyword,[])]
+        
+    def listsearch(self,keywordlist):
+        keywordlist=stem(filter_stopwords(normalise(keywordlist)))
+        if len(keywordlist)>0:
+            selected =self.index.get(keywordlist[0],[])
+            for keyword in keywordlist[1:]:
+                selected=merge(selected,self.index.get(keyword,[]))
+                
+        scored=[(ind,self.score(ind,keywordlist)) for ind in selected]
+        ranked=sorted(scored,key=operator.itemgetter(1),reverse=True)
+        print(ranked)
+        return [self.docs[index] for (index,_) in ranked]
+    
+    def score(self,ind,keywordlist):
+        tfidfs=self.tfidf[ind]
+        thesum=1
+        for keyword in keywordlist:
+            thesum*=tfidfs.get(keyword,0)
+        return thesum
+```
+
+```
+paras=docssearch(textlist)
+paras.listsearch(['norman','duke'])
+```
