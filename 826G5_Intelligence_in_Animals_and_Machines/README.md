@@ -45,7 +45,6 @@ This module will develop understanding of what it means for an animal or a machi
 
 # [Weeks]()
 [Week 0 - Preliminary](weeks/week_0/README.md)
-
 [Week 1 - What is intelligence and does it need a brain?](weeks/week_1/README.md)
 
 [Week_2 - Unexpected Cleverness](weeks/week_2/README.md)
@@ -67,3 +66,7 @@ This module will develop understanding of what it means for an animal or a machi
 [Week 10 - Brain Size](weeks/week_10/README.md)
 
 [Week 11 - Seminar Only (Debate)](weeks/week_11/README.md)
+
+# Labs
+
+
