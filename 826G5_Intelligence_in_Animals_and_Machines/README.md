@@ -52,7 +52,7 @@ This module will develop understanding of what it means for an animal or a machi
 
 [Week 3 - Collective Intelligence](weeks/week_3/README.md)
 
-[Week 4 - Moving Through the World](weeks/week_4/README.md)
+[Week 4 - Moving Through the World (Lab 3)](weeks/week_4/README.md)
 
 [Week 5 - Navigation](weeks/week_5/README.md)
 
