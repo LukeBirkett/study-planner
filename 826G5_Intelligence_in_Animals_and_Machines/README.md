@@ -56,7 +56,7 @@ This module will develop understanding of what it means for an animal or a machi
 
 [Week 5 - Navigation](weeks/week_5/README.md)
 
-[Week 6 - Motor Control](weeks/week_6/README.md)
+[Week 6 - Motor Control (Lab 4)](weeks/week_6/README.md)
 
 [Week 7 - Tool Used](weeks/week_7/README.md)
 
