@@ -1,11 +1,19 @@
 # Revision File
 
-This is the markdown file that will hold all of the resources used to revise and prepare for the exam. It will include notes of each weeks lecture, a breakdown of import code & concepts from the labs and possibly notes from any additional reading. 
+This is the markdown file that will hold all of the resources used to revise and prepare for the exam. It will include notes of each weeks lecture, a breakdown of import code & concepts from the labs.
 
 ## Contents for Whole Document
 1. [Week 1 - Intro to ANLP and Python](#week-1---intro-to-anlp-and-python)
 2. [Week 2 - Text Documents and Preprocessing](#week-2---text-documents-and-preprocessing)
 3. [Week 3 - Document Classification](#week-3---document-classification)
+4. [Week 4 - Further Document Classification](#week-4---further-document-classification)
+5. [Week 5 - Document Similarity and Cluster](#week-5---document-similarity-and-clustering)
+6. [Week 6 - Lexical Semantics and Word Sense](#week-6---lexical-semantics-and-word-senses)
+7. [Week 7 - Distributional Semantics](#week-7---distributional-semantics)
+8. [Week 8 - POS Tagging and Hidden Markov Models](#week-8---part-of-speech-tagging-and-hidden-markov-models)
+9. [Week 9 - Named Entity Recognition (NER) and Information Extraction (IE)](#week-9---named-entity-recognition-ner-and-information-extraction-ie)
+10. [Week 10 - Question Answering (QA)](#week-10---question-answering-qa)
+
 ---
 
 <div style="page-break-after: always;"></div>
