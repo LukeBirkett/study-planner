@@ -89,3 +89,10 @@ This module will develop understanding of what it means for an animal or a machi
 * [Paper: Threshold Supplementary](weeks/labs/IAM_Sussex_labs/lab_3_robinson/papers/threshold_supplmentary.pdf)
 * [Paper: Do Ants Make Direct Comparisons](weeks/labs/IAM_Sussex_labs/lab_3_robinson/papers/do_ants_make_direct_comparisons.pdf)
 * [Paper: Collective Comparisions Withut Individual Comparisons](weeks/labs/IAM_Sussex_labs/lab_3_robinson/papers/collective_comparisons_without_individual_comparisons.pdf)
+
+
+
+[The Hive Mind is a Single Reinforcement Learning
+Agent.](https://arxiv.org/pdf/2410.17517)
+
+[SEQUENTION and the Superorganism: A Timeless, Projection-Based Framework for Collective Animal Behavior](https://www.preprints.org/manuscript/202511.1039)
