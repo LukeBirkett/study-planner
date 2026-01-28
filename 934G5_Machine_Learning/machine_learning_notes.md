@@ -36,39 +36,90 @@ This week is largely a preliminary session which gives insight as to how the mod
 
 ## Week 1: Mini-Videos
 
-What is Machine Learning [[Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1515091f-1947-45ba-ba34-b31e00f85cfe), [Slides]()]
+The mini-videos hold the pre-recorded lecture content. They form the basis of the weekly content so should be watched before the in-person Wednesday lectures so that you can understand and be involved with the discussion content. 
+
+### <u> What is Machine Learning </u> 
+Mini-Lecture Resources: [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1515091f-1947-45ba-ba34-b31e00f85cfe) | [Slides](files/week_1/week_1_prerecorded_what_is_machine_learning.pdf)
 
 
-A Simple ML Model [[Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6067ee21-c700-437b-96d3-b31e01278a97), [Slides]()]
+<br>
 
+### A Simple ML Model 
+Mini-Lecture Resources: [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6067ee21-c700-437b-96d3-b31e01278a97) | [Slides](files/week_1/week_1_prerecorded_a_simple_ML_model.pdf)
+
+
+<br>
 
 ## Week 1: Lecture Content
 
-**<u>Resources:</u>** [Lecture Slides]() | [Lecture Recording]() | [Discussion Slides]() | [Discussion Padlet]()
+**<u>Resources:</u>** [Lecture Slides](files/week_1/week_1_lecture_slides.pdf) | [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=79a7d91a-7c91-4b83-bf3a-b3e00093f009) | [Discussion Slides](files/week_1/week_1_discussion_slides.pdf) | [Discussion Padlet](https://padlet.com/university_of_sussex/week-1-student-student-post-discussion-notes-cuq7t347imsvmo6g)
 
-**Week 1 discussion questions:**
-* What is the value of machine learning? 
-* What could be the expressions of weak learning by a linear regression model?
-* What could be expressions of memorizing by a linear regression model? 
-* How could the basic linear model be adapted for categorical labels?
+---
+
+### Main Lecture Content
+
+This a very basic lecture which convered no technical content and just explained the module as a whole. There will be very little notes from this lecture, though the discussion section of the lecture will have a lot of content. 
+
+#### learning outcomes:
+
+1. Understand machine learning terminologies and use them appropriately.
+    - Machine Learning also shares a lot of terms with statistics and it can be important to get the definitions correct for the particular context. This point is most important for communication and conveying what you truely mean, and visa versa with listening. 
+2. Describe how several traditional and advanced learning methods work.
+3. Reason about the data needed to build a machine learning model for a given task. 
+4. Prepare and preprocess data appropriately for building a model. 
+5. Build and evaluate models using standard software libraries.
+    - This module will not focus on doing things from first principal (from scratch)
+6. Specify issues and risks that need to be considered and/or addressed.
+
+#### Syllabus (Weekly)
+
+1. Introduction
+2. Trees and Neighbours
+3. Hyperplanes and Likelihoods
+4. Neural Networks
+5. Problems & Data: At the centre of Machine Learning
+6. How Good is my Model? (Evaluation)
+7. AI & Ethics
+8. Advanced Neural Networks
+9. Feature Learning & Generative Models
+10. Refinforment Learning 
+11. Coursework Q&A
+
+---
+
+### Discussion Lecture Content
+
+**Discussion Learning Outcomes**: 
+* How could the basic linear model be adpated for categorical labels?
+* What could be expression of weak learning or memorizing in a linear regression model? And in waht ways memorising be prevented?
 
 
+#### How could the basic linear model be adapted for categorical labels?
 
-**Rough Lecture Notes:**
+A linear model output is continous. In order to be able to use this model for categorical labels need the outputs to be discrete, or at least be interpreted as discrete. The main way of doing this would be to construct a model where the outputs are probabilitic and therefore between 0 and 1. We can then round, or partition, the outputs to determine a label/class. 
 
-[MODULE LEARNING OUTCOMES]
+We can take the outputs of a linear model and apply a function to get normalized, discretized output:
 
-[syllabus]
+$$f(x) = \sigma(xw + b) = \hat{y}$$
 
-discussion section:
+There are two popular ways to apply activation functions, Sign and Sigmoid. The Sign function is the most basic form of activation. It returns a hard value based on the threshold.
 
-recap of mini videos
+$$f(z) = \begin{cases} 1 & \text{if } z > 0 \\ 0 (or -1) & \text{if } z < 0 \end{cases}$$
 
-learning outcomes, 2 questions to focus on during the discussion
+This activation function lacks complexity or nuance. It simply cares about the threshold. Instances are treated the same wether they are 1 or 1000 over the threshold. Additionally, the derivative (slope) of the Sign function is zero everywhere except at $z=0$, where it is undefined. A zero slope means you cannot use Gradient Descent. If you try to "nudge" the weights to improve the model, the Sign function won't show you which direction to go. Given the importance of gradient descent in the modern deep learning, the Sign function is rarely used, though it was a ascept of the orginial perceptron model. 
 
-How could the basic linear model be adapted for categorical labels
+The Sigmoid function on the other hand squashes the input into a smooth S-curve. It provides Probability. Instead of just saying "Yes" or "No," it says "There is an 87% chance of Yes." It has a smooth slope at every point, this means Gradient Descent can see exactly how much a small change in weights will reduce the error.
 
-What could be expressions of weak learning or memorizing in a lin reg model? and in what ways could memorzing be prevented?
+$$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+
+##### Possible Loss Functions
+
+Sign Loss, or 0-1 loss, is the simpliest, most intuative loss functon for something that
+
+
+<br>
+<br>
+<br>
 
 
 1. turn linear regression into cat/prob
@@ -246,10 +297,14 @@ Avoids model learning explicitly the training data
 focus on informative features
 
 
+## SUMMARY
+
+
+
 
 ## Week 1: Lab Content
 
-**<u>Resources:</u>** [Notebook 1]() | [Notebook 1 Solutions]()
+**<u>Resources:</u>** [Notebook 1](files/week_1/week_1_lab.ipynb) | [Notebook 1 Solutions](files/week_1/week_1_lab_solutions.ipynb)
 
 <br>
 
