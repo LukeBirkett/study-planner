@@ -60,6 +60,10 @@ This is the first lab session working with the Robinson model. The goal is of th
 
 This is some sort of lab accompaniment. It goes through bits of the code in more detail. I haven't gone through this properly yet. 
 
+#### [Lab 3 Additonal Details](https://canvas.sussex.ac.uk/courses/34991/pages/lab-3-additional-details)
+
+Aimed at helping you to understand how the Python simulation of Robinson et al.'s model corresponds to the model itself.
+
 #### [Canvas Lab 4: Guided Notes](https://canvas.sussex.ac.uk/courses/34991/pages/lab-4-guided-tasks)
 
 TODO: Work through and explain `Lab 4`
