@@ -2,29 +2,26 @@
 
 This is the main file for the Machine Learning module taken in Spring 26. It will act as the location for note taking accross all mediums, i.e. lectures, videos, labs and additional readings, as well as a directory for file locations. It will recorded chronologically with a section for each week. 
 
+TODO: module overview
+
 # Table of Contents
 1. [Week 1 - Introduction](#week-1---introduction)
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-
-
-
-
+2. [Week 2 - Supervised Learning I]()
+3. [Week 3 - Supervised Learning II]()
+4. [Week 4 - Supervised Learning III]()
+5. [Week 5 - Model Validation I]()
+6. [Week 6 - Model Validation II]()
+7. [Week 7 - AI Ethics]()
+8. [Week 8 - Advanced Neural Networks]()
+9. [Week 9 - Beyond Supervised Learning]()
+10. [Week 10 - Attention]()
+11. [Week 11 - Reinforcement Learning]()
 
 --- 
 
 # [Week 1 - Introduction](https://canvas.sussex.ac.uk/courses/35245/pages/week-1-introduction-2?module_item_id=1546317)
 
 This week is largely a preliminary session which gives insight as to how the module works, its scope and the weekly stuctures, which has changed from last year. At the end it will give a basic insight into machine learning through Linear Regression. 
-
 
 #### Week 1: Contents
 
@@ -33,7 +30,6 @@ This week is largely a preliminary session which gives insight as to how the mod
 3. [Lab Content](#week-1-lab-content)
 4. [Additional Reading](#week-1-additional-reading)
 
-
 ## Week 1: Mini-Videos
 
 The mini-videos hold the pre-recorded lecture content. They form the basis of the weekly content so should be watched before the in-person Wednesday lectures so that you can understand and be involved with the discussion content. 
@@ -41,12 +37,10 @@ The mini-videos hold the pre-recorded lecture content. They form the basis of th
 ### <u> What is Machine Learning </u> 
 Mini-Lecture Resources: [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1515091f-1947-45ba-ba34-b31e00f85cfe) | [Slides](files/week_1/week_1_prerecorded_what_is_machine_learning.pdf)
 
-
 <br>
 
 ### A Simple ML Model 
 Mini-Lecture Resources: [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6067ee21-c700-437b-96d3-b31e01278a97) | [Slides](files/week_1/week_1_prerecorded_a_simple_ML_model.pdf)
-
 
 <br>
 
