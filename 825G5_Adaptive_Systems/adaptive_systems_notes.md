@@ -187,4 +187,8 @@ to learn,
 
 ## Week 1 Seminar Content
 
+
+
+
+
 ## Week 1 Additional Reading
