@@ -41,3 +41,16 @@ networkx, lab focus
 
 []
 
+---
+ 
+# Lab
+
+[Chapter 1 Tutorial](https://github.com/CambridgeUniversityPress/FirstCourseNetworkScience/blob/master/tutorials/Chapter%201%20Tutorial.ipynb)
+
+You can use NetworkX to construct and draw graphs that are undirected or directed, with weighted or unweighted edges. An array of functions to analyze graphs is available.
+
+[Offical Documentation](https://networkx.github.io/documentation/networkx-2.2/)
+
+[Offical Tutorial](https://networkx.github.io/documentation/networkx-2.2/tutorial.html)
+
+
