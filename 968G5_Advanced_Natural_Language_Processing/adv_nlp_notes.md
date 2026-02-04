@@ -69,37 +69,95 @@ Lab exercises are based on the previous weeks lecture and seminar content.  Week
 
 ## Week 1 - Seminar 
 
-The paper to read for this seminar is [Information Content Measures of Semantic Similarity Perform Better Without Sense Tagged Text (2010) by Ted Pedersen](files/week_1/week_1_seminar_paper.pdf). 
+* [Seminar Session](#week-1---seminar-session)
+* [Seminar Reading](#week-1---seminar-session)
+
+### Week 1 - Seminar Session 
+
+This seminar session was a mix of mild lecturing before breaking out into small groups to discuss questions. After which as a whole class we would put forward answers. In this section I will put down the questions and some notes for the answers. 
+
+[Seminar Questions](files/week_1/week_1_seminar_questions.pdf) **TODO:** break out into this file
+
+[TODO: SEMINAR SLIDES TO COME AFTER SESSION]
+
+[1000 docs, tagged, how to build classifer to assign correct label]
+preprocessing
+words and sense
+naive bayes, freqs, probs, words [slide]
+nb featue vector, i.e. all words w/ probs in vector form
+(confirm usage of feature vector)
+nb is the trad approach, not that modern
+
+[towards more intelligent nlp]
+word tokes = atomtic bulding of nlp
+but bow or even sequence misses human language underdstanding
+senses, meanings = lexical semantics
+meaning inferringt through relations with other words and similarity to words
+
+[lecture overview, 2 parts]
+lexical semantics
+distributional semantics
+[TODO: full breakdown]
+
+[1.1 questions]
+
+lexical ambiguity, word w/ different sense [1.1.1]
+homonymn; broad distinctions; plant
+polysemy; fine-grained book
+
+lexical variation; synonm, same meanings/sense [1.1.2]
+
+wordnet
+synset = senses
+synset has synonyms in it
+hypo and hype connects synsets; parent, child
+
+similarity measure; path length, equation, edge weight 1, IC, probability, frequency
+
+lcs; lowest common
+
+section 1.2 
+other questions
+
+Q1 What is distribuitonal hypo; word defined by company around it, context, windows, vectors
+
+Q2, dist sems in other applications, doc class, didnt see document in new application, use dis sem to compar similarities, us simialr docs label, has a good chance of being right, [1.2.2 Better Notes]
+
+Q3, Q4 asso measure, similar measure, difference, related headache and paracet, similar are words that mean the same thing or close
+
+assoc measured using freqs -> PMI, how rare pairs are, info grain by seeing together, common = not much info, PMI eqaution (actually the modern method is to us vectors and LinAlg, slide says can use the assoc measures in cosine sim) (create density vector where each space is a word with a measurement, i.e. PMI) use the vectors to establish similarity between documents
+
+### Week 1 - Seminar Reading
+
+The paper to read for this seminar is [Information Content Measures of Semantic Similarity Perform Better Without Sense Tagged Text (2010) by Ted Pedersen](files/week_1/week_1_seminar_paper.pdf). Here is a [link](https://notebooklm.google.com/notebook/b58e8c39-3a30-40a0-86c5-1c6db77ef489) to the NotebookLM which I created to help study this paper. 
 
 As humans we can read a piece of text, understand and assign meaning to it. Given this, we can also determine how similar words and thier meanings are, this is known as **semantic similarity**. This research paper investigates different methods of calculating semantic similarity and how they compare to human intuition - which human intuition being the gold standard metric we want to work towards. 
 
-The author demonstrates that Information Content measures perform significantly better when they are derived from large amounts of unannotated text rather than smaller, manually sense-tagged corpora. This because the raw data is larger in size and therefore has a wider coverage of concepts within the WordNet hierarchy. This allows the system to more accurately quantify how specific for general a term is. The studies findings suggest that expensive and labor intense process of hand-labelling data is unnecessary for improving linguistic algorithms. The conclusion is that having a greater volume of data to associate with various word meanings is the primary driver of success in these computational models. The belief prior to this paper was that high-quality semantic analysis requires costly, human-tagged data - this is known as the "expensive assumption in natural language processing". 
+The author demonstrates that Information Content measures perform significantly better when they are derived from large amounts of unannotated text rather than smaller, manually sense-tagged corpora. This because the raw data is larger in size and therefore has a wider coverage of concepts within the WordNet hierarchy. This allows the system to more accurately quantify how specific for general a term is. The studies findings suggest that the expensive and labor intensive process of hand-labelling data is unnecessary for improving linguistic algorithms. The conclusions is that enabling a system with a greater volume of (untagged) data is the primary driver of success in these computational models because it allows more senses/words to be counted leading to a more informed outcomes. The belief prior to this paper was that high-quality semantic analysis requires costly, human-tagged data - this is known as the "expensive assumption" in natural language processing. 
 
-By comparing various information content (IC) measures, the text explains how raw, untagged text—and even a simple "add-one" baseline using no external text at all—can outperform small, manually annotated corpora like SemCor. The core insight is that coverage is king
+By comparing various information content (IC) measures, the text explains how raw, untagged text—and even a simple "add-one" baseline using no external text at all—can outperform small, manually annotated corpora like SemCor. The core insight is that coverage is king. Humanly tagged data is sparse by definition as is it is costly in both time and resources. 
 
-The paper explores various information content (IC) measures and determines that raw, untagged text can outperform small, manually annonated corpora like SemCor. Even a simple add-one basline, using no external text can outperform tagged corpora. In the paper, the author uses the dictionary, i.e. a repository of all word, for the add-one method. There reason this can work is because coverage is king and fuzzy data is better than no data. This is important because tagged corporas are small by the standard of all words and/or senses. Humanly tagged data is sparse but due to the speed and cost of aquiring it. 
+Ultimately, the reason coverage is so important is due to the structure that the IC measures sit on top of, WordNet. This is itself the true source of semantic signal. The key to unlocking its full potential is to light up as much of the network as possible. This is better acheived by a larger corpora, hence, untagged data tends to prevail over tagged data as it is generally larger. 
 
-The ultimate statement made is that the reason coverage is king when calculating IC measures is becasue the true source of value is derived from WordNet itself, rather than the complexity or intution of any metric. WordNet is such a rich sementic signal in of itself that the ability to "unlock" as much of it as possible is more important than smaller amounts of high quality, human tagged data which is slow and expensive. 
+WordNet is not just a dictionary but a graph with a distinct mathematical structure. It is a hierachcal family tree for words. It's organized into synsets, whereby a synsets is just a set of synonyms that represent a single distinct concept.
 
-[QUICK OVERVIEW OF WHAT WORDNET IS]
-WordNet is not just a dictionary but a graph with a distinct mathematical structure. It is a hierachcal family tree for words. It's organized into synsets, whereby a synsets is just a set of synonyms that represent a single distinct concept. W
+The most rudimentary way to determine similarity using WordNet is to look at distance between two terms wthin the trees. Here, you start at a word, traverse the tree to the first common ancestor and then follow the tree down to the other term. You are counting the nodes/edges passed. This measure is known as "Path Length". 
 
-ith this structure in mind, the simplist way to detemine similarity is look at distance within the tree. If you want to compare dog and cat just traverse the nodes and edges can count how many there were inbetween. This intuative measure is called "Path Length". Dog and Cat might be children of mammal, so you count up the tree from Dog to Mammal and down to Cat. These two should be close but Dog and Umbrella you would need to climb all they way upto the general term of "Entity" and back down. 
+However, WordNet is not uniform in its branch distribution. Some topics and senses are much more densely populated with terms and others form a nested structured of sub-senses. Merely counting edges means we implement an assumption that all edges are created equal and worth a value of 1. This is false, for example, some areas such as biology have a rich, mutli-layered lexicon. The distances between "tennis player" and "athlete" may just be 1 step, which is fine as they are semanticly similar. But as we traverse the tree to more general terms, entries with a distance of 1 become way more abstract and their simiarlities diverage. At the very top of the tree the distance between "entity" and "object" is also 1 step, but semantically, the difference between entity and object is a massive philosophical leap.  
 
-However, this leads us to the issue of uniformity within WordNet. Merely counting means we are implementing the assumption that all edges and nodes are created equal and are all worth 1 in value. This could be said as each edge has a semantic distance of 1. But this is not quite true, some areas of the WordNet tree as dense populated, like in biology. The distance between a tennis player and athlete may be just 1 step which is fine because they are similar. But as traverse the tree, the entries become more abstract and there meanings diverge. At the very top of the tree the distance between entity and object is also one step. But semantically, the difference between entity and object is a massive philosophical leap but it is quantified the same as tennis player vs athlete. 
-
-Counting methods don't account for cluster density, we need a way to weight the nodes and edges. We need to know that object is a very generic, heavy word that doesn't tell us much and tennis player is a very specific light word that carries a lot of meaning. This is the reason for the Information Content (IC) metric. Instead of measuring distance by steps, we measure the specificity of the node itself. Information content is a measure of specificity. Specifically, it is defined as the inverse of the probability of encountering an instance of a concept in a large corpus. In a hierarchical taxonomy like WordNet, 'object' has a high probability because it subsumes almost everything, resulting in low IC. Conversely, 'tennis player' is a rare occurrence with a low probability, yielding high IC. By quantifying semantic weight this way, we can calculate similarity based on how much information two concepts share—specifically the IC of their Most Informative Common Ancestor (MICA)—ensuring that a match between two niche terms counts for more than a match between two generic ones."
+Counting methods don't account for cluster density, we need a way to weight the nodes and edges. We need to know that object is a generic word that doesn't tell us much and tennis player is a specific word that carries alot of meaning. This is the reason for the Information Content (IC) metric. Instead of measuring distance by steps, we measure the **specificity** of the node itself. Information Content is a measure of specificity. Specifically, it is defined as the inverse of the probability of encountering an instance of a concept in a large corpus. 
 
 $$IC(c) = -\log P(c)$$
 
-Where $P(c)$ is the probability of concept $c$ appearing in the text. As $P(c)$ approaches 1 (like the word "object"), the $IC$ approaches 0.
+<small> *Where $P(c)$ is the probability of concept $c$ appearing in the text. As $P(c)$ approaches 1 (like the word "object"), the $IC$ approaches 0.* </small>
+
+In a hierarchical taxonomy like WordNet, 'object' has a high probability because it subsumes almost everything, resulting in low IC. Conversely, 'tennis player' is a rare occurrence with a low probability, yielding high IC. By quantifying semantic weight this way, we can calculate similarity based on how much information two concepts share—specifically the IC of their Most Informative Common Ancestor (MICA)—ensuring that a match between two niche terms counts for more than a match between two generic ones."
 
 As a refresher for logarithms, doesn't necessarily turn every large number into a small one and vice-versa; rather, it maps a vast range of numbers onto a much smaller, more manageable scale. In the context of Information Content, it specifically handles the relationship between probability and surprise. In the formula $IC(c) = -\log P(c)$, the log function performs two specific "magic tricks" for NLP:
 * The Scale Squish: Probabilities are always between $0$ and $1$. If a word is extremely rare (e.g., $0.0000001$), the log turns that tiny decimal into a clean, workable number.
 * The Inverse Flip: Because we use the negative log, it ensures that as probability ($P$) goes down, Information Content ($IC$) goes up.
 
 If we just used $1/P(c)$, the numbers would explode too fast. If "Object" has a probability of $0.1$ and "Tennis Player" has $0.000001$, the raw inverse would be $10$ vs $1,000,000$. That makes "Tennis Player" seem $100,000$ times more important, which is usually too much weight.
-
 
 | Probability P(c) | Example / Context | −log10​(P) (IC) | −log2​(P) (Bits) |
 | :---- | :---- | :---- | :---- |
@@ -184,65 +242,6 @@ However, it also highlights another key point, which is WordNet itself. Its stru
 In fact, the counts from external text could just be seen a fine-tuning whereby weight is added to what the corpus determines the correct applications to be. If the external text is specialised, lets say Financial in topic, then the word Bank with the sense of financial institution would hold more weight compared to river bank, and in particlar with respects to itself lineages counts through its chain of hyponyms. 
 
 The final theme that Peterson is trying push is that for Information Content measure, which are inexplicity linked to WordNet, sense-tagged data is not only not required but it is determintal because its coverage is not enough. 
-
-[Seminar Questions](files/week_1/week_1_seminar_questions.pdf) **TODO:** break out into this file
-
-[TODO: SEMINAR SLIDES TO COME AFTER SESSION]
-
-[1000 docs, tagged, how to build classifer to assign correct label]
-preprocessing
-words and sense
-naive bayes, freqs, probs, words [slide]
-nb featue vector, i.e. all words w/ probs in vector form
-(confirm usage of feature vector)
-nb is the trad approach, not that modern
-
-[towards more intelligent nlp]
-word tokes = atomtic bulding of nlp
-but bow or even sequence misses human language underdstanding
-senses, meanings = lexical semantics
-meaning inferringt through relations with other words and similarity to words
-
-[lecture overview, 2 parts]
-lexical semantics
-distributional semantics
-[TODO: full breakdown]
-
-[1.1 questions]
-
-lexical ambiguity, word w/ different sense [1.1.1]
-homonymn; broad distinctions; plant
-polysemy; fine-grained book
-
-lexical variation; synonm, same meanings/sense [1.1.2]
-
-wordnet
-synset = senses
-synset has synonyms in it
-hypo and hype connects synsets; parent, child
-
-similarity measure; path length, equation, edge weight 1, IC, probability, frequency
-
-lcs; lowest common
-
-section 1.2 
-other questions
-
-Q1 What is distribuitonal hypo; word defined by company around it, context, windows, vectors
-
-Q2, dist sems in other applications, doc class, didnt see document in new application, use dis sem to compar similarities, us simialr docs label, has a good chance of being right, [1.2.2 Better Notes]
-
-Q3, Q4 asso measure, similar measure, difference, related headache and paracet, similar are words that mean the same thing or close
-
-assoc measured using freqs -> PMI, how rare pairs are, info grain by seeing together, common = not much info, PMI eqaution (actually the modern method is to us vectors and LinAlg, slide says can use the assoc measures in cosine sim) (create density vector where each space is a word with a measurement, i.e. PMI) use the vectors to establish similarity between documents 
-
-
-
-
-
-
-
-
 
 ## Week 1 - Additional Readings
 
