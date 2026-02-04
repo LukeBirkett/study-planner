@@ -61,10 +61,17 @@ This week is for reviewing the core concepts from lexical semantics and distribu
 Lab exercises are based on the previous weeks lecture and seminar content.  Week 1 falls before any seminar hence is a self-assessment excercise to work out our starting level using prior knowledge.
 
 * [Self-Assesment PDF](files/week_1/lab/how_good_is_your_python.pdf)
+* [Notebook Attempt](968G5_Advanced_Natural_Language_Processing/files/week_1/lab/week_1_lab.ipynb)
 * [Lab Solutions](files/week_1/solutions)
 
-* TODO: link to file used
-* TODO: Summarise lab
+This is a self-assessment exercise, designed to help you prepare for the Advanced Natural Language Processingmodule.  If you find any of the questions tricky, then  there are many resources to help you: Python textbooks, online documentation and other resources, the module discussion forum. 
+ 
+1. Write a python program to take a text file and output the number of lines, words  and characters in the file. 
+2. What assumptions do you make about the text? 
+3. Can you write the program so that it can be run from the command line?  And so that you can give the name of the text file to be processed on the command line? 
+4. Can you extend your code so that you can find the average length of a word? 
+5. Can you extend your code so that you can find the most frequently occurring letter? 
+6. Can you extend your code so that you can display a bar graph showing the frequency  distribution of letters in the text file? 
 
 
 ## Week 1 - Seminar 
