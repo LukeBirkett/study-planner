@@ -37,12 +37,63 @@ The mini-videos hold the pre-recorded lecture content. They form the basis of th
 ### <u> What is Machine Learning </u> 
 Mini-Lecture Resources: [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1515091f-1947-45ba-ba34-b31e00f85cfe) | [Slides](files/week_1/week_1_prerecorded_what_is_machine_learning.pdf)
 
-<br>
+This was a very basic introduction to what Machine Learning is. It touched on input features, dimensionality, generalizability, training data, unseen data. It clarified that ML models are software or mathmematical model that take in some input features and output labels. Training is the learning proccess and inference is giving the trained ML model instances to assign a value to. The slides introduced the types of learning: supervised, unsupervised, semi-supervised and self-supervised learning. 
 
 ### A Simple ML Model 
 Mini-Lecture Resources: [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6067ee21-c700-437b-96d3-b31e01278a97) | [Slides](files/week_1/week_1_prerecorded_a_simple_ML_model.pdf)
 
-<br>
+This video introduced the simplest of ML models, the linear regression model. 
+
+$$f(x) = xw + b = \hat{y}$$
+
+* $x$: features
+* $\hat{y}$: predicted outputs/labels
+* $w,b$: weights and bias, the model parameters
+
+Linear regression is a form of supervised learning and works on continous data. The formula above is in linear algebra form but it doesn't have to be presented that way. 
+
+Here is some toy data: 
+
+| Temperature (°C) | Relative humidity (%) | Wind speed (km/h) | Rain (mm) | Fire weather index |
+| 23 | 21 | 10 | 0 | 0 |
+| 40 | 89 | 6 | 1 | 30 |
+| 35 | 60 | 23 | 15 | 15 |
+
+Which can easily be presented in matrix form:
+
+$$\begin{bmatrix} \hat{y}_1 \\ \hat{y}_2 \\ \hat{y}_{N=3} \end{bmatrix} = \begin{bmatrix} 23 & 21 & 10 & 0 \\ 40 & 89 & 6 & 1 \\ 35 & 60 & 23 & 15 \end{bmatrix} \times \begin{bmatrix} w_1 \\ w_2 \\ w_3 \\ w_4 \end{bmatrix} + \begin{bmatrix} b \\ b \\ b \end{bmatrix}$$
+
+We can also present this as a System of Linear Equations:
+
+$$\begin{aligned} \hat{y}_1 &= 23w_1 + 21w_2 + 10w_3 + 0w_4 + b \\ \hat{y}_2 &= 40w_1 + 89w_2 + 6w_3 + 1w_4 + b \\ \hat{y}_3 &= 35w_1 + 60w_2 + 23w_3 + 15w_4 + b \end{aligned}$$
+
+**What are the best values of the weights and bias?**
+
+This is learning part of ML. It find the optimal, or good, parameters. The definition of an optimal model would be one that minizes the error between the models predictions and the true label. 
+
+**What to use as the error metric?**
+
+The standard/default for continous labels is the mean square error, or $L_2$ error. 
+
+$$L_2 = \frac{1}{N} \sum_{n=1}^{N} (\widehat{\mathbf{y}}_n - \mathbf{y}_n)^2$$
+
+Recall that $\hat{y}$ is just the model outputs so we can replace this:
+
+$$$$= \frac{1}{N} \sum_{n=1}^{N} (\mathbf{x}_n \mathbf{w} + b - \mathbf{y}_n)^2$$
+
+This equation is what we want to minimise to get the perfect model. 
+
+We know from maths that the minimum of a function is when its gradient (derivative) is zero, so:
+
+$$0 = \frac{dL_2}{d\mathbf{w}}$$
+
+Thus, is we can find the $w$, the weight vector, that corresponds to the minimum point, then we can optimize the model. 
+
+**How to do learning with the basic linear model:**
+* Get training data: $(x_n, y_n)$
+* Choose error metric/loss function
+* Find the optimal parameters, $w$ and $b$
+* Use the model for inference
 
 ## Week 1: Lecture Content
 
