@@ -192,3 +192,20 @@ to learn,
 
 
 ## Week 1 Additional Reading
+
+
+
+
+
+
+
+# Week 2
+
+# Week 2 Lecture
+
+
+
+# Week 2 Seminar
+
+leverage_points by donna meadows
+
