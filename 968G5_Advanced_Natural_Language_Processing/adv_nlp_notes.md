@@ -288,3 +288,470 @@ sections 5.1-5 4
 #### <u> [Lecture 3 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_lecture_3.pdf) </u>
 
 **TODO:** Read and notes
+
+
+
+
+
+
+# Week 2
+
+
+# Week 2 Lecture
+
+# Lecture 1
+
+Prev; lexical and distribution semantics
+* semantic rels
+* WordNet
+* distrub hypoth; words that mean similar things tend to be used in similar things. This is important for vector representations and spaces as similarly used words with produce similar vectors and therefore there meaning and context can be infered to understand lexical similarity. 
+* the importatance/challenge of sparsity and zipds law
+* dimenstion reduction 
+* word embeddings
+
+This week we are looking at **Probabilitic Language Models**
+
+- n-gram modelling (the start)
+- evals and perplexit
+- generation 
+-generalaiseatiyon
+
+[why do we want to be ablw to assign a prob to a sentence]
+starting desire came from machine translation
+
+desire to assign prob to a sentence
+
+translate sequence of tokens from source lange to other lang 
+
+need high prob in target lang but corrent to orginal lang meaning
+
+might be alternative translations for a sentence 
+
+i.e. high winds > large winds
+
+both are semnaticlly correct, but we as english speakers more often use high. prob tells us this
+
+this notion of probs also applies to spelling corrections
+
+given prase with 1 word spelt different. maybe wrong but still a correct word. over enough data probbility would show us that the correct word would have higher instances of usage
+
+P(minute) > P(minute)
+
+This concept is very easy to think about with speec recognition. Computer can parse sounds into words but we have many words, sounds and phrases that sound the same but mean something different. Often merely contructing sounds may prodcue an unintelligible sentence. The probability of a the real worded setnence will show up more way higher from a real corpus of text
+
+P(I saw a van) > P(eyes awe of an)
+
+This was the motivation for early language modelling
+
+[Probability language modelling]
+
+what is a prob language model
+
+has goal of compouting 1 of 2 things:
+
+compute prob of sent of serq of words [include notion]
+
+or comp prob of an upcoming word [include notation]:
+prob of x given we have seen seq
+
+either then called lang mod
+
+[chain rule for probs]
+UPPACK ALL NOTION ON SLIDES AND ADD REFRESH NOTES
+
+bayes > rearrange to get relationship between sequence and condition prob of subs and prior event > extend to may variables in a chain (seq) > general case notion 
+
+[apply the chain rule to words]
+UNPACK NOTATION, left to right, see word and then prob given we saw the previous word
+
+compute and you get a prob for the entire seq/sent
+
+[estimating probs]
+where can we give probs from?
+
+can we use whole previous seqs and the prior probs?
+
+i..e is P("hill"|"then we hiovered over the")
+
+the same as 
+
+freq("then he hovered over the hill) / freq("then he hovered over the")
+
+^ this would be the definntion of cond probs, previous over possible new occurance (this is a proportion of times based on what we have already seen)
+
+this whole process is v difficult due to sparsity.
+
+that exactly prev sentence is going ot be tiny even given an entire large courpus. This issue because worse the large the prior sentence and results will be unreliable
+
+many sentences will have never been seen
+
+[markov assumptions]
+to fix sparisty, in n-grams we use Markov Assumptions
+
+options
+
+first order MA: assume approx Probs. look as the 1 previous state to proxy the seq: p(hill\then he hovered over the hill) is the same as ~ p(hill|the)
+
+assump is independance
+
+all prev context is held in the
+
+we know this isnt true but is is a simple assump that allow us to calc some sort of prob
+
+second order: 2 prev words (seq) p(hill|over the)
+
+[n-gram lang model]
+
+INCLUDE NOTATION
+
+because assumption uses product of n-words because of indep assumption
+
+each word only considered the prev n-1 words to compute the prob
+
+n-gram; n is the number of orders considered
+
+approx of compents in the product
+
+the approxs can be estimated using Max Likelihod istimation on a training courpus
+
+INCLUDE NOTION
+
+still quire exposed to sparsity
+
+[unigram model]
+dont look at any previous words, words and probs are all indept
+
+INCLUDE NOTION
+
+product prob of each words prob
+
+very simplebut gives an estimate
+
+good for a baseline to compare against
+
+[bigrm]
+INCLUDE NOTATION 
+
+first order notion
+
+each word prev word considered
+
+should include token for start of setnence
+
+[trigrams and beyond]
+tri, quad, numbers
+
+quad is hard to go beyond due to sparsity resulting in unreliabilty
+
+[product of probs]
+general rule is to avoid every mutliplying probs
+
+either tend to vanish or explode
+
+instead use log 
+
+this allows use to product the probs
+
+avoids underflow
+
+compute mre efficent than multi
+
+can convery back to probs if required
+
+very small numbers in computers are inaccurate
+
+log keeps them bigger
+
+[evalaution]
+
+how good is a lang model?
+
+a good vs bad sentence?
+
+does it assign higher probs to real sentences
+
+and lowerr to ungrammatical or implausible
+
+[extrinstic eval]
+
+put models in a task; spelling, translation, speec rec
+
+run rask and get an accurance for each model
+- how many words spelling corrected
+- how many translations
+how many
+
+probs; time consum, other factors affecting the task, lang model is not isolated
+
+[instrinstic eval]
+does the model assign higher probs to seen vs unseen?
+
+if so it isn;t generalised
+
+train on train set, test on test set (splits)
+
+[perplexity]
+
+best lang is the one tht best predicts and unseen test set
+
+perp is the inverse prob of the test set, normalised by the number of words 
+
+INCLUDE NOTIONS
+
+this can be rearranged; law of expo and recips
+
+INCLUDE RE NOTION
+
+dont every have to calc actual prob (use log and products)
+
+get perp by doing e to the power of 1
+
+assumes we have calced prob as sum of logs
+
+non-log method will give udnerflow 
+
+GET DEFINITION OF UNDERFLOW!!!!
+
+[min perplexity]
+
+max prob is the same as in min perx as it is an inverse model
+
+perplex shoukd only be use on the train/test split that come from the same corpus. prep tends to be skewed by length of corpus even though it is normalised by length. 
+
+
+
+## PART 2
+
+generalisation in n-gram models
+
+[toy bigram]
+very small "corpus"
+
+rep probs as table/matrix
+
+bigram so prob of work given prev
+
+length of table is all possible tokens in corp
+
+RECREATE TABLE IN MARKDOWN
+
+can use these probs to chain into sentences/seqs
+
+what happens to table when you update corp wth more sentences
+
+can start to use prob stable to chain sentences that have never occured in the train corp but may be gramatically valid
+
+[generation]
+
+use the shannon-visualation to analyis possible sentences
+
+sents nee to start with <sos>
+
+look at prob dist of words given the start, what is possible and its probs
+
+can pick and word from the dist, usually the highest (this is how we **generate** tokens)
+
+repeate for the nxt token, given possible works based on generate token
+
+
+... repeate until have to stop (end token)
+
+INCLUDE SHANNON TABLE
+
+dont always need to pick most common word, just prop to probs
+
+[approximating shakespeare]
+n=844,647
+v = 29,066
+
+tokens, vocab
+
+estimate using different n-grams
+
+INCLUDE N-gram RESULTS TABLE
+
+starts to sound like shakes but there is a prob
+
+4-gram looks like shakes but it exact passage from shakesperee
+
+it doesnt sounds like shakes, it is shakes
+
+there is no generalisation
+
+there is nothing new
+
+with vocab, there are 840 million bigrams 
+
+99.96 of the possible bigrams did not occur in the shakespere corpus, only 300k occured
+
+the way we are constructing the model says that only bigrams that occured in the traning data can be generated
+
+[overfitting]
+
+n-grams only work well for word pred if the test corp looks like the training copurus 
+
+often this ownt be the case
+
+if shakes had wiritten one more play
+
+moddels need ot be robust so they can generalise to unseen data
+
+need to avoid 0 probs ffor data not seen in the train set
+
+[zeros]
+demonstates issue with 0s
+
+needto get prob mass to unnseen
+
+[smoothing intuition]
+
+when we have sparse dtates 
+
+steal prob mass from observed events to general to unobserved
+
+smoothing the counts
+
+[add one estimation]
+
+laplace smoothing
+
+add one to all words in vocab
+
+tends not to be used in language models
+
+models are huge
+
+assigns too much mass
+
+makes the model too compelx
+
+[unknown words]
+approach for lang models
+
+example; test contains words that train did not
+
+will also be train words not in test
+
+find training words that are least likely to be in test
+
+these will be the lowest frew words
+
+with this fix the vocab, just take n top words. can be based on some rule, i.e. occured atleast twice
+
+create an <unk> token which captures probs of out of vocab words
+
+if not in vocab then unk, including in trainng where we cut the corpus
+
+throwing away stuff in the courpus and treat as unknown word
+
+[unseen bigrams]
+
+unk token allows est prob of seeing an oov in the test
+
+can even est prob of seeing oov words together
+
+does not hel us est prob of two in vocab words that havent been seen together in the train
+
+[absolute discounting]
+
+church and gale (1991)
+
+look at text, divde train and test
+
+average bigram count in train vs average bigram in test
+
+they noticed that there is a relationship where the count in the test corupus is 0.75 lower in test (abvove 2 count)
+
+[abs disc interp]
+
+what they did is take d from each bigram counts
+
+(from train count or test count?????)
+
+d is a param to be set, i..e 0.75
+
+save up diff from unobserved wirds
+
+need to keep track of discount made for each word
+
+take from bigram (notion) and add to dummy token called lambda (notion)
+
+normalise counts to prob dists as normally works. freqs/total freq. probs ests for the bigrams based on corpus
+
+how to use these outputs? 
+
+when we want to estimate a new word (notation)
+
+1. look up observed discounted probs given the previous
+2. add the lamdba given the previous (sharing out)
+
+how to share out. obv more share to more freq words. 
+
+make sures non 0 as even if prob is 0 the shared lamb will create some level of output
+
+NOTATION
+
+
+
+
+# Week 2 Seminar
+
+extrinic =. measure how much it helps us in a specific application; accuracy focused
+intrinstic = measure probabilities that the model outputs; train, test split; does it have bias towards training data, i.e. higher probs vs test set
+
+
+2.2 
+
+1. [pre-init probs, construct shannon vis] issue; would just create the same sequence each time
+how to genrate diff likely sequence? sample distribution rather than select most likely
+
+2.
+
+3. 
+oov is out of vocab; method is the unk method, only return n top common words, turn less common into the unk token and compute prob based on the freq of the unk token; this is called fixing (freezing) our vocab; add one smooth is bad because the dataset (all words) is just too extreme in size; unk token, oov token; why throw away info? rare info means we don't know much about it, at least in a freq/prob dependent setting; instead we model unk tokens, this allows us to learn how text handles rare works, what sort of words because before and after rare works; rare/oov words can exist in the train but not test but also vv test but not train.
+
+4. 
+absolute discounting; subtract a little from seen bigrams to reserve some prob mass which we can allocate to unseen words (unk tokes); trad method take fixed discount from each bigram, take 0.75 from each, means higher counts are loosing less proportionatly; keep track of substracted amount, store in dummy token called lambda; 
+[DO CONCRETE NOTES ON THIS CONEPT IN BOTH LECTURE AND SEMIANR INC NOTION]
+
+stupid back off is other type of bigram smoothing in the lecture. [DIDNT TAKE NOTES OF THIS IN THE LECTURE OF SEMINAR, NEED TO REVIEW]
+used for web scale lang models; if 4 gram has 3 count, drop to 3 gram and take prob scaled by a fixed param, i.e. 0.4 (lamdba sign); called a "back off";
+
+
+# Paper
+
+Had questions to follow [havent done this yet]
+
+1. 
+basic, regarding first sem question
+sem slides have relevant passages from paper
+
+2. 
+step 1: seed sents;
+step 2: generate alternatives, 30, using a n-gram model, remove extreme (obvious) sentence to retain hard questions
+step 3: human grooming, prune 30 down to 4 alts, prune with respect to rules
+
+3. eval, perf measure
+attempted in lab next
+metruc measure was simply correct word or not; this is an accuracy is an appraoch; baseline measured against 20% random guess
+
+4. 
+skipped
+
+
+5. how does simple 4-gram model work?
+paper talks about simple vs smooth 4-gram
+
+simple model; look at bi, tri and quad gram and assign points with word existed in either types; scoring approach in n-gram matches
+
+smooth model; prob of word give previous workds; actual implementation, calculating product of probs; good turning smoothed.
+
+6. 
+skipped
+
+7. latent sem analysis
+simialr to dist sem methods
+but coccured with the document, not another word
+looks at target work with all other words in the sentence using lin alg
+[TAKE BETTER NOTES OF THIS SLIDE AND PART IN PAPER, GOOD TO UNDERSDTAND FOR FUTURE]
+semantic similarity method is jnust the same
