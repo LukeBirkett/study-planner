@@ -755,3 +755,7 @@ but coccured with the document, not another word
 looks at target work with all other words in the sentence using lin alg
 [TAKE BETTER NOTES OF THIS SLIDE AND PART IN PAPER, GOOD TO UNDERSDTAND FOR FUTURE]
 semantic similarity method is jnust the same
+other methods were only 4-grams, where as this method essentiall incorps while sent
+therefore has more context in decision, thats why it likely had the highest score. 
+specifically had later sentence context window
+
