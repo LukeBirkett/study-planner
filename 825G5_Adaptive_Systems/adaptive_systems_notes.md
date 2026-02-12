@@ -93,14 +93,14 @@ There are 3 main directions for the assessments:
 5. Processes of adaptation take place over various timescales
 6. All adaptation involves change, but not all change is adaptation
 
-#### Systems and Their Environments
+#### <u> Systems and Their Environments </u>
 
 We can often think of systems a being coupled whereby an agent(s) and environment impact one another. There is circular causality that flows to and from each agent and enviroment. Because the flows are circular, an agent can essentially have an effect on itself. It changes the env, which changes itself, and so on. 
 
 
 Llosed loops are generally more interesting than open loops. They can do much more compelx things than open loops. Open loops are characteristed as systems with inflows and/or outflows. A feedforward network is an input and output system. They can do useful things but they don't have the same dynamics and closed systems. 
 
-#### The fitt-est
+#### <u> The fitt-est </u>
 
 "Survival of the fittest", not actually first written by Dariwn but largely attributed. Actually written by Spencer. In first edition, Darwin wrote about how well species were fitted to their env. Fitted, a fitness as a specific term here. They do not mean the physical fitness is a muscular or cardiovascual sense, instead we mean evolutionary fitness which is a two-way relationshp between a populaiton and its environment. 
 
@@ -110,7 +110,7 @@ Therefore, progress in the naturual world does not mean better, better, more com
 
 e.g. sticlebacks over time became less armound from predators as their new envs didn't require it (possibly observed as reverse evolution). Revolution has a trade-off, more armour requires more resources. But resources of life are limited. If something can become more simple but still survive or thrive just the same then the fittness is the same. Additionally, fitness can easily go down when an env changes. It could be argued that an over armour fish is less fit because this armour comes with disadvantages.
 
-#### Maintaining a Good Fit
+#### <u> Maintaining a Good Fit </u>
 
 Successful systems fit well into their environemnt. A system can meant an agent, or just about anything. Often the system will adpat to maintain a good fit to an env. 
 
@@ -118,11 +118,11 @@ Successes or fitness is completed dependent on the context and system. Though fo
 
 Bateson: "the unit of survival is a flexible organism in its env". Flexible can be substituted for "capable of adapting". Coupled sys of agent and env can both change to fit changes in the other
 
-#### Timescales 
+#### <u> Timescales </u>
 
 This slide covered the notion of learning vs evoluaiton. Learning is what humans, or agents, do and aquire in their lifetime. Evolution is was changes over many lifetimes. Evolution, or atleast the perception of evolution, is often dependent on the rate of reproduction. Bacteria can evolve very fast in human life terms. 
 
-## Time
+#### <u> Time </u>
 
 Time is a repeating concept in the module. Today's main interest is "rates of changes" and "relative rates of change". 
 
@@ -130,9 +130,9 @@ e.g. rate of change of ecosystems. Global temperature changes compared to previo
 
 Consdier the rate of change of evolution which takes many generations so may not be quick enough to keep track with ecosystem evn changes. This results in a loss of fitness and risk of non-survival
 
-## Why do Systems Adapt?
+#### <u> Why do Systems Adapt? </u>
 
-To learn;
+To learn:
 * a behaviour or action 
 * how to solve a problem
 * to compensate for injury or damage
