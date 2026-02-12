@@ -328,3 +328,204 @@ Something about seeing triangles
 
 
 DO THE WHOLE [network repsresnation] SECTION AGAIN
+
+
+
+
+# Week 3 Lecture
+
+textbook second chapter
+
+think about structure of networks and important concepts
+
+[outline]
+chapter 2 small words [TODO write down slide structure] rewatch video and take downs of topic introductions
+
+things that are similar tend to group together. also a social phenom
+
+[bird of a feather]
+
+similar things tends to group togoether; like minded people, similar people
+
+wont go into quantifying this yet (later lecture) but ...
+
+how to measure?  how connected entities are compared to other entities; quant way to measure; distance; steps from one another; however still very expensive to compute this; can just calculate the distance between two nodes as there are many routes often; shortest path possible; this depends on type of network, i.e. weighted edges; physical shortest distances may not be the fastest; however this is all too expensive to calc; focus needs to be on density of connections to the "same" type; prob that node connects to same type; dont need to consider path this way
+
+friends of friends connected is clusters; counting the triangles; this is not measuring similar people directly
+
+degree = number of connections
+
+[assortativity]
+
+[THERE IS A PAPER REFERENCED HERE, if interested in network science then should read if possible, foundational paper]
+
+[rewatch slides]
+
+how does assoc emerge; 
+1. selection or self-selection process; homopily; you like people who are like yourself; (has a opposite word too); neurons that has similar reactions to the same input; human cells die so need several that know and do the same thing; brain is backed up by redundancy and re[sometihng]; similar ndoes become connected; social sciences this is very common topic, think social media and echo chambers; homopily causes echo chambers and radicalness, bias reinforced; 
+
+2. influece can also be a way that connectivity occurs; not just together because of similar but there is something that pulls you into a network/cluster; 
+
+do similarity incudes links or do links incudes similarity? i.e. yourr env is what influecnes you, exposed to a particualr group, does this influece you? this is related to coevolution and adativness. 
+
+assoc is not ness a good thing, echo chamoers
+
+[degree assortativity]
+
+look at this alot in net science. aka degree correlation; de-assorative is the oppos, assoc means similars group; degree assoc means group with people that has similar degrees (connections); 
+
+right is de-assoc, low degree codes are only connecting to central high degree nodes; doesnt mean disconnected; think hub and spoke;
+
+assoc means nodes connected to nodes with similar number of connected; how be variable within a net; have a mix of high and low degree nodes, but will only connected to similar nodes; think brain highly connects but body less degees, more direct; core-perihperhy structre (this was in bold, what does it mean?); hubs in the core (again, what does this mean?)
+
+degree is calc some sort of a degree correlation
+
+core-periphery with huges in core. "rich club" or social networds with key central figures. 
+
+[assoc in networkx]
+ measure correlation bbetween the degree and the average degree of the direct neighbours of a given node
+TODO INCLUDES FORMILAS; there is two; 
+
+first calc degree (number) of neighbours of a given node; dot product matmult; a_ji is the connection, k is either the weight or 1 (check this?)
+
+second; average degree of neighbours of a node with a degree of X
+
+if i have degree x, the average degree of my neighbours is x
+
+followed by peasron correlation
+
+TODO UNPACK NETX code
+
+[Paths; Definitions]
+
+unpack from slides
+
+pathl seq of links to go from source to target; there paty not be a paths
+
+cylce; closed path, source and taget node are the same, loop
+
+simple path; no traversing the same link more than ones; we will only deal with simple paths
+
+path length; num of links; could also be based on weights
+
+[euler circa 1736]
+
+[SHORTEST PATH]
+
+between two nodes; min length, there may be more than one; in weighted networkds, weights may mean distance; 
+
+shortest path length is a the metric for teh shrotest path, akak distances. undefined or initite is there is no root.
+
+[APL and Diameter]
+
+diameter is the longest shortest path length, or max of the shortest path lengths accross nodes; shortest path length =. of two nodes; diameter looks at all possible pairs of nodes, which is the longest in the network?; this gives a measure of the total size of the network; need to look at the shortest paths to give us this measure, otherwise we could just mkae arbitarily huge routes; number = you cannot find a longer path that will need to be traversed, any pair will be this or less; 
+
+TODO INCLUDE EQUATION OF DIAMETER
+
+Average Path Length (APL) average of the shortest path length accorss all pairs of nodes. 
+
+TODO TO DIFF EQUATIONS FOR UNDIR VS DIR NETWORKS
+
+big issue here if there is an undefinied path; netx will highlight this as a diconnected network; could exclused all connected elements; solution is to do the harmonic means
+
+TODO equation but also understand the intution as to why we make this change with repect to the above topic. harminc mean is a ratio; the infinate dstance becomes 0, we can get rid of disconnected components; average of iverse and invert again; 
+
+looking as inverse of distance has a name and paper, measure of network efficency; TODO RE WATCH THIS EXPLANATION; something about inf becoming 0;
+
+TODO UNPACK NETOWRKX OPTIOND (REWATCH SLIDES)
+
+[connectedness and components]
+
+net is conn if there is a path between any two nodes
+
+if not then disconnected
+
+MISSED SOME TERMINOLOGT ON FIRST SLIDE
+
+a dir net can be strongly connected or weakly connected
+
+strongly is triangles, a pass between any pair
+
+notion of in-component and out-component
+
+nodes that are connected to a network but you cannot go to, this in-component. i.e. a node on the edge that has a direction that goes into the network, i..e you cant get to do, cant go back; node can reach S nodes,  but S node cannot reach the start node; 
+
+out-compent as connect nodes that cannot go to the S but S can go to
+
+NETWORKX CODE TO UNPACK
+
+[trees]
+
+tree is a connected network with out cycles, friends of friends cannot exists, N-1 links; sparsest way of building network;
+
+with a tree, you can pick any node to be the root and it retrains its hierachical structure; nets can be reorganised; root has no parents, leaves ahve no children; 
+
+[finding shortest paths]
+
+algo; breadth-first search; not a tree becasue it has cycles (loops); start from source node, doesn't matter which one but probably start from root; as above, any can be root; first list neighbours at same depth; then iterative to next layer; 
+
+[breadth-first search]
+
+TODO DIDNT LIST TO ANY OF THIS, REFOLLOW SECTION AND MAKE NOTES
+
+[social distance]
+
+how closer or far, is is apl
+
+acedeic coauthoriship networks; how connected are authors, how far away;
+
+Paul Ardos; 500 coauthor; is a hub in a coauthorship network; SOMETING ABOUT SMALL NUMBERS, REVIST
+
+[six degrees of kevin bacon]
+
+shorts paths, hubs have short paths; 
+
+[small worlds]
+
+social networks trned to have very short paths
+
+six degress of sperationl any two people are at most 6 people away; 
+
+[milgrams experiement]
+
+PAPER TO READ
+
+take rand people, give them a tatget; send letter to people that might bring you closer to x person or place; see how many steps to get to x; only 26% Mmade it; av steps were 6; range 3-12;
+
+yahoo repeated with email in 2003; approx 4-7
+
+facebook; uni milan; 
+
+[short paths]
+
+what do we mean by short paths, when can we call a path short?
+
+depends on size of network; fast within network; observe erela between alp and net wise
+
+apl is short when it grows very slowly with the size of the network
+
+LOG EQUATION
+
+[small worlds]
+
+most irl will be small worlds
+
+type of structure that might not be so short? hubs create short routes if the hubs are connected; a lattice strcture will not be short; or a grid like nyc; 
+
+[friend of a friend]
+
+the presence of triangles
+
+often use with social becuase friends are often friends of friends also
+
+direct networks are a bit more complicated. transitivity; may have a triangle but all 3 arent actually connected;
+
+[clustering coefficent]
+
+measure num of trianges that a node actually has relative to how many it could have
+
+clust coeff is the fract of pairs of the nodes neighbours that are connected to each other
+
+NEED TO FOLLOW THIS SLIDE, LECTURE VIDEO and EQUATION BETTER
+
+xs
