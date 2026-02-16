@@ -2,15 +2,24 @@
 
 This is the main file for the Advanced Natural Language Proccessing module taken in Spring 26. It will act as the location for note taking accross all mediums, i.e. lectures, videos, labs and additional readings, as well as a directory for file locations. It will be recorded chronologically with a section for each week. 
 
-**TODO:** introduction to the module
+Advanced Natural Language Processing focuses on the application of data-driven and machine learning methods which have transformed the field of Natural Language Processing over the past couple of decades.  It does build on foundations provided by the level 7 Applied Natural Language Processing module. Students will develop their knowledge and understanding of key topics including word vector space models of semantics, language modelling, contextualised word embeddings, large language models, generative language models and their applications. 
 
-**TODO:** details of main text book
+Seminars will provide in-depth discussion of research papers related to the key topics and also general issues that arise when developing natural language processing tools, including: evaluation and reliability, data smoothing techniques; domain adaptation; supervised vs unsupervised learning; and transfer learning. 
 
-**TODO:** details of virtual env
+Labs will provide the opportunity for students to improve their python programming skills, experiment with some off-the-shelf technology and develop research skills.
+
+#### Learning Outcomes
+* Demonstrate a systematic knowledge and understanding of key challenges in the field of natural language processing (NLP) and critical awareness of current approaches to tackling these challenges.
+* Critically analyse state-of-the-art NLP technologies and critically assess their application to novel problems involving large quantities of realistic data.
+* Critically evaluate the effectiveness of an approach through the design and application of suitable experiments.
+* Synthesise and critically assess state-of-the-art technologies for a given NLP problem based on primary scientific literature.
+
+The textbook is [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/) by Dan Jurafsky and James H. Martin
+
 
 # Table of Contents
 1. [Week 1 - Lexical and Distributional Semantics Revisited](#week-1---lexical-and-distributional-semantics-revisited)
-2. [Week 2 - Language Modelling w/ N-grams]()
+2. [Week 2 - Language Modelling w/ N-grams](#week-2---language-modelling-with-n-grams)
 3. [Week 3 - Neural Networks and Neural Language Modelling]()
 4. [Week 4 - Word Embeddings]()
 5. [Week 5 - ]()
@@ -45,34 +54,25 @@ This week is for reviewing the core concepts from lexical semantics and distribu
 
 ## Week 1 - Lecture 
 
-[TODO: Lecture Slides (1 File)]()
-
-[Lecture Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c7d2751c-0820-4e87-8b8d-acb400db8436&start=1.23467)
-
-**TODO:** Watch and Notes
-
-[Lecture Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=15631590-2d19-4dcd-98bf-acb400db95f6&start=0)
-
-**TODO:** Watch and Notes
+| [Slides](/Users/lukebirkett/Repos/study-planner/968G5_Advanced_Natural_Language_Processing/files/week_1/week_1_lecture_lexical_distributional_semantics.pdf) | [Lecture Video Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c7d2751c-0820-4e87-8b8d-acb400db8436&start=1.23467) | [Lecture Video Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=15631590-2d19-4dcd-98bf-acb400db95f6&start=0) |
 
 
-## Week 1 - Lab
 
-Lab exercises are based on the previous weeks lecture and seminar content.  Week 1 falls before any seminar hence is a self-assessment excercise to work out our starting level using prior knowledge.
+## Week 0 - Lab
 
-* [Self-Assesment PDF](files/week_1/lab/how_good_is_your_python.pdf)
-* [Notebook Attempt](968G5_Advanced_Natural_Language_Processing/files/week_1/lab/week_1_lab.ipynb)
-* [Lab Solutions](files/week_1/solutions)
+The lab exercises are based on the previous weeks lecture and seminar content.  Week 1 fell before any seminar hence there was a self-assement exercise to get warmed out. However, for the following lab session there was also a full notebook for the content.
 
-This is a self-assessment exercise, designed to help you prepare for the Advanced Natural Language Processingmodule.  If you find any of the questions tricky, then  there are many resources to help you: Python textbooks, online documentation and other resources, the module discussion forum. 
- 
-1. Write a python program to take a text file and output the number of lines, words  and characters in the file. 
-2. What assumptions do you make about the text? 
-3. Can you write the program so that it can be run from the command line?  And so that you can give the name of the text file to be processed on the command line? 
-4. Can you extend your code so that you can find the average length of a word? 
-5. Can you extend your code so that you can find the most frequently occurring letter? 
-6. Can you extend your code so that you can display a bar graph showing the frequency  distribution of letters in the text file? 
+* [Self-Assessment Brief](files/week_1/lab/week_0_refresher/how_good_is_your_python.pdf)
+* [Self-Assessment Notebook](files/week_1/lab/week_0_refresher/week_0_lab.ipynb)
+* [Week 1 Notebook - Semantic Similarity](files/week_1/lab/week_1_semantic_similarity/week_1_semantic_similarity.ipynb)
 
+### Week 1 - Seminatic Similarity Lab
+
+1. [Getting Started](#getting-started)
+    * `ic-brown` explained
+2. [Useful WordNet Functions](#using-wordnet-wn-functions)
+    * Write a function to return the path similarity of two nouns
+    * Generalise the function to use IC measures
 
 ## Week 1 - Seminar 
 
@@ -81,58 +81,80 @@ This is a self-assessment exercise, designed to help you prepare for the Advance
 
 ### Week 1 - Seminar Session 
 
+| [Seminar Questions](files/week_1/week_1_seminar_questions.pdf) | [Seminar Slides]()
+
 This seminar session was a mix of mild lecturing before breaking out into small groups to discuss questions. After which as a whole class we would put forward answers. In this section I will put down the questions and some notes for the answers. 
 
-[Seminar Questions](files/week_1/week_1_seminar_questions.pdf) **TODO:** break out into this file
+**Prompt: Imagine you have been given a set of 1000 
+documents, each of which have been annotated as 
+relevantor irrelevant to a particular topic.  Your 
+task is to build a classifier which can assign the 
+correct label (relevantor irrelevant) to a previously 
+unseen document.  How would you go about doing 
+this?**
 
-[TODO: SEMINAR SLIDES TO COME AFTER SESSION]
+In my group we discussed pre-processing, identifying words and their sense, naive bayes as an approach to unpack frequeniques and probablities and finally we spoke about feature vectors from a linear algebra perspective. 
 
-[1000 docs, tagged, how to build classifer to assign correct label]
-preprocessing
-words and sense
-naive bayes, freqs, probs, words [slide]
-nb featue vector, i.e. all words w/ probs in vector form
-(confirm usage of feature vector)
-nb is the trad approach, not that modern
+#### Document Classification using Naive Bayes
 
-[towards more intelligent nlp]
-word tokes = atomtic bulding of nlp
-but bow or even sequence misses human language underdstanding
-senses, meanings = lexical semantics
-meaning inferringt through relations with other words and similarity to words
+Here, documents are respected as a bag-of-words where the features are the observed words. There is no notion of order meaning the structure of sentances is lost. NB selected a class/label based on the cumulative probabilites of the feature vector that respresents the document. 
 
-[lecture overview, 2 parts]
-lexical semantics
-distributional semantics
-[TODO: full breakdown]
+$$y = \text{argmax}_y P(y) \prod_{i=1}^{n} P(x_i \mid y)$$
 
-[1.1 questions]
+It is important to remember Naive Bayes is a similifiation of Bayes Rule. To simplifiy the model we assume that features, the words, are all indepent, i.e. the use of one word does not increase or decrease the use of a another, this is how we end up with our bag-of-words srtucture. Clearly this is not true but it makes the formula mathematically possible, allowing us to compute at least something. 
 
-lexical ambiguity, word w/ different sense [1.1.1]
-homonymn; broad distinctions; plant
-polysemy; fine-grained book
+#### Towards More Intelligent NLP
 
-lexical variation; synonm, same meanings/sense [1.1.2]
+This slide highlights that a Naive Bayes approach to NLP is a little too basic. It treats word tokens as atomic building blocks but obscures too much of the characteristics required for human understanding of language: the meaning. Meaning is generally inferred through words relationships with other words and/or their similarity to other words. This notion is the basis for Lexical Semnatics which is the focus of this weeks content. 
 
-wordnet
-synset = senses
-synset has synonyms in it
-hypo and hype connects synsets; parent, child
+#### Seminar 1.1 Questions
 
-similarity measure; path length, equation, edge weight 1, IC, probability, frequency
+**1. Give an example of lexical ambiguity**: These are words that are spelt exactly the same but have different senses. 
 
-lcs; lowest common
+**2. Give an example of lexical variation**: These are different words that mean the same thing/sense
 
-section 1.2 
-other questions
+**3. What is a WordNet synset?** a WordNet synset (short for "synonym set") is a group of words that mean the same thing in a specific context.
 
-Q1 What is distribuitonal hypo; word defined by company around it, context, windows, vectors
+**What does the number of synsets that a word form occurs in tell us?**: This is a measure of its polysemy, i.e. its multiple meanings.
 
-Q2, dist sems in other applications, doc class, didnt see document in new application, use dis sem to compar similarities, us simialr docs label, has a good chance of being right, [1.2.2 Better Notes]
+**What does the size of a synset tell us?** The "size" of a synset refers to the number of lemmas (individual word forms) that are grouped together within it. While the number of synsets for a word tells you about ambiguity, the size of a single synset tells you about lexical density and synonymy. If a sense has many different words for it then this may be a culturally important word that is used often, or something that requires different words to represent an emotional context. Additionally, a large sysnet might imply that the word is high-level and broad. A sysnset with only 1 word is monosemous, these words are very specific and can only ever mean 1 thing. 
 
-Q3, Q4 asso measure, similar measure, difference, related headache and paracet, similar are words that mean the same thing or close
+**How are synsets connected?** Synsets are linked in a semantic network of Hyponymy and Hypernymy. This is hiearchical structure which denotes an "Is-A" relationship. Hypernym (Superordinate): A more general term. (Furniture is a hypernym of Chair). Hyponym (Subordinate): A more specific term. (Oak is a hyponym of Tree)
 
-assoc measured using freqs -> PMI, how rare pairs are, info grain by seeing together, common = not much info, PMI eqaution (actually the modern method is to us vectors and LinAlg, slide says can use the assoc measures in cosine sim) (create density vector where each space is a word with a measurement, i.e. PMI) use the vectors to establish similarity between documents
+
+**4. Describe 2 ways WordNet can be used to calculate the 
+similarity of 2 concepts?  Which is the best way and how do you know?** 
+
+The two main ways of using WordNet are PathLength and Information Content. 
+
+PathLength is a distance based metric with traverses edges and counts the shortest route from one term to another. It introduces the concept of a Lowest Common Subsumer (LCS) which is the lowest (first) mutual Hypernymy that two terms share. Shorter paths are assumed to be more similar words. 
+
+The other measure, Information Content is considered to be node based. It assumes that the similarity of two concepts depends on how much "information" they share. It requires the addition of an external corpus to popualiton the statistics. The "Information Content" of a concept is based on its frequency in a large body of text. Rare, specific words (like Pomeranian) have high IC, while common, general words (like Entity) have low IC. There are many different IC metrics each with their own pros and cons. 
+
+The Information Content (IC) measures (specifically Lin or Jiang-Conrath) are generally considered superior to simple Path-Based measures. However, this something with a trade-off which is generally linked to data robustness and specifically data sparisty. Language is naturally sparse and miss values often lead to formulas failing. 
+
+
+#### Seminar 1.2 Questions
+
+**1. What is the distributional hypothesis?** 
+
+The Distributional Hypothesis is a foundational concept in linguistics and Natural Language Processing (NLP) that suggests the meaning of a word is determined by the words that frequently appear around it.
+
+**2. Explain how distributional semantics might help us in another application e.g. document classification**
+
+Distribution semantics allows us to transfer learnings from one application to the next and fill in missing information based on contextual clues. We may on know the exact meaning on a rare type of drink. However, we may see that is used similar to beer, also an alchoholic drink. By applying distribution demantics to a very large corpus we can learn that the rare drink is similar to beer even if the specific training sample wasn't able to tell us that. 
+
+**3. In traditional distributional semantics (aka vector 
+semantics), how is the association between 2 words often 
+measured?** 
+
+Note that there is a different between association and similartity. **Similarity** refers to words that share the same features or occupy the same spot in a hierarchy. These words are often "substitutable"—you could swap one for the other in a sentence and the basic meaning would remain intact. **Association** (also called Relatedness) refers to words that "go together" in the real world. They don't look or act alike, but they frequently appear in the same context or sequence. They are not substitutable.
+
+To measure Association we need to look at the words around a word. Frequency and/or simple conditional probability do not capture the intuition that some features are more informative than others. "the" and "is" appear relatively frequently with all of the word so their contribution to similarity should be smaller. They do not provide any specificity. PMI measures the amount of information gained by seeing a word and a feature together. A feature which co-occurs with a target word more than we would expect (if words and features occurred independently) has more weight in the similarity calculation.
+
+**4. In traditional distributional semantics, how is the similarity between 2 words often measured?**
+
+The main method is to compare two vectors using cosine similarity. he more similar two words are, the  smaller the angle θ between their  vectors will be.
 
 ### Week 1 - Seminar Reading
 
@@ -140,7 +162,9 @@ The paper to read for this seminar is [Information Content Measures of Semantic 
 
 As humans we can read a piece of text, understand and assign meaning to it. Given this, we can also determine how similar words and thier meanings are, this is known as **semantic similarity**. This research paper investigates different methods of calculating semantic similarity and how they compare to human intuition - which human intuition being the gold standard metric we want to work towards. 
 
-The author demonstrates that Information Content measures perform significantly better when they are derived from large amounts of unannotated text rather than smaller, manually sense-tagged corpora. This because the raw data is larger in size and therefore has a wider coverage of concepts within the WordNet hierarchy. This allows the system to more accurately quantify how specific for general a term is. The studies findings suggest that the expensive and labor intensive process of hand-labelling data is unnecessary for improving linguistic algorithms. The conclusions is that enabling a system with a greater volume of (untagged) data is the primary driver of success in these computational models because it allows more senses/words to be counted leading to a more informed outcomes. The belief prior to this paper was that high-quality semantic analysis requires costly, human-tagged data - this is known as the "expensive assumption" in natural language processing. 
+The author demonstrates that Information Content measures perform significantly better when they are derived from large amounts of unannotated text rather than smaller, manually sense-tagged corpora. This because the raw data is larger in size and therefore has a wider coverage of concepts within the WordNet hierarchy. This allows the system to more accurately quantify how specific for general a term is. The studies findings suggest that the expensive and labor intensive process of hand-labelling data is unnecessary for improving linguistic algorithms. 
+
+The conclusions is that enabling a system with a greater volume of (untagged) data is the primary driver of success in these computational models because it allows more senses/words to be counted leading to a more informed outcomes. The belief prior to this paper was that high-quality semantic analysis requires costly, human-tagged data - this is known as the "expensive assumption" in natural language processing. 
 
 By comparing various information content (IC) measures, the text explains how raw, untagged text—and even a simple "add-one" baseline using no external text at all—can outperform small, manually annotated corpora like SemCor. The core insight is that coverage is king. Humanly tagged data is sparse by definition as is it is costly in both time and resources. 
 
@@ -279,157 +303,111 @@ The final theme that Peterson is trying push is that for Information Content mea
 ### <u> Vector Semantics </u>
 The additional readings for this week are based on Vector Semantics:
 
-#### <u> [Chapter 5 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_chapter_5.pdf) </u>
+* <u> [Chapter 5 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_chapter_5.pdf) </u> sections 5.1-5 4 
+* <u> [Lecture 3 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_lecture_3.pdf) </u>
 
-sections 5.1-5 4 
+# Week 2 - Language Modelling with n-grams
 
-**TODO:** Read and notes
+This week we will be looking at n-gram language models.  In particular, we will be looking at:
+* why build language models?
+* how to evaluate language models?
+* perplexity
+* generation
+* generalisation and smoothing
 
-#### <u> [Lecture 3 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_lecture_3.pdf) </u>
+#### Week 2: Contents
 
-**TODO:** Read and notes
+1. [Lecture](#week-2---lecture)
+2. [Lab](#week-2---lab)
+3. [Seminar](#week-2---seminar)
+4. [Additional Readings](#week-2---additional-readings)
 
+# Week 2 - Lecture
 
+| [Lecture Slides](files/week_2/week_2_lecture_slides.pdf) |
 
+This week we are looking at **Probabilitic Language Models**. This includes: n-gram modelling and their evaluation methods (perplexity), generation and generalisation.
 
+#### Why do we want to be able to assign a prob to a sentence?
 
+The starting desire to acheive this comes form machine translation. If we wish to translate a sequence of tokens from source to other language then we want to select the most probable sequence in the target. 
 
-# Week 2
+However, the sentence, or words, chosen need to follow the cultural rules of a language. Semantically, there may be several phrases whereby the choice of words results in a high probability. i.e. high winds and large winds but the former is much more likely in action. If we derive our probabilites from large corpuses then the statistics will tell us that high winds is a much more common phases. 
 
+This desire to assign probabilities to tokens, or sequence of tokens, also applies to spelling corrections. By detailing the probability of sentences, we can work out which spelling/usage of a word if most likely and therefore more probable to be the correct spelling. 
 
-# Week 2 Lecture
-
-# Lecture 1
-
-Prev; lexical and distribution semantics
-* semantic rels
-* WordNet
-* distrub hypoth; words that mean similar things tend to be used in similar things. This is important for vector representations and spaces as similarly used words with produce similar vectors and therefore there meaning and context can be infered to understand lexical similarity. 
-* the importatance/challenge of sparsity and zipds law
-* dimenstion reduction 
-* word embeddings
-
-This week we are looking at **Probabilitic Language Models**
-
-- n-gram modelling (the start)
-- evals and perplexit
-- generation 
--generalaiseatiyon
-
-[why do we want to be ablw to assign a prob to a sentence]
-starting desire came from machine translation
-
-desire to assign prob to a sentence
-
-translate sequence of tokens from source lange to other lang 
-
-need high prob in target lang but corrent to orginal lang meaning
-
-might be alternative translations for a sentence 
-
-i.e. high winds > large winds
-
-both are semnaticlly correct, but we as english speakers more often use high. prob tells us this
-
-this notion of probs also applies to spelling corrections
-
-given prase with 1 word spelt different. maybe wrong but still a correct word. over enough data probbility would show us that the correct word would have higher instances of usage
-
-P(minute) > P(minute)
-
-This concept is very easy to think about with speec recognition. Computer can parse sounds into words but we have many words, sounds and phrases that sound the same but mean something different. Often merely contructing sounds may prodcue an unintelligible sentence. The probability of a the real worded setnence will show up more way higher from a real corpus of text
-
-P(I saw a van) > P(eyes awe of an)
+This concept is most easy to think about within the topic of speech recognition. A computer can parse sounds into words but we have many words, sounds and prases that in terms of pure noise, sounds the same but mean completely different things. Merely constructing sounds from the entire lexicon can result in an unintelligence sentence. A real sentence will be distinguished by its probability: `P("I saw a van") > P(eyes awe of an)`.
 
 This was the motivation for early language modelling
 
-[Probability language modelling]
+#### Probability language modelling
 
-what is a prob language model
+What is a probabilistic language model? It has the goal of computing 1 of 2 things:
+* Compute the probability of a sentence as represented by a sequences of words: $P(W) = P(W_1,W_2,...,W_n)$
+* Or the related but different task of computing the probability of an upcoming word given an input of a sequence of words: $P(W_5|W_1, W_2, W_3, W_4)$
 
-has goal of compouting 1 of 2 things:
+If a model does either of these tasks, it is a language mnodel (LM).
 
-compute prob of sent of serq of words [include notion]
+#### Chain Rule for Probabilties 
 
-or comp prob of an upcoming word [include notation]:
-prob of x given we have seen seq
+Conditional probability is given by: $P(B|A) = \frac{P(A, B)}{P(A)}$. 
 
-either then called lang mod
+It defines the probability of event B occurring, given that event A has already happened. We want to find the probability of $B$ in a world where $A$ has already happened. The solution to computing this is to find the overlap where both happen and normailze it against the total size of $A$
+* $P(B|A)$: The probability of $B$ given $A$.
+* $P(A, B)$: The joint probability (the chance that both $A$ and $B$ happen).
+* $P(A)$: The probability of event $A$ happening on its own.
 
-[chain rule for probs]
-UPPACK ALL NOTION ON SLIDES AND ADD REFRESH NOTES
+By multiplying both sides by $P(A)$ you get:
 
-bayes > rearrange to get relationship between sequence and condition prob of subs and prior event > extend to may variables in a chain (seq) > general case notion 
+$$P(A, B) = P(A)P(B|A)$$
 
-[apply the chain rule to words]
-UNPACK NOTATION, left to right, see word and then prob given we saw the previous word
+This is a fundamental rule used to find the probability of a sequence of events. It tells us that the probability of both $A$ and $B$ occurring is the probability that $A$ occurs, multiplied by the probability that $B$ occurs given that $A$ occurred.
 
-compute and you get a prob for the entire seq/sent
+In other words, to find the chance of two things happening together, you multiply the probability of the first event by the probability of the second event given the first has already occurred.
 
-[estimating probs]
-where can we give probs from?
+The Naive Bayes formula is essentially a clever rearrangement of this Product Rule. It takes the probability of a "Class" and "Features" happening together and flips them around to predict the class based on the features.
 
-can we use whole previous seqs and the prior probs?
+This can be extended to many more variables where each new event is dependant on everything that came before it:
 
-i..e is P("hill"|"then we hiovered over the")
+$$P(A, B, C, D) = P(A)P(B|A)P(C|A, B)P(D|A, B, C)$$
 
-the same as 
+For any number of variables $n$, the joint probability is the product of each variable conditioned on all previous ones: 
 
-freq("then he hovered over the hill) / freq("then he hovered over the")
+$$P(x_1, x_2, \dots, x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1, x_2) \dots P(x_n|x_1, \dots, x_{n-1})$$
 
-^ this would be the definntion of cond probs, previous over possible new occurance (this is a proportion of times based on what we have already seen)
+This logic can easily be applied to sentances whereby each most recent word in the sentence depends on the entirety of the sentence that came before. 
 
-this whole process is v difficult due to sparsity.
+#### Estimating Probabilities
 
-that exactly prev sentence is going ot be tiny even given an entire large courpus. This issue because worse the large the prior sentence and results will be unreliable
+The issue we run into here is data sparsity. As the sentence continues and the length of the dependant chain grows, the probability that the exact sentence has occured before starts to become extremely unlikely and our results will be unreliable. 
 
-many sentences will have never been seen
+#### Markov Assumptions
 
-[markov assumptions]
-to fix sparisty, in n-grams we use Markov Assumptions
+To fix sparsity in n-grams we use Markov Assumptions. Here, we simplying the dependency criteria from the entire previous chain to orders. The most common is first-order Markov Chains whereby each newest word depends only on the previous word. This 1 previous state is considered to be a proxt for the entire previous sentence, for the previous state will occur given a specific set of previous states, i.e. the context of the sentence. This is an assumption of independence whereby all previous context is held intrinsically in the state. In practice, we know this isn't true but it is a simple assumption that allows us to calculate some sort of probability. The markov model can be extended in its orders. A second order model allows each words to look at the previous 2. 
 
-options
+#### N-gram Language Model
 
-first order MA: assume approx Probs. look as the 1 previous state to proxy the seq: p(hill\then he hovered over the hill) is the same as ~ p(hill|the)
+ Calculating the probability of a word based on every preceding word is computationally difficult, or even impossible, the N-gram model introduces a simplifying assumption:
+ * It fixes the history and only considers $n$ words at a time: the current word ($w_i$) and the previous $n-1$ words.
+ * Maximum Likelihood Estimation (MLE): The model estimates these probabilities by looking at a training corpus and calculating frequencies. In statistics, Maximum Likelihood Estimation is a method of estimating the parameters of a model that makes the observed data "most probable."
 
-assump is independance
+ $$P(w_i \mid w_{i-(n-1)}, \dots, w_{i-1}) = \frac{freq(all\ n\ words\ together)}{freq(the\ previous\ n-1\ words)}$$
 
-all prev context is held in the
+ This formula represents the "training" phase of the model. It is the way the computer calculates the probability of a specific word appearing based on the context of the words that came right before it.
 
-we know this isnt true but is is a simple assump that allow us to calc some sort of prob
+In this context, if you see the phrase "the cat sat" 10 times in your data, and 6 of those times the next word is "on," the MLE estimate for $P(on \mid the, cat, sat)$ is $6/10 = 0.6$. This is the "best guess" the model can make based solely on the evidence it has seen in its training text.
 
-second order: 2 prev words (seq) p(hill|over the)
+#### Unigram Model
 
-[n-gram lang model]
+This is the most simplistic type of n-gram model whereby `n=1`. It doesn't look at any previous words meaning probabilites are all independent, i.e. words have probabilities which get chained together: `P("he fell over) = P(he) * P(fell) * P(over)`
 
-INCLUDE NOTATION
+This approach is very simple but atlest it gives an estimate which can be used as a baseline for further comparison.
 
-because assumption uses product of n-words because of indep assumption
+$$P(w_1, w_2, w_3, \dots, w_k) = \prod_{i=1}^{k} P(w_i)$$
 
-each word only considered the prev n-1 words to compute the prob
+#### Bigram Model
 
-n-gram; n is the number of orders considered
-
-approx of compents in the product
-
-the approxs can be estimated using Max Likelihod istimation on a training courpus
-
-INCLUDE NOTION
-
-still quire exposed to sparsity
-
-[unigram model]
-dont look at any previous words, words and probs are all indept
-
-INCLUDE NOTION
-
-product prob of each words prob
-
-very simplebut gives an estimate
-
-good for a baseline to compare against
-
-[bigrm]
+A bigram model is a first order markov model. 
 INCLUDE NOTATION 
 
 first order notion
@@ -691,10 +669,12 @@ make sures non 0 as even if prob is 0 the shared lamb will create some level of 
 
 NOTATION
 
+# Week 2 - Lab 
 
 
 
-# Week 2 Seminar
+
+# Week 2 - Seminar
 
 extrinic =. measure how much it helps us in a specific application; accuracy focused
 intrinstic = measure probabilities that the model outputs; train, test split; does it have bias towards training data, i.e. higher probs vs test set
@@ -759,3 +739,4 @@ other methods were only 4-grams, where as this method essentiall incorps while s
 therefore has more context in decision, thats why it likely had the highest score. 
 specifically had later sentence context window
 
+# Week 2 - Addtional Readings
