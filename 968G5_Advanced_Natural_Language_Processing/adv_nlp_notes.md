@@ -407,95 +407,63 @@ $$P(w_1, w_2, w_3, \dots, w_k) = \prod_{i=1}^{k} P(w_i)$$
 
 #### Bigram Model
 
-A bigram model is a first order markov model. 
-INCLUDE NOTATION 
+A bigram model is a first order markov model meaning that each word in a given sentence depends on the previous word:
 
-first order notion
+`P("then we hovered") = P("then|start") * P("he|then") * P("hovered|he") * P("over|hovered")`
 
-each word prev word considered
+#### Trigrams and Beyond
 
-should include token for start of setnence
+This logic pravails for any `n` number of terms to look back on. Rememeber `n=1` is a unigram which only looks at itself, so `n>1` looks back `n-1` terms. e.g. trigrams (3), quadrigrams (4), 5-grams (5). Higher terms will be able to capture more long range association dependencies but the models will be become more sparse and unreliable.
 
-[trigrams and beyond]
-tri, quad, numbers
+#### Products of Probabilties
 
-quad is hard to go beyond due to sparsity resulting in unreliabilty
+When calculating the probability of a long sequence (like a sentence in an N-gram model), we prefer logarithmic addition over raw multiplication for two main technical reasons: numerical stability and computational efficiency.
 
-[product of probs]
-general rule is to avoid every mutliplying probs
+Probabilites are always betwene 0 and 1, this means when you mutliple many probabilites together, like the chain rules, the result is a tiny output which quickly becomes infinitesimally small. Computers cannot represent numbers this small with high precision, leading to a "floating-point underflow" where the computer simply rounds the result down to zero.
 
-either tend to vanish or explode
+By taking the logarithm, these tiny probabilities are converted into manageable negative numbers (e.g., $log(0.0001) = -4$). Adding these values avoids the precision "death" that occurs with multiplication. 
 
-instead use log 
+Addtionally, from a hardware perspective, computers are generally faster at performing addition than multiplication, especially when dealing with billions of calculations in modern AI models.
 
-this allows use to product the probs
+In Maximum Likelihood Estimation (MLE), the goal is to find the parameters that maximize the probability of the data. Since the $log(x)$ function is monotonically increasing, the value of $x$ that maximizes the probability is the same value that maximizes the log of that probability. 
 
-avoids underflow
+$$log(a \times b) = log(a) + log(b)$$
 
-compute mre efficent than multi
+#### Evaluation
 
-can convery back to probs if required
+We want to be able to evaluate how good a language model is. The outputs need to be determined as good or bad sentences. Real sentences, that is grammatically and plausible sentences, should be assigned higher probabilities than "fake' ones.
 
-very small numbers in computers are inaccurate
+#### Extrinsic Evaluation
 
-log keeps them bigger
+This is where you evaluate a model by applying it to a task, i.e. spelling, translation, speech recognition. You run the task and get an accuracy for each model. 
+* How many words spelt correctly.
+* How many translations correct. 
 
-[evalaution]
+The issues with this approach is that it is time consuming to set up the conditions for such an experiement and even then there are other factors which may affects the task. The language model is not tested in isolation. 
 
-how good is a lang model?
+#### Intrinstic Evaluation
 
-a good vs bad sentence?
+While extrinsic evaluation measures a model's performance on a final, real-world task, intrinsic evaluation measures the model's quality in isolation, based on its internal properties. 
 
-does it assign higher probs to real sentences
+Intrinsic evaluation tests a language model on a specific sub-task that is independent of any external application. The goal is to see how well the model has learned the underlying patterns of the language itself rather than how well it helps a spellchecker or translator.
 
-and lowerr to ungrammatical or implausible
+A models parameters are trainined on a training set and then tested/evaluated on a test set. We are checking the probabilities applied to sentences. Does the model assign higher probabilties to seen sentences vs unseen?
 
-[extrinstic eval]
+#### Perplexity
 
-put models in a task; spelling, translation, speec rec
+To evaluate any model we need a metrix. The best language model is one that best predicts an unseen test set, i.e. it returns the highest `P(sentences)`. A common metric used for language models is Perplexity.
 
-run rask and get an accurance for each model
-- how many words spelling corrected
-- how many translations
-how many
+To calculate the Perplexity, we look at the probability it assigns to a test set of words. Essentially, perplexity is the inverse probability of the test set, normalized by the number of words.
 
-probs; time consum, other factors affecting the task, lang model is not isolated
+A lower perplexity score indicates that the model is less "surprised" by the test data, meaning it has a better grasp of the language's structure. If high then the model is "confused" and the test data was unexpected.
 
-[instrinstic eval]
-does the model assign higher probs to seen vs unseen?
+$$PP(W) = P(w_1, w_2, w_3, ..., w_N)^{-1/N}$$
 
-if so it isn;t generalised
+This formula can also be converted to logarithms to maintain numerical stablility:
 
-train on train set, test on test set (splits)
+$$PP(W) = e^{-1/N \log P(w_1, w_2, w_3, ..., w_N)}$$
 
-[perplexity]
-
-best lang is the one tht best predicts and unseen test set
-
-perp is the inverse prob of the test set, normalised by the number of words 
-
-INCLUDE NOTIONS
-
-this can be rearranged; law of expo and recips
-
-INCLUDE RE NOTION
-
-dont every have to calc actual prob (use log and products)
-
-get perp by doing e to the power of 1
-
-assumes we have calced prob as sum of logs
-
-non-log method will give udnerflow 
-
-GET DEFINITION OF UNDERFLOW!!!!
-
-[min perplexity]
-
-max prob is the same as in min perx as it is an inverse model
-
-perplex shoukd only be use on the train/test split that come from the same corpus. prep tends to be skewed by length of corpus even though it is normalised by length. 
-
+Because Perplexity is the inverse of probability, minimising perplexity is the same as maximising probability. 
 
 
 ## PART 2

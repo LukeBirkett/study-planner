@@ -1,0 +1,9 @@
+proportional_gain: 10
+integral_gain: 0
+derivative_gain: 1
+disturbance_strength: 0
+pattern: 0
+mass: 75
+main_plot: 1
+# too much mass - motor cannot supply enough torque
+# - fails in region where gravity has most effect
