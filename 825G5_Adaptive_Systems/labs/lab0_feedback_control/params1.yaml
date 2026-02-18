@@ -1,7 +1,7 @@
-proportional_gain: 10
+proportional_gain: 50
 integral_gain: 0
-derivative_gain: 1
-disturbance_strength: 0
+derivative_gain: 5
+disturbance_strength: 1
 pattern: 0
 mass: 75
 main_plot: 1
