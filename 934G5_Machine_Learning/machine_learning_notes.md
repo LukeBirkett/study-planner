@@ -361,3 +361,208 @@ The key to this Bishop chapter is to understand that Machine Learning is itself 
 <br>
 
 ---
+
+# [Week 2 - Trees and Neighbours](https://canvas.sussex.ac.uk/courses/35245/pages/week-2-trees-and-neighbours?module_item_id=1546318)
+
+Learning Outcomes:
+* Be able to describe two other types of machine learning models (decision trees & k nearest neighbours) and build them yourself. 
+* See how multiple weak models could be useful when used together. 
+
+#### Week 2: Contents
+
+1. [Mini-Videos](#week-n-mini-videos)
+2. [Lecture Content](#week-n-lecture-content)
+3. [Lab Content](#week-n-lab-content)
+4. [Additional Reading](#week-n-additional-reading)
+
+## Week 2: Mini-Videos
+
+* [A Tree Based Model](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cce85a25-e931-45ce-b34a-b32300909802)
+* [K-nearest Neighbours](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cce85a25-e931-45ce-b34a-b32300909802)
+
+---
+
+## Tree Based Models
+
+* Part 1: How Decision Trees work
+* Part 2: How mutliple weak trees can be more useful than an overfit one (ensemble learning)
+
+### Decsion Tree Creation Example
+
+Start with a feature and define a split (or category)
+
+Two leaf nodes come off of the tree
+
+It is possible that one, or both of the leaves, cleanly splits the data
+
+That is, the subset only has one class in it
+
+If only 1 leaf that one class in it, that does not mean it completely seperates the data for that class. But it means that we do not need to keep splitting that subset of that leaf further
+
+On the leaf(ves) are not determined then we select a feature again and specific another split, or constraint (=)
+
+Once all the leaves result in a cleanly split leaf, we have a tree
+
+Remeber, the point of creating any model is to be able to make inference with it. Inference is the ability to make a prediction on unseen/unlabelled data.
+
+The training part of a DT is contructing the tree and its splits based on the training data. Testing is taking instances and putting them through the tree to find their label. 
+
+#### Anatomy of DT 
+
+split point/internal nodes is where the splitting logic is defined
+
+end of the tree is called leaf nodes
+
+
+#### DT 
+
+DT works by repeatedly partioning the data space into 2
+
+Each split point is defined by a hyperplane that sperates partitions in the data space
+
+Leaf nodes represent labels for data insstances that share ther same label region
+
+can be used for both classification and regression
+
+We want a model whereby the parameters (splits) are optimized
+
+#### Knowing When to Split
+
+Recall we said that if a lead was completely part of 1 label then we didn't need ot split further
+
+This is an absolute example but things dont have to be 100% to decide to spot splitting
+
+In fact, only splitting at 100% points is an easy way to split to the trainining data
+
+The decision to split further in DT is based on a metric calledf purity. 
+
+Purity is the proportion of instances of the majority label.
+
+3/3 = 1
+
+3/5 = 0.67
+
+Any purity less than 1 can be considered but can set the decider value as a parameter
+
+#### Splitting Methodology
+* sort the dataset by a feature
+* compute the potential split points between each instance (if different values)
+* evalute each split based on split criteron: info gain (related to entropy) or Gini Index. 
+
+Both Info Gain and Gini Index are measures of disorder or uncertainty. If a space as a even mix of labels, then the space is more uncertain. A skewed space is more certain. Outcomes will be less suprising on average
+
+#### Information Gain
+
+How to chose the best split point using Info Gain:
+* the uncertainty is measured based on the outcome of both the splits subregions
+* info gain is a reduction in uncertainty (entropy) about the label for the patition
+* the split point selected is the one with the highest info gain, i.e. the point with the least uncertainty.
+
+$$Gain(m, m_{<s}, m_{>s}) = H_m - H_{m_{<s}/m_{>s}}$$
+
+The weighted average entropy of the resulting child nodes is defined as:
+$$H_{m_{<s}/m_{>s}} = \frac{n_{m_{<s}}}{n_m} H_{m_{<s}} + \frac{n_{m_{>s}}}{n_m} H_{m_{>s}}$$
+
+The reason it is weight is because it needs to be normalized against volumne of data in the given split. If one child node contains 95% of the data and the other only 5%, the entropy of the larger group should "count" more toward the final score. $\frac{n_{m_{<s}}}{n_m}$ and $\frac{n_{m_{>s}}}{n_m}$ are the weights. By multiplying the entropy of each split by its relative size, you ensure the Gain reflects the improvement across the entire dataset. 
+
+The entropy $H_m$ for a given node $m$ is calculated as:
+
+$$\text{entropy } H_m = -\sum_{k=1}^{K} p(c_k|m) \log_2 p(c_k|m)$$
+
+$p(c_k|m)$ can be computed form the data as $\frac{n_m_k}{n_m}$
+
+We calculate 3 H (entropy), one for each split and another for the parent. Each entropy calculation use the data instances `k` that belong to that sub-region. 
+
+#### Gini Index
+
+This is an alternative metric for capturing the uncertainty of a data region. For this method, the best split point is the one with the lowest index. Again, this method looks and weights the two sub-regions based on the number of instances it holds. 
+
+$$G_{m_{<s}/m_{>s}} = \frac{n_{m_{<s}}}{n_m} G_{m_{<s}} + \frac{n_{m_{>s}}}{n_m} G_{m_{>s}}$$
+
+The Gini calculation can be represented with probabilities:
+
+$$G_m = 1 - \sum_{k=1}^{K} p(c_k|m)^2$$
+
+Or raw counts:
+
+$$G_m = 1 - \sum_{k=1}^{K} \left( \frac{n_{m_k}}{n_m} \right)^2$$
+
+#### Categorical Features
+
+Before we were looking at continious features where we could evaluate potential splits using Info Gain or Gini Index. Clearly, this can not apply to categorical features. here, you need to evaluate each value as a potential split point. The same evaluation methods can be used for the splits. 
+
+#### Decision Tree Algo: Optimal Model 
+
+You start by initalising the hyperparamters and methods to be used: purity threshold, max number of leaf nodes and initial region, which needs to have the purity computed. The intitial region is just the starting train set. If purity >= threshold then stop splitting. Otherwise, for each feature compute the best split points based on split criterion. Once you split the data, the workflow continues independently for each leaf until the threshold is acheived.
+
+#### Overfitting and Pruning
+
+Overfitting in tree based models is related to the size of the tree and specifically the number of nodes. Pruning is a strategy to reduce overfitting by removing nodes. A pruning criterion $v_T$ is used to determine if a given node should be pruned, this is also known as the Cost-Complexity Pruning. It adds a penalty for every extra leaf node you add to the tree, which mitigates the tree growing too large and overfitting. 
+
+$$v_T = \sum_{\tau=1}^{|T|} \varepsilon_\tau + \alpha |T|$$
+
+* $|T|$: The total number of leaf nodes in the tree $T$. This represents the complexity of the model.
+* $\varepsilon_\tau$: The uncertainty measure for a specific leaf node $\tau$. This is usually the Gini Impurity or Entropy that you were looking at earlier. Summing these up gives you the total "error" or "disorder" remaining in the model.
+* $\alpha$: The pruning hyperparameter. If $\alpha = 0$, the tree stays as large as possible (no penalty for size). As $\alpha$ increases, the penalty for having many leaves grows, forcing the tree to become smaller and simpler.
+
+#### Ensemble Learning
+
+Creating a community model made up of multiple model. Ensembles can be any types of models but for trees it is a common application. There are two main approaches to ensemble learning are bagging (bootstrap aggregating) and boosting. 
+
+#### Bagging (Bootstrap Aggregating)
+
+Each model is trained on a randomly selected subset of training data and you do this iteratively so there is mutliple rounds. Each round, a subset can be picked up and a model trained. This is the bootstrapping portion of the training. The aggregating part is the community model voting from each constitutes whereby the outcomes are averaged. 
+
+This approach allows mutliple functions to capture a wider degree of complexity in the underyling data. Often the expected error of the community tends to be lower than each constituent, i.e. each trees, in the model. This makes sense as each tree is only trained on a subset of the training data. The individual trees are known as "weak learners". This is important because it means, individually the trees cannot overfit to the training data meaning they are robust to overfitting. 
+
+#### Boosting
+
+Boosting is a cumulative training approach, the tree is trained several times. For this to be possible, there needs to be something different about the training for each iteration. This is acheived through weighting the data. On each run, the model is evaluated and data points which performed worse are weighted. This amplifies them in the next run and forces the model to approach them with more rigour. 
+ 
+---
+
+## K-nearest Neighbours
+
+
+
+
+## Week N: Lecture Content
+
+## Week N: Lab Content
+
+## Week N: Additional Reading
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# [Week N - Introduction]()
+
+#### Week N: Contents
+
+1. [Mini-Videos](#week-n-mini-videos)
+2. [Lecture Content](#week-n-lecture-content)
+3. [Lab Content](#week-n-lab-content)
+4. [Additional Reading](#week-n-additional-reading)
+
+## Week N: Mini-Videos
+
+## Week N: Lecture Content
+
+## Week N: Lab Content
+
+## Week N: Additional Reading
