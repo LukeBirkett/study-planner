@@ -523,7 +523,85 @@ Boosting is a cumulative training approach, the tree is trained several times. F
 
 ## K-nearest Neighbours
 
+Learning Outcomes:
+* How kNN models work
 
+### kNN
+
+Goal is to obtain some output automatically based on a input
+
+With kNN there is no "model". You use the training data instances to find an output but there is no model or function derived. 
+
+With kNN, you use the class of k nearest neighbours to the data point $x_i$ that you want to run inference on to find an output $\yhat{y_1}$. Use a subset of `k` nearest neigbours.
+
+The inference is in the data itself, not any model or function. There is no training. 
+
+### How a kNN inference works
+
+1. For each test instance $x_i$, find its $k$ nearest neighbours based on a distance metric $dist(x_i,x_n) n = 1,2,...,N$
+2. Determine the class of $x_i$ from the labels of the $k$ neighbours and implement a voting strategy. 
+
+
+### Euclidean Distance 
+
+How to find the nearest neighbours? Some common/basic method is Eucidean distance. This could be considered the direct distance
+
+$$dist(x_i, x_n) = \sqrt{\sum_{d=1}^{D} (x_{i_d} - x_{n_d})^2} = \|x_i - x_n\|$$
+
+* The intution is the sum of the squared differents for each dimension. 
+
+What use cases is it best for? Objects in the sky (speed, pos, traj, start point, end point), Euclidean can give us a good measure of distance for this example. Football fans in a pub, find a persons supported team based on the people around them. 
+
+### Manhattan (city block distance)
+
+This measure of distance is the "L" shape. It can only move up/down or left/right. Hence to go diagonal, is must form an "L". This is summing the absolute difference across dimensions. 
+
+$$dist(x_i, x_n) = \sum_{d=1}^{D} |x_{i_d} - x_{n_d}| = |x_i - x_n|$$
+
+Use cases:
+* Prices of houses in a region. Street distance. 
+* Categories of items in a supermarket.
+* Trajector of cars in traffic
+
+### Cosine Similarity
+
+Not strictly a measure of distance but instead the angle between two vectors. In this example, the vector would be a feature vector where each entry is a dimension. 
+
+Below is a measure of Cosine Distance which is derived from cosine similarity. The fraction part of the formula is the Cosine Similarity.Subtracting it from $1$ turns it into a distance metric (where $0$ means the vectors are identical in direction, and $2$ would mean they are pointing in diametrically opposite directions).
+
+$$dist(x_i, x_n) = 1 - \frac{\sum_{d=1}^{D} x_{i_d} \cdot x_{j_d}}{\sqrt{\sum_{d=1}^{D} {x_{i_d}}^2} \cdot \sqrt{\sum_{d=1}^{D} {x_{n_d}}^2}}$$
+
+The deminsions of a vector could be anything, for example, words as per a text document. 
+
+### Voting Strategy
+
+* Majority Voting (for classification)
+
+$$\hat{y}_i = \max_c \left\{ \sum_{j=1}^{k} 1_{y_j=c}, \quad \forall c \in C \right\}$$
+
+* Averaging (for regression)
+
+$$\hat{y}_i = \frac{1}{k} \sum_{j=1}^{k} y_j$$
+
+### Inference Time Complexity for kNN
+
+Because there is not pre-trained model that can be excuted on test instances, all of the calculations associated with "training" are done at the point of inference, every time. This means that there is time complexity associated with inference. 
+
+Time complexity of inference is given as: $N^2*D$
+* $N$ for the total number data instances
+* $D$ for the total number of features
+
+Note, this complexity is very large and costly (comp + time). 
+
+### Strategy for Minimizing Time Complexity
+
+* Indexing for faster search. This can be considered as pre-processing so that inference can be conducting quicker. An abstract example of this could be thinking about an un-ordered alphabet list and how much long it would take you to find the right letter. Indexing is creating a catalogue system, an type of order.
+
+* kd tree, tree-based indexing of the data. Repeatedly partition the data region, similar to creating a decision tree. Changes time complexity to $N*D*log*N$.
+
+### Other Strategies: Dimensionality Reduction
+
+Given that time complexity is given by $N^2 * D$, an alternative way to reduce complexity is to reduce D. This would be acheived by reducing the number of dimensions (features). Dim Reduction will be a topic of study in Week 6. 
 
 
 ## Week N: Lecture Content
