@@ -99,9 +99,13 @@ Thus, is we can find the $w$, the weight vector, that corresponds to the minimum
 
 **<u>Resources:</u>** [Lecture Slides](files/week_1/week_1_lecture_slides.pdf) | [Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=79a7d91a-7c91-4b83-bf3a-b3e00093f009) | [Discussion Slides](files/week_1/week_1_discussion_slides.pdf) | [Discussion Padlet](https://padlet.com/university_of_sussex/week-1-student-student-post-discussion-notes-cuq7t347imsvmo6g)
 
+
+1. [Week 1 Lecture Content](#week-1-main-lecture-content)
+2. [Week 1 Discussion Content](#week-1-discussion-lecture-content)
+
 ---
 
-### Main Lecture Content
+### Week 1: Main Lecture Content
 
 This a very basic lecture which convered no technical content and just explained the module as a whole. There will be very little notes from this lecture, though the discussion section of the lecture will have a lot of content. 
 
@@ -132,22 +136,32 @@ This a very basic lecture which convered no technical content and just explained
 
 ---
 
-### Discussion Lecture Content
+### Week 1: Discussion Lecture Content
 
 **Discussion Learning Outcomes**: 
 * How could the basic linear model be adpated for categorical labels?
 * What could be expression of weak learning or memorizing in a linear regression model? And in waht ways memorising be prevented?
 
 
+1. [How could the basic linear model be adapted for categorical labels?](#how-could-the-basic-linear-model-be-adapted-for-categorical-labels)
+2. [Sign Loss](#sign-loss)
+3. [Hindge Loss](#hinge-loss)
+4. [What could be expressions of  weak learning or memorizing in a  linear regression model? And in  what ways could memorizing be  prevented?](#what-could-be-expressions-of--weak-learning-or-memorizing-in-a--linear-regression-model-and-in--what-ways-could-memorizing-be--prevented)
+5. [Data Augmentation](#data-augmentation)
+
+---
+
 #### How could the basic linear model be adapted for categorical labels?
 
 A linear model output is continous. In order to be able to use this model for categorical labels need the outputs to be discrete, or at least be interpreted as discrete. The main way of doing this would be to construct a model where the outputs are probabilitic and therefore between 0 and 1. We can then round, or partition, the outputs to determine a label/class. 
 
-We can take the outputs of a linear model and apply a function to get normalized, discretized output:
+We can take the outputs of a linear model and apply a function ($\sigma$) to get normalized, discretized output:
 
 $$f(x) = \sigma(xw + b) = \hat{y}$$
 
-There are two popular ways to apply activation functions, Sign and Sigmoid. The Sign function is the most basic form of activation. It returns a hard value based on the threshold.
+There are two popular ways to apply activation functions, Sign and Sigmoid. 
+
+The Sign function is the most basic form of activation. It returns a hard value based on the threshold.
 
 $$f(z) = \begin{cases} 1 & \text{if } z > 0 \\ 0 (or -1) & \text{if } z < 0 \end{cases}$$
 
@@ -157,127 +171,98 @@ The Sigmoid function on the other hand squashes the input into a smooth S-curve.
 
 $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
 
-##### Possible Loss Functions
+---
 
-Sign Loss, or 0-1 loss, is the simpliest, most intuative loss functon for something that
+#### Sign Loss
 
+Sign Loss, or 0-1 loss, is the simpliest, most intuative loss functon for something that. This formula checks if the output of the function $\text{sign}(\mathbf{x}_n \mathbf{w} + b)$ is the same as the true sign of the class. If it is then, add a $1$ to the summation. This approach measures the total 0-1 loss (error rate) over the entire dataset. 
 
-<br>
-<br>
-<br>
+$$L_0 = \frac{1}{N} \sum_{n=1}^{N} I(\text{sign}(\mathbf{x}_n \mathbf{w} + b) \neq y_n)$$
 
+$I(\dots)$: The Indicator Function. It returns 1 if the condition inside the parentheses is true (a misclassification) and 0 if it is false (a correct classification).
 
-1. turn linear regression into cat/prob
-
-Sign activation function (include formulas)
-- sign loss func
-- this is for comparing labels, matching or not
-- comparing labels isnt normally good as it doesn't tell model enough into on what went wrong 
-- Hinge Loss
-- take max of 0 and model output
-- uses the true sign to conver the output below or over 0
-- higne is better than high becuase it measure sin some way how much something was wrong
-- 
-
-
-
-
-2. loss funciton 
+Because the indicator function is "stair-stepped" (it jumps from 0 to 1 instantly), this function is notoriously difficult to optimize using standard gradient descent, which is why we usually use "surrogate" losses like Hinge Loss or Cross-Entropy in Deep Learning.
 
 ---
 
+#### Hinge Loss
 
+Hinge Loss is the primary loss function used for Support Vector Machines (SVMs). It is designed for maximum-margin classification, meaning it doesn't just care about getting the answer right; it cares about getting it right with a certain level of confidence (the "margin").
 
+Here the prediction isn't categorical but instead continuous. If the model predicts the correct class and is "far enough" away from the boundary (the margin), the loss is 0. If the prediction is wrong, or if it's correct but too close to the boundary, the loss increases linearly. 
 
-## 2nd Discussion
+By penalizing correct predictions that are too close to the decision boundary, Hinge Loss forces the model to find a boundary that separates the classes as widely as possible.
 
-find lin model such that 
-A
-B
+ Unlike the $L_0$ "Sign Loss" you saw earlier (which is a flat line with a sudden jump), Hinge Loss is continuous, allowing optimization via gradient descent
 
-fail A
-fail B
+$$\ell(y) = \max(0, 1 - y \cdot \hat{y})$$
 
-weak leaner - low model compexity, high bias
-- model is too simple which means it makes too many assumptions
-- bad variables
+Note that $\hat{y}$ is the same at $(x_n w + b)$, i.e. the prediction.
 
+---
 
-training data memorization
-- high model complexity
-- high variances, very senstiive to seen data
+#### What could be expressions of  weak learning or memorizing in a  linear regression model? And in  what ways could memorizing be  prevented?
 
+| Concept | Expression in Linear Regression | Symptom |
+| :--- | :--- | :--- |
+| Weak Learning (Underfitting) | High bias. The model is too simple to capture the underlying trend. | High training error and high testing error. Both $L_0$​ and Hinge/MSE stay high. |
+| Memorizing (Overfitting) | High variance. The model captures the noise and outliers in the training data rather than the general pattern. | Low (or zero) training error but very high testing error. |
 
-generalize in ML is the sweet spot between weak learner and memorization
+Note, a sign of overfitting can often be seen through weight values ($\mathbf{w}$) that have exploded to massive positive or negative magnitudes. This happens because the model tries to oscillate wildly to pass through every specific training point, including noise.
 
+There are 3 main ways to mitigate overfitting:
+* Regularization 
+* Cross Validation
+* Dimension Reduction/Feature Selection
 
-### 3rd Discuss
+##### Regularization
 
-Addressing Overfitting
+This is the most common method. We modify the loss function to penalize large weights.
+* L2 Regularization (Ridge): Adds $\lambda \sum w_j^2$ to the loss. This forces weights to be small.
+* L1 Regularization (Lasso): Adds $\lambda \sum |w_j|$ to the loss. This can force some weights to exactly zero, performing automatic feature selection.
 
-Model weights & Model Complexity
+##### Cross-Validation 
 
-If some weights are zero then this reduces the complexity, i.e. less features
+Instead of trusting a single training run, you split your data into $K$ "folds." You train on $K-1$ and test on the remaining one, rotating this process. This ensures the model's performance is consistent across different subsets of data.
 
-we want to create a way such that the learning will do this and cut out uninformative features 
+##### Dimension Reduction/Feature Selection
 
-Encourage Lower Complexity
+If you have too many features ($D$) compared to your number of samples ($N$), the model will almost certainly memorize the data. Removing irrelevant or redundant features (using techniques like PCA or simply looking at correlation) forces the model to learn the most important signals.
 
-Regularization
+---
 
-L1 is the one that encourages 0 weights where ness
+#### Data Augmentation
 
-[include equation] [all in slide]
+The dimensions of videos is `t x h x w x c`. This is time, (height, weight, channels[r,g,b]).
 
-l1 is a penalty term in the loss function 
+**Types of image transformations:**
+* Rotation
+* Translation (move left or right, off-center)
+* Flipping
+* Horizontal shear
+* Cropping
 
-=+ reg term * magnitute of the weights
+**Channel Transformations:**
+* Colour Transformation
+* Adding Noise (randomly)
+* Blurring
+* Contrast change
+* Greyscale
 
-it penalized non-zero weights
+**Transformations in the time dimension:**
+* Jittering - adding noise along the time dimension
+* Time Warping - Randomly changing the sample rates of random subsegmenets along the time dimension.
+* Time reversal - flipping temporal order.
+* Jigsaw - Randomly shuffling subsegments along teh time dimension.
+* Dropout - Randomly masking time steps in the signal.
 
-l1 because the mag weights is not squared
+The goal of data augmentation is to artificially expand the size and diversity of your training dataset by creating "new" samples that are slightly different from the originals but still represent the same ground truth. This forces the model to learn invariant features rather than "memorizing" specific pixel arrangements or noise patterns.
 
+By increases $N$ the sample size ($N$). A model can't easily "memorize" 10,000 versions of the same photo; it is forced to find the underlying pattern ($H_m$ or Gini purity) that connects them all.
 
-L2 is another way to encourage lower complex 
+Addtionally, it smooths the Loss Surface. By adding noise and variations, you make it harder for the model to find a "sharp" minimum that only fits the training data perfectly(overfitting).
 
-l2 because ^2 the mag weights
-
-lasso reg
-
-penalises large weights
-
-encourages very small weights
-
-nots compelxtly remove
-
-this is also a form of reduced complexity
-
-
-#### Image Section 
-
-take notes of this, relevant for assessment
-
-image dimensions
-
-transofrmations of images to create new features 
-
-time dimension augmentation
-- Jittering
-- Time Warping
-- [Take notes of rest]
-- DROPOUT
-
-
-Data augment is tool to reduce augmentation
-
-Avoids model learning explicitly the training data
-
-focus on informative features
-
-
-## SUMMARY
-
-
+---
 
 
 ## Week 1: Lab Content
@@ -294,7 +279,7 @@ This textbook it generally considered an entry point to the mathematical side of
 
 The recommended reading for this week is Chapter 1 which covered Linear Regression. The chapter goes through the details of Linear Regression as a model but by the end of the chapter is more focused on the notion of paramterizing a problem. Linear Regression is a basic, statistics based model which is unlikely to have much basis for assessment, however, it is still a good tool for spinning up simple test models and demonstrating concepts on. 
 
-*[ONGOING: I have skimmed through this chapter but have not taken any notes as it is fairly basic content which I am familar with both technically and on the intuition.]*
+*[I have skimmed through this chapter but have not taken any notes as it is fairly basic content which I am familar with both technically and on the intuition.]*
 
 <br>
 
@@ -332,21 +317,104 @@ The key to this Bishop chapter is to understand that Machine Learning is itself 
 
 ---
 
-### <u> M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021. </u>
+### <u> [M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021](https://mml-book.github.io/book/mml-book.pdf) </u>
 
-[Link]()
-
-[Sections 1.1, 2.1-2.2, 3.1, 5.1, 8.1, 9.1]
+* [1.1 Finding Words for Intuitions](https://mml-book.github.io/book/mml-book.pdf#page=18&zoom=100,192,168)
+* [2.1 Systems of Linear Equations](https://mml-book.github.io/book/mml-book.pdf#page=25&zoom=100,96,681)
+* [2.2 Matrices](https://mml-book.github.io/book/mml-book.pdf#page=28&zoom=100,192,312)
+* [3.1 Norms](https://mml-book.github.io/book/mml-book.pdf#page=77&zoom=100,96,320)
+* [5.1 Differentiation of Vector Calculus](https://mml-book.github.io/book/mml-book.pdf#page=147&zoom=100,96,536)
+* [8.1 Data, Models and Learning](https://mml-book.github.io/book/mml-book.pdf#page=257&zoom=100,96,712)
+* [9.1 Problem Formulation](https://mml-book.github.io/book/mml-book.pdf)
 
 <br>
 
 ---
 
-### <u> I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016. </u>
+### <u> [I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559280002461?auth=SAML) </u>
 
-[Link]()
+* 5.1 Learning Algorithms
+* 5.2 Capacity, Overfitting, Underfitting
+* 5.4 Estimators, Bias and Variance
 
-[Sections 5.1, 5.2, 5.4]
+#### Bias 
+
+Bias measures how much the average estimate from a learning algorithm differs from the true value you are trying to predict. In machine learning, this usually happens because your model makes simplistic assumptions that don't match reality (e.g., trying to fit a straight line to data that clearly curves).
+
+$$\text{bias}(\hat{\theta}_m) = \mathbb{E}(\hat{\theta}_m) - \theta$$
+
+$\mathbb{E}(\hat{\theta}_m)$: This is the "Expected Value." If you were to go out and collect 1,000 different datasets and train 1,000 different models, this is the average of all those results. If the bias is 0, the estimator is called unbiased. This means that, on average, your model is perfectly "on target," even if individual predictions are off.
+
+Bias is essentially "underfitting." It stems from two main sources:
+* Model Complexity: Your model is too simple for the task (e.g., a linear regression trying to map the stock market).
+* Erroneous Assumptions: You assumed the data followed a specific distribution (like a Normal distribution) when it actually followed something else.
+
+---
+| Feature | Bias | Variance |
+| :--- | :--- | :--- |
+| Definition | Error from incorrect assumptions. | Error from sensitivity to small fluctuations. |
+| Model State | Underfitting. | Overfitting. |
+| Complexity | Model is too simple. | Model is too complex. |
+| Fix | Increase features or model depth. | Increase data or add regularization. |
+---
+
+
+#### Evaluation 
+
+Goodfellow et al. show that the total error of your model isn't just one "thing"—it’s actually a sum of different types of errors. If we want to know how well our estimator $\hat{\theta}$ is performing, we calculate the MSE. 
+
+$$\text{MSE} = \text{bias}(\hat{\theta})^2 + \text{Var}(\hat{\theta})$$
+
+As you try to decrease bias (by making your model more complex), your variance almost always goes up. The goal of a machine learning engineer isn't to reach zero bias; it's to find the point where the sum of bias squared and variance is at its lowest. 
+
+In the book, they refer to "Capacity." High-capacity models (like deep neural networks) can have very low bias because they can fit almost any shape, but they are prone to massive variance.
+
+### Control 
+
+In modern deep learning, we actually tend to favor very high-capacity models (which have the potential for low bias) and then use techniques to beat the variance into submission. To reduce Bias we add more layers, use more neurons, or train for more epochs. To reduce Variance we use Dropout, $L^2$ weight decay (regularization), or get more data. 
+
+#### Statistical vs Societal Bias
+
+In the Deep Learning textbook (Chapter 5.4), "Bias" is a statistical term. In the news or ethics discussions, "Bias" is a societal or algorithmic term. 
+
+Statistical bias is purely mathematical, it is about the approximation error. Does the average of my estimates equal the true parameter? Problems to this may arise if the model is too weak to learn the complexity. E.g. Trying to predict house prices using only square footage when location also matters. The model is "biased" toward a simple linear relationship that doesn't exist.
+
+Societal/Algorithmic Bias is about fairness and disparate impact. Does the model treat different groups of people (race, gender, age) equitably? A problem arised if data used to train the model contains human prejudices, or certain groups are underrepresented. E.g. A facial recognition system that works perfectly on light-skinned faces but fails on dark-skinned faces because the training set lacked diversity. 
+
+While they are different concepts, Statistical Bias can actually cause Societal Bias.
+
+If a dataset has 10,000 examples of Group A and only 10 examples of Group B:
+* The model's "Expected Value" for Group B will be way off because it hasn't seen enough data to learn the true parameters for that group.
+* Mathematically, the estimator for Group B has high statistical bias (it defaults to the patterns of Group A).
+* Socially, this results in discrimination, as the model makes poor decisions for Group B.
+
+#### Asymptotic Unbiasedness
+
+In statistics, we have a property called Asymptotic Unbiasedness. An estimator is asymptotically unbiased if the bias vanishes as the number of data points $m$ approaches infinity:
+
+$$\lim_{m \to \infty} \text{bias}(\hat{\theta}_m) = 0$$
+
+A classic example is the Sample Variance. If you calculate variance by dividing by $n$ (the number of samples), your estimate is technically biased—it consistently underestimates the true variance. However, as $n$ gets larger, that error shrinks until it's effectively zero.
+
+#### 3 Types of Bias
+
+| Type of Bias | Source | Does more data fix it? |
+| :--- | :--- | :--- |
+| Estimation Bias | The specific ""guess"" made from a small sample. | Yes. Usually vanishes as m→∞. |
+| Model/Approximation Bias | The model is too simple (e.g., Linear vs. Non-linear). | No. You need a more complex model. |
+| Selection Bias | The data itself is a ""tilted"" view of reality. | No. You need better data, not just more of the same. |
+
+The Deep Learning Philosophy: This is why the field moved toward Massive Models + Massive Data. We use models with almost zero "Inherent Bias" (Deep Nets) and feed them enough data to eliminate "Estimation Bias."
+
+Note, that Selection Bias is a form of Statistical Bias, not just societal. In Goodfellow, an estimator $\hat{\theta}$ is a function of the data. If the data itself is "broken" or unrepresentative, the "Expected Value" of your model will never equal the "True" value of the population. Data can causes the Estimator to be bias. 
+
+In statistics, we assume our training data is sampled IID (Independent and Identidically Distributed) from some "true" distribution $p_{data}$. Selection bias occurs when your sampling process is flawed. Mathematically, this means:
+
+$$\mathbb{E}_{S \sim P_{sample}}[\hat{\theta}] \neq \theta_{true}$$
+
+Even if you have an infinite amount of data ($m \to \infty$), if that data was collected via a biased selection process, your model will be consistently wrong. In Goodfellow's terms, the bias of your estimator will not converge to zero. 
+
+That being said, the principal of Goodfellow, at least in Chapter 5, is focused on Model Bias (Capacity). This is because as a researcher, you can control your model's architecture. You often cannot control how the data was originally collected. They want you to understand that even with "perfect" data, a model that is too simple will still have bias because it lacks the capacity to learn the truth.
 
 <br>
 
@@ -356,7 +424,30 @@ The key to this Bishop chapter is to understand that Machine Learning is itself 
 
 [Link]()
 
-[Chapters 1, 2, 5]
+* Chapter 1 - Introduction
+* Chapter 2 - Gentle Start
+* Chapter 5 - The Bias-Complexity Trade-off
+
+
+#### The Bias-Complexity Trade-off
+
+A specific learning task is defined by an unknown distribution $D$ over $X × Y$, where the goal of the learner is to find a predictor $h : X → Y$, whose risk, $LD(h)$, is small enough.
+
+The question is therefore whether there exist a learning
+algorithm $A$ and a training set size $m$, such that for every distribution $D$, if $A$ receives $m$ i.i.d. examples from $D$, there is a high chance it outputs a predictor h that has a low risk, i.e. a superior universal learner. 
+
+The No-Free Lunch theorem states that no such universal learner exists.  To be more precise, the theorem states that for binary classification prediction tasks, for every learner there exists a distribution on which it fails. 
+
+We say that the learner fails if, upon receiving i.i.d. examples from that distribution, its output hypothesis is likely to have a large risk, say, ≥ 0. 3, whereas for the same distribution, there exists another learner that will output a hypothesis with a small risk. In other words, the theorem states that no learner can succeed on all learnable tasks – every learner has tasks on which it fails
+while other learners succeed.
+
+#### The No Free Lunch Theorem
+
+Let $A$ be any learning algorithm for the task of binary classification with respect to the $0-1$ loss over a domain $\mathcal{X}$. Let $m$ be any number smaller than $|\mathcal{X}|/2$, representing a training set size. Then, there exists a distribution $\mathcal{D}$ over $\mathcal{X} \times \{0,1\}$ such that:
+* There exists a function $f : \mathcal{X} \to \{0,1\}$ with $L_{\mathcal{D}}(f) = 0$.
+* With probability of at least $1/7$ over the choice of $S \sim \mathcal{D}^m$ we have that $L_{\mathcal{D}}(A(S)) \ge 1/8$.
+
+This theorem states that for every learner, there exists a task on which it fails, even though that task can be successfully learned by another learner. 
 
 <br>
 
@@ -389,89 +480,54 @@ Learning Outcomes:
 
 ### Decsion Tree Creation Example
 
-Start with a feature and define a split (or category)
+With Decision Trees, we start with a feature and define a split (or category). From this, two leaf nodes come out of the split which hold two sub-regions of the data as the parent node. 
 
-Two leaf nodes come off of the tree
+It is possible that one, or both of the leaves, cleanly splits the data. That is, the subset only has one class in it. If a leaf has only one class in it, that does not mean it completely seperates the data for that class. But it means that we do not need to keep splitting that leafs sub-region futher. 
 
-It is possible that one, or both of the leaves, cleanly splits the data
-
-That is, the subset only has one class in it
-
-If only 1 leaf that one class in it, that does not mean it completely seperates the data for that class. But it means that we do not need to keep splitting that subset of that leaf further
-
-On the leaf(ves) are not determined then we select a feature again and specific another split, or constraint (=)
-
-Once all the leaves result in a cleanly split leaf, we have a tree
+If the sub-regsion is not determined (1 class), then we select a feature again and specify another split, or constraint (=). Once all the leaves result in a cleanly split leaf, we have a tree that can be used for inference.
 
 Remeber, the point of creating any model is to be able to make inference with it. Inference is the ability to make a prediction on unseen/unlabelled data.
 
 The training part of a DT is contructing the tree and its splits based on the training data. Testing is taking instances and putting them through the tree to find their label. 
 
-#### Anatomy of DT 
+#### Decision Trees
 
-split point/internal nodes is where the splitting logic is defined
-
-end of the tree is called leaf nodes
-
-
-#### DT 
-
-DT works by repeatedly partioning the data space into 2
-
-Each split point is defined by a hyperplane that sperates partitions in the data space
-
-Leaf nodes represent labels for data insstances that share ther same label region
-
-can be used for both classification and regression
-
-We want a model whereby the parameters (splits) are optimized
+DT's work by repeatedly partioning the data space into 2. Each split point is defined by a hyperplane that sperates partitions in the data space. Leaf nodes represent labels for data insstances that share ther same label region. We can use trees for both classification and regression. Ultimately, we want a model whereby the parameters (splits) are optimized.
 
 #### Knowing When to Split
 
-Recall we said that if a lead was completely part of 1 label then we didn't need ot split further
+Recall, we said that if a leaf was completely part of 1 label then we didn't need to split further. This is an absolute example but things dont have to be 100% to decide to spot splitting. In fact, only splitting at 100% points is an easy way to overfit to the training data.
 
-This is an absolute example but things dont have to be 100% to decide to spot splitting
-
-In fact, only splitting at 100% points is an easy way to split to the trainining data
-
-The decision to split further in DT is based on a metric calledf purity. 
-
-Purity is the proportion of instances of the majority label.
-
-3/3 = 1
-
-3/5 = 0.67
-
-Any purity less than 1 can be considered but can set the decider value as a parameter
+We make the decision to split further based on a metric called "purity". Purity is the proportion of instances of the majority label. i.e. $3/3 = 1$, $3/5 = 0.67$. Any purity less than 1 can be considered but we can set the decider value as a parameter
 
 #### Splitting Methodology
-* sort the dataset by a feature
-* compute the potential split points between each instance (if different values)
-* evalute each split based on split criteron: info gain (related to entropy) or Gini Index. 
+* Sort the dataset by a feature, i.e. by height low to high.
+* Identify the potential split points between each instance (if different values). For a pre-decided rule. i.e. `100, 150, 200` then construct splits at `125, 175`.
+* Evalute each split based on split criteron: Info Gain (related to entropy) or Gini Index. 
 
 Both Info Gain and Gini Index are measures of disorder or uncertainty. If a space as a even mix of labels, then the space is more uncertain. A skewed space is more certain. Outcomes will be less suprising on average
 
 #### Information Gain
 
 How to chose the best split point using Info Gain:
-* the uncertainty is measured based on the outcome of both the splits subregions
-* info gain is a reduction in uncertainty (entropy) about the label for the patition
-* the split point selected is the one with the highest info gain, i.e. the point with the least uncertainty.
+* The uncertainty is measured based on the outcome of both the splits subregions.
+* Info gain is a reduction in uncertainty (entropy) about the label for the partition.
+* The split point selected is the one with the highest info gain, i.e. the point with the least uncertainty.
 
 $$Gain(m, m_{<s}, m_{>s}) = H_m - H_{m_{<s}/m_{>s}}$$
 
 The weighted average entropy of the resulting child nodes is defined as:
 $$H_{m_{<s}/m_{>s}} = \frac{n_{m_{<s}}}{n_m} H_{m_{<s}} + \frac{n_{m_{>s}}}{n_m} H_{m_{>s}}$$
 
-The reason it is weight is because it needs to be normalized against volumne of data in the given split. If one child node contains 95% of the data and the other only 5%, the entropy of the larger group should "count" more toward the final score. $\frac{n_{m_{<s}}}{n_m}$ and $\frac{n_{m_{>s}}}{n_m}$ are the weights. By multiplying the entropy of each split by its relative size, you ensure the Gain reflects the improvement across the entire dataset. 
+The reason it is weighted is because it needs to be normalized against volumne of data in the given split. If one child node contains 95% of the data and the other only 5%, the entropy of the larger group should "count" more toward the final score. $\frac{n_{m_{<s}}}{n_m}$ and $\frac{n_{m_{>s}}}{n_m}$ are the weights. By multiplying the entropy of each split by its relative size, you ensure the Gain reflects the improvement across the entire dataset. 
 
 The entropy $H_m$ for a given node $m$ is calculated as:
 
 $$\text{entropy } H_m = -\sum_{k=1}^{K} p(c_k|m) \log_2 p(c_k|m)$$
 
-$p(c_k|m)$ can be computed form the data as $\frac{n_m_k}{n_m}$
+$p(c_k|m)$ can be computed form the data as $\frac{n_{m_k}}{n_m}$
 
-We calculate 3 H (entropy), one for each split and another for the parent. Each entropy calculation use the data instances `k` that belong to that sub-region. 
+We calculate 3 $H$ (entropy), one for each split and another for the parent. Each entropy calculation use the data instances `k` that belong to that sub-region. 
 
 #### Gini Index
 
@@ -528,11 +584,9 @@ Learning Outcomes:
 
 ### kNN
 
-Goal is to obtain some output automatically based on a input
+Goal is to obtain some output automatically based on a input. With kNN there is no "model". You use the training data instances to find an output but there is no model or function derived. 
 
-With kNN there is no "model". You use the training data instances to find an output but there is no model or function derived. 
-
-With kNN, you use the class of k nearest neighbours to the data point $x_i$ that you want to run inference on to find an output $\yhat{y_1}$. Use a subset of `k` nearest neigbours.
+With kNN, you use the class of k nearest neighbours to the data point $x_i$ that you want to run inference on to find an output $\hat{y_1}$. Use a subset of `k` nearest neigbours.
 
 The inference is in the data itself, not any model or function. There is no training. 
 
@@ -604,7 +658,114 @@ Note, this complexity is very large and costly (comp + time).
 Given that time complexity is given by $N^2 * D$, an alternative way to reduce complexity is to reduce D. This would be acheived by reducing the number of dimensions (features). Dim Reduction will be a topic of study in Week 6. 
 
 
-## Week N: Lecture Content
+## Week 2: Lecture Content
+
+Discussion Points: 
+* Would differing feature scales affect the behaviour of the model?  
+* A student-posed question
+* What does this AI do?
+
+### Would differing feature scales affect the behaviour of the model?  
+
+Toy example, 5 standard weather features: 
+
+| | Humidity| No. of days of sunshine| Wind speed| Temperature| Rainfall rate |
+| :--| :--| :--| :--| :--| :-- |
+| Mean| 82.52| 120.345| 4.67| 9.42| 97.68 |
+| Standard deviation| 5.16| 63.21| 1.18| 4.51| 68.33 |
+| Min| 63.03| 3.49| 2.11| -1.62| 0.28 |
+| Max| 95.93| 345.34| 11.82| 20.37| 697.13 |
+
+Question: What do you notice about the scale of the features? Think about how the scale compares across features.
+
+* All metrics are on different scales and units. 
+* SD varies wildly.
+* Some mins are below 0. 
+
+#### For each of the 3 types of model, would differing scales accross features affect the behaviour of the model? And why or why not? 
+
+Hint: think about how the models are trained. 
+
+Whether or not scaling matters to a model, comes down to whether the model relies on distances or gradient-based optimization versus simple thresholding.
+
+---
+
+With Linear Regression, the scale normally matters. While the underlying math of Ordinary Least Squares (OLS) can theoretically handle different scales, in practice, scaling is crucial for two reasons: 
+* Most linear models are trained using optimization algorithms like Gradient Descent. If one feature ranges from 0 to 1 and another from 0 to 1,000,000, the "contour lines" of the loss function become extremely elongated ellipses. This forces the gradient to oscillate and take much longer to reach the minimum.
+*  If you use Lasso ($L1$) or Ridge ($L2$) regression, scaling is mandatory. Regularization penalizes the magnitude of coefficients. A feature with a large scale will naturally have a tiny coefficient to compensate, meaning the penalty will ignore it while unfairly punishing features with small scales.
+
+---
+
+With Decision Trees, scale is irrelevant. A tree makes decisions by picking a feature and a threshold. This is a monotonic transformation. The tree looks at features one by one. Whether Income is measured in dollars or thousands of dollars doesn't change the fact that there is a point in the data that best separates the classes. The information gain (or Gini impurity) remains identical regardless of the units. 
+
+--- 
+
+With kNN it is critically important because it is entirely distance-based. KNN usually calculates the Euclidean (or alternative) distance between points. If you have a Age feature (0–100) and an Annual Salary feature (0–200,000), the salary difference will completely overwhelm the age difference. A 1-year age gap is treated as equivalent to a $1 salary gap. Without scaling, KNN effectively ignores any feature with a smaller numerical range. 
+
+---
+
+#### Scaling Approaches
+
+The two most common approaches are Normalization and Standardization.
+
+##### Min-Max Scaling (Normalization)
+
+This method re-scales the data into a fixed range—usually 0 to 1. It is particularly useful when you have a specific bound for your data or when you are using algorithms that don't make assumptions about the distribution (like Neural Networks or KNN). 
+
+$$x_{new} = \frac{x - x_{min}}{x_{max} - x_{min}}$$
+
+* Pros: Preserves the relative distances between values and keeps everything within a tight, predictable window.
+* Cons: It is highly sensitive to outliers. If you have one person earning $10,000,000 in a dataset of middle-class earners, everyone else will be squashed into a tiny range near 0.
+
+The reason Min-Max Scaling is the "go-to" when you aren't sure about your data's distribution is that it makes zero structural changes to the data. It simply compresses the existing shape into a new, smaller box.
+
+Min-Max Scaling is a linear transformation. It doesn’t care if your data looks like a bell curve, a flat line, or a giant "U." It preserves the exact relative distances between every single data point. Algorithms like KNN or Recommender Systems calculate the distance between points. If you use Standardization on a non-normal distribution, you might "squash" the distances in the middle of the range differently than at the edges.
+
+Many real-world datasets have "hard floors" or "hard ceilings" that aren't normally distributed: Image Pixels: Always 0 to 255, Test Scores: Always 0 to 100%, Customer Ratings: Always 1 to 5 stars. In these cases, there is no "infinite tail" like a Normal distribution assumes. Min-Max Scaling honors these boundaries, whereas Standardization could result in values like -3.5 or +4.2, which don't make intuitive sense for a bounded feature like "Percentage."
+
+While not a "requirement" in the strictest sense, many activation functions in Neural Networks (like Sigmoid or Tanh) are most sensitive to inputs in a small range around 0 or 1. If you feed a Sigmoid function a value of 20 (which could happen with Standardization), the gradient "saturates" (becomes nearly zero), and the model stops learning. Min-Max ensures your inputs live exactly where the "math is most active."
+
+The only reason not to use Min-Max when you are unsure of the distribution is Outliers. Example: If 99% of your data is between 1 and 10, but you have one error value at 10,000, Min-Max will put that 1% at "1.0" and cram the other 99% of your data into the range "0.0001 to 0.001." In that scenario, your model loses all its "resolution" for the bulk of your data.
+
+##### Standardization (Z-Score Normalization)
+
+Standardization centers the data around a mean of 0 with a standard deviation of 1. Unlike Min-Max, it doesn't "clamp" the data to a specific range; instead, it describes how many standard deviations a point is from the average.
+
+$$z = \frac{x - \mu}{\sigma}$$
+
+* **Pros:** Much more robust to outliers and generally preferred for models that assume a Gaussian (normal) distribution, like Linear or Logistic Regression.
+* **Cons:** The resulting range is not fixed (you can have values of -5, 10, etc.), which some specific algorithms might find difficult to process.
+
+##### Robust Scaling
+
+If your data is "messy" and full of extreme outliers that you can't simply delete, a Robust Scaler is your best friend. Instead of using the mean and standard deviation (which outliers heavily influence), it uses the Median and the Interquartile Range (IQR). 
+
+* Logic: It subtracts the median and divides by the distance between the 25th and 75th percentiles.
+* Best for: Datasets where outliers are frequent and you don't want them to skew the scaling of the "normal" data points.
+
+
+
+| Scenario | Recommended Approach |
+| :--- | :--- |
+| Outliers are present | Standardization or Robust Scaling |
+| "Data must be between 0 and 1 (e.g., Image Pixels)" | Min-Max Scaling |
+| Algorithm assumes Normal Distribution | Standardization |
+| KNN or Gradient Descent models | Either (but usually Standardization) |
+
+#### Why Does Gradient Descent Prefer Standardization?
+
+To understand why Gradient Descent prefers standardization, you have to look at the "Loss Landscape"—the mathematical mountain range that the algorithm has to navigate to find the lowest point (the optimal solution). Standardization turns a chaotic, steep-walled canyon into a neat, symmetrical bowl.
+
+When features have different scales, the cost function (like Mean Squared Error) looks like a long, skinny elongated ellipse. If Feature A goes from 0 to 1 and Feature B goes from 0 to 1,000,000, a small change in the weight ($w_B$) for Feature B has a massive impact on the error, while a change in $w_A$ barely registers. The gradient (the direction of steepest descent) doesn't point directly toward the center. Instead, it points almost entirely toward the "steep" side. 
+
+Because the gradient in an unscaled landscape points steeply toward the narrow walls of the "canyon" rather than down the path to the minimum. The algorithm "bounces" back and forth between the steep walls. To avoid bouncing too far and diverging, you are forced to use a very small learning rate. This makes the entire training process incredibly slow. 
+
+When you standardize, the loss landscape becomes spherical (circular). In a circle, the gradient at any point points much more directly toward the center (the minimum). This allows the algorithm to take a direct path, using a larger learning rate without "tripping" over its own feet.
+
+In standard Gradient Descent, we use a single learning rate ($\alpha$) for all parameters: $w_{new} = w_{old} - \alpha \cdot \nabla J(w)$. If your features aren't on the same scale, the "ideal" learning rate for Feature A might be 0.1, while the ideal rate for Feature B might be 0.000001. Using a single $\alpha$ for both is a compromise that usually satisfies neither, leading to poor convergence or numerical instability. Standardization ensures that a single learning rate is effective for every weight in your model.
+
+
+
 
 ## Week N: Lab Content
 
