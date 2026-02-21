@@ -853,17 +853,32 @@ Boosting on the other hand is designed to reduce bias which is a sympton of unde
 
 ### [[W2] Random forests. L Breiman, 2001.](https://readinglists.sussex.ac.uk/leganto/nui/citation/23771559380002461?institute=44SUS_INST&auth=SAML)
 
+Leo Breiman’s 2001 paper "Random Forests" significantly evolved his earlier work on Bagging by introducing a crucial element of randomness to the tree-building process. While Bagging only randomizes the data (via bootstrapping), Random Forests randomize the features. 
+
+The primary breakthrough in the 2001 paper is the "Random Subspace Method": At each node of every tree, the algorithm selects a random subset of features (typically denoted as $m$ or max_features) rather than searching through all available features for the best split. This deliberately makes each individual tree "weaker" and less accurate, but it makes the trees de-correlated from one another. In simple Bagging, if one feature is a very strong predictor, almost every tree will use it for the first split, making the trees very similar (high correlation). Random Forests force some trees to ignore that "obvious" feature and find patterns in others, which reduces the overall variance of the ensemble. 
 
 ### [[W2] Experiments with a new boosting algorithm. Y Freund, R Schapire, 1996.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559410002461?auth=SAML)
 
+The 1996 paper by Yoav Freund and Robert Schapire introduced AdaBoost (Short for "Adaptive Boosting"), which became one of the most influential algorithms in machine learning history. While Bagging focuses on reducing variance, AdaBoost is designed primarily to reduce bias by converting a series of "weak learners" into a single "strong learner". 
+
+The fundamental innovation of AdaBoost is its iterative and adaptive nature. Unlike Random Forests, where trees are built in parallel, AdaBoost builds models one after another. In each iteration, the algorithm identifies the data points that the previous model got wrong and increases their weights. The next weak learner in the sequence is forced to pay more attention to these "hard" samples that were misclassified earlier. 
+
+Freund and Schapire proved that as long as each weak learner is at least slightly better than random guessing (error rate $< 0.5$), the overall training error of the ensemble will drop exponentially toward zero. One of the most surprising findings in the experiments was that AdaBoost often continued to improve its test error even after the training error reached zero. This challenged the traditional understanding of the bias-variance tradeoff at the time. 
+
+Because AdaBoost aggressively focuses on misclassified points, the authors noted it is highly sensitive to noisy data and outliers. If a data point is mislabeled, AdaBoost will keep increasing its weight, potentially ruining the model's performance by obsessing over an impossible-to-classify outlier.
 
 ### [[W2] Understanding machine learning: from theory to algorithms. S Shalev-Shwartz, S Ben-David, 2014.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559290002461?auth=SAML)
 
-[Chapters 10, 19]
+* Chapter 10 - Boosting
+* Chapter 19 - Nearest Neighbour
 
 ### [[W2] C Bishop. Pattern recognition and machine learning. 2006.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559310002461?auth=SAML)
 
-[Sections 14.2-14.4]
+* 14.2 - Committees
+* 14.3 - Boosting
+* 14.4 - Tree-based Models
+
+
 
 
 
