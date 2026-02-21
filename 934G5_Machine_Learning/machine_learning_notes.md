@@ -273,7 +273,13 @@ Addtionally, it smooths the Loss Surface. By adding noise and variations, you ma
 
 ## Week 1: Additional Reading
 
-### [<u> S Rogers, M Girolami. A first course in machine learning. 2017. </u>](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559300002461?auth=SAML)
+* [A first course in machine learning.](#w1-s-rogers-m-girolami-a-first-course-in-machine-learning-2017)
+* [Pattern Recognition and Machine Learning](#w1-c-bishop-pattern-recognition-and-machine-learning-2006)
+* [Mathematics for Machine Learning](#w1-m-deisenroth-a-faisal-cs-ong-mathematics-for-machine-learning-2021)
+* [Deep Learning](#w1-i-goodfellow-y-bengio-a-courville-deep-learning-2016)
+* [Understanding Machine Learning from Theory to Algorithms](#w1-s-shalev-shwartz-s-ben-david-understanding-machine-learning-from-theory-to-algorithms-2014)
+
+### <u> [[W1] S Rogers, M Girolami. A first course in machine learning. 2017.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559300002461?auth=SAML) </u>
 
 This textbook it generally considered an entry point to the mathematical side of machine learning. It takes a probabilistic perspective, teaching you the "why" behind the "how". It prioritizes intuition and Bayesian logic over raw code-heavy tutorials. 
 
@@ -285,7 +291,7 @@ The recommended reading for this week is Chapter 1 which covered Linear Regressi
 
 ---
 
-### [<u> C Bishop. Pattern recognition and machine learning. 2006. </u>](https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
+### <u> [[W1] C Bishop. Pattern recognition and machine learning. 2006.](https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf) </u>
 
 Christopher Bishop’s "Pattern Recognition and Machine Learning" (PRML) is the "Gold Standard" in the field. If Rogers and Girolami is the friendly introduction, Bishop is the deep, authoritative dive. It is famous for its rigor and its beautiful, detailed diagrams that help visualize high-dimensional probability distributions.
 
@@ -317,7 +323,7 @@ The key to this Bishop chapter is to understand that Machine Learning is itself 
 
 ---
 
-### <u> [M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021](https://mml-book.github.io/book/mml-book.pdf) </u>
+### <u> [[W1] M Deisenroth, A Faisal, CS Ong. Mathematics for Machine Learning. 2021](https://mml-book.github.io/book/mml-book.pdf) </u>
 
 * [1.1 Finding Words for Intuitions](https://mml-book.github.io/book/mml-book.pdf#page=18&zoom=100,192,168)
 * [2.1 Systems of Linear Equations](https://mml-book.github.io/book/mml-book.pdf#page=25&zoom=100,96,681)
@@ -331,7 +337,7 @@ The key to this Bishop chapter is to understand that Machine Learning is itself 
 
 ---
 
-### <u> [I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559280002461?auth=SAML) </u>
+### <u> [[W1] I Goodfellow, Y Bengio, A Courville. Deep Learning. 2016](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559280002461?auth=SAML) </u>
 
 * 5.1 Learning Algorithms
 * 5.2 Capacity, Overfitting, Underfitting
@@ -420,9 +426,7 @@ That being said, the principal of Goodfellow, at least in Chapter 5, is focused 
 
 ---
 
-### <u> S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014. </u>
-
-[Link]()
+### <u> [[W1] S Shalev-Shwartz, S Ben-David. Understanding machine learning: from theory to algorithms. 2014.](https://www-cambridge-org.sussex.idm.oclc.org/core/books/understanding-machine-learning/3059695661405D25673058E43C8BE2A6) </u>
 
 * Chapter 1 - Introduction
 * Chapter 2 - Gentle Start
@@ -727,7 +731,7 @@ While not a "requirement" in the strictest sense, many activation functions in N
 
 The only reason not to use Min-Max when you are unsure of the distribution is Outliers. Example: If 99% of your data is between 1 and 10, but you have one error value at 10,000, Min-Max will put that 1% at "1.0" and cram the other 99% of your data into the range "0.0001 to 0.001." In that scenario, your model loses all its "resolution" for the bulk of your data.
 
-##### Standardization (Z-Score Normalization)
+##### Standardization (Z-Score Normalization, Standard Scaling)
 
 Standardization centers the data around a mean of 0 with a standard deviation of 1. Unlike Min-Max, it doesn't "clamp" the data to a specific range; instead, it describes how many standard deviations a point is from the average.
 
@@ -764,13 +768,102 @@ When you standardize, the loss landscape becomes spherical (circular). In a circ
 
 In standard Gradient Descent, we use a single learning rate ($\alpha$) for all parameters: $w_{new} = w_{old} - \alpha \cdot \nabla J(w)$. If your features aren't on the same scale, the "ideal" learning rate for Feature A might be 0.1, while the ideal rate for Feature B might be 0.000001. Using a single $\alpha$ for both is a compromise that usually satisfies neither, leading to poor convergence or numerical instability. Standardization ensures that a single learning rate is effective for every weight in your model.
 
+## Week 2: Lab Content
+
+## Week 2: Additional Reading
+
+* [A first course in machine learning. S Rogers, M Girolami, 2017.](#w2-a-first-course-in-machine-learning-s-rogers-m-girolami-2017)
+* [Data Mining and Machine Learning. J Zaki, W Meira, 2020](#w2-data-mining-and-machine-learning-j-zaki-w-meira-2020)
+* [Bagging predictors. L Breiman, 1996.](#w2-bagging-predictors-l-breiman-1996)
+* [Random forests. L Breiman, 2001.](#w2-random-forests-l-breiman-2001)
+* [Experiments with a new boosting algorithm. Y Freund, R Schapire, 1996.](#w2-experiments-with-a-new-boosting-algorithm-y-freund-r-schapire-1996)
+* [Understanding machine learning: from theory to algorithms. S Shalev-Shwartz, S Ben-David, 2014.](#w2-understanding-machine-learning-from-theory-to-algorithms-s-shalev-shwartz-s-ben-david-2014)
+
+### [[W2] A first course in machine learning. S Rogers, M Girolami, 2017.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559300002461?auth=SAML)
+
+##### Section 5.3.1: K-Nearest Neighbours
+
+kNN is popular due to its simplicity and excellent empirical performance. It can handle both mutli-class and binary problems. It makes no assumptions about the parametric form of the decision boundary.  kNN does not have a training phase and is best described through the simple process to classify new objects. 
+
+##### 5.3.1.1 Choosing K
+
+Once you have the data and your decision metric, the number `k` points for a new point to be decided by is needed. If `k` is too small, the classification can be too influenced by noise. Generally, with a `k` too low, the main decision boundary will still look viable. However, the is the tendency for islands to form. These are data points where label make be different to its surroundings due to noise or mislabelled. If `k=1` points arbitarily close to this point will be "infected" by its label as there is not opponents in the voting to correct for the mistake, or noise. This leads to islands in the opposing boundary space. The solution to this is easy, add more `k`. Having numerous members to decide inferences behaves as a regulariser against noise/mistakes. 
+
+**What happens when `k` is too big?** As we increase `k`, the neighbours considered become further away in the space. As mentioned before, the increase in `k` has a regularising effect but as we venture further into the distance, we start to loose correlations in similarity. Extreme edge case where this is particular relevant are in small data sets where `k` approaches `n`causing the boundary to constantly overshoot for each inference, but also instances that are close to the true boundary. Here, if `k` is too large, the relevant neighbours on the correct side of the boundary can be exhausted and the spill over results in a collection of opposite class instances being considered. 
+
+##### K-Cross Validation
+
+The most popular method for choosing `k` is cross validation. k-Fold Cross-Validation is a robust resampling technique used to evaluate how well a machine learning model will generalize to an independent, unseen dataset. It helps ensure that your model hasn't just "memorized" the specific quirks of your training data.
+
+1. Split: You divide your entire dataset into $k$ equal-sized subsets (called "folds").
+2. Iterate: You run the training and testing process $k$ times.
+3. Train/Test: In each iteration, one fold is held out as the validation set, and the model is trained on the remaining $k-1$ folds.
+4. Rotate: The process repeats until every single fold has served as the validation set exactly once.
+5. Average: You take the average of the $k$ performance scores (e.g., accuracy, error rate) to get the final "cross-validated" estimate of the model's performance.
+
+By testing on every part of the data, you ensure the performance score isn't just an "accidental" result of a lucky split. This reduces the chance of bias in the estimator. It allows you to use all your data for both training and validation, which is especially helpful if your dataset is small. 
+
+Usually $k$ is set to 5 or 10. This provides a good balance between computational speed and a reliable estimate. However, Leave-One-Out (LOOCV) is the extreme case where $k = N$ (the number of samples). You train on every point except one, repeating this for every point in the dataset.
+
+When you apply k-cross to kNN modelling there are two votes that can place, one at inference within the folds and a final vote across each olds output. At inference, the method used is Majority Voting or Weighted Average, to decide among the `k` data points. Then you vote accross each fold, usually this is more of an arithmetic mean of the evaluation metric. It should be noted, that cross validation is not used for inference. It is a way to robustly evaluate the model. This is why the "voting" of the folds is an arithmetic mean. Each fold produces a performance level based on a given `k`, we just want to know how well that `k` performed without any bias. When actually performing inference, we will just us `k` directly in a kNN model. The cross validation allows us to compare `k` values effectively. 
+
+$$\text{Average Accuracy} = \frac{\text{Acc}_1 + \text{Acc}_2 + \dots + \text{Acc}_k}{k}$$
+
+Note, there is an exception to this which is known as "Ensemble" Inference. This is where you implement more than one model and use a method to to either vote or average the models in the ensemble at inference. This is not related to k-cross validation, though the techniques to execute are probably simimlar. 
+
+##### kNN and Deep Learning
+
+kNN can be used as the final layer in Deep Learning instead of a fully connected layer. n this setup, your deep learning layers act as a feature extractor (embedding the data into a high-dimensional space), and k-NN performs the final classification based on the distances ($dist$) you were looking at earlier. The Feature Extractor and the final kNN layer can be thought of as two seperate models as the kNN is not involved in the training process, it just processes the outputs of the Deep Model, i.e. its recevied the vectors. When using kNN as a final layer, considerations need to be taken based on the distance metric and computational cost. If the vector is of size 2048, the "Curse of Dimensionality" might make Euclidean distance less effective. This is why Cosine Similarity (which you asked for earlier) is often preferred for deep learning embeddings. Additionally, you need to ensure that your data augmentations (like the rotations or jittering you listed) are only applied to the training folds and not the validation folds. If you augment before splitting, you are "memorizing" versions of the test data, which ruins the cross-validation.
+
+Using k-NN instead of an FC layer is often called Deep Metric Learning. It is highly effective for: **Few-Shot Learning:** When you have very few examples of certain classes and **Open-Set Recognition:** When the model might encounter new classes during inference that weren't in the training set.
+
+Just to clarify the difference between training and validation folds. Imagine, the conduct k-cross validation where `k=7`. The model will be trainined on 6 splits and evaluated on 1. With kNN, the training folds are the data points that you run inference on. You apply augmentations to the training folds to increase the volume of trianing data. Its importants that you don't augment the validation fold. We want to know how the model handles a real photo, not a digitally distorted one, to get an honest accuracy score.
+
+In k-NN, "Training" is just "Remembering." You want the model to "remember" as many variations as possible (via augmentation) so that when it sees a "query" (Validation Fold), it has a nearby neighbor to compare it to.
+
+### [[W2] Data Mining and Machine Learning. J Zaki, W Meira, 2020](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559360002461?auth=SAML)
+
+* Chapter/Section 18.3 - K-nearest neighbours
+* Chapter 19 -  Decision Trees
+
+#### What is an Axis-Parallel Hyperplane?
+
+In high-dimensional space, a "hyperplane" is just a flat surface that divides data. A standard linear model can tilt this plane at any angle to find the best split. a Decision Tree considers only axis-parallel hyperplanes. This means: The weight vector ($w$) is restricted to a standard basis vector ($e_j$). Instead of using all features at once ($w_1x_1 + w_2x_2 + \dots$), the tree picks one feature ($x_j$) at a time to split on. Mathematically, as shown in the text, the complex equation $w^Tx + b = 0$ simplifies down to:
+
+$$h(x): x_j + b = 0$$
+
+This restriction is exactly what makes Decision Trees interpretable and fast: Every "node" in a tree is a simple question like "Is Age > 30?" or "Is Income < 50k?". By restricting $w$ to an axis-parallel vector, the tree is forced to look at one dimension ($x_j$) at a time. The tree splits the data into "boxes" (rectangles in 2D, rectangular prisms in 3D). Each split is a straight vertical or horizontal line parallel to an axis. The passage mentions that choosing the offset $b$ yields different hyperplanes. In Decision Tree terms, $b$ is the threshold (the value $s$) you use to calculate your Information Gain or Gini Impurity. 
+
+ If your data is best separated by a diagonal line (e.g., $x_1 + x_2 = 10$), a Decision Tree will struggle. It will have to create a "staircase" of many small axis-parallel steps to approximate that diagonal. But because it only deals with one axis at a time, the model is incredibly easy to explain. You don't need to understand complex weight vectors; you just need to know which feature was chosen and what the threshold was. 
 
 
+### [[W2] Bagging predictors. L Breiman, 1996.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559400002461?auth=SAML)
 
-## Week N: Lab Content
+The main takeaway from Leo Breiman’s 1996 paper is that Bagging (Bootstrap Aggregating) is a powerful method for reducing the variance of "unstable" learning algorithms, thereby significantly improving their predictive accuracy. Breiman’s central finding is that the effectiveness of bagging depends entirely on the stability of the underlying predictor. Algorithms like Decision Trees and Neural Networks are "unstable". A small change in the training data can lead to a massive change in the final model. Bagging thrives here because averaging these wildly different models "smooths out" the noise. Algorithms like Linear Regression or K-Nearest Neighbors are "stable". Because they don't change much when the data changes, bagging them provides little to no improvement and can occasionally even slightly degrade performance. 
 
-## Week N: Additional Reading
+The paper outlines a simple two-step process to create an ensemble: 
+1. Bootstrapping: Create multiple versions of your training set by sampling with replacement. Each new "bootstrap" set is the same size as the original but contains different combinations of data points (some repeated, some omitted).
+2. Aggregating: Train a separate predictor on each bootstrap set and then combine their outputs. For Classification: Use Majority Voting. For Regression: Use the Arithmetic Mean. 
 
+Bagging works by reducing the variance component of the error without significantly increasing the bias. It essentially prevents the model from "memorizing" specific training samples. Breiman showed that the aggregated predictor is guaranteed to perform better than a single predictor if the single predictor is sufficiently unstable. Through extensive testing on datasets like Boston Housing and Ionosphere, Breiman demonstrated that bagging nearly always led to a substantial decrease in misclassification rates for trees. 
+
+For clarity, bagging is not built on the concept of weak learners. Bagging is built on the concept of unstable, strong learners. While both Bagging and Boosting are ensemble methods, they have opposite philosophies regarding the "strength" of the models they use. Bagging is designed to reduce variance which is a symptom of overfitting. It works best with strong, complex, and unstable learners (like deep decision trees). A "strong" tree has low bias but high variance—it's very smart but very twitchy. Bagging takes many of these "twitchy" experts and averages them to cancel out their individual errors. 
+
+Boosting on the other hand is designed to reduce bias which is a sympton of underfitting. This is the method that actually relies on weak learners (like "stumps"—trees with only one split). It takes a model that is "weak" (barely better than random guessing) and adds new models sequentially to correct the mistakes of the previous ones. In his 1996 paper, Leo Breiman explicitly stated that for Bagging to work, the predictor must be unstable. Weak Learners (like a linear model or a shallow tree) are often very stable. If you change the data slightly, a weak learner usually produces the same simple answer. If you bag a stable learner, every bootstrap version of the model will look nearly identical. When you average them, you get the same result you started with, meaning you’ve gained nothing. 
+
+### [[W2] Random forests. L Breiman, 2001.](https://readinglists.sussex.ac.uk/leganto/nui/citation/23771559380002461?institute=44SUS_INST&auth=SAML)
+
+
+### [[W2] Experiments with a new boosting algorithm. Y Freund, R Schapire, 1996.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559410002461?auth=SAML)
+
+
+### [[W2] Understanding machine learning: from theory to algorithms. S Shalev-Shwartz, S Ben-David, 2014.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559290002461?auth=SAML)
+
+[Chapters 10, 19]
+
+### [[W2] C Bishop. Pattern recognition and machine learning. 2006.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559310002461?auth=SAML)
+
+[Sections 14.2-14.4]
 
 
 
