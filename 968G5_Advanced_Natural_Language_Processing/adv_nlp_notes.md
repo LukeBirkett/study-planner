@@ -1161,12 +1161,55 @@ if ends in ing then we know the tyype of word at least for example
 know parts of the word to make predictions
 
 
-## Week N: Seminar
+## Week 3: Seminar
+
+### 1.In ML, is a loss function the same as an objective function?
+
+As loss function is a type of objecive function. You minimise a loss function. But you could use a reward function which you wish to maximise. Often used interchangably. 
+
+### 2.Explain how a bigram model of language could be built with a feed-forward neural network?
+
+A network with 2 inputs, the current word and the previous. Each word one hot encoded. 
+
+
+3.What is the difference between a one-hot encoding of a word and a word embedding?
+
+4.What will a neural language model typically do with OOV words?
+
+5.If a combination of words is seen at test time which has not  been seen before, what will happen?
 
 
 
 
 
+1.What is an RNN and what advantage(s) does it have over a FF-NN (particularly when applied to language modelling)?
+2.What is an LSTM?
+3.How might 2 RNNs be used in the same network?
+4.What is a CNN?
+5.Why might it  be useful to have character based language models rather than word based language models?
+
+
+Disscusion of Paper: Character aware neural language models (Kim et al. 2016)
+
+1. What problem with using n-gram models is addressed by the use of neural language models? Why is it not completely addressed? How might character-aware models help?
+
+2. Why are LSTMs generally preferred over vanilla RNNs in language modelling?
+
+3. In a character-level CNN, what is the purpose of a filter or kernel? How many filters do they state are typically used in NLP applications? How many do the authors use in each of their small and large architectures?
+
+4. How is the character-level CNN incorporated into the overall architecture of the RNN-LM?
+
+5. How are OOV words handled in these experiments? What potential improvement could the authors have made and why didn’t they do it?
+
+6. Which model(s) performs best in the optimization experiments on the Penn Treebank?
+
+7. Why do the authors expect the performance gains to be more in other languages such as Arabic than in English? Are their expectations met in the experimental results?
+
+8. What advantages does the authors’ model have over the MLBL model of Botha and Blunsom (2014)?
+
+9. What observations can you make of the nearest neighbours of ‘richard’ using each of the word representations?
+
+10. What are the main conclusions of the paper? Are you convinced?
 
 
 ## Week N: Lab Content
