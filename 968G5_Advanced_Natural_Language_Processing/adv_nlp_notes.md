@@ -139,7 +139,7 @@ The Information Content (IC) measures (specifically Lin or Jiang-Conrath) are ge
 
 ---
 
-#### Seminar 1.2 Questions
+### Seminar 1.2 Questions
 
 **1. What is the distributional hypothesis?** 
 
@@ -335,15 +335,26 @@ This week we will be looking at n-gram language models.  In particular, we will 
 #### Week 2: Contents
 
 1. [Lecture](#week-2---lecture)
-2. [Lab](#week-2---lab)
-3. [Seminar](#week-2---seminar)
+2. [Seminar](#week-2---seminar)
+3. [Lab](#week-2---lab)
 4. [Additional Readings](#week-2---additional-readings)
 
-# Week 2 - Lecture
+## Week 2 - Lecture
 
 | [Lecture Slides](files/week_2/week_2_lecture_slides.pdf) |
 
 This week we are looking at **Probabilitic Language Models**. This includes: n-gram modelling and their evaluation methods (perplexity), generation and generalisation.
+
+* [Why do we want to be able to assign a prob to a sentence?](#why-do-we-want-to-be-able-to-assign-a-prob-to-a-sentence)
+* [Probability language modelling](#probability-language-modelling)
+* [Chain Rule for Probabilties ](#chain-rule-for-probabilties)
+* [N-gram Language Model](#n-gram-language-model)
+* [Lanugage Model Evaluation](#lanugage-model-evaluation)
+* [Perplexity](#perplexity)
+* [Part 2: Generalisation in n-Gram Models](#part-2-generalisation-in-n-gram-models)
+* [Toy Example](#toy-example)
+* [Unknown Words (Token)](#unknown-words-token)
+* [Absolute Discounting](#absolute-discounting)
 
 ---
 
@@ -468,7 +479,7 @@ $$log(a \times b) = log(a) + log(b)$$
 
 ---
 
-### Evaluation
+### Lanugage Model Evaluation
 
 We want to be able to evaluate how good a language model is. The outputs need to be determined as good or bad sentences. Real sentences, that is grammatically and plausible sentences, should be assigned higher probabilities than "fake' ones.
 
@@ -511,7 +522,7 @@ $$PP(W) = e^{-1/N \log P(w_1, w_2, w_3, ..., w_N)}$$
 Because Perplexity is the inverse of probability, minimising perplexity is the same as maximising probability. 
 
 
-# Part 2: Generalisation in n-Gram Models
+## Part 2: Generalisation in n-Gram Models
 
 ### Toy Example
 
@@ -616,9 +627,15 @@ The main reason we use the original formula is to handle the case where the bigr
 
 ---
 
-# Week 2 - Seminar
+<br>
+<br>
+<br>
+<br>
 
-## 2.1 Questions
+
+## Week 2 - Seminar
+
+### 2.1 Questions
 
 The best language model is one that best predicts an unseen test set, i.e. returns the highest $P(sentences)$. Perplexity is the inverse probability of the test set, normalised by the number of words:
 
@@ -670,7 +687,11 @@ $$S(w_i|w_{i-k+1}^{i-1}) = \begin{cases}
 
 ---
 
-## The Microsoft Research Sentence Completion Challenge (Zweig and Burges, 2011)
+<br>
+<br>
+<br>
+
+## Paper: The Microsoft Research Sentence Completion Challenge (Zweig and Burges, 2011)
 
 
 ### How was the dataset created? How and why were the incorrect answers selected in the way they were?
@@ -695,8 +716,495 @@ This is similar distributional sematic methods. The construction of the vectors 
 
 ---
 
+<br>
+<br>
+<br>
+
 # Week 2 - Lab 
 
 # Week 2 - Addtional Readings
 
 * Jurafsky and Martin Chapter 3 [N-gram Language Models]
+
+---
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+# [Week 3 - Neural Language Models]()
+
+* Feed Forward Networks
+* Recurrent (RNN)
+* Long-Short Term Memory (LSTM)
+* Convolutional (CNN)
+* Word-based vs Character Based
+
+#### Week N: Contents
+
+1. [Lecture]()
+2. [Seminar]()
+3. [Lab]()
+4. [Additional Readings]()
+
+## Week 3: Lecture
+
+3 parts
+
+* [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d1dda4d7-c0c6-4018-b756-b3e500fb35fb)
+* [Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9cae7217-e9c9-4e3f-894b-b3e800b7d5cc&start=0)
+* [Part 3](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=06ed8e74-ae66-4085-8d4d-b3e800be5350&start=0)
+
+
+[lecture 1]
+
+archicture looked as high level, details more relevent for other modules
+
+[neural eunit]
+
+y is the output as is each to the activation the unit
+
+z is weighted sum of inputs 
+
+$z - w.x + b$
+
+the vector vector shares the same dimensions as the input vector, which may be 3 i.e. for an rgb image
+
+weights of sum of weight/input vecots
+
+summed value goes into an activation function
+
+ADD IMAGE OF NEURON
+
+[activation function]
+
+introducing non-linearity into the network
+
+without wouldn't be able to stack layer to make networks as they would just simpifly to anothe rlinear function that could have more easily been acheived. 
+
+sigmoid, tahn, relu [GET THE FORMMULAS AND A QUICK SUMMARY]
+
+[feedforward network]
+
+dont just deail with single unit, instead networkds
+
+most simple network is a feedforward networkd with layers
+
+input layers, hidden layers, output layers
+
+each layer has a number of units, i..e nodes
+
+units can vary, no fixed or expected ot numbers
+
+outputs of one layers and the inputs to the next
+
+layers in an ff have no info of eachother, just take and pass, No cycles
+
+fully connencted if each unit takes an inputs from every unit in the previous layer
+
+units are taking the weighted sum of the inputs and applying an activation function $h = o(Wx+b)$
+
+each unit learns a different pattern form the inptus and passes this one
+
+[ADD IMAGE OF FF NET]
+
+output layer tends to use softmax as the act func. against has the weights and units. softmax takes the value at that unit and normalised it against all over units in the output layer. This allows the cumullative sum of the outputs to = 1, wherbey each unit is a %. this allows for probablistic outputs 
+
+$$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}$$
+
+ff is how a network runs once how it has been trained. 
+
+but where to do these weights come from? trianiing
+
+[trinaing neural networds]
+
+hard classification task = only once answer per instance/task
+
+i.e. softmax to select most probable class 
+
+in order to train we need a loss function. this tells us how good the network is 
+
+cross ent or neg log-like loss (simply log prob)
+
+input is the hot one encoded vector from the softmax. inportant as it selected the value to sum, i.e. just one equation
+
+INPUT THE LOSS FORMULA
+
+we want to find the parameters than minimize the loss function
+
+[gradient descent]
+
+randomly init parameters (weights, w)
+
+use ff to compute predictions 
+
+compute the loss function (J), might be done over a batch
+
+computer partital derivs of loss functions with respect to parameters, this tells us how much to adject them by. we want to find the global mimum
+
+back propage, i..e update the parameters
+
+$$W = W - \alpha \frac{dJ}{dW}$$
+
+this is how we update the parameters with the derividate. a is our leanring rate, it is the size of the updates we make
+
+repeat unitil converages and the loss is acceptabel small
+
+[feedword - neural language model]
+
+first proposed by bengio et al 2003
+
+input was some number of previous words representation
+
+window could be any size but they started with 3
+
+wt-3, wt-2, wt-1
+
+predict the next work in seq given the previous 3 words. 
+
+each words need to have a numerical embedding in terms of the whole vocab. could just be a number but modern approaches are vectors.
+
+output is a prob dist over all the possible words
+
+input is the rep of previous words
+
+$$P(w_t = V_{42} | w_{t-3}, w_{t-2}, w_{t-1})$$
+
+42 is the size of the output vector
+
+INSERT IMAGE
+
+[adv vs dis]
+
+ad: generalise over context of similar words (due to embeds), doesnt need smooth, candle longer histories
+
+why no smooth? not predicting based on the words. the words are combined in the weighted hidden layer to create a single unit several times. move into hypth space, should be similarites
+
+dis: very slow to train, atlest compared to n-gram. stil based on markov assumps, prob of word given entire context is approximateed based on n previous. still have fixed window idea
+
+[where dfo embedds come from]
+
+future topic in module. 
+
+could see embedding layers as another hidden layer. 
+
+could be a one hotting layer based on full vocab
+
+could init as a one hot but then learn the true vector embeddings as part of the backprop process. projectection layer
+
+In the context of the language models and neural networks we've been discussing, a projection layer is essentially a specialized fully connected (dense) layer used to change the dimensionality of data—effectively "projecting" it from one vector space to another. In neural language models, this layer is crucial for moving between the vocabulary space and the hidden state space. When you feed a word into a neural network, you start with a "one-hot" vector (a massive vector of zeros with a single 1). The projection layer acts as a lookup table that projects that "one-hot" index into a dense word embedding.
+
+
+could use pre-trained embeddings that have been learned somewhere else and frozen for inputs into the model (or allow them to be fine tuned)
+
+
+
+
+
+# Lecture 2 -  RNNs
+
+Prev lecture about ff model as a language model. tries to output a probability distribution over possible next words from an input which is a representation of some number of previous words. 
+
+# Simple Recurrent Network
+
+Hidden layer $h_t$ is based on current instances input but also the recurrent loop whereby the hidden layer takes itself from the previous timestep as an input ht-1
+
+[insert first simeple rrecurrent net image]
+
+[insert alt way to visualise]
+
+# RNN
+
+ADV:
+
+hidden layer from previous timestep provides context and momemry 
+
+now there is no fixed length on amount of pior context. we are not governed by inputting a fixed window, we can put a much longer window, we can also vary our window length
+
+the weights of U determine how the network should use the past hidden context in calcualting the output for the current input
+
+
+DISAD:
+
+long windows are theoretical, in practice the context held in the hidden tends you become fairly local
+
+difficult to cpature long range semantic depds
+
+to work well hiddel layer need to incorporate long and short range deps
+
+ # Recurrent Neural Network Language Model (Mikolov et al 2013)
+
+ input and output have dims of the vocab
+
+ starts as one hot vector
+
+ output is prob dist over words
+
+ word reps are therefore sound in the matrix U through learning
+
+ this is the distributed rep
+
+ hidden layer is a representation of everything that has happened in previous timesteps (theoretically)
+
+ trainedf same as NN with back prop to max data log-likilihood
+
+ [insert diagram]
+
+ # Computation of hidden and output layers 
+
+INSERT ALL FORMULAS FOR THIS MDOEL 
+
+word embed + resp of pre
+
+output prob dist
+
+softmax
+
+# LSTMs
+
+long short-term memory networks
+
+# Unrolling a simple RNN
+
+visualise each time step as a block [INSERT IMAGE]
+
+includes where activation takes place (tahn)
+
+# Unrolling an LSTM
+
+core idea: hidden layer are going to depend on 3 things:
+* current time step inputs
+* activation values from the hidden layer at the previous time stamp (short term mem)
+* activation values from the **cell state** (long term memory)
+
+cell state thing flow that runs along the top
+
+# gates inside neural units
+
+inside the units we have gates which control info flow
+
+it will allow some info through but other info wont
+
+each gate compoised of a activation function and pointwise mutliplicaiton
+
+the sigmoid is controlling how much info goes though the gate to the pointwise mutli
+
+which dimensions should be allowed to go through
+
+given sigmoud shape, values will often be close to 0 or 1, effectly opening or shutting out info 
+
+# forget gate
+
+first gate
+
+input: current inout $x_t$ and current (prev) hidden state  $h_t-1$
+
+given these two values, which go into an sigmoid activation. they decide how much of the current state is allowed to continue on down its path. 
+
+# input gate
+
+second gate
+
+input: current input $x_t$ and current (prev) hidden state  $h_t-1$ (a concatenation of the two vectore)
+
+what of these inputs needs to be remember, i.e. put into long term memory
+
+controled by a sigmoid again $i_t$ bit is only the source of info going inot the pointwise but instead using a tahn action $C_t$. The pointwise then feeds into the long term memory $C_t$
+
+The pointwise mutliplicate, which is the sigmoid outpu ton the info output, is then ADDED into the control flow (not multiplied)
+
+# output 
+
+this is the 3rd gate
+
+what should the output be
+
+how much of the hidden layer are we going to retain
+
+again a sigmoid of input and current hidden 
+
+a pointwise mutli with a tahn applied to the cell state
+
+output determined the new hidden layer state $h_t$
+
+used to detmeine current output, i.e. a new work
+
+but also remebered as the new hdiden layer, i.e. the short term memeory which will be passed onto the next cell block
+
+# stacked rnns
+
+output (at each time step) from RNN block is fed as an input into annother RNN
+
+stacking leds to deep network (deep learning)
+
+different layers tends to capture diff levels of abstraction 
+
+lower shorter term, higher (deeper) longer term 
+
+# bidirectional rnn
+
+take advantage of right context as well as left context
+
+have two rrns 
+
+one trained left to right 
+
+another trained right to left
+
+trained seperately as the inputs are different
+
+but then you concatent (add) the hidden layers to produce the output at each time step 
+
+
+
+
+
+
+
+
+# PART 3: Characters and Convolutions
+
+thinking about now: what should out actual input represenation be
+
+Problem for word-based Natural lang models: sparisty
+
+n-gram, victim of sparsity, Neural as a solution to this, shifts focus to context and embeddings
+
+nlm, ff, neural, overcome to certain extend as generalise using similar words. 
+
+doesnt matter if we havent seen exact word or sentence before
+
+we are not making prediction absed on based words or phases 
+
+but we have weigths which act on the inputs which then comobine together in many different ways to create the ouput
+
+howeve,r this relies on embedding being reliable 
+
+embeds are trained within the network
+
+if the network sees a word a lot it will make a lot more reliable embeddding that cpatures it similarities to words better
+
+less good if it only sees it once or twice. may not move much from init value
+
+embeds for low frew, or 0 freq, are going to be unreliable potnetially
+
+could have an unk token vector which created an unknown vector embed
+
+could nn are expensive we tend to restist the vocab anyway, so this is a good approach 
+
+what else can we do instead of an unk token, i.e. we don't know enough about it?
+
+# character based nlp 
+
+move anyway fro musing a word to using the caracters (leters)
+
+straight away sparsity problems will go away because the possible values are constrained to the alphabet
+
+ideaa
+is to form represents and make predictions about the language and what char should come next
+
+# cnns
+
+cnns very common in vision 
+
+used to detect feature in an image
+
+features can be anywhere in an image 
+
+but presence determeined by neighbouring pixels
+
+can also be used in text by looking at characters around
+
+# convolution s
+
+convo layers look at groups of inputs or neurons in accorsances to window sizes
+
+these windows slide over text in sequences in text to identify serquential trends
+
+kkernel function A is learn which looks for or filters for a particular patter//feature, e.g. 2 character sequence "un", 3 character seq "ing" 
+
+the network will learn these sequences in their windows, we don't outline them first
+
+# stacking convo layers
+
+staicking allows decection of complex features composed from simplier features
+
+# max pool 
+
+as well as the actual convo layers, there are max pooling layers
+
+takes the max of its inputs
+
+doesnt care where a feature is in its inputs, but if the inputs produce a 1, then the max pool extracts just this (easier to exaplin this concept with images)
+
+# kernel functions 
+
+indiv kernel function detect an individual feature in the input
+
+in pacted need hundred or thousands of kernal functoin s
+
+kernal functioins are just nn weights that are learnt by training on a corpus
+
+kernels are learnt per task
+
+# adv of char aweare nlm
+
+allows morphoglical info to be utilied 
+
+this is good for low freq words as we learn the structure of a word
+
+if ends in ing then we know the tyype of word at least for example
+
+know parts of the word to make predictions
+
+
+## Week N: Seminar
+
+
+
+
+
+
+
+## Week N: Lab Content
+
+## Week N: Additional Reading
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# [Week N - TITLE]()
+
+#### Week N: Contents
+
+1. [Lecture]()
+2. [Seminar]()
+3. [Lab]()
+4. [Additional Readings]()
+
+## Week N: Lecture
+
+## Week N: Seminar
+
+## Week N: Lab Content
+
+## Week N: Additional Reading
