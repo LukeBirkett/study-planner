@@ -1750,14 +1750,54 @@ INSSERT IMAGE
 
 **is this possible with sparse representations? seems like something that would need to have embeddings to acheive**
 
+
+
+
 ## Week 4: Seminar
 
+In distributional semantics, a composition model is a mathematical framework used to combine the meanings of individual words (represented as vectors) to form a representation for larger linguistic units, such as phrases or whole sentences. While standard distributional models are great at representing isolated words, they face a challenge: human language is infinite and hierarchical. We cannot have a pre-stored vector for every possible sentence ever spoken. Composition models solve this by allowing the system to "build" the meaning of a sentence from its parts.
+
+# Human Synonymy Judgements
+
+game skip
+
+# Q1
+
+# What do you under be prob of sparsity
+
+* words are rare
+* co-occuring words are even rarer
+* dist model = co-occuring in sentence = context
+
+# possible solutions
+
+smoothing; dim red; embed with fixed dim (lang models)
+
+# distributional smooth
+
+get post estimate by looking at the cooccureances of the target word + its neighbours
+
+requiers a good and robust way to obtain similar instances
+
+# alternative to smoothing
 
 
 
 
 
-# paper 
+
+
+
+
+
+
+
+
+
+
+
+
+# paper direct copy notes
 
 In this paper, we examine the vector-space word representations that are implicitly learned by the input-layer weights.
 
@@ -1924,9 +1964,14 @@ shown that the word representations learned by a
 RNNLM do an especially good job in capturing
 these regularities.
 
+
+
+
+
+
 ---
 
-Gemini:
+# Gemini chat about the paper:
 
 
 It is easy to look back at this now and see "basic linear algebra," but in 2013, this paper was a seismic shift in how we viewed the "black box" of neural networks. To understand why this wasn't considered "basic" at the time, we have to look at the prevailing mindset of the early 2010s.
@@ -2008,10 +2053,13 @@ To solve exactly what you are asking—how does it compute something for a word 
 
 # QUESTIONS 
 
-1. What are the main findings of this paper? Are you convinced?
+# 1. What are the main findings of this paper? Are you convinced?
 
 
-2. What do the authors claim is the main advantage of using distributed representations of words (aka. embeddings) over classical n-gram language models?
+
+
+
+# 2. What do the authors claim is the main advantage of using distributed representations of words (aka. embeddings) over classical n-gram language models?
 
 The main advantage is the ability of distributed representations to generalize to unseen word sequences. Words are mapped to a continuous vector space where semantically similar words are close to one another. Classical N-grams: These models rely on exact matches of word sequences. If a specific n-gram (e.g., "the sapphire sky") was not seen in the training data, the model has no information about it, leading to the "sparsity" problem. Because the model represents "sapphire" and "azure" as similar vectors, a model trained on "the sapphire sky" can naturally assign a high probability to "the azure sky," even if that specific phrase never appeared in the training set. 
 
@@ -2020,7 +2068,11 @@ The authors demonstrate that RNN-based distributed representations capture multi
 Because embeddings "smooth" the language space continuously, they often achieve lower perplexity (a measure of how well a probability distribution predicts a sample) than n-gram models.
 
 
-3. What is meant by a syntactic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing syntactic regularities. Do you think the same would apply to other distributional word representations?
+
+
+
+
+# 3. What is meant by a syntactic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing syntactic regularities. Do you think the same would apply to other distributional word representations?
 
 In the context of word embeddings, a syntactic analogy refers to a relationship based on the grammatical structure or "form" of words rather than their core meaning. While a semantic analogy relates to concepts (e.g., Paris : France), a syntactic one relates to linguistic rules like verb tense, pluralization, or degrees of comparison. These follow the pattern $A : B :: C : D$ (read as "$A$ is to $B$ as $C$ is to $D$"):
 
@@ -2039,7 +2091,7 @@ Early distributional models based on large co-occurrence matrices (like Latent S
 Models like FastText (an evolution of Word2Vec) are actually better at syntactic regularities. FastText represents a word as a sum of its character n-grams (e.g., "climbing" = cl, li, im, mb, bi, in, ng). Even if the model has never seen a specific rare verb, it recognizes the -ing or -ed ending and can mathematically "calculate" its syntactic position based on those sub-parts.
 
 
-4. What is meant by a semantic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing semantic regularities. Do you think the same would apply to other distributional word representations?
+# 4. What is meant by a semantic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing semantic regularities. Do you think the same would apply to other distributional word representations?
 
 A semantic analogy refers to a relationship based on the meaning, concepts, or real-world knowledge associated with words, rather than their grammatical form. In a vector space, this is represented by the idea that the "distance" and "direction" between two concepts (like a country and its capital) remain constant across different pairs.
 
@@ -2055,6 +2107,12 @@ Yes, the same applies here, and often even better. GloVe was designed specifical
 
 
 
+
+
+
+---
+
+**what is lsa**
 LSA is a form of dimensionality reduction. Its goal is to take a massive, sparse matrix (where most values are zero) and transform it into a compact, dense representation that captures the "thematic neighborhood" of words rather than just their exact spelling. LSA relies on a mathematical process called Singular Value Decomposition (SVD): The Matrix: You start with a "term-document matrix" that tracks how often every word appears in every document. The Compression: SVD factorizes this matrix into smaller pieces, effectively "throwing away" the noise and keeping only the most important statistical dimensions. The Result: Words that frequently appear in the same types of documents are pushed together in a multi-dimensional space, even if those words never actually appear in the same sentence.
 
 A major advantage of LSA is its ability to handle synonyms. In a traditional system, "physician" and "doctor" are treated as completely different things because they are spelled differently. In LSA, because "physician" and "doctor" both tend to appear in documents about hospitals and medicine, the model learns that they are nearly identical features.
@@ -2086,9 +2144,18 @@ LSA (Global): It is great for Document Classification because it knows the "gist
 
 LSA does learn they go together, but it maps them as a cluster (a neighborhood). Word2Vec maps them as a displacement (a specific path).
 
+---
 
 
-5. Explain the vector offset method used to answer an analogy question. In particular, what happens when no word exists at the predicted position?
+
+
+
+
+
+
+
+
+# 5. Explain the vector offset method used to answer an analogy question. In particular, what happens when no word exists at the predicted position?
 
 The vector offset method is a technique used in distributional semantics to solve word analogies by treating semantic relationships as geometric displacements. This method relies on the finding that in a well-trained vector space (like Word2Vec), the relationship between two words is represented by the constant distance and direction between them.
 
@@ -2104,16 +2171,127 @@ To prevent the model from simply returning one of the words used in the query (w
 
 
 
-6. What do you think of the results for identifying syntactic regularities? Is answering more than 1 in 3 questions correctly a good result? Are there any obvious trends in the results?
+# 6. What do you think of the results for identifying syntactic regularities? Is answering more than 1 in 3 questions correctly a good result? Are there any obvious trends in the results?
 
 
 
-7. Do you think the comparisons with other methods are fair? Why do the authors use a different test set when comparing with Collobert & Weston (2008) and Mnih & Hinton (2009)? Does this test set appear to be easier or harder than the original one?
+# 7. Do you think the comparisons with other methods are fair? Why do the authors use a different test set when comparing with Collobert & Weston (2008) and Mnih & Hinton (2009)? Does this test set appear to be easier or harder than the original one?
 
 
-8. What do you think of the results for identifying semantic regularities? Why are results given for
+# 8. What do you think of the results for identifying semantic regularities? Why are results given for
 Spearman’s Rank and MaxDiff Accuracy rather than Accuracy (as before)?
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+**Glvoe vs Word2Vec**
+
+The fundamental difference between GloVe (Global Vectors for Word Representation) and RNNs (Recurrent Neural Networks) lies in their mathematical objective: GloVe is a count-based, global matrix factorization model, whereas an RNN is a prediction-based, sequential model.
+
+While both ultimately produce dense word embeddings, they "look" at the data through very different lenses.
+
+1. Global Statistics vs. Local Context
+GloVe (Global): GloVe operates on a Global Co-occurrence Matrix. It looks at the entire corpus at once and counts how often every word in the dictionary appears near every other word. It focuses on the ratio of these probabilities to determine word meaning.
+
+RNN (Sequential): An RNN processes text one word at a time in a specific order. It builds a representation by trying to predict the next word in a sequence based on the "hidden state" (memory) of the words that came before it.
+
+Feature,GloVe,RNN (as used by Mikolov et al.)
+Input Data,A pre-computed word-word co-occurrence matrix.,Raw sequences of text (sentences).
+Goal,To ensure the dot product of two vectors equals the log of their co-occurrence count.,"To minimize ""perplexity""—making the predicted next word as accurate as possible."
+Handling Order,"Generally order-insensitive; it knows words are ""near"" each other but doesn't care which came first.",Strictly order-sensitive; the meaning of the hidden state changes based on word sequence.
+
+GloVe produces Static Embeddings. Once training is finished, the word "bank" has one fixed vector regardless of whether you are talking about a river or a vault.
+
+RNNs produce two types of representations. While the "input weights" $(\mathbf{U})$ are static, the Hidden State $(\mathbf{s}(t))$ is a Contextual Summary. It is a unique, composed vector that represents the meaning of the entire sentence up to that point.
+
+4. Which is better for Analogy Tasks?GloVe was specifically engineered to be excellent at the vector offset method ($King - Man + Woman = Queen$). Because it is forced to learn the global ratios of word occurrences, these linear regularities are often very "clean" and consistent across the whole space.RNNs capture these regularities as a byproduct of learning language. While they are very good at it, the primary "finding" of the Mikolov paper was that it was surprising a sequential prediction model would produce such neat linear geometry at all.
+
+If you want to understand global themes and solve analogies quickly, GloVe is the standard tool. If you want to understand sentence structure, word order, and compositional meaning, the RNN approach (or its modern successor, the Transformer) is required.
+
+In a broad sense, yes, the resulting vectors from GloVe and the weights in an RNN represent the same thing—semantic coordinates in a continuous space—but they are constructed using very different mathematical "blueprints."
+
+While they both end up as dense matrices where each row is a word vector, the internal logic of those values differs.
+
+1. Functional Similarity: The Lookup TableIn both models, the "word representations" act as a lookup table.In GloVe: The dense matrix is the result of factorizing a global co-occurrence table.In RNNs: The dense matrix (specifically the input weight matrix $\mathbf{U}$) is trained via backpropagation to help the model predict the next word.The Result: In both cases, if you take the row for "sofa" and the row for "couch," the numbers in those rows will be very similar because both models learned from context.
+
+3. The "Static" vs "Contextual" DistinctionThis is the most critical difference in how these weights behave during use:GloVe Weights: These are static. Once the matrix is trained, the vector for "bank" is fixed. It is essentially a "dead" file you look up.RNN Weights: While the matrix $\mathbf{U}$ is also static, it is just the starting point. The RNN uses these weights to build a dynamic hidden state $\mathbf{s}(t)$.If the RNN sees "River" followed by "bank," the hidden state $\mathbf{s}(t)$ will be a unique vector representing a "water-related bank."If it sees "Investment" followed by "bank," $\mathbf{s}(t)$ becomes a "finance-related bank".
+
+Which one is "Better"?
+GloVe is often preferred for Relational Analogies because its global objective forces the "geometry" of the space to be very consistent (e.g., the King - Man + Woman math). RNN Weights (and the resulting hidden states) are better for Syntactic Tasks and Compositionality, as they were trained to understand how words interact sequentially.
+
+In the context of models like GloVe or LSA, factorizing a global co-occurrence table is a mathematical process used to compress a massive, sparse record of language into a compact, dense "map" of meaning.
+
+First, you build a Global Co-occurrence Matrix.
+
+Factorization is a linear algebra technique that breaks one large matrix into two (or more) smaller matrices which, when multiplied together, recreate the original as closely as possible.In distributional semantics, we factor our giant $V \times V$ matrix into two smaller matrices of size $V \times d$ (where $d$ is a small number like 300).Matrix $W$: Represents the "Word" vectors.Matrix $C$: Represents the "Context" vectors.
+
+The magic of factorization is that it forces the model to find latent (hidden) dimensions.
+Because the model only has 300 dimensions to explain billions of co-occurrence counts, it has to find the "common denominators" of language.
+
+While an RNN learns these vectors by "reading" sentences one by one and predicting what comes next, Factorization looks at the "big picture" statistics of the whole language at once.
+
+Factorizing a co-occurrence table is essentially mathematical summarization. You take the "raw evidence" (who hangs out with whom) and condense it into "character traits" (the dense vectors).
+
+While both GloVe and SVD (the engine behind Latent Semantic Analysis) are global matrix factorization techniques, they differ fundamentally in what they factorize and how they handle the math. If SVD is a "brute force" mathematical compression, GloVe is a "linguistically motivated" optimization.
+
+1. The Matrix they Factorize
+The most significant difference is the "preprocessing" of the data before the math starts:
+* SVD (Latent Semantic Analysis): Typically factorizes a Term-Document Matrix. This matrix tracks which words appear in which documents. Because it looks at the document level, it excels at identifying broad topics (e.g., seeing that "stadium" and "referee" both belong to the "Sports" topic).
++1
+* GloVe: Factorizes a Word-Word Co-occurrence Matrix. Instead of looking at documents, it looks at a "sliding window" of local context across the entire corpus. It tracks how often "ice" appears near "cold" versus how often "steam" appears near "hot."
+
+2. The Objective: Linear RatiosThe "magic" of GloVe that makes it superior for analogies (like King - Man + Woman = Queen) is its specific mathematical objective.SVD: Aims for Reconstruction. It tries to find a lower-dimensional version of the matrix that has the minimum possible error compared to the original. It treats every "count" with similar importance.GloVe: Aims to model the ratio of co-occurrence probabilities.The Logic: If you want to know the difference between ice and steam, looking at the probability of water appearing near them doesn't help (it's high for both). But the ratio of $P(solid|ice) / P(solid|steam)$ will be very high.GloVe forces the word vectors' dot products to equal the logs of these co-occurrence counts, which preserves these linear ratios much better than SVD.
+
+In GloVe, deciding the size of the learned matrices involves two distinct dimensions: the Vocabulary Size ($V$) and the Embedding Dimension ($d$).
+
+1. The Vocabulary Size ($V$)This determines the number of rows in your word and context matrices.Thresholding: Rather than including every single string of characters found in a crawl (which would include typos and rare gibberish), researchers typically set a minimum frequency count (e.g., a word must appear at least 5 times).Computational Limits: A larger $V$ increases the memory footprint of the co-occurrence matrix exponentially ($V^2$). Most standard models cap $V$ between 50,000 and 400,000 words to balance coverage with hardware constraints.
+
+2. The Embedding Dimension ($d$)This is the number of columns in your matrices (the length of the word vector). Choosing this is a "Goldilocks" problem:Too Small ($d < 50$): The model suffers from underfitting. There aren't enough dimensions to capture the nuance between complex concepts (e.g., the subtle difference between "remorse" and "regret" might be lost).Too Large ($d > 1000$): The model begins to overfit to the noise in the training data. Furthermore, you encounter "diminishing returns" where the marginal gain in accuracy is outweighed by the massive increase in training time and memory.The "Sweet Spot": For most general-purpose NLP tasks, $d$ is set between 100 and 300. The original GloVe researchers found that performance on analogy tasks improves rapidly up to 200 dimensions, but plateaus significantly after 300.
+
+3. Hyperparameter TuningBecause there is no "perfect" number that works for every dataset, researchers use empirical validation:Downstream Task Performance: They train multiple versions (e.g., 50d, 100d, 300d).Evaluation: They test each on a specific task, like the Analogy Test ($King - Man + Woman = ?$) or Sentiment Analysis.Selection: They choose the smallest dimension that achieves the highest required accuracy.
+
+Actually, it’s quite the opposite! While GloVe is based on global statistics, it uses an iterative training process almost identical to modern neural networks.
+
+To be clear: GloVe has a specific loss function and uses Stochastic Gradient Descent (SGD) to minimize it.
+
+Even though GloVe factorizes a matrix, it doesn't use the standard closed-form math of SVD. Instead, it defines a Weighted Least Squares objective function. The goal is to make the dot product of two word vectors plus some "bias" terms equal to the log of their actual co-occurrence count:
+
+$$J = \sum_{i,j=1}^{V} f(X_{ij}) \left( w_i^T \tilde{w}_j + b_i + \tilde{b}_j - \log X_{ij} \right)^2$$
+
+$w_i^T \tilde{w}_j$: The dot product of the word and context vectors (the "predicted" similarity).
+$\log X_{ij}$: The "ground truth" (how often they actually appeared together in the corpus).
+$f(X_{ij})$: The weighting function (explained below).
+
+2. The Use of Gradient DescentBecause this is a massive optimization problem ($V^2$ possible pairs), you can't solve it in one go.
+* Initialization: The matrices (the rows of word vectors) are initialized with random numbers.
+* Sampling: The model iterates through all the non-zero entries in the global co-occurrence matrix.
+* Error Calculation: It calculates the "loss" (the difference between the dot product and the actual log-count).
+* Gradient Descent: It uses Stochastic Gradient Descent (SGD) to nudge the values in those vectors so that the error decreases.
+
+This is what makes GloVe different from a standard matrix factorization. In a normal factorization, every "zero" or "one" in the table has the same weight. In language, that's a disaster because:Rare words are noisy.Common words (like "the") appear so often they would dominate the whole model.GloVe’s loss function uses a weighting curve that caps the influence of very frequent words and ignores pairs that never co-occurred ($X_{ij} = 0$).
+
+People often think that "Global Statistics" means "No Training." However, in this case, the Global Statistics are just the Training Data.
+
+* RNNs: Train on raw text (word by word).
+* GloVe: Trains on a summary of the text (the co-occurrence matrix).
+
+Both use Loss Functions and Gradient Descent to turn that data into dense vectors
+
+---
 
 ## Week 4: Lab Content
 
