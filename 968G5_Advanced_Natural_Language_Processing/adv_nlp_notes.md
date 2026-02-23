@@ -1752,6 +1752,369 @@ INSSERT IMAGE
 
 ## Week 4: Seminar
 
+
+
+
+
+
+# paper 
+
+In this paper, we examine the vector-space word representations that are implicitly learned by the input-layer weights.
+
+We find that these representations are surprisingly good at capturing syntactic and semantic regularities in language, and that each relationship is characterized by a relation-specific vector offset.
+
+This allows vector-oriented reasoning based on the offsets between words. For example, the male/female relationship is automatically learned, and with the induced vector representations, “King - Man + Woman” results in a vector very close to “Queen.”
+
+We demonstrate that the word vectors capture syntactic regularities by means of syntactic analogy questions (provided with this paper), and are able to correctly answer almost 40% of the questions.
+
+distributed representation achieves a level of generalization that is not possible with classical n-gram language models; whereas a n-gram model works in terms of discrete units that have no inherent relationship to one another, a continuous space model works in terms of word vectors where similar words are likely to have similar vectors.
+
+when the model parameters are adjusted
+in response to a particular word or word-sequence,
+the improvements will carry over to occurrences of
+similar words and sequences
+
+By training a neural network language model, one
+obtains not just the model itself, but also the learned
+word representations, which may be used for other,
+potentially unrelated, tasks.
+
+In this work, we find that the learned word repre-
+sentations in fact capture meaningful syntactic and
+semantic regularities in a very simple way.
+
+Specif-
+ically, the regularities are observed as constant vec-
+tor offsets between pairs of words sharing a par-
+ticular relationship.
+
+or example, if we denote the
+vector for word i as xi, and focus on the singu-
+lar/plural relation, we observe that xapple−xapples ≈
+xcar −xcars, xf amily −xf amilies ≈xcar −xcars, and
+so on.
+
+More recently, neural network language
+models have been proposed for the classical lan-
+guage modeling task of predicting a probability dis-
+tribution over the “next” word, given some preced-
+ing words. These models were first studied in the
+context of feed-forward networks (Bengio et al.,
+2003; Bengio et al., 2006), and later in the con-
+text of recurrent neural network models (Mikolov et
+al., 2010; Mikolov et al., 2011b)
+
+This early work
+demonstrated outstanding performance in terms of
+word-prediction, but also the need for more compu-
+tationally efficient models. 
+
+The word representations we study are learned by a
+recurrent neural network language model (Mikolov
+et al., 2010), as illustrated in Figure 1
+
+This architec-
+ture consists of an input layer, a hidden layer with re-
+current connections, plus the corresponding weight
+matrices. 
+
+The input vector w(t) represents input
+word at time t encoded using 1-of-N coding, and the
+output layer y(t) produces a probability distribution
+over words. 
+
+The hidden layer s(t) maintains a rep-
+resentation of the sentence history
+
+The input vector
+w(t) and the output vector y(t) have dimensional-
+ity of the vocabulary. 
+
+he values in the hidden and output layers are computed as follows: 
+
+$$\mathbf{s}(t) = f \left( \mathbf{U}\mathbf{w}(t) + \mathbf{W}\mathbf{s}(t-1) \right) \qquad (1)$$
+
+$$\mathbf{y}(t) = g \left( \mathbf{V}\mathbf{s}(t) \right) , \qquad (2)$$
+
+where
+
+$$f(z) = \frac{1}{1 + e^{-z}} , \quad g(z_m) = \frac{e^{z_m}}{\sum_k e^{z_k}} . \qquad (3)$$
+
+In this framework, the word representations are
+found in the columns of U, with each column rep-
+resenting a word.
+
+The RNN is trained with back-
+propagation to maximize the data log-likelihood un-
+der the model. The model itself has no knowledge
+of syntax or morphology or semantics. Remark-
+ably, training such a purely lexical model to max-
+imize likelihood will induce word representations
+with striking syntactic and semantic properties.
+
+To understand better the syntactic regularities which
+are inherent in the learned representation, we created
+a test set of analogy questions of the form “a is to b
+as c is to ” testing base/comparative/superlative
+forms of adjectives; singular/plural forms of com-
+mon nouns; possessive/non-possessive forms of
+common nouns; and base, past and 3rd person
+present tense forms of verbs.
+
+
+we
+tagged 267M words of newspaper text with Penn Treebank POS tags (Marcus et al., 1993).
+
+We then
+selected 100 of the most frequent comparative adjec-
+tives (words labeled JJR); 100 of the most frequent
+plural nouns (NNS); 100 of the most frequent pos-
+sessive nouns (NN POS); and 100 of the most fre-
+quent base form verbs (VB). We then systematically
+generated analogy questions by randomly matching
+each of the 100 words with 5 other words from the
+same category, and creating variants as indicated in
+Table 1. The total test set size is 8000. The test set
+is available online.
+
+n addition to syntactic analogy questions, we used
+the SemEval-2012 Task 2, Measuring Relation Sim-
+ilarity (Jurgens et al., 2012), to estimate the extent
+to which RNNLM word vectors contain semantic
+information.
+
+The dataset contains 79 fine-grained
+word relations, where 10 are used for training and
+69 testing.
+
+As we have seen, both the syntactic and semantic
+tasks have been formulated as analogy questions.
+We have found that a simple vector offset method
+based on cosine distance is remarkably effective in
+solving these questions.
+
+In this method, we assume
+relationships are present as vector offsets, so that in
+the embedding space, all pairs of words sharing a
+particular relation are related by the same constant
+offset. (Figure 2)
+
+In this model, to answer the analogy question a:b
+c:d where d is unknown, we find the embedding
+vectors xa, xb, xc (all normalized to unit norm), and
+compute y = xb −xa + xc.
+
+Of course, no word might exist at that
+exact position, so we then search for the word whose
+embedding vector has the greatest cosine similarity
+to y and output it
+
+
+We see that the RNN vectors capture significantly
+more syntactic regularity than the LSA vectors, and
+do remarkably well in an absolute sense, answering
+more than one in three questions correctly
+
+We have presented a generally applicable vector off-
+set method for identifying linguistic regularities in
+continuous space word representations.
+
+We have
+shown that the word representations learned by a
+RNNLM do an especially good job in capturing
+these regularities.
+
+---
+
+Gemini:
+
+
+It is easy to look back at this now and see "basic linear algebra," but in 2013, this paper was a seismic shift in how we viewed the "black box" of neural networks. To understand why this wasn't considered "basic" at the time, we have to look at the prevailing mindset of the early 2010s.
+
+Before this paper, researchers knew that Recurrent Neural Networks (RNNs) were good at predicting the next word in a sequence. However, the hidden layers—represented by the vector $\mathbf{s}(t)$ in the formulas you just saw—were largely viewed as abstract mathematical "junk" that helped the model minimize loss.
+
+People didn't necessarily expect that these hidden states would organize themselves into a perfectly linear, relational map. The discovery wasn't just that the vectors had meaning, but that they had proportional, geometric meaning.
+
+While people knew that "cat" and "dog" would be close together (distance), they didn't realize that the direction and magnitude of the displacement between words would be consistent across the entire space.
+
+The "King - Man + Woman = Queen" insight: This showed that the vector $\vec{v}(king) - \vec{v}(man)$ resulted in a "gender vector" that could be applied to any other noun.
+
+Linearity in a Non-linear System: RNNs use non-linear activation functions (like the $sigmoid$ in your uploaded image). It was surprising that a highly non-linear system would produce a latent space where semantic relationships could be solved with simple vector addition and subtraction.
+
+Remember the Dagan et al. (1994) paper you were reading? That era focused on discrete counts and "smoothing" to handle sparsity. Mikolov’s work proved that you didn't need to manually smooth or find neighbors using complex formulas. The RNN's hidden layer performed a form of automatic, continuous smoothing that was far more powerful than anything seen in the previous 20 years.
+
+In 2013, training these models was computationally expensive. The efficiency of the linear regularities meant we could perform semantic tasks without needing a separate, heavy classifier. Today, we take for granted that "embeddings = meaning." In 2013, the dominant paradigm in NLP was still based on logic-based rules and sparse n-gram models. The idea that you could "calculate" the capital of France by doing Paris - France + Italy felt like magic, not basic math.
+
+The "basic" nature of the math was actually the point. Mikolov showed that we didn't need complex, deep architectures to extract these meanings; they were a natural byproduct of simple objective functions. This paved the way for the Word2Vec revolution (Skip-gram and CBOW) just months later.
+
+You’ve pinpointed the exact tension between theory and scale. People suspected hidden layers were useful, but they lacked the specific proof and the massive data volume required to turn a mathematical curiosity into a world-changing tool.
+
+It wasn't that people thought the layers were "useless," but rather that they didn't realize how structured and universal those representations were until the scale of data and compute changed.
+
+The concept of "distributed representations" (vectors) dates back to Geoffrey Hinton and others in the mid-1980s. They proved that neural networks could learn internal features to solve specific tasks. hese early experiments were done on tiny, toy datasets (like family trees with 24 people). While the "hidden units" showed some logic, nobody knew if this would hold up when trained on the messy, infinite complexity of the real-world internet.
+
+In the 90s and 2000s, "large" datasets were a few million words. To see the "King - Man + Woman = Queen" regularity, the model needs to see those words in thousands of different contexts to "average out" the noise. Without Wikipedia-scale corpora (billions of words), the vector space is too "lumpy" and the linear analogies don't emerge.
+
+Before this paper, people were obsessed with making RNNs deeper and more complex to handle logic. However, complex models are slow. The Mikolov Insight: He realized that if you simplify the architecture (removing the non-linear hidden layers, leading to Word2Vec), you could train on 1,000x more data in the same amount of time. He proved that more data + simpler model > less data + complex model.
+
+C. Lack of Evaluation Frameworks
+Believe it or not, before this paper, there wasn't a standardized "Analogy Test." Researchers mostly evaluated RNNs by Perplexity (how well they predicted the next word). If a model had low perplexity, people said "Great, it's a good language model!" They didn't think to stop and ask: "Wait, can I do math with the internal weights?"
+
+3. The "Unsupervised" Revelation
+Most prior work used Supervised Learning (labels). If you train a network to classify "Sentiment," the hidden layer will represent "Happy vs. Sad." The shock of the Mikolov paper was that Unsupervised Learning (just predicting the next word) created a hidden layer that understood everything: gender, geography, verb tense, and capital cities. It proved that "meaning" is a statistical byproduct of "prediction."
+
+The finding that word representations inhabit a continuous, linear vector space is the "silver bullet" for the sparsity problem because it replaces exact matches with geometric proximity. In traditional NLP (lexical semantics), if the model hasn't seen the specific sequence "The platypus eats," it has zero information. In the continuous space described by Mikolov et al., the model can "triangulate" meaning even for sequences it has never encountered.
+
+1. From "Discrete Gaps" to "Continuous Maps"
+Sparsity is fundamentally the problem of unseen events. In a sparse system (like a one-hot or n-gram model), every word is an island. There is no path from "sofa" to "couch" unless they are explicitly linked. If your training data contains "He sat on the sofa" but your test data contains "He sat on the couch," a sparse model sees "couch" as a completely unknown entity ($0$ probability). Because the RNNLM (Recurrent Neural Network Language Model) learns that sofa and couch have nearly identical vectors, the model's hidden state $\mathbf{s}(t)$ for both sentences will be almost mathematically identical. The model "borrows" the experience of sofa to understand couch.
+
+> So here, it doesn't matter that a network is being passed couch in one of the units. Because the other 3 input units are "He sat on the". This will produce a vector that is in the similar space to "He sat on the sofa". Can these we can use the probability of "He sat on the sofa" as a proxy for "He sat on the couch"
+> semantic generalization in a continuous space.
+> To refine that intuition: it’s not just that the model uses the probability as a "proxy"—it’s that, mathematically, the model can no longer easily tell the difference between the two scenarios because they map to the same region of "meaning."
+> In a sparse model, the "ID" for sofa (Index 402) and couch (Index 8001) are as different as the numbers 1 and 1,000,000. There is no overlap.
+> In an RNNLM, after seeing "He sat on the..." thousands of times followed by various pieces of furniture, the backpropagation process pushes the input embeddings ($\mathbf{w}(t)$ in your formula) for sofa and couch to nearly the same coordinates.
+> 2. The Hidden State as a "Contextual Summary"Look back at the formula you uploaded:$$\mathbf{s}(t) = f(\mathbf{U}\mathbf{w}(t) + \mathbf{W}\mathbf{s}(t-1))$$$\mathbf{s}(t-1)$ has already captured the "history" of the sentence: He sat on the.When you provide the current word $\mathbf{w}(t)$ (couch), it is multiplied by $\mathbf{U}$.If $V_{couch} \approx V_{sofa}$, then the resulting hidden state $\mathbf{s}(t)$ will be nearly identical for both sentences.
+> 
+
+Handling Inflectional SparsitySuppose your dataset is small. You see "walk" and "walked," and you see "run," but you never see the word "ran."In a sparse model: "ran" is a "zero."In the Mikolov space: The model knows the vector relationship $V_{walked} - V_{walk} \approx \text{PAST\_TENSE}$. It can mathematically predict where $V_{ran}$ should be by calculating $V_{run} + \text{PAST\_TENSE}$.
+
+In your previous question about the Softmax function $g(z_m) = \frac{e^{z_m}}{\sum_k e^{z_k}}$, the "sparsity" is tackled because the model assigns a non-zero probability to every word in the vocabulary for every context. Because the vector space is continuous, similar words naturally get similar probability "mass."
+
+4. Why the "Linearity" matters for Sparsity
+If the space were "curved" or disorganized, finding a neighbor wouldn't help you predict a relationship. The fact that the space is linear means that the "gaps" in our data (the sparse zeros) can be filled in using simple arithmetic. We can navigate the "empty" parts of the language space because the map is consistent.
+
+We tackle sparsity by moving from a world where we need to see everything to a world where we only need to see enough to build the map. Once the map (the vector space) is built, the "unseen" points are just coordinates we haven't visited yet, but whose locations we can already guess.
+
+
+
+
+This is the ultimate "Aha!" moment in understanding neural NLP. If the network has literally never seen the word "couch" during its entire training phase, we run into a "Cold Start" problem. How the network handles this depends on whether the word is Out-of-Vocabulary (OOV) or simply Rare.
+
+1. Scenario A: The word is "Rare" (Seen once or twice)If "couch" appeared even once in a 1-billion-word corpus, it has a vector. Because it likely appeared in a context like "He sat on the couch," the backpropagation algorithm nudged its vector to look like other things that appear after "He sat on the..." (like sofa or chair).In this case:The weights $\mathbf{U}$ multiply the "couch" vector.The result "percolates" through, and because the vector is already in the "furniture neighborhood," the hidden state $\mathbf{s}(t)$ remains stable.
+
+2. Scenario B: The word is "Unknown" (Truly never seen)
+If the word "couch" was never in the training data, the network cannot compute a specific vector for it. In traditional RNNLMs (like the 2013 Mikolov paper), there is no magic "inference" for a brand-new string of characters.
+
+Here is what actually happens: The <UNK> Token. Most models reserve a specific slot in the vocabulary for an "Unknown" token. Any word not in the vocabulary is replaced by the <UNK> symbol. The network has a specific vector for <UNK> that it learned from other rare words during training. The Problem: In this case, "couch" and "glip-glop" would look identical to the model. Sparsity wins here.
+
+
+The Sub-word Revolution (The Modern Fix)
+To solve exactly what you are asking—how does it compute something for a word it hasn't seen?—modern models (and later iterations of Mikolov's work like FastText) don't look at whole words. They look at sub-words or character n-grams. If the model sees "couch" for the first time: It breaks it into co, ou, uch. It might have seen couching or vouch before. It aggregates the vectors of those known pieces to "construct" a vector for the unknown word "couch."
+
+
+4. Why it doesn't just turn into a 0In the sparse models you read about earlier (like one-hot), an unknown word is a 0. It has no index, so the math breaks.In a continuous model, every input is a dense vector. Even a randomly initialized vector for an unknown word is a collection of numbers (e.g., [0.1, -0.2, 0.5]).It's not a "0"; it's "noise."The "History" ($\mathbf{s}(t-1)$) is often strong enough to "override" the noise of one unknown word. If the model is $90\%$ sure the next part of the sentence involves furniture because of "He sat on the...", a noisy input for "couch" won't totally derail the hidden state. It will just make the prediction slightly "fuzzier."The "Percolation" Summary: If the word is known but rare, its vector has already been "pulled" into the right neighborhood by the context. If it is truly unknown, modern models build its vector from sub-components so the math never hits a "0."
+
+---
+
+# QUESTIONS 
+
+1. What are the main findings of this paper? Are you convinced?
+
+
+2. What do the authors claim is the main advantage of using distributed representations of words (aka. embeddings) over classical n-gram language models?
+
+The main advantage is the ability of distributed representations to generalize to unseen word sequences. Words are mapped to a continuous vector space where semantically similar words are close to one another. Classical N-grams: These models rely on exact matches of word sequences. If a specific n-gram (e.g., "the sapphire sky") was not seen in the training data, the model has no information about it, leading to the "sparsity" problem. Because the model represents "sapphire" and "azure" as similar vectors, a model trained on "the sapphire sky" can naturally assign a high probability to "the azure sky," even if that specific phrase never appeared in the training set. 
+
+The authors demonstrate that RNN-based distributed representations capture multi-dimensional semantic and syntactic relationships as constant vector offsets.
+
+Because embeddings "smooth" the language space continuously, they often achieve lower perplexity (a measure of how well a probability distribution predicts a sample) than n-gram models.
+
+
+3. What is meant by a syntactic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing syntactic regularities. Do you think the same would apply to other distributional word representations?
+
+In the context of word embeddings, a syntactic analogy refers to a relationship based on the grammatical structure or "form" of words rather than their core meaning. While a semantic analogy relates to concepts (e.g., Paris : France), a syntactic one relates to linguistic rules like verb tense, pluralization, or degrees of comparison. These follow the pattern $A : B :: C : D$ (read as "$A$ is to $B$ as $C$ is to $D$"):
+
+Word2Vec (specifically architectures like CBOW and Skip-gram) captures these because of the Distributional Hypothesis: words that appear in similar contexts have similar meanings. In syntax, "form" dictates context just as much as "meaning" does.
+
+Consider the words "climbing" and "climb":
+
+Shared Semantic Context: Both will appear near words like "mountain," "rope," or "steep."
+
+Unique Syntactic Context: "Climbing" will frequently be preceded by auxiliary verbs like "is," "was," or "are" (e.g., "He is climbing"). "Climb" will follow modals or "to" (e.g., "They want to climb").
+
+The Result: The model learns a specific vector offset for the "-ing" suffix. Because the context shift from "walk" to "walking" is statistically almost identical to the shift from "climb" to "climbing," the vectors for these changes become parallel in the embedding space.
+
+Early distributional models based on large co-occurrence matrices (like Latent Semantic Analysis) are generally weaker at capturing fine-grained syntactic analogies. They tend to capture "topical" similarity (e.g., doctor and hospital). Because they often use large context windows or bag-of-words approaches, the subtle word-order cues required to distinguish "walk" from "walking" often get washed out.
+
+Models like FastText (an evolution of Word2Vec) are actually better at syntactic regularities. FastText represents a word as a sum of its character n-grams (e.g., "climbing" = cl, li, im, mb, bi, in, ng). Even if the model has never seen a specific rare verb, it recognizes the -ing or -ed ending and can mathematically "calculate" its syntactic position based on those sub-parts.
+
+
+4. What is meant by a semantic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing semantic regularities. Do you think the same would apply to other distributional word representations?
+
+A semantic analogy refers to a relationship based on the meaning, concepts, or real-world knowledge associated with words, rather than their grammatical form. In a vector space, this is represented by the idea that the "distance" and "direction" between two concepts (like a country and its capital) remain constant across different pairs.
+
+These follow the proportional relationship $A : B :: C : D$:Capital Cities: London : England :: Tokyo : Japan 
+
+Word2Vec (specifically Skip-gram and CBOW) excels here because it treats words as dense vectors learned from their surrounding context. The model relies on the fact that words with similar meanings appear in similar environments.
+
+The specific vector offset—the "jump" you take to get from the country to the city—represents the concept of "being the capital of." Because the model sees the same pattern for Berlin and Germany, the vector $\vec{v}(Berlin) - \vec{v}(Germany)$ ends up pointing in the same direction and having the same length as $\vec{v}(Paris) - \vec{v}(France)$.
+
+Earlier models like Latent Semantic Analysis (LSA) capture thematic similarity (e.g., bee is near honey), but they often struggle with specific relational analogies. Because they use global matrix factorization, the fine-grained directional relationships (the "offset") are often not as precisely preserved as they are in the prediction-based Word2Vec.
+
+Yes, the same applies here, and often even better. GloVe was designed specifically to capture these linear regularities by training on the ratio of co-occurrence probabilities. It explicitly forces the global statistics of the corpus into a model where the differences between word vectors represent meaning.
+
+
+
+LSA is a form of dimensionality reduction. Its goal is to take a massive, sparse matrix (where most values are zero) and transform it into a compact, dense representation that captures the "thematic neighborhood" of words rather than just their exact spelling. LSA relies on a mathematical process called Singular Value Decomposition (SVD): The Matrix: You start with a "term-document matrix" that tracks how often every word appears in every document. The Compression: SVD factorizes this matrix into smaller pieces, effectively "throwing away" the noise and keeping only the most important statistical dimensions. The Result: Words that frequently appear in the same types of documents are pushed together in a multi-dimensional space, even if those words never actually appear in the same sentence.
+
+A major advantage of LSA is its ability to handle synonyms. In a traditional system, "physician" and "doctor" are treated as completely different things because they are spelled differently. In LSA, because "physician" and "doctor" both tend to appear in documents about hospitals and medicine, the model learns that they are nearly identical features.
+
+In our more recent discussions, we compared LSA to neural approaches like Word2Vec:LSA (Global): Analyzes the entire corpus at once to find global themes. It is generally better at capturing "topical" similarity (e.g., bee and honey).Word2Vec (Local): Uses a "sliding window" to look at immediate neighbors. It is often better at capturing specific relational analogies like $King - Man + Woman = Queen$.
+
+Speed & Efficiency: It makes classification models faster and less prone to overfitting by compressing thousands of unique words into a few hundred "concepts".
+
+Thematic Understanding: It allows a computer to understand that a document about "strikeouts" relates to Sports, even if the word "sports" is never mentioned.
+
+While your intuition is correct—LSA definitely learns that "Paris" and "France" "go together"—there is a technical reason why it struggles with relational analogies (like the city:country pair) compared to Word2Vec.
+
+It comes down to the difference between Topical Association and Relational Linearities.
+
+Topical Association vs. Relational Direction
+LSA is excellent at Topical Association. If you search for "Paris," LSA will likely return "France," "Eiffel Tower," and "baguette" because they all co-occur in the same documents. In the vector space, these words will form a "cloud" or cluster.
+
+However, a Semantic Analogy requires more than just being in the same cloud; it requires a consistent directional vector.
+
+To solve Paris : France :: Tokyo : Japan, the model needs the "step" from France to Paris to be the same mathematical direction as the "step" from Japan to Tokyo.
+
+LSA vectors are built using Singular Value Decomposition (SVD), which focuses on reconstructing the global variance of the data. This often "squashes" the specific directional relationships into a general "topic" dimension. You know they are related, but the math doesn't necessarily preserve the specific nature of the relationship (e.g., "is the capital of") as a straight line.
+
+The "Bag of Words" Limitation
+As we discussed earlier, LSA typically uses a Term-Document Matrix This means it looks at whether words appear in the same document. Because documents are large, the relationship it learns is broad: "These words are about French things". Word2Vec uses a tiny local window (5–10 words). By looking only at immediate neighbors, it captures the specific linguistic "slots" words fill. The precision of these small windows is what allows the linear "offset" (the analogy math) to emerge so clearly.
+
+Global Statistics vs. Local Prediction
+LSA (Global): It is great for Document Classification because it knows the "gist" of a text. It knows "Paris" belongs in the "France" topic. Word2Vec (Local): It is better at Linguistic Regularities because it treats word relationships like a map with specific coordinates and directions.
+
+LSA does learn they go together, but it maps them as a cluster (a neighborhood). Word2Vec maps them as a displacement (a specific path).
+
+
+
+5. Explain the vector offset method used to answer an analogy question. In particular, what happens when no word exists at the predicted position?
+
+The vector offset method is a technique used in distributional semantics to solve word analogies by treating semantic relationships as geometric displacements. This method relies on the finding that in a well-trained vector space (like Word2Vec), the relationship between two words is represented by the constant distance and direction between them.
+
+How the Vector Offset Method WorksTo solve an analogy of the form "$A$ is to $B$ as $C$ is to $D$" (e.g., King : Man :: Queen : Woman), the model follows these steps:Calculate the Relationship Vector: The model calculates the difference between the vectors for words $A$ and $B$: $\vec{v}(B) - \vec{v}(A)$. This represents the "relational shift" (like gender or capital city).Apply the Offset: This vector is added to the vector for word $C$. This points the model toward a location in the vector space where $D$ should theoretically reside: $\vec{v}(D) \approx \vec{v}(C) + (\vec{v}(B) - \vec{v}(A))$.Find the Result: The model then looks for the word vector in the dictionary that is closest to this new coordinate.
+
+Because word embeddings inhabit a continuous space, the mathematical result of the calculation ($\vec{v}(C) + \vec{v}(B) - \vec{v}(A)$) will almost certainly point to a precise coordinate where no actual word vector is located. To resolve this, the model uses the following strategies:
+
+Cosine Similarity Search
+The model does not look for an exact match. Instead, it performs a nearest-neighbor search using a metric like Cosine Similarity. It scans the entire vocabulary to find the word vector that has the smallest angular distance from the predicted coordinate.
+
+To prevent the model from simply returning one of the words used in the query (which are often very close to the target area), the inputs $A, B,$ and $C$ are typically excluded from the search results. For example, if the model calculates $King - Man + Woman$, it will ignore those three words and find the next closest neighbor, which is usually Queen. 
+
+
+
+
+6. What do you think of the results for identifying syntactic regularities? Is answering more than 1 in 3 questions correctly a good result? Are there any obvious trends in the results?
+
+
+
+7. Do you think the comparisons with other methods are fair? Why do the authors use a different test set when comparing with Collobert & Weston (2008) and Mnih & Hinton (2009)? Does this test set appear to be easier or harder than the original one?
+
+
+8. What do you think of the results for identifying semantic regularities? Why are results given for
+Spearman’s Rank and MaxDiff Accuracy rather than Accuracy (as before)?
+
+
 ## Week 4: Lab Content
 
 ## Week 4: Additional Reading
