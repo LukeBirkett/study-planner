@@ -1212,13 +1212,549 @@ Disscusion of Paper: Character aware neural language models (Kim et al. 2016)
 10. What are the main conclusions of the paper? Are you convinced?
 
 
-## Week N: Lab Content
+## Week 3: Lab Content
 
-## Week N: Additional Reading
-
-
+## Week 3: Additional Reading
 
 
+
+
+
+
+
+
+
+
+# [Week 4 - Lexical and Distributional Semantics 2]()
+
+#### Week 4: Contents
+
+1. [Lecture]()
+2. [Seminar]()
+3. [Lab]()
+4. [Additional Readings]()
+
+## Week 4: Lecture
+
+* https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=353c47a5-1230-4ffa-b59c-b3ef010c79b0&start=0
+* https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75f1da88-d5ed-48f5-9451-b3ef0116d27c&start=0 
+
+# PART 1 
+
+return to topic of lexical and distribution semantics from week 1
+
+lex; word sense, sem relationships, sem similarty
+
+dist; bootstrap sems from context, cosine sim of two vectors, post wise info as measure of assoc
+
+assoc is occured together in same context, similar is the interchangbale words
+
+last few weeks has been lang models; n-grams, sparse, smooth methods, moive into neural networks as neext solution 
+
+# challenges for measures of dist sim 
+
+* mixture of sense (lec 1); neighbours of diff sense
+* mixture of relationships; syson, hypo, semantically related
+* sparsity (didnt look at much last time but will this time, more been topic for lang models)
+
+# lec 4 overvew
+
+p1; sparsity, zips law, smooth, dim red
+
+p2; word embed (potential overcome of sparsity), word2vec, glove, composoition 
+
+
+# sparsity
+
+what do we mean about parsity?
+
+google news corpus 320m word (tokes) with vocab of 82k (types)
+
+what does this tell use about distribution of types?
+
+mean freq is 3900 for each type, does this mean anything? could we look at occurance coompared to mean freq to build understanding? learn what words are similar to others?
+
+maybe if it was normal dist with small sd
+
+problem is very few words have 3900 occurances
+
+this is because the distribution of wordsis def not normal dist or have a sd of 1
+
+# zipf's law
+
+"the product of the freq of a word and its rank is approx constant"
+
+rank = howw often occur in corpus, i.e. 1st most freq
+
+demonstrates there are few words tht occur alot 
+
+but a big trail of words that occur infreq or even once (hapax legomena)
+
+HL make up approx half of vocab; names, spelling mistakes, techniqal terms, scientific
+
+this is sparisty in action, many rare words
+
+# consequences of zipds law
+
+82k dim coocurance vectors will be very sparse
+
+if word only occurs once, then all other co-occuranes in the vocab will be 0. this is very sparse. 
+
+we don't really know what 0 means. is it impossible or also just rare and we havent seen it
+
+what can we do?
+
+# possible solutions
+
+* smoothing
+* dim red
+* word embed/fix dim reps (from lang models)
+
+# smoothing intuition
+
+int is that anytihng is possible, even unobserned events
+
+when we have sparse statics, "steal" prob mass from observed inorder to generalise to unobs events
+
+# add one smoothing (laplace)
+
+prentend we saw each word one more time than we did
+
+obs + 1, 0+1, 1+1 etc
+
+# applyinh add-1 smoothing
+
+good method for some methids, i.e. naive bayes, as its prevents 0 prob which breaks the foruklas
+
+but here the number zeroes isn't so huge
+
+classes < sie of eng vocab which is what language models use for their corpus
+
+add1 is rarely used for co-occurance data/lang models
+
+it assungs too much mass to unseen occourences
+
+unseen cooccurances are much more vast than the actual obs co-oc
+
++ is wouldn't help us wuth dist semantics sparisty problem anyway
+
+**why is add1 unlikely to help the sparse problem of dist semantics**
+
+address later in seminar?
+
+# distributional smoothing
+
+Dagan, Pereira and Lee (1994), define S(w) as the k-most similar words to w according to some distributional simiarity measure
+
+the smoothed occurance probability of two words in then:
+
+INSERT DIST SMOOTH FORUMLA
+
+smoothed prob of w2 occuring given w1 has occured
+
+find all words that in a similarity set of w1
+
+take prob of w2 occuring aginst all of the words in the simiarity set; then sum up these probs
+
+prob of sim words is taken as a weighted average
+
+# smoothing example
+
+prob of snort and aardvark
+
+both rare words. obs cooccured freq is 0
+
+estimate prob of based on cooccurance of snorth with neighbours of aardark
+
+INSERT FORUMLAS
+
+do this both way round? snort|aard and aard|snort
+
+why are we doing it both way rounds?
+
+# distrib msooth in practice
+
+* build sparse rep of all words (In the context of 1994 distributional semantics, a "sparse representation" usually refers to a co-occurrence vector, not a one-hot vector.)
+
+> A vector where only one dimension is $1$ and all others are $0$. This represents an identity, but it contains no semantic information. You cannot find "neighbors" for a one-hot vector because every word is mathematically equidistant from every other word.
+
+> A vector where the dimensions represent context words. For example, the vector for "dog" might have a $5$ in the "bark" column and a $10$ in the "pet" column. It is "sparse" because out of a 50,000-word vocabulary, "dog" only co-occurs with a few hundred words.
+
+> If you use Kullback-Leibler (KL) divergence or Cosine Similarity on these sparse co-occurrence vectors, you can find neighbors. For example:
+
+> Word A (Cat): {meow: 10, food: 5, sleep: 20}
+> Word B (Dog): {bark: 8, food: 7, sleep: 15}
+
+> Even if "Cat" never appears with "bark" and "Dog" never appears with "meow," they both appear with "food" and "sleep." k-NN uses these shared dimensions to decide they are neighbors.
+
+* auto generate thesuraus of neighbours (find k nearest neighbours of every word)
+
+* re-estimate co-occurence probabilities of every pair of words using distribitional smoothing formula
+
+* regenerate the thesaurus
+
+# dimensionality reduction
+
+other solution to sparsity
+
+v popular 07-13
+
+build cocurrance matrix, 82k dim, reduce down to managnumber number; 1000, 300, 50
+
+could just ignore features and select the ones you want but there are more technical ways
+
+find axis of the data where there is most variation
+
+transform data so these are the basis of the space
+
+3 main ways;
+* PCA princ comp analysis - statistical techniwue
+* SVD singular decomp SVD - matrix factorisation technique
+* non-neg matrix factorisation (nnmf)
+
+# PCA
+
+int behind; reduce from 2 dims down to 1
+
+2 dims could be ppmi occurance with other words
+
+want to find natural axis of the data
+
+could just loose a dimension and just look at x-axis but we loose alot of info
+
+better to sort of like finding the regression line, best line of fit, the princ component
+
+could be best fit from least squares
+
+this looses the least information as it is built form both axis
+
+# pca (2)
+
+generally have alot more than 2 dimensions 
+
+want to reduce n to k, i.e. k=300
+
+apply pca iteratively to find all k dimensions
+
+find all pricnc comps
+
+subsi pc need to be orthogonal 
+
+dont need to now math or cade, packages do this, just know int
+
+variance in the data is not captured by the pc, byt can be computed by the loss of information 
+
+# latent semantic analysis (lSA)
+
+deerester et al 1990; landauer et al 1998;
+
+rep text as matrix X where each row is a unique word and each column is a document (or other type context that word can be compared to)
+
+the values are transformed freqs (tf-idf, ppmi)
+
+they used tf-idf as they were using documents 
+
+but if the other context was words then ppmi would be better
+
+once you have matric applied SVD to decomose into a product of 3 matrics
+
+INSERTT IMAGE OF DECOMPOSITION
+
+$X = W.S.P$
+
+decompose means we area breaking down the matrix into n matrices which when product togetehr become the original matrix agian
+
+given matrices need to have given sizes to acheive the correct output
+
+[5x3]=[5x2][2x2][2x3]
+
+s is diagonal matrix, the demnision of which define the reduced space. will be alot smaller than orginal input
+
+w is the reduced dim set of word vectors
+
+p is the red dim set of doc/co-occurance vectors
+
+w,s,p is found by using standard matrix tecniques, by fding eigen values and eigen vectors
+
+also known as eigendecompostion
+
+
+# nnmf
+
+non-neg matric factoriz; variation on svd
+
+svd there are a variation of matric decomps that can be derived to rebuild the orignal matrix size
+
+nnmf have further costraint that all values in the facotrized space are allowed to be non-neg
+
+ptentially leads to nmore interpretable spaces
+
+NMF forces every value in the resulting matrices to be zero or greater.
+
+In SVD, the latent dimensions (components) are allowed to have negative values. Mathematically, this is elegant because it ensures dimensions are orthogonal (independent). However, semantically, it’s a nightmare.SVD creates "Counter-Evidence": To represent a word like apple, SVD might take a "Fruit" component and then subtract a "Tropical" component.The Interpretation Issue: What does "negative tropicality" mean? In human language, we don't usually define a concept by what it isn't in a mathematical vacuum. It’s hard for a human to look at a vector of $+0.5, -0.2, +0.8$ and explain the "meaning" of that $-0.2$
+
+NMF and the "Parts-Based" Representation
+NMF functions on the Additive Property. Because you cannot have negative numbers, the only way to reconstruct the original data is by adding components together. Additive Logic: To represent apple, NMF might add a bit of the "Fruit" component, a bit of the "Crunchy" component, and a bit of the "Red" component. The Interpretation Win: This mirrors how humans categorize things. We see objects as a collection of features or parts. Sparsity: Because NMF is trying to reconstruct the data using only additions, it naturally pushes many values toward zero. This results in "cleaner" components where only a few words are highly active, making the "topic" of that dimension immediately obvious to a human reader.
+
+Visualizing the Dimensions
+Imagine you are factorizing a dataset of faces: SVD would produce "Eigenfaces"—ghostly, whole-face images that look like blurry versions of the average person. Some features are "subtracted" to reach the final face. NMF would produce recognizable parts: a dimension for "noses," a dimension for "eyes," and a dimension for "mouths." To make a face, the model simply adds those parts together.
+
+In distributional semantics, these "parts" end up being semantic themes (e.g., a "sports" dimension, a "finance" dimension), which is why NMF is a favorite for topic modeling.
+
+# using PCA, SVD, LSA, NNMF
+
+adv; massively reduce dims, theo should captur sims between word in the occurances
+
+dis; comp expensive to obtain to the vectors (vectors are the more efficent part), generally impossible to interpret/interrogate dimensions, too complex
+
+
+
+# PART 2
+
+previous part was about challenge the problem of sparsity
+
+# word embeddings
+
+start with the assumption that each word can be represent by a fixed set of dims, i.e. select the number first any number less can vocab
+
+learn best values for each word; optimise of some performance taskl; log-liklieghood of some training corpus
+
+optimise to be the best prob, i..e get the best vector embed
+
+# simple nn 
+
+use a network to learn the embeddings
+
+can represent network as a matrix
+
+each layer is a matrix vector mm on the weights and the inputs
+
+# hot one encoding
+
+inputs to the network
+
+input space with V dims, where V is size of the vocab (huge vector, with just 1 entry in the vector, all other 0)
+
+this esssnetially switches on a matrix column, or an input to the network
+
+slelecting a weght from the column matrixs
+
+this entry disperses into the matric and is passed around so the network lights up
+
+but for entrying, only 1 neuron is entering and firing. 
+
+embedding for word 1 (1,0)
+
+these hot one endodes are the starting representations for our words
+
+but we want them to be better and optimied. 
+
+this is why we create word embeds
+
+the orginal task was to generate the next work in a seq, but people realised that when passing in a word, a valuable respresentation was made in the hidden layers which could then be extracted and used as itis a better respresentation than the hot one
+
+# paper: recurrent neural network langaugge model (mikolov etal NAACL 2013)
+
+input if cyrrebt word (hot one), projected into embed space using weight vector U
+
+RNN, so have a hidden layer state st-1 from previous, passed in using W weight vector
+
+embed space is s(t)
+
+output y(t) is size of vocab and is prob dist over the next word; soft max makes it prob dist
+
+the meaning of words is contained in the weight vectors U
+
+# word2vec mikolov et al 2013
+
+more simple approach specifically for this task 
+
+simpler than rrn as you dont need the recurrance
+
+CBOW or skip-gram models instead; v similar
+
+# word2vec intution
+
+current word in the courpus is ref to the target
+
+use fix length content window either side of the target e.g. +/- word either size
+
+each word has 2 different embeddings (representation; vector, weights)
+* one embed when it is a tartget word
+* one embed when it is used as a context word
+
+in cbow, context embedddings are used to predict the target. the cont embeed is the 4(2) words either side of the embedding
+
+cbow predicts current word given context
+
+we want the sum of the context vectors to be as close as possible to the target word embedding
+
+skip-gram; hard int; take target embed word and try to predict the context words. optimise the weights to obtain these context words
+
+
+how to train word to vec? init embeds randomly and then iterate over the text, compus loss function for each instance; compare how close the projects and the output were
+
+
+The one-hot vector is the input mechanism, not the embedding itself.Imagine you want to predict the word "sat" given the context "The cat ___ on."You take the one-hot vectors for "The", "cat", "on".Multiplying a one-hot vector by the weight matrix $W$ is mathematically equivalent to selecting a specific row from that matrix.That row is the Context Embedding for that word.
+
+Input: You take the random context embeddings of the surrounding words and average them.Prediction: You multiply this average vector by the target embedding matrix ($W'$) to get scores for every word in the vocabulary.Update: You compare the result to the actual one-hot target ("sat"). Using backpropagation, you nudge the random numbers in both matrices so that next time, the vectors for "cat" and "on" result in a higher probability for "sat."
+
+The input is indeed a one-hot vector, but the "target" for the loss function isn't a subtraction of embeddings. Instead, it is a comparison between two probability distributions.
+
+To calculate the loss, the model takes the "average context vector" it just created and multiplies it by the Target Embedding Matrix ($W'$). This produces a vector of raw scores (logits), one for every word in the dictionary.Step A: We apply the Softmax function to these scores. This turns them into probabilities that sum to 100%.Step B: We compare this probability distribution to the One-Hot Target Vector of the actual word that was supposed to be there. We don't subtract the embeddings. We use Cross-Entropy Loss.
+
+Imagine the target word is "sat." The One-Hot Target: [0, 0, 1, 0, 0] (where index 2 is "sat"). The Model's Prediction: [0.1, 0.05, 0.6, 0.1, 0.15]. The loss function looks at the probability the model assigned to the correct index (0.6). The "goal" of the backpropagation is to push that 0.6 as close to 1.0 as possible.
+
+
+Summary of the Flow
+1. Input: One-hot vectors of context words.
+2. Projection: Pull out context embeddings and average them.
+3. Output: Multiply average by Target Matrix to get scores for all words.
+4. Softmax: Convert scores to probabilities.
+5. Loss: Compare probabilities to the One-Hot Target using Cross-Entropy.
+6. Backprop: Update both the Context and Target embeddings.
+iterate training
+
+# gradient descent
+
+* random intit para setting (W)
+* comp pred
+* comp cost function (J) MIN OR MAX
+* comp part deriv of cost function with respect to paramers
+* backprop, update params (formaila)
+* repeate until conver/cost is accept small
+
+# skip gram int
+
+hard one to understand
+
+what is the obj fubcntion?
+
+is w2 likely to show up near w1?
+
+treat the target word and context words and positive samples
+
+randomly sample other words in lexicon to get negative samples
+
+train class to distinguish those two cases (classes)
+
+* rand init two sets of embeddings - each word in the vocab has a taget embedd t_w and context embed c_w
+* iteratively shift target and context embedds to that:
+* taget embed of word w is more like the context embed of words that occur nearby, and less like the embd of words that dont occur nearby
+
+INSERT FORMULA
+
+QUITE DIFFICULT TO UNDERSTAND, REVISE AND DO BETTER NOTES
+
+# word2vec params 
+
+has lots of other hyperparameters
+
+number of epochs; learning rate; batch size before updates are made; window size
+
+depends on corpus and goal
+
+# glove (pennington et al 2014)
+
+anotthoer approach to dim red
+
+combined ideas of matrix factors but speed of neural techs (word2vec)
+
+start with matricx and want to decompose
+
+aim: find set of `m` dim focal embedds (F) and m-dim context embed (C) such that X=FC Transpose
+
+m is alot smaller than V (start)
+
+NEED BETTER NOTES AND UNDERSTAND ON THIS
+
+# correlation with human judgement 
+
+baroni (2014) wor2vec embes. better than ahains count based dist reps (ppmi, none matrix factorisation)
+
+dont bother counting just predict cooccurences
+
+# what is so specifical about word2vec and glove
+
+omer and levy 2014 shows that word2vec embed are implicit factorisation of stataard occurence vectors with weights as ppmi
+
+but there are alot more hyper parametes that are tunable. this can make it better? 
+
+INSERRT LIST OF WHY THE HYPERPARAMS MAKE IT BETTER 1-7
+
+# disadvants of low density reps
+
+dimensions are un-interpretable; no way of knowing what dim reps what
+
+non-determinism; random init, diff solution each each, new local minima, cannot find global min even if there was, cannot compare runs between corpus (silverlining; allows use to test of stat sign, if we get same neighbours if diff run then this is important)
+
+# where next with distribution semantics... what about phrases?
+
+sim of nurse to man?
+
+# comosition intersective
+
+INCLUDE FORMULA
+
+male nurse associated with nurse and maleness 
+
+cpatures the intitution that features of the phase must have occured with all of the constituents of the prhase
+
+a fearture is associated with male nurse if its associated with male and nurse
+
+commonly implemented with pointwise mutliplication of vectors
+
+as the wordsin the phase are increaseed, this will tend towards a 0 zero vector due to sparsity. 
+
+# coomposite addtive
+
+INCLUDE FORMULA
+
+more common way to think about composotion
+
+CPATURES THE INTITUATION THAT FEATURES of the phase must have occured with one of the consts of the prhases
+
+feature will be associated with male nurse if it associated with male or nurse
+
+inplemented with additonal of vectors 
+
+can re-normalise to get the constistuents
+
+as more words are compused will tends to the centre of the semantic space
+
+after a while every feature will start to be come hihgly rated with target feature (phrase)
+
+# evaltion of compsition model 
+
+very difficult to get human phrase evaluaiton. rememebr it was hard just for words
+
+the eval is correlation with human simialrtity judgements for phrases
+
+sementatic similarity in context tasks; application based eval;
+
+"do these two senteneces mean the same"
+
+# chanllegnes of comp models 
+
+note all phrases are composoiton
+
+word order is surely important but adding vectors ignores order
+
+negation? how to do we same something is not this
+
+
+
+
+INSSERT IMAGE
+
+
+**is this possible with sparse representations? seems like something that would need to have embeddings to acheive**
+
+## Week 4: Seminar
+
+## Week 4: Lab Content
+
+## Week 4: Additional Reading
 
 
 
