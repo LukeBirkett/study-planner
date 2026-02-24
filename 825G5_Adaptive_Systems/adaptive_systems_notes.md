@@ -93,14 +93,14 @@ There are 3 main directions for the assessments:
 5. Processes of adaptation take place over various timescales
 6. All adaptation involves change, but not all change is adaptation
 
-#### <u> Systems and Their Environments </u>
+### <u> Systems and Their Environments </u>
 
 We can often think of systems a being coupled whereby an agent(s) and environment impact one another. There is circular causality that flows to and from each agent and enviroment. Because the flows are circular, an agent can essentially have an effect on itself. It changes the env, which changes itself, and so on. 
 
 
 Llosed loops are generally more interesting than open loops. They can do much more compelx things than open loops. Open loops are characteristed as systems with inflows and/or outflows. A feedforward network is an input and output system. They can do useful things but they don't have the same dynamics and closed systems. 
 
-#### <u> The fitt-est </u>
+### <u> The fitt-est </u>
 
 "Survival of the fittest", not actually first written by Dariwn but largely attributed. Actually written by Spencer. In first edition, Darwin wrote about how well species were fitted to their env. Fitted, a fitness as a specific term here. They do not mean the physical fitness is a muscular or cardiovascual sense, instead we mean evolutionary fitness which is a two-way relationshp between a populaiton and its environment. 
 
@@ -110,7 +110,7 @@ Therefore, progress in the naturual world does not mean better, better, more com
 
 e.g. sticlebacks over time became less armound from predators as their new envs didn't require it (possibly observed as reverse evolution). Revolution has a trade-off, more armour requires more resources. But resources of life are limited. If something can become more simple but still survive or thrive just the same then the fittness is the same. Additionally, fitness can easily go down when an env changes. It could be argued that an over armour fish is less fit because this armour comes with disadvantages.
 
-#### <u> Maintaining a Good Fit </u>
+### <u> Maintaining a Good Fit </u>
 
 Successful systems fit well into their environemnt. A system can meant an agent, or just about anything. Often the system will adpat to maintain a good fit to an env. 
 
@@ -118,11 +118,11 @@ Successes or fitness is completed dependent on the context and system. Though fo
 
 Bateson: "the unit of survival is a flexible organism in its env". Flexible can be substituted for "capable of adapting". Coupled sys of agent and env can both change to fit changes in the other
 
-#### <u> Timescales </u>
+### <u> Timescales </u>
 
 This slide covered the notion of learning vs evoluaiton. Learning is what humans, or agents, do and aquire in their lifetime. Evolution is was changes over many lifetimes. Evolution, or atleast the perception of evolution, is often dependent on the rate of reproduction. Bacteria can evolve very fast in human life terms. 
 
-#### <u> Time </u>
+### <u> Time </u>
 
 Time is a repeating concept in the module. Today's main interest is "rates of changes" and "relative rates of change". 
 
@@ -130,13 +130,90 @@ e.g. rate of change of ecosystems. Global temperature changes compared to previo
 
 Consdier the rate of change of evolution which takes many generations so may not be quick enough to keep track with ecosystem evn changes. This results in a loss of fitness and risk of non-survival
 
-#### <u> Why do Systems Adapt? </u>
+### <u> Why do Systems Adapt? </u>
 
 To learn:
 * a behaviour or action 
 * how to solve a problem
 * to compensate for injury or damage
-* to adpat to changes in the environment
+* to adapt to changes in the environment
+
+Ens are dynamic, i.e. constantly chaning, therefore unpredictable. Slow changes in environment may be adpated to by a process evolution. 
+
+* Slow changes in enviroment may be adapted to by a process of evolution
+* Faster changes and other suprises may be adpated to by learn 
+* Very fact changes may be adjusted to by a process of regultions and control (which are not necessarily processes of adaption)
+
+### Problematic Terminology
+
+Often key concepts and words in adaptive systems have mutliple defintions. 
+
+Defining evolution thorugh natural selection: 
+* Adpatation is a central concept in biology. The word has two related meanings
+1. Adaption means the evolutionary process by which, over the course of generations, organisms are altered to become improved with respect to features that affect survival or reproduction. 
+2. An adpations is a characteristic of an organism that evolved by natural selection. 
+
+Sometimes "an adapativtion" is referred to as an "adaptive trait". This causes a similar problem because when we refer to an adpative system we mean one which can adapt itself through some adaptive process; a self-adpative system. 
+
+### Adaptation (as a process)
+
+Examples: 
+* learning in humans
+* learning in aritifical neural networkds
+* evolution through naturual selection
+
+With these, there is a a mechanism which is searching for "good", or optimal. The change (adaptation) must be directied somehow. Though not all change is adaptation. 
+
+### Adapative Traits (an adaptation)
+
+Speed is an adv for predators and prey. Animals have adapted to be fast. A cheetah has mutli adapative traits which synergistically contribute to its speed. 
+
+### Adpated vs Self-Adative
+
+An adpated system, is something which is adapted by some other system or external processes - such as an evolutionary algo - to have some desirable for beneficial characteristics.
+* eco-system and natural selection
+* simulated env and genetic algo
+
+> Possibly important for my idea. The environment will be a self-adpaptive system. But the farming system will be an adapted system will can be tweaked and optimized based on some metric. 
+
+A self-adaptive system is something that has the ability to adaptive itself:
+* by learning
+* by changing its body through reconfiguration
+
+On this model we are principally interesedf in:
+* The self-adaptive systems which adapt themselves
+* As well as the systems and proccess which can adapt other systems. 
+
+Often our studied systems will be will be both both adpated and self-adaptive
+
+### Not all Change is Adaption - Evolution
+
+A process of adaptation always involves change but not all changes are adaptaiton. Genetric mutations are random but over many gnereations mutations which make organisms less likely (or more) are selected for or against. 
+
+### Not all Change is Adaption - Learning
+
+Like evolution, learning also must be directed by rules or algos to acheived desireable or effective results
+
+Hebb's rule; neurons which fire together, wire together
+
+### Summary
+
+* An adaptation is a characteristic of a system, which is the result of a process
+
+* But adaptation can also mean the process by which a system is adapted
+
+* We can distinguish between systems which are self-adaptive, which means that they can adapt themselves (a process), and systems which  are adapted by other systems or external processes
+• I use self-adaptive here to distinguish from adaptive, which is often 
+used otherwise, e.g. in “adaptive traits” or “adaptive behaviour”
+• While all processes of adaptation involve change, not all change is 
+adaptation - only changes which are selected or directed according to 
+some set of rules or laws can lead to adaptation
+• Adaptive processes can be driven in many ways, but often the change 
+involved in a system’s adaptation is prompted by changes in its 
+environment
+• Which kinds of adaptive processes (if any) are effective in a given 
+situation or environment is determined by relative rates of change
+
 
 ### Week 1 Lecture Summary
 
@@ -146,214 +223,220 @@ To learn:
 
 * [Defining Adaptive Systems](https://canvas.sussex.ac.uk/courses/34987/pages/defining-adaptive-systems?wrap=1)
 
-# Week 2
 
-# Week 2 Lecture
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
+# [Week 2 - Systems]()
 
+#### Week 2: Contents
 
+https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=57984111-19fc-4644-b989-b3e80107efb8
 
-# Week 2 Seminar
 
-leverage_points by donna meadows
 
+## Week 2 Lecture Content
 
+In this lecture, we cover some basic systems theory language and concepts. Some of you may already be very familiar with these concepts, and therefore find this a very simple lecture, but that won't be the case for everyone. For this lecture, our main objective is to make sure we all know and can use the same ways of describing systems, in a non-technical way. We will start to look at more technical material on systems in later lectures, in particular in the ones related to Cybernetics.
 
 
+Learning Outcomes:
+* Systems are connected sets of elements
+* Systems are made up of systems 
+* A systems environment is also a system 
+* Systems are usuallty open, but we can model them as if they were closed. 
 
-# Week 3 Lecture
 
+Lecture Outline:
+1. Why use a systems approach?
+2. A defintion of a system
+3. Casual Connections
+4. Systems and their ennvironments
+5. Subsystems and supersystems
+6. Overlapping systems
+7. Open and closed systems
 
+### Why use a systems approach?
 
+The systems approach is holistic: we study whole systems. This is in constract to reductionism where people try to go down to the lowest mechanisms of a system and work those parts out. 
 
+In order to model systems we must use abstraction to make this possible as they are too fine grained and complex. i.e. a system of human but not going down to the molecurlar level. 
 
-# Week 3 - Seminar
+The systems approach is cross-discipline. Often applies to business and finance, but also politics, biology, engineering. 
 
+### An informal definition of a system
 
+> “A set of elements or parts that is coherently organized and interconnected in a pattern or structure that produces a characteristic set of behaviors, often classified as its ‘function’ or ‘purpose’.” (Meadows)
 
+**A set of elements or parts;** i.e. a robot system which is made up of parts; once set up they are all connected; Could talk about an animal and considered the organs as parts;
 
+**organized and interconnected in a pattern of structure:** think about the arrows in a diagram, without the arrows it is not a connected system; 
 
+**produces a characteristic set of behaviours;** we characterise systems by their output behaviours; external (that we see) or internal behaviour; 
 
+**function or 'purpose';** fuction of an object may be what it was designed for; or it hasevolutes to
 
+### Causal Connection
 
+Arrows in diagrams; system elements are casually connected; can transfer: info, energy, matter; or a combo
 
+### Systems and their environments
 
-# Lab 0 Negative Feedback
+Definiiton systems by parititions; define a system by its boundary; where is the boundary between the thing and not thing; agents and env; a coupled agents, env relationship can be draw wit the agents embedded in the env; we may also differentitate between an agents immediate env and the whole environment. 
 
-This lab has 3 main aims:
-1. To see negative feedback control in action, and to get some feel for both its power and its limitations.
-2. To introduce you to the PID controller, which is relatively simple but still far superior to the controller we saw in lectures.
-3. To introduce you to Pymunk, a relatively simple and easy to use physics engine for Python. Perhaps some of you will consider using it in assignments.
+The agents, env coupled system is a closed loop or circular causality, where each subsystem has an effect on the other. 
 
-#### A PID negative feedback controlled pendulum, with an external disturbance affecting the pendulum
+### Systems and Their Parameters
 
-![PID System](labs/lab0_feedback_control/inverted_pendulums.png "Project Architecture")
+Often, the pwower of a system to adapt will lie in its parameters
+* Why do want to adapt the system?
+* When do we want to adapt the system? Maybe upto a certain point of performence, maybe its a system that learns continuously. could be intermitted, i.e. there is a threshold to meet, if it is in the threshold is doesn't change, if it does then parameters can change to re-adapt. 
+* How should we adjust the parameters?
 
-Figure 1 shows a negative feedback controlled pendulum, with a style of diagram that is familiar to you from lectures, but which has the addition of a disturbance which affects the pendulum. **The angle of the pendulum is the controlled variable**. 
+### Subsystems
 
-We can set the code to either use a reference angle of $\frac{\pi}{2} radians$, so that the pendulum will stand upright, in the inverted position (if the controller is effective). Or alternatively, we can set the controller to use a time-varying reference signal, so that the pendulum exhibits cyclic motion.
+Zooming in on a system; an element in a system is often also a system itself; example a nn, is composed of layers, which are their own systems; 
 
-In the code for this lab, the disturbance is a randomly varying force applied to the free end of the pendulum in the x-axis only. This means that it has most effect when the pendulum is vertically aligned.
 
-You will also notice that the system diagram shows a different controller to the one covered in lectures. In lecture examples, the controller was a simple proportional controller, where the output from the controller is proportional (linearly) to the error. 
 
-The controller in Figure 1 is a proportional-integral-derivative (PID) controller. In effect, this controller is three controllers in parallel and one of them is the proportional controller. 
 
-The third controller is a derivative controller, and its output is proportional to the derivative of the error with respect to time. The derivative component of the PID controller can prevent overshoot, as the derivative (i.e. how the error is changing over time) has predictive power. 
 
-The integral component, on the other hand, captures information about the history of the error, and can be used to eliminate steady-state errors, where a controller otherwise fails to "catch up" to the reference signal. 
+# week 3
 
-Setting the parameters of the PID controller can be a bit tricky (or at least is easy to get wrong), especially the gain for the integral controller - if any of the gains are too large, the controller can become unstable, but this is especially the case for the integral gain.
+https://canvas.sussex.ac.uk/courses/34987/pages/week-3-cybernetics-and-negative-feedback-control?module_item_id=1619230
 
-The controller is defined as follows: $c(t) = K_p e(t) + K_i \int_{0}^{t} e(\tau) d\tau + K_d \frac{de(t)}{dt}$
+https://canvas.sussex.ac.uk/courses/34987/pages/cybernetics-resources
 
-Where $K_p, K_i, K_d$ are the gains for the proportional, integral and derivative terms, respectively, and is a dummy time variable.
 
-For simulation (in Sandbox, in this case), we discretise the equation to:
 
-$$c(t) = K_p e(t) + K_i \sum_{\tau=0}^{t} e(\tau)\Delta t + K_d \frac{e(t)-e(t-1)}{\Delta t}$$
+https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=89d90ed0-dd78-4e4f-99c3-b3ef0107dec0
 
+https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7255e26-bf02-4d46-9cf9-b3f001039adb
 
-where $\Delta t$ is the duration of a simulation time step, and the derivative term can only be evaluated for $t >= 1$
 
-**Types of controllers:**
-* If we set $K_i = K_d = 0$, then we have the proportional controller which we are already familiar with.
-* If only $K_i = 0$ then we have a PD (proportional-derivative) controller, 
-* If only $K_d = 0$ then we have a PI (proportional-integral) controller. 
+everything of interest to us on this module was influenced by cybernetics
 
-**Understanding the Controllers:**
-* Proportional ($K_p$): "The further I am from the target, the harder I should push." (The Present)
-* Integral ($K_i$): "I’ve been slightly off-target for a long time; I need to add a little extra push to close the gap." (The Past)
-* Derivative ($K_d$): "I’m approaching the target very fast; I should slow down now so I don't overshoot." (The Future)
+feedback is everything in all intelligent systems
 
-Both of these last controllers are quite commonly used, as they are more stable than the PID controller under certain circumstances. In this lab, we will only use the **proportional** and **proportional-derivative** controller variants, as I was unable to create a scenario with this particular simulation where the integral controller component was beneficial, although a future lab with a slightly more interesting and challenging system will use the full PID controller. 
+lecture outline:
+* cybernetics before cybernetics
+* important of feedback
+* macy meetings
+* cybernetics is names
+* cybernetics original of artifical neural networks
+* other cyberneticians 
 
-In this diagram, we can think of the controller as being the computational part of the system. The pendulum system includes the motor that the controller specifies the angular velocity (rather than a level of supplied energy or torque) for. This is due to the fact that the physics engine that we are using here, Pymunk, only has one type of motor, which is effectively already feedback-controlled to produce a constant angular velocity - the motor can slow down or stall, e.g. if its maximum torque is insufficient to lift the pendulum, but we don't have access to or control over the instantaneous level of torque.
+what did cyb lead to; ai, robotics; control theory; systems thinking; neural networkds; genetic algos; ultrastablity; autopoiesis;
 
-#### Playing with the System
+father of cybernetics; norbert wiener; 
 
-Feel free to play with the code if you want to, but you can do quite a lot just by modifying the parameters in the parameter file shown in Figure 1. These parameters are:
+cybernetics before cybernetics; war weapons; anti-aircraft, radar, connected radar and weapon into 1 system; these feedback mechanisms also applied to nervious systems; realised these systems are common in natural world
 
-* `proportional_gain`: The proportional controller gain, or amplification/attenuation factor, denoted $k$ in the Lecture 3.2 slides, but $K_p$ here.
-* `integral_gain`: The integral controller gain, denoted $K_i$.
-* `derivative_gain`: The derivative controller gain, denoted $K_d$.
-* `disturbance_strength`: The scale of disturbing forces. If this is set to 0, then there will be no disturbances.
-* `pattern`: This parameter determines whether the reference signal for the controller is fixed or varies periodically. Set to $0$
- for fixed, and to $1$ for periodic.
-* `mass`: Sets the mass of the ball on the end of the pendulum (note: this is not the full mass of the pendulum - its bar also has some small mass which we can't adjust from here)
-* `main_plot`: This parameter determines whether or not the plot shown in Figure 2 is displayed. Set to $1$
- to display the plot and to $0$ to not display it. 
+paper: behaviour, purpose and teleology; behaviouristic account of what it means for something to have a purpose; "all goal-directed (purpose) behaviour may be considered to require negative feedback"; the system is working towards some goal; "uniform behaviouristic analysis is applicable to both machines and living organisms, regardless of the complexity ofg the behaviour"; 
 
-#### Limitation 1: Not enough force
 
-Video 1 shows the system as you'll find it when you first run the code. The controller has a fixed reference point, and so the goal of the complete closed-loop system is for the pendulum to stand in the inverted position. Although the motor will run at a constant speed, until our controller changes it, the motor has a limit on how much torque (angular force) it can deliver. Here, the mass of the pendulum is so large that the motor fails.
+2nd part
 
-Try increasing the gain of the controller and see if the pendulum will stand, as in Video 2. I'll be very surprised if you will find any gain for which this will be the case, but physics engines can do strange things - if this works, please let me know!
+learning outcomes:
+* basic principle of negative feedback control 
+* negative feedback leads to stability
+* stability without control 
+* delays in feedback loops
 
-#### Stability through control
 
-Try decreasing the mass of the pendulum, and find the point at which the motor torque becomes sufficient to lift the pendulum and produce plots like the ones shown in Figure 3. 
+metapors, or analogies; similar concepts in eng lang; analogies more useful in science; analogue electrons, derived from analogies; this is due to the relationships with anologes; dampener takes fraction out of the systeml; isomorpoism, two systems to produce the same outputs; this is the strongest type of an analogy; we dont always have perfect isomorhism between systems; think about bio objects and physical object (both are system); if they are isomorphic, then we can use experiements on the phyiscal system to say things about the biological thing; use robot as a model of an animal; 
 
-#### Figure 3: The main plot output from our simulation.
 
-Figure 3 shows the main plot of our simulation outputs. This corresponds to the behaviour shown in Video 2. You may notice a similarity between the plots for the angle of the pendulum and the error. You may also notice what is known as overshoot in the pendulum angle plot: before the pendulum stabilises, it goes past the reference point and then bounces back. The noise and disturbance plots aren't relevant here, because the disturbance scale has been set to zero. The plots are coloured in such a way as to indicate time - not necessary for plots where time is on one axis, but useful in the interpretation of phase portraits. Notice where the lines end in the phase portraits. What does it signify for trajectories in phase space to converge on points like these, and why do the trajectories converge on those particular points?
 
-* **Pendulum Angle**: This is the position of the pendulum in Radians. $1.57$ Radians ($\pi/2$) is exactly 90° (north) and $-1.57$ for -90° (south)
-* Angle phase portrait 
-* Error phase portrait
-* Zero mean brown noise
-* Disturbance 
-* Error
+stable and unstable equilibria; points where the system can balance; unstable will only balance if undisturbed, small changes will push it off; stable eq, these points behave v different, still remain if no change, but changes will remove it from the balance but it will return; could thinkg of it as a pendulum, pend up in unstable eq, pend down in stable eq; friciton/grav will always cause the pend to hand down; possible to turn an unstable eq to stable using a neg feedback loop; this is how humans stand up; we balance our body upright; 
 
-Try to find a value for the `derivative_gain` parameter which will lead to the pendulum stabilising as quickly as possible without overshoot.
+cyberntic loops; weiner and co, importance of feedback; systems with feedback, elelemtsa are connected; cybers called this circular causality; 
 
+negative feedback control; controlled system or proccess is often refered to as the plant; could be the movement of an arm, output of a factory, tradjectory of a ship; output from the plant is the controlled variable; ref signal r specifices the desired plant output, 0, the goal of the sys is to make o = r; 0 will often be variable or a pattern rather than a single value; if we take out the sensor loop then we just have a feedforward, there is no way to check that r = o; to way to acvheive control; the actual output is what is fed back to the controller so that the controller acts on the error e; e is the difference between desired and actual outputs; no sensor is perfect, there will be noise in reading the output; also there is delays in the feedback from output, sensor to controller; human acturately steeering a car based on trajecory is another type of feedback loop (DIAGRAM); controller only ever doers somrthing if the error >0, if 0 the calc is 0 so no output change;
 
-#### Initial Run
+INSERT NEG FEEDBACK CONTROL DIAGRAM
 
-When running initially running the code as it comes, the pendulum starts pointing south and it push up hard on the left handside. It reaches just above level and swings back down. It doesn't quite return to south and then is pushed back up the left where it also doesn't return to the same height as before. This pattern repeats where each swing the low and high points become less extreme. Eventually, the pendulum settles pointing south west. This is the point whereby the motor strength it enough to hold the pendulum and resist it from falling into gravities desired position of handing south. 
+example; r = 10 and k controoler gain = 0.1
 
-The code is set up with `controller = FeedbackController(..., ref_value=1 * math.pi/2)`, this means the target and therefore the error is conditions to 90 degrees, i.e. straight north. 
+at time t=0 output o=0
 
-In the add_pendulum function, the ball is placed at box_offset + Vec2d(150, -50). Because gravity in your space is set to (0.0, -900.0) (straight down), the pendulum starts hanging downwards.
+in everytime step we calc 
 
-In the run, the pendulum exhibits pulsing behaviour. Infact the motor/controller, which is a proporitonal controller, is constant but it is programmed to changed its output based on the error. This means as the pendulum is shot up, it power reduces and the mass of the pendulum is able to swing it back down. As it approaches south, the motor increases, this is what causes the oscilations. 
+e = r - o 
+c = ke 
+ot_1 = ot + ct
 
-A Proportional controller’s output is $K_p \times \text{error}$. As the pendulum gets closer to the top, the error gets smaller. Eventually, the error is so small that the resulting motor speed isn't strong enough to overcome gravity. 
+no noise or delay in this system
 
-The goal is to have the pendlum stand up right, this is why the motor responds to the error, otherwise, it would continually push the pendulum over the taget. 
+after some number of steps o ~ r, e ~ c ~ 0
 
-Essentially, if the Proportional Gain ($K_p$) is too low, the motor doesn't have enough strength to swing the pendulum and its mass all the way up. Eventually, it gets stuck where the motor's effort perfectly balances out the pull of gravity.
+variying init condition; start paramets from diff places; system should still stabilise in the same way
 
-The output of the motor is governed by the `proportional_gain` $(K_p), the target and the current angle: `motor.rate = controller.step(dt, ang, target)`
+the very simple feedback control system that we have seen is capable of controlling or regulating system; but this is reactive not self-adaptive; does not monitor its own perforamnce; if a constrol systems params are not set correctly, it may performance badly; self-adpative systems have more than one feedback loops; at least 1 to monitor performance; 
 
-$$\text{Motor Rate} = K_p \times (\text{Target} - \text{Current Angle})$$
 
+problems with delays;there will alaways be some delay; delay causes two probs; 
+* errror delay means there is some period of time where the process is in error before the controller does something; a
+* a dleay in the feedback path means that the controller is always working with out of date information, and negative feedback may even turn into positive feedback
 
-```
-proportional_gain: 10
-integral_gain: 0
-derivative_gain: 0
-disturbance_strength: 0
-pattern: 0
-mass: 100
-main_plot: 1
-```
 
+stability without control; many systems tend towards stability without control; a cample, a cup of coffee, cooling = t_c = -k(t_c = t_r); this system/equation is isomorphic to a negative feedback system; eventully t_c and t_r are the same and nothing happens
 
-#### Increasing the gain of the controller 
-> Try increasing the gain of the controller and see if the pendulum will stand, as in Video 2. I'll be very surprised if you will find any gain for which this will be the case, but physics engines can do strange things - if this works, please let me know!
+In control theoretic terms, the rooms temperature is analogous to the reference signal, and the temperature of the cup is analogous to the controlled variable
+* moving away from describing physics and toward describing information flow
+* In a designed control system (like a thermostat or a self-driving car), the Reference Signal is the "target" or "setpoint" provided by the user. It is the state the system should be in.
+* The Room Temperature ($T_r$) acts as this dial. Because of the laws of thermodynamics, the coffee "wants" to reach the room's temperature. The room effectively "tells" the coffee what its final temperature will be.
+* The Controlled Variable (also called the Process Variable) is the actual state of the system that we are measuring and trying to change. This is the Temperature of the Cup ($T_c$). It is the "output" of the system. It changes over time based on the physics of the situation.
+* In a standard control system, you usually need a Controller (a computer or a person) to look at the difference between these two and decide what to do. In this "Stability without Control" example, the "Controller" is Nature.
+* 
 
-I did not record this attempt as it doesn't lead to a desired outcome.
+--- 
+
+> This slide is a classic introduction to how physical processes naturally mimic control systems—specifically, a first-order linear system behaving through negative feedback.
+
+> $$\dot{T_c} = -k(T_c - T_r)$$
+
+* $T_c$: Temperature of the coffee (the state or controlled variable).
+* $\dot{T_c}$: The rate of change of the coffee's temperature over time.
+* $T_r$: Temperature of the room (the reference or setpoint).
+* $k$: The thermal coupling constant (the gain).
+
+> The negative sign is the most important part. It ensures that if the coffee is hotter than the room $(T_c > T_r)$, the rate of change is negative (it cools down). If the coffee is colder, it heats up. This is the definition of stability.
+
+> The block diagram on the right maps this physical process into the language of cybernetics and adaptive systems:
+> * The Error Signal ($\Sigma$): The summing junction calculates $T_r - T_c$. In control terms, this is the "error" between where the system is and where it "wants" to be.
+> * The Gain ($k$): This represents how "aggressively" the system reacts to that error. A thick ceramic mug has a low $k$; a metal spoon in the cup might increase $k$.
+> * The Integrator ($\int$): This is the physics of the cup itself. Accumulating the rate of change ($\dot{T_c}$) over time results in the actual temperature ($T_c$).
+
+> 3. Why it's called "Stability without Control"
+> This is the "aha!" moment for your module. Usually, we think of "control" as something an engineer adds (like a thermostat or a cruise control chip).
+
+> However, this system is inherently stable because of its natural properties. There is no computer chip "deciding" to cool the coffee; the physics of the temperature gradient creates a feedback loop that forces the system toward an equilibrium ($T_c = T_r$).
+
+> 1. The Passive Stable System (The Coffee Cup)A passive system like the one in your slide has fixed parameters.The gain ($k$) is determined by the physical properties of the mug and the liquid.It doesn't "learn" or change its behavior if the environment changes drastically.If you move the coffee to a windy room, the value of $k$ might change due to physics (convection), but the system itself isn't monitoring its performance and tuning $k$ to reach equilibrium faster.
+
+> 2. The Adaptive System (The "Smart" Heater)An adaptive system is a "system of systems." It features a secondary loop (often called an adaptation mechanism or a parameter estimator) that monitors the primary feedback loop.Primary Loop: Maintains the temperature (like the coffee cup).Secondary Loop: Observes the error signal. If the error isn't shrinking fast enough, the secondary loop changes the parameters (like the gain $k$) of the primary loop in real-time.
 
 ---
 
-#### Decreasing the Mass of the Pendulum
-
-> Try decreasing the mass of the pendulum, and find the point at which the motor torque becomes sufficient to lift the pendulum and produce plots like the ones shown in Figure 3.
-
-Whilst it may seem inutatively that this is just the oppposite but same change as increasing the gain of the controller, it actually allows for fine-tuning on the control. There is less inertia and therefore parameter tweaks make visible makes. 
-
-The result of decreasing the mass is that it overshoots the target but also continues to overshoot and pick up momentum with each loop. It is stuck in a positive feedback loop and begins to swing wildly.
-
-#### Finding a Value for `derivative_gain`
-> Try to find a value for the derivative_gain parameter which will lead to the pendulum stabilising as quickly as possible without overshoot.
-
-By setting `derivative_gain: 1` we find that the pendulum reaches the upright position as before but this time sticks there. Below are a series of explanations around what is happening:
-
-Proportional Gain ($K_p$) is tethered to the distance from the target as measured by the error. The higher the error the strong the push from the proportional gain. Derivative Gain ($K_d$) on the other and a dampening effect that slows things down. It is not contingent on anything sense of position or distance from the tatget, it only cares about how fast it is moving. In the code it is the "change in error" over "change in time" ($\frac{de}{dt}$). 
-
-Derivative Gain can be interpreted as reacting to the potential future position by acting on the current velocity. If the speed is fast then if left unchecked the position will most forward districally. The DG works against this flow. 
-
-In the code, the DG is calculated within the `FeedbackController.step()` function, the $K_d$ part of the formula is: $K_d \times \frac{Error_{current} - Error_{previous}}{\Delta t}$. If the pendulum is moving fast towards the target, the error will be shrinking rapidily. This will result in a negative value for the derivate which ultilty works against the proportional gains forward momentum. 
-
-These combined forces mean that when the pendulum entrer the upright position is essentially stops dead at 90° instead of swinging past it like before. It removes energy from the system (specifically, it removes kinetic energy).
-
-An important distinction to make for this example is that they are only acting against each other when the pendulum is moving toward the target. Once the upright position is found they actually work in tandem to keep the pendulum there. If the pendulum deviates from its upright positiom, then the error starts getting bigger so $K_p$ pulls Up to fix it. At the same time, $K_d$ also pushes Up to stop the falling motion as it engages in a reversal of the errors gradient. It cancels out the kinetic energy.
-
-Also, at $90^\circ$ exactly, Error = 0, so $K_p \times 0 = 0$, so both forces are in activate. 
-
-```
-proportional_gain: 10
-integral_gain: 0
-derivative_gain: 1
-disturbance_strength: 0
-pattern: 0
-mass: 75
-main_plot: 1
-```
-
-#### Introducing Disturbance
-
-If setting the `disturbance_strength: 1` we find a situation whereby the motor and derivative force are still the main driving source. This means that they are able to stabilbes the pendulum in the vertical position. However, what the distrubance will known the pendulum off center. A few things can happen here. First, the pendlum is knocked off center but the balancing forces are able to bring it straight bacl. The other option, is that the distrubance completely knocks the pendulum off target and sends it into a spinning loop. The further disturbances continue to send it round on a loop and it begins to spin uncontrollably. In all instances I watch, the loop eventually ends and the forces are able to able the pendulum again. 
+When the rate of change of a variable is a function of that variable, then you have feedback, i.e. $\dot{T_c} = -k(T_c - T_r)$, t_c is on both sides. t_c is a function of t_c
 
 
-#### Additional Experimentation
+# Summary
 
-Experiment with combinations of appropriate or too high proportional and derivative controller gains, a fixed or periodic reference signal, and various levels of disturbance (try 0, 1, 2, 3 at first for disturbance levels)
 
-* In each case, try to explain what you are observing. Is the system behaving in a way which seems realistic and can be explained in terms of the physics and parameters, or is the Pymunk physics engine producing strange behaviours?
-* In every case, look at the plots, especially the phase portraits, and see how they change.
-    * If you could not see the animation of the pendulum's motion, what could you tell about the system's behaviour from just the phase portraits?
-* Try a disturbance level of 50 or even higher.
-    * This is to highlight the limitations of physics engines, and Pymunk specifically - they can all behave strangely, often (but not exclusively) due to the injection of too much energy, as in this case. Actually, in my (fairly limited) experience, Pymunk fails quite gracefully in comparison to some physics engines, where systems are more likely to literally explode rather than just stretch under similar circumstances. 
+
+
+we saw that feedback control system matmmatically  may be isomorphic to a self stable system.
+
+this may be an insight as to what feedback control is for. to turn an unstable system into a stable one
+
+
+
+
+
+feedback loop to monitor the performence
