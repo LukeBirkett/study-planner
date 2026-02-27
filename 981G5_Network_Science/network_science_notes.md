@@ -144,7 +144,9 @@ Examples of tree networks include phylogenetic trees, water distribution or powe
 
 **Why do we care about components and disconnects?** This is linked to redunancy, reliliance and robustness measures. We test these by attacking the network. Interconnectness and Density is a big factor in how these attacks are handled, and/or spread. A high density network means more redundancy, which means it will be more resiliant to attack/changes. 
 
-# Density and Sparsity
+## Density and Sparsity
+
+### Undirected Networks
 
 For an undirected network of size $N$ (nodes) with $L$ links:
 
@@ -175,59 +177,52 @@ Now that we have the maximum possible number of links we can use it calculate th
 
 $<<$ means much less than. Scientists use >> when a simple inequality doesn't tell the whole story.
 
+### Directed Networks
+
+In a directed network, the logic of "N choose 2" changes because the direction of the connection creates a unique relationship. In an undirected network, we divide by 2 because $A \to B$ and $B \to A$ are the exact same link. In a directed network, they are considered two distinct links. 
+
+For the first node: You have $N$ choices. For the second node: You have $N - 1$ choices (since a node usually doesn't link to itself). Therefore the maximum links for Directed Networks is:
+
+$$L_{max} = N(N - 1)$$
+
+Because direction matters, we don't "collapse" the pairs. You can have a link from $A \to B$ AND a separate link from $B \to A$.
+
+
+| Feature | Undirected (Lmax​) | Directed (Lmax​) |
+| :--- | :--- | :--- |
+| Formula | 2N(N−1)​ | N(N−1) |
+| Logic | Pairs of nodes | Ordered pairs (Source → Target) |
+| Example (3 nodes) | 3 possible links | 6 possible links | 
+
 ---
 
+## Example Network: Facebook
+
+$N \approx 10^9$; $L \approx 10^3 * N$
+
+This also means the average degree $\langle k \rangle$ is approx 1,000 (or $10^3$). Strictly speaking, if we start with the average degrees formula $\langle k \rangle = \frac{2L}{N}$, sub in our total links $\langle k \rangle = \frac{2 \times (10^3 \times N)}{N}$, and then factorise $\langle k \rangle = 2 \times 10^3 = 2,000$. We will then tend to drop the constant because the squared order of magniute swamps out the $2$.
 
 
+Using the previous formula, $L_{max} = \frac{N(N-1)}{2}$. For a network as huge as Facebook ($N \approx 10^9$), $N-1$ is basically just $N$. So, scientists often approximate the maximum links as $L_{max} \approx \frac{N^2}{2}$.
 
+The density formula is $d = \frac{L}{L_{max}}$. Plugging in we get $d \approx \frac{10^3 \times N}{N^2}$, we cancel out the N's leaving you with $10^3/N$. With $N = 10^9$, the density is $10^{-6}$.
 
-formula for size of undirected, max links, density
-sparse definition based on density
+This extremely low density ($0.000001$) tells you that Facebook is a sparse network. Even though there are trillions of links, it is nearly empty compared to its maximum capacity because most people are only connected to a tiny fraction of the total population.
 
-and formula for directed, max links, density
+Most (but not all) real-world networks are similarly sparse because the number of
+links scales proportionally to , whereas the maximum scales with 
 
+---
 
+## Subnetworks
 
+A subnetwork is a network obtained by selecting a subset of the nodes and all of the links among these nodes. A complete subnetwork is called a clique, where complete means each node connected to all othernodes. We look as subnetworks because we are interested to see details in certain areas of networks.
 
+```S = nx.subgraph(G, node_list)```
 
-[complete network]
-every node connected to everyone
-density will be 1
+---
 
-
-
-
-[facebook]
-appox of sizes
-N
-L
-d
-
-facebook is not dense, actually sparse
-most networks are sparse
-this is because links scale with N
-where as max sclaes with N^2
-this means lager the net, the more sparse
-
-
-
-
-[subnetworks]
-why? interested to see details in certain area of networks
-
-A subnetwork is a network
-obtained by selecting a
-subset of the nodes and all
-of the links among these
-nodes.
-
-S = nx.subgraph(G, node_list)
-
-A complete subnetwork is
-called a clique
-
-slide has a part respreenting networks are matrix
-
+## Degree
 
 
 
@@ -337,6 +332,15 @@ Something about seeing triangles
 
 
 DO THE WHOLE [network repsresnation] SECTION AGAIN
+
+
+
+
+
+
+
+
+
 
 
 
