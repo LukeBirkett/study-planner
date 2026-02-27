@@ -231,7 +231,7 @@ situation or environment is determined by relative rates of change
 <br>
 
 
-# [Week 2 - Systems]()
+# [Week 2 - Systems](https://canvas.sussex.ac.uk/courses/34987/pages/week-2-systems-2?module_item_id=1617677)
 
 #### Week 2: Contents
 
@@ -242,6 +242,8 @@ https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=57984111-19fc-4644-
 ## Week 2 Lecture Content
 
 In this lecture, we cover some basic systems theory language and concepts. Some of you may already be very familiar with these concepts, and therefore find this a very simple lecture, but that won't be the case for everyone. For this lecture, our main objective is to make sure we all know and can use the same ways of describing systems, in a non-technical way. We will start to look at more technical material on systems in later lectures, in particular in the ones related to Cybernetics.
+
+[week 2 intro](https://canvas.sussex.ac.uk/courses/34987/pages/week-2-systems-2?module_item_id=1617677)
 
 
 Learning Outcomes:
@@ -308,6 +310,7 @@ Zooming in on a system; an element in a system is often also a system itself; ex
 # week 3
 
 https://canvas.sussex.ac.uk/courses/34987/pages/week-3-cybernetics-and-negative-feedback-control?module_item_id=1619230
+
 
 https://canvas.sussex.ac.uk/courses/34987/pages/cybernetics-resources
 
@@ -428,15 +431,257 @@ When the rate of change of a variable is a function of that variable, then you h
 
 # Summary
 
+1. Systems with loops in their interconnections have feedback, or  circular causality
+2. Negative feedback tends to lead to stability
+3. Some systems are naturally stable, or self-stable
+4. In control, negative feedback can be used to turn unstable points in a system’s dynamics into stable points
+    * we saw that feedback control system matmmatically  may be isomorphic to a self stable system.
+    * this may be an insight as to what feedback control is for. to turn an unstable system into a stable one
+5. Although negative feedback tends to lead to stability, delays in  feedback loops can cause problems
+6. Systems which are self-stable may be mathematically equivalent  to feedback-controlled systems! (or vice versa, e.g. see point 4)
+7. Self-adaptive systems have multiple feedback loops
+    * feedback loop to monitor the performence
 
 
 
-we saw that feedback control system matmmatically  may be isomorphic to a self stable system.
-
-this may be an insight as to what feedback control is for. to turn an unstable system into a stable one
 
 
 
 
 
-feedback loop to monitor the performence
+
+
+
+# week 4
+
+[Lecture Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=acbe3aed-b38f-4d7a-9613-b3f601088a6f)
+
+[Robotics Resources](https://canvas.sussex.ac.uk/courses/34987/pages/robotics-resources?wrap=1)
+
+[Weekly Page with Reading Content](https://canvas.sussex.ac.uk/courses/34987/pages/week-4-sensorimotor-behaviour-2?module_item_id=1620203)
+
+[Braintenberg Pages to read]()
+
+# part 1 - braitenberg vechicles
+
+Learning Outcomes/Main Points:
+* The sensorimotor loop: new, diff kind of feedback loop which cant be characterised as pos or neg; living agents,  robots, agents that act in a physical or sim phys world, all obs extranl behaviour is sensiormotor
+* braitenburg becicles: a thought exper with simple sensori motor systems (lab to follow)
+
+# agents
+
+software; angent-based model of complex systems
+
+this lecture focuses on sensorimotor agents
+
+types; artificial, organism, robot; can be similuated or real. model focuses on simulated, real not really practical for module
+
+agents are systems which act in and on their environment
+
+most of the systems in this module are agents
+
+# sensormotor agents 
+
+agents are systems which acts in and on their environment
+
+they are coupled to their env
+
+most simple agent has a sens, controller, motor which enables them to ineracts, and potentially maniplite, their env
+
+# braitenberg
+
+book, Vehicles, describes a series of thought experiements involving mobile agents we might call them animats
+
+doesnt refer to robots at all
+
+# black box
+
+bb arised from electrical engineering
+
+concept, ee studing a system, no idea what happens in bb, measure inputs and output and infer what might have been happening in the box; not ideal approach as you cant scope down into how
+
+# differential drive
+
+braiten veh have differential drives
+
+diff drive robot is aheeel robot where each wheel has its own motor
+
+because it has diff motors they can drive at diff speeds
+
+if same speed then it will go forward
+
+if left more than right, then it will turn right. 
+
+magnute of diff makes turn more sharp
+
+if one wheel not moving then circle. turn on the spot without changing position
+
+# braitenberg vehicles
+
+we connect their motors to light sensors, either directly or through very simple controlers
+
+different types of model behaviour:
+* aggressor; hates light, wants to destroy, this is acheived by setting up the diff drive in a certain way. the left wheel is set up the right sensor, and the right wheel to the left sense. if the light is closer to the left, then the right wheel goes faster, this gives the impress of the robot chasing and going towards the light. it appears aggressive
+* cowards; make the connections direct, left sens, left wheel, etc. this is gives the impression of running away from the light. 
+* lover; insread of having pos connections, the sensors are set to neg; still direct connections, but as it gets closer to the light, it slows down and eveutally stops. it wants to be near the light, hence lover. basking near the light course. 
+
+these are sensorimotor loop robots and even through the connections and rules are very basic, the cumuliative behaviour infer something much more complex. for example, a robot which loves the sun and wants to bath in it. 
+
+braitne imagines how we might percieve these behaviours if the vehcicles were black B and we didn't know the simple rules that govern
+
+these bechicles have no controller, it is just power and sensors. 
+
+this veh would need an amplififer, the snensors signal needs ot be turned into a relevant motor signal
+
+[MAPPING MODEL/env TO DIAGRAM]
+
+# sensorimotor coupleing 
+
+relevant for lab 1
+
+b vehs are couples to envs
+
+we can change (adappt) the nature of that coupling by modifying the systems parameters on the agents side 
+
+[SENSORIMOTOR AGENT PARAMS]
+
+can change that params to inpact y
+
+this is not a self-adaptive sys but can be adpated (by us changing the params)
+
+in lab, get a fully coded controller whereby we can change the params to get new behvaiour
+
+could think of this as a NN 
+
+[INSERT NN esqe picture]
+
+there are inputs which are the sensor receiving light and then there are weights which goern how the network perceives the inouts
+
+in a ff network we can play with these weights to be new haviour
+
+
+if we arrange the light in interested patters, or have them moving, we can mkae bVs have in ways that appear complex
+
+this is making the env more complex
+
+the agent is a product of the env
+
+behaviour is the product of interactions between brains, bodies and envs
+
+the behav of bVs are reflexive or reactive, not adapative, to be adaptive we need a second fedeback loop that monitor performence of the veh and potentially changes the params for the vehs
+
+# autonomy for robotics
+
+automony has various definijtions
+
+but work a working def in robotics (pfierfer and scheirer): 
+
+autonomy mean independance from external control 
+
+autonomy is not an all or nothing issue, but a matter of degree 
+
+"controlability and capaility of acquiring one's own history are correlated: The more an agent can have its own history the less controllable it will be"
+
+this can be itpreted as the agents internal state. this alone can make the agents behav difficult to predict and therefore to control 
+
+controllability and autonomy are set up as opposites
+
+given two agents A B. the less knowledge A has about B's internal state, the less A can control B. 
+
+Autonomy of not a property of an agent but instead a property of relationships between agents
+
+Thus, here autonomy is defined as a relationship between two systems. a property of an agent in a coupled system
+---
+its easy to predict Bvs when you jnow the state of the agents params
+
+according to P and S, what is the level of autonomy BVs have?
+
+# summary 
+
+* We have introduced the sensorimotor loop, another example of circular causality, in the context of the “external” or observable behaviour of robots and living systems such as animals
+
+* We have met Braitenberg’s vehicles, a thought experiment with simple sensorimotor vehicles which can act with surprisingly (apparent) complexity
+
+* As with Braitenberg’s vehicles, all sensorimotor behaviour is the product of interactions with the environment – behaviour, and by extension intelligent behaviour, arises from the interactions
+between “brain”, body and environment
+
+* In preparation for our next lab, we have seen a way to
+parameterise the behaviours of Braitenberg’s simplest vehicles
+
+# part 2 - cybernetics and sensorimotor systems
+
+learn/main:
+* situation and embodied robotics began in cyberntics
+* grey walter was very successful in this area in the 1950 but his ideas were forgotten for decades
+* in 980s frustion with condtional ai lead to a new cynetrics approach: behaviour based robotics
+* behaviour based robitcs are often note self-adaptive  - but we will see in later lectures they can be made self-adpative if we follow ashbys theory of ultrastable systems
+
+in the following lab we will parameterise sensorimotor systems but in the future we will be writting algorithms which modify the parameters - making the systems self-adpative
+
+# cyb robitics - grey walter
+
+inventor of tortoise vehicles. like Bvs they explore their envs
+
+slightly strange mechanism; two motors; 1 motor for forward, 2 for steering; only have a single light sense on top of head, but turns with wheel (front); 3 wheels, front steering; they have lights on them, it allows them to interact with eachother; have a bump sensor, to tell that bump occured, but no direction; 
+
+basically it follows a light using this rotating column which contains the steering wheel and sensor. 
+
+when it reaches the light, the column just rotaties to keep it there, but the back wheels are still going forward (?). 
+
+their own light allows them to see other bots but also themselves in a mirror, or reflective surface. 
+
+---
+
+What is the difference between a feedback loop and a sensorimotor loop?
+
+This is a nuanced distinction that sits at the heart of Embodied Cognition and Adaptive Systems. While they share the same mathematical structure (like the coffee cup on your slide), the difference lies in agency and loops.
+
+1. The Standard Feedback Loop (The "Coffee Cup" Model)
+A standard feedback loop is a unidirectional flow of information used to maintain stability. It is typically "passive" or "top-down."
+* Characteristics: The system receives a signal, compares it to a setpoint, and produces an output.
+* The "Passive" Nature: The coffee cup doesn't choose to cool down. The environment (the room) imposes the reference signal on the cup.
+* Example: A thermostat. It measures temperature (Input) and turns on the heater (Output). The thermostat doesn't move around the room to find a warmer spot; it just sits there and reacts to the data it gets.
+
+2. The Sensorimotor Feedback Loop (The "Braitenberg" Model)
+A sensorimotor loop is bidirectional and circular. It implies that the system's actions directly change what it perceives next. In your module, this is often called "Closing the Loop" through the environment.
+
+* Characteristics: Action and Perception are inseparable. The "Motor" part of the loop moves the "Sensor" part into a new state.
+* The "Active" Nature: The system is an agent. It doesn't just process information; it seeks it.
+* Example: A Braitenberg Vehicle. When the vehicle moves forward (Motor), its sensors move closer to the light source (Sensor). This changes the input, which changes the motor speed, which changes the position again.
+
+The Key Distinction: In a standard loop, the environment acts on the system. In a sensorimotor loop, the system acts on the environment to change its own sensory input.
+
+In an Adaptive System, the sensorimotor loop is where the "learning" happens. If a Braitenberg vehicle's motor starts to veer left because of a mechanical glitch, an adaptive sensorimotor loop will notice that the "expected" sensory change (getting closer to the light) isn't happening. It will then adjust its internal gains ($k$) to compensate for the drift.
+
+--- 
+
+the torts represent an early example of situations and emborded intelligent bheaviour in robots
+
+behaviour is coming from the physical interactions
+
+it does not come from some compelx controller which tells the robot what to do any tries to maniiplute and use the env in such as way to acheive an outcome
+
+this work was from the 50s, when otu of fashion, and then can back in the 80s
+
+# situatedness and embodient 
+
+all animals and robots are situations and embodied in the sense that htye have body which detemriend how they intereact with the enviromentn 
+
+they are situation in the environment 
+
+but there is a deeper concept of embodiement:
+* to what extend does an agent take advantage of its situatedness
+* to what extend does the embodiment of the robot affect it behaviour, and is the effect for better or worse?
+
+# umwelten
+
+german words
+
+parts of the env that an agent can sense andf have an effect on
+
+some species have sense that we don't; sense electric fields; also do have the tools to manipluate them. 
+
+other have less, i.e. tics cannot ear, they don't ignore soumd, they just can't sense it
+
+in any given pphysical sense, there may be many umwelten; each specieis may perseive a different umwelten
+

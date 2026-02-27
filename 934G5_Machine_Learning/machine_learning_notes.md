@@ -6,7 +6,7 @@ TODO: module overview
 
 # Table of Contents
 1. [Week 1 - Introduction](#week-1---introduction)
-2. [Week 2 - Supervised Learning I]()
+2. [Week 2 - Supervised Learning I](#week-2---trees-and-neighbours)
 3. [Week 3 - Supervised Learning II]()
 4. [Week 4 - Supervised Learning III]()
 5. [Week 5 - Model Validation I]()
@@ -19,6 +19,10 @@ TODO: module overview
 
 --- 
 
+<br>
+<br>
+<br>
+
 # [Week 1 - Introduction](https://canvas.sussex.ac.uk/courses/35245/pages/week-1-introduction-2?module_item_id=1546317)
 
 This week is largely a preliminary session which gives insight as to how the module works, its scope and the weekly stuctures, which has changed from last year. At the end it will give a basic insight into machine learning through Linear Regression. 
@@ -27,17 +31,24 @@ This week is largely a preliminary session which gives insight as to how the mod
 
 1. [Mini-Videos](#week-1-mini-videos)
 2. [Lecture Content](#week-1-lecture-content)
-3. [Lab Content](#week-1-lab-content)
 4. [Additional Reading](#week-1-additional-reading)
+
+<br>
+<br>
+<br>
 
 ## Week 1: Mini-Videos
 
 The mini-videos hold the pre-recorded lecture content. They form the basis of the weekly content so should be watched before the in-person Wednesday lectures so that you can understand and be involved with the discussion content. 
 
+---
+
 ### <u> What is Machine Learning </u> 
 Mini-Lecture Resources: [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1515091f-1947-45ba-ba34-b31e00f85cfe) | [Slides](files/week_1/week_1_prerecorded_what_is_machine_learning.pdf)
 
 This was a very basic introduction to what Machine Learning is. It touched on input features, dimensionality, generalizability, training data, unseen data. It clarified that ML models are software or mathmematical model that take in some input features and output labels. Training is the learning proccess and inference is giving the trained ML model instances to assign a value to. The slides introduced the types of learning: supervised, unsupervised, semi-supervised and self-supervised learning. 
+
+---
 
 ### A Simple ML Model 
 Mini-Lecture Resources: [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6067ee21-c700-437b-96d3-b31e01278a97) | [Slides](files/week_1/week_1_prerecorded_a_simple_ML_model.pdf)
@@ -67,9 +78,13 @@ We can also present this as a System of Linear Equations:
 
 $$\begin{aligned} \hat{y}_1 &= 23w_1 + 21w_2 + 10w_3 + 0w_4 + b \\ \hat{y}_2 &= 40w_1 + 89w_2 + 6w_3 + 1w_4 + b \\ \hat{y}_3 &= 35w_1 + 60w_2 + 23w_3 + 15w_4 + b \end{aligned}$$
 
+---
+
 **What are the best values of the weights and bias?**
 
 This is learning part of ML. It find the optimal, or good, parameters. The definition of an optimal model would be one that minizes the error between the models predictions and the true label. 
+
+---
 
 **What to use as the error metric?**
 
@@ -94,6 +109,12 @@ Thus, is we can find the $w$, the weight vector, that corresponds to the minimum
 * Choose error metric/loss function
 * Find the optimal parameters, $w$ and $b$
 * Use the model for inference
+
+---
+
+<br>
+<br>
+<br>
 
 ## Week 1: Lecture Content
 
@@ -151,7 +172,7 @@ This a very basic lecture which convered no technical content and just explained
 
 ---
 
-#### How could the basic linear model be adapted for categorical labels?
+### How could the basic linear model be adapted for categorical labels?
 
 A linear model output is continous. In order to be able to use this model for categorical labels need the outputs to be discrete, or at least be interpreted as discrete. The main way of doing this would be to construct a model where the outputs are probabilitic and therefore between 0 and 1. We can then round, or partition, the outputs to determine a label/class. 
 
@@ -173,7 +194,7 @@ $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
 
 ---
 
-#### Sign Loss
+### Sign Loss
 
 Sign Loss, or 0-1 loss, is the simpliest, most intuative loss functon for something that. This formula checks if the output of the function $\text{sign}(\mathbf{x}_n \mathbf{w} + b)$ is the same as the true sign of the class. If it is then, add a $1$ to the summation. This approach measures the total 0-1 loss (error rate) over the entire dataset. 
 
@@ -185,7 +206,7 @@ Because the indicator function is "stair-stepped" (it jumps from 0 to 1 instantl
 
 ---
 
-#### Hinge Loss
+### Hinge Loss
 
 Hinge Loss is the primary loss function used for Support Vector Machines (SVMs). It is designed for maximum-margin classification, meaning it doesn't just care about getting the answer right; it cares about getting it right with a certain level of confidence (the "margin").
 
@@ -201,7 +222,7 @@ Note that $\hat{y}$ is the same at $(x_n w + b)$, i.e. the prediction.
 
 ---
 
-#### What could be expressions of  weak learning or memorizing in a  linear regression model? And in  what ways could memorizing be  prevented?
+### What could be expressions of  weak learning or memorizing in a  linear regression model? And in  what ways could memorizing be  prevented?
 
 | Concept | Expression in Linear Regression | Symptom |
 | :--- | :--- | :--- |
@@ -215,23 +236,23 @@ There are 3 main ways to mitigate overfitting:
 * Cross Validation
 * Dimension Reduction/Feature Selection
 
-##### Regularization
+### Regularization
 
 This is the most common method. We modify the loss function to penalize large weights.
 * L2 Regularization (Ridge): Adds $\lambda \sum w_j^2$ to the loss. This forces weights to be small.
 * L1 Regularization (Lasso): Adds $\lambda \sum |w_j|$ to the loss. This can force some weights to exactly zero, performing automatic feature selection.
 
-##### Cross-Validation 
+### Cross-Validation 
 
 Instead of trusting a single training run, you split your data into $K$ "folds." You train on $K-1$ and test on the remaining one, rotating this process. This ensures the model's performance is consistent across different subsets of data.
 
-##### Dimension Reduction/Feature Selection
+### Dimension Reduction/Feature Selection
 
 If you have too many features ($D$) compared to your number of samples ($N$), the model will almost certainly memorize the data. Removing irrelevant or redundant features (using techniques like PCA or simply looking at correlation) forces the model to learn the most important signals.
 
 ---
 
-#### Data Augmentation
+### Data Augmentation
 
 The dimensions of videos is `t x h x w x c`. This is time, (height, weight, channels[r,g,b]).
 
@@ -264,11 +285,8 @@ Addtionally, it smooths the Loss Surface. By adding noise and variations, you ma
 
 ---
 
-
-## Week 1: Lab Content
-
-**<u>Resources:</u>** [Notebook 1](files/week_1/week_1_lab.ipynb) | [Notebook 1 Solutions](files/week_1/week_1_lab_solutions.ipynb)
-
+<br>
+<br>
 <br>
 
 ## Week 1: Additional Reading
@@ -379,7 +397,7 @@ In the book, they refer to "Capacity." High-capacity models (like deep neural ne
 
 In modern deep learning, we actually tend to favor very high-capacity models (which have the potential for low bias) and then use techniques to beat the variance into submission. To reduce Bias we add more layers, use more neurons, or train for more epochs. To reduce Variance we use Dropout, $L^2$ weight decay (regularization), or get more data. 
 
-#### Statistical vs Societal Bias
+### Statistical vs Societal Bias
 
 In the Deep Learning textbook (Chapter 5.4), "Bias" is a statistical term. In the news or ethics discussions, "Bias" is a societal or algorithmic term. 
 
@@ -394,7 +412,7 @@ If a dataset has 10,000 examples of Group A and only 10 examples of Group B:
 * Mathematically, the estimator for Group B has high statistical bias (it defaults to the patterns of Group A).
 * Socially, this results in discrimination, as the model makes poor decisions for Group B.
 
-#### Asymptotic Unbiasedness
+### Asymptotic Unbiasedness
 
 In statistics, we have a property called Asymptotic Unbiasedness. An estimator is asymptotically unbiased if the bias vanishes as the number of data points $m$ approaches infinity:
 
@@ -402,7 +420,7 @@ $$\lim_{m \to \infty} \text{bias}(\hat{\theta}_m) = 0$$
 
 A classic example is the Sample Variance. If you calculate variance by dividing by $n$ (the number of samples), your estimate is technically biased—it consistently underestimates the true variance. However, as $n$ gets larger, that error shrinks until it's effectively zero.
 
-#### 3 Types of Bias
+### 3 Types of Bias
 
 | Type of Bias | Source | Does more data fix it? |
 | :--- | :--- | :--- |
@@ -433,7 +451,7 @@ That being said, the principal of Goodfellow, at least in Chapter 5, is focused 
 * Chapter 5 - The Bias-Complexity Trade-off
 
 
-#### The Bias-Complexity Trade-off
+### The Bias-Complexity Trade-off
 
 A specific learning task is defined by an unknown distribution $D$ over $X × Y$, where the goal of the learner is to find a predictor $h : X → Y$, whose risk, $LD(h)$, is small enough.
 
@@ -445,7 +463,7 @@ The No-Free Lunch theorem states that no such universal learner exists.  To be m
 We say that the learner fails if, upon receiving i.i.d. examples from that distribution, its output hypothesis is likely to have a large risk, say, ≥ 0. 3, whereas for the same distribution, there exists another learner that will output a hypothesis with a small risk. In other words, the theorem states that no learner can succeed on all learnable tasks – every learner has tasks on which it fails
 while other learners succeed.
 
-#### The No Free Lunch Theorem
+### The No Free Lunch Theorem
 
 Let $A$ be any learning algorithm for the task of binary classification with respect to the $0-1$ loss over a domain $\mathcal{X}$. Let $m$ be any number smaller than $|\mathcal{X}|/2$, representing a training set size. Then, there exists a distribution $\mathcal{D}$ over $\mathcal{X} \times \{0,1\}$ such that:
 * There exists a function $f : \mathcal{X} \to \{0,1\}$ with $L_{\mathcal{D}}(f) = 0$.
@@ -453,6 +471,10 @@ Let $A$ be any learning algorithm for the task of binary classification with res
 
 This theorem states that for every learner, there exists a task on which it fails, even though that task can be successfully learned by another learner. 
 
+<br>
+<br>
+<br>
+<br>
 <br>
 
 ---
@@ -467,8 +489,11 @@ Learning Outcomes:
 
 1. [Mini-Videos](#week-n-mini-videos)
 2. [Lecture Content](#week-n-lecture-content)
-3. [Lab Content](#week-n-lab-content)
 4. [Additional Reading](#week-n-additional-reading)
+
+<br>
+<br>
+<br>
 
 ## Week 2: Mini-Videos
 
@@ -482,6 +507,8 @@ Learning Outcomes:
 * Part 1: How Decision Trees work
 * Part 2: How mutliple weak trees can be more useful than an overfit one (ensemble learning)
 
+---
+
 ### Decsion Tree Creation Example
 
 With Decision Trees, we start with a feature and define a split (or category). From this, two leaf nodes come out of the split which hold two sub-regions of the data as the parent node. 
@@ -494,24 +521,32 @@ Remeber, the point of creating any model is to be able to make inference with it
 
 The training part of a DT is contructing the tree and its splits based on the training data. Testing is taking instances and putting them through the tree to find their label. 
 
-#### Decision Trees
+---
+
+### Decision Trees
 
 DT's work by repeatedly partioning the data space into 2. Each split point is defined by a hyperplane that sperates partitions in the data space. Leaf nodes represent labels for data insstances that share ther same label region. We can use trees for both classification and regression. Ultimately, we want a model whereby the parameters (splits) are optimized.
 
-#### Knowing When to Split
+---
+
+### Knowing When to Split
 
 Recall, we said that if a leaf was completely part of 1 label then we didn't need to split further. This is an absolute example but things dont have to be 100% to decide to spot splitting. In fact, only splitting at 100% points is an easy way to overfit to the training data.
 
 We make the decision to split further based on a metric called "purity". Purity is the proportion of instances of the majority label. i.e. $3/3 = 1$, $3/5 = 0.67$. Any purity less than 1 can be considered but we can set the decider value as a parameter
 
-#### Splitting Methodology
+---
+
+### Splitting Methodology
 * Sort the dataset by a feature, i.e. by height low to high.
 * Identify the potential split points between each instance (if different values). For a pre-decided rule. i.e. `100, 150, 200` then construct splits at `125, 175`.
 * Evalute each split based on split criteron: Info Gain (related to entropy) or Gini Index. 
 
 Both Info Gain and Gini Index are measures of disorder or uncertainty. If a space as a even mix of labels, then the space is more uncertain. A skewed space is more certain. Outcomes will be less suprising on average
 
-#### Information Gain
+---
+
+### Information Gain
 
 How to chose the best split point using Info Gain:
 * The uncertainty is measured based on the outcome of both the splits subregions.
@@ -533,7 +568,9 @@ $p(c_k|m)$ can be computed form the data as $\frac{n_{m_k}}{n_m}$
 
 We calculate 3 $H$ (entropy), one for each split and another for the parent. Each entropy calculation use the data instances `k` that belong to that sub-region. 
 
-#### Gini Index
+---
+
+### Gini Index
 
 This is an alternative metric for capturing the uncertainty of a data region. For this method, the best split point is the one with the lowest index. Again, this method looks and weights the two sub-regions based on the number of instances it holds. 
 
@@ -547,15 +584,21 @@ Or raw counts:
 
 $$G_m = 1 - \sum_{k=1}^{K} \left( \frac{n_{m_k}}{n_m} \right)^2$$
 
-#### Categorical Features
+---
+
+### Categorical Features
 
 Before we were looking at continious features where we could evaluate potential splits using Info Gain or Gini Index. Clearly, this can not apply to categorical features. here, you need to evaluate each value as a potential split point. The same evaluation methods can be used for the splits. 
 
-#### Decision Tree Algo: Optimal Model 
+---
+
+### Decision Tree Algo: Optimal Model 
 
 You start by initalising the hyperparamters and methods to be used: purity threshold, max number of leaf nodes and initial region, which needs to have the purity computed. The intitial region is just the starting train set. If purity >= threshold then stop splitting. Otherwise, for each feature compute the best split points based on split criterion. Once you split the data, the workflow continues independently for each leaf until the threshold is acheived.
 
-#### Overfitting and Pruning
+---
+
+### Overfitting and Pruning
 
 Overfitting in tree based models is related to the size of the tree and specifically the number of nodes. Pruning is a strategy to reduce overfitting by removing nodes. A pruning criterion $v_T$ is used to determine if a given node should be pruned, this is also known as the Cost-Complexity Pruning. It adds a penalty for every extra leaf node you add to the tree, which mitigates the tree growing too large and overfitting. 
 
@@ -565,26 +608,38 @@ $$v_T = \sum_{\tau=1}^{|T|} \varepsilon_\tau + \alpha |T|$$
 * $\varepsilon_\tau$: The uncertainty measure for a specific leaf node $\tau$. This is usually the Gini Impurity or Entropy that you were looking at earlier. Summing these up gives you the total "error" or "disorder" remaining in the model.
 * $\alpha$: The pruning hyperparameter. If $\alpha = 0$, the tree stays as large as possible (no penalty for size). As $\alpha$ increases, the penalty for having many leaves grows, forcing the tree to become smaller and simpler.
 
-#### Ensemble Learning
+---
+
+### Ensemble Learning
 
 Creating a community model made up of multiple model. Ensembles can be any types of models but for trees it is a common application. There are two main approaches to ensemble learning are bagging (bootstrap aggregating) and boosting. 
 
-#### Bagging (Bootstrap Aggregating)
+---
+
+### Bagging (Bootstrap Aggregating)
 
 Each model is trained on a randomly selected subset of training data and you do this iteratively so there is mutliple rounds. Each round, a subset can be picked up and a model trained. This is the bootstrapping portion of the training. The aggregating part is the community model voting from each constitutes whereby the outcomes are averaged. 
 
 This approach allows mutliple functions to capture a wider degree of complexity in the underyling data. Often the expected error of the community tends to be lower than each constituent, i.e. each trees, in the model. This makes sense as each tree is only trained on a subset of the training data. The individual trees are known as "weak learners". This is important because it means, individually the trees cannot overfit to the training data meaning they are robust to overfitting. 
 
-#### Boosting
+---
+
+### Boosting
 
 Boosting is a cumulative training approach, the tree is trained several times. For this to be possible, there needs to be something different about the training for each iteration. This is acheived through weighting the data. On each run, the model is evaluated and data points which performed worse are weighted. This amplifies them in the next run and forces the model to approach them with more rigour. 
  
 ---
 
+<br>
+<br>
+<br>
+
 ## K-nearest Neighbours
 
 Learning Outcomes:
 * How kNN models work
+
+---
 
 ### kNN
 
@@ -594,10 +649,14 @@ With kNN, you use the class of k nearest neighbours to the data point $x_i$ that
 
 The inference is in the data itself, not any model or function. There is no training. 
 
+---
+
 ### How a kNN inference works
 
 1. For each test instance $x_i$, find its $k$ nearest neighbours based on a distance metric $dist(x_i,x_n) n = 1,2,...,N$
 2. Determine the class of $x_i$ from the labels of the $k$ neighbours and implement a voting strategy. 
+
+---
 
 
 ### Euclidean Distance 
@@ -610,6 +669,8 @@ $$dist(x_i, x_n) = \sqrt{\sum_{d=1}^{D} (x_{i_d} - x_{n_d})^2} = \|x_i - x_n\|$$
 
 What use cases is it best for? Objects in the sky (speed, pos, traj, start point, end point), Euclidean can give us a good measure of distance for this example. Football fans in a pub, find a persons supported team based on the people around them. 
 
+---
+
 ### Manhattan (city block distance)
 
 This measure of distance is the "L" shape. It can only move up/down or left/right. Hence to go diagonal, is must form an "L". This is summing the absolute difference across dimensions. 
@@ -621,6 +682,8 @@ Use cases:
 * Categories of items in a supermarket.
 * Trajector of cars in traffic
 
+---
+
 ### Cosine Similarity
 
 Not strictly a measure of distance but instead the angle between two vectors. In this example, the vector would be a feature vector where each entry is a dimension. 
@@ -630,6 +693,8 @@ Below is a measure of Cosine Distance which is derived from cosine similarity. T
 $$dist(x_i, x_n) = 1 - \frac{\sum_{d=1}^{D} x_{i_d} \cdot x_{j_d}}{\sqrt{\sum_{d=1}^{D} {x_{i_d}}^2} \cdot \sqrt{\sum_{d=1}^{D} {x_{n_d}}^2}}$$
 
 The deminsions of a vector could be anything, for example, words as per a text document. 
+
+---
 
 ### Voting Strategy
 
@@ -641,6 +706,8 @@ $$\hat{y}_i = \max_c \left\{ \sum_{j=1}^{k} 1_{y_j=c}, \quad \forall c \in C \ri
 
 $$\hat{y}_i = \frac{1}{k} \sum_{j=1}^{k} y_j$$
 
+---
+
 ### Inference Time Complexity for kNN
 
 Because there is not pre-trained model that can be excuted on test instances, all of the calculations associated with "training" are done at the point of inference, every time. This means that there is time complexity associated with inference. 
@@ -651,15 +718,25 @@ Time complexity of inference is given as: $N^2*D$
 
 Note, this complexity is very large and costly (comp + time). 
 
+---
+
 ### Strategy for Minimizing Time Complexity
 
 * Indexing for faster search. This can be considered as pre-processing so that inference can be conducting quicker. An abstract example of this could be thinking about an un-ordered alphabet list and how much long it would take you to find the right letter. Indexing is creating a catalogue system, an type of order.
 
 * kd tree, tree-based indexing of the data. Repeatedly partition the data region, similar to creating a decision tree. Changes time complexity to $N*D*log*N$.
 
+---
+
 ### Other Strategies: Dimensionality Reduction
 
 Given that time complexity is given by $N^2 * D$, an alternative way to reduce complexity is to reduce D. This would be acheived by reducing the number of dimensions (features). Dim Reduction will be a topic of study in Week 6. 
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 ## Week 2: Lecture Content
@@ -686,7 +763,7 @@ Question: What do you notice about the scale of the features? Think about how th
 * SD varies wildly.
 * Some mins are below 0. 
 
-#### For each of the 3 types of model, would differing scales accross features affect the behaviour of the model? And why or why not? 
+### For each of the 3 types of model, would differing scales accross features affect the behaviour of the model? And why or why not? 
 
 Hint: think about how the models are trained. 
 
@@ -708,11 +785,11 @@ With kNN it is critically important because it is entirely distance-based. KNN u
 
 ---
 
-#### Scaling Approaches
+### Scaling Approaches
 
 The two most common approaches are Normalization and Standardization.
 
-##### Min-Max Scaling (Normalization)
+### Min-Max Scaling (Normalization)
 
 This method re-scales the data into a fixed range—usually 0 to 1. It is particularly useful when you have a specific bound for your data or when you are using algorithms that don't make assumptions about the distribution (like Neural Networks or KNN). 
 
@@ -731,7 +808,9 @@ While not a "requirement" in the strictest sense, many activation functions in N
 
 The only reason not to use Min-Max when you are unsure of the distribution is Outliers. Example: If 99% of your data is between 1 and 10, but you have one error value at 10,000, Min-Max will put that 1% at "1.0" and cram the other 99% of your data into the range "0.0001 to 0.001." In that scenario, your model loses all its "resolution" for the bulk of your data.
 
-##### Standardization (Z-Score Normalization, Standard Scaling)
+---
+
+### Standardization (Z-Score Normalization, Standard Scaling)
 
 Standardization centers the data around a mean of 0 with a standard deviation of 1. Unlike Min-Max, it doesn't "clamp" the data to a specific range; instead, it describes how many standard deviations a point is from the average.
 
@@ -740,7 +819,9 @@ $$z = \frac{x - \mu}{\sigma}$$
 * **Pros:** Much more robust to outliers and generally preferred for models that assume a Gaussian (normal) distribution, like Linear or Logistic Regression.
 * **Cons:** The resulting range is not fixed (you can have values of -5, 10, etc.), which some specific algorithms might find difficult to process.
 
-##### Robust Scaling
+---
+
+### Robust Scaling
 
 If your data is "messy" and full of extreme outliers that you can't simply delete, a Robust Scaler is your best friend. Instead of using the mean and standard deviation (which outliers heavily influence), it uses the Median and the Interquartile Range (IQR). 
 
@@ -756,7 +837,9 @@ If your data is "messy" and full of extreme outliers that you can't simply delet
 | Algorithm assumes Normal Distribution | Standardization |
 | KNN or Gradient Descent models | Either (but usually Standardization) |
 
-#### Why Does Gradient Descent Prefer Standardization?
+---
+
+### Why Does Gradient Descent Prefer Standardization?
 
 To understand why Gradient Descent prefers standardization, you have to look at the "Loss Landscape"—the mathematical mountain range that the algorithm has to navigate to find the lowest point (the optimal solution). Standardization turns a chaotic, steep-walled canyon into a neat, symmetrical bowl.
 
@@ -768,7 +851,11 @@ When you standardize, the loss landscape becomes spherical (circular). In a circ
 
 In standard Gradient Descent, we use a single learning rate ($\alpha$) for all parameters: $w_{new} = w_{old} - \alpha \cdot \nabla J(w)$. If your features aren't on the same scale, the "ideal" learning rate for Feature A might be 0.1, while the ideal rate for Feature B might be 0.000001. Using a single $\alpha$ for both is a compromise that usually satisfies neither, leading to poor convergence or numerical instability. Standardization ensures that a single learning rate is effective for every weight in your model.
 
-## Week 2: Lab Content
+---
+
+<br>
+<br>
+<br>
 
 ## Week 2: Additional Reading
 
@@ -777,21 +864,28 @@ In standard Gradient Descent, we use a single learning rate ($\alpha$) for all p
 * [Bagging predictors. L Breiman, 1996.](#w2-bagging-predictors-l-breiman-1996)
 * [Random forests. L Breiman, 2001.](#w2-random-forests-l-breiman-2001)
 * [Experiments with a new boosting algorithm. Y Freund, R Schapire, 1996.](#w2-experiments-with-a-new-boosting-algorithm-y-freund-r-schapire-1996)
-* [Understanding machine learning: from theory to algorithms. S Shalev-Shwartz, S Ben-David, 2014.](#w2-understanding-machine-learning-from-theory-to-algorithms-s-shalev-shwartz-s-ben-david-2014)
+* [Understanding machine learning: from theory to algorithms. S Shalev-Shwartz, S Ben-David, 2014.](#w2-understanding-machine-learning-from-theory-to-algorithms-s-shalev-shwartz-s-ben-david-2014)]
+
+---
 
 ### [[W2] A first course in machine learning. S Rogers, M Girolami, 2017.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559300002461?auth=SAML)
 
-##### Section 5.3.1: K-Nearest Neighbours
+
+### Section 5.3.1: K-Nearest Neighbours
 
 kNN is popular due to its simplicity and excellent empirical performance. It can handle both mutli-class and binary problems. It makes no assumptions about the parametric form of the decision boundary.  kNN does not have a training phase and is best described through the simple process to classify new objects. 
 
-##### 5.3.1.1 Choosing K
+---
+
+### 5.3.1.1 Choosing K
 
 Once you have the data and your decision metric, the number `k` points for a new point to be decided by is needed. If `k` is too small, the classification can be too influenced by noise. Generally, with a `k` too low, the main decision boundary will still look viable. However, the is the tendency for islands to form. These are data points where label make be different to its surroundings due to noise or mislabelled. If `k=1` points arbitarily close to this point will be "infected" by its label as there is not opponents in the voting to correct for the mistake, or noise. This leads to islands in the opposing boundary space. The solution to this is easy, add more `k`. Having numerous members to decide inferences behaves as a regulariser against noise/mistakes. 
 
 **What happens when `k` is too big?** As we increase `k`, the neighbours considered become further away in the space. As mentioned before, the increase in `k` has a regularising effect but as we venture further into the distance, we start to loose correlations in similarity. Extreme edge case where this is particular relevant are in small data sets where `k` approaches `n`causing the boundary to constantly overshoot for each inference, but also instances that are close to the true boundary. Here, if `k` is too large, the relevant neighbours on the correct side of the boundary can be exhausted and the spill over results in a collection of opposite class instances being considered. 
 
-##### K-Cross Validation
+---
+
+### K-Cross Validation
 
 The most popular method for choosing `k` is cross validation. k-Fold Cross-Validation is a robust resampling technique used to evaluate how well a machine learning model will generalize to an independent, unseen dataset. It helps ensure that your model hasn't just "memorized" the specific quirks of your training data.
 
@@ -811,7 +905,9 @@ $$\text{Average Accuracy} = \frac{\text{Acc}_1 + \text{Acc}_2 + \dots + \text{Ac
 
 Note, there is an exception to this which is known as "Ensemble" Inference. This is where you implement more than one model and use a method to to either vote or average the models in the ensemble at inference. This is not related to k-cross validation, though the techniques to execute are probably simimlar. 
 
-##### kNN and Deep Learning
+---
+
+### kNN and Deep Learning
 
 kNN can be used as the final layer in Deep Learning instead of a fully connected layer. n this setup, your deep learning layers act as a feature extractor (embedding the data into a high-dimensional space), and k-NN performs the final classification based on the distances ($dist$) you were looking at earlier. The Feature Extractor and the final kNN layer can be thought of as two seperate models as the kNN is not involved in the training process, it just processes the outputs of the Deep Model, i.e. its recevied the vectors. When using kNN as a final layer, considerations need to be taken based on the distance metric and computational cost. If the vector is of size 2048, the "Curse of Dimensionality" might make Euclidean distance less effective. This is why Cosine Similarity (which you asked for earlier) is often preferred for deep learning embeddings. Additionally, you need to ensure that your data augmentations (like the rotations or jittering you listed) are only applied to the training folds and not the validation folds. If you augment before splitting, you are "memorizing" versions of the test data, which ruins the cross-validation.
 
@@ -821,12 +917,14 @@ Just to clarify the difference between training and validation folds. Imagine, t
 
 In k-NN, "Training" is just "Remembering." You want the model to "remember" as many variations as possible (via augmentation) so that when it sees a "query" (Validation Fold), it has a nearby neighbor to compare it to.
 
+---
+
 ### [[W2] Data Mining and Machine Learning. J Zaki, W Meira, 2020](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559360002461?auth=SAML)
 
 * Chapter/Section 18.3 - K-nearest neighbours
 * Chapter 19 -  Decision Trees
 
-#### What is an Axis-Parallel Hyperplane?
+### What is an Axis-Parallel Hyperplane?
 
 In high-dimensional space, a "hyperplane" is just a flat surface that divides data. A standard linear model can tilt this plane at any angle to find the best split. a Decision Tree considers only axis-parallel hyperplanes. This means: The weight vector ($w$) is restricted to a standard basis vector ($e_j$). Instead of using all features at once ($w_1x_1 + w_2x_2 + \dots$), the tree picks one feature ($x_j$) at a time to split on. Mathematically, as shown in the text, the complex equation $w^Tx + b = 0$ simplifies down to:
 
@@ -836,6 +934,7 @@ This restriction is exactly what makes Decision Trees interpretable and fast: Ev
 
  If your data is best separated by a diagonal line (e.g., $x_1 + x_2 = 10$), a Decision Tree will struggle. It will have to create a "staircase" of many small axis-parallel steps to approximate that diagonal. But because it only deals with one axis at a time, the model is incredibly easy to explain. You don't need to understand complex weight vectors; you just need to know which feature was chosen and what the threshold was. 
 
+---
 
 ### [[W2] Bagging predictors. L Breiman, 1996.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559400002461?auth=SAML)
 
@@ -851,11 +950,15 @@ For clarity, bagging is not built on the concept of weak learners. Bagging is bu
 
 Boosting on the other hand is designed to reduce bias which is a sympton of underfitting. This is the method that actually relies on weak learners (like "stumps"—trees with only one split). It takes a model that is "weak" (barely better than random guessing) and adds new models sequentially to correct the mistakes of the previous ones. In his 1996 paper, Leo Breiman explicitly stated that for Bagging to work, the predictor must be unstable. Weak Learners (like a linear model or a shallow tree) are often very stable. If you change the data slightly, a weak learner usually produces the same simple answer. If you bag a stable learner, every bootstrap version of the model will look nearly identical. When you average them, you get the same result you started with, meaning you’ve gained nothing. 
 
+---
+
 ### [[W2] Random forests. L Breiman, 2001.](https://readinglists.sussex.ac.uk/leganto/nui/citation/23771559380002461?institute=44SUS_INST&auth=SAML)
 
 Leo Breiman’s 2001 paper "Random Forests" significantly evolved his earlier work on Bagging by introducing a crucial element of randomness to the tree-building process. While Bagging only randomizes the data (via bootstrapping), Random Forests randomize the features. 
 
 The primary breakthrough in the 2001 paper is the "Random Subspace Method": At each node of every tree, the algorithm selects a random subset of features (typically denoted as $m$ or max_features) rather than searching through all available features for the best split. This deliberately makes each individual tree "weaker" and less accurate, but it makes the trees de-correlated from one another. In simple Bagging, if one feature is a very strong predictor, almost every tree will use it for the first split, making the trees very similar (high correlation). Random Forests force some trees to ignore that "obvious" feature and find patterns in others, which reduces the overall variance of the ensemble. 
+
+---
 
 ### [[W2] Experiments with a new boosting algorithm. Y Freund, R Schapire, 1996.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559410002461?auth=SAML)
 
@@ -867,10 +970,14 @@ Freund and Schapire proved that as long as each weak learner is at least slightl
 
 Because AdaBoost aggressively focuses on misclassified points, the authors noted it is highly sensitive to noisy data and outliers. If a data point is mislabeled, AdaBoost will keep increasing its weight, potentially ruining the model's performance by obsessing over an impossible-to-classify outlier.
 
+---
+
 ### [[W2] Understanding machine learning: from theory to algorithms. S Shalev-Shwartz, S Ben-David, 2014.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559290002461?auth=SAML)
 
 * Chapter 10 - Boosting
 * Chapter 19 - Nearest Neighbour
+
+---
 
 ### [[W2] C Bishop. Pattern recognition and machine learning. 2006.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771559310002461?auth=SAML)
 
@@ -878,9 +985,268 @@ Because AdaBoost aggressively focuses on misclassified points, the authors noted
 * 14.3 - Boosting
 * 14.4 - Tree-based Models
 
+---
+
+<br>
+<br>
+<br>
+
+# [Week 3 - Hyperplanes and Likelihoods](https://canvas.sussex.ac.uk/courses/35245/pages/week-3-hyperplanes-and-likelihoods?module_item_id=1546319)
+
+* A non-tree method (support vector machine) that also works by partitioning data into regions of similar labels, based on a hyperplane; 
+* How machine learning could be framed in terms of estimation of likelihoods (Bayes classifier and logistic regression methods). 
+
+#### Week N: Contents
+
+1. [Mini-Videos](#week-n-mini-videos)
+2. [Lecture Content](#week-n-lecture-content)
+4. [Additional Reading](#week-n-additional-reading)
+
+<br>
+<br>
+<br>
+
+## Week N: Mini-Videos
+
+[SVM](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cf9bf785-fafe-4bf6-974d-b32300d38c31)
+
+[Probabilistic Models](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b66e5b5-11ae-4747-a39b-b32300ecd1a4)
+
+
+<br>
+<br>
+<br>
+
+# SVM
+
+the optimal swm model is the hyperlane that:
+* seperates two classes +1 and -1
+* and; maximises its distances (margin) to them 
+
+hyperplane terminonoloy just means a line (2s) in mutli-dimensional space
+
+h*w*c is an images dimensions, can still have an hyperplane
+
+the condition "maximises its distances (margin) to them" is the main part of SVM because there may be many lines that just seperate the two classes. 
+
+The support vectors are the instances from each class that are closest to the other class. they determin the max margin hyperplane. it is the space to find the line in. 
+
+We need to find a line that maximise the margin whilst being in between the Support Vectors
+
+optimal hyperp:
+* at max margin from both classees
+* still correctly classif
+* means that hyperplane has to be the midpoint between two classes
+
+conceptually, in a 2d space, this is just the same as the linear model which constructs a line
+
+xw = 0, this is the hyperplane
+
+xw = 1, xw = -1, these are the support vectors
+
+
+maxim the margin $\text{maximize} \quad \frac{2}{\|\mathbf{w}\|}$ is the same as minimising $$\text{minimize} \quad \frac{\|\mathbf{w}\|^2}{2}$$ 
+
+In practice, maximizing that fraction is mathematically "messy" because the variable is in the denominator. To make it a standard Quadratic Programming problem that's easier for computers to solve, we flip it, square it, and divide by 2.
+
+The Square: Squaring the norm $\|\mathbf{w}\|$ removes the square root, making the function differentiable everywhere.
+
+The 2: The $1/2$ is a "convenience constant"—when you take the derivative (to find the minimum), the exponent $2$ and the $1/2$ cancel out, leaving you with a very clean linear expression.
+
+
+SVM Objective function:
+
+$$L_{SVM}(\mathbf{w}) = -\sum_{n=1}^{N} \beta_n(y_n(\mathbf{x}_n \mathbf{w}) - 1) + \frac{1}{2}\|\mathbf{w}\|^2$$
+
+B_n is a lagrange multiplier (coeffs of additional constraints in a function to be optimized)
+
+--- 
+
+This equation represents the Lagrangian form used to solve the SVM optimization problem: 
+
+$-\sum_{n=1}^{N} \beta_n(y_n(\mathbf{x}_n \mathbf{w}) - 1)$: This term represents the classification error constraints. The $\beta_n$ are the Lagrange multipliers (often denoted as $\alpha_n$ in other texts) that enforce the condition that data points must lie on the correct side of the margin.
+
+$\frac{1}{2}\|\mathbf{w}\|^2$: This is the term for the margin to be maximized. As we discussed previously, minimizing the square of the norm of the weights is mathematically equivalent to maximizing the geometric margin between classes.
+
+The Input Features ($\mathbf{x}_n$)What it is: This is the vector of numerical values for a specific data point (e.g., the height and weight of a person if you're classifying "taller than average").Role: It represents the position of the point in space.
+
+3. The Functional Margin ($y_n(\mathbf{x}_n \mathbf{w}) - 1$)What it is: This is the core calculation for each point.The Math: You take the dot product of the features ($\mathbf{x}_n$) and the current weights ($\mathbf{w}$), then multiply it by the label ($y_n$).The Goal: For a point to be correctly classified and outside the margin, this result needs to be $\geq 0$. If it's negative, it means the point is either misclassified or too close to the boundary (the "classification error" mentioned in your image).
+
+note that the main predictive part of the model, is just a simple linear model with weights and params
+
+In the objective function you shared ($y_n(x_n w) - 1$), the "$-1$" acts as a threshold. The SVM doesn't just want the margin to be positive; it wants the margin to be at least 1.
+
+If the result is greater than 1, the "Classification Error" part of your formula becomes negative, which the minimization process loves.
+
+If the result is between 0 and 1, the point is correctly classified but is "too close" to the boundary for comfort.
+
+The beauty of the SVM formula is that it uses a mathematical "trick" where the label $y_n$ acts as a sign switcher. This allows one single formula to handle both classes simultaneously.
+
+Case 1: The label is $+1$ (Positive Class)If the data point belongs to the positive class, the formula looks like this:$$(+1) \cdot (\text{prediction})$$To get a positive result (which the model wants), the prediction $(\mathbf{x}_n \mathbf{w})$ must also be positive.If the prediction is $+2$, the result is $+2$ (Correct!).If the prediction is $-2$, the result is $-2$ (Error!).
+
+Case 2: The label is $-1$ (Negative Class)If the data point belongs to the negative class, the formula looks like this:$$(-1) \cdot (\text{prediction})$$To get a positive result, the prediction $(\mathbf{x}_n \mathbf{w})$ must be negative.Because $(-1) \times (\text{negative number}) = \text{positive number}$.If the prediction is $-2$, the result is $+2$ (Correct!).If the prediction is $+2$, the result is $-2$ (Error!).
+
+---
+
+* max margin to maximised (or min with inverse)
+
+this is known as the primal form of the objective function
+
+the other formulation of the loss function is the dual: 
+
+$$L_{SVM}(\mathbf{w}) = -\sum_{n=1}^{N} \beta_n(y_n(\mathbf{x}_n \mathbf{w}) - 1) + \frac{1}{2}\|\mathbf{w}\|^2$$
+
+it isderived from the primal 
+
+no longer can the weights parameters, instead we have two B paramets. this is solved using quadratic programming but we don't cover this on the module 
+
+# summary 
+
+svm model is a max margin hyperplane between two classes
+
+there are two formulation of the loss function that meet this req
+
+<br>
+<br>
+<br>
+
+#  Probabilistic Models
+
+* how ML could be frames in terms of estimation of likelihoods
+* how a bayes classifer works
+* how the logistic regression works
+
+two parts to video; bayes classifer; logistic regression
+
+<br>
+<br>
+<br>
+
+# bayes classifer
+
+This formula describes how to update the probability of a hypothesis based on new evidence.
+
+$$P(B|A) = \frac{P(A|B)P(B)}{P(A)}$$
+
+* Definitions:
+* $P(B|A)$: Conditional probability of $B$ given observation of $A$ (Posterior probability).
+* $P(B)$: Prior probability of $B$.
+* $P(A|B)$: Probability of $A$ having occurred given observation of $B$ (Likelihood).
+* $P(A)$: Probability of $A$.
+
+
+$$P(C_k | x_1, \dots, x_n) = \frac{P(C_k) \prod_{i=1}^{n} P(x_i | C_k)}{P(x_1, \dots, x_n)}$$
+
+$P(C_k | x_1, \dots, x_n)$: The Posterior probability. This is what we are trying to calculate—the probability that the instance belongs to class $C_k$ given the observed features.
+
+$\prod_{i=1}^{n} P(x_i | C_k)$: The Likelihood. The "Naive" part assumes that every feature ($x_i$) is independent of the others. Therefore, we just multiply the individual probabilities of each feature occurring in that class together.
+
+$$\hat{y} = \text{argmax}_{k} \left( P(C_k) \prod_{i=1}^{n} P(x_i | C_k) \right)$$
+
+<br>
+<br>
+<br>
+
+# logistic regression
+
+$$\sigma(z) = \frac{1}{1 + e^{-z}}$$ 
+
+$$P(y=1|\mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}$$
+
+$$J(\mathbf{w}) = -\frac{1}{N} \sum_{n=1}^{N} [y_n \log(\hat{y}_n) + (1 - y_n) \log(1 - \hat{y}_n)]$$
+
+Log Loss and Cross-Entropy Loss are the same thing when we are dealing with a binary classification problem (where you have two classes).
+
+likelihood is analgous to loss
+
+log loss is specifically for things where there are two possible outcomes
+
+model opt involves maximising the likelihood
+ eq to finding the wights that min the loss
+
+
+linear models work by predicting based on a decision boundary 
+
+thisis x_n x = 0 
+
+if the class falls below then it is class x, other wise class y
+
+this is just a hyperplane as seen before
+
+however, the decision boundary can be set anywhere, i.e. = 1
+
+
+--- 
+
+To understand why we can't solve Logistic Regression with a simple "plug-and-play" formula like we can with Linear Regression (Ordinary Least Squares), we have to look at the derivative of the cost function.
+
+In Linear Regression, the derivative of the cost function results in a linear equation ($X^TX\hat{\beta} = X^Ty$). We can solve this using basic algebra to get a closed-form solution.
+
+In Logistic Regression, we use the Log Loss (Cross-Entropy) function. For a single parameter $w$, the gradient (derivative) of the cost function $J(w)$ looks like this:
+
+$$\frac{\partial J(w)}{\partial w} = \sum_{n=1}^{N} (\sigma(w x_n) - y_n)x_n$$
+
+To find the minimum "closed-form" style, we would need to set that derivative to zero and solve for $w$:
+
+$$\sum_{n=1}^{N} (\sigma(w x_n) - y_n)x_n = 0$$
+
+If we expand the Sigmoid function ($\sigma$), the equation becomes:
+
+$$\sum_{n=1}^{N} \left( \frac{1}{1 + e^{-w x_n}} - y_n \right)x_n = 0$$
+
+This is a transcendental equation. Because the variable $w$ is "trapped" inside an exponent ($e^{-w x_n}$) and also exists inside a summation, there is no algebraic way to isolate $w$ on one side of the equals sign.
+
+Since we can't solve for $w$ directly, we use Gradient Descent. Think of it as feeling your way down a mountain in the fog:
+1. Start with a random weight $w$.
+2. Calculate the gradient (the slope) at that point.
+3. Take a small step in the opposite direction of the slope (the "downhill" direction).
+4. Repeat until the slope is nearly zero.
+
+Unlike the SVM Dual Objective, which is a Quadratic Programming problem with specific constraints, Logistic Regression's Log Loss is a smooth, convex surface. This means Gradient Descent is guaranteed to eventually find the global minimum, even without a closed-form solution.
+
+We modify the original Log Loss (Cross-Entropy) by adding a regularization term:
+
+$$J(\mathbf{w}) = \underbrace{-\frac{1}{N} \sum_{n=1}^{N} [y_n \log(\hat{y}_n) + (1 - y_n) \log(1 - \hat{y}_n)]}_{\text{Log Loss}} + \underbrace{\lambda R(\mathbf{w})}_{\text{Penalty}}$$
+
+$\lambda$ (Lambda): The regularization strength. A higher $\lambda$ penalizes weights more severely, leading to a simpler model.
+
+$R(\mathbf{w})$: The specific type of penalty applied.
+
+2. Common Types of RegularizationThere are two primary ways to calculate the penalty $R(\mathbf{w})$:L2 Regularization (Ridge)This adds the squared magnitude of the weights. It is the most common form and is mathematically identical to the "margin maximization" term in SVMs.$$R(\mathbf{w}) = \frac{1}{2} \|\mathbf{w}\|^2 = \frac{1}{2} \sum_{j=1}^{d} w_j^2$$Effect: It shrinks all weights toward zero but rarely makes them exactly zero. It’s great for handling multicollinearity (when features are correlated).L1 Regularization (Lasso)This adds the absolute magnitude of the weights.$$R(\mathbf{w}) = \|\mathbf{w}\|_1 = \sum_{j=1}^{d} |w_j|$$Effect: It can force some weight coefficients to become exactly zero. This effectively performs feature selection, removing irrelevant variables from the model entirely.
+
+# summary 
+
+bayes classifer gives the probabiltiy of each class by updating tyhe prior prob of the class with the likei of the obs data
+
+nive assumoption of condition inde in bayes model in the naive abyes classifer
+
+logistic reggresion model is a classifer (not regression)
+
+its loss function is cross ent and is opt using grad desc
+
+<br>
+<br>
+<br>
+
+## Week N: Lecture Content
+
+* What are the assumptions of the SVM? What if they are not met?
+* How could one use the SVM for multiclass classification? 
+
+
+What are the assumptions of the SVM? What if they aren't met? 
+(30mins)
+* What are the SVM assumptions?
+
+
+How could one use the SVM for multiclass classification? (30mins)
 
 
 
+
+
+
+## Week N: Additional Reading
 
 
 
