@@ -144,6 +144,10 @@ Examples of tree networks include phylogenetic trees, water distribution or powe
 
 **Why do we care about components and disconnects?** This is linked to redunancy, reliliance and robustness measures. We test these by attacking the network. Interconnectness and Density is a big factor in how these attacks are handled, and/or spread. A high density network means more redundancy, which means it will be more resiliant to attack/changes. 
 
+<br>
+
+---
+
 ## Density and Sparsity
 
 ### Undirected Networks
@@ -176,6 +180,8 @@ The formula cancels out and effectivly flips the fraction so that the simple bit
 Now that we have the maximum possible number of links we can use it calculate the density $d$ which is given by: $\frac{L}{L_max} = \frac{2L}{N(N-1)}$. We say a network is space is $d << 1$$.
 
 $<<$ means much less than. Scientists use >> when a simple inequality doesn't tell the whole story.
+
+---
 
 ### Directed Networks
 
@@ -243,6 +249,8 @@ D.out_degree(4)
 D.degree(4) # total degree
 ```
 
+---
+
 ## Average Degree
 
 The average degree of a (undirected network) is $\langle k \rangle = \frac{\sum_{i} k_{i}}{N}$. This tells you the average number of edges a network's node has. 
@@ -255,11 +263,15 @@ This tells us that Density ($d$) is essentially the probability that any two nod
 
 While the "Average Degree" tells you the typical connectivity, it doesn't tell you if the network has "hubs." For that, we use $\kappa$ (Kappa). The Heterogeneity Parameter ($\kappa$): $$\kappa = \frac{\langle k^2 \rangle}{\langle k \rangle^2}$$
 
+---
+
 ## Excess Degrees
 
 The excess degree of a node $k$ with degree is $k-1$. It represents the number of edges connected to that node excluding the edge that was used to reach it.
 
 We can then define the mean excess degree of a network, which is the average number of connections a randomly chosen neighbour of a node has excluding the link to the starting node. This concept is important when considering spreading on a network (e.g., in epidemiology). The famous Friendship paradox (not to be confused with the Friendship theorem!) is closely related to that.
+
+---
 
 ## Strength
 
@@ -273,12 +285,16 @@ In a weighted and directed network, we have:
 * **in-strength:** $s_{i}^{in} = \sum_j w_{ji}$
 * **out-strength:** $s_{i}^{out} = \sum_j w_{ji}$
 
+---
+
 ## Simplifying Assumptions
 
 There are some rules that we apply to networks for simplification purposes:
 * Single-layer networks with a single type of nodes and a single type of link (unless using a temporal structure).
 * There are no self-loops. A node cannot connect to itself.
 * There can only be a single link between nodes (or two for directed networks). 
+
+---
 
 ## Network Representations
 
@@ -315,6 +331,8 @@ W.degree(4, weight='weight') # strength
 However, it should be noted that matrices are poor respresenations for networds because networds are sparse, meaning a lot of the space in the matrix will be empty but the memory will be allocated. The best repsresentation will be an edge list/dictionary. 
 
 **If a matrix is not efficent then why use them?** Becuase it allows us to use linear algebra for the maths. 
+
+---
 
 ## Adjacency List
 
@@ -362,6 +380,8 @@ This output is to be interpetted as:
 
 Meaning each key entry in the adj list is a node, and the numbers to the right are the out-bound connections, from that node. If there are no out bound connections then the node entry will still exist but there will be not numbers to the right of it. 
 
+---
+
 ## Edge List 
 
 An edge list is the simplest and most common way to store network data. While an adjacency list organizes connections by node, an edge list is just a two-column (or three-column) list where each row represents a single link $(node_1, node_2)$. In a weighted matrix the weight is also included $(node_1, node_2, weight)$.
@@ -378,6 +398,8 @@ G2 = nx.read_edgelist("netfile.edgelist")
 nx.write_weighted_edgelist(W, "wf.edges") 
 W2 = nx.read_weighted_edgelist("wf.edges")
 ```
+
+---
 
 ## Adjanency Matrices and Matrix Multiplication
 
@@ -432,6 +454,11 @@ For $\mathbf{A}^2$ in a simple directed network without "self-loops," the diagon
 
 However, with $\mathbf{A}^3$, the diagonal is the "Triangle Detector". If the entry at $(X, X)$ in $\mathbf{A}^3$ is 1, it means there is a path $X \to Y \to Z \to X$. By summing the diagonal of $\mathbf{A}^3$ (called the Trace), scientists count the total number of triangles in the network.
 
+---
+
+<br>
+<br>
+<br>
 
 
 # Week 3 Lecture
