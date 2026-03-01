@@ -66,7 +66,7 @@ for u,v in G.edges:18
 print(u, v)
 ```
 
-![Undirected Network](./week_1/screenshots/undir_net.png)
+![Undirected Network](./week_2/screenshots/undir_net.png)
 
 ### Directed Networks
 
@@ -94,7 +94,7 @@ D.neighbors(2)
 for s in D.successors(2):
 ```
 
-![Directed Network](./week_1/screenshots/dir_net.png)
+![Directed Network](./week_2/screenshots/dir_net.png)
 
 ### Weighted Network
 
@@ -120,7 +120,7 @@ nx.draw(W, pos,
     with_labels=True,
 ```
 
-![Weighted Network](./week_1/screenshots/weight_net.png)
+![Weighted Network](./week_2/screenshots/weight_net.png)
 
 ---
 
@@ -128,7 +128,7 @@ nx.draw(W, pos,
 
 In a bipartite network, there are two groups of nodes such that links only connect nodes from different groups and not nodes from the same group. This could be though of at product::input relationships, i.e. songs and artists, product and customers, classes and students. 
 
-![Biparite Network](./week_1/screenshots/biparite.png)
+![Biparite Network](./week_2/screenshots/biparite.png)
 
 --- 
 
@@ -138,7 +138,7 @@ A tree network is a special class of undirected, connected network such that the
 
 Examples of tree networks include phylogenetic trees, water distribution or power grids, broadcasting networks, food webs
 
-![Tree Network](./week_1/screenshots/tree.png)
+![Tree Network](./week_2/screenshots/tree.png)
 
 **What is the sparestest type of network?** Technically a straight line but in terms of a true network, a tree. This is ebcause each time you add a new node, you add one more possible edge, this is why Links/Edges = $N-1$. There cannot exist a network with less edges than $N-1$, removing any link in a tree would result in a disconnected components. 
 
@@ -318,87 +318,119 @@ However, it should be noted that matrices are poor respresenations for networds 
 
 ## Adjacency List
 
-TODO
+While an adjacency matrix is a grid of 0s and 1s, an adjacency list is a more compact "address book" for a network. Instead of a giant table showing every possible connection (even the ones that don't exist), you only list the connections that actually are there.
+
+In an adjacency list, every node $i$ has its own list that contains the names (or indices) of its neighbors. 
+
+For Undirected Networks: If there is a link between $A$ and $B$, $B$ appears in $A$'s list, and $A$ appears in $B$'s list. This is the exact reason we divide the max links for undirected networks by two because we don't want to count the link from A to B as being different from B to A: ($L_{max} = \frac{N(N-1)}{2}$). 
+
+For Directed Networks: If $A \to B$, then $B$ appears in $A$'s list (the "out-list"), but $A$ does not appear in $B$'s list unless there is a separate link $B \to A$
+
+In the Facebook example, the network is sparse ($d \approx 10^{-6}$). A matrix for 1 billion users would require $10^{18}$ cells (a quintillion!), mostly filled with zeros. This is impossible for most computers to store. An adjacency list only stores the actual links ($L$). Since the average person only has $10^3$ friends, the computer only has to store $10^9$ lists with about 1,000 entries each. This is much more efficient. 
+
+```
+for line in nx.generate_adjlist(G):
+    print(line)
+
+nx.write_adjlist(G, "netfile.adjlist")
+G2 = nx.read_adjlist("netfile.adjlist") 
+```
+
+```
+1 2
+2 1 3
+3 4
+4 2 5 7
+5 8
+6 5
+7 4
+8
+10 9
+9
+```
+
+This output is to be interpetted as:
+
+```
+{
+    1: [2],
+    2: [1,3],
+    3: [4],
+    ...
+}
+```
+
+Meaning each key entry in the adj list is a node, and the numbers to the right are the out-bound connections, from that node. If there are no out bound connections then the node entry will still exist but there will be not numbers to the right of it. 
 
 ## Edge List 
 
-TODO
+An edge list is the simplest and most common way to store network data. While an adjacency list organizes connections by node, an edge list is just a two-column (or three-column) list where each row represents a single link $(node_1, node_2)$. In a weighted matrix the weight is also included $(node_1, node_2, weight)$.
 
+For an undirected network, you do not write the bi-directional entries twice. If $1 \to 2$ there will be an edge list entry but this won't exist for $2 /to 1$. 
 
-# stuff on adj matrix and matrix mutliplication
+```
+for edge in nx.generate_edgelist(W, data=["weight"]):
+    print(edge)
 
-The intuition behind multiplying an adjacency matrix by itself is that it reveals connectivity over multiple steps. While the base adjacency matrix $\mathbf{A}$ tells you who is directly connected (1 step), $\mathbf{A}^2$ tells you about paths that are exactly 2 steps long.
+nx.write_edgelist(G, "netfile.edgelist")
+G2 = nx.read_edgelist("netfile.edgelist")
 
-#### Intuition: The "Path Counting" Rule
+nx.write_weighted_edgelist(W, "wf.edges") 
+W2 = nx.read_weighted_edgelist("wf.edges")
+```
+
+## Adjanency Matrices and Matrix Multiplication
+
+The intuition behind multiplying an adjacency matrix by itself is that it reveals connectivity over multiple steps within the netowrk. 
+
+While the base adjacency matrix $\mathbf{A}$ tells you who is directly connected (1 step), $\mathbf{A}^2$ tells you about paths that are exactly 2 steps long.
+
 When you perform matrix multiplication $\mathbf{A}^2 = \mathbf{A} \cdot \mathbf{A}$, the value at index $(i, j)$ in the resulting matrix represents the number of paths of length 2 from node $i$ to node $j$.
 * $\mathbf{A}^1$: Tells you if you can go from $i \to j$ in 1 step.
 * $\mathbf{A}^2$: Tells you how many ways you can go from $i \to k \to j$ in 2 steps.
 * $\mathbf{A}^3$: Tells you how many ways you can go from $i \to k \to m \to j$ in 3 steps.
 
 
-2. Walking through your $3 \times 3$ Example
+Let take an example where the network is: $X \to Y \to Z \to X$:
 
-Look at the example in your slide where the network is $X \to Y \to Z \to X$:
+The First Matrix ($\mathbf{A}$) captures the direct link relationships: $X \to Y$ is 1, $Y \to Z$ is 1, $Z \to X$ is 1. All other values in the matrix are 0 because you can't get anywhere else in exactly one jump. $Y \to X$ is 0 for example. 
 
-The First Matrix ($\mathbf{A}$):
-
-Shows direct links: $X \to Y$ is 1, $Y \to Z$ is 1, $Z \to X$ is 1.
-
-All other values are 0 because you can't get anywhere else in exactly one jump.
-
-The Squared Matrix ($\mathbf{A}^2$):
-
-Notice the "1" has shifted.
-
-In the first row ($X$), the "1" is now in the third column ($Z$).
-
-Intuition: This means there is exactly one path of length 2 from $X$ to $Z$ ($X \to Y \to Z$).
-
-You cannot get from $X$ back to $X$ in 2 steps, so the diagonal is 0.
-
-3. Why this matters for the "Big Picture"
-This calculation is the engine behind many of the concepts in your other slides:
-
-Robustness: If you multiply $\mathbf{A}$ by itself many times and the matrix is still full of zeros, it means the network is not well-connected (it has a small $S$).
+With the Squared Matrix ($\mathbf{A}^2$) the 1's have shifted. The first row represents $X$. Originally, it only had a $1$ in the middle column which was its connectioned to $Y$. Now, the $1$ has shifted to the end column. This means there is example 1 path of length 2 from $X$ to $Z$ ($X \to Y \to Z$). You cannot get from $X$ back to $X$ in 2 steps, so the diagonal is 0.
 
 
-Betweenness Centrality: The graph in your first slide measures how many "shortest paths" pass through a node. To find those paths, computers effectively perform operations similar to matrix multiplication to "explore" the network.
+![a2](./week_2/screenshots/a2.png)
 
-Clustering: Remember "N choose 3" ($\binom{N}{3}$) for triangles? A triangle is just a path of length 2 ($i \to j \to k$) that has a third link closing the loop ($k \to i$). Scientists find these by looking at the diagonal of $\mathbf{A}^3$.
+This calculation and the intution is the backbone behind many other concepts in network science. 
 
-Matrix,Intuition,Application
-A,Direct neighbors,"Degree (ki​), Strength (si​)"
-A2,Friends-of-friends,"Clustering, Indirect influence"
-An,Long-distance paths,"Network diameter, Robustness"
+**Robustness:** If you multiply $\mathbf{A}$ by itself many times and the matrix is still full of zeros, it means the network is not well-connected (it has a small $S$). In a well-connected network, each step should open up more routes to get to same place. Think about travelling through London and how many individual routes you could take to a destination if you really wished. 
 
+**Betweeness as a Centrality Measure**: This is covered later in the module but we often wish to be able to measure centrality, which is a concept related to hubs. Betweenness looks at shortest-paths which pass through a node. To find those paths effectivly we can use matrix mutliplication to traverse a network and we can track indices of interested to see if they are passed through. 
 
-To understand the intuition behind matrix multiplication in networks, think of it as a path-finding machine. When you multiply an adjacency matrix $\mathbf{A}$ by itself, you are calculating the "friends of friends" connections.
+**Clustering:** Recall "N choose 3" ($\binom{N}{3}$) for triangles. A triangle is just a path of length 2 ($i \to j \to k$) that has a third link closing the loop ($k \to i$). We find these by looking at the diagonal of $\mathbf{A}^3$.
 
-1. The Core Intuition: Steps in a JourneyThe power of the matrix tells you the length of the "jump" you are taking:
+**Small World Effect:** If a network is "dense" enough ($d \approx \langle k \rangle / N$), you will find that $\mathbf{A}^n$ fills up with non-zero numbers very quickly, meaning everyone is connected by a short path.
 
-$\mathbf{A}^1$ (Direct Links): Shows if you can get from $i$ to $j$ in exactly 1 step.
+| Matrix | Intuition | Application |
+| :--- | :--- | :--- |
+| $A$ | Direct neighbors | Degree ($k_i$​), Strength ($s_i$​) |
+| $A_2$ | Friends-of-friends | Clustering, Indirect links |
+| $A_n$ | Long-distance paths | Network diameter, Robustness |
 
-$\mathbf{A}^2$ (Indirect Links): Shows how many ways you can get from $i$ to $j$ in exactly 2 steps.
+#### How Hubs Impact Adjacency Matrices?
 
-$\mathbf{A}^n$ (Long Distance): Shows how many ways you can get from $i$ to $j$ in exactly $n$ steps.
+When you add a hub, the row and column for H will be full of ones. This in turn will hugely impact the result for $\mathbf{A}^2$. In the examples before, $\mathbf{A}^2$ largely just results in the 1's being shifted around the matrix. Nodes that weren't able directly directly accessed in 1 step are opened up with 2 steps. However, with the introduction of a hub, the numbers in $\mathbf{A}^2$ will become larger than 1. 
 
+If there is a path from $X \to H \to Z$ AND a path $X \to Y \to Z$, the entry for $(X, Z)$ in $\mathbf{A}^2$ will be 2.
 
-3. Why This is Useful in Network ScienceThis isn't just a math trick; it's how we calculate the "spread" across a network:
+This is important because the more paths of length 2 between nodes, the more "redundant" and robust the network becomes.
 
-Clustering Coefficients: Remember "N choose 3" $\binom{N}{3}$ for triangles? To find a triangle, a computer looks for cases where you can go from $i$ to $j$ in 2 steps ($\mathbf{A}^2$) AND there is a direct link from $j$ back to $i$ ($\mathbf{A}^1$).
+#### "Cliquiness" and the Diagonal
 
-Disease/Information Spread: If you want to know how many people can be reached by a virus in 4 "handshakes," you look at $\mathbf{A}^4$.
+To find if a network is "cliquey" (high clustering), we look at the diagonal of the matrix powers. The diagonal represents paths that start and end at the same node. 
 
-Small World Effect: If a network is "dense" enough ($d \approx \langle k \rangle / N$), you will find that $\mathbf{A}^n$ fills up with non-zero numbers very quickly, meaning everyone is connected by a short path.
+For $\mathbf{A}^2$ in a simple directed network without "self-loops," the diagonal is usually 0 because you can't go $i \to j \to i$ unless it's a mutual connection.
 
-1. Adding the Hub to the MatrixWhen you add a hub, the row and column for H will be full of ones. This dramatically changes the result of $\mathbf{A}^2$:Before (The Loop): $\mathbf{A}^2$ just shifted the "1"s around the circle.After (With Hub): The numbers in $\mathbf{A}^2$ will suddenly become larger than 1.If there is a path from $X \to H \to Z$ AND a path $X \to Y \to Z$, the entry for $(X, Z)$ in $\mathbf{A}^2$ will be 2.Intuition: The more paths of length 2 between nodes, the more "redundant" and robust the network becomes.
-
-2. Finding "Cliquiness" with the DiagonalTo find if a network is "cliquey" (high clustering), we look at the diagonal of the matrix powers. The diagonal represents paths that start and end at the same node.$\mathbf{A}^2$ Diagonal: In a simple directed network without "self-loops," this diagonal is usually 0 because you can't go $i \to j \to i$ unless it's a mutual connection.$\mathbf{A}^3$ Diagonal: This is the "Triangle Detector." If the entry at $(X, X)$ in $\mathbf{A}^3$ is 1, it means there is a path $X \to Y \to Z \to X$.By summing the diagonal of $\mathbf{A}^3$ (called the Trace), scientists count the total number of triangles in the network.
-
-3. Summary of IntuitionMultiplying the matrix is like simulating a walk. If you want to know if two people are "connected" within a few handshakes (like the 1,000 friends in the Facebook example), you just keep powering up the matrix until the $(i, j)$ spot is no longer zero.
-
-
-
+However, with $\mathbf{A}^3$, the diagonal is the "Triangle Detector". If the entry at $(X, X)$ in $\mathbf{A}^3$ is 1, it means there is a path $X \to Y \to Z \to X$. By summing the diagonal of $\mathbf{A}^3$ (called the Trace), scientists count the total number of triangles in the network.
 
 
 
