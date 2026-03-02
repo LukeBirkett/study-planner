@@ -1876,6 +1876,623 @@ Both use Loss Functions and Gradient Descent to turn that data into dense vector
 
 
 
+# [Week 5 - Applications in NLP](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-5-applications-in-nlp)
+
+This week we will be looking at different types of applications in NLP. In particular, we will focus on sequence classification applications and sequence labelling applications.  We will give a broad overview of what it means to be one of these types of application and how performance of an approach can be evaluated.  We will discuss a range of different approaches, contrasting traditional approaches to approaches which have been developed which make use of language models.  This will pave the way for us to be able to consider transformer-based approaches and large language models in a few weeks time. 
+
+#### Week 6: Contents
+
+1. [Lecture](#week-6-lecture)
+2. [Seminar]()
+4. [Additional Readings]()
+
+## Week 6: Lecture
+
+## Applications of Language Modelling
+
+In a couple of weeks we will move into more advanced transformer based models, but first we are going to delve into the applications of language modelling and why we are interested in lanaguage modelling. If we can build a solid grounding in the applications, we should be able to substitue in our advanced models from the applications we have set up using more basic approaches. 
+
+We are rarely interested in estimating the probability of a serquence of words as the end product, or even the similarity of a pair of words. We use these are parts of a wider goal. 
+
+## Week 5 Overview 
+
+Application types: for almost all app we will think of the input as a seq of words; with classifcication we want to label the whole sequence; with seq label, we want to label the words, normally from a pre-existing list of labels, i.e. word type gammar; transduction, simlar to label, translate input to output seq, though doesn't need to be same length, i.e. diff langs have diff lengths, doesn't need to be one to one labelling; seq gen: take on input seq and output another seq, i.e. a sumamry of a doc, similar to trans but different contect
+
+approachs: traditional, language models, more advanced models; how out avs models slot it
+
+* [Part 1: Sequence Classifciaiton]()
+* [Part 2: Sequence Labelling]()
+
+## Part 1: Sequence Classifciaiton
+
+
+wht is seq classification
+
+how to represent document/sequence representation
+
+how to evaluation the classification
+
+the traditional approach for constast and basis of learning
+
+language modelling approaches: baysian, composition of embeddings, neural classification models
+
+## Seq Classication
+
+could be doc, text classification
+
+we call seq as there is no constraint on what the serquence is 
+
+we are making a sequence level classification. 
+
+could be sentiment, topic, relvlance, spam, machine gnereated
+
+there is an input seq and just 1 label
+
+classifcation could be minary or mutli-class but whatever it is be know the possible outputs before hand
+
+classif could be hard or soft; hard = put each seq into a single class, soft = interested in learning the correct probabilit, i.e. 60% likely to be hate speec. soft approachs are more common for mutliclass approaches, as large docs will have mutli topics thus valid for moere than one, and by different extents
+
+## Evalulation
+
+How to eval seq class?
+
+accuracy; how many decision right out of total. 
+
+moves into int of confusion matrix: TP, FP, FN, TN
+
+these are the simplist measures and are at the mercy of class disribution which can trick a high accuracy. 
+
+this means to **precision, recall and f1**
+
+[INSERT QUICK DEFINITION OF THESE ARE THEIR FORMULAS WHICH RESPRECT TO CONFUSION MATRIX]
+
+[INSERT IMAGE FOR MUTLI CLSAS CONFUSION MATRIX]
+
+This results in duplicates of prec, recall or f1
+
+THe most common approach is to average one of the metrics for each of the classes, usually F1
+* macro average: unweighted average
+* micro average: average weighted by size of each class
+
+## Representing Sequences for Classifcation
+
+classically, doc level is a BoW. no order just counts of words
+
+What are the benefits and limitations of bow? 
+
+Loose context of order and sentimate. 
+
+Same, similar sentences, in terms of comoposition of words will be represeent the same
+
+Limited in knowing semantic relationships between words and effect of order
+
+but it is a simokle approach that allows us to create and analyse something quickly with a good enough result
+
+## Tradityionall Approach
+
+ML classifer, i..e naive bayes, log reg, ff net, svm
+
+Train on train split, test on split. need labelled data
+
+Bayes approach is about finding most likely class based on feature
+
+[quickly insert bayes summary formulas]
+
+* bayes
+*ingore denomin
+* apply anive
+
+## Using Language Models in Classification
+
+Know we know about language models, distributed reps and embeedding. How to us this for classifc
+
+lang model tells us the prob of a seq, how can this help us classify it into some categories?
+
+* Baysian Approach NB
+* WOrd embbed based approach
+* Neural Approahc (leads us inot trans later)
+
+## Baysian Approach to classifcation
+
+---
+
+In simple terms, taking a Bayesian approach means treating probability as a "degree of belief" that gets updated as new evidence comes in.
+
+While traditional (Frequentist) statistics focuses on how often an event happens in the long run, Bayesian statistics focuses on how certain we are about a hypothesis right now, given what we already know.
+
+A Bayesian analysis always follows a specific logical flow, often summarized by Bayes' Theorem:
+
+$$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$$
+
+A measure of certainty or belief.
+
+The output is Posterior distributions and Credible Intervals.
+
+Small Sample Sizes: If you don't have much data, your "Prior" knowledge can help steer the analysis so the results aren't wildly skewed by a few outliers.
+
+A Bayesian "95% Credible Interval" actually means there is a 95% chance the value falls in that range—which is how most people wish traditional statistics worked.
+
+It is ideal for machine learning and AI because the model can constantly update its "beliefs" every time a new piece of data arrives, rather than restarting from scratch.
+
+Most standard neural networks are not Bayesian by default, but there is a specific subfield called Bayesian Neural Networks (BNNs).
+
+Strictly speaking, no. Batching (or Mini-batch Stochastic Gradient Descent) is a frequentist optimization tool, not a Bayesian one.
+
+Batching was invented for efficiency. Calculating the gradient (the direction to update weights) for a dataset of 1 million images at once is too slow and memory-intensive. We break it into "batches" of 32 or 64 simply so the computer can handle the math.
+
+Even though batching isn't "Bayesian" by design, it introduces noise. Because each batch is just a random slice of the data, the "direction" the model moves in vibrates slightly.
+
+In Bayesian terms, this noise can be seen as a way of exploring the "probability space" of the weights.
+
+There is a specific technique called Stochastic Gradient Langevin Dynamics (SGLD) that essentially uses batching noise to turn a regular neural network into a Bayesian one.
+
+The math for BNNs is incredibly "expensive." Instead of learning one value for a weight, the computer has to learn the mean and the variance, effectively doubling the parameters and making the calculus much harder.
+
+---
+
+Build a seperat lang model of each class, i.e.  P(seq|class)
+
+[INSERT FORMULAS]
+
+build a model for each class; n-gram, neural 
+
+n-gram model could give us a prob for each work to a class. apply to sequences (i.e. not a BoW) to work out the prob of class
+
+however, this approach has largely been superseeded by word embedding approachs 
+
+## Word Embedding Approach
+
+Distribution hypothesis: words which which eman similar things tend to behave in similar ways
+
+i.e. they co-occur with sim words
+
+i.e. they have simi.ar word embeds
+
+build a occurance matrix 
+
+[insert cooccur matix]
+
+but how can we go from represenations of words to res of seqs or docus
+
+## The princ of compositionality
+
+"The meaning of a complex epression is determined by the meanings of its constitut express and the rules used to combine them"
+
+## composition for meaning repres
+
+constit expressions are words
+
+words are represented by distitubional rep/embeddings, i..e word2vec or glove, taken from nn models
+
+to get rep of seq, we need to compos the embed of the words
+
+how to we do that? rules of composutions? (from the orgin quiote)
+
+## additive composiotion
+
+add the vectors (of the individual words)
+
+OR average the vectors (find the centriod)
+
+the result is often the same as the direction is the similar
+
+remember we are interested in the cosine similariyy so it is the direction that matters
+
+## using word embeedings
+
+whatever rule we decide, sum/contriod/max, for all of the word emdbeds for words in the seq
+
+pass the input to a classifer: log reg, svm, nn
+
+
+[insert image going to from words to seq using embbed > pool > mean> > classif]
+
+i.e. you have obtained a seq embed that can be used
+
+## disad of adding word embeds
+
+word embeds are uncontextualised
+
+it individual word embedds were just of the raw word (in our example)
+
+they didn't take into account their context or surroundings, just words
+
+head:body, head:leader
+
+the word order was not taken into account (depending on the method). This is def true is adding the vectors, order never matters for adding vectors (i think?)
+
+but it is easy to implelent. 
+
+## Language Model of r Seq Rep
+
+Previously we were taking the word embeddings out of our networks and using them in various ways
+
+Other approach, is a bidirectional rnn or lstm to build a full representation of the sequence. 
+
+put word embeds into a forward and backwards rnn
+
+i.e. represent a seq by what is predicted to the left, or the right of it
+
+the forward rep is telling us what might come next and has knowledge of what came before it 
+
+backward predicts the previous words, gives us a diff view of the seq
+
+note that we want a fixed them rep
+
+and then concatenate the reps b_Y, f_y (back, for), this is the rep of the seq
+
+[insert bi dir image]
+
+[insert bi dir going into prediuction net]
+
+last bi dir layer is the seq rep
+
+
+---
+
+## Part 2: Sequence Labelling
+
+what do we mean by seeq lab?
+
+have input seq of someomthing, probably words, but culd be chars, parts
+
+seq label we want to label each part of the input seq
+
+[insert image of example]
+
+traddiitonally, the mainapproach for this was Part of Speech tagging
+
+another is named entity recognition
+
+these approaches are often layered on top of each other
+
+## IOB encoding 
+
+i inside, o outside, b begining 
+
+again layered with named enttiy 
+
+B-per 
+B-In
+
+first name, last name, 
+
+turn span ident into seq label problem using iob encoding, i.e. we just have 1 tag per token, not layering seq tabs
+
+find the correct span of text that constititie an entity
+
+## evaluation
+
+precision
+
+recall
+
+f1
+
+[include formauls and definitions]
+
+tethered to notion of correct entitiies
+
+## classification 
+
+seq label task is essentially a classsifcation task for each word/token
+
+however, we want to assign the most likely sequence of labels given the observed tokens
+
+NOT the most liekly label for each token given all of the other tokens
+
+we want to predeict a seq, not an individual 
+
+so this might rule out simple classifs like bayes or log reg
+
+## approaches to seq labelling
+
+* rule-based
+* baysian (HMMs) updating knowledge as now evidence arises
+* discriminative (memm, cpf) (what???)
+* rnn, lstm
+* LATER: transform/attenion (bert)
+* LATER: hynbrid
+
+## rule-based
+
+still v common in pracrice, cheap and easy to implement based on domain knowledge
+
+lists, atlases, varying degreees of supervised ML
+
+not going to talk abou thtis much
+
+## baysian models
+
+mldel join prob dists fgrom trainind data
+
+labels are viewed as latnent of hidden staes which generates observed seq
+
+bayes theorme us used to obtain a conditional probability to label unseeen data
+
+for seq lab probs; we emplore Hidden Markov Models
+
+## Simple HMM 
+
+2 states to consider; per, not
+
+thouhg normally there would be alot more
+
+hmm looks that state transition probability
+
+the probabiliy of trans from PER to NOT, or PER TO PER
+
+there is an indep assumoption that the current state only depends on the previous state
+
+often given as a state transition matrix
+
+the emssion probabilities are P(obs word|state)
+
+the prob of the rpevious word emiiting the next stte
+
+the probability are derived from labell corpora using maximum likelihood estimate
+
+learn the underlying probs from the trainng data
+
+apply the baysian on the sequenceusing the underlying probs
+
+---
+
+In the world of statistics, MLE (Maximum Likelihood Estimation) is the "Frequentist" way of finding the best fit, while MAP (Maximum A Posteriori) is the "Bayesian" version of that same goal.
+
+MLE asks: "Which parameter values make the data I just saw most likely to occur?"The Logic: It assumes you have no prior knowledge. It only cares about the current evidence.The Math: It only maximizes the Likelihood ($P(\text{Data} | \theta)$).The Flaw: If you flip a coin once and it lands on heads, MLE will tell you the coin is 100% rigged to heads. It has no "common sense" to tell it that most coins are fair.
+
+The reason is that Hidden Markov Models (HMMs) are Generative Models, and in the early days of ML, we often mixed Bayesian logic with Frequentist optimization to save on computing power.
+
+An HMM is considered Bayesian (specifically a Bayesian Network) because of its Conditional Dependency: It assumes there is a "Hidden State" (the truth) that you can't see. It assumes the "Observation" (the data) is generated based on that state. When you run the model, you use Bayes’ Rule to "invert" the logic: "Given these observations, what is the most likely hidden state?"
+
+the inference (using the model) is purely Bayesian. You are updating your belief about the hidden state as you see each new observation in the sequence.
+
+To make an HMM work, you need three things: Transition probabilities, Emission probabilities, and Initial state probabilities.
+
+MLE HMMs are fast. You can solve them with dynamic programming (the Viterbi algorithm) in linear time.
+
+The HMM is a Bayesian Architecture usually trained with Frequentist Tools.
+
+---
+
+## More on HMMs
+
+To maximise the probabiltiy of tag sequence give word sequence, Bayes is applied
+
+[INSERT FORMULA]
+
+p(tags|words) = 
+
+us viberti algo to find the tag seqwhich opt the prob (not going into this here)
+
+## Hiddem Markow Model (HMM)
+
+Drawbacks arise from the two simplifiying assumptions
+
+Bi-gram (what whartever order chosen), limits model history [INSRERTT FORMULA]
+
+much prevous tags are not considered
+
+feature independance limits model richness [INSERT FORMULA]. independ assump allows us to product but we know in practise this isnt true
+
+## Discrimitate Model 
+
+Max Ent Mark Model (MEMM)
+
+Conditioan Random Field (CRF)
+
+Get away from indepdn assumptiopn
+
+and leverage interdependance between features
+
+in order to discfrim between different classes
+
+## MEMM
+
+not going into too much details
+
+in HMM model: P(obs|tag)
+
+in MEMM model: P(Tag|Obs)
+
+## label bias problem 
+
+memms use a per-state expon model
+
+couldn't dedice tags intil later in the seqenece
+
+wasnt able to make use of early info (is that right?)
+
+solution was COnditional Random Fields (CRFs)
+
+srps have a single expo model for the joint prob of the entire label seq
+
+more complex model
+
+memm created a model for each state/label
+
+crf just one model for whole seq
+
+## what is a crf
+
+an indurected graph where 
+
+## linear cgain crf
+
+[insert graph showing diff]
+
+## graphical comp among hmm, memm, cpir
+
+no arrows, output depds on whole seq
+
+[insert diagram]
+
+## linear chain crf
+
+details about details for crf, but we arent going to worry about the details on how to train one
+
+We just want to know that they exist
+
+NN can have crf layers
+
+just know that we are modelling the distribution of the entire set of a seqouence output given the entire sequence of input ariables
+
+rather than having a single model per state
+
+or you using the latnest approach from hmm based on prev tag label 
+
+## Neural Models
+
+Bi-dir lstm is most popular non trandformuler for serq label 
+
+vanilla RNN and GRU were also used
+
+NN allow anytihn input (word, char, embedd) to be used
+
+ma and hovy (20216) good based for bi-lstm arch
+
+## ma and hovy
+
+a char rep for each word is generated from a cnn based on char embeddings (similar to kim et al)
+
+char rep is then conccanated (into words?) using glove word embed
+
+gives a rep of a word based on cooccurenaces with other words (other words come from the glove)
+
+char rep from CNN + other words context form glove
+
+char talks issues with low freq words as learn structure of words
+
+glvoe works well for high freq words and context unpacks semantics (is taht the right topic?)
+
+bi-dir lstm is acheived by concatenating left to right and right to left lstm hidden states
+
+cpr is used as output layer (rather than softmax) to decode label seqs
+
+[INSERRT PAPER DIAGRAMS]
+
+char embed > comvo > max pool > char rep
+
+then char and glove reps are collections are the inputs and put into the networks
+
+f lstm, b lstm, both into cpf
+
+cpf means inputs to not optimise on a token basis, but other the whole output seq
+
+this is the basic archiecture to approach this
+
+## adv of neural approach
+
+end-to-end seq label, no feature engingeering
+
+seq of words > seq of labels
+
+test of diff net archs and hypernmater opt
+
+
+
+## Week 5: Seminar
+
+## Sequence Classification Labelling
+
+### Warm Up
+
+Machine Translation is transduction. It is slightly different because it not 1-to-1, i.e. diff languages. Not strictly sequence labelling, though it can be used to help. 
+
+### Week 5 Overview
+
+This week is just classification and labelling. Next week will be transduction and generation. Then we will look into the basic/traditional approaches to these, this we can later in the module substitute in more advanced, transformer models. 
+
+### Part 1 Questions: Sequence Classification
+
+1. Unbal
+
+Macro average if more informative than Micro average. micro average revert to accuracy (how?)
+
+Good to do both and comment on them both.
+
+> The evaluation measure for subtask TC is micro-average F1. Note that as we have converted this into a **single-label task**, micro-average F1 is equivalent to Accuracy (as well as to Precision and to Recall).
+
+2. Lang Models used for Seq Classifcation
+
+---
+
+* Bayesian Approach
+
+A Bayesian approach means treating probability as a "degree of belief" that gets updated as new evidence comes in.
+
+Classes + sequence. Update the probability of a global class probability using element (feautre) of a sequence. (is the updating fearture the sequence or the elements of the sequence?)
+
+---
+
+* Word Embeddings Based Approach
+
+Use work embedding as inputs into a model, or to create a sentence embedding to also use as input into a classifying model. 
+
+If constructing a sequence embedding then need to find the sum/centroid/max (composition) of the word. 
+
+Better approach is to use a network, i.e. a bi-directional RNN or LSTM, to build a representation of the sequence using the work level respresentations as input. Concat the forward and backward RNN representations. (Maybe this is the end-to-end neural approach?)
+
+---
+
+* End-to-end Neural Approach
+
+---
+
+3. Different methods might be used to compose word embeddings? What are the advtanges and disadvantage?
+
+Additive, mutliplicative, pooling to create a single context vector. 
+
+Centriod of the two vectors is still termed as additive composition. Direction still the same as additive, so from a cosine similarity perspective still the same thing. (add = average)
+
+Adding, or averaging, word vectors looses the context of the order of the vectors. Additionally, word vector may not have semantics contextualised depending on how the embeddings were constructed, i.e. co-ocurrence word embeds. 
+
+---
+
+### Part 2: Sequence Labelling
+
+1. Give an example sentence and show how it might be annotated using an IOB encoding for Named Entity Recognition (e.g. PER, ORG, LOC etc)
+
+---
+
+2. What do understand by each of the following; HMM, MEMM, CRF. 
+
+**Hidden Markov Model:** Bayesian Approach, State Transition Probs, Emissions, MLE underlying probabilites from training corpus. Prob for each (all) states give the previous `n` states. Can be used to generate tag or word sequence.
+
+**Maximum Entrophy Markov Model:** HMM wasn't that good for named entity tagging. Opposite to HMM, models prob of current tag based on previous state and current obs (word).
+
+**Conditional Random Field:** MK have no ability to backtrack. you have to start making state predictions straight away. if a mistake this bubbled through the model. also later context may update earlier preds. CRF models full sequence directly, using a single logistic regression model. slower, more powerful. maths doesn't matter for this module. Often used as a the end of a neural model. 
+
+---
+
+3. Describe the typical components in a neural model for sequence labelling. 
+
+Embed, RNN/LSTM/iterative/memory-based model, sequence predictor
+
+Word embeddings from glove to provide contextual info
+
+Char reps to learn word structure. this compliemnet where word embeddings are not strong reps (convolutional model)
+
+## Week 5: Additional Reading
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # [Week N - TITLE]()
 
 #### Week N: Contents
