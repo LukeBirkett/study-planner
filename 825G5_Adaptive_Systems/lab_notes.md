@@ -2,6 +2,10 @@
 1. [Lab 0 - Negative Feedback](#lab-0---negative-feedback)
 
 
+<br>
+<br>
+<br>
+
 # Lab 0 - Negative Feedback
 
 This lab has 3 main aims:
@@ -10,22 +14,21 @@ This lab has 3 main aims:
 3. To introduce you to Pymunk, a relatively simple and easy to use physics engine for Python. Perhaps some of you will consider using it in assignments.
 
 # Table of Contents
-1. [](#a-pid-negative-feedback-controlled-pendulum-with-an-external-disturbance-affecting-the-pendulum)
-2. [](#playing-with-the-system)
-3. [](#limitation-1-not-enough-force)
-4. [](#stability-through-control)
-5. [](#figure-3-the-main-plot-output-from-our-simulation)
-6. []()
-7. []()
-8. []()
-9. []()
-10. []()
-11. []()
-12. []()
-13. []()
-14. []()
+1. [A PID negative feedback controlled pendulum](#a-pid-negative-feedback-controlled-pendulum-with-an-external-disturbance-affecting-the-pendulum)
+2. [Playing with the System](#playing-with-the-system)
+3. [Not Enough Force](#limitation-1-not-enough-force)
+4. [Stability Through Control](#stability-through-control)
+5. [Main Output Plots](#figure-3-the-main-plot-output-from-our-simulation)
+6. [Initial Run](#initial-run)
+7. [Increasing the gain of the controller](#increasing-the-gain-of-the-controller)
+8. [Decreasing the Mass of the Pendulum](#decreasing-the-mass-of-the-pendulum)
+9. [Finding a Value for derivative_gain](#finding-a-value-for-derivative_gain)
+10. [Introducing Disturbance](#introducing-disturbance)
+11. [Additional Experimentation](#additional-experimentation)
 
-#### A PID negative feedback controlled pendulum, with an external disturbance affecting the pendulum
+---
+
+## A PID negative feedback controlled pendulum, with an external disturbance affecting the pendulum
 
 ![PID System](labs/lab0_feedback_control/inverted_pendulums.png "Project Architecture")
 
@@ -70,7 +73,11 @@ Both of these last controllers are quite commonly used, as they are more stable 
 
 In this diagram, we can think of the controller as being the computational part of the system. The pendulum system includes the motor that the controller specifies the angular velocity (rather than a level of supplied energy or torque) for. This is due to the fact that the physics engine that we are using here, Pymunk, only has one type of motor, which is effectively already feedback-controlled to produce a constant angular velocity - the motor can slow down or stall, e.g. if its maximum torque is insufficient to lift the pendulum, but we don't have access to or control over the instantaneous level of torque.
 
-#### Playing with the System
+<br>
+
+---
+
+## Playing with the System
 
 Feel free to play with the code if you want to, but you can do quite a lot just by modifying the parameters in the parameter file shown in Figure 1. These parameters are:
 
@@ -84,17 +91,29 @@ Feel free to play with the code if you want to, but you can do quite a lot just 
 * `main_plot`: This parameter determines whether or not the plot shown in Figure 2 is displayed. Set to $1$
  to display the plot and to $0$ to not display it. 
 
-#### Limitation 1: Not enough force
+<br>
+
+---
+
+## Limitation 1: Not enough force
 
 Video 1 shows the system as you'll find it when you first run the code. The controller has a fixed reference point, and so the goal of the complete closed-loop system is for the pendulum to stand in the inverted position. Although the motor will run at a constant speed, until our controller changes it, the motor has a limit on how much torque (angular force) it can deliver. Here, the mass of the pendulum is so large that the motor fails.
 
 Try increasing the gain of the controller and see if the pendulum will stand, as in Video 2. I'll be very surprised if you will find any gain for which this will be the case, but physics engines can do strange things - if this works, please let me know!
 
-#### Stability through control
+<br>
+
+---
+
+## Stability through control
 
 Try decreasing the mass of the pendulum, and find the point at which the motor torque becomes sufficient to lift the pendulum and produce plots like the ones shown in Figure 3. 
 
-#### Figure 3: The main plot output from our simulation.
+<br>
+
+---
+
+## Figure 3: The main plot output from our simulation.
 
 Figure 3 shows the main plot of our simulation outputs. This corresponds to the behaviour shown in Video 2. You may notice a similarity between the plots for the angle of the pendulum and the error. You may also notice what is known as overshoot in the pendulum angle plot: before the pendulum stabilises, it goes past the reference point and then bounces back. The noise and disturbance plots aren't relevant here, because the disturbance scale has been set to zero. The plots are coloured in such a way as to indicate time - not necessary for plots where time is on one axis, but useful in the interpretation of phase portraits. Notice where the lines end in the phase portraits. What does it signify for trajectories in phase space to converge on points like these, and why do the trajectories converge on those particular points?
 
@@ -107,8 +126,11 @@ Figure 3 shows the main plot of our simulation outputs. This corresponds to the 
 
 Try to find a value for the `derivative_gain` parameter which will lead to the pendulum stabilising as quickly as possible without overshoot.
 
+<br>
 
-#### Initial Run
+---
+
+## Initial Run
 
 When running initially running the code as it comes, the pendulum starts pointing south and it push up hard on the left handside. It reaches just above level and swings back down. It doesn't quite return to south and then is pushed back up the left where it also doesn't return to the same height as before. This pattern repeats where each swing the low and high points become less extreme. Eventually, the pendulum settles pointing south west. This is the point whereby the motor strength it enough to hold the pendulum and resist it from falling into gravities desired position of handing south. 
 
@@ -139,15 +161,20 @@ mass: 100
 main_plot: 1
 ```
 
+<br>
 
-#### Increasing the gain of the controller 
+---
+
+## Increasing the gain of the controller 
 > Try increasing the gain of the controller and see if the pendulum will stand, as in Video 2. I'll be very surprised if you will find any gain for which this will be the case, but physics engines can do strange things - if this works, please let me know!
 
 I did not record this attempt as it doesn't lead to a desired outcome.
 
+<br>
+
 ---
 
-#### Decreasing the Mass of the Pendulum
+## Decreasing the Mass of the Pendulum
 
 > Try decreasing the mass of the pendulum, and find the point at which the motor torque becomes sufficient to lift the pendulum and produce plots like the ones shown in Figure 3.
 
@@ -155,7 +182,11 @@ Whilst it may seem inutatively that this is just the oppposite but same change a
 
 The result of decreasing the mass is that it overshoots the target but also continues to overshoot and pick up momentum with each loop. It is stuck in a positive feedback loop and begins to swing wildly.
 
-#### Finding a Value for `derivative_gain`
+<br>
+
+---
+
+## Finding a Value for `derivative_gain`
 > Try to find a value for the derivative_gain parameter which will lead to the pendulum stabilising as quickly as possible without overshoot.
 
 By setting `derivative_gain: 1` we find that the pendulum reaches the upright position as before but this time sticks there. Below are a series of explanations around what is happening:
@@ -182,12 +213,19 @@ mass: 75
 main_plot: 1
 ```
 
-#### Introducing Disturbance
+<br>
+
+---
+
+## Introducing Disturbance
 
 If setting the `disturbance_strength: 1` we find a situation whereby the motor and derivative force are still the main driving source. This means that they are able to stabilbes the pendulum in the vertical position. However, what the distrubance will known the pendulum off center. A few things can happen here. First, the pendlum is knocked off center but the balancing forces are able to bring it straight bacl. The other option, is that the distrubance completely knocks the pendulum off target and sends it into a spinning loop. The further disturbances continue to send it round on a loop and it begins to spin uncontrollably. In all instances I watch, the loop eventually ends and the forces are able to able the pendulum again. 
 
+<br>
 
-#### Additional Experimentation
+---
+
+## Additional Experimentation
 
 Experiment with combinations of appropriate or too high proportional and derivative controller gains, a fixed or periodic reference signal, and various levels of disturbance (try 0, 1, 2, 3 at first for disturbance levels)
 
@@ -196,3 +234,7 @@ Experiment with combinations of appropriate or too high proportional and derivat
     * If you could not see the animation of the pendulum's motion, what could you tell about the system's behaviour from just the phase portraits?
 * Try a disturbance level of 50 or even higher.
     * This is to highlight the limitations of physics engines, and Pymunk specifically - they can all behave strangely, often (but not exclusively) due to the injection of too much energy, as in this case. Actually, in my (fairly limited) experience, Pymunk fails quite gracefully in comparison to some physics engines, where systems are more likely to literally explode rather than just stretch under similar circumstances. 
+
+<br>
+
+---

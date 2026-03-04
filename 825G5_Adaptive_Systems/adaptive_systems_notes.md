@@ -17,13 +17,11 @@ TODO: module overview
 10. [Week 10 - ]()
 11. [Week 11 - ]()
 
+<br>
+
 --- 
 
 # [Week 1 - Introduction](https://canvas.sussex.ac.uk/courses/34987/pages/week-1-introduction-to-adaptive-systems-2?module_item_id=1616848)
-
-#### Week 1: Contents
-
-1. [Lecture Content](#week-1-lecture-content)
 
 ## Week 1 Lecture Content
 
@@ -36,13 +34,17 @@ This weeks lecture is split into two half. The first half introduces the module,
 3. [Defining Adaptive Systems](#defining-adaptive-systems)
 4. [Lecture Summary](#week-1-lecture-summary)
 
-### Part 1: Introduction to the Module
+---
+
+## Part 1: Introduction to the Module
 
 **| [File Location](825G5_Adaptive_Systems/files/week_1/week_1_lecture_introduction_to_the_module.pdf) | [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=84021c4e-5e0c-40f1-aa19-b3e101082d12) |**
 
 Adaptive systems is extremely cross-disciplinary subject. It can be found in the sciences, engineering, artifical life, finance, politics, economics and just about anything where a system is present. However, there are broad to two reasons to study adpative systems: 
 * From the scientific perspective in the persuit of knowledge. We want to understand and model natural adapative systems around us. 
 * The technological/engineering perspective. The ability to make artifical adative systems for our own utility, i.e. software systems and robots. 
+
+---
 
 **Why should we study natural adative systems?** 
 
@@ -51,7 +53,11 @@ Generally, natural adapative systems are superior to our own. They are smarter, 
 * Artifical NNs which are based off of brain neurons.
 * Central Pattern Generators (CPG) for locomotion
 
+---
+
 **Why study the artifical ones?** Natural systems are complex and often the full information is out of reach. With articical systems we can contruct something where we have full control of the inputs and outouts. We can simulate, iterate, automate and analyse how the system works, or doesn't work. Typically, we transfer learnings from natural systems into artifical but we may (rarely) learn something in an aritfical system that can be applied to natural systems. Finally, artifical systems are modular and accessible, we can easily pickup or incorporate someone else work into our own. 
+
+---
 
 **<u>Module Structure:</u>**
 
@@ -69,6 +75,7 @@ Generally, natural adapative systems are superior to our own. They are smarter, 
 9. Self-Organising Systems
 10. Living Systems
 
+---
 
 **<u>Assessments:</u>**
 1. 1000 word report, little bit of code, basic experiment, due week 8, worth 20%, consider a practice run
@@ -82,7 +89,11 @@ There are 3 main directions for the assessments:
 2. Engineering: e.g. designing, implementing and testing your own adaptive system. You still collect results and test how well 
 3. Artifical Life: Investigating and explaining theoretical adaptive systems. 
 
-### Part 2: - Introduction to Adaptive Systems
+<br>
+
+---
+
+## Part 2: - Introduction to Adaptive Systems
 
 **| [File Location](/Users/lukebirkett/Repos/study-planner/825G5_Adaptive_Systems/files/week_1/week_1_lecture_introduction_to_the_module.pdf) | [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=84021c4e-5e0c-40f1-aa19-b3e101082d12) |**
 
@@ -93,12 +104,16 @@ There are 3 main directions for the assessments:
 5. Processes of adaptation take place over various timescales
 6. All adaptation involves change, but not all change is adaptation
 
+---
+
 ### <u> Systems and Their Environments </u>
 
 We can often think of systems a being coupled whereby an agent(s) and environment impact one another. There is circular causality that flows to and from each agent and enviroment. Because the flows are circular, an agent can essentially have an effect on itself. It changes the env, which changes itself, and so on. 
 
 
 Llosed loops are generally more interesting than open loops. They can do much more compelx things than open loops. Open loops are characteristed as systems with inflows and/or outflows. A feedforward network is an input and output system. They can do useful things but they don't have the same dynamics and closed systems. 
+
+----
 
 ### <u> The fitt-est </u>
 
@@ -110,6 +125,8 @@ Therefore, progress in the naturual world does not mean better, better, more com
 
 e.g. sticlebacks over time became less armound from predators as their new envs didn't require it (possibly observed as reverse evolution). Revolution has a trade-off, more armour requires more resources. But resources of life are limited. If something can become more simple but still survive or thrive just the same then the fittness is the same. Additionally, fitness can easily go down when an env changes. It could be argued that an over armour fish is less fit because this armour comes with disadvantages.
 
+---
+
 ### <u> Maintaining a Good Fit </u>
 
 Successful systems fit well into their environemnt. A system can meant an agent, or just about anything. Often the system will adpat to maintain a good fit to an env. 
@@ -118,9 +135,13 @@ Successes or fitness is completed dependent on the context and system. Though fo
 
 Bateson: "the unit of survival is a flexible organism in its env". Flexible can be substituted for "capable of adapting". Coupled sys of agent and env can both change to fit changes in the other
 
+---
+
 ### <u> Timescales </u>
 
 This slide covered the notion of learning vs evoluaiton. Learning is what humans, or agents, do and aquire in their lifetime. Evolution is was changes over many lifetimes. Evolution, or atleast the perception of evolution, is often dependent on the rate of reproduction. Bacteria can evolve very fast in human life terms. 
+
+---
 
 ### <u> Time </u>
 
@@ -129,6 +150,8 @@ Time is a repeating concept in the module. Today's main interest is "rates of ch
 e.g. rate of change of ecosystems. Global temperature changes compared to previous periods in time. 
 
 Consdier the rate of change of evolution which takes many generations so may not be quick enough to keep track with ecosystem evn changes. This results in a loss of fitness and risk of non-survival
+
+---
 
 ### <u> Why do Systems Adapt? </u>
 
@@ -144,7 +167,9 @@ Ens are dynamic, i.e. constantly chaning, therefore unpredictable. Slow changes 
 * Faster changes and other suprises may be adpated to by learn 
 * Very fact changes may be adjusted to by a process of regultions and control (which are not necessarily processes of adaption)
 
-### Problematic Terminology
+---
+
+## Problematic Terminology
 
 Often key concepts and words in adaptive systems have mutliple defintions. 
 
@@ -155,7 +180,9 @@ Defining evolution thorugh natural selection:
 
 Sometimes "an adapativtion" is referred to as an "adaptive trait". This causes a similar problem because when we refer to an adpative system we mean one which can adapt itself through some adaptive process; a self-adpative system. 
 
-### Adaptation (as a process)
+---
+
+## Adaptation (as a process)
 
 Examples: 
 * learning in humans
@@ -164,11 +191,15 @@ Examples:
 
 With these, there is a a mechanism which is searching for "good", or optimal. The change (adaptation) must be directied somehow. Though not all change is adaptation. 
 
-### Adapative Traits (an adaptation)
+---
+
+## Adapative Traits (an adaptation)
 
 Speed is an adv for predators and prey. Animals have adapted to be fast. A cheetah has mutli adapative traits which synergistically contribute to its speed. 
 
-### Adpated vs Self-Adative
+---
+
+## Adpated vs Self-Adative
 
 An adpated system, is something which is adapted by some other system or external processes - such as an evolutionary algo - to have some desirable for beneficial characteristics.
 * eco-system and natural selection
@@ -186,17 +217,23 @@ On this model we are principally interesedf in:
 
 Often our studied systems will be will be both both adpated and self-adaptive
 
-### Not all Change is Adaption - Evolution
+---
+
+## Not all Change is Adaption - Evolution
 
 A process of adaptation always involves change but not all changes are adaptaiton. Genetric mutations are random but over many gnereations mutations which make organisms less likely (or more) are selected for or against. 
 
-### Not all Change is Adaption - Learning
+---
+
+## Not all Change is Adaption - Learning
 
 Like evolution, learning also must be directed by rules or algos to acheived desireable or effective results
 
 Hebb's rule; neurons which fire together, wire together
 
-### Summary
+---
+
+## Summary
 
 * An adaptation is a characteristic of a system, which is the result of a process
 
@@ -214,11 +251,6 @@ environment
 • Which kinds of adaptive processes (if any) are effective in a given 
 situation or environment is determined by relative rates of change
 
-
-### Week 1 Lecture Summary
-
-[Lecture Summary](https://canvas.sussex.ac.uk/courses/34987/pages/week-1-introduction-to-adaptive-systems-2?module_item_id=1616848)
-
 ### Defining Adaptive Systems
 
 * [Defining Adaptive Systems](https://canvas.sussex.ac.uk/courses/34987/pages/defining-adaptive-systems?wrap=1)
@@ -227,24 +259,35 @@ situation or environment is determined by relative rates of change
 <br>
 <br>
 <br>
-<br>
-<br>
 
 
 # [Week 2 - Systems](https://canvas.sussex.ac.uk/courses/34987/pages/week-2-systems-2?module_item_id=1617677)
 
-#### Week 2: Contents
-
-https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=57984111-19fc-4644-b989-b3e80107efb8
-
-
-
-## Week 2 Lecture Content
-
 In this lecture, we cover some basic systems theory language and concepts. Some of you may already be very familiar with these concepts, and therefore find this a very simple lecture, but that won't be the case for everyone. For this lecture, our main objective is to make sure we all know and can use the same ways of describing systems, in a non-technical way. We will start to look at more technical material on systems in later lectures, in particular in the ones related to Cybernetics.
 
-[week 2 intro](https://canvas.sussex.ac.uk/courses/34987/pages/week-2-systems-2?module_item_id=1617677)
+#### Week 2: Contents
 
+* [Lecture Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=57984111-19fc-4644-b989-b3e80107efb8)
+* [Week 2 Intro Page](https://canvas.sussex.ac.uk/courses/34987/pages/week-2-systems-2?module_item_id=1617677)
+* [Lecture Content](#week-2-lecture-content)
+
+## Weekly Introduction
+
+Systems science is holistic, meaning it studies the whole system. This could is in opposition to a reductionist approach where we look at components, or it they could be two complementary routes. Often complex system are made up of more systems, which we also want to explore. 
+
+If we think of complex systems like our own bodies as hierarchies of systems, then the reductionist approach to science is a way of moving down the hierarchy to lower levels of subsystem, while the holistic approach can be thought of as being a way of moving up the hierarchy to study the supersystems of those lower levels. 
+
+To gain a full understanding of a complex system, we need to be able to move both up and down through the different levels of its hierarchy in the scientific models that we build.
+
+The lecture introduces the idea of the open system. The theory of open systems is central to the study of life and living systems. 
+
+The concept of time makes a brief appearance again in today's lecture. Whenever we create models of systems, we have to decide which features of the systems we have to include in our models, and which features we can leave out because their effects are negligible. Some of these decisions will be related to rates of change, which we have seen before, and what is sometimes referred to as the time horizon of the model. 
+
+The example I give in the lecture is of a double-walled flask, which can keep a drink either hot or cold for hours. Suppose we want to model the behaviour of the molecules of the liquid in the flask. If the time horizon of our model is only a few seconds, then we can reasonably model the flask as a closed system. This is because in such a short space of time, only a small amount of energy can transported from the interior to the exterior of the flask, or vice versa. However, if we want to model how the liquid molecules behave over a period of days, then we must treat the flask as an open system - over this period of time, the liquid in the flask can either lose or gain a significant amount of energy (i.e. cool down or warm up, depending on whether they were initially hot or cold in comparison to the flask's environment). The insulating properties of the flask are impressive, but they ultimately only slow the transfer of thermal energy, they do not stop it. 
+
+Finally, there is one concept which only is only covered quite briefly in this lecture (and the previous one) but which is an important concept for this module: coupled systems. Often, it is useful to think of systems, e.g. animals or robots, as being embedded (and situated) in their environments. This is certainly true, and it is a description which makes a lot of intuitive sense. However, as we shall see again in later classes, it can also be very useful to describe a system and its environment as being coupled systems. It is very often useful in the systems approach to shift between different points of view, either up or down the hierarchy of super- and sub-systems, or alternatively "sideways" as in this case, where we may still view a system at the same level, but from a changed perspective. 
+
+## Week 2 Lecture Content
 
 Learning Outcomes:
 * Systems are connected sets of elements
@@ -252,6 +295,7 @@ Learning Outcomes:
 * A systems environment is also a system 
 * Systems are usuallty open, but we can model them as if they were closed. 
 
+---
 
 Lecture Outline:
 1. Why use a systems approach?
@@ -262,6 +306,8 @@ Lecture Outline:
 6. Overlapping systems
 7. Open and closed systems
 
+---
+
 ### Why use a systems approach?
 
 The systems approach is holistic: we study whole systems. This is in constract to reductionism where people try to go down to the lowest mechanisms of a system and work those parts out. 
@@ -269,6 +315,8 @@ The systems approach is holistic: we study whole systems. This is in constract t
 In order to model systems we must use abstraction to make this possible as they are too fine grained and complex. i.e. a system of human but not going down to the molecurlar level. 
 
 The systems approach is cross-discipline. Often applies to business and finance, but also politics, biology, engineering. 
+
+---
 
 ### An informal definition of a system
 
@@ -282,15 +330,21 @@ The systems approach is cross-discipline. Often applies to business and finance,
 
 **function or 'purpose';** fuction of an object may be what it was designed for; or it hasevolutes to
 
+---
+
 ### Causal Connection
 
 Arrows in diagrams; system elements are casually connected; can transfer: info, energy, matter; or a combo
+
+---
 
 ### Systems and their environments
 
 Definiiton systems by parititions; define a system by its boundary; where is the boundary between the thing and not thing; agents and env; a coupled agents, env relationship can be draw wit the agents embedded in the env; we may also differentitate between an agents immediate env and the whole environment. 
 
 The agents, env coupled system is a closed loop or circular causality, where each subsystem has an effect on the other. 
+
+---
 
 ### Systems and Their Parameters
 
@@ -299,6 +353,8 @@ Often, the pwower of a system to adapt will lie in its parameters
 * When do we want to adapt the system? Maybe upto a certain point of performence, maybe its a system that learns continuously. could be intermitted, i.e. there is a threshold to meet, if it is in the threshold is doesn't change, if it does then parameters can change to re-adapt. 
 * How should we adjust the parameters?
 
+---
+
 ### Subsystems
 
 Zooming in on a system; an element in a system is often also a system itself; example a nn, is composed of layers, which are their own systems; 
@@ -306,130 +362,170 @@ Zooming in on a system; an element in a system is often also a system itself; ex
 
 
 
+# [Week 3 - Cybernetics and Negative Feedback Control](https://canvas.sussex.ac.uk/courses/34987/pages/week-3-cybernetics-and-negative-feedback-control?module_item_id=1619230)
 
-# week 3
+Today's lecture is in two parts.Part 1 in an introduction to the historical origins of Cybernetics. Part 2, starts to look more closely at the ideas of circular causality, and negative feedback.
 
-https://canvas.sussex.ac.uk/courses/34987/pages/week-3-cybernetics-and-negative-feedback-control?module_item_id=1619230
+#### Week 3: Contents
 
+* [Lecture Recording Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=89d90ed0-dd78-4e4f-99c3-b3ef0107dec0)
+* [Lecture Recording Part 2][https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7255e26-bf02-4d46-9cf9-b3f001039adb]
+* [Cybernetrics Resources](https://canvas.sussex.ac.uk/courses/34987/pages/cybernetics-resources)
 
-https://canvas.sussex.ac.uk/courses/34987/pages/cybernetics-resources
+## Weekly Introduction
 
+In Lecture 3.1, we see something of how influential Cybernetics has been on areas including Artificial Intelligence, computing, robotics, and systems theory. Later in the module, we will also see how one Cybernetician in particular, Ashby, has been very influential in the area of adaptive systems.
 
+Apart from the history, the main idea to take away from Lecture 3.1 is that the early cyberneticians were perhaps the first scientists to fully recognise how important feedback is to the behaviour of both natural and human-made systems. I would go so far as to say that there is no intelligent or adaptive behaviour without feedback. Taking ourselves as an example, we cannot stand up without feedback, cannot pick up a pen, cannot steer a bicycle or a car, cannot learn how to throw a ball - indeed, without feedback, we cannot learn any skills at all. 
 
-https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=89d90ed0-dd78-4e4f-99c3-b3ef0107dec0
+When we look at some different kinds of feedback and where they are used, we come back to the idea of different **timescales**:
+* Being able to stand up straight requires relatively fast feedback - without regular and quick updates from our senses about how well we are balancing, we would fall over. 
+* There are some actions which humans regularly perform which are too fast for feedback to be involved in controlling. A good example of this is a tennis serve. Due to the time it takes for signals to travel along the nerves in our arms, the tennis serve is too fast for feedback to be involved in controlling the arm - feedback signals cannot reach the brain fast enough to be of use, and the arm is controlled using feedforward or open-loop control. 
 
-https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7255e26-bf02-4d46-9cf9-b3f001039adb
+All feedback takes from finite amount of time to be fed into a system, meaning that the info is always to some extent out of date. 
 
+In general, negative feedback is associated with stability and positive feedback with instability. However, a system with a negative feedback can behave like one with positive feedback if the feedback signals are significantly delayed.
 
-everything of interest to us on this module was influenced by cybernetics
+Whether or not feedback delays are significant in a system can only be determined by comparing how fast the feedback is in comparison to how quickly the system and its environment change - put simply: fast feedback is required to keep up with fast changes in controlled systems or their environments, but for systems and environments which change slowly, slow feedback may be good enough.
 
-feedback is everything in all intelligent systems
+In many situations and systems, stability is seen as desirable, and instability is seen as undesirable or even dangerous. However, positive feedback, which tends to lead to instability, can often be a good thing.
 
-lecture outline:
-* cybernetics before cybernetics
-* important of feedback
-* macy meetings
-* cybernetics is names
-* cybernetics original of artifical neural networks
-* other cyberneticians 
+Looking ahead: in the last part of the lecture on positive feedback and chaos, we will spend some time looking at chaotic systems. As we shall see, chaotic behaviour can emerge in systems which have nonlinear feedback, which may be positive at some times and negative at others. We will see that deterministically chaotic systems are not only inherently unstable, but also that - looked at in the right way - may be so unpredictable as to be deterministic and yet effectively random at the same time. 
 
-what did cyb lead to; ai, robotics; control theory; systems thinking; neural networkds; genetic algos; ultrastablity; autopoiesis;
+## Week 3 Lecture Content
 
-father of cybernetics; norbert wiener; 
+* [3.1 Cybernetics]()
+* [3.2 Negative Feedback]()
 
-cybernetics before cybernetics; war weapons; anti-aircraft, radar, connected radar and weapon into 1 system; these feedback mechanisms also applied to nervious systems; realised these systems are common in natural world
+## Part 1: Cybernetics
 
-paper: behaviour, purpose and teleology; behaviouristic account of what it means for something to have a purpose; "all goal-directed (purpose) behaviour may be considered to require negative feedback"; the system is working towards some goal; "uniform behaviouristic analysis is applicable to both machines and living organisms, regardless of the complexity ofg the behaviour"; 
+Everything of interest to us on this module was influenced by cybernetics.
 
-
-2nd part
-
-learning outcomes:
-* basic principle of negative feedback control 
-* negative feedback leads to stability
-* stability without control 
-* delays in feedback loops
-
-
-metapors, or analogies; similar concepts in eng lang; analogies more useful in science; analogue electrons, derived from analogies; this is due to the relationships with anologes; dampener takes fraction out of the systeml; isomorpoism, two systems to produce the same outputs; this is the strongest type of an analogy; we dont always have perfect isomorhism between systems; think about bio objects and physical object (both are system); if they are isomorphic, then we can use experiements on the phyiscal system to say things about the biological thing; use robot as a model of an animal; 
-
-
-
-stable and unstable equilibria; points where the system can balance; unstable will only balance if undisturbed, small changes will push it off; stable eq, these points behave v different, still remain if no change, but changes will remove it from the balance but it will return; could thinkg of it as a pendulum, pend up in unstable eq, pend down in stable eq; friciton/grav will always cause the pend to hand down; possible to turn an unstable eq to stable using a neg feedback loop; this is how humans stand up; we balance our body upright; 
-
-cyberntic loops; weiner and co, importance of feedback; systems with feedback, elelemtsa are connected; cybers called this circular causality; 
-
-negative feedback control; controlled system or proccess is often refered to as the plant; could be the movement of an arm, output of a factory, tradjectory of a ship; output from the plant is the controlled variable; ref signal r specifices the desired plant output, 0, the goal of the sys is to make o = r; 0 will often be variable or a pattern rather than a single value; if we take out the sensor loop then we just have a feedforward, there is no way to check that r = o; to way to acvheive control; the actual output is what is fed back to the controller so that the controller acts on the error e; e is the difference between desired and actual outputs; no sensor is perfect, there will be noise in reading the output; also there is delays in the feedback from output, sensor to controller; human acturately steeering a car based on trajecory is another type of feedback loop (DIAGRAM); controller only ever doers somrthing if the error >0, if 0 the calc is 0 so no output change;
-
-INSERT NEG FEEDBACK CONTROL DIAGRAM
-
-example; r = 10 and k controoler gain = 0.1
-
-at time t=0 output o=0
-
-in everytime step we calc 
-
-e = r - o 
-c = ke 
-ot_1 = ot + ct
-
-no noise or delay in this system
-
-after some number of steps o ~ r, e ~ c ~ 0
-
-variying init condition; start paramets from diff places; system should still stabilise in the same way
-
-the very simple feedback control system that we have seen is capable of controlling or regulating system; but this is reactive not self-adaptive; does not monitor its own perforamnce; if a constrol systems params are not set correctly, it may performance badly; self-adpative systems have more than one feedback loops; at least 1 to monitor performance; 
-
-
-problems with delays;there will alaways be some delay; delay causes two probs; 
-* errror delay means there is some period of time where the process is in error before the controller does something; a
-* a dleay in the feedback path means that the controller is always working with out of date information, and negative feedback may even turn into positive feedback
-
-
-stability without control; many systems tend towards stability without control; a cample, a cup of coffee, cooling = t_c = -k(t_c = t_r); this system/equation is isomorphic to a negative feedback system; eventully t_c and t_r are the same and nothing happens
-
-In control theoretic terms, the rooms temperature is analogous to the reference signal, and the temperature of the cup is analogous to the controlled variable
-* moving away from describing physics and toward describing information flow
-* In a designed control system (like a thermostat or a self-driving car), the Reference Signal is the "target" or "setpoint" provided by the user. It is the state the system should be in.
-* The Room Temperature ($T_r$) acts as this dial. Because of the laws of thermodynamics, the coffee "wants" to reach the room's temperature. The room effectively "tells" the coffee what its final temperature will be.
-* The Controlled Variable (also called the Process Variable) is the actual state of the system that we are measuring and trying to change. This is the Temperature of the Cup ($T_c$). It is the "output" of the system. It changes over time based on the physics of the situation.
-* In a standard control system, you usually need a Controller (a computer or a person) to look at the difference between these two and decide what to do. In this "Stability without Control" example, the "Controller" is Nature.
-* 
-
---- 
-
-> This slide is a classic introduction to how physical processes naturally mimic control systems—specifically, a first-order linear system behaving through negative feedback.
-
-> $$\dot{T_c} = -k(T_c - T_r)$$
-
-* $T_c$: Temperature of the coffee (the state or controlled variable).
-* $\dot{T_c}$: The rate of change of the coffee's temperature over time.
-* $T_r$: Temperature of the room (the reference or setpoint).
-* $k$: The thermal coupling constant (the gain).
-
-> The negative sign is the most important part. It ensures that if the coffee is hotter than the room $(T_c > T_r)$, the rate of change is negative (it cools down). If the coffee is colder, it heats up. This is the definition of stability.
-
-> The block diagram on the right maps this physical process into the language of cybernetics and adaptive systems:
-> * The Error Signal ($\Sigma$): The summing junction calculates $T_r - T_c$. In control terms, this is the "error" between where the system is and where it "wants" to be.
-> * The Gain ($k$): This represents how "aggressively" the system reacts to that error. A thick ceramic mug has a low $k$; a metal spoon in the cup might increase $k$.
-> * The Integrator ($\int$): This is the physics of the cup itself. Accumulating the rate of change ($\dot{T_c}$) over time results in the actual temperature ($T_c$).
-
-> 3. Why it's called "Stability without Control"
-> This is the "aha!" moment for your module. Usually, we think of "control" as something an engineer adds (like a thermostat or a cruise control chip).
-
-> However, this system is inherently stable because of its natural properties. There is no computer chip "deciding" to cool the coffee; the physics of the temperature gradient creates a feedback loop that forces the system toward an equilibrium ($T_c = T_r$).
-
-> 1. The Passive Stable System (The Coffee Cup)A passive system like the one in your slide has fixed parameters.The gain ($k$) is determined by the physical properties of the mug and the liquid.It doesn't "learn" or change its behavior if the environment changes drastically.If you move the coffee to a windy room, the value of $k$ might change due to physics (convection), but the system itself isn't monitoring its performance and tuning $k$ to reach equilibrium faster.
-
-> 2. The Adaptive System (The "Smart" Heater)An adaptive system is a "system of systems." It features a secondary loop (often called an adaptation mechanism or a parameter estimator) that monitors the primary feedback loop.Primary Loop: Maintains the temperature (like the coffee cup).Secondary Loop: Observes the error signal. If the error isn't shrinking fast enough, the secondary loop changes the parameters (like the gain $k$) of the primary loop in real-time.
+Feedback is everything in all intelligent systems
 
 ---
 
-When the rate of change of a variable is a function of that variable, then you have feedback, i.e. $\dot{T_c} = -k(T_c - T_r)$, t_c is on both sides. t_c is a function of t_c
+Lecture outline:
+* Cybernetics before cybernetics
+* Important of feedback
+* Macy meetings
+* Cybernetics is names
+* Cybernetics original of artifical neural networks
+* Other cyberneticians 
+
+---
+
+Cybernetics lead to: AI, Robotics, Control theory, systems thinking, neural networks, genetic algorithms, ultrastability, autopoiesis. 
+
+---
+
+## Part 2: Negative Feedback
+
+Learning outcomes:
+* Basic principle of negative feedback control 
+* Negative feedback leads to stability
+* Stability without control 
+* Delays in feedback loops
+
+---
+
+### Analogies
+
+Metaphors and analogies are similar concepts in the English language. They are both the "bridge-builders" of language. They both help us understand something new by comparing it to something we already know, but they go about it in different ways—one is a poetic shortcut, while the other is a structural blueprint.
+
+A metaphor is a figure of speech that says one thing is another thing. It’s usually brief, punchy, and more about the feeling or essence of a situation than a logical breakdown. "Time is a thief.". Creates a vivid image or emotional impact. It doesn't literally mean time has a mask and a getaway car; it suggests the "vibe" of loss.
+
+An analogy is an explanatory tool that shows how two things are alike in their functions or relationships. It is usually more detailed and focuses on the "how" and "why." "An atom is like a tiny solar system, where the nucleus is the sun and electrons are the planets orbiting it." To explain a complex process by mapping the structure of a familiar system onto an unfamiliar one.
+
+ However, analogies are more useful in science. An analogy allows a scientist to "map" the known rules of one system onto another.
+
+An Isomorpoism is the strongest type of analogy. This is where two systems produce the same outputs. 
+
+metapors, or analogies; similar concepts in eng lang; analogies more useful in science; analogue electrons, derived from analogies; this is due to the relationships with anologes; dampener takes fraction out of the systeml; 
+
+We don't always have the perfect Isomorphism between systems, but a similar model is good enough. Think about biological models and their physical, "toy model" examples. If we want build a good enough physical model, we can conduct experiements on it to say things about the biological thing. Perhaps using a robot in lieu of an animal. 
+
+--- 
 
 
-# Summary
+### Stable and Unstable Equilibria
+
+There are two point in a sytem where "things" can balance. 
+
+A unstable equiliberium will only stay in balance if undisturbed. Small changes will push it out of balance. 
+
+A stable equilib behave very different. It will still remain in balance in the case of no disturbances and changes will (potentially) remove it from balance, but it will natural return to the balanced point. 
+
+It is easy to think in the example of a pendulum. The unstable Eq is the pendulum balance perfectly up right. It is very unstable and will definitely fall. The stable position is handing down. You can move it off balance but naturally gravity will bring it back to its stable position. 
+
+---
+
+### Cybernetic Loops
+
+Weiner and co stressed the importance of feedback. In systems with feedback, the components are connected. Cyberneticans called this **circular causality**.
+
+---
+
+### Negative Feedback Control 
+
+A controlled system, or process, is often refered to as the plant. Could be the movement of an arm, output of a factory, tradjectory of a ship. Output from the plant is the controlled variable. 
+
+![Negative Feedback Control](./files/week_3/screenshots/control_diagram.png)
+
+The reference signal $r$ is what specifies the desired plant output. The goal of the system is to make $o=r$. The $o$ output will often be a variable or pattern rather than a single value. 
+
+If you remove the sensor loop then you just have feedforward network whereby in input $e$ emits an output $o$ via some mechanism, i.e. the controller processing the input and the plant executing the signal from the controller. There exists no way to acheive control because there is no way to check that $r=o$.
+
+In a negative feedback control system, the actual output is fed back to controller, via sensor and computed into the error, so that the controller can act on the differential (actual - desired). 
+
+It should be noted that no sensor is perfect, there will be noise in the reading the output signal. Additionally, there will always be delays in feedback from the output sensor to the controler. 
+
+Remember, the controller only ever sends the signal to do something if the error is $>0$. Given the issues with noise and delay, there can be times where the actual output has changed but the controller doesn't have the information to react to it yet. 
+
+---
+
+### Varying Inital COnditions
+
+If we start the parameters from different places, the system shoud still stabilise in the same way. THe very simple feedback control systems above are capable of controlling or regulating a system. But it this is reactive, not self-adaptive. This is because it does not monitor its own performance. This means that if a systems parameters are not set correctly, it may perform badly. Self-adaptive systems need more than one feedback loop and at least 1 to monitor performance. 
+
+---
+
+### Problems with Delays
+
+There will always be some level of delay but delay causes two problems:
+* Error delay means there is some peroid of time where the process is in error before the controller has reacted to it. 
+* A delay in the feedback path itself means that the controller is always working with out of date information. Can extreme outcome of this is the negative feedback may turn into positive feedback.
+
+---
+
+### Stability Without Control
+
+Many systems tend towards stability without control. For example, a cup of coffee cooling: $t_c = -k(T_c - T_r)$, accoridng to Networks Law (model) of cooling. Here $k$ is a rate parameter which lumps various physics factors together. 
+
+![Coffee System](./files/week_3/screenshots/coffee_system.png)
+
+This system/equation is isomorphic to a negative feedback system. Eventully $T_c$ and $T_r$ will be the same and nothing more will happen. 
+
+In control theoretic terms, the rooms temperature is analogous to the reference signal, and the temperature of the cup is analogous to the controlled variable.
+
+When the rate of change of a variable is a function of that variable, then you have feedback. In this case, $T_c$ is a function of $T_c$ (itself). 
+
+In a designed control system (like a thermostat or a self-driving car), the Reference Signal is the "target" or "setpoint" provided by the user. It is the state the system should be in.
+
+The Room Temperature ($T_r$) acts as this dial. Because of the laws of thermodynamics, the coffee "wants" to reach the room's temperature. The room effectively "tells" the coffee what its final temperature will be.
+
+The Controlled Variable (also called the Process Variable) is the actual state of the system that we are measuring and trying to change. This is the Temperature of the Cup ($T_c$). It is the "output" of the system. It changes over time based on the physics of the situation.
+
+In a standard control system, you usually need a Controller (a computer or a person) to look at the difference between these two and decide what to do. In this "Stability without Control" example, the "Controller" is Nature.
+
+The coffee cup example is a passive system. The gain ($k$) is determined by the physical properties of the mug and the liquid. It doesn't "learn" or change its behavior if the environment changes drastically. If you move the coffee to a windy room, the value of $k$ might change due to physics (convection), but the system itself isn't monitoring its performance and tuning $k$ to reach equilibrium faster.
+
+An adaptive system is a "system of systems." It features a secondary loop that monitors the primary feedback loop. The primary feedback loop determins the tempurature of the coffee cup in relation to the tempurature of the room. A secondary loop observes, normally the rate of rate, of the error signal. If the error isn't skrinking fast enough, the secondary loop changes the parameters, like the gain $k$ of the primary loop in real-time. 
+
+---
+
+
+### Summary
 
 1. Systems with loops in their interconnections have feedback, or  circular causality
 2. Negative feedback tends to lead to stability
@@ -442,7 +538,7 @@ When the rate of change of a variable is a function of that variable, then you h
 7. Self-adaptive systems have multiple feedback loops
     * feedback loop to monitor the performence
 
-
+---
 
 
 
@@ -683,5 +779,181 @@ some species have sense that we don't; sense electric fields; also do have the t
 
 other have less, i.e. tics cannot ear, they don't ignore soumd, they just can't sense it
 
-in any given pphysical sense, there may be many umwelten; each specieis may perseive a different umwelten
+in any given pphysical sense, there may be many umwelten; each species may perseive a different umwelten
 
+# ai robotics
+
+what not to do in the 1980s
+
+Standford cart example; expensive, often didnt work
+
+Rodney Brooks questioned the interal model of these robots
+
+The Grey tortoises were able to drive around easily and naturally
+
+internal model, nothing in the torts
+
+# 4. Behaviour-based Robotics 
+
+(new style of ai)
+
+RBrooks convined that a new approach to ai was needed
+
+identify that torts were superior to ai at the time (stanford)
+
+"of torts didnt need to create plans of envs, what were plans actually good for?"
+
+the env is not static, so why a map
+
+feedback delays attack maps and planned
+
+plans and world models are not reqed for a lot of sensiormotor behaviour
+
+sense-plan-act is the old type of ai (good old fashioned ai (GOFAI)): this is the bad type
+
+perception > moddeling > planing > task exc > motor control
+
+serial syystem, bottle neck caused at most comp part of the sys
+
+rodney brooks said "the world is its own best model"
+> is it always exactly upto date. the int is that models and plans don't need to be build but instead tools to deal with the current.
+> he said to "sense it appropriately" and "often enough"
+
+rb proposal:
+
+parraleization: doing things together instead of in order
+
+simple stuff (bottom) runs in parelle with more compelx (top) stuff
+
+sense-act is parallel and fast
+
+ditching the central planner allowed robots to be smaller, faster and cheaper. with simle behaviours, no modelling was required, i.e. comutation. 
+
+this no modelling aroach remains true in modern alications in many cases
+
+# subsumption architecture
+
+intrudiced by RB but not used anymore because it wasn't that flexible
+
+diff level sof behviour in layers that run in parra 
+
+diagram doesnt show it well but layers can talk and each builds on the layer(s) below them 
+
+example:
+1. (loest)avoud contract with objects
+2. wander aimlessly without hitting things
+3. explore the word by seeing places in distance that look reachable and heading for them 
+4. build map of env and plan routes
+5. notice changes in "Static" env
+...
+
+note that the lower levels givem themselves to the higher levels
+
+this way of doing things eventually died out and was replaced by nn
+
+was not scalable 
+
+but the underlying principles are still important
+* in sit and embodied ai, model and plans are not normally included unless absoltely ncessary. or at least max out that capability before adding complex stuff
+* many other approaches, such as the extended braitneberg architecture, are module in a similar way to the subs architecture
+* the benfefit of paraell processing is clear in both ai and bio, 
+
+# extended braitneberg archietcture
+
+today nn's dominate AI and robotics
+
+if you wanted to hand-design a controller, then the extended braintenberg architecture EBA might be a good palce to begin
+
+This coul dbe an approach for the coursework, though it is not too highly recommended. 
+
+EBA has similar benefits to the subssumption arch; modular, simpler behave emelemts that combine to produce more complex behaviours; processes may be run in parallel. 
+
+but EBA is much more flexible 
+
+in eba there a number of sensi-motor procs running in para
+
+each process connects a subset of the sensors to a subset of the motors
+
+therefore proccesses do not use all of the sensors
+
+there outputs from the process are somehow combined and fed into the motor
+
+the process can be implemented in many ways; coupld be nn, could be large and complex, could be based rules based
+
+connections can be weights to influenc their strengths on the motors
+
+the output of processes goes to the motors, but it can also be fed back round ans inputs alongside the sensors into the processes; as if they were sensors; this could allow the most important processes to overright the less; 
+
+# summary
+
+sit and embod robotics began in cybernetics but at first ai robotics search was more focused on a more computational approach
+
+grey walters work in 50s was successful but forgotten for decades
+
+80s become frustrated with convetional AI led to new cyberntrics-inspired approach: behaviour-based orbitics
+
+None of the system in these slides are self-adaptive. this is sevre limitation. big effect on how flexible and apative the ystems are in termf of their autoonomy. 
+
+automony needs more of a notion of history and state. change the way it behaves based on these. 
+
+
+
+
+
+# Lecture 5 -  Evolutionary Robotics
+
+# Learning Outcomes
+
+A broad overview of artificial evolution and evolutionary robotics
+
+An understanding of the difference between adapted and self-adaptive, in an an evolutionary robotics context
+
+A familiarity with three very different forms of adaptation in recurrent neural networks (3 case studies)
+
+# Evolution: reproduction, mutation and selection
+
+A process of adaptation always involves change, but not all changes are adaptations.
+
+Successful organisms are adapted to their environments, for example: By evolution (over multiple generations); By learning (during their lifetimes).
+
+Genetic mutations are random, but, over many generations, mutations which make organisms less likely to survive and reproduce are selected against. By this process of elimination, beneficial genes tend to survive and multiply
+
+Alternatively, you will often read of beneficial mutations or traits being selected for. E.g. giraffes born with short necks might be selected against, as it is difficult for them to reach high branches of trees. But we could equally say that giraffes with long necks are being selected for, as they reach those branches more easily
+
+most genetic/evo algos are based on this idea of random changes and survival. when we do these types of algo we typically do selected for, rather than selected against. 
+
+# Mutation and selection
+
+In Neo-Darwinist (or gradualist) theories of evolution, adaptation involves random mutations, followed by selection
+
+THe env plays a big role in slelection
+
+When selecting in artificial evolution, we first compute fitness for our whole population, then we probabilistically select the most fit members of the population for reproduction
+
+We do it probabilsitically because diversity is important in a populication. This is because it is the population that evolutes not individuals. This is in contract to just selecting the best outright everytime.
+
+Genetic algorithms (GAs) are inspired by the gradualist view. Note: there are many, many variants of evolutionary algorithm – not all will follow the above approach.
+
+Evo algos are a larger class, gen algos are a subset of these
+
+# Main ingredients for evolution
+
+For a species or population to evolve, three main ingredients are required:
+
+1. Reproduction
+* Sometimes referred to as replication. 
+* Genes are copied from one generation to the next 
+* genes may come from either a single or multiple parents
+* But can't just continually copy, this is not evolution. 
+
+2. Mutation 
+* Random changes to genes. 
+* Most mutations reduce fitness (or are deleterious).
+* Waiting for rare mutations that make things better
+
+3. Selection
+* Mechanisms of selection tend to preserve beneficial genes, and remove deleterious ones from a gene pool
+
+These ingredients form the basis of both natural and artificial evolution. 
+
+# Population-based GAs
