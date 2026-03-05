@@ -1434,6 +1434,411 @@ didnt follow this section
 
 
 
+# week 6 - modularity and stochstic block modelling
+
+1. why null models are used (last week lecture’s recap)
+2. learn about modularity and the Stochastic Block Model
+3. compare community detection approaches
+4. introduction to Network Inference
+
+# Last Week Recap
+
+Why do we use null models? why can't we just observe a network and study it
+* don't want to over fit to one net you have
+
+“Null models are a flexible tool to statistically benchmark the presence or magnitude of features of interest, by selectively preserving specific architectural properties of (brain) networks while systematically randomizing others.”
+
+Make sure the prop we are looking at are interesing (?)
+
+
+* we accept the complexity of a system
+* we try to represent this complexity as a network
+* we hypothesize that a specific collective property plays a role in the function of
+the system
+* we use network null models to test if the property of interest is non-trivial
+
+brains; hubs; do these hubs have any function; re-create the net without nets, does it behave the same?
+
+Recall D-k Randomization [INSERT DIGAGRAM]
+
+"A common belief is that a self-organizing system should evolve to a network structure
+that makes these dynamical processes, or network functions, efficient. If this is the
+case, then given a real network, we may ‘reverse engineer’ it by showing that its
+structure optimizes its function. In that respect the problem of interdependency
+between different network properties becomes particularly important”"
+
+# Conceptual Summary
+
+* Random networks models (Gilbert and Erd˝os–R´enyi models)
+* Small-world models (Watts-Strogatz model)
+*  Preferential atttachment models (Polya’s urn and variations of Barab´asi-Albert models - (To do with hubs)
+* Configuration model (retain sequence)
+* Exponential random graphs (ERG), we will get back to this later
+
+[GO BACK AND REVIEW, GIVE SHORT DEFINITIONS TO WHAT ALL OF THESE ARE]
+
+
+# Whats is another simple example of "whole-level" network property?
+
+Modularity
+
+can divide net into modules
+
+# modularity and comminity detection
+
+Modularity seems like an intuitive concept,
+but it is not so easy to define.
+One possible “general” definition for
+modules (or clusters or communitites) is
+
+working def: "Modularity seems like an intuitive concept,
+but it is not so easy to define.
+One possible “general” definition for
+modules (or clusters or communitites) is"
+
+and a network is said to have a modular
+structure if it has these modules.
+
+begin of slides stressed the importantce of null models. alsl vis ill be very important for understadning and defintion mdoular
+
+Most real world networks display a modular structure:
+
+Nodes that are similar tends to connect: Homophiliy Principle (sociology)
+
+Neurons that fire together wire together
+
+Cynertics: the architecture of complexity: "Hierarchy, I shall argue, is one of the central structural schemes that the architect of complexity uses. ([. . . ]) There once were two watchmakers, named Hora and Tempus, ..."
+
+c-elgan brain structure visualised. one possible way to vis modular [INSERT DIAGRAM]
+
+# community detection
+
+how to indentify modules:
+
+1. Optimization based algo 
+2. Statistical (baysian) inference
+
+other options: 
+3. Spectral Methods
+4. Dynamical Methods
+5. And many more
+https://www.sciencedirect.com/science/article/pii/S0370157316302964?via%3Dihub
+
+neurscuence prob isnt the best example of understand this concpet as even after we map out the whole brain we still don't really understand it
+
+
+# hard vs soft clustering
+
+when defining modules, will be less nodes be part of 1 module?
+
+if not, then we call it hard clustering
+
+if allowed, then soft clustering
+
+Strong community: a subgraph Gr such that the internal degree k
+in of each vertex i is greater than its external degree k
+out 
+
+k_in_i (Gr) > k_out_i(Gr)
+
+Weak community: the internal degree of the subgraph exceeds its external
+degree  [INSERT LATEX FORMULA]
+
+int is to do with number of nodes within the module rather than outside. 
+
+
+in-degree with nodes within the module
+
+but node will (may) have connections to nodes outside of the module
+
+strong and weak is about assessing the communities. we ahve already established the community, now we are assesing them: subgraphs
+
+Modern Definitions (2004):
+
+Strong community: a subgraph each of whose vertices has a higher
+probability to be linked to every vertex of the subgraph than to any other
+vertex of the graph
+
+Weak community: a subgraph such that the average edge probability of
+each vertex with the other members of the group exceeds the average edge
+probability of the vertex with the vertices of any other group
+
+> Assuming we have a good definition for the probability of an edge
+
+note these are just a working defintion, not perfect yet (coming later)
+
+later in the slides we get to how to define the modules themsevles (find them)
+
+
+# modularity index
+
+assume we have found a partition of the network
+
+we want a measure that says if it is a good partition
+
+they give us a high (or low) modularity measure
+
+these measures will be used later to optimise and find modules
+
+metric shoul tell use if a node have more edges between nodes in the same module - compared to random chance
+
+* define what a part is
+* come up with prob measure for random chance
+* observe action vs expected
+
+
+assume part found: b = {1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2}
+
+think of this as assigning node to a space
+
+b_i is node_i
+
+netX does not use this concention
+
+another way to define modules is list of lists where each list is a module and contains the elemtns within in
+
+[[1,2,3][3,4,5][6,7,8]]
+
+[INSERT NETWORK DIAGRAM]
+
+Recall the configuration model, our degree sequence is
+{ki} = {3, 4, 4, 4, 5, 5, 4, 4, 4, 4, 5, 4, 3, 4, 5}
+
+we want to come up with a measure of what we would expect
+
+we want to retain nunber of nodes, edges
+
+first we need the number of edges in the same module: [INSERT FORMULA]
+
+conical delta: δbi,bj: 1 if elemetns bi,bj match, otherwise 0. works as a switch. maths way as a rule or if/statement
+
+A_ij is the adjeancy matrix look up [quick reminder of what this is]
+
+sum = counting connections
+
+divde by two to stop each edge of being counted twice
+
+
+what is the prob of two nodes being connected in the configuration model (degree seq)? 
+
+thisis what need to come up with a measure of modularity
+
+trick then talking of probs between two things, we generally mutliply things (bay)
+
+int: create nodes and provide stubes based on their degree seq; empty unconnected model; total connections is the stubs / 2 because we don't want to double count connections; stubs become edges; or stubs are 2L; 
+
+k_i * k_j / 2L
+
+this is the random prob of a connection between node 
+
+he total expected number of edges between nodes i and j in the same group is
+1
+2
+P
+ij
+kikj
+2L
+δbi,bj
+, where L is the total number of edges (note the double 1/2).
+
+something about modularity index (?): [INSERT MODULARITY]
+
+Was this the measure of modularity in a net work???
+
+
+For the network above Q ≈ 0.5 (rule of thumb: Q > 0.3 is considered modular)
+
+
+# Modularity Index (Python Example)
+
+
+# Community Detection: Modularity Maximisation 
+
+ind the partition b that maximises the modularity index Q (Similar concept to
+k-means clustering.)
+
+* loop through each possible partition of
+a network
+▶ compute Q for each partition
+▶ select the partition with the highest Q
+
+issue where is that the number of possible partiotions of a network is huge
+
+size N is given by bell number
+https://oeis.org/A000110/list
+
+For instance, a(20) = 51724158235372 
+
+we need some algo approach to tackle this:
+
+# algos
+
+# louvain algo
+
+most opular for community detection
+
+very fast
+
+Goal: find the partition b that maximises the modularity index Q 
+
+phases 1
+1. start with N communityies, rand assign nodes
+2. sweep through nodes, make make proposia, assign node i to the community of one of its neighbours. 
+3. compute Q, if imporoved then make change, other wise revert
+4. repeat uuntil the increases stop
+
+
+phase 2:
+take the modules created in phase 1
+
+turn the "communities" into a single node
+
+this is known as coarse graining
+
+repeat on coarse grained
+
+[INSERT NETWX CODE]
+
+sometimes fails [understand reason why]
+
+Using Louvain, best partition gives Q = 0.5003 → for both of them! They are actually the same exact network, generate using a configuration model with degree sequence ki = 4, ∀i (same as a regular random graph with d = 4). The trick is to sort nodes using the partition from the Louvain algorithm!
+
+# community detection pitfall
+
+[NOT IN ORGINAL SLIDES]
+
+# Stochastic Block Model and Bayesian Inference
+
+New Goal: Community detection without overfitting
+
+Possible Solution:
+▶ define a null model for modular networks: the Stochastic Block Model (SBM).
+▶ do Bayesian inference
+
+# Stochastic Block Model [13, 14]
+
+Intuition: think of modular networks as particular representations of a latent similarity space.
+
+recall the isea of homophily "like attracts like" in social networkds. think of modular networks as particular represations of a latent similarity space
+
+SBM
+
+given the partition of N nodes into B blocks: b = {b1, b2, . . . , bB}
+
+▶ we construct a generative model that generates networks with a probability: P(A|b)
+
+There are two ways to do this. both syarts teh same
+
+Both start by defining the number of blocks
+B and the number of nodes in each block n = {n1, n2, . . . , nB}
+
+1. Using edges. Using the expected number of edges between block r and block s
+
+{e_rs} B × B matrix
+
+e_rs = \sum_ij Aij δbi,r δbj,s
+
+Convention is that if r = s then ers
+is twice the number of edges
+
+2. Using probability. Using the probability (density) of
+connections between blocks
+
+{p_rs} B × B matrix
+
+if r ̸= s prs =
+ers
+nr × ns
+
+if r = s prs =
+1
+2
+ers
+nr
+2
+
+[get the formulas better]
+
+netx uses probs
+
+[netx code]
+
+# stoch block model: example
+
+re-review this. slide diff
+
+coarse grained adjency matrix > generate network
+
+can use counts or probs
+
+# baysian ingerence int
+
+we wish to learn the best parti b after obs a real workd network A, i.e. p(b|A)
+
+Earlier, we generated modular networks using our generative model P(A|b).
+Now we wish to learn the best partition b after observing a real world network A, i.e., P(b|A).
+
+can't solve b analytics so we employ mcmc 
+
+sample b(b|a) by starting with some b_0 and then make new proposals b -> b' with prob p(b'|b)
+
+[need to review all of this]
+
+
+---
+
+old slides
+
+Goal: infer the most likely partition b of the observed network A → maximise
+p(b|A), while avoiding overfitting.
+
+To do this we take very seriously the principle of maximum indifference, i.e., we want to choose the most uninformative priors and a generative model (likelihood) with maximal entropy.
+
+[insert min length equations]
+
+The SBM P(A|b) is the maximum entropy model for a network A with partition b. By
+maximising the entropy S = − \sum P(A|b) ln P(A|b) we can obtain
+
+[insert product equations]
+
+This should make sense, remember our Stochastic Block Model: Example in slide 19.
+
+[type out notes and research with gemini dk]
+
+[Follow this over into MCMC slide]
+
+---
+
+# baysian infernce: graph-tool
+
+lab: diff between lev algo and baysian to obtian module splits
+
+# community detection: algos compared
+
+modularity max: find part that maximises a score
+* this assumes there is modulaity
+* does it require number of modules to be pre-set?
+* example, fitting line to data that hasn't been generated by a linear process
+* leuvan will give you a number even if there isn't modules
+
+bayesian SMB: find parts that the grpah model probable under a generative model
+* about generating ensembles
+* can't go without repeated data (?)
+* how like it is to obs x if the data observed by a modular process
+
+is lev always bad to use? good for a quick first check, if modularity is the main focus, bays gives you a strong answer/claim that an obss network if derived from a given input/distriburion
+
+# what not covered
+
+we did not cover 
+
+dynamic methods: rand walk, diffusion, synchnonization
+
+spectral methods: linear algebra
+
+
+
+
 
 
 

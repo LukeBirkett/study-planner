@@ -33,9 +33,6 @@ This week is largely a preliminary session which gives insight as to how the mod
 2. [Lecture Content](#week-1-lecture-content)
 4. [Additional Reading](#week-1-additional-reading)
 
-<br>
-<br>
-<br>
 
 ## Week 1: Mini-Videos
 
@@ -94,7 +91,7 @@ $$L_2 = \frac{1}{N} \sum_{n=1}^{N} (\widehat{\mathbf{y}}_n - \mathbf{y}_n)^2$$
 
 Recall that $\hat{y}$ is just the model outputs so we can replace this:
 
-$$$$= \frac{1}{N} \sum_{n=1}^{N} (\mathbf{x}_n \mathbf{w} + b - \mathbf{y}_n)^2$$
+$$= \frac{1}{N} \sum_{n=1}^{N} (\mathbf{x}_n \mathbf{w} + b - \mathbf{y}_n)^2$$
 
 This equation is what we want to minimise to get the perfect model. 
 
@@ -112,9 +109,6 @@ Thus, is we can find the $w$, the weight vector, that corresponds to the minimum
 
 ---
 
-<br>
-<br>
-<br>
 
 ## Week 1: Lecture Content
 
@@ -140,6 +134,8 @@ This a very basic lecture which convered no technical content and just explained
 5. Build and evaluate models using standard software libraries.
     - This module will not focus on doing things from first principal (from scratch)
 6. Specify issues and risks that need to be considered and/or addressed.
+
+---
 
 #### Syllabus (Weekly)
 
@@ -473,9 +469,6 @@ This theorem states that for every learner, there exists a task on which it fail
 
 <br>
 <br>
-<br>
-<br>
-<br>
 
 ---
 
@@ -491,18 +484,15 @@ Learning Outcomes:
 2. [Lecture Content](#week-n-lecture-content)
 4. [Additional Reading](#week-n-additional-reading)
 
-<br>
-<br>
-<br>
 
 ## Week 2: Mini-Videos
 
-* [A Tree Based Model](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cce85a25-e931-45ce-b34a-b32300909802)
-* [K-nearest Neighbours](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cce85a25-e931-45ce-b34a-b32300909802)
+1. [A Tree Based Model](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cce85a25-e931-45ce-b34a-b32300909802)
+2. [K-nearest Neighbours](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cce85a25-e931-45ce-b34a-b32300909802)
 
 ---
 
-## Tree Based Models
+## 1. Tree Based Models
 
 * Part 1: How Decision Trees work
 * Part 2: How mutliple weak trees can be more useful than an overfit one (ensemble learning)
@@ -630,11 +620,9 @@ Boosting is a cumulative training approach, the tree is trained several times. F
  
 ---
 
-<br>
-<br>
-<br>
 
-## K-nearest Neighbours
+
+## 2. K-nearest Neighbours
 
 Learning Outcomes:
 * How kNN models work
@@ -732,9 +720,7 @@ Note, this complexity is very large and costly (comp + time).
 
 Given that time complexity is given by $N^2 * D$, an alternative way to reduce complexity is to reduce D. This would be acheived by reducing the number of dimensions (features). Dim Reduction will be a topic of study in Week 6. 
 
-<br>
-<br>
-<br>
+
 <br>
 <br>
 
@@ -745,6 +731,8 @@ Discussion Points:
 * Would differing feature scales affect the behaviour of the model?  
 * A student-posed question
 * What does this AI do?
+
+---
 
 ### Would differing feature scales affect the behaviour of the model?  
 
@@ -996,7 +984,7 @@ Because AdaBoost aggressively focuses on misclassified points, the authors noted
 * A non-tree method (support vector machine) that also works by partitioning data into regions of similar labels, based on a hyperplane; 
 * How machine learning could be framed in terms of estimation of likelihoods (Bayes classifier and logistic regression methods). 
 
-#### Week N: Contents
+#### Week 3: Contents
 
 1. [Mini-Videos](#week-n-mini-videos)
 2. [Lecture Content](#week-n-lecture-content)
@@ -1006,185 +994,177 @@ Because AdaBoost aggressively focuses on misclassified points, the authors noted
 <br>
 <br>
 
-## Week N: Mini-Videos
+## Week 3: Mini-Videos
 
-[SVM](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cf9bf785-fafe-4bf6-974d-b32300d38c31)
+1. [Support Vector Machines](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cf9bf785-fafe-4bf6-974d-b32300d38c31)
+2. [Probabilistic Models](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b66e5b5-11ae-4747-a39b-b32300ecd1a4)
 
-[Probabilistic Models](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b66e5b5-11ae-4747-a39b-b32300ecd1a4)
+## 1. Support Vector Machines
 
-
-<br>
-<br>
-<br>
-
-# SVM
-
-the optimal swm model is the hyperlane that:
+The optimal svm model is the hyperlane that:
 * seperates two classes +1 and -1
 * and; maximises its distances (margin) to them 
 
-hyperplane terminonoloy just means a line (2s) in mutli-dimensional space
+The hyperplane terminology just means a "line" in mutli-dimensional space. `height, width, channel` is an images dimensions but we can still have an hyperplane. 
 
-h*w*c is an images dimensions, can still have an hyperplane
+The condition "maximises its distances (margin) to them" is the main part of SVM because there may be many lines that just seperate the two classes but they want the line that maximise the distance between the two partitions. The "support vectors" are the instances from each class that are closest to the other class. They determine the max margin hyperplane and dicate the space to find the hyperplace in. We need to find a line that maximise the margin whilst being in-between the Support Vectors.
 
-the condition "maximises its distances (margin) to them" is the main part of SVM because there may be many lines that just seperate the two classes. 
+Conceptually, in a 2d space, this is just the same as the linear model which constructs a line. $xw = 0$ is the hyperplane, $xw = 1, xw = -1$ are the support vectors. 
 
-The support vectors are the instances from each class that are closest to the other class. they determin the max margin hyperplane. it is the space to find the line in. 
+Although this is portray as a maximusation problem between the support vectors: $\text{maximize} \quad \frac{2}{\|\mathbf{w}\|}$. We can convert it into a minimisation problen: $\frac{\|\mathbf{w}\|^2}{2}$. 
 
-We need to find a line that maximise the margin whilst being in between the Support Vectors
+In practice, maximizing that fraction is mathematically "messy" because the variable is in the denominator. To make it a standard Quadratic Programming problem that's easier for computers to solve, we flip it, square it, and divide by 2. Squaring the norm $\|\mathbf{w}\|$ removes the square root, making the function differentiable everywhere.
 
-optimal hyperp:
-* at max margin from both classees
-* still correctly classif
-* means that hyperplane has to be the midpoint between two classes
-
-conceptually, in a 2d space, this is just the same as the linear model which constructs a line
-
-xw = 0, this is the hyperplane
-
-xw = 1, xw = -1, these are the support vectors
-
-
-maxim the margin $\text{maximize} \quad \frac{2}{\|\mathbf{w}\|}$ is the same as minimising $$\text{minimize} \quad \frac{\|\mathbf{w}\|^2}{2}$$ 
-
-In practice, maximizing that fraction is mathematically "messy" because the variable is in the denominator. To make it a standard Quadratic Programming problem that's easier for computers to solve, we flip it, square it, and divide by 2.
-
-The Square: Squaring the norm $\|\mathbf{w}\|$ removes the square root, making the function differentiable everywhere.
-
-The 2: The $1/2$ is a "convenience constant"—when you take the derivative (to find the minimum), the exponent $2$ and the $1/2$ cancel out, leaving you with a very clean linear expression.
-
-
-SVM Objective function:
+**SVM Objective function:**
 
 $$L_{SVM}(\mathbf{w}) = -\sum_{n=1}^{N} \beta_n(y_n(\mathbf{x}_n \mathbf{w}) - 1) + \frac{1}{2}\|\mathbf{w}\|^2$$
+* $B_n$ is a lagrange multiplier (coeffs of additional constraints in a function to be optimized)
 
-B_n is a lagrange multiplier (coeffs of additional constraints in a function to be optimized)
 
---- 
+This equation represents the Lagrangian form used to solve the SVM optimization problem: The $-\sum_{n=1}^{N} \beta_n(y_n(\mathbf{x}_n \mathbf{w}) - 1)$: term represents the classification error constraints. The $\beta_n$ are the Lagrange multipliers (often denoted as $\alpha_n$ in other texts) that enforce the condition that data points must lie on the correct side of the margin.
 
-This equation represents the Lagrangian form used to solve the SVM optimization problem: 
+$\frac{1}{2}\|\mathbf{w}\|^2$: This is the term for the margin to be maximized. Minimizing the square of the norm of the weights is mathematically equivalent to maximizing the geometric margin between classes.
 
-$-\sum_{n=1}^{N} \beta_n(y_n(\mathbf{x}_n \mathbf{w}) - 1)$: This term represents the classification error constraints. The $\beta_n$ are the Lagrange multipliers (often denoted as $\alpha_n$ in other texts) that enforce the condition that data points must lie on the correct side of the margin.
+The Input Features ($\mathbf{x}_n$) are the vector of numerical values for a specific data point (e.g., the height and weight of a person if you're classifying "taller than average").
 
-$\frac{1}{2}\|\mathbf{w}\|^2$: This is the term for the margin to be maximized. As we discussed previously, minimizing the square of the norm of the weights is mathematically equivalent to maximizing the geometric margin between classes.
+The Functional Margin ($y_n(\mathbf{x}_n \mathbf{w}) - 1$) is the core calculation for each point You take the dot product of the features ($\mathbf{x}_n$) and the current weights ($\mathbf{w}$), then multiply it by the label ($y_n$). For a point to be correctly classified and outside the margin, this result needs to be $\geq 0$. If it's negative, it means the point is either misclassified or too close to the boundary (the "classification error" mentioned in your image). The "$-1$" acts as a threshold. The SVM doesn't just want the margin to be positive; it wants the margin to be at least 1. If the result is between 0 and 1, the point is correctly classified but is "too close" to the boundary for comfort. 
 
-The Input Features ($\mathbf{x}_n$)What it is: This is the vector of numerical values for a specific data point (e.g., the height and weight of a person if you're classifying "taller than average").Role: It represents the position of the point in space.
-
-3. The Functional Margin ($y_n(\mathbf{x}_n \mathbf{w}) - 1$)What it is: This is the core calculation for each point.The Math: You take the dot product of the features ($\mathbf{x}_n$) and the current weights ($\mathbf{w}$), then multiply it by the label ($y_n$).The Goal: For a point to be correctly classified and outside the margin, this result needs to be $\geq 0$. If it's negative, it means the point is either misclassified or too close to the boundary (the "classification error" mentioned in your image).
-
-note that the main predictive part of the model, is just a simple linear model with weights and params
-
-In the objective function you shared ($y_n(x_n w) - 1$), the "$-1$" acts as a threshold. The SVM doesn't just want the margin to be positive; it wants the margin to be at least 1.
-
-If the result is greater than 1, the "Classification Error" part of your formula becomes negative, which the minimization process loves.
-
-If the result is between 0 and 1, the point is correctly classified but is "too close" to the boundary for comfort.
 
 The beauty of the SVM formula is that it uses a mathematical "trick" where the label $y_n$ acts as a sign switcher. This allows one single formula to handle both classes simultaneously.
 
-Case 1: The label is $+1$ (Positive Class)If the data point belongs to the positive class, the formula looks like this:$$(+1) \cdot (\text{prediction})$$To get a positive result (which the model wants), the prediction $(\mathbf{x}_n \mathbf{w})$ must also be positive.If the prediction is $+2$, the result is $+2$ (Correct!).If the prediction is $-2$, the result is $-2$ (Error!).
+If the label is $+1$ (Positive Class), the data point belongs to the positive class, the formula looks like this: $(+1) \cdot (\text{prediction})$. To get a positive result (which the model wants), the prediction $(\mathbf{x}_n \mathbf{w})$ must also be positive. If the prediction is $+2$, the result is $+2$ (Correct!). If the prediction is $-2$, the result is $-2$ (Error!).
 
-Case 2: The label is $-1$ (Negative Class)If the data point belongs to the negative class, the formula looks like this:$$(-1) \cdot (\text{prediction})$$To get a positive result, the prediction $(\mathbf{x}_n \mathbf{w})$ must be negative.Because $(-1) \times (\text{negative number}) = \text{positive number}$.If the prediction is $-2$, the result is $+2$ (Correct!).If the prediction is $+2$, the result is $-2$ (Error!).
+If the label is $-1$ (Negative Class), the data point belongs to the negative class, the formula looks like this: $(-1) \cdot (\text{prediction})$. To get a positive result, the prediction $(\mathbf{x}_n \mathbf{w})$ must be negative. Because $(-1) \times (\text{negative number}) = \text{positive number}$. If the prediction is $-2$, the result is $+2$ (Correct!). If the prediction is $+2$, the result is $-2$ (Error!).
+
+
+Note, the main **predictive** part of the model, is just a simple linear model with weights and parameters.
+
+The minimisation approach to the loss function is known as the primal form. The Primal objective is the "natural" way we think about SVMs: we want to maximize the margin while minimizing classification errors. It is formulated as a minimization problem. We want to find the weight vector $w$ and bias $b$ that define the hyperplane. The $\frac{1}{2} \|w\|^2$ term maximizes the margin (since the margin is $2/\|w\|$). Every point must be on the correct side of the margin, or pay a penalty. The complexity depends on the number of features (dimensions). If you have millions of features, this becomes computationally expensive. 
+
+By using Lagrange multipliers ($\alpha$), we transform the Primal into the Dual form. This is a maximization problem that only depends on the dot products of the input vectors. 
+
+$$\max_{\alpha} \sum_{i=1}^{n} \alpha_i - \frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} \alpha_i \alpha_j y_i y_j (x_i \cdot x_j)$$
+
+The objective changes to finding the Lagrange multipliers $\alpha_i$ for each data point. Most $\alpha_i$ will be zero. The points where $\alpha_i > 0$ are the Support Vectors—the only points that actually define the boundary. Because the objective only involves the dot product $(x_i \cdot x_j)$, we can replace it with a Kernel function $K(x_i, x_j)$. This allows us to find nonlinear boundaries in infinite-dimensional space without actually calculating the coordinates in that space. The complexity depends on the number of samples ($n$), not the number of features.
+
+---
+| Feature | Primal Form | Dual Form |
+| :--- | :--- | :--- |
+| Goal| Minimize w and b| Maximize α |
+| Variables | w (weights), b (bias) | α (Lagrange multipliers) |
+| Best for...|  Linear SVM with many samples, few features  | Nonlinear SVM (Kernels) or fewer samples |
+| Key Advantage | Intuitive geometric interpretation | Enables the Kernel Trick |
+---
+
+<br>
+
+###  2. Probabilistic Models
+
+* How ML could be framed in terms of estimation of likelihoods
+* How a bayes classifer works
+* How the logistic regression works
+
+1. [Bayes Classifier](#bayes-classifer)
+2. [Logistic Regression]()
+
+<br>
 
 ---
 
-* max margin to maximised (or min with inverse)
+### Bayes Classifer
 
-this is known as the primal form of the objective function
-
-the other formulation of the loss function is the dual: 
-
-$$L_{SVM}(\mathbf{w}) = -\sum_{n=1}^{N} \beta_n(y_n(\mathbf{x}_n \mathbf{w}) - 1) + \frac{1}{2}\|\mathbf{w}\|^2$$
-
-it isderived from the primal 
-
-no longer can the weights parameters, instead we have two B paramets. this is solved using quadratic programming but we don't cover this on the module 
-
-# summary 
-
-svm model is a max margin hyperplane between two classes
-
-there are two formulation of the loss function that meet this req
-
-<br>
-<br>
-<br>
-
-#  Probabilistic Models
-
-* how ML could be frames in terms of estimation of likelihoods
-* how a bayes classifer works
-* how the logistic regression works
-
-two parts to video; bayes classifer; logistic regression
-
-<br>
-<br>
-<br>
-
-# bayes classifer
-
-This formula describes how to update the probability of a hypothesis based on new evidence.
+Bayes formula describes how to update the probability of a hypothesis based on new evidence:
 
 $$P(B|A) = \frac{P(A|B)P(B)}{P(A)}$$
 
-* Definitions:
-* $P(B|A)$: Conditional probability of $B$ given observation of $A$ (Posterior probability).
-* $P(B)$: Prior probability of $B$.
-* $P(A|B)$: Probability of $A$ having occurred given observation of $B$ (Likelihood).
-* $P(A)$: Probability of $A$.
+| Term | Definition |
+| :--- | :--- | 
+| $P(B\|A)$ | Conditional probability of $B$ given observation of $A$ (Posterior probability). |
+| $P(B)$ | Prior probability of $B$. |
+| $P(A\|B)$ | Probability of $A$ having occurred given observation of $B$ (Likelihood). |
+| $P(A)$ | Probability of $A$. |
 
+To classify a document as "Spam" based on the words "Win" and "Money," a pure Bayesian model looks for the probability:
+
+$$P(\text{Spam} \mid \text{Win AND Money})$$
+
+This requires the model to have seen plenty of examples where both words appear together. If you have 1,000 different words, you would need to calculate combinations for every possible grouping of those words. The data requirements grow exponentially.
+
+A common issue in prastice is data sparsity, particularly when deal with language. Often we will not be able to compute the likelihood as examples may not have occured together in our sample hence we cannot compute a probability. 
+
+To solve this, we make the "Naive" assumption that all features are independent. This means that the probabiltiy of 1 feature does not depend on the previous, hence, we can compute the probabilities for each feature independently and mutliply them together.
 
 $$P(C_k | x_1, \dots, x_n) = \frac{P(C_k) \prod_{i=1}^{n} P(x_i | C_k)}{P(x_1, \dots, x_n)}$$
 
-$P(C_k | x_1, \dots, x_n)$: The Posterior probability. This is what we are trying to calculate—the probability that the instance belongs to class $C_k$ given the observed features.
+$P(C_k | x_1, \dots, x_n)$: is the the Posterior probability. This is what we are trying to calculate, the probability that the instance belongs to class $C_k$ given the observed features.
 
-$\prod_{i=1}^{n} P(x_i | C_k)$: The Likelihood. The "Naive" part assumes that every feature ($x_i$) is independent of the others. Therefore, we just multiply the individual probabilities of each feature occurring in that class together.
+$\prod_{i=1}^{n} P(x_i | C_k)$ is how we now calculate the likelihood. The "Naive" part assumes that every feature ($x_i$) is independent of the others. Therefore, we just multiply the individual probabilities of each feature occurring in that class together.
 
 $$\hat{y} = \text{argmax}_{k} \left( P(C_k) \prod_{i=1}^{n} P(x_i | C_k) \right)$$
 
-<br>
-<br>
+---
+
 <br>
 
-# logistic regression
 
-$$\sigma(z) = \frac{1}{1 + e^{-z}}$$ 
+### Logistic Regression
 
-$$P(y=1|\mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}$$
+#### 1. The Model: Mapping Input to Probability
+
+Logistic Regression predicts the probability that an input $x$ belongs to "Class 1." It uses the Sigmoid Function ($\sigma$) to squash any real-valued number into the range $[0, 1]$.
+
+---
+| Step | Formula |
+| :--- | :--- |
+| Linear Predictor | $z = \mathbf{w}^T \mathbf{x} + b$ |
+| The Transformation | $\sigma(z) = \frac{1}{1 + e^{-z}}$ |
+| The Prediction | $P(y=1\|\mathbf{x}) = \frac{1}{1 + e^{-(\mathbf{w}^T \|\mathbf{x} + b)}}$ | 
+---
+
+By default, we classify as $y=1$ if $P \geq 0.5$. This occurs when $\mathbf{w}^T \mathbf{x} + b = 0$, forming a Hyperplane (a straight line in 2D) that separates the classes.
+
+---
+
+#### The Cost Function: Measuring Error
+
+To train the model, we use Log Loss (also known as Binary Cross-Entropy). Minimizing this loss is mathematically equivalent to Maximizing the Likelihood (finding the weights that make the observed data most probable). 
 
 $$J(\mathbf{w}) = -\frac{1}{N} \sum_{n=1}^{N} [y_n \log(\hat{y}_n) + (1 - y_n) \log(1 - \hat{y}_n)]$$
 
-Log Loss and Cross-Entropy Loss are the same thing when we are dealing with a binary classification problem (where you have two classes).
+* If $y=1$, we want $\hat{y}$ to be close to 1 (minimizes $-\log(\hat{y})$).
+* If $y=0$, we want $\hat{y}$ to be close to 0 (minimizes $-\log(1-\hat{y})$).
 
-likelihood is analgous to loss
+---
 
-log loss is specifically for things where there are two possible outcomes
+#### Why Log Loss?
 
-model opt involves maximising the likelihood
- eq to finding the wights that min the loss
+In statistics, when we have a model that predicts probabilities, we want to find the parameters that make our observed data most likely. This is called Maximum Likelihood Estimation (MLE).
 
+If you have a series of independent events (like coin flips or emails being spam), the total probability is found by multiplying them:
 
-linear models work by predicting based on a decision boundary 
+$$P(\text{Data}) = P(y_1) \times P(y_2) \times \dots \times P(y_n)$$
 
-thisis x_n x = 0 
+Multiplying thousands of tiny decimals (probabilities) is a nightmare for computers (it leads to "arithmetic underflow"). By taking the Log, we turn that multiplication into addition:
 
-if the class falls below then it is class x, other wise class y
+$$\log(P_1 \times P_2) = \log(P_1) + \log(P_2)$$
 
-this is just a hyperplane as seen before
+Log Loss is simply the negative Log-Likelihood. Minimizing the loss is mathematically identical to maximizing the probability of your data being correct.
 
-however, the decision boundary can be set anywhere, i.e. = 1
+If you tried to use Mean Squared Error (MSE) with a Sigmoid function, you would run into a major calculus problem. The Sigmoid function is very flat at the edges (near 0 and 1). If you use MSE, the derivative (the slope) also becomes very flat when the model is "confidently wrong." This creates a non-convex cost function with many "potholes" (local minima) where Gradient Descent can get stuck. Log Loss "warps" the space. It applies an infinite penalty as the error approaches 1. This keeps the cost function convex (a perfect bowl shape), ensuring Gradient Descent always finds the bottom.
 
+Log Loss is "stricter" than other loss functions. In Linear Regression if the target is 10 and you guess 8, your error is $2^2 = 4$. In Logistic Regression (Log Loss), if the target is "Class 1" (100% certainty) and you predict 0.01 (1% certainty), the log loss is $-\log(0.01) \approx 4.6$. If you predict 0.0001, the loss jumps to $9.2$. As your prediction gets closer to being "certainly wrong," the penalty grows exponentially. This forces the model to be not just "mostly right," but also "suitably confident."
 
---- 
+---
 
-To understand why we can't solve Logistic Regression with a simple "plug-and-play" formula like we can with Linear Regression (Ordinary Least Squares), we have to look at the derivative of the cost function.
+#### Single Parameter Partial Derivative
 
-In Linear Regression, the derivative of the cost function results in a linear equation ($X^TX\hat{\beta} = X^Ty$). We can solve this using basic algebra to get a closed-form solution.
-
-In Logistic Regression, we use the Log Loss (Cross-Entropy) function. For a single parameter $w$, the gradient (derivative) of the cost function $J(w)$ looks like this:
+For a single parameter $w$, the gradient (derivative) of the cost function $J(w)$ looks like this:
 
 $$\frac{\partial J(w)}{\partial w} = \sum_{n=1}^{N} (\sigma(w x_n) - y_n)x_n$$
+
+---
+
+#### Close Form Failure
 
 To find the minimum "closed-form" style, we would need to set that derivative to zero and solve for $w$:
 
@@ -1196,39 +1176,42 @@ $$\sum_{n=1}^{N} \left( \frac{1}{1 + e^{-w x_n}} - y_n \right)x_n = 0$$
 
 This is a transcendental equation. Because the variable $w$ is "trapped" inside an exponent ($e^{-w x_n}$) and also exists inside a summation, there is no algebraic way to isolate $w$ on one side of the equals sign.
 
-Since we can't solve for $w$ directly, we use Gradient Descent. Think of it as feeling your way down a mountain in the fog:
+---
+
+#### Optimization: Gradient Descent
+
+Unlike Linear Regression, Logistic Regression has no closed-form solution. When you set the derivative of the Log Loss to zero, the weights $w$ are "trapped" inside the exponent of the Sigmoid function. This results in a transcendental equation that cannot be solved with basic algebra. We use Gradient Descent. Since the Log Loss surface is convex, we iteratively "walk down the hill" by updating weights in the opposite direction of the gradient until we hit the global minimum.
+
 1. Start with a random weight $w$.
 2. Calculate the gradient (the slope) at that point.
 3. Take a small step in the opposite direction of the slope (the "downhill" direction).
 4. Repeat until the slope is nearly zero.
 
-Unlike the SVM Dual Objective, which is a Quadratic Programming problem with specific constraints, Logistic Regression's Log Loss is a smooth, convex surface. This means Gradient Descent is guaranteed to eventually find the global minimum, even without a closed-form solution.
+---
 
-We modify the original Log Loss (Cross-Entropy) by adding a regularization term:
+#### Regularization: Preventing Overfitting
 
-$$J(\mathbf{w}) = \underbrace{-\frac{1}{N} \sum_{n=1}^{N} [y_n \log(\hat{y}_n) + (1 - y_n) \log(1 - \hat{y}_n)]}_{\text{Log Loss}} + \underbrace{\lambda R(\mathbf{w})}_{\text{Penalty}}$$
+We add a penalty term $\lambda R(\mathbf{w})$ to the loss function to prevent the weights from becoming too large (which causes overfitting). $\lambda$ (Lambda): Controls the strength. High $\lambda = $ simpler model (heavy penalty); Low $\lambda = $ more complex model.
 
-$\lambda$ (Lambda): The regularization strength. A higher $\lambda$ penalizes weights more severely, leading to a simpler model.
 
-$R(\mathbf{w})$: The specific type of penalty applied.
+**$L2 Regularization (Ridge):** This adds the squared magnitude of the weights. It is the most common form and is mathematically identical to the "margin maximization" term in SVMs. It shrinks all weights toward zero but rarely makes them exactly zero. It’s great for handling multicollinearity (when features are correlated).
 
-2. Common Types of RegularizationThere are two primary ways to calculate the penalty $R(\mathbf{w})$:L2 Regularization (Ridge)This adds the squared magnitude of the weights. It is the most common form and is mathematically identical to the "margin maximization" term in SVMs.$$R(\mathbf{w}) = \frac{1}{2} \|\mathbf{w}\|^2 = \frac{1}{2} \sum_{j=1}^{d} w_j^2$$Effect: It shrinks all weights toward zero but rarely makes them exactly zero. It’s great for handling multicollinearity (when features are correlated).L1 Regularization (Lasso)This adds the absolute magnitude of the weights.$$R(\mathbf{w}) = \|\mathbf{w}\|_1 = \sum_{j=1}^{d} |w_j|$$Effect: It can force some weight coefficients to become exactly zero. This effectively performs feature selection, removing irrelevant variables from the model entirely.
+$$R(\mathbf{w}) = \frac{1}{2} \|\mathbf{w}\|^2 = \frac{1}{2} \sum_{j=1}^{d} w_j^2$$
 
-# summary 
+**L1 Regularization (Lasso):** This adds the absolute magnitude of the weights. It can force some weight coefficients to become exactly zero. This effectively performs feature selection, removing irrelevant variables from the model entirely.
 
-bayes classifer gives the probabiltiy of each class by updating tyhe prior prob of the class with the likei of the obs data
+$$R(\mathbf{w}) = \|\mathbf{w}\|_1 = \sum_{j=1}^{d} |w_j|$$
 
-nive assumoption of condition inde in bayes model in the naive abyes classifer
 
-logistic reggresion model is a classifer (not regression)
+---
 
-its loss function is cross ent and is opt using grad desc
+Logistic Regression is essentially a Linear Model passed through a Non-linear Activation (Sigmoid), optimized via Maximum Likelihood because there is no direct algebraic solution.
+
+--- 
 
 <br>
-<br>
-<br>
 
-## Week N: Lecture Content
+## Week 3: Lecture Content
 
 * What are the assumptions of the SVM? What if they are not met?
 * How could one use the SVM for multiclass classification? 
@@ -1241,12 +1224,7 @@ What are the assumptions of the SVM? What if they aren't met?
 
 How could one use the SVM for multiclass classification? (30mins)
 
-
-
-
-
-
-## Week N: Additional Reading
+## Week 3: Additional Reading
 
 
 
