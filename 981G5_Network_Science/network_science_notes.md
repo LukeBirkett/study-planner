@@ -1,8 +1,14 @@
+# Network Science
+
+1. [Week 1 - Introduction](#week-1---introduction) 
+2. [Week 2 - Network Elements ](#week-2---network-elements)
+3. [Week 3 - Small World](#week-3---small-worlds)
+
+
+
 # Week 1 - Introduction
 
-# Week 1 Lecture 
-
-# What is a Complex System? 
+## What is a Complex System? 
 
 In a discussion, some students suggeted that a jet engine is a complex system. The lecturer said this could be true depending on the definition but for this module it is not a complex system. We would not want components jet engine to be a complex system because we wish a jet engine to be work exactly as planned everytime. With a complex system we can never fully understand then and know their outcomes as they are too complex. A complex system is not the same as complicated system for which a jet engine would be. A brain is an example of a complex system. It has a very large number of small components all working together in various ways. Emergence is a key theme in complex systems. 
 
@@ -10,10 +16,12 @@ Dynamics on network means things that happen on the network, i.e. firing. There 
 
 ---
 
+<br>
 
 # Week 2 - Network Elements 
 
-Let us learn the language of networks:
+Learning Outcomes:
+* Learn the language of networks
 * The components: nodes, links
 * Types of networks and representations
 * Features of nodes and links
@@ -21,6 +29,15 @@ Let us learn the language of networks:
 We want to be able to talk about:
 * properties to characterize structure & behavior of networks
 * roles of networks in affecting processes occurring on network structures
+
+---
+
+#### Lecture 2: Contents 
+
+* []()
+
+
+<br>
 
 ---
 
@@ -461,203 +478,508 @@ However, with $\mathbf{A}^3$, the diagonal is the "Triangle Detector". If the en
 <br>
 
 
-# Week 3 Lecture
+# Week 3 - Small Worlds
 
-textbook second chapter
+**||** [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c9b0c637-df69-41ee-a755-b3ef00b54cbd) **||**
 
-think about structure of networks and important concepts
+This week correlates to the **second chapter** (small worlds) of the textbook and we will be thinking about the structure of networks, as well as, important concepts. 
 
-[outline]
-chapter 2 small words [TODO write down slide structure] rewatch video and take downs of topic introductions
+Lecture Outline:
 
-things that are similar tend to group together. also a social phenom
+* **Birds of a feather**; things that are similar tend to group. 
+* **Paths and distances**; understand but also quantify in order to look into things like spread. Also important for optimization tasks. 
+* **Connectedness and components**
+* **Finding shortest paths**
+* **Social distance**
+* **Six degrees of separation**
+* **Friend of a friend**
 
-[bird of a feather]
+---
 
-similar things tends to group togoether; like minded people, similar people
+#### Lecture 2: Contents 
 
-wont go into quantifying this yet (later lecture) but ...
+* []()
 
-how to measure?  how connected entities are compared to other entities; quant way to measure; distance; steps from one another; however still very expensive to compute this; can just calculate the distance between two nodes as there are many routes often; shortest path possible; this depends on type of network, i.e. weighted edges; physical shortest distances may not be the fastest; however this is all too expensive to calc; focus needs to be on density of connections to the "same" type; prob that node connects to same type; dont need to consider path this way
+---
 
-friends of friends connected is clusters; counting the triangles; this is not measuring similar people directly
+## Birds of a Feather
 
-degree = number of connections
+In network science, "Birds of a Feather" usually refers to two distinct but related concepts: Homophily (similarity of node attributes) and Clustering (structural density). The principle that "similar things tend to group together" is a defining feature of real-world networks.
 
-[assortativity]
+Similar things tend to group together; like minded people, similar poeple etc. We wont go into quantifying this yet, this is covered in a later lecture. 
 
-[THERE IS A PAPER REFERENCED HERE, if interested in network science then should read if possible, foundational paper]
+Homophily is the tendency of nodes to connect to others with similar attributes (e.g., interests, demographics, or "like-mindedness"). A common quantitative approach is calculating the probability that a node connects to a node of the same "type" versus a different type. This is computationally cheaper than path-based metrics because it only requires looking at a node’s immediate neighbors (its degree) rather than the entire network map.
 
-[rewatch slides]
+Path based measures look at the distance between nodes. How many steps does it take to get from one to another. However, this is often a global approach and comutationally expensive. Additionally, there are often several ways to get from Node A to Node B, we are only interested in the shortest path possible generally. Although, this opens up the additional problem of comparing options. In a large enough network, if the problem is uncontrainsed, a path from A to B is infinite. 
 
-how does assoc emerge; 
-1. selection or self-selection process; homopily; you like people who are like yourself; (has a opposite word too); neurons that has similar reactions to the same input; human cells die so need several that know and do the same thing; brain is backed up by redundancy and re[sometihng]; similar ndoes become connected; social sciences this is very common topic, think social media and echo chambers; homopily causes echo chambers and radicalness, bias reinforced; 
+The focus needs to be on the density of connections to the "same" type. As we will see througout the module, "same" can mean a number of different things. If we just consisder the probability that a node connects to the same "same", or not, then we dont need to consider path length and physical distances. This is also a local computation, you just need to look at a nodes connections/neighbours, not the travse the whole network looking for a route. Recall, that in Networks, we call the number of connections a of a node is called the "Degree". 
 
-2. influece can also be a way that connectivity occurs; not just together because of similar but there is something that pulls you into a network/cluster; 
+In the previous week(s), we looked at the Friendship Paradox and "Friends of Friends". This notion of connectivity is called clustering, or at least it forms the basis of clustering and the clustering coefficent which measures how "cliquey" the local neighborhood is. The quantantive way to approach clustering is to count the triangles $\binom{N}{3}$ in the network, or areas of a network, i.e. around a given node. That being said, it shoul be noted that these structures do not equal identity. Clustering only tells you that people are connected in groups. It doesn't tell you why. Homophily (the "Birds of a Feather" concept) is the actual measure of similarity—like-minded people grouping together.
 
-do similarity incudes links or do links incudes similarity? i.e. yourr env is what influecnes you, exposed to a particualr group, does this influece you? this is related to coevolution and adativness. 
+| Concept | Method | Requirement |
+| :--- | :--- | :--- |
+| Clustering | Counting triangles / $\mathbf{A}^3$ diagonal | Only the Links ($L$) |
+| Homophily | Probability of "same-type" connection | Node Attributes (Metadata) |
 
-assoc is not ness a good thing, echo chamoers
+---
 
-[degree assortativity]
+## Assortativity
 
-look at this alot in net science. aka degree correlation; de-assorative is the oppos, assoc means similars group; degree assoc means group with people that has similar degrees (connections); 
+[Mixing patterns in networks](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.67.026126)
+* This is a foundation paper in network science
 
-right is de-assoc, low degree codes are only connecting to central high degree nodes; doesnt mean disconnected; think hub and spoke;
+In network science, assortativity (or assortative mixing) is a preference for a network's nodes to attach to others that are similar in some way.
 
-assoc means nodes connected to nodes with similar number of connected; how be variable within a net; have a mix of high and low degree nodes, but will only connected to similar nodes; think brain highly connects but body less degees, more direct; core-perihperhy structre (this was in bold, what does it mean?); hubs in the core (again, what does this mean?)
+Assortativity (or assortative mixing) describes the preference for nodes to attach to others that are similar in some way. This similarity can be structural (degree) or attribute-based (homophily).
 
-degree is calc some sort of a degree correlation
+There are two possible mechanisms by which assortativity emerges naturally: 
+* Selection (Homophily): similar nodes become connected
+* Influence (Social Contagion): connected nodes become more similar.
 
-core-periphery with huges in core. "rich club" or social networds with key central figures. 
+**Selection or Homophily:** You like people who are like yourself. Neurons that have similar reactions to the same input. Human cells die so need several that know and do the same thing. Similar nodes become connected and "word" together. In social sciences this is very common topic, think about social media and echo chambers. Homopily causes echo chambers and radicalness as bias reinforced. 
 
-[assoc in networkx]
- measure correlation bbetween the degree and the average degree of the direct neighbours of a given node
-TODO INCLUDES FORMILAS; there is two; 
+**Influence:** This can also be a way that connectivity occurs. There is something that pulls you into a network/cluster. "You become who you hang out with." In this mechanism, the connection exists before the similarity develops. Change, and attributes, changing based on the "physical" neighbors.
 
-first calc degree (number) of neighbours of a given node; dot product matmult; a_ji is the connection, k is either the weight or 1 (check this?)
+---
 
-second; average degree of neighbours of a node with a degree of X
+## Degree Assortativity
 
-if i have degree x, the average degree of my neighbours is x
+This is a very common topic in Network Science, also known as degree correlation. Degree Assortativity means that nodes group with people that have similar degrees. 
 
-followed by peasron correlation
+Assortative networks have a core-periphery structure with hubs in the core, e.g. social networks. In an assortative network, nodes do group with nodes that have similar degrees. High-degree nodes (hubs) tend to connect to other high-degree nodes, while low-degree nodes connect to other low-degree nodes. This creates a "dense core" of highly connected individuals.
 
-TODO UNPACK NETX code
+![assortative_network]()
 
-[Paths; Definitions]
+Disassortative networks have hub-and-spoke (or star) structure, e.g.  Web, Internet, food webs, bio networks. In a disassortative network, nodes do not group with nodes of similar degrees. High-degree nodes tend to connect to low-degree nodes. 
 
-unpack from slides
+![disassortative_network]()
 
-pathl seq of links to go from source to target; there paty not be a paths
+---
 
-cylce; closed path, source and taget node are the same, loop
+## Calcualting Assortativity
 
-simple path; no traversing the same link more than ones; we will only deal with simple paths
+By comparing a node's own degree to the average degree of the nodes it hangs out with, we can see if "hubs connect to hubs" (assortative) or "hubs connect to spokes" (disassortative).
 
-path length; num of links; could also be based on weights
+#### 1. Average Nearest-Neighbor Degree for a specific node $i$
 
-[euler circa 1736]
+This formula calculates the average degree of all nodes directly connected to node $i$. You are adding up the degrees of all your friends and dividing by the number of friends you have.
 
-[SHORTEST PATH]
+$$k_{nn}(i) = \frac{1}{k_i} \sum_{j} a_{ij}k_j$$
 
-between two nodes; min length, there may be more than one; in weighted networkds, weights may mean distance; 
+* $k_i$: The degree of node $i$ (how many neighbors it has).
+* $a_{ij}$: The adjacency matrix entry. It acts as a "filter" that only includes nodes $j$ that are actually connected to $i$.
+* $k_j$: The degree of neighbor $j$.
 
-shortest path length is a the metric for teh shrotest path, akak distances. undefined or initite is there is no root.
+#### 2. Average Nearest-Neighbor Degree for all nodes with degree $k$
 
-[APL and Diameter]
+This formula aggregates the values from above to see the general trend for all nodes of a certain "rank" or degree. 
 
-diameter is the longest shortest path length, or max of the shortest path lengths accross nodes; shortest path length =. of two nodes; diameter looks at all possible pairs of nodes, which is the longest in the network?; this gives a measure of the total size of the network; need to look at the shortest paths to give us this measure, otherwise we could just mkae arbitarily huge routes; number = you cannot find a longer path that will need to be traversed, any pair will be this or less; 
+$$\langle k_{nn}(k) \rangle = \langle k_{nn}(i) \rangle_{i:k(i)=k}$$
 
-TODO INCLUDE EQUATION OF DIAMETER
+* $\langle \dots \rangle$: This bracket notation always means "Average".
+* $k_{nn}(k)$: This is the Average Nearest-Neighbor Degree for all nodes that have a degree of exactly $k$.
+* $i:k(i)=k$: This is the "filter". It says: "Only look at nodes ($i$) where their degree ($k(i)$) is equal to $k$".
 
-Average Path Length (APL) average of the shortest path length accorss all pairs of nodes. 
+#### 3. How this identifies Assortativity
 
-TODO TO DIFF EQUATIONS FOR UNDIR VS DIR NETWORKS
+Scientists plot $\langle k_{nn}(k) \rangle$ against $k$ to see the relationship:
+* Assortative ($r > 0$): If the graph increases, it means high-degree nodes connect to other high-degree nodes.
+* Disassortative ($r < 0$): If the graph decreases, it means high-degree nodes (hubs) are connected to low-degree nodes (spokes).
 
-big issue here if there is an undefinied path; netx will highlight this as a diconnected network; could exclused all connected elements; solution is to do the harmonic means
+This part of the process is essentially looking for a trendline on a scatter plot. Once you have calculated $\langle k_{nn}(k) \rangle$ for every possible degree $k$ in your network, you plot them to see the "social behavior" of the hubs versus the spokes.
 
-TODO equation but also understand the intution as to why we make this change with repect to the above topic. harminc mean is a ratio; the infinate dstance becomes 0, we can get rid of disconnected components; average of iverse and invert again; 
+Scientists use the Degree Correlation Function, which is a plot where:
+* The x-axis ($k$): Represents the degree of a node.
+* The y-axis ($\langle k_{nn}(k) \rangle$): Represents the average degree of that node's neighbors.
 
-looking as inverse of distance has a name and paper, measure of network efficency; TODO RE WATCH THIS EXPLANATION; something about inf becoming 0;
+---
 
-TODO UNPACK NETOWRKX OPTIOND (REWATCH SLIDES)
+#### Python Implementation
 
-[connectedness and components]
+```
+import scipy.stats
 
-net is conn if there is a path between any two nodes
+knn_dict = nx.average_degree_connectivity(G)
+k, knn = list(knn_dict.keys()), list(knn_dict.values ())
+r, p_value = scipy.stats.pearsonr(k, knn)
+```
 
-if not then disconnected
+* `nx.average_degree_connectivity(G)`: This single function performs the heavy lifting of your formulas. It calculates $k_{nn}(i)$ for every node and then groups them to find $\langle k_{nn}(k) \rangle$ for every degree $k$.
+* `list(knn_dict.keys())`: These are your $k$ values (the independent variable on your x-axis).
+* `list(knn_dict.values())`: These are your $\langle k_{nn}(k) \rangle$ values (the average neighbor degrees on your y-axis).
+* `scipy.stats.pearsonr(k, knn)`: This calculates the Assortativity Coefficient ($r$). It measures the strength and direction of the linear relationship between a node's degree and its neighbors' average degree.
 
-MISSED SOME TERMINOLOGT ON FIRST SLIDE
+---
 
-a dir net can be strongly connected or weakly connected
+#### NetworkX Different Approaches
 
-strongly is triangles, a pass between any pair
+There are different ways to measure Assortativity depending on what attribute you are using to define "similarity" between nodes. It could be on labels, numbers or the structure of the network itself. 
 
-notion of in-component and out-component
+---
 
-nodes that are connected to a network but you cannot go to, this in-component. i.e. a node on the edge that has a direction that goes into the network, i..e you cant get to do, cant go back; node can reach S nodes,  but S node cannot reach the start node; 
+#### Categorical Attribute Assortativity
 
-out-compent as connect nodes that cannot go to the S but S can go to
+`nx.attribute_assortativity_coefficient(G, category)`
 
-NETWORKX CODE TO UNPACK
+This approach is used when your nodes have labels or discrete categories. It measures the probability that a node connects to another node in the same group versus a different group. If people in a social network mostly connect with others of the same gender, the coefficient will be close to 1. This is the most direct measure of Homophily (Selection). It answers: "Are people sticking to their own kind?"
 
-[trees]
+---
 
-tree is a connected network with out cycles, friends of friends cannot exists, N-1 links; sparsest way of building network;
+#### Numerical Attribute Assortativity 
 
-with a tree, you can pick any node to be the root and it retrains its hierachical structure; nets can be reorganised; root has no parents, leaves ahve no children; 
+`nx.numeric_assortativity_coefficient(G, quantity)`
 
-[finding shortest paths]
+This is used for continuous values or ordered numbers. It calculates the correlation between the numerical values of connected nodes. Unlike categories (where you are either "in" or "out"), this accounts for how close the numbers are. If 20-year-olds connect with 21-year-olds, the "similarity" is high. If 20-year-olds only connect with 80-year-olds, the assortativity would be negative. It answers: "Is there a linear relationship between the 'score' of one node and its neighbor?".
 
-algo; breadth-first search; not a tree becasue it has cycles (loops); start from source node, doesn't matter which one but probably start from root; as above, any can be root; first list neighbours at same depth; then iterative to next layer; 
+---
 
-[breadth-first search]
+#### Degree Assortativity 
 
-TODO DIDNT LIST TO ANY OF THIS, REFOLLOW SECTION AND MAKE NOTES
+`nx.degree_assortativity_coefficient(G)`
 
-[social distance]
+This is a structural measure that ignores external metadata and looks only at the network's links. It calculates the Pearson correlation between the degrees ($k$) of adjacent nodes. In an assortative social network, hubs ($k=1000$) connect to other hubs ($k=800$). In a disassortative tech network, hubs connect to spokes ($k=1$). This is what the previous $k_{nn}$ formulas were exploring. It answers: "Do popular nodes hang out with other popular nodes?".
 
-how closer or far, is is apl
 
-acedeic coauthoriship networks; how connected are authors, how far away;
+---
+| Approach | Attribute Type | Key Question |
+| :--- | :--- | :--- |
+| Categorical | "Labels (Gender, Race, Job)" | Do nodes pick the same group? |
+| Numerical | "Numbers (Age, Income, Height)" | Do nodes pick similar values? |
+| Degree | "Structure (ki​,kj​)" | Do hubs pick hubs? |
+---
 
-Paul Ardos; 500 coauthor; is a hub in a coauthorship network; SOMETING ABOUT SMALL NUMBERS, REVIST
+<br>
+<br>
 
-[six degrees of kevin bacon]
+Note, these functions give a single "summary number" ($r$) where as `nx.average_degree_connectivity(G)` gives you the raw data points needed to see the full relationship across the whole network. 
 
-shorts paths, hubs have short paths; 
+This function calculates the Average Nearest-Neighbor Degree for every degree $k$ found in the network. It returns a dictionary where: 
+* The Key ($k$): Is the degree of a node. 
+* The Value ($\langle k_{nn}(k) \rangle$): Is the average degree of all nodes connected to nodes of degree $k$.
 
-[small worlds]
+It is the direct implementation of the formula:
 
-social networks trned to have very short paths
+$$\langle k_{nn}(k) \rangle = \frac{1}{N_k} \sum_{i:k_i=k} k_{nn}(i)$$
 
-six degress of sperationl any two people are at most 6 people away; 
+The three coefficients (assort_a, assort_n, and r) give you a final verdict: "The network is assortative".
+`nx.average_degree_connectivity(G)` is used when you want to visualize the trend.
+* Coefficients: Best for a quick summary or comparison between different networks.
+* Average Degree Connectivity: Best for plotting a degree correlation function. It allows you to see if the relationship is linear or if only specific hubs behave strangely.
 
-[milgrams experiement]
+---
 
-PAPER TO READ
+## Paths: definitions
 
-take rand people, give them a tatget; send letter to people that might bring you closer to x person or place; see how many steps to get to x; only 26% Mmade it; av steps were 6; range 3-12;
+**Path:** sequence of links traversed to go from a source to a target node. Directed networkds must be traversed according to their directions. There may not be a path between two nodes (directed). 
 
-yahoo repeated with email in 2003; approx 4-7
+**Cycle:** path where source and target node are the same. i.e. a loop. 
 
-facebook; uni milan; 
+**Simple path:** no traversing the same link more than once. This module deals only with simple paths.
 
-[short paths]
+**Path length:** number of links in path. 
 
-what do we mean by short paths, when can we call a path short?
+---
 
-depends on size of network; fast within network; observe erela between alp and net wise
+## Shortest Path
 
-apl is short when it grows very slowly with the size of the network
+This is the minimum length path between two nodes. There may be more than one, we just want the shortest. In a weighted network, the weight may mean distances. 
 
-LOG EQUATION
+---
 
-[small worlds]
+## APL and Diameter
 
-most irl will be small worlds
+In network science, the longest shortest path is formally known as the Diameter of the network. While it sounds like a contradiction, the term describes the maximum distance you would ever have to travel between any two nodes using the most efficient route available. 
 
-type of structure that might not be so short? hubs create short routes if the hubs are connected; a lattice strcture will not be short; or a grid like nyc; 
+Between any two nodes (A and B), there might be many ways to travel. The shortest path is the route with the fewest possible links. You calculate the shortest path for every possible pair of nodes in the entire network. The largest of all those values is your Diameter. Given any 2 nodes, this is the longest path you can take in the network. 
 
-[friend of a friend]
+In Network Science, we generally need to constrain our task to look at shortest paths. Without this, we could just make arbitarily long routes that take pointless de-tours. 
 
-the presence of triangles
+$$\ell_{\max} = \max_{i, j} \ell_{ij}$$
 
-often use with social becuase friends are often friends of friends also
+The average path length (APL) is the average of the shortest path lengths across all pairs of nodes
 
-direct networks are a bit more complicated. transitivity; may have a triangle but all 3 arent actually connected;
+**Undirected:**
+For undirected networks, you divide by the total number of possible pairs $\binom{N}{2}$.
 
-[clustering coefficent]
+$$\langle \ell \rangle = \frac{\sum_{i,j} \ell_{ij}}{\binom{N}{2}} = \frac{2 \sum_{i,j} \ell_{ij}}{N(N-1)}$$
 
-measure num of trianges that a node actually has relative to how many it could have
+* Numerator: The sum of all shortest path distances ($\ell_{ij}$) between every pair of nodes.
+* Denominator: $N(N-1)/2$ is the total number of unique pairs in an undirected network. We multiply the sum by 2 to account for the $1/2$ in the denominator.
 
-clust coeff is the fract of pairs of the nodes neighbours that are connected to each other
+**Directed:** 
+For directed networks, the direction of the link matters, so you divide by the total number of ordered pairs.
 
-NEED TO FOLLOW THIS SLIDE, LECTURE VIDEO and EQUATION BETTER
+$$\langle \ell \rangle = \frac{\sum_{i,j} \ell_{ij}}{N(N-1)}$$
 
-xs
+$N(N-1)$: This represents the total number of directed pairs (where $A \to B$ is counted separately from $B \to A$).
+
+---
+
+## Undefined Path
+
+The biggest issue here is if there is an undefined path. Netx will highlight this as a dissconected network, this risks excluding all connected elements. The solution is to do the harmonic mean.
+
+In standard arithmetic average formulas, like the ones in your other slides, an "undefined" path (where nodes $i$ and $j$ are not connected) is treated as having a distance of infinity ($\infty$). If you try to sum infinity into an average, the entire result becomes infinity, which doesn't tell you anything useful about the network's structure.
+
+The formula you’ve shared (the harmonic mean of path lengths) is the key to calculating distances in networks that are disconnected.
+
+$$\langle \ell \rangle = \left( \frac{\sum_{i,j} \frac{1}{\ell_{ij}}}{\binom{N}{2}} \right)^{-1}$$
+
+* $\langle \ell \rangle$: The average path length (specifically the harmonic mean).
+* $\ell_{ij}$: The shortest path distance between node $i$ and node $j$.
+* $\frac{1}{\ell_{ij}}$: The reciprocal of the distance. If a path is undefined ($\ell_{ij} = \infty$), this value becomes 0, preventing the total average from becoming infinite.
+* $\sum_{i,j}$: The sum over all pairs of nodes $i$ and $j$.$\binom{N}{2}$: The total number of possible pairs in the network.
+* $(\dots)^{-1}$: After averaging the reciprocals, you flip the fraction back to return the result to the scale of "steps" or "links".
+
+In this formula, you are not summing the distances ($\ell_{ij}$) directly. Instead, you are summing their reciprocals: $\frac{1}{\ell_{ij}}$. If a path is defined: A distance of 2 becomes $1/2$, a distance of 10 becomes $1/10$, etc. If a path is undefined: The distance is $\infty$. The reciprocal of infinity is zero ($\frac{1}{\infty} = 0$). Because undefined paths turn into zeros in this calculation, they simply drop out of the summation without "breaking" the math. The formula effectively counts the pairs that are connected and ignores the ones that aren't. The resulting $\langle \ell \rangle$ gives you a finite, meaningful number that represents the "efficiency" of communication across the reachable parts of the network.
+
+Note, that this formula allows us to do calculation on networks which are not complete, i.e. there isn't a connection between every node. But it also allows for use to calculate when there is an entire break in a network, where it may be broken down into seperate components but we consider it to be the "same" network. 
+
+We use this formula when the network is disconnected (composed of two or more separate "islands" of nodes). It treats the "infinite" distance between these islands as zero in the summation, allowing us to measure the efficiency of the parts that are reachable.
+
+Note, that another route to handling undefined, or disconnected sub-nets, is to just measure the APL and Diameter of the largest component. However, this is a topic for later so we don't loook at it here. 
+
+
+Below are various path related functions in NetworkX:
+
+```
+nx.has_path(G, 'a', 'c')
+nx.has_path(G, 'a', 'b')
+nx.shortest_path(G, 'a', 'b')
+nx.shortest_path_length(G,'a','b')
+nx.shortest_path(G, 'a') # dictionary
+nx.shortest_path_length(G, 'a') # dictionary
+nx.shortest_path(G) # all pairs
+nx.shortest_path_length(G) # all pairs
+nx.average_shortest_path_length(G) # error
+G.remove_node('c') # make G connected
+nx.average_shortest_path_length(G) # now okay
+
+
+nx.has_path(D, 'b', 'a')
+nx.has_path(D, 'a', 'b')
+nx.shortest_path(D, 'a', 'b')
+
+nx.shortest_path_length(W, 'a', 'b')
+nx.shortest_path_length(W, 'a', 'b', 'weight')
+```
+
+---
+
+## Connectedness and Components
+
+A network is connected with there is a path between any two nodes. These don't need to be 1 step apart, there just needs to be an availble route through the network. If a network is not connected it is disconnected but will have mutliple components which are connected. 
+
+A connected component is a connected subnetwork. The largest one is called giant component, it often includes a substantial portion of the network. A singleton is the smallest-possible connected component. 
+
+A directed network can be strongly connected or weakly connected if there is a path between any two nodes, respecting or disregarding the link directions, respectively. 
+* Strongly Connected: You must follow the arrows. To get from node $A$ to node $B$, there must be a sequence of directed links ($A \to \dots \to B$). To be a strongly connected network, every node must be able to reach every other node while respecting these one-way streets. For two nodes to be strongly connected, you need a path that goes $i \to j$ and a path that comes back $j \to i$. In the simplest possible loop involving three nodes, this forms a directed triangle (a 3-cycle).
+* Weakly Connected: You are allowed to "disregard" the direction of the arrows. This means you treat the directed links as if they were simple, undirected edges. If you can get from $A$ to $B$ by traveling "the wrong way" down a one-way street, the nodes are weakly connected.
+
+If a directed network is not strongly connected, many node pairs will have a shortest path $\ell_{ij} = \infty$ because you simply can't "get there from here" following the arrows. This is why we measure Diameter or APL using the harmonic mean or Largest Connected Component. It's very common for directed networks (like the Web or Twitter) to have many nodes that are weakly connected but cannot reach each other "strongly".
+
+Strongly connected components are often made up of many overlapping directed triangles. In Week 2 we looked at using Linear Algebra/Matrix Mutliplication as a triangle detector by looking at the diagonal in the $A^3$. If a directed network has many triangles (high clustering), it is much more likely to have a large Strongly Connected Component because there are many redundant "return paths". This is particularly relevant to the small worlds concept. 
+
+A weakly connected network is a "feed-forward" loop. You can get to $k$ easily, but once you are at $k$, you are stuck. There is no way back to $i$. This is weakly connected. 
+
+A strongly connected network represents a "feedback" loop. No matter where you are, you can reach everyone else. This is strongly connected.
+
+---
+
+## In/Out Components
+
+The in-component of a strongly connected component $S$ is the set of nodes from
+which one can reach $S$, but that cannot be reached from $S$
+
+The out-component of a strongly connected component $S$ is the set of nodes that can be reached from $S$, but from which one cannot reach $S$
+
+A Strongly Connected Component (SCC) covers both of these, i.e. you can get to and from a node. Disconnected nodes have no path to or from the SCC at all.
+
+---
+
+## Trees
+
+* A tree is a connected network without cycles
+* A tree is a connected network with N -1 links
+* In a tree there is a single path between any two nodes
+* Trees are hierarchical: you can pick a node as the root . Each node is connected to a parent node (toward the root) and to one or more children nodes (away from the root).  The root has no parent. The leaves have no children
+
+---
+
+# Finding Shortest Paths
+
+Whether you are calculating the Average Path Length ($\langle \ell \rangle$), the Diameter ($\ell_{\max}$), or checking for Strong/Weak Connectivity, you need a way to actually find those shortest paths.
+
+The main algorithm used to find shortest paths is called breadth-first search. It looks like a tree in structure but it is not as it has cycles.
+
+Think of BFS like dropping a stone into a still pond. The stone hits a single node. The "ripples" expand outward one layer at a time. You must visit every node at distance 1 before you are allowed to look at anyone at distance 2. Because you explore layer-by-layer, the first time you encounter a node, you are guaranteed to have found the absolute shortest path to it. 
+
+You can start from any node and treat it as the root. This allows you to form the network to work out the shortest roots from any node. 
+
+In BFS, Layer 1 contains every node exactly 1 step away. Layer 2 contains every node exactly 2 steps away.
+
+BFS is efficient at finding the shortest path because it never has to "re-visit" a node to see if there's a better route. Once a node is labeled with a distance, that is guaranteed to be its minimum. The "slowness" ($O(N^2)$) comes only from the fact that you have to repeat this entire process for every single node to get the full network APL.
+
+It feels like brute force because, in a way, it is! You are systematically checking every neighbor. However, BFS is considered "efficient" compared to a true random brute force because it never explores the same path twice and never looks deeper than it needs to. BFS keeps a list of nodes it has already visited. If another route tries to go to that same node later, the algorithm says, "Stop, I've already been here via a shorter or equal path". This prevents the algorithm from going in circles or re-calculating the same distances over and over.
+
+To find the Average Path Length, you have to run this BFS "ripple" starting from every single node in the network. If there are $N$ nodes, you run BFS $N$ times. That is where the $O(N^2)$ (or more accurately $O(N(N+L))$) comes from.
+
+The Cost of a Single BFS is $O(N+L)$. You start from a node, and traverse every link it has to find the nodes one step away. Then from each new node, you traverse every link it has. There is a lookup table of recorded nodes so if a link heads back to a node, you don't go there, i.e. the next step you are just at new nodes. You repeat the searching steps again. At the final step, you have exhausted all nodes and links. You have visted every node once and traversed every link once, hence, $O(N+L)$. 
+
+However, a single BFS only tells you the distance from one specific node to everyone else. To calculate metrics like the Average Path Length ($\langle \ell \rangle$) or the Diameter ($\ell_{\max}$), you need the distance between every possible pair of nodes. Therefore, you have to repeat the algo for every node in the network ($N$ times). Resulting in $O(N(N+L))$.
+
+If the network is sparse (like a Tree where $L \approx N$), this looks like $O(N \times 2N)$, which simplifies to $O(N^2)$. If the network is dense (where $L \approx N^2$), this can climb toward $O(N^3)$.
+
+Recall, that the max links a network can have is: 
+* Undirected $L_{max} = \binom{N}{2} = \frac{N(N-1)}{2}$
+* Directed $L_{max} = N(N-1)$
+
+---
+| Network Type | Formula for $L_{max}$​ | Approximation for Large $N$ | 
+| :--- | :--- | :--- | 
+| Undirected | $\frac{N(N−1)}{2}$​ | $≈\frac{}{} N^2$ | 
+| Directed | $N(N−1)$ | $≈N^2$ | 
+---
+
+---
+
+## Breadth-First Search
+
+Every node starts with a distance of $l = -1$. This is a "flag" that tells the algorithm, "I haven't visited this node yet". The source node is manually set to $l = 0$. When you find a neighbor $j$ from node $i$, you set its distance to $l(j) = l(i) + 1$. This ensures you are always building the path one step at a time. 
+
+The FIFO (First-In, First-Out) Queue (The Frontier) is the mechanical "brain" of the BFS. The first node added is the first one processed. This queue holds the "frontier" of the search. By always removing the next node in the queue, the algorithm is forced to finish everyone at distance 1 before it can even start looking at anyone at distance 2. The algorithm stops only when this queue is empty, meaning every reachable node has been processed. 
+
+As the BFS runs, it doesn't just find numbers; it builds a directed shortest-path tree. Initially, this tree has all nodes but no links. Every time a new node $j$ is discovered from node $i$, a directed link ($i \to j$) is added to this tree. This tree is the "proof" of the shortest route. If you want to know how to get from the source to node 10 in the shortest way, you just follow the arrows in this tree. 
+
+The algo has a check: "For each neighbour/successor $j$ of $i$ with $l(j) = -1$". In ensures, that only non-visited nodes are considered. 
+
+---
+
+## Small Worlds
+
+What have we learned so far:
+* Social networks tend to have very short paths
+* Six degrees of separation: the idea that any two people are at most six steps away from each other in the social network
+
+---
+
+## Milgrams Experiment
+
+[J. Travers & S. Milgram, An Experimental Study of the Small World Problem](https://www.jstor.org/stable/2786545?origin=crossref)
+
+Stanley Milgram’s 1967 experiment, often called the "Small World" study, is the foundational research behind the "six degrees of separation" concept. It aimed to measure how connected people are within a large social network.
+
+The Setup
+* The Goal: Participants in the Midwestern U.S. (Omaha, Nebraska, and Wichita, Kansas) were asked to send a folder to a specific "target" person: a stockbroker in Boston.
+* The Rule: Participants could only send the folder to someone they knew personally (on a first-name basis) who they thought might be "closer" to the target.
+* The Chain: Each person who received the folder would repeat the process until it eventually reached the stockbroker in Boston.
+
+The Results
+* Success Rate: Only about 20% of the chains actually reached the target.
+* Path Length: For the chains that did succeed, the average number of intermediate "handshakes" was approximately six.
+* The Outcome: This led to the famous phrase "Six Degrees of Separation," suggesting that any two people on Earth can be connected through a short chain of acquaintances.
+
+Milgram’s experiment discovered a fundamental property of social networks: they have a very small Average Path Length ($\langle \ell \rangle$) despite having millions of nodes.
+
+
+Small World Property: This is defined as a network where the average distance $\langle \ell \rangle$ between nodes grows very slowly (logarithmically) as the number of nodes $N$ increases.
+
+The "Six Degrees" Paradox: Even though most people only know a tiny fraction of the world's population, the existence of "hubs" or long-range acquaintances (people who know people in different cities/social circles) keeps the overall diameter of the network remarkably small.
+
+---
+
+## Short Paths
+
+What do we mean by “short paths”? When can we call a path “short”? **depends on the network**
+
+We need to observe the relationship between Average Path Length (APL) and Network Size.
+
+We say that the average path length is short when it grows very slowly with the size of the network, say, logarithmically:
+
+$$\langle \ell \rangle \sim \log N$$
+
+
+This relationship (the small world propert) is the mathematical heart of Milgram's experiment and the "Six Degrees of Separation." It means that as a network grows larger (as $N$ increases), the average distance between nodes ($\langle \ell \rangle$) increases incredibly slowly—specifically, logarithmically.
+
+It acts as both a definition and a benchmark (check). In network science, we use this specific scaling behavior to distinguish "Small World" networks from other structures like grids or lattices. The formula $\langle \ell \rangle \sim \log N$ is the formal requirement for a network to be considered "Small World". If you increase the number of nodes $N$ by a factor of 10, and the average path length $\langle \ell \rangle$ only increases by a small constant amount, the network satisfies the Small World property.
+* Lattice/Grid: $\langle \ell \rangle \sim N^{1/d}$ (where $d$ is dimension). This grows much faster than $\log N$.
+* Small World: $\langle \ell \rangle \sim \log N$. This grows much slower.
+
+---
+
+## Small Worlds
+
+Many other types of networks are small worlds, too. Air transportation networks, the Internet, the Web, and Wikipedia, all have short paths. Most real-world networks are small worlds. 
+
+---
+
+## Friend of a Friend
+
+Another feature of social (and some other) networks is the presence of triangles: if Alice and Bob are both friends with Charlie, they are also likely friends of each other. In other words, many friends of my friends are also my friends. In directed networks, we can consider only certain types of directed triangles, like shortcuts (in a follower-network). This is known as transitivity, there may be a triangle, but all 3 arent actually connected. 
+
+## Clustering Coefficent
+
+We can measure the number of triangles that a node actually has relative to how many it could have. The clustering coefficient of a node is the fraction of pairs of the node’s neighbours that are connected to each other:
+
+$$C(i) = \frac{\tau(i)}{\tau_{max}(i)} = \frac{\tau(i)}{\binom{k_i}{2}} = \frac{2\tau(i)}{k_i(k_i - 1)}$$
+
+* $C(i)$: The clustering coefficient of node $i$. This measures how close node $i$'s neighbors are to being a complete graph (a "clique").
+* $\tau(i)$: The actual number of links existing between the neighbors of node $i$ (forming triangles).
+* $\tau_{max}(i)$: The maximum possible number of links that could exist between those neighbors.
+* $k_i$: The degree of node $i$ (how many neighbors it has).
+* $\binom{k_i}{2}$: The mathematical combination representing the total possible pairs of neighbors.
+
+If there are 8 neighbours, each neighbour can connect to 7 (excluding itself) and that is true for all 8 neighbours, hence, the $\tau_{max}(i)$ is $k_i(k_i - 1)$.
+
+This too if a check for Small World-ness and works alongside the other one ($\langle \ell \rangle \sim \log N$):
+* Small distances: $\langle \ell \rangle \sim \log N$ (as we discussed).
+* High clustering: A high average $C(i)$ across the network.
+
+While the $\log N$ formula checks if people are "close" in terms of steps, this $C(i)$ formula checks if your friends also know each other. In real social networks, clustering is usually much higher than in a purely random network.
+
+## Network Clustering Coefficent 
+
+The above formula was the clustering coefficient of 1 node. To work out the coefficient for the network we look at the average clusteirng coefficient of the nodes: 
+
+$$C = \frac{\sum_{i:k_i > 1} C(i)}{N_{k > 1}}$$
+
+* $C$: The overall average clustering coefficient for the network.
+* $C(i)$: The local clustering coefficient for an individual node $i$.
+* $\sum_{i:k_i > 1}$: This instructs you to sum the local clustering coefficients only for nodes that have a degree ($k_i$) greater than 1.
+* $N_{k > 1}$: This represents the total count of nodes in the network that have a degree greater than 1.
+
+Here are the valid NetworkX functions:
+
+```
+nx.triangles(G) # dict node -> no. triangles
+
+nx.clustering(G, node) # clustering coefficient of node
+
+nx.clustering(G) # dict node -> clustering coefficient
+
+nx.average_clustering(G) # network's clustering coefficient
+```
+
+## Alternative Clustering: Triplets
+
+An alternative option is the look at the triplets:
+
+$$C = \frac{closed}{triplets}$$
+
+where a triplet consists of three nodes where at least two edges exist (i.e., a wedge or a
+triangle). A closed triplet is a triplet where all three nodes are connected (i.e., a triangle).
+
+This provides an intuitive measure of transitivity, i.e., how often a friend of a friend is also
+a direct friend
+
+```
+nx.average_clustering(G) # network's average clustering coefficient
+
+nx.transitivity(G) # network's global clustering coefficient
+
+```
+
+
 
 
 
@@ -1172,6 +1494,10 @@ the remaining is the super stable core
 
 
 
+
+
+
+
 # week 5 (chapter 4 part 2)
 
 emp networks are; hetro, degree, hubs, clustering tends to be high, this creates resiliance, maybe be design, i..e transport, crete redunance to avoid dependency
@@ -1428,6 +1754,10 @@ go through this better
 [barabasi albert model]
 
 didnt follow this section
+
+
+
+
 
 
 
