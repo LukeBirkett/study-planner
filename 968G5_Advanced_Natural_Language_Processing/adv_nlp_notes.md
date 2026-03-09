@@ -2476,7 +2476,367 @@ Char reps to learn word structure. this compliemnet where word embeddings are no
 
 ## Week 5: Additional Reading
 
+Jurafsky and Martin Chapter 4: Logistic Regresssion and Text Classificaton.
 
+Jurafsky and Martin Chapter 17: Sequence Labelling for Parts of Speech and Named Entities.
+
+---
+
+
+
+
+
+
+# [Week 6 - Machine Translation](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-6-machine-translation)
+
+This week we will be looking at the application of Machine Translation (MT).  This can be seen as an example of a sequence generation or sequence transduction problem, where the input is a sequence in the source language and the output is a sequence in the target language.
+
+In particular we will look at:
+* what makes MT hard?
+* Evaluation of MT
+* Classical MT (pre-1990s)
+* Statistical MT (1990-2015)
+    * word-based models
+    * phrase-based models
+* Neural MT (2016 - )
+    * Encoder-decoder models
+
+#### Week 6: Contents
+
+1. [Lecture]()
+2. [Seminar]()
+3. [Lab]()
+4. [Additional Readings]()
+
+## Week 6: Lecture
+
+Moving into sequence generation tasks such as Machine Translation.
+
+* Classical MT (Pre 1990s); only talk about briefly
+* Statiatical MT (1990-2015); Word-based models, Phrase-based models.
+* Neural MT (2015 - ); Encoder-decoder models
+
+---
+
+### Why/is MT hard?
+
+* Lexical Differences 
+* Structural differences (morphological differences and syntactic differences)
+* Study of systematic cross-linguistic similarities and differences is called linguistic typology
+
+---
+
+### Lexical Divergences
+
+* Homonymy and polysemy (in both languages); ambiguous words in both languages. 
+* e.g., “I know that machine translation is hard.”à French savoir, fact in french need this. 
+* whereas “I know David Weir.” à French connaître. Person not fact.
+* Diff distinctions in diff languages. Chinese distinguied between older and younger brother. In english would just be brother: "I met my brother".
+* Could be grammatical difference, i.e. structure of sent in english vs german. 
+* Gender making works, common in romance langs
+* Lexical gaps, words directly stolen from other language, no word exists in translation
+
+### Morphological Different
+
+Morphology, the way a word is broken down into different parts, or Morphims. 
+
+Diff language approach this in diff ways
+
+In some, they are clear differentialble, distinguiable, i.e. Finnish. Known as agglutinative
+
+Others are fusion, where the morhemes are not clear distinguishable. Parts my contain mulitple bits of into. Russian is like this. 
+
+Additional some languages don't really have morpological change, these are "isolaoting" such as chinese
+
+Aothers have high morpheme to word ratio, this give it the ability to form words which are equivalent to sentence in other languages, this is known as polysynthetic. (a literal word that contains enough content (morphs) to form the meaning of an entire sentence in a word)
+
+Iso to synthentic
+
+viet, england, turkic, swahili, eskimi-inuit
+
+english is quite low on the scale, it is quite iso
+
+### Syntactic Differences
+
+See Jurafsky and Martin Chapter 13 if interested
+
+SVO vs SOV vs VSO
+
+Subject verb order etc; abotu sentecne order and structure
+
+### Evaluation
+
+* Human raters; decide how good the trans is; 
+    1. fluency, rating on scale to 1-5, "cloze" task, delete nth word and ask human reader to guess word, gives us a labels task to eval from; 
+    2. fidelity; adequacy/informativness, does it give same info as orginal text, was any of the input text lost or ignored;
+    3. there is post-edit cost. how long did the human rated translator take for evaluation purposes. 
+
+* Automatic Evaluation; BLEU, 2001, still used in most evals,; chrF, most recent work moving towards this. 
+
+### BLEU
+
+Has a machine hypo for the traslation
+
+example shows two possible human translation
+
+not worrying about what the input sentence was
+
+bleu stats by looking as average unigram precision
+
+=1/2 (3/5+4/5)
+
+clearly flawed but good start
+
+Why are we just thinking about precision
+
+Why not recall (recal and prec)?
+
+**ask gemini to explain this and refesh the definitions**
+
+propsoal of bleu, don't think about recall as couldnt expect to get high recall. there are many ways to translate, cant ness expect to get the exact ref translation. but want ot know that the words prediict are correct
+
+flaw only consdiering unigrams (get to this in a min)
+
+probs with prec, easy to get good prec without getting anything meaningful, gmaing the eval metric
+
+i.e machine pred; "the the the the", the always occurs to prec will be maxed out
+
+### Modified Preciison 
+
+For each word in the machine translation, take the maximum
+
+number of times it occurs in any human reference
+¡ For example, mmax(the) = 2
+
+Restrict the number of times a word can appear in machine
+translation to its m_max
+
+would turn "the the the the the" from 5/5 to maybe 1 or 2 / 5
+
+### BLEU (cont)
+
+compute modified prec ofr uni, bi, tri, quad
+
+check if "the weater" exists etc
+
+combined using geometric mena (?)
+
+penality for trans with are too short
+
+good eval of increm changes to same general archicecture; related to Papineni 2002 paper (this week)
+
+### chrF
+
+charscter based F score (popovic 2015)
+
+char based rather than word based
+
+overcomes problems with different tokenization standards; important when trans between languages with different tokenization patterns; diff tokenizers or diff langes
+
+think about why bleu was proposed; didnt use recall as hypo couldn't full match human; but if we concen that human can be diff from hypo, even if hypo if true, then this is true for all hypos, so the issue is normalized; we want to compare diff hypos and systmes against human references, the lower recall bias doesn't really matter for compareisons, the actual score won't be fully correct but robust for comparison.
+
+work out char based prec and recall: 
+
+chrp = percentage of char 1-gram, ..., n-gram in the hhypo that occur in the reference, averaged
+
+chrr = percentage of char, 1-gram, ..., n-gram, in the reference that occur in the hypo, averaged
+
+combine to make an f-score
+
+could be f1, but actually use a param beta, allows us to give more weight to one of the P or R
+
+i.e. twice as much weight to precision or recall.
+
+**apprently giving beta to P gives more weight to R, why is this**
+
+[INSERT FORMULA HERE]
+
+---
+
+## PART 2: Approaches to Machine Translation
+
+### Classical MT: Vauquios Triangle
+
+Pre-19990s systens were rule-based; direct translation, transfer-based, interlingua based. 
+
+Generally a word for word translation, sometimes with reordering. Sometimes with analysis, or even transfor,ing into a intermedi interlingua. 
+
+### Statistical Machine Translation
+
+Focus on results not process
+
+What does it mean for a sentence to be a translation of some often sentence
+
+Concept of faithfulness (same info) and fluency (in target lang)
+
+Stat, based on probability derived from parallel corpora.
+
+corpora: sents in ref coupled target language, used for training, supervised. 
+
+### Bayesian Noisy Channel 
+
+source lang F, trans late to target lang E
+
+consider there is a noisey channel that took the target and formed it into the source
+
+almost a backward approach
+
+mostly likely target to have generated the source
+
+e_hat (sequence of tatget) = argmax P(source|target) * P(target)
+
+P(source|target) = capture model faithfullness (info)
+
+P(target) captures model fluency
+
+allows us to breakdown the problem
+
+### P(E): Fluency
+
+The underlying model assigns probs to sequences
+
+It should learn, or derive, that the uncommon, or irregular, sentences have a lower probability then common ones.
+
+Can be obtained from any monolinguial corpus. Don't need to know anything info about naohter language
+
+Most sytems used an n-gram language model 
+
+### P(F|E): faithfulness
+
+Probability of source give the target
+
+Simplest models are based on word alignment 
+
+mappening between workds 
+
+the simplifiying assu,ption was that each source word comes exactly 1 target work
+
+the mapping could be 1 to many, many targets align to source
+
+note, this is justa flavour, not used anymore
+
+### Estimating Translation Probs
+
+parrell corpora -> sentence aligned data
+
+### Expection Maximuise
+
+(not going to go into this much)
+
+How to get probs
+
+init model param, all conns equally likely
+
+assign probs (E-step)
+
+estimate param (M-step)
+
+eterate
+
+not important to understand details (any more)
+
+### From Word-Based Models to Phrase-Based Models
+
+Word-based models assume one-to-many alignment of words
+
+Word-based models cannot (easily) handle non-
+compositional phrases **(what is comp??)**
+
+Phrase-based models treat phrases as atomic units
+
+many to many
+
+### Phrase alignment
+
+Generated by running word alignment algorithms in both directions to give
+* a one-to-many alignment
+* a many-to-one alignment
+
+Classifiers developed to decide how to symmetrize the alignments somewhere between intersection (min) and union (max)
+
+### Phrase translation
+
+Given a phrase alignment, we can store each
+pair of aligned phrases in a phrase translation
+table together with its MLE translation
+probability:
+
+𝑃 𝑓|𝑒 = 𝑐𝑜𝑢𝑛𝑡(𝑓, 𝑒)
+∑! 𝑐𝑜𝑢𝑛𝑡(𝑓, 𝑒)
+
+This gives us the ``translation options” for
+each phrase at decode time.
+
+### Standard Model of Phrase Based Machine Translation (PBMT)
+
+For translating French (source language) to English (target language), use a log-linear model:
+
+[INSERT FORMULA]
+
+The feature functions hi are typically
+* a language model;
+* a reordering model;
+* a word penalty; and
+* various translation models (phrase translation and word translation)
+
+before (word-based) we were framing it as the target generating the source, now we have moved to a discriminative log linear
+
+**what is the different between a generative baysian model and an discriminative log-linear model?**
+
+**what does inference and training look like?**
+
+### Decoding for Phrase-Based Statistical MT
+
+relevant for nn models also 
+
+Finding the sentence which maximises translation
+probability is a search problem
+
+we can't possible try every sentence availbe in X lang to find the best fit
+
+exhuastic search is in impossible
+
+need to make optimisations to avoid searhc all combinations
+
+phase-based translatatio, use table ot limit search space. even then a large space **meaning?**
+
+decoders tend to use best-first search
+
+mainaint a priority queue (or stack) with all partital translation hypos and their scores
+
+upate in iterations and prune queve using beam search. 
+
+bs; at each iteration only kee the k most promising search states and prine high cost states (**meaning?**)
+
+### Shorticoming of PBMT
+
+battle design choices. 
+
+large phtase trans table become really large
+
+inability to generalise; simiar phases don't share stasitic wweight. they are atomic units, no idea of simialr; 
+
+---
+
+
+
+
+
+
+
+---
+
+## Week 6: Seminar
+
+## Week 6: Lab Content
+
+I won't be publishing solutions this week as this lab forms the basis of the assignment.  Please do talk to the TAs in the lab if you have any questions about what to do or what you have done.
+
+## Week 6: Additional Reading
+
+Jurafsky and Martin (2026), Chapter 12 Machine Translation
+
+---
 
 
 
