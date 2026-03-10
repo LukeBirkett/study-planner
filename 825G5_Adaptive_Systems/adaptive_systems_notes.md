@@ -900,7 +900,22 @@ automony needs more of a notion of history and state. change the way it behaves 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Lecture 5 -  Evolutionary Robotics
+
+[Video Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=40b3755e-3f88-42f5-bac8-b4040109e9bd)
 
 # Learning Outcomes
 
@@ -910,7 +925,7 @@ An understanding of the difference between adapted and self-adaptive, in an an e
 
 A familiarity with three very different forms of adaptation in recurrent neural networks (3 case studies)
 
-# Evolution: reproduction, mutation and selection
+# Part 1: Evolution: reproduction, mutation and selection
 
 A process of adaptation always involves change, but not all changes are adaptations.
 
@@ -941,6 +956,7 @@ Evo algos are a larger class, gen algos are a subset of these
 For a species or population to evolve, three main ingredients are required:
 
 1. Reproduction
+* With inheritence!
 * Sometimes referred to as replication. 
 * Genes are copied from one generation to the next 
 * genes may come from either a single or multiple parents
@@ -956,4 +972,317 @@ For a species or population to evolve, three main ingredients are required:
 
 These ingredients form the basis of both natural and artificial evolution. 
 
+You need all 3 of these for evolution. + darwin says if you do have all 3 then evolution will have to take place (?)
+
 # Population-based GAs
+
+When we put these elements together into a genetic algorithm; 
+
+we have population, or candiate solutions which are a solution to some problem; we start by initalising the population, likely set random values about genes. doesn't have to be random if you have some sort of knowledge about something, can statt with a specific distribution; we then evaluate the population, based on fitness, this is measure of how good the genotype is, eval every candiate and assign a score, probably based on some task assigned; based on fitness we do selection, select higher fitness for reproduction, i.e. maybe take two half of population (detminerinistic) and reproduce (duplicate), this type turns out to be quite bad as in just a few population interations it kills diversity, better would be to have a stochastic or probabilistic, Probabilistic describes a state or a single event, while Stochastic describes a process over time, where select high genotypes most of the time but low genos get picked sometimes, this is better and appears to perform better; reprod need some sort of merging between the parents, which creates some sort of new population; there are different approaches to the new population in these algos, some approaches discard the old population and just keep the new reproduced population, others merge the two pools; after this we iterate and evaluate fitness again; each iterate is a generation of the population; repeat loop until some contraint or target is met, this could be a simple as just number of iterations or related to a metric or attribute of the population; even when a ga is running well it still may not find a solution in a number of iters, this is why we sent an iters constraint; also set some kind of threshold on the acceptable level of fitness, once met stop the algo; fitness scores re often normalized between 0 and 1, 0.95 is normally good enough but it depends on the topic; 
+
+---
+
+These notes outline the fundamental structure and logic of Population-based Genetic Algorithms (GAs). In essence, a GA is a search heuristic inspired by Charles Darwin’s theory of natural evolution. It "evolves" a solution to a problem over multiple generations.
+
+#### 1. The GA Lifecycle (The Loop)
+
+The algorithm follows a circular process of evaluation and refinement:
+* Initialization: You start with a "population" of candidate solutions (genotypes). These are usually randomized, but can be biased if you already have some domain knowledge.
+* Evaluation (Fitness): Every individual is tested against a Fitness Function. This assigns a score based on how well that specific genotype solves the assigned task.
+* Selection: You choose which individuals get to "parent" the next generation.
+    * Deterministic Selection: (e.g., just picking the top 50%) is warned against because it destroys diversity too quickly, leading to a "dead end" where every individual is identical.
+    * Stochastic/Probabilistic Selection: This is the preferred method. Higher fitness individuals have a higher probability of being picked, but lower fitness individuals are occasionally chosen to keep the "gene pool" diverse.
+* Reproduction & Variation: The selected parents are merged (Crossover) and often slightly altered (Mutation) to create a new population.
+* Replacement: The algorithm decides whether to throw away the old parents entirely (Generational GA) or mix them with the new children (Steady-state or Elitist GA).
+
+#### Diversity vs. Convergence
+The notes emphasize that if you are too "greedy" (only picking the very best), the population loses diversity. Without diversity, the algorithm can't explore new areas of the "fitness landscape" and gets stuck.
+
+#### Termination (When to Stop)
+A GA doesn't run forever. It stops when:
+1. A Fitness Threshold is met: (e.g., a solution reaches a normalized score of 0.95).
+2. An Iteration Constraint is hit: If the GA is struggling to find a perfect solution, it stops after a pre-set number of generations (to save time/computing power).
+
+#### Stochastic vs. Probabilistic
+Probabilistic: Refers to the likelihood of a single event (the chance of this parent being picked right now).
+
+Stochastic: Refers to the random process over the entire timeline of the algorithm.
+
+---
+| Phase | Action | Purpose | 
+| :--- | :--- | :--- | 
+| Initialization | Create random genotypes | Establish a starting point for exploration.
+| Evaluation | Assign fitness scores (0 to 1) | "Identify which solutions are ""working.""" |
+| Selection | Stochastic picking of parents | "Favor the ""strong"" while maintaining diversity." | 
+| Iteration | Repeat for N generations | Gradually improve the average fitness of the group. |
+---
+
+---
+
+# Part 3: Fitness Functions and Landscapes
+
+The fitness function is what quant measures performence or success
+
+In trad ML we thinking cost functions and minimizing them using gradient descent
+ 
+But fitness functions can take many forms and are often maximised. 
+
+Think about a walking robot, the success is messured in distance at the nd of the simulation, we want to maximise this
+
+Could be a fitness score for following a trajectory, correct path +1, wrong path -1
+
+However, normally, we don't us evo methods to get an outcome. We use then to see suprising solutions
+
+the more we expecify the outcome, the less uprising results we will get
+
+# Evolutionary Fitness
+
+Evolutionary algorithms can get trapped on local optima. A common strategy to mitigate this
+problem is to have small mutations with high probability and large mutations with low
+probability (i.e. have many micromutations and very few macromutations)
+
+Fitness and costs are different sides of the same coins 
+
+If we normalize them both, we could say something like: fittness = 1-cost
+
+some problems it might be easier to work out the cost, i.e. the distance a robot travels
+
+**if we want to normalize the cost, why does fitness=1-cost achieve this?**
+
+Sometimes it is no ob or easy to work out how the cost should be normalized because we don't know the max possible cost
+
+If so, we can normalize fitness instead: fitness = 1/1+cost. if cost goes to 0, fit will go to 1. result will be a non-linear relationship
+
+**why does this normalize the cost?** 
+
+fitness landscape = fitness against parameter(s). there exists global and possible local maxima in this landscape. there could be any locals. probs will local max is that we we apply small mutations (small changes), we could be trapped on this local max. macro mutations could help to escape these. 
+
+AGs are better for lumpy landscape with many locals. Here, gradient descent can get stuck but AG has the oppurtunity to jump out. However, if the landscape is smooth with just one min or max, then AG is at disadvantage because most mutations will through it off track. 
+
+# Part 4: Artifical Neural Networks
+
+Most of robotics uses NN so this is a fundemental topic. May not go too much into the full technicals but as this is coved in other modules. 
+
+Maass, W. (1997). Networks of spiking neurons: the third generation of neural network models. Neural networks, 10(9):1659–1671.
+
+Maas defined 3  generation of NN:s
+1. McCulloch and Pitts, bio inspired
+2. Generation 2: "Activation Function" nerurons including RNNs
+3. Spiking neural networks (SNNs); more bio plausible
+
+
+Spiking have intermitent spiking outputs. 
+
+[Simple Model of Spiking Neurons IEEE Transactions on Neural Networks (2003) 14:1569- 1572 Eugene M. Izhikevich](https://www.izhikevich.org/publications/spikes.htm)
+
+Spiking is used more in bio rather than AI; because you need a way to turn spikes into some starardised output similar other AI; spiking not covered on this module. 
+
+# ANNs - Feedforward
+
+Inputs, layers, weights, hidden layers, activation functions, output layers.
+
+Activ; sigmoid, hyperbolic tangent; rectifed linear; radial basis function
+
+MM with vector and weights (dot product)
+
+# ANNs - Recurrent
+
+Recurrent neural networks include feedback loops
+
+# Continuous-time recurrent neural network (CTRNNs)
+
+Filled with feedback loops
+
+This eq is the state of an individual neuron $i$:
+$$\tau_{i}\dot{y}_{i} = -y_{i} + \sum_{j=1}^{N} w_{ij}\sigma(y_{j} + \theta_{j}) + sI(t)$$
+
+dot above y is shorthand for deriviate
+
+therefore the formula is for change over time $𝜏_𝑖$. time determines how quickly the state of aneuron can change
+
+neurons can have different $𝜏_𝑖$ for diff neurons; some neurons change states slowly or quick; gives us more richness of dynamics
+
+Where the activation function is sigmoid
+
+• $y_i$ state of neuron $i$
+• $𝜏_𝑖$ time constant for neuron $i$
+• $𝜃_𝑗$ bias for neuron $j$
+• $𝑤_{𝑖𝑗}$ weight on synapse between neurons $i$ and $j$
+• $𝐼$ sensory input
+• $s$ weight on sensory input
+
+Feedforward ANNs are universal function approximators
+
+CTRNNs are dynamical system approximators
+* if you hage a dynamic system where the states change. 
+
+“. . . any finite time trajectory of a given n-dimensional dynamical system can be approximately realized by the internal state of the output units of a continuous time recurrent neural network with n output units, some hidden units, and an appropriate initial condition.”
+
+---
+
+Gemini Notes:
+
+Most standard Neural Networks (like the ones used for image recognition) are "Feed-Forward." They are basically complex functions: you give them an input $x$, and they spit out a prediction $y$. They have no "memory" of what happened a second ago.
+
+CTRNNs are different because they are dynamical systems. Here is why they are perfect for systems with changing internal states:
+
+1. Internal State and Memory
+
+In the formula you shared, $y_i$ represents the internal state (the "membrane potential") of a neuron. Because of the decay term ($-y_i$) and the time constant ($\tau_i$), the neuron doesn't just react to an input and then "forget" it.
+
+* It takes time for the neuron to charge up.
+* It takes time for it to leak away.
+* This allows the network to have short-term memory and internal "tempos."
+
+2. Temporal Dynamics
+
+CTRNNs are built using differential equations, meaning they live in continuous time.
+
+* In your pendulum lab, the pendulum’s position is a continuous flow.
+* A CTRNN is designed to "hook into" that flow. It doesn't just see a snapshot; it experiences the rhythm of the movement.
+* This makes them ideal for tasks like walking, swimming, or balancing, where the timing of the motor output is just as important as the direction.
+
+3. Recurrence: The "Brain" Loop 
+
+The "R" in Recurrent means the neurons are connected in loops. Neuron A can excite Neuron B, which then loops back to inhibit Neuron A.
+
+* This creates central pattern generators (CPGs)—circuits that can produce rhythmic pulsing even without any external input
+* This is how a biological brain maintains an internal state (like "hunger" or "arousal") that persists even when the environment changes.
+
+4. Why use them for the "South West" Pendulum?
+
+If you used a CTRNN instead of a PID controller for your pendulum:
+
+The PID controller only knows the current error and the previous error.
+
+A CTRNN could develop an internal representation of the gravity it's fighting. It could "learn" that at certain angles it needs a specific sustained level of power, effectively acting as its own "internal model."
+
+Summary: 
+
+Standard NN: Best for Pattern Recognition (e.g., "Is this a cat?").
+
+CTRNN: Best for Sensorimotor Control (e.g., "How do I move my legs to stay upright while the wind blows?").
+
+| Donella Meadows Term | CTRNN Component |Physical Analogy | 
+| :--- | :--- | :--- | 
+| Stock | yi​ (State) | Water in a tank | 
+| Inflow | ∑wij​σ(...)+sI(t) | The faucet filling the tank | 
+| Outflow/Leak | −yi​ | A hole in the bottom of the tank |
+| Buffer/Delay | τi​ | The size of the tank (inertia) |
+
+1. The Membrane Potential ($y_i$) is the "Stock"
+
+In Meadows' book, a Stock is the memory of the history of changing flows in the system (like water in a bathtub or inventory in a warehouse).In a CTRNN, the internal state $y_i$ is your Stock. It represents the "amount" of electrical charge or activation currently held by the neuron.Just like a bathtub doesn't empty instantly when you turn off the tap, the neuron doesn't hit zero instantly because it is a reservoir of state.
+
+2. The Time Constant ($\tau_i$) is the "Buffer"
+
+Meadows emphasizes that Buffers (or delays) are what make systems stable or oscillate.If $\tau_i$ is very large, the "Stock" ($y_i$) changes very slowly. This acts as a massive buffer against sudden spikes in input $I(t)$.It filters out "noise." If a small disturbance hits the pendulum, a neuron with a high buffer won't react frantically; it "waits" to see if the pressure persists.
+
+3. The Recurrent Weights ($w_{ij}$) are the "Feedback Loops"
+
+This is where the "Adaptive" part comes in.Positive Feedback: If $w_{ij}$ is positive and connects back to itself, it’s a reinforcing loop. It can lead to "runaway" growth or a "switch" flipping.Negative Feedback: If $w_{ij}$ is negative, it acts like the PID controller you used in the lab, constantly trying to pull the "Stock" back to a setpoint.
+
+---
+
+# Part 5: Evolutionary Robotics
+
+Putting together stuff we have seen so far
+
+Before:
+1. random generation
+2. loop of eval > select > varition: genotype
+3. terminate
+
+now we take this genotype and covert it to a phenotype. this is known as the decoding step, taking the list of numbers and decode it to produce the phenotype. this is a mapping
+
+genotype to phenotype; whereby the phenotype is a neural network.
+
+The phenotype is the literal neural network (the controller) that resides within the robot's body.
+
+The genotype is usually just a long string of numbers (often called a "chromosome" or "bitstring"). It doesn't "do" anything on its own; it is just storage.It contains the raw data for all the evolvable parameters of your robot.If you are evolving a CTRNN, the genotype will contain the values for every $w_{ij}$ (weight), every $\theta_j$ (bias), every $\tau_i$ (time constant), and potentially even the physical dimensions of the robot.
+
+The mapping is the process of taking those numbers from the genotype and "plugging them in" to the correct slots.
+
+Example: The first 10 numbers in the genotype are assigned to the weights of Neuron 1, the next 10 to Neuron 2, and so on.
+
+The phenotype is the physical realization of that genotype. In this context, it is the actual, functioning Neural Network—complete with weights, biases, and connections—connected to the robot's sensors and motors.
+* A phenotype is the set of observable characteristics or traits of an organism, resulting from the interaction of its genotype (genetic makeup) with the environment. It encompasses not only physical appearance (such as hair color or height) but also behavioral, physiological, and biochemical traits
+
+The phenotype is what actually interacts with the environment.
+
+When the lecture says the genotype maps to a NN, it means the result of the mapping is a fully formed controller.
+
+You asked if the genotype is just an input to a NN. In standard evolutionary robotics, no. An input to a NN is a sensory signal (like a light sensor reading). The genotype defines the structure and rules of the NN itself.
+
+* The Genotype: The blueprints and tuning instructions for a guitar.
+* The Mapping: The factory process of building and tuning that guitar.
+* The Phenotype: The actual guitar.
+* The Input: The musician plucking the strings (sensory data).
+
+
+Why this matters for CTRNNs:
+
+Because CTRNNs have so many parameters ($\tau, w, \theta$), the genotype can get very long.Linear Mapping: Most simple labs use a 1-to-1 mapping where one number in the genotype equals one weight.Developmental Mapping: More advanced research uses "indirect" mapping (like DNA), where a small genotype "grows" a very complex phenotype. This is how a small amount of human DNA can create a brain with trillions of connections.
+
+
+It should be noted, that the neural networks, the physcial emboidments, are usually pre-construced. Their size, layers etc are pre-determined. 
+
+1. Is the EA just an Optimization Method?
+
+Yes. In this context, you can think of the Evolutionary Algorithm as a Global Optimizer.
+
+In "traditional" AI, we use Gradient Descent (Backpropagation) to train networks. But Gradient Descent requires two things:
+
+A Differentiable Error: You need to know exactly how much "wronger" you are if you change a weight by 0.001.
+
+A Clear Target: You usually need a dataset of "correct" answers to compare against.
+
+In robotics, you often don't have those. If a robot falls over, you don't know which of the 50 weights caused the fall. The EA doesn't care about gradients; it just tries a bunch of random settings, sees which robot walked the furthest, and "breeds" the winners. This is why it’s often called Reinforcement Learning via Evolution.
+
+
+
+With evolutionary and generatic algos, we aren't explicitly training anything in the traditional sense. This is because the genetic algo doesn't have any sense of what is good or bad, it just produces stuff which we then convert into phenos/NN and test. 
+
+This is one of the most fundamental philosophical divides in AI: the difference between learning and selection.
+
+In a traditional Neural Network (like those trained with Backpropagation), the system "learns" by looking at its own mistakes and correcting them mathematically. In an Evolutionary Algorithm (EA), the individuals themselves never learn a single thing. They are born, they perform, and they die.
+
+The EA is essentially a "Generate and Test" loop. It throws 100 random robots at a wall. It doesn't know why robot #42 did better than robot #41; it just sees that #42 has a higher score and duplicates its genotype.
+
+In the industry, we often use the word "training" as a catch-all, but technically:
+
+Training (Learning): Usually implies a change in an individual's internal state based on experience.
+
+Evolution (Optimization): Is a change in the population’s distribution based on performance.
+
+
+
+we often categorize Genetic Algorithms (GAs) as a Stochastic Global Optimization technique.
+
+Grid Search: This is exhaustive and deterministic. It’s like a person walking across a field in perfectly straight lines, checking every single square meter. It is guaranteed to find the highest point, but if the field is the size of a continent (a "High-Dimensional Parameter Space"), the person will die of old age before they finish.
+
+Genetic Algorithms: These are heuristic and stochastic. Instead of checking everything, the GA drops 100 people at random. It only spends time checking the areas around the people who report back saying, "Hey, I'm standing on a hill!"
+
+The real difference between a GA and a "Random Search" (simply picking random points) is Crossover.In a grid search, the "trials" don't talk to each other. Trial A doesn't know what Trial B found.In a GA, if Trial A finds a good value for Parameter 1 ($K_p$), and Trial B finds a good value for Parameter 2 ($\tau$), the GA swaps their genes. It creates a "child" that has both the good $K_p$ and the good $\tau$.This is known as the Building Block Hypothesis. The GA isn't just searching; it is assembling a solution from pieces of previous successes.
+
+
+
+3. Hyper-parameter Search in the "Wild"
+In standard Deep Learning, we use Hyper-parameter Optimization (HPO) tools like Optuna or Ray Tune. These often use Evolutionary Strategies (a close cousin of the GA) for exactly the reasons you suspected:
+
+Non-Differentiable Spaces: If you are searching for the "number of layers" in a network, you can't use Calculus (Gradients) because you can't have 2.5 layers. Evolution handles these "discrete" jumps perfectly.
+
+Jagged Landscapes: Grid search gets stuck if the "best" spot is hidden in a tiny, sharp needle-peak between your grid lines. Because GAs use Mutation, they have a chance to "accidentally" land on those hidden peaks.
+
+
+4. The "Meadows" Limit: Diminishing Returns
+Linking back to Donella Meadows—she warns about the "Limits to Growth." In a GA-based parameter search:
+
+Early on, the GA finds huge improvements (Exponential Growth).
+
+Later, as the population "converges" on a peak, the improvements get smaller and smaller.
+
+At this point, your "Advanced Grid Search" has effectively become a Local Search. This is where you might stop the GA and switch to a more precise tool to find the exact "center" of the peak.
+
+
+---

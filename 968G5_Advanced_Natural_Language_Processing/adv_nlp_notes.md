@@ -2513,10 +2513,12 @@ In particular we will look at:
 Moving into sequence generation tasks such as Machine Translation.
 
 * Classical MT (Pre 1990s); only talk about briefly
-* Statiatical MT (1990-2015); Word-based models, Phrase-based models.
+* Statistical MT (1990-2015); Word-based models, Phrase-based models.
 * Neural MT (2015 - ); Encoder-decoder models
 
 ---
+
+## PART 1: Machine Translation.
 
 ### Why/is MT hard?
 
@@ -2529,26 +2531,26 @@ Moving into sequence generation tasks such as Machine Translation.
 ### Lexical Divergences
 
 * Homonymy and polysemy (in both languages); ambiguous words in both languages. 
-* e.g., “I know that machine translation is hard.”à French savoir, fact in french need this. 
+* e.g., “I know that machine translation is hard.”à French savoir, in fact french need this. 
 * whereas “I know David Weir.” à French connaître. Person not fact.
-* Diff distinctions in diff languages. Chinese distinguied between older and younger brother. In english would just be brother: "I met my brother".
+* Diff distinctions in diff languages. Chinese distinguished between older and younger brother. In english would just be brother: "I met my brother".
 * Could be grammatical difference, i.e. structure of sent in english vs german. 
 * Gender making works, common in romance langs
 * Lexical gaps, words directly stolen from other language, no word exists in translation
 
 ### Morphological Different
 
-Morphology, the way a word is broken down into different parts, or Morphims. 
+Morphology, the way a word is broken down into different parts, or Morphemes. 
 
 Diff language approach this in diff ways
 
-In some, they are clear differentialble, distinguiable, i.e. Finnish. Known as agglutinative
+In some, they are clear differentiable, distinguishable, i.e. Finnish. Known as agglutinative
 
-Others are fusion, where the morhemes are not clear distinguishable. Parts my contain mulitple bits of into. Russian is like this. 
+Others are fusion, where the morphemes are not clearly distinguishable. Parts may contain multiple bits of into. Russian is like this. 
 
-Additional some languages don't really have morpological change, these are "isolaoting" such as chinese
+Additional some languages don't really have morphological change, these are "isolating" such as chinese
 
-Aothers have high morpheme to word ratio, this give it the ability to form words which are equivalent to sentence in other languages, this is known as polysynthetic. (a literal word that contains enough content (morphs) to form the meaning of an entire sentence in a word)
+Others have high morpheme to word ratio, this gives it the ability to form words which are equivalent to sentences in other languages, this is known as polysynthetic. (a literal word that contains enough content (morphs) to form the meaning of an entire sentence in a word)
 
 Iso to synthentic
 
@@ -2562,20 +2564,20 @@ See Jurafsky and Martin Chapter 13 if interested
 
 SVO vs SOV vs VSO
 
-Subject verb order etc; abotu sentecne order and structure
+Subject verb order etc; about sentence order and structure
 
 ### Evaluation
 
 * Human raters; decide how good the trans is; 
     1. fluency, rating on scale to 1-5, "cloze" task, delete nth word and ask human reader to guess word, gives us a labels task to eval from; 
-    2. fidelity; adequacy/informativness, does it give same info as orginal text, was any of the input text lost or ignored;
-    3. there is post-edit cost. how long did the human rated translator take for evaluation purposes. 
+    2. fidelity; adequacy/informativeness, does it give same info as original text, was any of the input text lost or ignored;
+    3. There is a post-edit cost. how long did the human rated translator take for evaluation purposes. 
 
 * Automatic Evaluation; BLEU, 2001, still used in most evals,; chrF, most recent work moving towards this. 
 
 ### BLEU
 
-Has a machine hypo for the traslation
+Has a machine hypo for the translation
 
 example shows two possible human translation
 
@@ -2589,19 +2591,19 @@ clearly flawed but good start
 
 Why are we just thinking about precision
 
-Why not recall (recal and prec)?
+Why not recall (recall and precision)?
 
-**ask gemini to explain this and refesh the definitions**
+**ask gemini to explain this and refresh the definitions**
 
-propsoal of bleu, don't think about recall as couldnt expect to get high recall. there are many ways to translate, cant ness expect to get the exact ref translation. but want ot know that the words prediict are correct
+proposal of bleu, don't think about recall as couldn't expect to get high recall. there are many ways to translate, cant ness expect to get the exact ref translation. but want ot know that the words predicate are correct
 
-flaw only consdiering unigrams (get to this in a min)
+flaw only considering unigrams (get to this in a min)
 
-probs with prec, easy to get good prec without getting anything meaningful, gmaing the eval metric
+probs with prec, easy to get good prec without getting anything meaningful, gaming the eval metric
 
 i.e machine pred; "the the the the", the always occurs to prec will be maxed out
 
-### Modified Preciison 
+### Modified Precision 
 
 For each word in the machine translation, take the maximum
 
@@ -2615,25 +2617,26 @@ would turn "the the the the the" from 5/5 to maybe 1 or 2 / 5
 
 ### BLEU (cont)
 
-compute modified prec ofr uni, bi, tri, quad
+compute modified prec of uni, bi, tri, quad
 
-check if "the weater" exists etc
+check if "the weather" exists etc
 
-combined using geometric mena (?)
+combined using geometric mean (?)
 
 penality for trans with are too short
 
-good eval of increm changes to same general archicecture; related to Papineni 2002 paper (this week)
+good eval of increment changes to same general architecture; related to Papineni 2002 paper (this week)
+* doesn't require human eval, takes time
 
 ### chrF
 
-charscter based F score (popovic 2015)
+character based F score (popovic 2015)
 
 char based rather than word based
 
-overcomes problems with different tokenization standards; important when trans between languages with different tokenization patterns; diff tokenizers or diff langes
+overcomes problems with different tokenization standards; important when trans between languages with different tokenization patterns; diff tokenizers or diff languages
 
-think about why bleu was proposed; didnt use recall as hypo couldn't full match human; but if we concen that human can be diff from hypo, even if hypo if true, then this is true for all hypos, so the issue is normalized; we want to compare diff hypos and systmes against human references, the lower recall bias doesn't really matter for compareisons, the actual score won't be fully correct but robust for comparison.
+think about why bleu was proposed; didn't use recall as hypo couldn't full match human; but if we concern that human can be diff from hypo, even if hypo if true, then this is true for all hypos, so the issue is normalized; we want to compare diff hypos and systems against human references, the lower recall bias doesn't really matter for comparisons, the actual score won't be fully correct but robust for comparison.
 
 work out char based prec and recall: 
 
@@ -2647,7 +2650,7 @@ could be f1, but actually use a param beta, allows us to give more weight to one
 
 i.e. twice as much weight to precision or recall.
 
-**apprently giving beta to P gives more weight to R, why is this**
+**apparently giving beta to P gives more weight to R, why is this**
 
 [INSERT FORMULA HERE]
 
@@ -2657,9 +2660,9 @@ i.e. twice as much weight to precision or recall.
 
 ### Classical MT: Vauquios Triangle
 
-Pre-19990s systens were rule-based; direct translation, transfer-based, interlingua based. 
+Pre-19990s systems were rule-based; direct translation, transfer-based, interlingua based. 
 
-Generally a word for word translation, sometimes with reordering. Sometimes with analysis, or even transfor,ing into a intermedi interlingua. 
+Generally a word for word translation, sometimes with reordering. Sometimes with analysis, or even transforming into an intermediate interlingua. 
 
 ### Statistical Machine Translation
 
@@ -2677,15 +2680,15 @@ corpora: sents in ref coupled target language, used for training, supervised.
 
 source lang F, trans late to target lang E
 
-consider there is a noisey channel that took the target and formed it into the source
+consider there is a noisy channel that took the target and formed it into the source
 
 almost a backward approach
 
 mostly likely target to have generated the source
 
-e_hat (sequence of tatget) = argmax P(source|target) * P(target)
+e_hat (sequence of target) = argmax P(source|target) * P(target)
 
-P(source|target) = capture model faithfullness (info)
+P(source|target) = capture model faithfulness (info)
 
 P(target) captures model fluency
 
@@ -2697,9 +2700,9 @@ The underlying model assigns probs to sequences
 
 It should learn, or derive, that the uncommon, or irregular, sentences have a lower probability then common ones.
 
-Can be obtained from any monolinguial corpus. Don't need to know anything info about naohter language
+Can be obtained from any monolinguial corpus. Don't need to know anything info about another language
 
-Most sytems used an n-gram language model 
+Most systems used an n-gram language model 
 
 ### P(F|E): faithfulness
 
@@ -2707,19 +2710,19 @@ Probability of source give the target
 
 Simplest models are based on word alignment 
 
-mappening between workds 
+mapping between words 
 
-the simplifiying assu,ption was that each source word comes exactly 1 target work
+the simplifying assumption was that each source word comes exactly 1 target work
 
 the mapping could be 1 to many, many targets align to source
 
-note, this is justa flavour, not used anymore
+note, this is just a flavour, not used anymore
 
 ### Estimating Translation Probs
 
-parrell corpora -> sentence aligned data
+parallel corpora -> sentence aligned data
 
-### Expection Maximuise
+### Expectation Maximise
 
 (not going to go into this much)
 
@@ -2731,7 +2734,7 @@ assign probs (E-step)
 
 estimate param (M-step)
 
-eterate
+iterate
 
 not important to understand details (any more)
 
@@ -2781,9 +2784,9 @@ The feature functions hi are typically
 
 before (word-based) we were framing it as the target generating the source, now we have moved to a discriminative log linear
 
-**what is the different between a generative baysian model and an discriminative log-linear model?**
+**What is the difference between a generative Bayesian model and a discriminative log-linear model?**
 
-**what does inference and training look like?**
+**What does inference and training look like?**
 
 ### Decoding for Phrase-Based Statistical MT
 
@@ -2792,41 +2795,186 @@ relevant for nn models also
 Finding the sentence which maximises translation
 probability is a search problem
 
-we can't possible try every sentence availbe in X lang to find the best fit
+we can't possible try every sentence available in X lang to find the best fit
 
-exhuastic search is in impossible
+exhaustive search is in impossible
 
-need to make optimisations to avoid searhc all combinations
+need to make optimisations to avoid searching all combinations
 
-phase-based translatatio, use table ot limit search space. even then a large space **meaning?**
+phase-based translation, use tables to limit search space. even then a large space **meaning?**
 
 decoders tend to use best-first search
 
-mainaint a priority queue (or stack) with all partital translation hypos and their scores
+maintain a priority queue (or stack) with all partial translation hypos and their scores
 
-upate in iterations and prune queve using beam search. 
+update in iterations and prune queue using beam search. 
 
-bs; at each iteration only kee the k most promising search states and prine high cost states (**meaning?**)
+bs; at each iteration only keep the k most promising search states and prune high cost states (**meaning?**)
 
-### Shorticoming of PBMT
+### Shortcoming of PBMT
 
 battle design choices. 
 
-large phtase trans table become really large
+large phrase trans table become really large
 
-inability to generalise; simiar phases don't share stasitic wweight. they are atomic units, no idea of simialr; 
+inability to generalise; similar phases don't share statistical weight. they are atomic units, no idea of similar; 
+
 
 ---
 
+## PART 3: Neural Machine Translation
 
 
 
+### NMT
 
 
+### Basic Arch of NMT
+
+Encoder-decoder; seq to seq
+
+comprised of 2 rrns/lstm, one to consume, one to generate
+
+squeezed into vector in the midle to decode
+
+RNN1, the encoder, builds a representation of the source
+sentence x = x1 … xn
+
+ℎ = 𝑒𝑛𝑐𝑜𝑑𝑒𝑟(𝑥)
+
+The output from RNN1 (after the complete source
+sentence has been read) is input to RNN2, the decoder to
+generate target sentence
+
+𝑦_i+1 = 𝑑𝑒𝑐𝑜𝑑𝑒𝑟(ℎ, 𝑦_1 … 𝑦i)
+
+[INCLUDE DIAGRAM]
+
+### RNNs
+
+RNNs are very effective at learning language models i.e., P(E) the probability of a sentence in a given language. During training, the error (i.e., difference between output and next word) is backpropagated to update the weights used to combine Xt and ht-1AND the representations of the words (Xt)
+
+
+### LTSM
+
+Simple RNNs struggle with long term dependencies e.g.,
+“He grew up in Spain. He speaks fluent …”
+Spain infleuces word, increase prob, doesn't mandate spanish. lstm should be better than remembering start
+
+LSTMs overcome this problem by having 4 interacting layers in each repeated module.
+
+
+### Encoder-Decoder Details
+
+In most classic "Sequence-to-Sequence" tasks (like Translation or Speech-to-Text), no, you never discard the encoder. You need it for every single sentence you process.
+
+Think of it like a Translator (Encoder) and a Writer (Decoder) working together in a room.
+
+There is one specific scenario where the Encoder is "set aside," and that is Generative Pre-training (like GPT).
+
+GPT-style models are Decoder-only. They don't have an Encoder at all! They are trained to just "continue" a sequence.
+
+BERT-style models are Encoder-only. They are great at "understanding" text, but they are terrible at writing long sentences.
+
+
+### Possible Weakness
+
+Slow training and inference speed
+¡ Ineffectiveness at dealing with rare words
+¡ Output sentences that do not translate all
+words of the input sentence
+¡ Difficulty in translating long sentences since
+the encoder output (or context) needs to
+encode the whole sentence
+§ Information from start of sentence may be lost
+
+
+### Rare Words
+
+- Due to computational constraints, NMT systems usually limited to top 30K-80K of most frequent words in each language
+- Unknown/rare words can be translated using a dictionary or exact copy provided it is known which source word generated UNK token in target.
+- Problem when sentence contains multiple rare words
+- Luong et al. first use a word alignment of parallel corpora and annotate unknown words with positional information (e.g., UNK1); not common anymore
+- Output from NMT can then be post-processed
+
+### Subword Tokenization
+
+- Modern approach
+- Word vocabulary is huge and sparse; problematic, rare words
+- Character vocabulary is small and dense, but lacking in semantic meaning; computation good, but chars don't contain semantic meaning.
+- Subword tokenization provides a compromise between the wwo
+- Frequent words tend to be a token 
+- whereas rare words will be broken down into subwords based on character n-grams
+- Shared vocabulary for source and target languages – makes it easy to copy tokens like names from source to target; lookup table (?)
+- Common algorithms include: BytePiece Encoding (BPE);Wordpiece algorithm (next week); Unigram / SentencePiece algorithm. 
+
+### Long Sentences
+
+Attention (more on this next week) provides a way for the decoder to get information from all of the hidden states of the encoder rather than just the last hidden state. 
+
+The final encoder vector is a bottleneck (by design) but this causes issues
+
+Add attention to RNN. decoder get states from all encoder parts, not just the end. 
+
+### Attention
+
+A sketched of the encoder-decoder network with attention, focusing on the computation of c_i (output vector of the encoder). The context value c_i i sone of the inputs to the computation of h^d_i (element of the deocder).  It is computeted by taking the weighted sum of all the encoder hidden states, each weighted by their dot product with the prior decoder hidden state h^d_i-1
+
+i.e. all previous encoder into c_1, including all of the decoder i-1 previous points
+
+the decoder i-1 mix  (through dot product) with each of the encoder atention weights a_ij, which then go into c_i vector which is passed from encoder to decoder
+
+i.e. wrapping in all information, not relying in the bottle next nector which can loose context (old)
+
+$$\sum a_ij h_^_j = c_i$$
+
+[INSERT DIAGRAM]
+
+int is that at the end the attenion should highlight and keep in frame the most important words
+
+### Google NMT (2016-2020)
+
+Recurrent networks are LSTMs with attention (8 layers - residual connections between layers to encourage gradient flow)
+
+For parallelism, the **attention** from the decoder network connect to top layer of encoder network
+
+Low-precision arithmetic for inference, accelerated using special hardware (Google’s TPU); hardware tricks
+
+Rare words dealt with using **sub-word units** (balancing flexibility of single characters with efficiency of full words)
+
+Beam search techniques includes a length normalization procedure and a coverage penalty to encourage model to translate all of the input.
+
+### Transformers and LLMs in MT
+
+* Transformers generally have higher
+performance than LSTMS and GRUs
+* Generally replacing seq2seq architectures
+* More on this in weeks 7-10; no focus this week, just a bit of info. 
 
 ---
 
 ## Week 6: Seminar
+
+### Lecture Questions
+
+1. 
+
+2. 
+
+3. 
+
+4. 
+
+5. 
+
+cont reps (w2v embs) are able to capture morph, synt and smenatic sim
+
+train on parrell corpora (correct?)
+
+
+
+
+
 
 ## Week 6: Lab Content
 
@@ -2835,6 +2983,12 @@ I won't be publishing solutions this week as this lab forms the basis of the ass
 ## Week 6: Additional Reading
 
 Jurafsky and Martin (2026), Chapter 12 Machine Translation
+
+**READ THIS CHAPTER**
+
+* [Examining Large Pre-Trained Language Models for Machine Translation: What You Don't Know About It](https://arxiv.org/abs/2209.07417)
+
+* [Improving Transformer based Neural Machine Translation with Source-side Morpho-linguistic Features](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9355969&tag=1)
 
 ---
 
