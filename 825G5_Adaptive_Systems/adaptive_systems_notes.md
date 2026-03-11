@@ -6,7 +6,7 @@ TODO: module overview
 
 # Table of Contents
 1. [Week 1 - Introduction](#week-1---introduction)
-2. [Week 2 - ]()
+2. [Week 2 - Systems](#week-2---systems)
 3. [Week 3 - ]()
 4. [Week 4 - ]()
 5. [Week 5 - ]()
@@ -259,13 +259,16 @@ situation or environment is determined by relative rates of change
 <br>
 <br>
 <br>
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # [Week 2 - Systems](https://canvas.sussex.ac.uk/courses/34987/pages/week-2-systems-2?module_item_id=1617677)
 
 In this lecture, we cover some basic systems theory language and concepts. Some of you may already be very familiar with these concepts, and therefore find this a very simple lecture, but that won't be the case for everyone. For this lecture, our main objective is to make sure we all know and can use the same ways of describing systems, in a non-technical way. We will start to look at more technical material on systems in later lectures, in particular in the ones related to Cybernetics.
-
-#### Week 2: Contents
 
 * [Lecture Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=57984111-19fc-4644-b989-b3e80107efb8)
 * [Week 2 Intro Page](https://canvas.sussex.ac.uk/courses/34987/pages/week-2-systems-2?module_item_id=1617677)
@@ -364,13 +367,13 @@ Zooming in on a system; an element in a system is often also a system itself; ex
 
 # [Week 3 - Cybernetics and Negative Feedback Control](https://canvas.sussex.ac.uk/courses/34987/pages/week-3-cybernetics-and-negative-feedback-control?module_item_id=1619230)
 
-Today's lecture is in two parts.Part 1 in an introduction to the historical origins of Cybernetics. Part 2, starts to look more closely at the ideas of circular causality, and negative feedback.
-
-#### Week 3: Contents
+Today's lecture is in two parts. Part 1 in an introduction to the historical origins of Cybernetics. Part 2, starts to look more closely at the ideas of circular causality, and negative feedback.
 
 * [Lecture Recording Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=89d90ed0-dd78-4e4f-99c3-b3ef0107dec0)
 * [Lecture Recording Part 2][https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7255e26-bf02-4d46-9cf9-b3f001039adb]
 * [Cybernetrics Resources](https://canvas.sussex.ac.uk/courses/34987/pages/cybernetics-resources)
+* [3.1 Cybernetics]()
+* [3.2 Negative Feedback]()
 
 ## Weekly Introduction
 
@@ -391,11 +394,6 @@ Whether or not feedback delays are significant in a system can only be determine
 In many situations and systems, stability is seen as desirable, and instability is seen as undesirable or even dangerous. However, positive feedback, which tends to lead to instability, can often be a good thing.
 
 Looking ahead: in the last part of the lecture on positive feedback and chaos, we will spend some time looking at chaotic systems. As we shall see, chaotic behaviour can emerge in systems which have nonlinear feedback, which may be positive at some times and negative at others. We will see that deterministically chaotic systems are not only inherently unstable, but also that - looked at in the right way - may be so unpredictable as to be deterministic and yet effectively random at the same time. 
-
-## Week 3 Lecture Content
-
-* [3.1 Cybernetics]()
-* [3.2 Negative Feedback]()
 
 ## Part 1: Cybernetics
 
@@ -429,6 +427,17 @@ Learning outcomes:
 
 ---
 
+1. [Analogies](#analogies)
+2. [Stable and Unstable Equilibria](#stable-and-unstable-equilibria)
+3. [Cybernetic Loops](#cybernetic-loops)
+4. [Negative Feedback Control](#negative-feedback-control)
+5. [Varying Inital Conditions](#varying-inital-conditions)
+6. [Problems with Delays](#problems-with-delays)
+7. [Stability Without Control](#stability-without-control)
+8. [Week 3, Part 2, Summary](#week-3-part-2-summary)
+
+---
+
 ### Analogies
 
 Metaphors and analogies are similar concepts in the English language. They are both the "bridge-builders" of language. They both help us understand something new by comparing it to something we already know, but they go about it in different ways—one is a poetic shortcut, while the other is a structural blueprint.
@@ -446,7 +455,6 @@ metapors, or analogies; similar concepts in eng lang; analogies more useful in s
 We don't always have the perfect Isomorphism between systems, but a similar model is good enough. Think about biological models and their physical, "toy model" examples. If we want build a good enough physical model, we can conduct experiements on it to say things about the biological thing. Perhaps using a robot in lieu of an animal. 
 
 --- 
-
 
 ### Stable and Unstable Equilibria
 
@@ -484,7 +492,7 @@ Remember, the controller only ever sends the signal to do something if the error
 
 ---
 
-### Varying Inital COnditions
+### Varying Inital Conditions
 
 If we start the parameters from different places, the system shoud still stabilise in the same way. THe very simple feedback control systems above are capable of controlling or regulating a system. But it this is reactive, not self-adaptive. This is because it does not monitor its own performance. This means that if a systems parameters are not set correctly, it may perform badly. Self-adaptive systems need more than one feedback loop and at least 1 to monitor performance. 
 
@@ -525,7 +533,7 @@ An adaptive system is a "system of systems." It features a secondary loop that m
 ---
 
 
-### Summary
+### Week 3, Part 2, Summary
 
 1. Systems with loops in their interconnections have feedback, or  circular causality
 2. Negative feedback tends to lead to stability
@@ -540,6 +548,12 @@ An adaptive system is a "system of systems." It features a secondary loop that m
 
 ---
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 
@@ -548,368 +562,294 @@ An adaptive system is a "system of systems." It features a secondary loop that m
 
 
 
-# week 4
+# [Week 4 - Sensorimotor behaviour](https://canvas.sussex.ac.uk/courses/34987/pages/week-4-sensorimotor-behaviour-2?module_item_id=1620203)
 
-[Lecture Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=acbe3aed-b38f-4d7a-9613-b3f601088a6f)
+These lecture notes explore the intersection of robotics and cybernetics, specifically focusing on sensorimotor agents that interact with their environments through feedback loops. The text highlights Braitenberg Vehicles, which are simple models demonstrating how basic mechanical connections between sensors and motors can create the appearance of complex, goal-directed behavior. It contrasts historical "sense-plan-act" AI models with modern behavior-based robotics, which prioritize immediate environmental interaction over internal mapping. The material also introduces Grey Walter’s tortoises and Rodney Brooks' subsumption architecture to illustrate the transition toward situated and embodied AI. Ultimately, the sources define autonomy as a relational property and emphasize that truly adaptive systems require internal mechanisms to modify their own parameters over time.
 
-[Robotics Resources](https://canvas.sussex.ac.uk/courses/34987/pages/robotics-resources?wrap=1)
 
-[Weekly Page with Reading Content](https://canvas.sussex.ac.uk/courses/34987/pages/week-4-sensorimotor-behaviour-2?module_item_id=1620203)
+* [Lecture Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=acbe3aed-b38f-4d7a-9613-b3f601088a6f)
+* [Robotics Resources](https://canvas.sussex.ac.uk/courses/34987/pages/robotics-resources?wrap=1)
+* [Weekly Page with Reading Content](https://canvas.sussex.ac.uk/courses/34987/pages/week-4-sensorimotor-behaviour-2?module_item_id=1620203)
+* [Braintenberg Pages to read]()
+* [4.1 Braitenbergs Vehicles]()
+* [4.2 Sensorimotor Systems]()
 
-[Braintenberg Pages to read]()
+---
 
-# part 1 - braitenberg vechicles
+## Weekly Introduction
+
+While standard feedback loops are about maintaining a setpoint (like a thermostat), sensorimotor loops are about an agent's actions directly changing its own future perceptions. 
+
+1. [Part 1 - Braitenberg Vechicles](#part-1---braitenberg-vechicles)
+    * [Agents](#agents)
+    * [Braitenberg Vehicles](#braitenberg-vehicles)
+    * [The Vehicles](#the-vehicles)
+    * [Black Box](#black-box)
+    * [Differential Drive](#differential-drive)
+    * [Sensorimotor Coupling](#sensorimotor-coupling)
+    * [Autonomy and Predictability](#autonomy-and-predictability)
+2. [Part 2 - Cybernetics and Sensorimotor Systems](#part-2---cybernetics-and-sensorimotor-systems)
+    * []()
+    * []()
+    * []()
+    * []()
+    * []()
+    * []()
+    * []()
+    * []()
+
+---
+
+## Part 1 - Braitenberg Vechicles
 
 Learning Outcomes/Main Points:
 * The sensorimotor loop: new, diff kind of feedback loop which cant be characterised as pos or neg; living agents,  robots, agents that act in a physical or sim phys world, all obs extranl behaviour is sensiormotor
 * braitenburg becicles: a thought exper with simple sensori motor systems (lab to follow)
 
-# agents
-
-software; angent-based model of complex systems
-
-this lecture focuses on sensorimotor agents
-
-types; artificial, organism, robot; can be similuated or real. model focuses on simulated, real not really practical for module
-
-agents are systems which act in and on their environment
-
-most of the systems in this module are agents
-
-# sensormotor agents 
-
-agents are systems which acts in and on their environment
-
-they are coupled to their env
-
-most simple agent has a sens, controller, motor which enables them to ineracts, and potentially maniplite, their env
-
-# braitenberg
-
-book, Vehicles, describes a series of thought experiements involving mobile agents we might call them animats
-
-doesnt refer to robots at all
-
-# black box
-
-bb arised from electrical engineering
-
-concept, ee studing a system, no idea what happens in bb, measure inputs and output and infer what might have been happening in the box; not ideal approach as you cant scope down into how
-
-# differential drive
-
-braiten veh have differential drives
-
-diff drive robot is aheeel robot where each wheel has its own motor
-
-because it has diff motors they can drive at diff speeds
-
-if same speed then it will go forward
-
-if left more than right, then it will turn right. 
-
-magnute of diff makes turn more sharp
-
-if one wheel not moving then circle. turn on the spot without changing position
-
-# braitenberg vehicles
-
-we connect their motors to light sensors, either directly or through very simple controlers
-
-different types of model behaviour:
-* aggressor; hates light, wants to destroy, this is acheived by setting up the diff drive in a certain way. the left wheel is set up the right sensor, and the right wheel to the left sense. if the light is closer to the left, then the right wheel goes faster, this gives the impress of the robot chasing and going towards the light. it appears aggressive
-* cowards; make the connections direct, left sens, left wheel, etc. this is gives the impression of running away from the light. 
-* lover; insread of having pos connections, the sensors are set to neg; still direct connections, but as it gets closer to the light, it slows down and eveutally stops. it wants to be near the light, hence lover. basking near the light course. 
-
-these are sensorimotor loop robots and even through the connections and rules are very basic, the cumuliative behaviour infer something much more complex. for example, a robot which loves the sun and wants to bath in it. 
-
-braitne imagines how we might percieve these behaviours if the vehcicles were black B and we didn't know the simple rules that govern
-
-these bechicles have no controller, it is just power and sensors. 
-
-this veh would need an amplififer, the snensors signal needs ot be turned into a relevant motor signal
-
-[MAPPING MODEL/env TO DIAGRAM]
-
-# sensorimotor coupleing 
-
-relevant for lab 1
-
-b vehs are couples to envs
-
-we can change (adappt) the nature of that coupling by modifying the systems parameters on the agents side 
-
-[SENSORIMOTOR AGENT PARAMS]
-
-can change that params to inpact y
-
-this is not a self-adaptive sys but can be adpated (by us changing the params)
-
-in lab, get a fully coded controller whereby we can change the params to get new behvaiour
-
-could think of this as a NN 
-
-[INSERT NN esqe picture]
-
-there are inputs which are the sensor receiving light and then there are weights which goern how the network perceives the inouts
-
-in a ff network we can play with these weights to be new haviour
-
-
-if we arrange the light in interested patters, or have them moving, we can mkae bVs have in ways that appear complex
-
-this is making the env more complex
-
-the agent is a product of the env
-
-behaviour is the product of interactions between brains, bodies and envs
-
-the behav of bVs are reflexive or reactive, not adapative, to be adaptive we need a second fedeback loop that monitor performence of the veh and potentially changes the params for the vehs
-
-# autonomy for robotics
-
-automony has various definijtions
-
-but work a working def in robotics (pfierfer and scheirer): 
-
-autonomy mean independance from external control 
-
-autonomy is not an all or nothing issue, but a matter of degree 
-
-"controlability and capaility of acquiring one's own history are correlated: The more an agent can have its own history the less controllable it will be"
-
-this can be itpreted as the agents internal state. this alone can make the agents behav difficult to predict and therefore to control 
-
-controllability and autonomy are set up as opposites
-
-given two agents A B. the less knowledge A has about B's internal state, the less A can control B. 
-
-Autonomy of not a property of an agent but instead a property of relationships between agents
-
-Thus, here autonomy is defined as a relationship between two systems. a property of an agent in a coupled system
 ---
-its easy to predict Bvs when you jnow the state of the agents params
 
-according to P and S, what is the level of autonomy BVs have?
+## Agents
 
-# summary 
+Agents are systems which act in and on their environment. Most of the systems in this module are agents and this lecture in particular focused on Sensorimotor agents.
 
-* We have introduced the sensorimotor loop, another example of circular causality, in the context of the “external” or observable behaviour of robots and living systems such as animals
+A Sensorimotor Agent is an autonomous or semi-autonomous system that is physically coupled to its environment. Its behavior is the emergent result of a continuous, circular loop consisting of three core components:
+* Sensors: The "Input." These take in specific signals from the environment (e.g., light, heat, touch) based on the agent's Umwelt.
+* Controller: The "Logic." This maps the sensory input to a motor command. This can be as simple as a direct wire (Braitenberg) or as complex as a CTRNN.
+* Motors/Actuators: The "Output." These perform an action that changes the agent's physical state (position, orientation).
 
-* We have met Braitenberg’s vehicles, a thought experiment with simple sensorimotor vehicles which can act with surprisingly (apparent) complexity
+The defining characteristic of these agents is that action changes perception. When the motor moves the agent, the sensors receive new data because of that movement. This creates a "closed-loop" system where the environment is an active part of the agent's "thinking" process.
 
-* As with Braitenberg’s vehicles, all sensorimotor behaviour is the product of interactions with the environment – behaviour, and by extension intelligent behaviour, arises from the interactions
-between “brain”, body and environment
+An important charactistic of sensorimotor agents is their embodient. They have a "body" that exists in space. The physical shape of the body (where the sensors are placed) is just as important as the controller. Often an inties perseived intelligence or skills are a direct result of their embodiment, rather than some higher form of intelligence. 
 
-* In preparation for our next lab, we have seen a way to
-parameterise the behaviours of Braitenberg’s simplest vehicles
+Also, sensorimotor agents are situated. They intrinsically depend on their environment to determine thier behaviour, or fitness. Their behavior only makes sense in the context of that environment (e.g., an "Aggressor" vehicle only acts "aggressive" if there is a light to chase). 
 
-# part 2 - cybernetics and sensorimotor systems
-
-learn/main:
-* situation and embodied robotics began in cyberntics
-* grey walter was very successful in this area in the 1950 but his ideas were forgotten for decades
-* in 980s frustion with condtional ai lead to a new cynetrics approach: behaviour based robotics
-* behaviour based robitcs are often note self-adaptive  - but we will see in later lectures they can be made self-adpative if we follow ashbys theory of ultrastable systems
-
-in the following lab we will parameterise sensorimotor systems but in the future we will be writting algorithms which modify the parameters - making the systems self-adpative
-
-# cyb robitics - grey walter
-
-inventor of tortoise vehicles. like Bvs they explore their envs
-
-slightly strange mechanism; two motors; 1 motor for forward, 2 for steering; only have a single light sense on top of head, but turns with wheel (front); 3 wheels, front steering; they have lights on them, it allows them to interact with eachother; have a bump sensor, to tell that bump occured, but no direction; 
-
-basically it follows a light using this rotating column which contains the steering wheel and sensor. 
-
-when it reaches the light, the column just rotaties to keep it there, but the back wheels are still going forward (?). 
-
-their own light allows them to see other bots but also themselves in a mirror, or reflective surface. 
+Most basic sensorimotor agents are reactive (they have a fixed response to a stimulus). They only become adaptive when they have an internal mechanism to change their own mapping/parameters over time. A sensorimotor agent is a system that 'closes the loop' with its environment, meaning its internal state and external actions are inseparable from the physical context it inhabits.
 
 ---
 
-What is the difference between a feedback loop and a sensorimotor loop?
+## Braitenberg Vehicles
 
-This is a nuanced distinction that sits at the heart of Embodied Cognition and Adaptive Systems. While they share the same mathematical structure (like the coffee cup on your slide), the difference lies in agency and loops.
+In his 1984 book, Vehicles: Experiments in Synthetic Psychology, Valentino Braitenberg proposed a series of thought experiments involving simple mobile agents (often called animats).
 
-1. The Standard Feedback Loop (The "Coffee Cup" Model)
-A standard feedback loop is a unidirectional flow of information used to maintain stability. It is typically "passive" or "top-down."
-* Characteristics: The system receives a signal, compares it to a setpoint, and produces an output.
-* The "Passive" Nature: The coffee cup doesn't choose to cool down. The environment (the room) imposes the reference signal on the cup.
-* Example: A thermostat. It measures temperature (Input) and turns on the heater (Output). The thermostat doesn't move around the room to find a warmer spot; it just sits there and reacts to the data it gets.
+The core premise is "Synthetic Psychology": the idea that we can understand complex internal states (like love, fear, or aggression) by building simple systems from the bottom up and observing their behavior.
 
-2. The Sensorimotor Feedback Loop (The "Braitenberg" Model)
-A sensorimotor loop is bidirectional and circular. It implies that the system's actions directly change what it perceives next. In your module, this is often called "Closing the Loop" through the environment.
+Key Principles:
+* The Law of Uphill Analysis and Downhill Invention: It is much easier to invent a simple mechanism that produces complex behavior than it is to analyze a complex behavior and guess the simple mechanism behind it.
+* Minimalist Architecture: These vehicles require no "central processor" or "memory." They consist only of sensors directly connected to motors (sometimes through an amplifier).
+* Behavior as Emergence: Behavior is not "programmed" into the vehicle; it emerges from the interaction between the vehicle's wiring and the environment (the light sources).
 
-* Characteristics: Action and Perception are inseparable. The "Motor" part of the loop moves the "Sensor" part into a new state.
-* The "Active" Nature: The system is an agent. It doesn't just process information; it seeks it.
-* Example: A Braitenberg Vehicle. When the vehicle moves forward (Motor), its sensors move closer to the light source (Sensor). This changes the input, which changes the motor speed, which changes the position again.
+Note, a solution to "Uphill Analysis", whereby researchers need to figure out what weights a robot needs, is "Downhill Invention". This is where Evolutionary Algorithms (EAs) come into play. An EA doesn't "analyze" at all; it just "invents" thousands of random setups and keeps the ones that work.
 
-The Key Distinction: In a standard loop, the environment acts on the system. In a sensorimotor loop, the system acts on the environment to change its own sensory input.
+---
 
-In an Adaptive System, the sensorimotor loop is where the "learning" happens. If a Braitenberg vehicle's motor starts to veer left because of a mechanical glitch, an adaptive sensorimotor loop will notice that the "expected" sensory change (getting closer to the light) isn't happening. It will then adjust its internal gains ($k$) to compensate for the drift.
+## The Vehicles
+
+The vehicles themsevles were very basic. They were comprised of sensors and wheels/motors, one of each side. The sensors transfers the signal of a light source into powering the wheels. The strong the light, the stronger the signal that controlled the motor and the fast the wheel. 
+
+Despite this basic structure, there a number of different ways to set up the vehicle to treat behavior that appears more advanced and emotionally guided:
+
+---
+| Vehicle Type | Connection Style | Signal Type | "Resulting ""Emotion""" |
+| :--- | :--- | :--- | :--- |
+| Vehicle 1 | Single Sensor/Motor | Positive | Active: Moves in the presence of a stimulus. |
+| Vehicle 2a (Coward) | Direct (Left to Left) | Positive | Fear: Turns away from the light and flees. |
+| Vehicle 2b (Aggressor) | Crossed (Left to Right) | Positive | "Aggression: Turns toward the light and ""attacks"" it." |
+| Vehicle 3a (Lover) | Direct (Left to Left) | Inhibitory (Negative) | Love: Slows down as it approaches light; stays near it. |
+| Vehicle 3b (Explorer) | Crossed (Left to Right) | Inhibitory (Negative) | Exploration: Slows down near light but eventually drifts away. |
+
+---
+
+## Black Box
+
+Braitenberg used these vehicles to challenge our perceptions. If you saw a Vehicle 2b (Aggressor) in the wild, you might say, "That robot is angry; it's chasing the light!" However, because we know the "Genotype" (the simple crossed wires), we know there is no "anger" inside. This highlights the Attribution Bias: we tend to over-attribute intelligence and emotion to systems based on their external sensorimotor behavior. This is where the notion of the "black box" comes into play. Without knowing the rules before (black box) it is easy to assume some higher level of intelligence.
+
+---
+
+## Differential Drive
+
+To understand why the wiring (Direct vs. Crossed) creates these "personalities," you have to understand the Differential Drive—the mechanical "body" that the controller is actually moving.
+
+A differential drive is a mobile robot setup with two independent wheels, each with its own motor. It is the most common platform for sensorimotor agents because of its maneuverability.
+
+* Equal Speeds ($V_L = V_R$): The vehicle moves in a straight line.
+* Different Speeds ($V_L \neq V_R$): The vehicle moves along a curved path.
+* Opposite Speeds ($V_L = -V_R$): The vehicle rotates on the spot (Zero-turning radius).
+
+---
+
+## Sensorimotor Coupling
+
+This section will be relevant to lab 1. The Braitenberg Vechicles are coupled to their environments. We can change (adapt) the nature of that coupling by modifiying the systems parameters ion the agents side. 
+
+Note, that this is not a self-adaptive system as it can only acheve the ability to "adpat" by us extrernal changing the parameters that govern behaviour and outcome. 
+
+In the lab we will see a fully coded controller whereby we can change the parameters to get new behaviour.
+
+![Braint Agent and Env Params](./files/week_4/screenshots/bv_parameters.png)
+
+You could frame this model as a Neural Network where the inputs are the sensor reveiving light and there are weights which govern how the network perceived and reacts to the inputs. It is the weights that are the parameters which can be changed (adapted)
+
+![Brait Model NN](./files/week_4/screenshots/bv_neural_net.png)
+
+Furthermore, because the agents is coupled to the environment, if we arrange the lights in interesting patterns, or have them moving, we can make the Vehciles behaviour in even more complex ways. This approach is making the environment more complex but because the agent is a product of the environemnt it passes over. 
+
+Behaviour is a product of the interactions between brains, bodies and environments. 
+
+Again, it should be understood that the behaviour, however compelx, is just reactive, not adaptive. To be adpative we woul dneed a second feedback loop that mintors the performance of the vehicle and potentially change the parameter to be acheive a certain outcome. Above we are just discussing changing the parameters ourselves and observing the different outcomes. 
 
 --- 
 
-the torts represent an early example of situations and emborded intelligent bheaviour in robots
+## Autonomy and Predictability
 
-behaviour is coming from the physical interactions
+In this module, autonomy is not viewed as a "magic" property of being alive. Instead, it is a technical relationship between an agent and its controller (or environment).
 
-it does not come from some compelx controller which tells the robot what to do any tries to maniiplute and use the env in such as way to acheive an outcome
+According to Pfeifer and Scheier, autonomy is not an absolute state (all-or-nothing); it is a matter of degree. Autonomy is the independence from external control. It is a property of the relationship between two systems (e.g., a human designer and a robot). If System A can perfectly predict and command System B, System B has zero autonomy.
 
-this work was from the 50s, when otu of fashion, and then can back in the 80s
+The most important concept is the correlation between Internal State and Controllability: "The more an agent can have its own history, the less controllable it will be."
 
-# situatedness and embodient 
+If a robot is purely reactive (like a Braitenberg Vehicle), its behavior is 100% predictable if you know the environment and the wiring. It has no "memory," so it has no "opinion" on what to do—it just reacts. As soon as you add a "memory" (like a CTRNN's membrane potential or a learning algorithm), the agent’s current action depends on what happened to it in the past. Because the external controller (the human) may not know every tiny detail of the agent's past experiences, the agent becomes less predictable and, therefore, more autonomous. 
 
-all animals and robots are situations and embodied in the sense that htye have body which detemriend how they intereact with the enviromentn 
+These two concepts are set up as opposites:
+* High Controllability: The agent is a "slave" to the input. Input $X$ always results in Output $Y$.
+* High Autonomy: The agent is "situated" in its own history. Input $X$ results in Output $Y$ only if the agent is in Internal State $Z$.
 
-they are situation in the environment 
+If we evaluate Braitenberg Vehicles using the Pfeifer and Scheier definition:
+1. Level of Autonomy: Very Low / Zero.
+2. Why? They lack "Internal State." They do not acquire their own history. Every time they see a light, they perform the exact same mathematical turn.
+3. The "Trap": Even though they look autonomous (because they move on their own), they are actually entirely controlled by the light source and their fixed wiring.
 
-but there is a deeper concept of embodiement:
-* to what extend does an agent take advantage of its situatedness
-* to what extend does the embodiment of the robot affect it behaviour, and is the effect for better or worse?
+"Autonomy is the degree to which an agent's behavior is determined by its own internal state and history, rather than by immediate external triggers or the designer’s commands."
 
-# umwelten
+---
 
-german words
+## Summary 
 
-parts of the env that an agent can sense andf have an effect on
+* Sensorimotor Loop: A bidirectional, circular feedback loop where Action and Perception are inseparable. The agent’s movement directly determines its next sensory input.
+* Synthetic Psychology: The "Downhill Invention" approach—proving that complex behaviors (emotions/intentions) can be created using incredibly simple mechanical rules.
+* Differential Drive: Movement is governed by two independent wheels. Steering is purely a result of the velocity difference between the left and right motors ($V_L$ vs $V_R$).
+* Wiring Personalities: * Direct (L→L): Turns the vehicle away from the stimulus (e.g., "Coward").
+    * Crossed (L→R): Turns the vehicle toward the stimulus (e.g., "Aggressor").
+* The Black Box: A warning against Attribution Bias. External complexity does not guarantee internal complexity; we often over-attribute "intelligence" to simple reactive systems.
+* Autonomy: Defined as independence from external control. Autonomy is a matter of degree. It is directly correlated to Internal State/History—the more an agent remembers its past, the less predictable (and more autonomous) it becomes.
+* Emergence: Intelligence is not "located" in the brain; it is an emergent property of the interaction between the Brain, Body, and Environment.
 
-some species have sense that we don't; sense electric fields; also do have the tools to manipluate them. 
+---
 
-other have less, i.e. tics cannot ear, they don't ignore soumd, they just can't sense it
+## Part 2 - Cybernetics and Sensorimotor Systems
 
-in any given pphysical sense, there may be many umwelten; each species may perseive a different umwelten
+Part 2 shifts from the theoretical "thought experiments" of Braitenberg to the actual history and engineering of Behaviour-Based Robotics. It tracks the rebellion against "Classical AI" and the birth of Situated and Embodied AI.
 
-# ai robotics
+Learning Outcomes:
+* Situational and embodied robotics began in cyberntics
+* Grey walter was very successful in this area in the 1950 but his ideas were forgotten for decades.
+* In 1980s frustion with condtional AI lead to a new cynetrics approach: behaviour based robotics.
+* behaviour based robitcs are often not self-adaptive  - but we will see in later lectures they can be made self-adpative if we follow Ashbys theory of ultrastable systems.
 
-what not to do in the 1980s
+In the following lab we will parameterise sensorimotor systems but in the future we will be writting algorithms which modify the parameters - making the systems self-adpative.
 
-Standford cart example; expensive, often didnt work
+## Cybernetic Foundations: Grey Walter’s Tortoises
 
-Rodney Brooks questioned the interal model of these robots
+In the 1950s, neurophysiologist W. Grey Walter created Machina Speculatrix (nicknamed "Tortoises" like Elmer and Elsie). These were the first true examples of situated and embodied robotics, predating modern AI by decades.
 
-The Grey tortoises were able to drive around easily and naturally
+#### The Mechanical "Body":
+* Three-Wheeled Chassis: A tricycle design where the front wheel provides both steering and drive power.
+* Scanning Sensor: A single light sensor (photo-cell) mounted on a rotating steering column. The "eye" and the "wheel" always point in the same direction.
+* Dual Motors: One motor for forward locomotion and one for steering.
+* Bump Sensor: A simple protective shell that acts as a touch sensor to trigger an "avoidance" reflex.
 
-internal model, nothing in the torts
+The Tortoises demonstrated that complex social interaction does not require a complex brain—only physical rules: 
+* Light Seeking (Phototaxis): The rotating sensor scans until it "sees" light, then the steering locks to drive toward it.
+* The Mirror Test: When a tortoise saw itself in a mirror (or saw the light on another tortoise’s shell), the interaction between its own movement and its light-seeking behavior created a flickering "dance."
+* Self-Recognition?: To an observer, it looked like the robot was "recognizing" itself. In reality, it was just a sensorimotor loop reacting to its own output.
 
-# 4. Behaviour-based Robotics 
+#### Key Principles:
+* Parsimony: Walter proved that very few "neurons" (he used only two vacuum tubes) could produce unpredictable, life-like behavior.
+* Embodiment: The "intelligence" wasn't in a computer program; it was in the physical arrangement of the motors, wheels, and sensors.
+* Social Robotics: By giving the robots a way to sense each other (the shell lights), Walter showed how collective behavior emerges from simple individual rules.
 
-(new style of ai)
+Grey Walter’s tortoises proved that 'situatedness'—being physically present and reactive in an environment—could produce complex, social-looking behaviors without the need for a central processor or an internal map.
 
-RBrooks convined that a new approach to ai was needed
+---
 
-identify that torts were superior to ai at the time (stanford)
+## Situatedness and Embodient 
 
-"of torts didnt need to create plans of envs, what were plans actually good for?"
+In Adaptive Systems, Situatedness and Embodiment are more than just physical descriptions; they are fundamental philosophies of design. At its most basic level, an agent is situated if it exists within a dynamic, real-world environment rather than an abstract simulation or a symbolic database. This means the agent must deal with the "here and now," treating the world as a primary source of information rather than relying on an internal map.
 
-the env is not static, so why a map
+Embodiment takes this a step further by focusing on the agent’s physical presence. It isn't just about having a body, but about how that body’s structure—its weight, the placement of its sensors, and its mechanical constraints—contributes to its behavior. A truly embodied agent exploits its Passive Dynamics, allowing its physical form to do some of the "computational work" for free. For example, the curved shell of a Grey Walter tortoise is an embodied feature that allows it to physically deflect off a wall without needing a complex "obstacle avoidance" algorithm.
 
-feedback delays attack maps and planned
+Ultimately, the depth of an agent's embodiment is measured by how effectively it takes advantage of its situatedness. We must ask whether the agent’s physical form makes its task easier or if the body is merely a passive container for a program. In this view, intelligence is not something "added" to a robot via a complex controller; instead, it is a product of the interaction between a physical body and the immediate context it inhabits.
 
-plans and world models are not reqed for a lot of sensiormotor behaviour
 
-sense-plan-act is the old type of ai (good old fashioned ai (GOFAI)): this is the bad type
+## Umwelten
 
-perception > moddeling > planing > task exc > motor control
+The term Umwelten (coined by biologist Jakob von Uexküll) describes the "self-centered world" or the unique sensory reality of an agent. While multiple agents might exist in the same physical space, each inhabits a different Umwelt based on what their specific sensors can detect and what their bodies can act upon.
 
-serial syystem, bottle neck caused at most comp part of the sys
+In robotics, this concept is crucial because it reminds us that an agent does not interact with "The World" in its entirety; it only interacts with the subset of the world it can perceive. For example, a Braitenberg vehicle with only light sensors is "blind" to sound, temperature, or physical obstacles until it physically collides with them. The wall exists in the physical environment, but it does not exist in the agent's visual Umwelt.
 
-rodney brooks said "the world is its own best model"
-> is it always exactly upto date. the int is that models and plans don't need to be build but instead tools to deal with the current.
-> he said to "sense it appropriately" and "often enough"
+This "sensory bubble" is defined by two factors:
+* The Sensory Limit: What the agent can detect (e.g., a tick is sensitive to the smell of butyric acid and heat, ignoring all visual data).
+* The Functional Limit: What the agent can do (e.g., if a robot cannot move sideways, the "sideways" space is functionally irrelevant to its immediate decision-making).
 
-rb proposal:
+Understanding Umwelten allows designers to simplify robots. Instead of trying to make a robot "see everything," we can give it just the specific sensors needed for its task. As Rodney Brooks famously argued, if you "sense the world appropriately and often enough," you don't need a complex internal model. You simply react to the specific cues that enter your Umwelt.
 
-parraleization: doing things together instead of in order
+"The world is its own best model" (Rodney Brooks) is the antidote to a small Umwelt. If an agent "senses often enough," it doesn't need to remember the wall; it just reacts to it the moment it appears in its Umwelt.
 
-simple stuff (bottom) runs in parelle with more compelx (top) stuff
+## AI Robotics and Behaviour-Based Robotics
 
-sense-act is parallel and fast
+The transition from traditional "Classical AI" to modern Behaviour-Based Robotics (BBR) represents a fundamental shift in how we define artificial intelligence. In the 1970s and 80s, the dominant approach was GOFAI (Good Old Fashioned AI), which relied on a serial processing pipeline known as Sense-Plan-Act. In this model, a robot would take sensory data, build a massive internal 3D model of its world, calculate a logical path through that model, and then execute a small movement. This approach was famously personified by the Stanford Cart, which was so computationally overburdened that it would "think" for fifteen minutes only to move a few feet. These systems were notoriously "brittle"—if a single chair was moved while the robot was planning, the internal model became obsolete, and the robot would inevitably crash into the real-world obstacle.
 
-ditching the central planner allowed robots to be smaller, faster and cheaper. with simle behaviours, no modelling was required, i.e. comutation. 
+In the late 1980s, Rodney Brooks led a rebellion against this slow, top-down logic. He observed that simple biological organisms and even Grey Walter’s 1950s tortoises moved through the world with far more grace than expensive supercomputers. Brooks argued that the "central planner" was a bottleneck and that "the world is its own best model". He proposed that instead of building a map of a room, a robot should simply "sense it appropriately and often enough" to react to it in real-time. Feedback loops made the world maps constructed by complex, computationally heavily proccesses redunant because by the time it had been produced it was already out of date. This led to the birth of Behaviour-Based Robotics, which replaced the serial pipeline with parallelization.
 
-this no modelling aroach remains true in modern alications in many cases
+In this new paradigm, instead of one giant brain, the robot is composed of multiple, simple behavioral layers (like Avoid Objects, Wander, and Explore) that all run at the same time. By ditching the need for complex internal modelling and central planning, robots became faster, cheaper, and significantly more robust. This "bottom-up" approach proved that most sensorimotor tasks don't require abstract thought; they simply require a tight, fast coupling between what the robot senses and how it acts.
 
-# subsumption architecture
+## Subsumption Architecture
 
-intrudiced by RB but not used anymore because it wasn't that flexible
+The Subsumption Architecture was Rodney Brooks’ practical method for implementing behavior-based robotics. It was the "blueprint" that allowed his robots to function without a central brain by organizing simple behaviors into a hierarchy of layers. 
 
-diff level sof behviour in layers that run in parra 
+He realized that the "Sense-Plan-Act" bottleneck was the problem. His Subsumption Architecture allowed robots to be fast and cheap by running layers (like "Avoid Obstacles") in parallel rather than waiting for a central planner.
 
-diagram doesnt show it well but layers can talk and each builds on the layer(s) below them 
+In this architecture, each layer is a self-contained "behavior" (like a mini Braitenberg vehicle) that connects sensors to actuators. Crucially, these layers run in parallel and asynchronously.
+* Lowest Layers: Handle survival-level tasks (e.g., "Avoid Collisions"). They are fast and reactive.
+* Higher Layers: Handle goal-oriented tasks (e.g., "Find the Charging Dock").
+* The "Subsumption" Mechanism: Higher layers can "subsume" (suppress or inhibit) the signals of the lower layers. For example, if the "Explore" layer wants to move forward, but the "Avoid" layer detects a wall, the lower layer overrides the higher one to prevent a crash.
 
-example:
-1. (loest)avoud contract with objects
-2. wander aimlessly without hitting things
-3. explore the word by seeing places in distance that look reachable and heading for them 
-4. build map of env and plan routes
-5. notice changes in "Static" env
-...
+While revolutionary, the Subsumption Architecture had a major limitation: it wasn't scalable. As you add more layers (Layer 10, Layer 11...), the web of "who inhibits whom" becomes a "spaghetti" mess of wires that is almost impossible for a human to hand-design. Also, the priority of the layers is fixed. If you want the robot to prioritize "Finding a Dock" over "Cleaning" only when the battery is low, you have to add even more complex "switch" logic.
 
-note that the lower levels givem themselves to the higher levels
+ubsumption Architecture replaced the central planner with a hierarchy of parallel behavioral layers. While it allowed for fast, robust interaction with the world, its reliance on a fixed, hand-designed hierarchy made it difficult to scale for highly complex tasks.
 
-this way of doing things eventually died out and was replaced by nn
+## Extended Braitneberg Archietcture
 
-was not scalable 
+The Extended Braitenberg Architecture (EBA) is the modern, more flexible evolution of Rodney Brooks’ ideas. If Subsumption is a rigid ladder of command, EBA is a democratic network of modules. It provides a way to build complex controllers that are still reactive and parallel but much easier to tune and scale.
 
-but the underlying principles are still important
-* in sit and embodied ai, model and plans are not normally included unless absoltely ncessary. or at least max out that capability before adding complex stuff
-* many other approaches, such as the extended braitneberg architecture, are module in a similar way to the subs architecture
-* the benfefit of paraell processing is clear in both ai and bio, 
+In the Subsumption Architecture, layers were strictly ranked (Layer 2 always beats Layer 1). EBA breaks this "spaghetti" logic by using weighted combinations. Instead of one layer "killing" another's signal, multiple processes contribute their "opinions" to the motors. These outputs are summed or averaged, allowing the robot to perform smooth, blended behaviors (e.g., veering slightly to avoid a chair while still heading toward a light).
 
-# extended braitneberg archietcture
+An EBA controller is made of several independent processes running in parallel. Each process only listens to the sensors it needs. A "Collision" process listens to bump sensors; a "Target" process listens to light sensors. Each process outputs a value for the motors, which is multiplied by a Weight ($w$). Crucially, the output of these processes can be fed back into the system as if it were a sensor. This allows the robot to have a "memory" of what it just did, creating a primitive form of internal state without needing a giant map.
 
-today nn's dominate AI and robotics
+The EBA is much easier to manage than Subsumption because it is parameterized. You don't have to rewire the whole robot to change its behavior; you just adjust the weights ($w$) of the different processes. Because it uses weights and feedback loops, EBA is a natural bridge to Neural Networks. In fact, many modern robot controllers are essentially EBA-style modules where the "processes" are small NNs.
 
-if you wanted to hand-design a controller, then the extended braintenberg architecture EBA might be a good palce to begin
+The Extended Braitenberg Architecture (EBA) provides a modular and flexible alternative to the rigid hierarchies of the Subsumption Architecture. By using weighted connections to combine parallel behavioral processes, EBA allows for "blended" behaviors and easier scaling. While EBA systems are not inherently self-adaptive, their parameterized nature makes them the perfect candidates for the "Second Feedback Loop"—where an evolutionary algorithm can "tune" the weights to optimize the robot’s performance.
 
-This coul dbe an approach for the coursework, though it is not too highly recommended. 
+If you wanted to hand-design a controller, then the EBA might be a good place to begin. It could be used as an approach for the course but it is not recommended as it isn't itself an adaptive system. Though you could use it as inspiration to develop one. 
 
-EBA has similar benefits to the subssumption arch; modular, simpler behave emelemts that combine to produce more complex behaviours; processes may be run in parallel. 
+## Summary
 
-but EBA is much more flexible 
+* The Roots of Robotics: Situated and embodied robotics originated in Cybernetics, emphasizing physical interaction over abstract logic. Early pioneers like Grey Walter (1950s) demonstrated that simple mechanical rules could produce complex, "social" behaviors.
+* The GOFAI Detour: For decades, AI research shifted toward a computational/symbolic approach (GOFAI). This relied on the serial Sense-Plan-Act pipeline, which proved to be slow, "brittle," and computationally expensive, as seen in the Stanford Cart.
+* The 1980s Revolution: Frustration with the limits of conventional AI led Rodney Brooks to revive cybernetic principles through Behaviour-Based Robotics. This approach replaced central planning with Parallelism, famously asserting that "the world is its own best model."
+* Layered Architectures: * Subsumption Architecture: Organized behaviors into a fixed hierarchy where higher layers override lower ones.
+    * Extended Braitenberg Architecture (EBA): A more flexible, modular alternative that uses weighted combinations of processes to allow for fluid, blended behaviors.
+    * The Autonomy Gap: A critical limitation of all the systems discussed so far is that they are not self-adaptive. They are "hard-wired" by the designer and lack a sense of history or internal state.
+* The Path Forward: True autonomy requires the system to modify its own parameters based on experience. To move beyond mere "reaction," robots need a second feedback loop—such as Evolutionary Algorithms or CTRNNs—to acquire their own history and adapt to changing environments.
 
-in eba there a number of sensi-motor procs running in para
+---
 
-each process connects a subset of the sensors to a subset of the motors
-
-therefore proccesses do not use all of the sensors
-
-there outputs from the process are somehow combined and fed into the motor
-
-the process can be implemented in many ways; coupld be nn, could be large and complex, could be based rules based
-
-connections can be weights to influenc their strengths on the motors
-
-the output of processes goes to the motors, but it can also be fed back round ans inputs alongside the sensors into the processes; as if they were sensors; this could allow the most important processes to overright the less; 
-
-# summary
-
-sit and embod robotics began in cybernetics but at first ai robotics search was more focused on a more computational approach
-
-grey walters work in 50s was successful but forgotten for decades
-
-80s become frustrated with convetional AI led to new cyberntrics-inspired approach: behaviour-based orbitics
-
-None of the system in these slides are self-adaptive. this is sevre limitation. big effect on how flexible and apative the ystems are in termf of their autoonomy. 
-
-automony needs more of a notion of history and state. change the way it behaves based on these. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 

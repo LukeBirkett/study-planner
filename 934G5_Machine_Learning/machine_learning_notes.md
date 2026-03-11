@@ -7,7 +7,7 @@ TODO: module overview
 # Table of Contents
 1. [Week 1 - Introduction](#week-1---introduction)
 2. [Week 2 - Supervised Learning I](#week-2---trees-and-neighbours)
-3. [Week 3 - Supervised Learning II]()
+3. [Week 3 - Supervised Learning II](#week-3---hyperplanes-and-likelihoods))
 4. [Week 4 - Supervised Learning III]()
 5. [Week 5 - Model Validation I]()
 6. [Week 6 - Model Validation II]()
@@ -986,9 +986,9 @@ Because AdaBoost aggressively focuses on misclassified points, the authors noted
 
 #### Week 3: Contents
 
-1. [Mini-Videos](#week-n-mini-videos)
-2. [Lecture Content](#week-n-lecture-content)
-4. [Additional Reading](#week-n-additional-reading)
+1. [Mini-Videos](#week-3-mini-videos)
+2. [Lecture Content](#week-3-lecture-content)
+4. [Additional Reading](#week-3-additional-reading)
 
 <br>
 <br>
@@ -996,8 +996,12 @@ Because AdaBoost aggressively focuses on misclassified points, the authors noted
 
 ## Week 3: Mini-Videos
 
-1. [Support Vector Machines](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cf9bf785-fafe-4bf6-974d-b32300d38c31)
-2. [Probabilistic Models](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b66e5b5-11ae-4747-a39b-b32300ecd1a4)
+**Videos:** || [Support Vector Machines](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cf9bf785-fafe-4bf6-974d-b32300d38c31) || [Probabilistic Models](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b66e5b5-11ae-4747-a39b-b32300ecd1a4) ||
+
+1. [Support Vector Machines](#1-support-vector-machines)
+2. [Probabilistic Models](#2-probabilistic-models)
+    * [Bayes Classifier](#bayes-classifer)
+    * [Logistic Regression](#logistic-regression)
 
 ## 1. Support Vector Machines
 
@@ -1058,14 +1062,14 @@ The objective changes to finding the Lagrange multipliers $\alpha_i$ for each da
 
 <br>
 
-###  2. Probabilistic Models
+### 2. Probabilistic Models
 
 * How ML could be framed in terms of estimation of likelihoods
 * How a bayes classifer works
 * How the logistic regression works
 
 1. [Bayes Classifier](#bayes-classifer)
-2. [Logistic Regression]()
+2. [Logistic Regression](#logistic-regression)
 
 <br>
 
@@ -1213,19 +1217,518 @@ Logistic Regression is essentially a Linear Model passed through a Non-linear Ac
 
 ## Week 3: Lecture Content
 
-* What are the assumptions of the SVM? What if they are not met?
-* How could one use the SVM for multiclass classification? 
+#### 1. What are the assumptions of the SVM? What if they are not met?
+
+The primary assumption of a "Hard Margin" SVM is that the data is perfectly linearly separable. Mathematically, this assumes there exists a weight vector $\mathbf{w}$ and a bias $b$ such that for every training instance $(\mathbf{x}_n, y_n)$, the condition $y_n(\mathbf{w}^T\mathbf{x}_n + b) \geq 1$ holds true. It further assumes that the "optimal" solution is the one that maximizes the geometric margin, defined as $\frac{2}{\|\mathbf{w}\|}$, providing the best generalization by staying as far from both classes as possible.
+
+If these assumptions are not met—for instance, if the data contains noise, outliers, or is inherently non-linear—a Hard Margin SVM will fail to find a solution (the optimization will not converge). To address this, we relax the assumptions using a Soft Margin. We introduce slack variables $\varepsilon_n$, allowing some points to fall within the margin or even on the wrong side of the boundary. We then minimize a trade-off between the margin size and the classification error, controlled by the box constraint $C$:
+
+$$\min_{\mathbf{w}, \varepsilon} \frac{\|\mathbf{w}\|^2}{2} + C \sum_{n=1}^{N} \varepsilon_n \quad \text{subject to } y_n(\mathbf{w}^T\mathbf{x}_n) \geq 1 - \varepsilon_n$$
+
+---
+
+#### 2. How could you use the SVM with non-linearly separable classes?
+
+When classes cannot be separated by a straight line or flat hyperplane, we employ the Kernel Trick. This involves mapping the original input features into a higher-dimensional feature space where a linear separation becomes possible. Instead of explicitly calculating the coordinates in this high-dimensional space (which is computationally expensive), we use a Kernel Function $K(\mathbf{x}_n, \mathbf{x}_m)$. This function computes the inner product of the vectors in the transformed space directly from the original space.
+
+The Dual Lagrangian formulation allows us to substitute the standard dot product with this kernel:
+
+$$g(\beta) = \sum_{n=1}^{N} \beta_n - \frac{1}{2} \sum_{n,m=1}^{N} \beta_n \beta_m y_n y_m K(\mathbf{x}_n, \mathbf{x}_m)$$
+
+Common non-linear kernels include the Polynomial Kernel, $K(\mathbf{x}, \mathbf{z}) = (\mathbf{x}^T\mathbf{z} + r)^d$, and the Radial Basis Function (RBF/Gaussian) Kernel, $K(\mathbf{x}, \mathbf{z}) = \exp(-\gamma \|\mathbf{x} - \mathbf{z}\|^2)$. These allow the SVM to create complex, curved decision boundaries in the original feature space.
+
+---
+
+In a standard approach, if you wanted to move from a 2D space to a 3D space, you would have to apply a transformation function $\phi(x)$ to every single data point in your set. If the new space has thousands of dimensions (or infinite, in the case of some kernels), calculating and storing those new coordinates would crash your computer’s memory. Instead, the Kernel Trick allows us to skip the transformation entirely.
+
+---
+
+##### 1. Optimization based on the "Function of the Data"
+
+As you noted, the optimization is based on the Dual Form of the SVM. In the Dual Form, the only way the data $\mathbf{x}$ appears is in the form of a dot product between pairs of points: $(\mathbf{x}_n \cdot \mathbf{x}_m)$. A dot product is just a single number that represents the similarity between two vectors. The Kernel Trick replaces that simple dot product with a Kernel Function $K(\mathbf{x}_n, \mathbf{x}_m)$: $K(\mathbf{x}_n, \mathbf{x}_m) = \phi(\mathbf{x}_n) \cdot \phi(\mathbf{x}_m)$. The "trick" is that we can calculate the result of the dot product in the high-dimensional space using only the coordinates from the original low-dimensional space. 
+
+---
+
+##### 2. An Intuitive Example: The Polynomial Kernel
+
+Imagine your data is in 2D, and you want to use a degree-2 polynomial kernel.The Manual Way: You would take every point $(x_1, x_2)$ and transform it into $(x_1^2, x_2^2, \sqrt{2}x_1x_2)$. You now have a 3D dataset. You then calculate the dot products in 3D.The Kernel Way: You keep your data in 2D. To find the similarity between two points $\mathbf{x}$ and $\mathbf{z}$ in that imaginary 3D space, you just calculate:$$K(\mathbf{x}, \mathbf{z}) = (\mathbf{x}^T \mathbf{z})^2$$You get the exact same numerical result as the 3D dot product, but you never actually visited the 3D space.
+
+---
+
+##### 3. Summary of Why This Matters
+
+Computation: You save massive amounts of CPU and RAM because you aren't storing high-dimensional coordinates.
+
+Infinite Dimensions: The RBF (Gaussian) Kernel actually represents a dot product in an infinite-dimensional space. It is physically impossible to "convert" the dataset into infinite dimensions, but with the kernel function, we can still calculate the similarity as if we had.
+
+The Boundary: Even though the math happens "as if" we are in a high-dimensional space, when you plot the result back in your original 2D space, the decision boundary looks like a curve or a circle instead of a straight line.
 
 
-What are the assumptions of the SVM? What if they aren't met? 
-(30mins)
-* What are the SVM assumptions?
+---
 
+#### 3. How could one use the SVM for multiclass classification?
 
-How could one use the SVM for multiclass classification? (30mins)
+Because the SVM is inherently a binary classifier designed to separate two classes ($+1$ and $-1$), multiclass problems are solved by decomposing them into multiple binary sub-problems. There are two standard strategies:
+
+* One-vs-All (OvA): We train $K$ separate SVMs (where $K$ is the number of classes). Each model $i$ is trained to distinguish class $i$ from all other classes combined. During inference, the class whose SVM produces the highest confidence score (the largest positive distance from the hyperplane) is chosen.
+* One-vs-One (OvO): We train an SVM for every possible pair of classes, resulting in $\frac{K(K-1)}{2}$ models. For inference, each SVM casts a "vote" for one of the two classes it was trained on, and the class with the most total votes is selected.
+
+---
+
+#### 4. In your own words, how would you define a Naïve Bayes model?
+
+A Naïve Bayes model is a probabilistic classifier based on Bayes' Theorem that predicts the probability of a class $C_k$ given an input vector $\mathbf{x}$. It is "naïve" because it makes the strong independence assumption that the presence of a particular feature in a class is unrelated to the presence of any other feature. This simplifies the complex calculation of the joint likelihood into a product of individual conditional probabilities. Mathematically, it selects the class that maximizes the posterior:
+
+$$\hat{y} = \text{argmax}_{k} \left( P(C_k) \prod_{i=1}^{n} P(x_i | C_k) \right)$$
+
+Despite its simplistic assumptions, it is highly efficient and performs remarkably well for high-dimensional tasks like text classification (spam detection), especially when the "independence" assumption is roughly met or when data is scarce.
+
+---
+
+#### 5. In your own words, how would you define a logistic regression learning algorithm?
+
+Logistic Regression is a discriminative probabilistic model that predicts the likelihood of a binary outcome by passing a linear combination of input features through the Sigmoid function. Unlike Linear Regression, which outputs continuous values, Logistic Regression outputs a probability $P \in [0, 1]$ using the transformation $\sigma(z) = \frac{1}{1 + e^{-z}}$.
+
+The "learning" part of the algorithm involves finding the weights $\mathbf{w}$ that maximize the likelihood of the observed data, typically achieved by minimizing the Binary Cross-Entropy (Log Loss):
+
+$$J(\mathbf{w}) = -\frac{1}{N} \sum_{n=1}^{N} [y_n \log(\hat{y}_n) + (1 - y_n) \log(1 - \hat{y}_n)]$$
+
+Because this loss function is convex but has no closed-form solution, the algorithm uses Gradient Descent to iteratively update the weights until the model accurately separates the classes with a linear decision boundary.
+
+---
 
 ## Week 3: Additional Reading
 
+#### S. Rogers & M. Girolami: A First Course in Machine Learning (2017)
+
+* 5.2 (Support Vector Machines)
+* 5.3.2 (Logistic Regression)
+
+Bridge between Linear and Non-linear. It’s excellent for understanding the transition from the simple linear models of Week 1 to the more robust classifiers of Week 3. It focuses heavily on the probabilistic interpretation of Logistic Regression. If you want to see exactly how we go from a "guess" to a "probability," this is your best bet.
+
+--- 
+
+#### J. Zaki & W. Meira: Data Mining and Machine Learning (2020)
+
+* 18.1–18.2 (Probabilistic Classification)
+* 21 (SVMs)
+* 24 (Multiclass/Ranking)
+
+Good for: Algorithmic Structure and Multiclass. This is more "computer science" oriented. It breaks down the One-vs-All and One-vs-One strategies you noted in your lecture questions very clearly. Section 24 is particularly useful if you are confused about how to apply binary SVMs to datasets with 10+ classes.
+
+--- 
+
+#### 3. C. Cortes & V. Vapnik: Support-vector networks (1995)
+
+The Paper: This is the seminal paper that introduced SVMs to the world. Good for: Historical Context and the "Hard" Math.
+
+Read this only if you want to see the original derivation of the "Soft Margin" (the $\xi$ slack variables). It explains why they chose the hinge loss over other options. It’s a dense but rewarding read for a Master's student.
+
+--- 
+
+#### 4. I. Rish: An empirical study of the Naïve Bayes classifier (2001)
+
+The Paper: A famous study on why Naïve Bayes works even when the "independence assumption" is clearly false. Good for: Theoretical Justification. It explains a paradox: even if features are correlated (violating the "Naïve" part), the decision boundary of the classifier often remains correct. It’s a great piece for a "discussion" section of an essay.
+
+--- 
+
+#### 5. C. Bishop: Pattern Recognition and Machine Learning (2006)
+
+* 2.3 (Gaussian Distribution)
+* 4.3 (Probabilistic Discriminative Models)
+* 7.1 (Maximum Margin Classifiers)
+
+Good for: Visualizing the Loss Surface. Bishop is the "Gold Standard." Section 7.1 has the best diagrams in existence for understanding how the Support Vectors "support" the hyperplane.
+
+---
+
+##### 6. M. Deisenroth et al.: Mathematics for Machine Learning (2021)
+
+* 6.1–6.3 (Probability)
+* 7.1 (Optimization)
+* 12 (SVMs)
+
+Good for: The Primal-Dual Derivation.If you are struggling with the Lagrangian Multipliers ($\beta$ or $\alpha$) in your notes, this book breaks down the optimization steps with extreme clarity.
+
+---
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# [Week 4 - Perceptron](https://canvas.sussex.ac.uk/courses/35245/pages/week-4-neural-networks?module_item_id=1546320)
+
+You'll explore how a function of functions (multilayer perceptron) captures more complex relationships than linear.
+
+#### Week 4: Contents
+
+1. [Mini-Videos](#week-4-mini-videos)
+2. [Lecture Content](#week-4-lecture-content)
+3. [Additional Reading](#week-4-additional-reading)
+
+## Week 4: Mini-Videos
+
+Videos: [Neural Networks (Perceptron and Mutli-Layer)](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e91ad051-70a7-41f7-bc15-b32c010679d7)
+
+This video looks at what a neural network is and how it workds. It is split into two parts: Perceptron and Multi-Layer Perceptron. 
+
+---
+
+### Perceptron Learning Algorithm 
+
+The Perceptron is a fundamental linear binary classifier. The goal of the PLA is to find a weight vector $\mathbf{w}$ that defines a hyperplane capable of separating two linearly separable classes.
+
+##### 1. Initialization
+
+Initialize the weight vector $\mathbf{w}$ (and typically a bias term $b$, often folded into $\mathbf{w}$ as $w_0$ with a corresponding input $x_0=1$). These can be initialized to zero or small random values.
+
+##### 2. Inference (Forward Pass)
+
+For a given data instance $\mathbf{x}_n$, compute the predicted output $\hat{y}_n$ using the sign activation function:
+
+$$\hat{y}_n = \text{sign}(\mathbf{w}^T \mathbf{x}_n)$$
+
+Where the $\text{sign}$ function maps the continuous dot product to a discrete label, typically $\{-1, +1\}$.
+
+##### 3. The Weight Update Rule
+
+The Perceptron uses a specific case of Stochastic Gradient Descent based on the Perceptron Criterion (a variant of Hinge Loss). If a point is correctly classified, the loss is zero. If misclassified, the weights are "nudged" to correct the error.
+
+The update rule is defined as:
+
+$$\mathbf{w}_{new} = \mathbf{w}_{old} - \eta \frac{dL}{d\mathbf{w}}$$
+
+For the Perceptron, this simplifies to:
+
+$$\mathbf{w}_{new} = \mathbf{w}_{old} + \eta (y_n \mathbf{x}_n) \mathbb{I}[\hat{y}_n \neq y_n]$$
+
+Components:
+* Learning Rate ($\eta$ or $\lambda$): Often set to $1$ for the basic Perceptron as it only affects the scale of the weights, not the direction of the final boundary.
+* Indicator Function ($\mathbb{I}$) (turns on or off for correct predictions)
+    $$\mathbb{I}[\hat{y}_n \neq y_n] = \begin{cases} 1 & \text{if } \hat{y}_n \neq y_n \\ 0 & \text{if } \hat{y}_n = y_n \end{cases}$$
+
+The term $+\eta y_n \mathbf{x}_n$ is only applied during a misclassification. If the model predicts negative when the true label $y_n$ is positive, the weight vector is adjusted by adding the feature vector $\mathbf{x}_n$, effectively rotating the hyperplane toward the misclassified point. Conversely, if the prediction is positive when it should be negative, $\mathbf{x}_n$ is subtracted.
+
+##### 4. Iteration and Convergence
+
+Steps 2 and 3 are repeated iteratively for each instance in the dataset (or in random order).
+
+* Convergence: If the data is linearly separable, the PLA is guaranteed to converge to a solution where the loss gradient is zero (no more misclassifications).
+* Non-Separable Data: If the data is not linearly separable, the algorithm will loop infinitely, as it will constantly attempt to "correct" points that cannot be isolated by a single straight line.
+
+---
+
+## Re: Linearly Seperable
+
+Relevant to week on SVW; means that two classes can be discriminated by a hyperplane;  In the original feature space, the hyperplane is always "straight" (flat), but the decision boundary it creates can look "curved" once we project it back from a higher dimension; By definition, a hyperplane is a linear subspace; In 2D, a hyperplane is a straight line; In $D$ dimensions, it is a $(D-1)$ dimensional "flat" object; 
+
+When we say data is "linearly separable," we specifically mean that there exists a linear combination of the features that equals zero, forming a straight cut through the data: $\mathbf{w}^T\mathbf{x} + b = 0$. If your data looks like a circle (points of class A inside, class B outside), no "straight" line in 2D can separate them. This data is not linearly separable in its current form.
+
+However, this is where the Kernel Trick you asked about earlier comes in: We take that "curved" 2D data and project it into a higher dimension (e.g., 3D). In that new 3D space, the data becomes linearly separable. We find a perfectly straight, flat hyperplane to separate them in 3D. When we project that straight 3D cut back down to our original 2D paper, it appears as a curved circle.
+
+* Linear Model: The boundary must be "straight" relative to the features it is given.
+* Non-Linear Model (Kernels): The boundary is still a "straight" hyperplane in the math (the high-dimensional space), but it is a "curved" manifold in the original space.
+
+---
+
+## The Guarantee of Perception
+
+The Perceptron Convergence Theorem provides a mathematical guarantee that if a dataset is linearly separable, the Perceptron Learning Algorithm will converge to a solution in a finite number of steps. However, this guarantee fails when the classes are non-linearly separable, as the model lacks the "capacity" to form non-linear decision boundaries. The classic example of this failure is the XOR (Exclusive OR) problem; because the data points for an XOR gate are distributed such that no single axis-parallel or diagonal hyperplane can isolate the classes, a single-layer perceptron will oscillate indefinitely without reaching a solution.
+
+---
+
+## Mutlilayer Perceptron
+
+The Multilayer Perceptron (MLP) is a feed-forward artificial neural network that extends the single-layer perceptron by adding one or more "hidden" layers between the input and output. This architectural shift allows the model to learn hierarchical representations of data, solving non-linearly separable problems (like XOR) that a single layer cannot.
+
+An MLP is composed of three distinct types of layers:
+* Input Layer: Receives the raw feature vectors $\mathbf{x}$. It performs no computation; it simply passes the values forward.
+* Hidden Layers: The computational engine of the network. Each layer applies a linear transformation followed by a non-linear activation function. By stacking these, the network "warps" the input space into a new manifold.
+* Output Layer: Produces the final prediction $\hat{y}$. The choice of activation here is determined by the task (e.g., Sigmoid for binary classification, Softmax for multi-class, or Linear for regression).
+
+In a standard MLP, layers are Fully Connected (Dense). This means every neuron in layer $L$ provides an input to every neuron in layer $L+1$. Each connection is associated with a specific weight ($w$), and each neuron (except in the input layer) has an associated bias ($b$).
+
+Standard naming conventions can be ambiguous, but in academic contexts:
+* A "3-layer network" typically refers to the number of layers with weights (2 hidden + 1 output).
+* The Width of the network refers to the number of neurons in a hidden layer.
+* The Depth refers to the total number of layers.
+
+The transformation at each hidden unit $j$ can be expressed as:
+
+$$z_j = \sum_{i} w_{ji} a_i + b_j$$
+
+$$a_j = g(z_j)$$
+
+Where $g(\cdot)$ is a non-linear activation function. Without the non-linearity $g$, the entire MLP would mathematically collapse into a single linear transformation, regardless of how many layers are added.
+
+---
+
+## Activation Functions
+
+| Function | Formula | Intuition |
+| :--- | :--- | :--- |
+| Sigmoid | $\sigma(z) = \frac{1}{1 + e^{-z}}$​ | Squashes input to $(0, 1)$. Ideal for binary classification at the output layer but prone to vanishing gradients in deep networks. |
+| Tanh | $\tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}$​ | Squashed to $(-1, 1)$. Being zero-centered often allows for faster convergence during training than Sigmoid. |
+| ReLU | $f(z) = \max(0, z)$ | The Standard. It is computationally efficient and significantly reduces the vanishing gradient problem for positive inputs. |
+| Leaky ReLU | $f(z) = \max(\alpha z, z)$ | A variation of ReLU where $\alpha$ is a small constant (e.g., $0.01$). It ensures neurons stay "alive" by providing a small gradient for negative values. |
+| Softmax | $\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^K e^{z_j}}$​ | Used in the Output Layer for multi-class tasks. It normalizes a vector of scores into a probability distribution that sums to $1$.. |
+
+Output Layer Selection Summary: 
+* **Binary Classification:** Sigmoid
+* **Multi-class Classification:** Softmax
+* **Regression:** Linear (no activation) or ReLU (if the output must be positive).
+
+---
+
+## Gradient Descent for Optimization
+
+Gradient Descent is an iterative optimization algorithm used to minimize a loss function $L(\mathbf{w})$ by updating model parameters (weights) in the direction of the steepest descent.
+
+* Initialization: Start with an initial weight vector $\mathbf{w}_0$ (usually small random values).
+* The Objective: Find $\mathbf{w}$ such that $L(\mathbf{w})$ is at a global (or satisfactory local) minimum.The 
+* General Update Rule: $\mathbf{w}_{t+1} = \mathbf{w}_t - \eta \nabla L(\mathbf{w}_t)$ 
+    * $\eta$ (eta): The Learning Rate, which controls the step size.
+    * $\nabla L(\mathbf{w}_t)$: The Gradient, which is the vector of partial derivatives $\frac{\partial L}{\partial \mathbf{w}}$.
+
+#### Convergence and Stopping Criteria
+
+The process repeats (iterations/epochs) until a stopping criterion is met:
+* Convergence: The difference between updates is negligible ($\|\mathbf{w}_{new} - \mathbf{w}_{old}\| < \epsilon$).
+* Gradient Threshold: The magnitude of the gradient $\nabla L$ is close to zero.
+* Early Stopping: Performance on a separate validation set starts to degrade (loss increases), signaling the start of overfitting.
+
+---
+
+## Stochastic Gradient Descent (SDG)
+
+In standard (Batch) Gradient Descent, the model must perform a forward and backward pass for the entire dataset of $N$ instances before making a single update to the weights ($\mathbf{w}$). This requires $O(N)$ computations per step, which becomes computationally prohibitive as $N$ grows.
+
+#### 1. The SGD Mechanism
+
+Stochastic Gradient Descent (SGD) approximates the true gradient of the entire dataset by using only a single, randomly selected data instance $(x_n, y_n)$ to compute the loss and update the weights at each iteration $t$:
+
+$$\mathbf{w}_{t+1} = \mathbf{w}_t - \eta \nabla L_n(\mathbf{w}_t)$$
+
+Where:
+* $\eta$ is the learning rate.
+* $\nabla L_n(\mathbf{w}_t)$ is the gradient of the loss for only the $n$-th instance.
+
+**Efficiency:** Updates are made $N$ times faster than in Batch GD, allowing the model to begin learning immediately without waiting for the full dataset to be processed.
+
+**Stability:** Because a single data point is a noisy approximation of the true population gradient, the loss does not decrease monotonically. Instead, it "bounces" or fluctuates wildly.
+
+While the instability of SGD might seem like a disadvantage, the inherent "noise" in the updates serves a regularizing purpose. The fluctuations can provide the "energy" needed for the optimization to jump out of shallow local minima or saddle points that might trap a smoother, more stable Batch Gradient Descent. Also, this stochasticity can prevent the model from settling too perfectly into the quirks of the training data, often leading to better performance on unseen data.
+
+---
+
+## Mini-batching
+
+Mini-batching is the industry-standard compromise used in almost all modern Deep Learning frameworks. Instead of using the entire dataset ($N$) or a single instance ($1$), we partition the data into a subset or "batch" $\mathcal{B}$ of size $b$, where $1 < b < N$.
+
+The weight update is calculated by averaging the gradients of all instances within the current mini-batch:
+
+$$\mathbf{w}_{t+1} = \mathbf{w}_t - \eta \frac{1}{|\mathcal{B}|} \sum_{n \in \mathcal{B}} \nabla L_n(\mathbf{w}_t)$$
+
+In optimization, stability refers to the consistency of the gradient direction toward the minimum:
+* The Noise Reduction: By averaging the gradients of 32 or 64 samples, the extreme "outlier" gradients of individual noisy data points are dampened. This results in a smoother, more direct path toward the global minimum compared to the jagged "drunken walk" of pure SGD.
+* Vectorization: From a computational perspective, mini-batches allow us to use Matrix Multiplication on GPUs. Processing a batch of 64 images simultaneously is often nearly as fast as processing one image, making it significantly more efficient than pure SGD.
+
+Small Batches (e.g., 8, 16): More "stochastic" (noisy). This adds a regularization effect that can help the model generalize better, but training may take longer to converge.
+
+Large Batches (e.g., 512, 1024): More "deterministic" (stable). Training is faster per epoch, but the model may get stuck in "sharp" local minima that don't generalize well to unseen data.
+
+---
+
+## Standard MLP Loss functions
+
+The loss function (or cost function) measures the discrepancy between the network's prediction $\hat{y}$ and the true target $y$. The choice of function is strictly dictated by the nature of the output layer and the task at hand.
+
+##### 1. Mean Squared Error (MSE / $L_2$ Loss)
+
+Primary Use: Regression tasks (e.g., predicting a continuous value like temperature or price).
+
+MSE calculates the average of the squares of the errors. Squaring the error ensures that larger deviations are penalized more heavily than smaller ones, and it provides a smooth, differentiable surface for Gradient Descent.
+
+$$L_{MSE} = \frac{1}{N} \sum_{i=1}^N (y_i - \hat{y}_i)^2$$
+
+* $y_i$: The actual ground-truth value.
+* $\hat{y}_i$: The continuous value predicted by the network.
+* Intuition: It treats the error as a geometric distance. It assumes that the noise in the data follows a Gaussian distribution.
+
+##### 2. Categorical Cross-Entropy Loss
+
+Primary Use: Multi-class Classification (usually paired with a Softmax output layer).
+
+Instead of measuring distance, Cross-Entropy measures the "dissimilarity" between two probability distributions: the true distribution (usually a one-hot encoded vector) and the predicted distribution from the network.
+
+$$L_{CE} = -\sum_{k=1}^K y_k \log(\hat{y}_k)$$
+
+* $K$: The total number of classes.
+* $y_k$: The ground-truth probability (1 for the correct class, 0 for others).
+* $\hat{y}_k$: The predicted probability for class $k$.         
+    * Intuition: Because $y_k$ is 0 for all incorrect classes, the formula effectively simplifies to $-\log(\hat{y}_{correct})$. As the predicted probability for the correct class approaches 1, the loss approaches 0. If the probability for the correct class is low, the negative log creates an exponentially large penalty.
+
+---
+
+## Feedforward
+
+The Feedforward process is the initial stage where input data flows through the network’s layers—undergoing successive linear transformations and non-linear activations—to produce a final prediction $\hat{y}$. Because this prediction is a composite function of every weight and bias in the architecture, the resulting loss $L$ is a shared responsibility across the entire network. To perform Gradient Descent, we must solve the Credit Assignment Problem: determining exactly how much each individual weight contributed to the final error. This necessitates a mechanism to "back-distribute" the loss from the output layer through the hidden layers, setting the stage for Backpropagation.
+
+---
+
+## Backpropagation
+
+Backpropagation is the algorithm used to calculate the gradient of the loss function with respect to every weight in a multilayer network. It is an efficient application of the Chain Rule from calculus, allowing the "error signal" computed at the output to be propagated backward through the hidden layers to the very first layer.
+
+##### 1. The Recursive Gradient Calculation
+
+In a Multi-Layer Perceptron (MLP), the loss gradient for a specific weight $w_{ji}$ (the connection between neuron $i$ in a previous layer and neuron $j$ in the current layer) is calculated as:
+
+$$\frac{\partial L}{\partial w_{ji}} = \left( \frac{\partial g(z_j)}{\partial z_j} \sum_{k} \frac{\partial L}{\partial z_k} \cdot w_{kj} \right) \cdot g(z_i)$$
+
+This is commonly simplified using the Delta Rule notation:
+
+$$\frac{\partial L}{\partial w_{ji}} = \delta_j \cdot a_i$$
+
+##### 2. Breakdown of Components
+
+To understand how the "blame" is distributed, we look at the two components of the gradient:
+
+$\delta_j$ (The Local Error): This represents how much the loss changes with respect to the input of neuron $j$. It is a product of the derivative of the activation function at unit $j$, $g'(z_j)$, and the weighted sum of errors flowing back from all units $k$ in the subsequent layer.
+
+$a_i$ (The Activation): This is the output value from the previous layer's neuron $i$. It scales the error; if a neuron was "quiet" (low activation), the weights connected to it will receive a smaller update.
+
+##### 3. The Layer-by-Layer Logic
+
+1. Output Layer: The error is calculated directly by comparing the prediction $\hat{y}$ to the true label $y$ using the chosen loss function.
+2. Hidden Layers: Each hidden layer $J$ calculates its $\delta_j$ based on the $\delta_k$ values from the layer $K$ immediately following it.
+3. Update: Once all $\frac{\partial L}{\partial w}$ are calculated, SGD or Mini-Batch GD is used to subtract these gradients from the current weights, moving the model toward a lower loss.
+
+Note that $\delta_j$ contains the term $\frac{\partial g(z_j)}{\partial z_j}$. If you use a Sigmoid activation, this derivative is very small (max 0.25). As you multiply these small numbers backward through many layers, the gradient "vanishes" to nearly zero, preventing the early layers from learning. This is why ReLU—which has a derivative of 1 for all positive inputs—is the preferred choice for deep hidden layers.
+
+## Computational Graphs
+
+A computational graph is a directed graph where:
+* Nodes: Represent variables (tensors) like inputs $\mathbf{x}$, weights $\mathbf{w}$, biases $b$, or intermediate results $z$.
+* Edges (Operations): Represent mathematical functions (addition, multiplication, activations like ReLU) that transform input nodes into output nodes.
+
+By breaking a complex neural network into a graph of simple operations, the computer doesn't need to know the derivative of the "whole" network. It only needs to know the derivative of each individual node (e.g., the derivative of a multiplication). It then uses the Chain Rule to multiply these simple derivatives together.
+
+## How Backpropagation Works in the Graph
+
+To calculate gradients, the graph is traversed in reverse. Every node in the graph is treated as an "object" that knows its own local derivative.
+
+The Key Methods:
+* `get_parents(node)`: Used during the forward pass to see where data is coming from.
+* `get_children(node)`: Used during the backward pass to see which nodes are "sending" error signals back to this one.
+* `backprop(op_inputs, backprop_to, grad_on_output)`: This is the most important part. Every operation (like matmul or add) has a pre-defined formula for its own derivative.
+    * `grad_on_output`: The error signal coming from the "right" (the layers closer to the output).
+    * `backprop_to`: The specific variable we want the gradient for (e.g., the weights).
+
+##### Example: $z = w \cdot x$
+
+Imagine a single node representing a matrix multiplication ($z = w \cdot x$).
+
+1. Forward Pass: The graph records that $z$ was created by multiplying $w$ and $x$.
+2. Backward Pass: The graph receives a gradient from the next layer: $\frac{\partial L}{\partial z}$.
+3. Local Computation: The matmul operation knows that its local derivative with respect to $w$ is $x$.
+4. Chain Rule: The final gradient for $w$ is simply the incoming gradient multiplied by the local derivative
+
+$$\frac{\partial L}{\partial w} = \frac{\partial L}{\partial z} \cdot \frac{\partial z}{\partial w} = \text{Incoming Gradient} \cdot x$$
+
+## Summary: The Computational Workflow
+
+* Forward Pass: Build the graph and calculate the output $\hat{y}$ and loss $L$.
+* Reverse Pass (Autograd): Starting at the loss node, visit every node in reverse order.
+* Local Gradient: Each node uses its backprop() method to multiply the incoming gradient by its local derivative.
+* Update: Store these gradients in the weight nodes so the optimizer (SGD) can update them.
+
+
+## Learning Rate
+
+The Learning Rate ($\eta$ or $\alpha$) is the most critical hyperparameter in neural network training. It determines the size of the "step" the model takes toward the minimum of the loss function during each update.
+
+Finding the correct learning rate is a balancing act between speed and stability:
+* Large Learning Rate: Training is faster, but the model risks overshooting the minimum. If the steps are too large, the loss may oscillate or even diverge (increase) indefinitely.
+* Small Learning Rate: Training is very stable, but it is extremely slow. The model may also get trapped in "shallow" local minima or plateau on flat regions of the loss surface (saddle points).
+
+However, we rarely use a "fixed" learning rate for the entire training process. Instead, we use a Learning Rate Schedule to start with large steps (to traverse the loss landscape quickly) and finish with small steps (to "settle" precisely into the global minimum).
+
+#### Step Decay
+
+The learning rate is reduced by a factor every few epochs (e.g., cut in half every 10 epochs).
+
+$$\eta_t = \eta_0 \cdot \gamma^{\lfloor \frac{\text{epoch}}{s} \rfloor}$$
+
+$\gamma$: Decay factor (e.g., $0.5$).
+$s$: Step size (how often to drop).
+
+#### Exponential Decay
+
+The learning rate decreases continuously at every iteration. This is smoother than step decay.
+
+$$\eta_t = \eta_0 \cdot e^{-kt}$$
+
+* $k$: Hyperparameter determining the rate of decay.
+* $t$: Iteration or epoch number.
+
+#### $1/t$ Decay (Time-Based)
+
+The learning rate is inversely proportional to the time or iteration. This ensures a very rapid drop initially followed by a very slow, long "tail."
+
+$$\eta_t = \frac{\eta_0}{1 + kt}$$
+
+#### Summary: Why Decay?
+
+As training progresses, the weights $\mathbf{w}$ get closer to the optimal solution. A large learning rate that was helpful at the start might cause the model to "bounce" around the minimum at the end. Decay allows the model to "cool down" and converge to a higher precision.
+
+## Early Stopping: Regularization through Termination
+
+It is important to understand that an MLP has high capacity. If trained for too many epochs, the model will move beyond learning the general patterns (signal) and begin to "memorize" the specific noise and outliers of the training set.
+
+#### 1. The Logic of the Three-Way Split
+
+To implement early stopping, we must divide our data into three distinct sets:
+* Training Set: Used to compute gradients and update weights.
+* Validation Set: Used exclusively to monitor the model's ability to generalize to unseen data during the training process.
+* Test Set: Used only once at the very end to report the final performance.
+
+#### 2. Monitoring the "Generalization Gap"
+
+As training progresses, we track the loss for both the training and validation sets:
+* Phase 1 (Learning): Both training and validation loss decrease. The model is learning useful features.
+* Phase 2 (Overfitting): The training loss continues to decrease (sometimes reaching zero), but the validation loss begins to rise. This "U-shape" in the validation curve indicates that the model is becoming too specific to the training data. The difference between the two losses is known as the Generalization Gap.
+
+3. The Stopping Criterion
+
+Instead of training until the training gradient is zero (mathematical convergence), we stop training at the inflection point—the exact epoch where the validation loss is at its global minimum.
+* In practice, we don't stop the moment the validation loss ticks up once (as it might be a temporary fluctuation). We use a hyperparameter called Patience (e.g., 5 epochs), which tells the algorithm to wait and see if the loss improves before officially terminating.
+* In practice, we don't stop the moment the validation loss ticks up once (as it might be a temporary fluctuation). We use a hyperparameter called Patience (e.g., 5 epochs), which tells the algorithm to wait and see if the loss improves before officially terminating.
+
+## Summary
+
+A MLP is a feed-forward neural network with
+multiple layers.
+
+Loss gradients to be used for SGD optimization per
+hidden layer are obtained through backpropagation
+from the output layer.
+
+The hyperparameters of a MLP are:
+• number of hidden layers and units,
+• activation functions,
+• loss function,
+• mini-batch size,
+• number of gradient descent ‘iterations’ (epochs),
+• learning rate.
+
+## Week 4: Lecture Content
+
+## Week 4: Additional Reading
 
 
 
@@ -1236,24 +1739,16 @@ How could one use the SVM for multiclass classification? (30mins)
 
 
 
-
-
-
-
-
-# [Week N - Introduction]()
+# [Week N - ]()
 
 #### Week N: Contents
 
-1. [Mini-Videos](#week-n-mini-videos)
-2. [Lecture Content](#week-n-lecture-content)
-3. [Lab Content](#week-n-lab-content)
-4. [Additional Reading](#week-n-additional-reading)
+1. [Mini-Videos](#week-3-mini-videos)
+2. [Lecture Content](#week-3-lecture-content)
+3. [Additional Reading](#week-3-additional-reading)
 
-## Week N: Mini-Videos
+## Week 3: Mini-Videos
 
-## Week N: Lecture Content
+## Week 3: Lecture Content
 
-## Week N: Lab Content
-
-## Week N: Additional Reading
+## Week 3: Additional Reading
