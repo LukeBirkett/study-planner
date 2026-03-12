@@ -1730,6 +1730,58 @@ The hyperparameters of a MLP are:
 
 ## Week 4: Additional Reading
 
+### A. Zhang et al.: Dive into Deep Learning (D2L) (2021)
+
+* 3–4 (Basics & MLPs)
+* 5.1–5.3 (Model Selection/Underfitting)
+* 5.5 (Weight Initialization)
+* 6 (GPU computing)
+
+This is a very "code-first" resource. It explains MLPs through the lens of implementation. Section 5.5 is particularly important as it discusses Weight Initialization (how to start your w values so the gradients don't explode or vanish). If you want to understand how to actually build these models in the lab using PyTorch or MXNet, this is the best choice.
+
+---
+
+### [C. Bishop & H. Bishop: Deep Learning: Foundations and Concepts (2024)](https://www.bishopbook.com/)
+* 6 (?) (MLPs and Backprop)
+* 7–8 (Optimization and Regularization).
+
+This is the brand-new update to the classic Bishop text. It is more modern than the 2006 version, covering things like Dropout, Batch Normalization, and modern optimizers (Adam/RMSProp). This is likely the most "up-to-date" theoretical explanation of the concepts you just took notes on (Early Stopping, ReLU, etc.).
+
+---
+
+### I. Goodfellow et al.: Deep Learning (2016)
+
+* 6 (Deep Feedforward Networks)
+* 8 (Optimization for Training Deep Models).
+
+Known as the "Bible of Deep Learning." Chapter 6 is the definitive text on the Universal Approximation Theorem (why MLPs can learn anything). Chapter 8 is a deep dive into the challenges of optimization, such as Saddle Points and Vanishing Gradients. If you want to understand the deep "why" behind SGD and backprop, Goodfellow is the authority.
+
+---
+
+### C. Bishop: Pattern Recognition and Machine Learning (2006)
+
+* 4.1.7 (The Perceptron), 
+* 5.1–5.3 (Feed-forward Network Functions & Network Training)
+
+Historical context for the Perceptron and the formal mathematical derivation of the Chain Rule for backpropagation. Bishop’s derivation of the backprop equations is legendary for its clarity and rigor.
+
+---
+
+### M. Deisenroth et al.: Mathematics for Machine Learning (2021)
+
+* 7.1 (Optimization).
+
+Pure mathematical foundations of Gradient Descent. It doesn't focus on "Neural Networks" specifically, but rather the calculus and linear algebra that makes the updates possible. Recommended for anyone struggling with the Calculus. If the partial derivatives ($\partial L / \partial w$) in your notes feel like "magic," this section will ground them in standard vector calculus.
+
+---
+
+### S. Shalev-Shwartz & S. Ben-David: Understanding Machine Learning (2014)
+
+* 20 (Neural Networks)
+
+This focuses on Computational Complexity. It asks: "How many neurons do we need to represent a certain function?" and "Is it computationally 'Hard' (NP-hard) to find the global minimum?". It approaches NNs from the perspective of learnability and algorithmic complexity.
+
+---
 
 
 
