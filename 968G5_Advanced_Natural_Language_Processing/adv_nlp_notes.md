@@ -2015,71 +2015,35 @@ This week is just classification and labelling. Next week will be transduction a
 
 #### 1. Give examples of balanced and unbalanced class distributions. Why does class balance matter when developing and evaluating sequence classification models?
 
-Macro average if more informative than Micro average. micro average revert to accuracy (how?)
-
-Good to do both and comment on them both.
-
-> The evaluation measure for subtask TC is micro-average F1. Note that as we have converted this into a **single-label task**, micro-average F1 is equivalent to Accuracy (as well as to Precision and to Recall).
+A balanced distribution occurs when each class has roughly the same number of samples (e.g., 50% Spam, 50% Ham), whereas an unbalanced distribution sees one class dominating (e.g., 99% Negative, 1% Positive). Class balance is critical because high accuracy can be misleading; a model could achieve 99% accuracy by simply guessing the majority class every time. In single-label tasks, Micro-average F1 is equivalent to Accuracy because every misclassification is simultaneously a False Positive for one class and a False Negative for another, causing Precision and Recall to equalize. Therefore, Macro-averaging is more informative as it treats all classes equally, forcing the model to perform well on the minority "underdogs" to achieve a high score.
 
 #### 2. Describe 3 different ways in which language models might be used in sequence classification
 
----
-
-* Bayesian Approach
-
-A Bayesian approach means treating probability as a "degree of belief" that gets updated as new evidence comes in.
-
-Classes + sequence. Update the probability of a global class probability using element (feautre) of a sequence. (is the updating fearture the sequence or the elements of the sequence?)
-
----
-
-* Word Embeddings Based Approach
-
-Use work embedding as inputs into a model, or to create a sentence embedding to also use as input into a classifying model. 
-
-If constructing a sequence embedding then need to find the sum/centroid/max (composition) of the word. 
-
-Better approach is to use a network, i.e. a bi-directional RNN or LSTM, to build a representation of the sequence using the work level respresentations as input. Concat the forward and backward RNN representations. (Maybe this is the end-to-end neural approach?)
-
----
-
-* End-to-end Neural Approach
+Language models can be integrated into classification via three primary strategies. The Bayesian Approach (such as Naive Bayes) treats the probability of a class as a "degree of belief" that is updated by the elements of a sequence, essentially calculating which class-specific model is most likely to have generated the observed text. The Word Embedding Approach utilizes compositionality to create a sequence-level representation by calculating the sum or centroid of individual word vectors, which is then passed to a standard classifier. Finally, the End-to-End Neural Approach uses a bi-directional RNN or LSTM to process word-level representations sequentially; by concatenating the forward and backward hidden states, the model builds a rich, order-aware representation of the entire sequence for prediction.
 
 ---
 
 #### 3. Different methods might be used to compose word embeddings? What are the advtanges and disadvantage?
 
-Additive, mutliplicative, pooling to create a single context vector. 
-
-Centriod of the two vectors is still termed as additive composition. Direction still the same as additive, so from a cosine similarity perspective still the same thing. (add = average)
-
-Adding, or averaging, word vectors looses the context of the order of the vectors. Additionally, word vector may not have semantics contextualised depending on how the embeddings were constructed, i.e. co-ocurrence word embeds. 
-
----
+Common methods for composing embeddings include additive, multiplicative, and pooling (Max/Mean) operations to reduce a sequence of vectors into a single document vector. While finding the centroid (averaging) is mathematically identical to addition in terms of cosine similarity (direction), these methods are fundamentally limited by their inability to capture word order or contextual nuance. Because vector addition is commutative, the resulting "context vector" cannot distinguish between different syntactic arrangements of the same words, and if the underlying embeddings were constructed using static methods like GloVe or Word2Vec, the final representation remains "uncontextualized" and blind to polysemy.
 
 ## Part 2: Sequence Labelling
 
 #### 1. Give an example sentence and show how it might be annotated using an IOB encoding for Named Entity Recognition (e.g. PER, ORG, LOC etc)
 
+To identify named entities within a span of text, we use IOB encoding to turn span identification into a sequence labelling task. For the sentence "Apple Inc. is based in Cupertino", the annotation would be: Apple (B-ORG), Inc. (I-ORG), is (O), based (O), in (O), Cupertino (B-LOC). This prefix system allows the model to clearly define the beginning and interior of multi-word entities using only one tag per token.
+
 ---
 
 #### 2. What do understand by each of the following; HMM, MEMM, CRF. 
 
-**Hidden Markov Model:** Bayesian Approach, State Transition Probs, Emissions, MLE underlying probabilites from training corpus. Prob for each (all) states give the previous `n` states. Can be used to generate tag or word sequence.
-
-**Maximum Entrophy Markov Model:** HMM wasn't that good for named entity tagging. Opposite to HMM, models prob of current tag based on previous state and current obs (word).
-
-**Conditional Random Field:** MK have no ability to backtrack. you have to start making state predictions straight away. if a mistake this bubbled through the model. also later context may update earlier preds. CRF models full sequence directly, using a single logistic regression model. slower, more powerful. maths doesn't matter for this module. Often used as a the end of a neural model. 
+A Hidden Markov Model (HMM) is a generative Bayesian approach that models transition and emission probabilities to find the most likely "hidden" tag sequence that produced the observed words. However, because HMMs are limited by local independence assumptions, Maximum Entropy Markov Models (MEMMs) were introduced to model the probability of a tag based on the current observation and previous state; yet, MEMMs suffer from "Label Bias" where mistakes early in the sequence cannot be corrected. Conditional Random Fields (CRFs) solve this by modeling the entire sequence directly with a single global model, allowing later context to influence earlier predictions and ensuring the most likely global "path" of tags is chosen.
 
 ---
 
 #### 3. Describe the typical components in a neural model for sequence labelling. 
 
-Embed, RNN/LSTM/iterative/memory-based model, sequence predictor
-
-Word embeddings from glove to provide contextual info
-
-Char reps to learn word structure. this compliemnet where word embeddings are not strong reps (convolutional model)
+A modern neural model for sequence labelling, such as the Ma and Hovy (2016) architecture, typically consists of three layers. First, it combines word embeddings (like GloVe) for semantic context with character-level representations (often using a CNN) to capture morphological structure and handle low-frequency or unseen words. Second, these inputs are fed into a Bi-directional LSTM to build a context-aware representation of each token from both directions of the sequence. Finally, a CRF sequence predictor is used as the output layer to ensure the predicted labels follow valid structural rules (e.g., an "Inside" tag must follow a "Beginning" tag), optimizing the entire sequence output rather than individual tokens.
 
 ---
 
@@ -2089,70 +2053,106 @@ SemEval-2020 Task 11: Detection of Propaganda Techniques in News Articles
 
 Da San Martino et al. (2020) introduce a competition to detect and classify propaganda techniques in text. When reading this paper, do not be overly concerned with the different systems which took part in the competition. You will learn about the best-performing methods (transformer-based approaches including BERT) in a few weeks time. For now, we will focus on the overall idea of propaganda detection, the two tasks introduced in this paper (span identification and technique classification), the dataset and the evaluation metrics. Once you have read the paper, consider the following questions.
 
+#### Paper Summary
+
+The paper addresses the growing concern over online misinformation by proposing a computational framework to detect propaganda—communication used to influence an audience and further an agenda by using logical fallacies and emotional appeals.
+
+Unlike previous work that classified entire articles as "propaganda or not," this paper focuses on a fine-grained analysis. It argues that propaganda is often embedded within otherwise factual text. Therefore, the goal is to identify the specific spans (text fragments) where propaganda occurs and then categorize which of the 14 specific techniques (e.g., Slogans, Name Calling, Fear) are being used.
+
+#### The Two Subtasks
+* SI (Span Identification): A sequence labelling task. Given a plain-text article, identify the start and end offsets of all propagandistic fragments.
+* TC (Technique Classification): A sequence classification task. Given a specific span of text already identified as propaganda, classify it into one of 14 categories.
+
+#### The Dataset (PTC-SemEval20)
+The authors curated a corpus of news articles from various sources. The annotation process was rigorous, involving professional annotators and a specialized agreement metric ($\gamma$) to handle the difficulty of identifying overlapping and subjective text spans.
+
+---
+
 #### 1. What do you understand by the term propaganda and why might it be important to develop systems which can automatically detect propaganda in text?
 
+Propaganda is a form of communication that aims to influence the attitude of a community toward some cause or position. It often relies on "loaded" language, emotional manipulation, and logical fallacies rather than rational discourse. Developing automated detection systems is vital to combat the spread of disinformation, prevent the manipulation of public opinion on a massive scale (especially in politics), and help users critically evaluate the information they consume online.
 
 ---
 
 #### 2. Why is automatic propaganda detection difficult?
-
+It is difficult because propaganda is often highly contextual and subtle. Unlike sentiment analysis, which might rely on specific "angry" or "happy" words, propaganda can use factual statements arranged in a manipulative way. Furthermore, there is significant subjectivity; what one person considers a "strong argument," another might label as "loaded language." Finally, the class imbalance is extreme—most text in a news article is non-propagandistic, making the spans hard to find.
 
 ---
 
 #### 3. Give examples of 3 different propaganda techniques being used in text. Explain why this is propaganda.
-
+1. Name Calling / Labeling: Labeling an opponent with a derogatory term (e.g., "The radical socialist candidate"). It simplifies a complex person into a negative label.
+2. Appeal to Fear: Warning that a disaster will occur if a certain action isn't taken (e.g., "If we don't pass this law, our streets will be filled with crime"). It bypasses logic by triggering a survival instinct.
+3. Slogans: Using brief, striking phrases that act as emotional triggers (e.g., "Make America Great Again" or "Forward"). They discourage critical thought by providing a pre-packaged conclusion.
 
 ---
 
 #### 4. What textual features might be useful to help a system detect propaganda?
-
+To detect these, a system might look for:
+* Lexical Features: Loaded words, superlatives, and intensifiers.
+* Sentiment/Emotion: High levels of negative or polarizing sentiment.
+* Punctuation/Style: Excessive use of exclamation marks or "scare quotes."
+* Structural Cues: Use of rhetorical questions or repetition.
+* Word Embeddings: Capturing the "flavor" or context in which certain political terms appear.
 
 ---
 
 #### 5. Describe the pipeline proposed by the paper for propaganda identification. Can you think of any alternatives? What advantages / disadvantages are there of each?
+The paper proposes a sequential pipeline: first identify the spans (SI), then classify those spans (TC).
+* Alternative: A Joint Model that performs both tasks simultaneously (e.g., a Bi-LSTM that outputs IOB tags with the technique name integrated, like B-Slogan).
+* Pros/Cons: The sequential approach is simpler to train but suffers from "error propagation" (if the span is wrong, the classification will be too). The joint approach is more complex but allows the model to use the "technique type" to help find the boundaries.
 
 
 ---
 
 #### 6. How was the PTC-SemEval20 corpus collected and annotated? What do you understand by “the γ agreement on the annotated articles is on average 0.6”?
-
+The corpus was collected from news websites known for biased content and annotated by experts. The $\gamma$ (gamma) agreement is a metric specifically designed for tasks where annotators choose the length of a span. A score of 0.6 indicates "moderate to substantial" agreement. In the messy world of propaganda, where people disagree on exactly where a manipulative phrase starts and ends, 0.6 is considered quite high.
 
 ---
 
 #### 7. How do the authors evaluate systems on the span identification task?
+SI is evaluated using a partial match F1-score. Instead of requiring the model to find the exact character-level match, the authors use a formula that gives partial credit for overlaps between the predicted span and the "gold" (human-annotated) span. This accounts for the subjective nature of where a propagandistic phrase begins.
 
 
 ---
 
 #### 8. Micro-average F1 is used to evaluate systems on the technique classification task. The authors state that for a single-label task, this is equivalent to accuracy. Explain
-
+In the TC task, each propaganda span is assigned exactly one label. Because it is a single-label, multi-class task, every mistake counts as one False Positive for the guessed class and one False Negative for the correct class. Mathematically, this causes Precision, Recall, and F1 to converge to the same value: the total number of correct predictions divided by the total number of samples (Accuracy).
 
 ---
 
 #### 9. Outline one method which could be used to carry out span identification.
-
+A common method is Sequence Labelling using BIO encoding. Every word in an article is passed through a Bi-LSTM or CRF layer to be tagged as B-Prop (Beginning of propaganda), I-Prop (Inside), or O (Outside). This transforms the span-finding problem into a token-level classification task.
 
 ---
 
 #### 10. Outline one method which could be used to carry out techniques classification.
+Once a span is identified, it can be treated as a Sequence Classification task. The words in the span are converted into a single vector (via additive composition of embeddings or the hidden state of an RNN), which is then passed to a Softmax classifier to choose one of the 14 techniques.
 
 
 ---
 
 #### 11. Systems were evaluated for span identification on both the development set and the test set. Why do you think the results are not the same on both?
+Results often differ because of overfitting. A model might perform better on the Development set because researchers used that set to tune their hyperparameters (essentially "learning" the quirks of that specific data). The Test set is "blind" and often contains slightly different topics or writing styles, leading to a more realistic (and usually lower) performance score.
 
 
 ---
 
 #### 12. What is the predominant propaganda technique found in the corpus? If a system labelled every propaganda snippet with this label, how would it do? What do you think of the system results for techniques classification (Table 6)?
+If a system labeled every snippet with the predominant technique, Loaded Language, it would achieve a surprisingly high Micro-F1 score (approx. 0.40) simply due to the class imbalance. This score would be misleading, as it represents a total failure to identify the other 13 techniques. This is why researchers look at the results in Table 6 with skepticism; a high Micro-average often masks a model's inability to handle the "Long Tail" of rare but dangerous propaganda techniques like Causal Oversimplification or Straw Men.
+
+In contrast, the Macro-average F1 for such a system would be extremely low (approaching 0.02). Because the Macro-average calculates the F1 score for each of the 14 classes independently before averaging them, the 13 classes that were never predicted would each receive a score of zero, heavily penalizing the final result. In the context of propaganda detection, the Macro score is a superior metric because it prevents a model from "gaming" the evaluation by only learning the most frequent technique (Loaded Language). It forces the system to demonstrate competence across the entire spectrum of propaganda, ensuring that rare but high-stakes techniques—like Appeal to Fear or Red Herrings—are not ignored in favor of the majority class.
+
+In Micro-averaging, you don't calculate scores for each class individually. Instead, you pool all the True Positives (TP), False Positives (FP), and False Negatives (FN) from every class into one big pile and calculate a single F1 score from those totals. This allows the dominant class to take over and muddy score if left unchecked. 
+
+In Macro-averaging, you treat each class as a separate entity, regardless of its size. You calculate the F1 score for Class A, Class B, and Class C independently. Then, you take the simple average: $\frac{F1_A + F1_B + F1_C}{3}$. Every class has a 33.3% weight in the final score. If your model fails completely on a tiny minority class, that "0" is averaged in with the others, dragging the final score down significantly. In the papers example, there are 13 other classes outside of Loaded Language which would provide an equal zero weight. 
 
 ---
 
 ## Week 5: Additional Reading
 
-Jurafsky and Martin Chapter 4: Logistic Regresssion and Text Classificaton.
+* [Jurafsky and Martin Chapter 4: Logistic Regresssion and Text Classificaton.](https://web.stanford.edu/~jurafsky/slp3/4.pdf)
 
-Jurafsky and Martin Chapter 17: Sequence Labelling for Parts of Speech and Named Entities.
+* [Jurafsky and Martin Chapter 17: Sequence Labelling for Parts of Speech and Named Entities.](https://web.stanford.edu/~jurafsky/slp3/17.pdf)
 
 ---
 
