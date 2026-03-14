@@ -20,12 +20,12 @@ The textbook is [Speech and Language Processing](https://web.stanford.edu/~juraf
 # Table of Contents
 1. [Week 1 - Lexical and Distributional Semantics Revisited](#week-1---lexical-and-distributional-semantics-revisited)
 2. [Week 2 - Language Modelling w/ N-grams](#week-2---language-modelling-with-n-grams)
-3. [Week 3 - Neural Networks and Neural Language Modelling]()
+3. [Week 3 - Neural Networks and Neural Language Modelling](#week-3---neural-language-models)
 4. [Week 4 - Word Embeddings]()
-5. [Week 5 - ]()
-6. [Week 6 - ]()
-7. [Week 7 - ]()
-8. [Week 8 - ]()
+5. [Week 5 - Applications in NLP]()
+6. [Week 6 - Machine Translation]()
+7. [Week 7 - Pre-Trained Large Language Models]()
+8. [Week 8 - Transfer Learning with Pre-Train Large Language]()
 9. [Week 9 - ]()
 10. [Week 10 - ]()
 11. [Week 11 - ]()
@@ -158,9 +158,13 @@ The additional readings for this week are based on Vector Semantics:
 <br>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
 
 
-# Week 2 - Language Modelling with n-grams
+# [Week 2 - Language Modelling with n-grams](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-2-language-modelling-with-n-grams?module_item_id=1602169)
 
 This week we will be looking at n-gram language models.  In particular, we will be looking at:
 * why build language models?
@@ -569,7 +573,7 @@ This is similar distributional sematic methods. The construction of the vectors 
 <br>
 
 
-# [Week 3 - Neural Language Models]()
+# [Week 3 - Neural Language Models](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-3-neural-networks-and-neural-language-models)
 
 * Feed Forward Networks
 * Recurrent (RNN)
@@ -577,1316 +581,1095 @@ This is similar distributional sematic methods. The construction of the vectors 
 * Convolutional (CNN)
 * Word-based vs Character Based
 
-#### Week N: Contents
+#### Week 3: Contents
 
-1. [Lecture]()
-2. [Seminar]()
-3. [Lab]()
-4. [Additional Readings]()
+1. [Lecture](#week-4-lecture)
+2. [Seminar](#week-3-seminar)
+2. [Paper](#week-3-paper-discussion)
+4. [Additional Readings](#week-4-additional-reading)
 
 ## Week 3: Lecture
 
-3 parts
+* [Part 1 - Neural Networks](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d1dda4d7-c0c6-4018-b756-b3e500fb35fb)
+* [Part 2 - RNN/LSTM/GRU](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9cae7217-e9c9-4e3f-894b-b3e800b7d5cc&start=0)
+* [Part 3 - CNNs](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=06ed8e74-ae66-4085-8d4d-b3e800be5350&start=0)
 
-* [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d1dda4d7-c0c6-4018-b756-b3e500fb35fb)
-* [Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9cae7217-e9c9-4e3f-894b-b3e800b7d5cc&start=0)
-* [Part 3](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=06ed8e74-ae66-4085-8d4d-b3e800be5350&start=0)
+---
 
+# Part 1 - Neural Networks
 
-[lecture 1]
+While traditional n-gram models rely on discrete counts and the Markov assumption, Neural Language Models (NLMs) represent words in a continuous, high-dimensional vector space. At a high level, the architecture focuses on transforming input tokens into dense embeddings, which are then processed through hidden layers to capture non-linear relationships. By using a Feed-Forward structure, the network learns to predict the next token by projecting the context into a "hidden" space, effectively bypassing the data sparsity issues that plague n-grams. In this module, the focus remains on how these architectures—specifically the Softmax output and Cross-Entropy Loss—allow the model to assign probabilities to sequences in a way that generalizes to unseen data.
 
-archicture looked as high level, details more relevent for other modules
+---
 
-[neural eunit]
+## Neural Unit
 
-y is the output as is each to the activation the unit
+The fundamental building block of the network is the neuron (or unit). It performs two distinct operations: a linear transformation followed by a non-linear activation. 
 
-z is weighted sum of inputs 
+The unit first calculates the weighted sum ($z$) of its inputs. This is represented mathematically as the dot product of the input vector and the weight vector, plus a bias term:
 
-$z - w.x + b$
+$$z = \mathbf{w} \cdot \mathbf{x} + b$$
 
-the vector vector shares the same dimensions as the input vector, which may be 3 i.e. for an rgb image
+The output ($y$) is produced by passing the sum $z$ through a non-linear activation function ($g$ or $\sigma$):
 
-weights of sum of weight/input vecots
+$$y = g(z)$$
 
-summed value goes into an activation function
+This output then serves as the input for the next layer in the network. Without this non-linear step, the entire neural network would collapse into a simple linear regression model, regardless of how many layers are added.
 
-ADD IMAGE OF NEURON
+---
 
-[activation function]
+## Feedforward Network 
 
-introducing non-linearity into the network
+In a Feed-Forward Network (FFN), information flows in one direction: from the input layer, through one or more hidden layers, to the output layer. There are no cycles or loops in this architecture, distinguishing it from the Recurrent Neural Networks (RNNs) we see later in the module.
 
-without wouldn't be able to stack layer to make networks as they would just simpifly to anothe rlinear function that could have more easily been acheived. 
+* Input Layer: Represents the raw data (e.g., word embeddings).
+* Hidden Layers: Where the "learning" happens. These layers extract increasingly abstract features from the input.
+* Output Layer: Produces the final prediction (e.g., the probability of the next word).
+* Fully Connected (Dense): In a standard FFN, every unit in layer $i$ is connected to every unit in layer $i+1$. Each connection has its own weight.
 
-sigmoid, tahn, relu [GET THE FORMMULAS AND A QUICK SUMMARY]
+Each hidden layer $h$ can be represented as a vector calculation. If $\mathbf{x}$ is our input, the first hidden layer is:
+$$\mathbf{h} = g(\mathbf{W}\mathbf{x} + \mathbf{b})$$
 
-[feedforward network]
+For Language Modelling, the output layer typically has a size equal to the entire Vocabulary ($V$). To turn the raw output values (logits) into probabilities that sum to 1, we use the Softmax function:
+$$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{|V|} e^{z_j}}$$
 
-dont just deail with single unit, instead networkds
+This allows us to interpret the output as $P(w_t \mid \text{context})$, where the index with the highest probability is our predicted word.
 
-most simple network is a feedforward networkd with layers
+---
 
-input layers, hidden layers, output layers
+## Training Neural Networks
 
-each layer has a number of units, i..e nodes
+Training is the process of adjusting the network's weights and biases so that its predictions match the "ground truth" labels in the training data. In NLP, this usually means predicting the actual next word in a sentence.
 
-units can vary, no fixed or expected ot numbers
+To improve, the network needs a mathematical measure of how "wrong" its current predictions are. This is the Loss Function ($J$).
 
-outputs of one layers and the inputs to the next
+For language modelling, we use Cross-Entropy Loss (often referred to as Negative Log-Likelihood). If the model predicts a probability $P(w)$ for the correct word, the loss for that single instance is:
 
-layers in an ff have no info of eachother, just take and pass, No cycles
+$$L = -\log P(w)$$
 
-fully connencted if each unit takes an inputs from every unit in the previous layer
+* If the model is confident and correct ($P \approx 1$), the loss is near 0.
+* If the model is wrong or uncertain ($P \approx 0$), the loss becomes very large.
+* The goal of training is to minimize the average loss across the entire training corpus.
 
-units are taking the weighted sum of the inputs and applying an activation function $h = o(Wx+b)$
+Once we have the loss, we use Gradient Descent to update the parameters. This happens in three repeating steps:
+1. Forward Pass: Compute the prediction and the resulting loss.
+2. Backward Pass (Backpropagation): Use the chain rule from calculus to calculate the gradient—the partial derivative of the loss with respect to every weight in the network ($\frac{\partial J}{\partial W}$). This tells us which direction to "nudge" the weights to decrease the loss.
+3. Update: Adjust the weights in the opposite direction of the gradient, scaled by a Learning Rate ($\alpha$): $W = W - \alpha \frac{\partial J}{\partial W}$
 
-each unit learns a different pattern form the inptus and passes this one
+In practice, we don't update the weights after every single word (Stochastic Gradient Descent) because it's noisy and slow. Instead, we use Mini-batch Gradient Descent, where we calculate the average loss for a small group of sentences (e.g., 32 or 64) and perform one update step.
 
-[ADD IMAGE OF FF NET]
+---
 
-output layer tends to use softmax as the act func. against has the weights and units. softmax takes the value at that unit and normalised it against all over units in the output layer. This allows the cumullative sum of the outputs to = 1, wherbey each unit is a %. this allows for probablistic outputs 
+## Feed-Forward Neural Language Model (Bengio et al., 2003)
 
-$$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}$$
+This model treats language modeling as a supervised learning task: predicting the next word $w_t$ given a fixed-length history of $n-1$ words.
 
-ff is how a network runs once how it has been trained. 
+#### Architecture & Process
+1. **Input:** A sequence of words (e.g., a 3-word window: $w_{t-3}, w_{t-2}, w_{t-1}$).
+2. **Projection Layer (Embeddings):** Each word is initially a high-dimensional "one-hot" vector. The model multiplies these by a shared weight matrix $C$ to produce a dense, lower-dimensional embedding vector.
+3. **Concatenation:** These embedding vectors are concatenated into a single large input vector for the hidden layer.
+4. **Hidden Layer:** A standard fully connected layer with a non-linear activation (usually tanh). This layer learns the "contextual interactions" between the input words.
+5. **Output Layer (Softmax):** The final layer has a size equal to the vocabulary ($|V|$). It outputs a probability distribution over all possible next words.
 
-but where to do these weights come from? trianiing
+$$P(w_t | w_{t-1}, \dots, w_{t-n+1})$$
 
-[trinaing neural networds]
+#### Advantages vs. Disadvantages
 
-hard classification task = only once answer per instance/task
+| Feature, | Neural Language Model (NLM) | n-gram Models | 
+| :--- | :--- | :--- | 
+| Generalization | High. Similar words (e.g., "dog" and "cat") have similar embeddings, so the model knows they appear in similar contexts. | Low. Treats words as atomic units; "dog" and "cat" are as different as "dog" and "refrigerator." | 
+| Smoothing | Not needed. The model maps words into a continuous space; there are no "zero counts", only lower probabilities. | Essential. Required to handle unseen word combinations (Laplace, Kneser-Ney). |
+| Context | Can handle slightly longer histories than n-grams (though still fixed). | Becomes exponentially sparse as n increases. |
+| Training Speed | Slow. Backpropagation and softmax over a huge vocabulary are computationally expensive. | Fast. Simple counting and division. | 
 
-i.e. softmax to select most probable class 
+The "Hypothesis Space" Intuition: Unlike n-grams, which look for exact matches, the NLM moves into a "feature space." If the model has seen "The cat sat on the...", it can predict "mat" for "The dog sat on the..." because it recognizes that "cat" and "dog" occupy similar positions in the embedding space.
 
-in order to train we need a loss function. this tells us how good the network is 
+#### The Limitations of the Bengio Model
 
-cross ent or neg log-like loss (simply log prob)
+The primary limitation is the Fixed Window. Even though it's better than an n-gram, it still uses a "Markov-style" assumption where it only looks at the previous $n$ words. It cannot "remember" a subject introduced at the beginning of a long paragraph. In a Feed-Forward network, the input layer size is hard-coded into the weight matrix. You could just make the inital input size very large but as you increase the window size, the number of weights in the first hidden layer explodes. Also, the most subtle but critical issue is that with a concatenated vector, the model treats "Position 1" and "Position 2" as completely different sets of weights. The model may learn structurally that "The" is a common word at $w_t-1$ but it needs to learn this again for all positions. 
 
-input is the hot one encoded vector from the softmax. inportant as it selected the value to sum, i.e. just one equation
+---
 
-INPUT THE LOSS FORMULA
+<br>
+<br>
 
-we want to find the parameters than minimize the loss function
 
-[gradient descent]
+# Part 2 - RNN/LSTM/GRU
 
-randomly init parameters (weights, w)
+## Simple Recurrent Network
 
-use ff to compute predictions 
+While Feed-Forward Neural Networks (FFNNs) offer a significant leap over n-grams through dense embeddings and better generalization, they are fundamentally limited by a fixed-length context window. In natural language, dependencies often span far beyond the previous three or four words. To address this, we transition to Recurrent Neural Networks (RNNs). Unlike FFNNs, which process an entire window of text as a single static input, RNNs process language sequentially. By maintaining an internal "hidden state" that is updated at every time step, these models create a persistent memory of the past, allowing them to handle variable-length inputs and potentially capture long-range dependencies that a fixed window would simply miss.
 
-compute the loss function (J), might be done over a batch
+Key Shifts: 
+* From Fixed to Variable: Moving away from hard-coded window sizes to architectures that can process any number of tokens.
+* From Concatenation to Recurrence: Instead of stacking word vectors side-by-side, we feed the output of the previous step back into the network alongside the current word.
+* The Vanishing Gradient Problem: Identifying why "Vanilla" RNNs struggle with long-term memory and how LSTMs and GRUs use specialized "gates" to protect and maintain information over time.
 
-computer partital derivs of loss functions with respect to parameters, this tells us how much to adject them by. we want to find the global mimum
+## Recurrent Neural Networks (RNN)
 
-back propage, i..e update the parameters
+An RNN is essentially a Feed-Forward network that "loops." At each time step $t$, the network takes two inputs: the current word $x_t$ and its own previous hidden state $h_{t-1}$.
 
-$$W = W - \alpha \frac{dJ}{dW}$$
+#### Advantages
 
-this is how we update the parameters with the derividate. a is our leanring rate, it is the size of the updates we make
+* Sequential Memory: The hidden layer acts as a "summary" or "bottleneck" of the previous context.
+* Variable Length: Unlike the Bengio model, the same weights ($U, V, W$) are used regardless of sentence length.
+* Parameter Sharing: The model learns the meaning of a word once, and that knowledge is applied no matter where the word appears in the sequence.
 
-repeat unitil converages and the loss is acceptabel small
+#### Disadvantages
 
-[feedword - neural language model]
+* The Vanishing Gradient Problem: During backpropagation, the gradient is multiplied by the weight matrix repeatedly. If weights are small, the gradient shrinks to zero, meaning the model "forgets" the start of long sentences.
+* While it can theoretically remember everything, in practice, $h_t$ is heavily biased toward the most recent words.
 
-first proposed by bengio et al 2003
+---
 
-input was some number of previous words representation
+## RNN Language Model (Mikolov et al., 2013)
 
-window could be any size but they started with 3
+Mikolov’s implementation formalized how RNNs could be used for large-scale language modelling. The "memory" is stored in the hidden layer, which serves as a distributed representation of the history.
 
-wt-3, wt-2, wt-1
+To compute the state of an RNN at any time step $t$, we use the following formulas:
 
-predict the next work in seq given the previous 3 words. 
+#### 1. The Hidden Layer ($h_t$)
+The hidden state is a concatenation of the current input and the previous context, passed through a non-linear activation (usually $tanh$ or $sigmoid$):
+$$h_t = \sigma(W x_t + U h_{t-1} + b)$$
+* $W$: Weights for the input-to-hidden connections.
+* $U$: Weights for the hidden-to-hidden (recurrent) connections.
+* $b$: Bias vector.
 
-each words need to have a numerical embedding in terms of the whole vocab. could just be a number but modern approaches are vectors.
+#### 2. The Output Layer ($y_t$)
+The raw output (logits) is calculated from the current hidden state:
+$$a_t = V h_t + c$$
+* $V$: Weights for the hidden-to-output connections.
+* $c$: Output bias.
 
-output is a prob dist over all the possible words
+#### 3. The Probability Distribution ($\hat{y}_t$)
+Finally, we apply Softmax to get the probability of every word in the vocabulary:
+$$\hat{y}_t = \text{softmax}(a_t)$$
 
-input is the rep of previous words
+#### 4. Distributed Representations in RNNs
+One of the coolest things about the Mikolov model is that the matrix $W$ (the input weights) essentially becomes a lookup table for word embeddings. As the model learns to predict the next word, it naturally groups similar words together in the vector space because they lead to similar hidden states.
 
-$$P(w_t = V_{42} | w_{t-3}, w_{t-2}, w_{t-1})$$
+---
 
-42 is the size of the output vector
+## Long Short-Term Memory (LSTM)
 
-INSERT IMAGE
+The core innovation of the LSTM is the Cell State ($C_t$), which acts as a "long-term memory" conveyor belt running through the top of the units. While the standard RNN squashes all information through a single $tanh$ layer, the LSTM uses gates to surgically add or remove information from the cell state.
 
-[adv vs dis]
+Every LSTM unit at time $t$ considers:
+* $x_t$: The current input (the current word embedding).
+* $h_{t-1}$: The short-term memory (hidden state from the previous step).
+* $C_{t-1}$: The long-term memory (cell state from the previous step).
 
-ad: generalise over context of similar words (due to embeds), doesnt need smooth, candle longer histories
+#### The Gating Mechanism
+Each gate uses a Sigmoid ($\sigma$) activation function. Because sigmoid outputs are between 0 and 1, they act as "valves":
+* 0: Close the gate (forget/block everything).
+* 1: Open the gate (keep/pass everything).
 
-why no smooth? not predicting based on the words. the words are combined in the weighted hidden layer to create a single unit several times. move into hypth space, should be similarites
+#### The Forget Gate ($f_t$)
+It looks at $x_t$ and $h_{t-1}$ and decides which bits of the long-term memory ($C_{t-1}$) are no longer relevant.
+* Formula: $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$
+* Example: If the sentence subject changes from singular to plural, the forget gate might "erase" the singular verb constraint.
 
-dis: very slow to train, atlest compared to n-gram. stil based on markov assumps, prob of word given entire context is approximateed based on n previous. still have fixed window idea
+#### The Input Gate ($i_t$) & Candidate State ($\tilde{C}_t$)
+This gate decides what new information to store in the cell state.
+1. The Input Gate ($\sigma$) decides which values to update.
+2. The Candidate State ($tanh$) creates a vector of new potential values to add to the state.
+3. The Update: These are multiplied and then added to the cell state.
+    * Crucial Point: Because we add rather than multiply, the gradient can flow back through time much more easily, solving the vanishing gradient problem.
 
-[where dfo embedds come from]
+#### The Output Gate ($o_t$)
 
-future topic in module. 
+This gate decides what the next Hidden State ($h_t$) should be. It takes the current cell state, runs it through a $tanh$ (to keep values between -1 and 1), and multiplies it by the output gate’s sigmoid filter.
 
-could see embedding layers as another hidden layer. 
+The result $h_t$ is used for the current prediction and passed to the next cell as short-term memory.
 
-could be a one hotting layer based on full vocab
+---
 
-could init as a one hot but then learn the true vector embeddings as part of the backprop process. projectection layer
+## Stacked RNNs (Deep RNNs)
 
-In the context of the language models and neural networks we've been discussing, a projection layer is essentially a specialized fully connected (dense) layer used to change the dimensionality of data—effectively "projecting" it from one vector space to another. In neural language models, this layer is crucial for moving between the vocabulary space and the hidden state space. When you feed a word into a neural network, you start with a "one-hot" vector (a massive vector of zeros with a single 1). The projection layer acts as a lookup table that projects that "one-hot" index into a dense word embedding.
+In a Stacked RNN, the output (hidden state $h_t$) of one RNN layer is not used to predict a word immediately; instead, it becomes the input for the next RNN layer above it.
 
+#### Why Stack?
+* Hierarchical Abstraction: Just as CNNs learn edges before shapes, stacked RNNs learn different levels of linguistic abstraction.
+    * Lower layers tend to capture lower-level syntax (parts of speech, local morphology).
+    * Higher layers tend to capture more abstract semantic concepts and long-range structure.
+* Increased Capacity: Stacking allows the model to learn more complex functions. Most modern systems use at least 2 to 4 layers.
 
-could use pre-trained embeddings that have been learned somewhere else and frozen for inputs into the model (or allow them to be fine tuned)
+--- 
 
+## Bidirectional RNNs (Bi-RNN)
 
+A standard RNN is "causal"—it only knows about the past. However, for many NLP tasks (like Part-of-Speech tagging or Named Entity Recognition), the future context is just as important as the past.
 
+Example: In the sentence "The bank was flooded," you don't know if "bank" is a financial institution or a river bank until you see the word "flooded."
 
+A Bidirectional RNN consists of two independent hidden layers:
+* Forward Pass: Processes the sequence from left to right ($w_1, w_2, \dots, w_n$).
+* Backward Pass: Processes the sequence from right to left ($w_n, w_{n-1}, \dots, w_1$).
 
-# Lecture 2 -  RNNs
+At each time step $t$, the hidden states from both directions are concatenated (joined together) to form the final representation:
+$$h_t = [h_t^{\text{forward}} ; h_t^{\text{backward}}]$$
 
-Prev lecture about ff model as a language model. tries to output a probability distribution over possible next words from an input which is a representation of some number of previous words. 
+Constraint: You cannot use a Bidirectional RNN for generative language modeling (predicting the next word) because the "backward" pass would effectively "cheat" by seeing the word you are trying to predict. They are best for tasks where the entire sentence is available at once.
 
-# Simple Recurrent Network
+---
 
-Hidden layer $h_t$ is based on current instances input but also the recurrent loop whereby the hidden layer takes itself from the previous timestep as an input ht-1
+<br>
+<br>
 
-[insert first simeple rrecurrent net image]
+# Part 3 - CNNs
 
-[insert alt way to visualise]
+In previous sections, we treated words as the "atomic" units of language. However, this creates a massive problem for Out-of-Vocabulary (OOV) words or rare morphological variants (e.g., "unapologetically"). If the model hasn't seen that specific word enough times in training, its embedding will be poor.
 
-# RNN
+Convolutional Neural Networks (CNNs) offer a solution by shifting the focus from words to characters. By using CNNs to "scan" the characters within a word, the model can learn to recognize sub-word patterns like prefixes, suffixes, and stems, allowing it to build a meaningful representation for words it has never seen before.
 
-ADV:
+---
 
-hidden layer from previous timestep provides context and momemry 
+## Convolutions in NLP
+Originally designed for computer vision to detect edges and shapes, CNNs in NLP are used to detect local features in a sequence.
 
-now there is no fixed length on amount of pior context. we are not governed by inputting a fixed window, we can put a much longer window, we can also vary our window length
+#### How it Works
+* Filters (Kernels): A filter is a small matrix of weights that slides over the input. In NLP, the input is usually a matrix of character embeddings.
+* Width of the Filter: Instead of a 2D square (like in images), NLP filters usually have a fixed width equal to the embedding dimension and a variable height (e.g., 2, 3, or 4 characters).
+* A height of 3 is effectively looking for character n-grams (trigrams).
+* Feature Maps: As the filter slides down the word, it performs a mathematical operation (dot product) to produce a "feature map"—a list of scores showing where a specific pattern (like "-ing") was detected.
 
-the weights of U determine how the network should use the past hidden context in calcualting the output for the current input
+#### Max Pooling
+After the convolution, we are left with many scores. We usually only care if a feature was present, not necessarily where it was. Max-over-time pooling takes the single highest value from the feature map. This makes the model position-invariant—it recognizes the "ing" feature regardless of whether it's in the middle or end of the string.
 
+#### Stacking Convolutional Layers
 
-DISAD:
+In a CNN, stacking means feeding the output of one convolutional layer as the input to a second (or third) convolutional layer.
 
-long windows are theoretical, in practice the context held in the hidden tends you become fairly local
+Think of it as a hierarchy of understanding: instead of just looking at the raw characters, the model starts looking at the "features of features."
 
-difficult to cpature long range semantic depds
+---
 
-to work well hiddel layer need to incorporate long and short range deps
+## Kernel Functions 
 
- # Recurrent Neural Network Language Model (Mikolov et al 2013)
+In Natural Language Processing, Kernels (also called Filters) are the actual "detectors" within the convolutional layer. They are the matrices of weights that the network learns during training to identify specific patterns in the character or word sequences.
 
- input and output have dims of the vocab
+A kernel is a small window of weights. In a character-level CNN, the kernel usually has a width that matches the size of the character embeddings and a height that defines the "window size" (the number of characters it looks at simultaneously).
+* Height 2: Looks for bigrams (e.g., "th", "re", "ed").
+* Height 3: Looks for trigrams (e.g., "ing", "pre", "ion").
+* Height 5+: Looks for longer root words or complex morphemes.
 
- starts as one hot vector
+As the kernel slides over the input matrix, it performs a pointwise multiplication between its own weights and the input values, then sums them up to produce a single value.
 
- output is prob dist over words
+$$z = \sum (Weights \times Inputs) + bias$$
 
- word reps are therefore sound in the matrix U through learning
+If the characters in the current window match the pattern the kernel has "learned" to look for, the resulting score will be high. If they don't match, the score will be low or negative.
 
- this is the distributed rep
+Unlike traditional NLP, where we might manually define "suffixes" or "prefixes," a CNN learns these kernels through backpropagation:
+1. Initialization: At the start of training, kernels are filled with random numbers (noise).
+2. Feedback: If the model fails to predict a word because it didn't recognize a plural "-s", the loss function sends a signal back.
+3. Optimization: The weights inside the kernels are adjusted so that, next time, they "fire" more strongly when they see that specific character pattern.
 
- hidden layer is a representation of everything that has happened in previous timesteps (theoretically)
+A single kernel can only detect one specific type of feature. In practical applications like the Kim et al. (2016) paper, the model uses hundreds or even thousands of kernels of varying heights. This allows the model to simultaneously detect a vast array of linguistic features, from simple plurals to complex semantic markers.
 
- trainedf same as NN with back prop to max data log-likilihood
+## Advantages of Character-Aware Neural Language Models
 
- [insert diagram]
+Character-aware models (like the CNN-LSTM architecture) provide a powerful middle ground between purely word-based models and character-only models. By looking "inside" the word, the model gains several key advantages:
 
- # Computation of hidden and output layers 
+#### Sub-word Morphological Awareness:
 
-INSERT ALL FORMULAS FOR THIS MDOEL 
+Traditional models treat "run" and "running" as completely unrelated tokens. A character-aware model, however, recognizes the shared "run" stem.
 
-word embed + resp of pre
+Suffixes/Prefixes: The model learns that "-ing" often denotes a present participle or that "un-" denotes negation.
 
-output prob dist
+Syntactic Clues: Even if the model doesn't know the root of a word, seeing an "-ly" ending allows it to predict that the word is an adverb, which helps constrain the possible grammatical structure of the sentence.
 
-softmax
+#### Superior Handling of Sparse and OOV Data
+Sparsity is the "enemy" of NLP. Character-level features act as a safety net:
+* Low-Frequency Words: If a word appears only twice in a 1-million-word corpus, a word-level model cannot learn a good embedding for it. A character-aware model uses its knowledge of the word's components (derived from more frequent words) to build a reliable representation.
+* Out-of-Vocabulary (OOV): When the model hits a word it has never seen before, it doesn't just return a generic <UNK> token. It "reads" the characters and builds a vector on the fly based on the morphemes it recognizes.
 
-# LSTMs
+#### Robustness to Noise
+Human language is messy, especially on the web.
+* Misspellings: If a user writes "definitly" instead of "definitely," a word-level model fails. A character-CNN will see that 90% of the characters match the pattern for "definitely" and can still produce a nearly identical vector.
+* Slang & Variations: It can handle creative emphasis (e.g., "yesssssss") by recognizing the core "yes" feature within the string.
 
-long short-term memory networks
+#### Parameter Efficiency
+In a standard NLM, the input embedding matrix grows linearly with the vocabulary size ($|V| \times \text{dimension}$). For a 100k word vocabulary, this is massive.
+* In a character-aware model, you only store embeddings for a small set of characters (usually ~100–250).
+* The "knowledge" of words is stored in the CNN kernels, which are much smaller than a massive word-lookup table.
 
-# Unrolling a simple RNN
+---
 
-visualise each time step as a block [INSERT IMAGE]
-
-includes where activation takes place (tahn)
-
-# Unrolling an LSTM
-
-core idea: hidden layer are going to depend on 3 things:
-* current time step inputs
-* activation values from the hidden layer at the previous time stamp (short term mem)
-* activation values from the **cell state** (long term memory)
-
-cell state thing flow that runs along the top
-
-# gates inside neural units
-
-inside the units we have gates which control info flow
-
-it will allow some info through but other info wont
-
-each gate compoised of a activation function and pointwise mutliplicaiton
-
-the sigmoid is controlling how much info goes though the gate to the pointwise mutli
-
-which dimensions should be allowed to go through
-
-given sigmoud shape, values will often be close to 0 or 1, effectly opening or shutting out info 
-
-# forget gate
-
-first gate
-
-input: current inout $x_t$ and current (prev) hidden state  $h_t-1$
-
-given these two values, which go into an sigmoid activation. they decide how much of the current state is allowed to continue on down its path. 
-
-# input gate
-
-second gate
-
-input: current input $x_t$ and current (prev) hidden state  $h_t-1$ (a concatenation of the two vectore)
-
-what of these inputs needs to be remember, i.e. put into long term memory
-
-controled by a sigmoid again $i_t$ bit is only the source of info going inot the pointwise but instead using a tahn action $C_t$. The pointwise then feeds into the long term memory $C_t$
-
-The pointwise mutliplicate, which is the sigmoid outpu ton the info output, is then ADDED into the control flow (not multiplied)
-
-# output 
-
-this is the 3rd gate
-
-what should the output be
-
-how much of the hidden layer are we going to retain
-
-again a sigmoid of input and current hidden 
-
-a pointwise mutli with a tahn applied to the cell state
-
-output determined the new hidden layer state $h_t$
-
-used to detmeine current output, i.e. a new work
-
-but also remebered as the new hdiden layer, i.e. the short term memeory which will be passed onto the next cell block
-
-# stacked rnns
-
-output (at each time step) from RNN block is fed as an input into annother RNN
-
-stacking leds to deep network (deep learning)
-
-different layers tends to capture diff levels of abstraction 
-
-lower shorter term, higher (deeper) longer term 
-
-# bidirectional rnn
-
-take advantage of right context as well as left context
-
-have two rrns 
-
-one trained left to right 
-
-another trained right to left
-
-trained seperately as the inputs are different
-
-but then you concatent (add) the hidden layers to produce the output at each time step 
-
-
-
-
-
-
-
-
-# PART 3: Characters and Convolutions
-
-thinking about now: what should out actual input represenation be
-
-Problem for word-based Natural lang models: sparisty
-
-n-gram, victim of sparsity, Neural as a solution to this, shifts focus to context and embeddings
-
-nlm, ff, neural, overcome to certain extend as generalise using similar words. 
-
-doesnt matter if we havent seen exact word or sentence before
-
-we are not making prediction absed on based words or phases 
-
-but we have weigths which act on the inputs which then comobine together in many different ways to create the ouput
-
-howeve,r this relies on embedding being reliable 
-
-embeds are trained within the network
-
-if the network sees a word a lot it will make a lot more reliable embeddding that cpatures it similarities to words better
-
-less good if it only sees it once or twice. may not move much from init value
-
-embeds for low frew, or 0 freq, are going to be unreliable potnetially
-
-could have an unk token vector which created an unknown vector embed
-
-could nn are expensive we tend to restist the vocab anyway, so this is a good approach 
-
-what else can we do instead of an unk token, i.e. we don't know enough about it?
-
-# character based nlp 
-
-move anyway fro musing a word to using the caracters (leters)
-
-straight away sparsity problems will go away because the possible values are constrained to the alphabet
-
-ideaa
-is to form represents and make predictions about the language and what char should come next
-
-# cnns
-
-cnns very common in vision 
-
-used to detect feature in an image
-
-features can be anywhere in an image 
-
-but presence determeined by neighbouring pixels
-
-can also be used in text by looking at characters around
-
-# convolution s
-
-convo layers look at groups of inputs or neurons in accorsances to window sizes
-
-these windows slide over text in sequences in text to identify serquential trends
-
-kkernel function A is learn which looks for or filters for a particular patter//feature, e.g. 2 character sequence "un", 3 character seq "ing" 
-
-the network will learn these sequences in their windows, we don't outline them first
-
-# stacking convo layers
-
-staicking allows decection of complex features composed from simplier features
-
-# max pool 
-
-as well as the actual convo layers, there are max pooling layers
-
-takes the max of its inputs
-
-doesnt care where a feature is in its inputs, but if the inputs produce a 1, then the max pool extracts just this (easier to exaplin this concept with images)
-
-# kernel functions 
-
-indiv kernel function detect an individual feature in the input
-
-in pacted need hundred or thousands of kernal functoin s
-
-kernal functioins are just nn weights that are learnt by training on a corpus
-
-kernels are learnt per task
-
-# adv of char aweare nlm
-
-allows morphoglical info to be utilied 
-
-this is good for low freq words as we learn the structure of a word
-
-if ends in ing then we know the tyype of word at least for example
-
-know parts of the word to make predictions
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 ## Week 3: Seminar
 
-### 1.In ML, is a loss function the same as an objective function?
+### Part 1 Questions
+
+#### 1. In ML, is a loss function the same as an objective function?
 
 As loss function is a type of objecive function. You minimise a loss function. But you could use a reward function which you wish to maximise. Often used interchangably. 
 
-### 2.Explain how a bigram model of language could be built with a feed-forward neural network?
+---
 
-A network with 2 inputs, the current word and the previous. Each word one hot encoded. 
+#### 2. Explain how a bigram model of language could be built with a feed-forward neural network?
 
+A network with 2 inputs, the current word and the previous. Each word one hot encoded.
 
-3.What is the difference between a one-hot encoding of a word and a word embedding?
+---
 
-4.What will a neural language model typically do with OOV words?
+#### 3. What is the difference between a one-hot encoding of a word and a word embedding?
 
-5.If a combination of words is seen at test time which has not  been seen before, what will happen?
+One-hot encoding: A sparse, high-dimensional vector (size of vocabulary) where only one index is 1 and the rest are 0. It treats words as atomic units with no mathematical relationship (the distance between any two words is identical).
 
+Word embedding: A dense, low-dimensional vector (e.g., 300 dimensions). It captures semantic similarity; words used in similar contexts are placed closer together in the vector space.
 
+---
 
+#### 4. What will a neural language model typically do with OOV words?
 
+Most word-level NLMs map all Out-of-Vocabulary words to a special <UNK> token. During training, the model learns an embedding for <UNK> by replacing rare words in the training set with it. At test time, any unknown word is treated as this generic token. Character-aware models (like Kim et al.) avoid this by building the representation from characters instead.
 
-1.What is an RNN and what advantage(s) does it have over a FF-NN (particularly when applied to language modelling)?
-2.What is an LSTM?
-3.How might 2 RNNs be used in the same network?
-4.What is a CNN?
-5.Why might it  be useful to have character based language models rather than word based language models?
+---
 
+#### 5. If a combination of words is seen at test time which has not  been seen before, what will happen?
 
-Disscusion of Paper: Character aware neural language models (Kim et al. 2016)
+Unlike n-gram models, which would return a zero probability (and infinite perplexity) without smoothing, a Neural LM will still calculate a non-zero probability. This is because the model operates on the similarity of embeddings. If it has seen "eat a burger" and "eat a sandwich," and it encounters the unseen "eat a taco," it uses the fact that "taco" is semantically similar to "burger/sandwich" to make a reasonable prediction.
 
-1. What problem with using n-gram models is addressed by the use of neural language models? Why is it not completely addressed? How might character-aware models help?
+---
 
-2. Why are LSTMs generally preferred over vanilla RNNs in language modelling?
+### Part 2 Questions
 
-3. In a character-level CNN, what is the purpose of a filter or kernel? How many filters do they state are typically used in NLP applications? How many do the authors use in each of their small and large architectures?
+#### 1. What is an RNN and what advantage(s) does it have over a FF-NN (particularly when applied to language modelling)?
 
-4. How is the character-level CNN incorporated into the overall architecture of the RNN-LM?
+An RNN is a network where the hidden state is fed back into itself at the next time step.
+* Advantage 1: It can process variable-length inputs.
+* Advantage 2: It maintains a recurrent memory of the entire prior context rather than being limited to a fixed-size window.
 
-5. How are OOV words handled in these experiments? What potential improvement could the authors have made and why didn’t they do it?
+---
 
-6. Which model(s) performs best in the optimization experiments on the Penn Treebank?
+#### 2. What is an LSTM?
 
-7. Why do the authors expect the performance gains to be more in other languages such as Arabic than in English? Are their expectations met in the experimental results?
+A Long Short-Term Memory network is a specialized RNN designed to solve the vanishing gradient problem. it uses a "cell state" and three gates (forget, input, output) to regulate the flow of information, allowing it to remember dependencies over much longer sequences than a standard RNN.
 
-8. What advantages does the authors’ model have over the MLBL model of Botha and Blunsom (2014)?
+---
 
-9. What observations can you make of the nearest neighbours of ‘richard’ using each of the word representations?
+#### 3. How might 2 RNNs be used in the same network?
 
-10. What are the main conclusions of the paper? Are you convinced?
+Stacked RNNs: One RNN layer sits on top of another; the hidden states of the first act as inputs for the second to learn hierarchical features.
 
+Bidirectional RNNs: Two separate RNNs process the text (one forward, one backward), and their hidden states are concatenated to capture both left and right context.
 
-## Week 3: Lab Content
+---
+
+#### 4. What is a CNN?
+
+A Convolutional Neural Network uses sliding "filters" (kernels) to extract local features from an input (like character n-grams within a word). In NLP, it is often paired with max-pooling to identify the most important features regardless of their position.
+
+---
+
+#### 5. Why might it  be useful to have character based language models rather than word based language models?
+
+Morphological Awareness: They learn sub-word patterns (prefixes/suffixes).
+
+No OOV Problem: They can represent any word as long as it's made of known characters.
+
+Efficiency: They require a much smaller input vocabulary (e.g., 256 characters vs. 100k+ words).
+
+---
+
+# Week 3: Paper Discussion
+
+#### Character aware neural language models (Kim et al. 2016)
+
+The paper "Character-Aware Neural Language Models" (Kim et al., 2016) presents a shift in architecture by moving away from traditional word-level embeddings. Instead, it utilizes a CNN to extract features directly from characters, which are then passed through a Highway Network and into an LSTM for sequence modeling. The primary contribution of the paper is proving that a model can achieve state-of-the-art performance with 60% fewer parameters than word-level models while effectively solving the Out-of-Vocabulary (OOV) problem. It is particularly effective for morphologically rich languages (like Arabic or Russian) because the character-level CNN naturally captures sub-word structures like prefixes and suffixes that word-level models simply treat as distinct, unrelated tokens.
+
+The Pipeline: Characters $\rightarrow$ Convolutional Layer $\rightarrow$ Max-over-time Pooling $\rightarrow$ Highway Network $\rightarrow$ LSTM.
+
+In the context of the Kim et al. (2016) paper, a Highway Network is a specialized type of neural layer that sits between the CNN (which extracts character features) and the LSTM (which handles the sequence). Inspired by LSTMs, Highway Networks use gating mechanisms to control the flow of information. In deep networks, as you add more layers, it becomes harder for the "raw" signal from the input to reach the deeper parts of the model (and harder for gradients to flow back during training). In the character-aware model, the CNN output might be quite "noisy." The Highway Network helps refine this output before it reaches the LSTM.
+
+--- 
+
+#### 1. What problem with using n-gram models is addressed by the use of neural language models? Why is it not completely addressed? How might character-aware models help?
+
+The problem with n-gram models is Sparsity and assigning 0 probability to unseen sequences. Neural language models solve this by generalizing via word embeddings. Similar words share similar context meaning an unknown words meaning can be infer through the context of the sentence in the latent space.  
+
+Basic NN's are not a complete solution because Rare and OOV words still have poor or no embeddings. The following solution to this is character-aware models. They build representations from sub-word units, allowing the model to "guess" meanings of unknown words based on their structure.
+
+---
+
+#### 2. Why are LSTMs generally preferred over vanilla RNNs in language modelling?
+
+Vanilla RNNs suffer from vanishing gradients, making them "forget" long-term dependencies. LSTMs use gates to protect the cell state, allowing them to capture dependencies over much longer distances.
+
+---
+
+#### 3. In a character-level CNN, what is the purpose of a filter or kernel? How many filters do they state are typically used in NLP applications? How many do the authors use in each of their small and large architectures?
+
+* Purpose: To detect character n-grams (features) like "-ing" or "pre-".
+* NLP Typical: Hundreds or thousands.
+* Authors' use: 1,100 filters in the small model; 5,250 in the large model (using widths 1–7).
+
+In the Kim et al. (2016) architecture—and most character-level CNNs used for word representations—the filters are not stacked on top of each other. Instead, they run in parallel. Think of it as a "wide" architecture rather than a "deep" one.
+
+When the authors say they use 1,100 filters, they mean that 1,100 different "detectors" are all looking at the same raw input (the character embeddings of the word) at the same time.
+
+1. Multiple Sizes: They use filters of different heights (widths 1 through 7).
+    * Width 1 filters look at single characters.
+    * Width 3 filters look at trigrams (like "ing").
+    * Width 7 filters look at long sequences (like "ness-ly").
+2. Multiple Features: For each size (e.g., width 3), they don't just have one filter; they have hundreds. One might learn to look for "ing", another for "pre", another for "the", and so on.
+
+Since they aren't stacked, how does the model use all 1,100 outputs? Each filter slides over the word and produces a feature map. Max-pooling is applied to every single feature map, extracting one "best" score from each filter. All 1,100 "best" scores are concatenated (joined end-to-end) to form one single, long vector. 
+
+This long vector is what represents the word. It is then passed through the Highway Layer and finally into the LSTM.
+
+In Computer Vision, we stack layers because a "nose" is made of "lines," and a "face" is made of "noses." In character-level NLP, words are usually too short for that kind of deep hierarchy to be useful. It is much more effective to have many different-sized "specialists" (parallel filters) looking for various sub-word patterns simultaneously.
+
+---
+
+#### 4. How is the character-level CNN incorporated into the overall architecture of the RNN-LM?
+
+The CNN replaces the standard word-lookup table. The CNN processes characters $\rightarrow$ max-pools into a fixed vector $\rightarrow$ passes through a Highway Network $\rightarrow$ this vector is used as the input $x_t$ for the LSTM at each time step.
+
+---
+
+#### 5. How are OOV words handled in these experiments? What potential improvement could the authors have made and why didn’t they do it?
+
+the CNN builds a vector based on the word's characters. 
+
+They still used a word-level Softmax at the output. A character-level output (predicting the next word character-by-character) would have completely removed the fixed vocabulary limit, but it is computationally much harder.
+
+---
+
+#### 6. Which model(s) performs best in the optimization experiments on the Penn Treebank?
+
+The LSTM-Char (their model) outperformed word-level LSTMs and was comparable to models with far more parameters. It specifically achieved the best results when the parameter count was kept small.
+
+---
+
+#### 7. Why do the authors expect the performance gains to be more in other languages such as Arabic than in English? Are their expectations met in the experimental results?
+
+Arabic is morphologically rich (many prefixes/suffixes/internal changes). English is relatively simple.
+
+Yes. The performance gains on morphologically rich languages (Arabic, Czech, Russian) were much larger than the gains on English.
+
+---
+
+#### 8. What advantages does the authors’ model have over the MLBL model of Botha and Blunsom (2014)?
+
+The MLBL model required explicit morphological preprocessing (breaking words into morphemes first). The Kim et al. model is end-to-end; it learns to identify these features automatically from raw characters without an external linguist tool.
+
+---
+
+#### 9. What observations can you make of the nearest neighbours of ‘richard’ using each of the word representations?
+
+Word-level: Finds semantic neighbors (other names like 'edward').
+
+Char-level: Finds orthographic neighbors (words that look the same, e.g., 'richards', 'richardson').
+
+Kim et al. Model: It successfully combines both, finding names that are both semantically and structurally similar.
+
+---
+
+#### 10. What are the main conclusions of the paper? Are you convinced?
+
+Conclusion: Sub-word information is sufficient for high-quality language modeling and drastically reduces parameter counts.
+
+Critique: It’s convincing because the model excels where word-level models fail (OOV/Rich morphology), though it is slower to train due to the extra CNN steps.
+
+---
 
 ## Week 3: Additional Reading
 
+* [Jurafsky and Martin Chapter 6: Neural Networks](https://web.stanford.edu/~jurafsky/slp3/6.pdf)
+* [Jurafsky and Martin Chapter 13: RNNs and LSTMs](https://web.stanford.edu/~jurafsky/slp3/13.pdf)
 
 
+---
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
+# [Week 4 - Lexical and Distributional Semantics 2](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-4-word-embeddings)
 
+Week 4 marks a fundamental pivot in the module. Previously, we looked at distributional semantics through the lens of sparse co-occurrence matrices—counting how often words appear near one another and using metrics like PPMI to weight them. However, as Zipf’s Law dictates, language is naturally sparse; the vast majority of words appear so infrequently that our counts are often unreliable or zero.
 
-
-
-
-# [Week 4 - Lexical and Distributional Semantics 2]()
+This week, we explore two major solutions to this "Curse of Sparsity." First, we look at Dimensionality Reduction (LSA, SVD, NMF), which attempts to compress massive, sparse matrices into dense "concept" spaces. Second, we dive into Neural Word Embeddings (Word2Vec, GloVe). Unlike traditional models that count everything first, these models predict words in a local context, learning dense, fixed-dimensional vectors that capture remarkably complex semantic and syntactic analogies through simple vector arithmetic. We conclude by looking at Compositionality: how we can combine these individual word vectors to represent the meaning of entire phrases and sentences.
 
 #### Week 4: Contents
 
-1. [Lecture]()
-2. [Seminar]()
-3. [Lab]()
-4. [Additional Readings]()
+1. [Lecture](#week-4-lecture)
+2. [Seminar](#week-4-seminar)
+4. [Paper](#week-4-paper)
+4. [Additional Readings](#week-4-additional-reading)
 
 ## Week 4: Lecture
 
 * https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=353c47a5-1230-4ffa-b59c-b3ef010c79b0&start=0
 * https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75f1da88-d5ed-48f5-9451-b3ef0116d27c&start=0 
 
-# PART 1 
+This week returns to the core principles of Lexical Semantics (word senses and hierarchical relationships) and Distributional Semantics (inferring meaning from context). While Week 1 focused on measuring similarity through vector space models and association via Pointwise Mutual Information (PMI), we now address the persistent challenge of sparsity that plagued both n-gram models and traditional count-based distributional models.
 
-return to topic of lexical and distribution semantics from week 1
+The transition from "counting" to "predicting" represents a shift from sparse, high-dimensional matrices to dense, low-dimensional Neural Word Embeddings. This evolution allows us to move beyond simple word-sense identification and bootstrap richer semantic representations that capture both similarity (paradigmatic/interchangeable words) and association (syntagmatic/co-occurring words) within a unified, optimized vector space.
 
-lex; word sense, sem relationships, sem similarty
+---
 
-dist; bootstrap sems from context, cosine sim of two vectors, post wise info as measure of assoc
+## Challenges for Distributional Similarity Measures
 
-assoc is occured together in same context, similar is the interchangbale words
+1. Mixture of Senses (Polysemy); Traditional word vectors (i.e. hot one) are global—they collapse all meanings of a word into a single point in space. If a word like "bank" has two distinct senses (financial vs. river), its vector will be a mathematical "average" of both. The nearest neighbors of "bank" might include both "money" and "river," creating a blurred representation that doesn't accurately reflect either sense in a specific context.
+2. Mixture of Relationships: Distributional similarity is a "blind" metric; it knows two words are related but doesn't know how. Cosine similarity cannot distinguish between different lexical relations. Synonyms: Big/Large (Interchangeable). Hyponyms: Dog/Animal (Is-a relationship). The model treats "relatedness" as a monolith, making it difficult to perform tasks that require specific logic (like entailment).
+3. Data Sparsity & Zipf’s Law: This is the most significant technical challenge for traditional models. According to Zipf’s Law, most words are rare (Hapax Legomena). If a word only appears once or twice, we do not have enough "contextual evidence" to build a reliable vector.  In a sparse matrix, a value of $0$ doesn't necessarily mean two words never go together; it usually just means we haven't seen them together yet. Sparse vectors lead to unreliable similarity scores for all but the most frequent words.
 
-last few weeks has been lang models; n-grams, sparse, smooth methods, moive into neural networks as neext solution 
+PPMI is the metric used to weight the features within a Distributional Similarity model. 
+1. The Framework: Distributional Similarity (the "Distributional Hypothesis" that words with similar contexts have similar meanings).
+2. The Representation: A Co-occurrence Matrix, where rows are target words and columns are context words.
+3. The Weighting (PPMI): Raw counts are misleading (e.g., the word "the" co-occurs with everything). Positive Pointwise Mutual Information (PPMI) is the specific measure of Association used to give high scores to "informative" context words and low scores to uninformative ones.
+4. The Comparison (Cosine Similarity): Once you have the PPMI-weighted vectors, you use Cosine Similarity to measure how Similar the two words are.
 
-# challenges for measures of dist sim 
+Raw counts are biased toward frequent words. PPMI asks: "How much more do these two words co-occur than we would expect if they were just paired at random?". PPMI is a "count-based" sparse measure.
 
-* mixture of sense (lec 1); neighbours of diff sense
-* mixture of relationships; syson, hypo, semantically related
-* sparsity (didnt look at much last time but will this time, more been topic for lang models)
+---
 
-# lec 4 overvew
+## Sparsity
 
-p1; sparsity, zips law, smooth, dim red
+In Natural Language Processing, sparsity refers to the statistical "void" created by the vast number of rare words in any given corpus. Using the Google News corpus as a case study (320 million tokens across 82,000 types), a simple mathematical average suggests a mean frequency of roughly 3,900 occurrences per word. However, because language follows Zipf’s Law rather than a normal distribution, this mean is highly misleading. In reality, word frequencies do not cluster around a central average with a small standard deviation; instead, a few "power words" (like the, is, of) appear millions of times, while the vast majority of words appear only a handful of times or even just once (Hapax Legomena). This results in co-occurrence matrices that are mostly filled with zeros, making it mathematically difficult to calculate similarity for most of the vocabulary.
 
-p2; word embed (potential overcome of sparsity), word2vec, glove, composoition 
+---
 
+## Zipf's Law
 
-# sparsity
+Zipf's Law is the empirical observation that in any large corpus of natural language, the frequency of a word is inversely proportional to its rank in the frequency table. It is a specific type of Power Law distribution
 
-what do we mean about parsity?
+If we rank all words in a corpus by their frequency ($r=1$ for the most common, $r=2$ for the second most common, etc.), the frequency ($f$) of a word is approximately:
 
-google news corpus 320m word (tokes) with vocab of 82k (types)
+$$f \propto \frac{1}{r}$$
 
-what does this tell use about distribution of types?
+This implies that the product of a word's frequency and its rank is roughly constant: $f \times r \approx C$.
 
-mean freq is 3900 for each type, does this mean anything? could we look at occurance coompared to mean freq to build understanding? learn what words are similar to others?
+Key Characteristics
+* The 80/20 Rule: A very small number of words (the "heads") account for the vast majority of tokens in a text. For example, the top 100 words typically make up about 50% of any English corpus.
+* The Long Tail: The majority of the "vocabulary types" (the unique words) occur very rarely.
+* Hapax Legomena: These are words that appear only once in a corpus. In a typical large dataset, Hapax Legomena make up approximately 50% of the entire vocabulary.
 
-maybe if it was normal dist with small sd
+#### Consequences for Distributional Semantics
+Zipf's Law is the mathematical reason why distributional models suffer from extreme sparsity:
+* Empty Vectors: For the 50% of words that appear only once, we have almost zero contextual evidence. Their 82k-dimensional co-occurrence vectors will be almost entirely zeros.
+* Unreliable Statistics: We cannot distinguish if a $0$ in a PPMI matrix means two words are semantically incompatible or if we simply haven't seen them together yet because they are both in the "tail."
+* The Failure of the Mean: Because word distribution is not a "Normal Distribution," the "average frequency" is a useless metric. We cannot use standard Gaussian statistics to understand word behavior.
+* Note: On a log-log plot (log frequency vs. log rank), Zipf's Law appears as a straight line with a slope of approximately $-1$. If the line is straight, the data follows a Power Law.
 
-problem is very few words have 3900 occurances
+---
 
-this is because the distribution of wordsis def not normal dist or have a sd of 1
+## Solutions to Sparsity 
 
-# zipf's law
+To tackle the solutions to sparsity, we need to distinguish between simply "fixing the math" (Smoothing) and "redrawing the map" (Dimensionality Reduction).
 
-"the product of the freq of a word and its rank is approx constant"
+### I. Smoothing: "Filling the Gaps"
 
-rank = howw often occur in corpus, i.e. 1st most freq
+The intuition behind smoothing is to redistribute probability mass. We assume that a zero count in our data doesn't mean "impossible," but rather "unobserved due to limited data."
 
-demonstrates there are few words tht occur alot 
+#### 1. Add-One (Laplace) Smoothing
 
-but a big trail of words that occur infreq or even once (hapax legomena)
+We simply add 1 to every possible co-occurrence count. 
 
-HL make up approx half of vocab; names, spelling mistakes, techniqal terms, scientific
+In a vocabulary of 82k, there are $82,000^2$ (approx. 6.7 billion) possible pairs. If we only observe a few million pairs, Add-One assigns a massive amount of "fake" probability mass to the billions of unseen pairs. This "washes out" the real signal, making every word look equally similar to every other word.
 
-this is sparisty in action, many rare words
+#### 2. Distributional Smoothing (Dagan et al., 1994)
 
-# consequences of zipds law
+Instead of adding a flat "+1", we use a word's neighbors to estimate its missing values.
 
-82k dim coocurance vectors will be very sparse
+If "aardvark" and "snort" never co-occur, but "aardvark" is very similar to "pig" (which does co-occur with "snort"), we can "borrow" some of that probability.
 
-if word only occurs once, then all other co-occuranes in the vocab will be 0. this is very sparse. 
+$$P_{smooth}(w_2 \mid w_1) = \sum_{w' \in S(w_1)} \text{sim}(w_1, w') \times P(w_2 \mid w')$$
 
-we don't really know what 0 means. is it impossible or also just rare and we havent seen it
+Where $S(w_1)$ is the set of words similar to $w_1$. We take a weighted average of how $w_1$'s neighbors behave.
 
-what can we do?
+Why do it both ways ($w_1|w_2$ and $w_2|w_1$)? Because the relationship isn't necessarily symmetrical. "Snort" might be a very specific feature for "aardvark" and "pig," but "aardvark" is just one of many things that can "snort." We average both to get a stable estimate of their association
 
-# possible solutions
+### II. Dimensionality Reduction: "Finding the Essence"
 
-* smoothing
-* dim red
-* word embed/fix dim reps (from lang models)
+Rather than trying to fill a 82,000-dimensional matrix, we transform the data into a dense, lower-dimensional space (e.g., 300 dimensions). This forces the model to ignore noise and find latent (hidden) patterns.
 
-# smoothing intuition
+#### 1. PCA (Principal Component Analysis)
+Goal: Find the axes (Principal Components) along which the data varies the most.
 
-int is that anytihng is possible, even unobserned events
+Intuition: If you have a 3D cloud of data shaped like a pancake, PCA realizes that the "thickness" of the pancake is less important than its "width" and "length." It flattens the 3D data into 2D while losing as little information as possible.
 
-when we have sparse statics, "steal" prob mass from observed inorder to generalise to unobs events
+#### 2. SVD (Singular Value Decomposition)
+This is the engine behind Latent Semantic Analysis (LSA).It factorizes the PPMI matrix into three matrices: $X = U \Sigma V^\top$.By keeping only the top $k$ singular values, we effectively "merge" dimensions that behave similarly. If "doctor" and "physician" have almost identical co-occurrence patterns, SVD will collapse them into the same latent "medical" dimension.
 
-# add one smoothing (laplace)
+#### 3. NNMF (Non-Negative Matrix Factorization)
+Constraint: All values must be non-negative ($\ge 0$).
 
-prentend we saw each word one more time than we did
+Advantage: Unlike SVD (which can have negative values that are hard to interpret), NNMF results in a "parts-based" representation. It builds a word's meaning by adding components together.
 
-obs + 1, 0+1, 1+1 etc
+Example: "Apple" = (0.5 $\times$ Fruit) + (0.3 $\times$ Red) + (0.2 $\times$ Technology). This makes the dimensions much more interpretable for humans.
 
-# applyinh add-1 smoothing
+---
 
-good method for some methids, i.e. naive bayes, as its prevents 0 prob which breaks the foruklas
+## Latent Semantic Analysis (LSA)
 
-but here the number zeroes isn't so huge
+LSA (Deerwester et al., 1990) is a technique in distributional semantics that uncovers the hidden ("latent") relationships between words by analyzing which documents or contexts they appear in.
 
-classes < sie of eng vocab which is what language models use for their corpus
+#### The Input: The Term-Context Matrix ($X$)
 
-add1 is rarely used for co-occurance data/lang models
+We start with a large matrix where rows represent unique words (types) and columns represent contexts (traditionally whole documents, but can be paragraphs or sliding windows). The cell values are usually transformed frequencies. If using documents, `tf-idf` is standard; if using local word-windows, `PPMI` is preferred.
 
-it assungs too much mass to unseen occourences
+#### The Mechanism: Singular Value Decomposition (SVD)
 
-unseen cooccurances are much more vast than the actual obs co-oc
+SVD is the mathematical engine of LSA. It decomposes the large, sparse matrix $X$ into the product of three specific matrices:
+$$X \approx W \cdot S \cdot P^\top$$
 
-+ is wouldn't help us wuth dist semantics sparisty problem anyway
+* $W$ (Word/Term Matrix): Each row is a dense vector representing a word. This is our "reduced dimension" word embedding.
+* $S$ (Singular Values): A diagonal matrix that acts as the "weights" for the new dimensions. The values are sorted by importance.
+* $P^\top$ (Context/Document Matrix): Represents the documents in the new reduced space.
 
-**why is add1 unlikely to help the sparse problem of dist semantics**
+#### The "Trimming" Process (Dimensionality Reduction)
+To achieve a "concept space," we don't keep all the dimensions. If our original matrix has 50,000 dimensions, we might keep only the top $k$ (e.g., 300). By ignoring the smaller singular values in $S$, we effectively remove noise.This forces the model to merge synonyms. If "physician" and "doctor" appear in similar medical documents, SVD will map them to the same latent "medical" dimensions.
 
-address later in seminar?
+As you noted, $W, S,$ and $P$ are found using Eigendecomposition. The singular values in $S$ are the square roots of the eigenvalues, and the columns of $W$ and $P$ are the eigenvectors. This is why LSA is often referred to as a "spectral" method.
 
-# distributional smoothing
+#### Why LSA was a Breakthrough
+* Synonymy: It solves the problem where a search for "physician" fails to find a document containing only the word "doctor."
+* Global Context: Unlike Word2Vec (which looks at immediate neighbors), LSA looks at the global distribution across the entire corpus.
 
-Dagan, Pereira and Lee (1994), define S(w) as the k-most similar words to w according to some distributional simiarity measure
+#### SVD and LSA
 
-the smoothed occurance probability of two words in then:
+SVD is the mathematical tool, while LSA is the application of that tool to language.
 
-INSERT DIST SMOOTH FORUMLA
+SVD is a general matrix factorization algorithm used in many fields (physics, signals, geometry). It takes any rectangular matrix and breaks it into three parts. It doesn't care if the numbers represent word counts, pixels in an image, or sensor data from a telescope.
 
-smoothed prob of w2 occuring given w1 has occured
+LSA is the specific pipeline used in NLP that utilizes SVD. It includes the linguistic "prep work" before and after the math.
 
-find all words that in a similarity set of w1
+* Step 1 (Pre-SVD): Creating the Term-Document matrix.
+* Step 2 (The Weighting): Applying tf-idf or PPMI to the raw counts (SVD on raw counts usually performs poorly because "the" and "and" dominate the variance).
+* Step 3 (The SVD): Running the actual matrix factorization.
+* Step 4 (The Truncation): Choosing the value of $k$ (the number of dimensions to keep) to filter out "noise" and capture "concepts."
+* Step 5 (Post-SVD): Using the resulting vectors for tasks like document similarity or synonym detection.
 
-take prob of w2 occuring aginst all of the words in the simiarity set; then sum up these probs
+You can apply SVD to a image to compress it—that is called Image Compression, not LSA. You only call it LSA when you apply SVD to a weighted word-context matrix to find "Latent Semantics" (hidden meanings).
 
-prob of sim words is taken as a weighted average
+---
 
-# smoothing example
+## NNMF
 
-prob of snort and aardvark
+NMF is a variation of matrix factorization that imposes a strict constraint: all values in the decomposed matrices must be non-negative ($\ge 0$). While SVD is a "subtractive" model, NMF is a purely "additive" model.
 
-both rare words. obs cooccured freq is 0
+In SVD (and LSA), dimensions are allowed to be negative. This allows for mathematical elegance (orthogonality), but it is semantically confusing. To represent the word "Apple," SVD might take a "Fruit" component and subtract a "Tropical" component. Humans don't naturally define concepts by what they aren't. A negative value in a semantic vector (e.g., $-0.4$ on a "finance" dimension) is nearly impossible for a linguist to explain.
 
-estimate prob of based on cooccurance of snorth with neighbours of aardark
+NMF operates on the Additive Property. To reconstruct the original data, the model can only add components together—never subtract them. To represent "Apple," the model adds a bit of "Fruit," a bit of "Red," and a bit of "Crunchy." This mirrors human cognition. We see objects as a collection of "parts" or features.
 
-INSERT FORUMLAS
+#### Benefits of NMF in Distributional Semantics
 
-do this both way round? snort|aard and aard|snort
+Sparsity and Clarity: Because NMF is forced to use only additions, it naturally pushes many values toward zero. This creates "clean" dimensions where only a few words have high scores. If you look at an NMF dimension, you might see ball, goal, score, team—it is immediately obvious that this dimension represents "Sports."
 
-why are we doing it both way rounds?
+Topic Modeling: Because the dimensions are so interpretable, NMF is frequently used for Topic Modeling. Each latent dimension acts as a "topic" that a document can be composed of.
 
-# distrib msooth in practice
+Psychological Plausibility: The idea that we build meaning by combining positive features (rather than subtracting abstract ones) is more aligned with how humans categorize the world.
 
-* build sparse rep of all words (In the context of 1994 distributional semantics, a "sparse representation" usually refers to a co-occurrence vector, not a one-hot vector.)
+While NMF is more interpretable, it is not as mathematically unique as SVD. SVD has one "perfect" solution; NMF is solved iteratively and can result in slightly different dimensions depending on how you initialize the math.
 
-> A vector where only one dimension is $1$ and all others are $0$. This represents an identity, but it contains no semantic information. You cannot find "neighbors" for a one-hot vector because every word is mathematically equidistant from every other word.
+---
 
-> A vector where the dimensions represent context words. For example, the vector for "dog" might have a $5$ in the "bark" column and a $10$ in the "pet" column. It is "sparse" because out of a 50,000-word vocabulary, "dog" only co-occurs with a few hundred words.
+## Using these methods
 
-> If you use Kullback-Leibler (KL) divergence or Cosine Similarity on these sparse co-occurrence vectors, you can find neighbors. For example:
+#### The Advantages (The "Why")
+Massively reduce dimensions: You are taking a vocabulary of 82,000 (which is impossible for most computers to process efficiently in a single matrix) and squashing it down to 300. This is a 99.6% reduction in size.
 
-> Word A (Cat): {meow: 10, food: 5, sleep: 20}
-> Word B (Dog): {bark: 8, food: 7, sleep: 15}
+Capture similarities in occurrences: Because these methods look at the entire matrix at once, they notice that "cat" and "dog" are similar because they both appear with "pet," "fur," and "food," even if "cat" and "dog" never appear in the same sentence.
 
-> Even if "Cat" never appears with "bark" and "Dog" never appears with "meow," they both appear with "food" and "sleep." k-NN uses these shared dimensions to decide they are neighbors.
+#### The Disadvantages (The "Why Not")
 
-* auto generate thesuraus of neighbours (find k nearest neighbours of every word)
+Comp expensive to obtain the vectors: Calculating the SVD or NNMF of an $82,000 \times 82,000$ matrix is a massive task for a CPU/GPU. It requires huge amounts of RAM and time. Note: The "vectors are the more efficient part" means that once you have the 300-dim vectors, they are fast to use—but getting them in the first place is the bottleneck.
 
-* re-estimate co-occurence probabilities of every pair of words using distribitional smoothing formula
+Impossible to interpret/interrogate dimensions: This is the "Black Box" problem. In a 300-dimension SVD space, you might look at Dimension 42 and ask, "What does this represent?" The answer is usually a mess of numbers. It’s not "The Sport Dimension"; it’s a mathematical slice of variance that has no human linguistic label. (NNMF tries to fix this, but it’s still not perfect).
 
-* regenerate the thesaurus
+Too Complex: These are "Global" methods. If you add one new word or one new document to your corpus, you theoretically have to re-run the entire math on the whole matrix to get updated vectors. They aren't "online" or flexible like neural networks.
 
-# dimensionality reduction
+---
 
-other solution to sparsity
+## From One-Hot to Embeddings: The Neural Mechanism
 
-v popular 07-13
+#### 1. The One-Hot Encoding (The Input)
 
-build cocurrance matrix, 82k dim, reduce down to managnumber number; 1000, 300, 50
+To feed a word into a Neural Network, we must first turn it into a vector. We use One-Hot Encoding, a vector of size $V$ (Vocabulary size) where every entry is $0$ except for the index representing that specific word, which is $1$. The problem is that one-hot vectors are huge (e.g., 82,000 dimensions) and "hollow." They contain no info about meaning. The vector for "cat" is just as different from "dog" as it is from "spaceship."
 
-could just ignore features and select the ones you want but there are more technical ways
+#### 2. The "Embedding Layer" (The Selection)
 
-find axis of the data where there is most variation
+When you multiply a One-Hot vector by a weight matrix $W$, something special happens mathematically: you are simply selecting one row of that matrix.
 
-transform data so these are the basis of the space
+$$[0, 0, 1, 0, 0] \times \begin{bmatrix} w_{1,1} & w_{1,2} \\ w_{2,1} & w_{2,2} \\ \mathbf{w_{3,1}} & \mathbf{w_{3,2}} \\ w_{4,1} & w_{4,2} \end{bmatrix} = [\mathbf{w_{3,1}, w_{3,2}}]$$
 
-3 main ways;
-* PCA princ comp analysis - statistical techniwue
-* SVD singular decomp SVD - matrix factorisation technique
-* non-neg matrix factorisation (nnmf)
+This "switches on" a specific column or row in the network. Instead of processing 82,000 zeros, the network immediately pulls out a small, dense vector (e.g., 300 dimensions). Crucially, these weights are not fixed; they are the parameters the model optimizes during training.
 
-# PCA
+#### 3. Embeddings as a "By-Product"
 
-int behind; reduce from 2 dims down to 1
+Originally, researchers built Neural Language Models to predict the next word in a sequence. However, they noticed that to perform that task well, the network had to learn meaningful representations in its hidden layers.
+* The Task: Predict $w_{t+1}$ given $w_t$.The Result: Words that appear in similar contexts (like "pizza" and "burger") end up having very similar weights in the matrix so the network can make similar predictions for both.
+* The Discovery: We can throw away the "prediction" part of the network and just keep the Weight Matrix. 
+* This matrix is our Lookup Table of word embeddings.
 
-2 dims could be ppmi occurance with other words
+An embedding is just a learned weight. We start with a random vector for every word, and through backpropagation, the network nudges those numbers until "cat" and "dog" are mathematically close to each other because it helps the network predict the surrounding words more accurately.
 
-want to find natural axis of the data
+---
 
-could just loose a dimension and just look at x-axis but we loose alot of info
+## Recurrent Neural Network Language Model (RNN-LM)
+This 2013 NAACL paper explains how to use an RNN to predict the next word, whereas Word2Vec (the later 2013 paper) simplifies things to just learn embeddings. It is not Word2Vec, though it is from the same author (Mikolov et al NAACL 2013) and is the prelude to W2V. Think of this model as a "chain" where each link knows what happened in the previous link. 
 
-better to sort of like finding the regression line, best line of fit, the princ component
+The paper "Recurrent Neural Network Based Language Model" (Mikolov et al., 2013) is a seminal work that fundamentally challenged the long-standing dominance of $n$-gram models in Natural Language Processing. The authors proposed an architecture that uses a Recurrent Neural Network (RNN) to model language, where the probability of the next word is conditioned not just on a fixed window of previous words, but on a "hidden state" that acts as a continuous memory of the entire preceding context. By projecting words into a dense embedding space (the $U$ matrix) and allowing information to cycle through the hidden layer via a recurrent weight matrix ($W$), the model learns to represent words as continuous vectors. This allows the system to achieve a level of generalization impossible for $n$-grams; if the model learns that "dog" and "cat" are semantically similar, it can naturally assign a high probability to "the cat sat" even if it has only ever seen "the dog sat" in its training data.
 
-could be best fit from least squares
+The significance of this paper lies in its solution to the curse of dimensionality and the sparsity problem. While traditional $n$-gram models grow exponentially in complexity as the context window increases and struggle with "zero-count" sequences, Mikolov’s RNN-LM maintains a constant number of parameters and uses "distributed representations" to smooth the probability space. This work demonstrated that neural networks could achieve significantly lower perplexity (a measure of how well the model predicts a sample) than state-of-the-art smoothed $n$-grams. Furthermore, it laid the essential groundwork for the subsequent "word2vec" revolution by proving that the internal weights learned by these networks (the word embeddings) captured deep, multi-dimensional semantic and syntactic relationships that could be used in almost every other NLP task.
 
-this looses the least information as it is built form both axis
+---
 
-# pca (2)
+## Word2Vec 
 
-generally have alot more than 2 dimensions 
+While the RNN-LM was groundbreaking, it was slow. The "recurrence" (the $W$ matrix that handles memory) is computationally expensive because it forces the model to process words strictly one by one. In the follow-up 2013 paper, Mikolov realized that if our primary goal is just to get great word embeddings, we don't actually need a "memory" of the whole sentence. We just need to look at immediate neighbors.
 
-want to reduce n to k, i.e. k=300
+The transition is a move toward radical simplification. By removing the recurrent hidden layer, the model becomes a "shallow" neural network. This allows it to be trained on massive datasets (billions of words) in a fraction of the time.
 
-apply pca iteratively to find all k dimensions
+Instead of an RNN reading a sentence from start to finish, Word2Vec uses a fixed-length context window.
+* You define a radius (e.g., +/- 2 words).
+* As you slide this window across the corpus, the "Center" word is your Target, and the words around it are your Context.
 
-find all pricnc comps
+One of the most important technical details of this system is that every word has two representations:
+* $v_w$ (Input/Context Vector): Used when the word is part of the "neighboring" context.
+* $u_w$ (Output/Target Vector): Used when the word is the "target" being predicted.
 
-subsi pc need to be orthogonal 
+Why? It makes the math much cleaner. During training, we are essentially trying to align these two vectors so that if "cat" often appears near "purred," the Context Vector for cat and the Target Vector for purred have a high dot product.
 
-dont need to now math or cade, packages do this, just know int
+---
 
-variance in the data is not captured by the pc, byt can be computed by the loss of information 
+## The Two Architectures
+This logic branches into two distinct models: CBOW and Skip-gram.
 
-# latent semantic analysis (lSA)
-
-deerester et al 1990; landauer et al 1998;
-
-rep text as matrix X where each row is a unique word and each column is a document (or other type context that word can be compared to)
-
-the values are transformed freqs (tf-idf, ppmi)
-
-they used tf-idf as they were using documents 
-
-but if the other context was words then ppmi would be better
-
-once you have matric applied SVD to decomose into a product of 3 matrics
-
-INSERTT IMAGE OF DECOMPOSITION
-
-$X = W.S.P$
-
-decompose means we area breaking down the matrix into n matrices which when product togetehr become the original matrix agian
-
-given matrices need to have given sizes to acheive the correct output
-
-[5x3]=[5x2][2x2][2x3]
-
-s is diagonal matrix, the demnision of which define the reduced space. will be alot smaller than orginal input
-
-w is the reduced dim set of word vectors
-
-p is the red dim set of doc/co-occurance vectors
-
-w,s,p is found by using standard matrix tecniques, by fding eigen values and eigen vectors
-
-also known as eigendecompostion
-
-
-# nnmf
-
-non-neg matric factoriz; variation on svd
-
-svd there are a variation of matric decomps that can be derived to rebuild the orignal matrix size
-
-nnmf have further costraint that all values in the facotrized space are allowed to be non-neg
-
-ptentially leads to nmore interpretable spaces
-
-NMF forces every value in the resulting matrices to be zero or greater.
-
-In SVD, the latent dimensions (components) are allowed to have negative values. Mathematically, this is elegant because it ensures dimensions are orthogonal (independent). However, semantically, it’s a nightmare.SVD creates "Counter-Evidence": To represent a word like apple, SVD might take a "Fruit" component and then subtract a "Tropical" component.The Interpretation Issue: What does "negative tropicality" mean? In human language, we don't usually define a concept by what it isn't in a mathematical vacuum. It’s hard for a human to look at a vector of $+0.5, -0.2, +0.8$ and explain the "meaning" of that $-0.2$
-
-NMF and the "Parts-Based" Representation
-NMF functions on the Additive Property. Because you cannot have negative numbers, the only way to reconstruct the original data is by adding components together. Additive Logic: To represent apple, NMF might add a bit of the "Fruit" component, a bit of the "Crunchy" component, and a bit of the "Red" component. The Interpretation Win: This mirrors how humans categorize things. We see objects as a collection of features or parts. Sparsity: Because NMF is trying to reconstruct the data using only additions, it naturally pushes many values toward zero. This results in "cleaner" components where only a few words are highly active, making the "topic" of that dimension immediately obvious to a human reader.
-
-Visualizing the Dimensions
-Imagine you are factorizing a dataset of faces: SVD would produce "Eigenfaces"—ghostly, whole-face images that look like blurry versions of the average person. Some features are "subtracted" to reach the final face. NMF would produce recognizable parts: a dimension for "noses," a dimension for "eyes," and a dimension for "mouths." To make a face, the model simply adds those parts together.
-
-In distributional semantics, these "parts" end up being semantic themes (e.g., a "sports" dimension, a "finance" dimension), which is why NMF is a favorite for topic modeling.
-
-# using PCA, SVD, LSA, NNMF
-
-adv; massively reduce dims, theo should captur sims between word in the occurances
-
-dis; comp expensive to obtain to the vectors (vectors are the more efficent part), generally impossible to interpret/interrogate dimensions, too complex
-
-
-
-# PART 2
-
-previous part was about challenge the problem of sparsity
-
-# word embeddings
-
-start with the assumption that each word can be represent by a fixed set of dims, i.e. select the number first any number less can vocab
-
-learn best values for each word; optimise of some performance taskl; log-liklieghood of some training corpus
-
-optimise to be the best prob, i..e get the best vector embed
-
-# simple nn 
-
-use a network to learn the embeddings
-
-can represent network as a matrix
-
-each layer is a matrix vector mm on the weights and the inputs
-
-# hot one encoding
-
-inputs to the network
-
-input space with V dims, where V is size of the vocab (huge vector, with just 1 entry in the vector, all other 0)
-
-this esssnetially switches on a matrix column, or an input to the network
-
-slelecting a weght from the column matrixs
-
-this entry disperses into the matric and is passed around so the network lights up
-
-but for entrying, only 1 neuron is entering and firing. 
-
-embedding for word 1 (1,0)
-
-these hot one endodes are the starting representations for our words
-
-but we want them to be better and optimied. 
-
-this is why we create word embeds
-
-the orginal task was to generate the next work in a seq, but people realised that when passing in a word, a valuable respresentation was made in the hidden layers which could then be extracted and used as itis a better respresentation than the hot one
-
-# paper: recurrent neural network langaugge model (mikolov etal NAACL 2013)
-
-input if cyrrebt word (hot one), projected into embed space using weight vector U
-
-RNN, so have a hidden layer state st-1 from previous, passed in using W weight vector
-
-embed space is s(t)
-
-output y(t) is size of vocab and is prob dist over the next word; soft max makes it prob dist
-
-the meaning of words is contained in the weight vectors U
-
-# word2vec mikolov et al 2013
-
-more simple approach specifically for this task 
-
-simpler than rrn as you dont need the recurrance
-
-CBOW or skip-gram models instead; v similar
-
-# word2vec intution
-
-current word in the courpus is ref to the target
-
-use fix length content window either side of the target e.g. +/- word either size
-
-each word has 2 different embeddings (representation; vector, weights)
-* one embed when it is a tartget word
-* one embed when it is used as a context word
-
-in cbow, context embedddings are used to predict the target. the cont embeed is the 4(2) words either side of the embedding
-
-cbow predicts current word given context
-
-we want the sum of the context vectors to be as close as possible to the target word embedding
-
-skip-gram; hard int; take target embed word and try to predict the context words. optimise the weights to obtain these context words
-
-
-how to train word to vec? init embeds randomly and then iterate over the text, compus loss function for each instance; compare how close the projects and the output were
-
-
-The one-hot vector is the input mechanism, not the embedding itself.Imagine you want to predict the word "sat" given the context "The cat ___ on."You take the one-hot vectors for "The", "cat", "on".Multiplying a one-hot vector by the weight matrix $W$ is mathematically equivalent to selecting a specific row from that matrix.That row is the Context Embedding for that word.
-
-Input: You take the random context embeddings of the surrounding words and average them.Prediction: You multiply this average vector by the target embedding matrix ($W'$) to get scores for every word in the vocabulary.Update: You compare the result to the actual one-hot target ("sat"). Using backpropagation, you nudge the random numbers in both matrices so that next time, the vectors for "cat" and "on" result in a higher probability for "sat."
-
-The input is indeed a one-hot vector, but the "target" for the loss function isn't a subtraction of embeddings. Instead, it is a comparison between two probability distributions.
-
-To calculate the loss, the model takes the "average context vector" it just created and multiplies it by the Target Embedding Matrix ($W'$). This produces a vector of raw scores (logits), one for every word in the dictionary.Step A: We apply the Softmax function to these scores. This turns them into probabilities that sum to 100%.Step B: We compare this probability distribution to the One-Hot Target Vector of the actual word that was supposed to be there. We don't subtract the embeddings. We use Cross-Entropy Loss.
-
-Imagine the target word is "sat." The One-Hot Target: [0, 0, 1, 0, 0] (where index 2 is "sat"). The Model's Prediction: [0.1, 0.05, 0.6, 0.1, 0.15]. The loss function looks at the probability the model assigned to the correct index (0.6). The "goal" of the backpropagation is to push that 0.6 as close to 1.0 as possible.
-
-
-Summary of the Flow
-1. Input: One-hot vectors of context words.
-2. Projection: Pull out context embeddings and average them.
-3. Output: Multiply average by Target Matrix to get scores for all words.
+#### CBOW (Continuous Bag of Words)
+"Predict the center from the surroundings."
+1. Input: One-hot vectors of all context words in the window.
+2. Projection: Pull the context embeddings from the Input Matrix ($W$) and average them.
+3. Output: Multiply that average by the Target Matrix ($W'$) to get raw scores for the whole vocab.
 4. Softmax: Convert scores to probabilities.
-5. Loss: Compare probabilities to the One-Hot Target using Cross-Entropy.
-6. Backprop: Update both the Context and Target embeddings.
-iterate training
+5. Loss: Compare the probability of the actual target word (e.g., "sat") to the model's guess using Cross-Entropy.
+6. Backprop: Nudge the vectors in both $W$ and $W'$ to reduce the error.
 
-# gradient descent
+#### Skip-gram (The Inverse)
+"Predict the surroundings from the center." This is often called the "harder" task, which usually results in better embeddings for rare words.
+* Input: The one-hot vector for one target word.
+* Projection: Pull just one embedding vector.
+* Output: Try to predict multiple context words independently.
+* Logic: If I give you the word "sat," the model has to learn that "cat," "on," and "the" are all high-probability neighbors.
 
-* random intit para setting (W)
-* comp pred
-* comp cost function (J) MIN OR MAX
-* comp part deriv of cost function with respect to paramers
-* backprop, update params (formaila)
-* repeate until conver/cost is accept small
+---
 
-# skip gram int
+## Why this works (The "Softmax" Goal)
+We are not subtracting vectors during training. We are comparing probability distributions.
 
-hard one to understand
+If the model predicts a 60% chance for "sat" ($0.6$), the "Signal" for backpropagation is the 40% error ($1.0 - 0.6$). The gradient descent process then travels back into the weights:
+* It strengthens the connection between the context words and "sat."
+* It weakens the connection between those context words and everything else (like "airplane").
 
-what is the obj fubcntion?
+---
 
-is w2 likely to show up near w1?
+## Summary of RNN to Word2Vec
+By simplifying the RNN into these window-based architectures, Word2Vec achieved:
+* Speed: Could be trained on the 100-billion-word Google News dataset.
+* Linear Relationships: The surprising discovery that $Vec(\text{"King"}) - Vec(\text{"Man"}) + Vec(\text{"Woman"})$ resulted in a vector very close to $Vec(\text{"Queen"})$.
 
-treat the target word and context words and positive samples
+---
 
-randomly sample other words in lexicon to get negative samples
+## Why Word2Vec Replaced LSA/SVD
+By 2013, Latent Semantic Analysis (LSA) was the industry standard. It was mathematically sound, but it struggled with the sheer scale of the internet. Mikolov’s Word2Vec didn't just offer better vectors; it offered a more scalable way to learn.
 
-train class to distinguish those two cases (classes)
+#### Computational Efficiency (Local vs. Global)
+* LSA (Global): To run LSA, you must first build a Global Co-occurrence Matrix. If your vocabulary is 100,000 words, you need a $100,000 \times 100,000$ matrix. Running SVD on a matrix of this size is "memory-heavy" and computationally "expensive." If you add one new document to your corpus, you theoretically have to re-run the entire math for the whole matrix.
+* Word2Vec (Local): Word2Vec is Stream-based. It only ever looks at 5–10 words at a time (the sliding window). It doesn't need to see the whole corpus to start learning. This means it can be trained on billions of words using a standard computer, whereas LSA would crash due to memory limits.
 
-* rand init two sets of embeddings - each word in the vocab has a taget embedd t_w and context embed c_w
-* iteratively shift target and context embedds to that:
-* taget embed of word w is more like the context embed of words that occur nearby, and less like the embd of words that dont occur nearby
+#### The Discovery of Linear Analogies
+The most famous reason for Word2Vec’s success was the discovery that its vector space preserved Relational Logic.
+* LSA is great at Topical Association (knowing that Paris and France are related).
+* Word2Vec captures Specific Directions. Because it predicts words in local slots, it maps the "step" from a Country to its Capital as a consistent vector direction.
+* This allowed for the famous vector arithmetic: $\vec{v}(King) - \vec{v}(Man) + \vec{v}(Woman) \approx \vec{v}(Queen)$. LSA rarely achieves this level of precise geometric regularity.
 
-INSERT FORMULA
+#### Scalability and "Online" Learning
+* Scale: Because Word2Vec is a neural network, it scales linearly with the size of the data. You can feed it 100 billion words from Google News, and it just keeps getting better.
+* Flexibility: Word2Vec is an "Online" model. You can take a model pre-trained on Wikipedia and "fine-tune" it on medical journals. You don't have to start from scratch. With LSA, incorporating new data into an existing "concept space" is mathematically much more difficult.
 
-QUITE DIFFICULT TO UNDERSTAND, REVISE AND DO BETTER NOTES
+---
 
-# word2vec params 
+## Skip Gram: Different Approach to Training and Labels
 
-has lots of other hyperparameters
+If the standard "Softmax" flow is a Multi-class Classification (predicting 1 word out of 80,000), then Negative Sampling is a Binary Classification (predicting if a pair is "Real" or "Fake").
 
-number of epochs; learning rate; batch size before updates are made; window size
+Instead of asking "What is the next word?", we ask: "Is word $C$ likely to show up near word $T$?"
+* Positive Samples: Words that actually appear in the window together (e.g., Paris and France). We want the model to output 1 (Yes).
+* Negative Samples: Words randomly picked from the dictionary (e.g., Paris and Puddle). We want the model to output 0 (No).
 
-depends on corpus and goal
+To make the math work, every word has two identities: 
+* Target Embedding ($v_w$): Used when the word is the "Center."
+* Context Embedding ($u_w$): Used when the word is a "Neighbor."
 
-# glove (pennington et al 2014)
+The model starts with random numbers and iteratively shifts the vectors:
+* Increase Similarity: If a pair is Positive, we maximize their Dot Product. This moves the target and context vectors closer together in space.
+* Decrease Similarity: If a pair is Negative, we minimize their Dot Product. This pushes the vectors away from each other.
 
-anotthoer approach to dim red
+The objective is to maximize the probability of the actual context words ($w_{pos}$) and minimize the probability of the $k$ random negative words ($w_{neg}$):
 
-combined ideas of matrix factors but speed of neural techs (word2vec)
+$$\mathcal{L} = \log \sigma(v_{target} \cdot u_{pos}) + \sum_{i=1}^{k} \log \sigma(-v_{target} \cdot u_{neg_i})$$
 
-start with matricx and want to decompose
+Wait, why use $\sigma$ (Sigmoid)? The Sigmoid function takes any dot product and squashes it between 0 and 1. This turns a mathematical score into a "probability of being a real neighbor."
 
-aim: find set of `m` dim focal embedds (F) and m-dim context embed (C) such that X=FC Transpose
+#### Why this is "Hard to Understand"
+The confusion usually stems from the fact that we are training two matrices ($W$ and $W'$) simultaneously. After training is finished, we usually throw away the Context Matrix ($W'$) and only use the Target Matrix ($W$) as our final word embeddings.
 
-m is alot smaller than V (start)
+---
 
-NEED BETTER NOTES AND UNDERSTAND ON THIS
+## Glove (Pennington et al 2014)
 
-# correlation with human judgement 
+To understand GloVe (Global Vectors), you have to see it as the "peace treaty" between the two worlds we’ve discussed: the Global Matrix Factorization of LSA and the Local Context Prediction of Word2Vec.
 
-baroni (2014) wor2vec embes. better than ahains count based dist reps (ppmi, none matrix factorisation)
+Pennington et al. (2014) argued that both previous methods were flawed. LSA uses global statistics but is bad at analogies; Word2Vec is great at analogies but "wastes" data because it only looks at local windows and ignores how often words appear across the whole corpus.
 
-dont bother counting just predict cooccurences
+> GloVe: Global Vectors for Word Representation
 
-# what is so specifical about word2vec and glove
+GloVe’s core insight is that ratios of co-occurrence probabilities are the true carriers of meaning, not just the raw counts.
 
-omer and levy 2014 shows that word2vec embed are implicit factorisation of stataard occurence vectors with weights as ppmi
+GloVe tries to solve the matrix factorization problem ($X = FC^\top$) but does so using a weighted least squares objective.
+* $X$: A global word-word co-occurrence matrix (counts how many times word $i$ appears in the context of word $j$ across the entire corpus).
+* $F$: Focal/Target embeddings.
+* $C$: Context embeddings.
+* The Goal: Find vectors such that their dot product equals the log of their co-occurrence count: $w_i \cdot \tilde{w}_j \approx \log(X_{ij})$.
 
-but there are alot more hyper parametes that are tunable. this can make it better? 
+#### Why Ratios Matter (The "Ice" vs. "Steam" Example)
+This is the "aha!" moment of the GloVe paper. Consider the relationship between "Ice," "Steam," and a probe word "Water":
+1. $P(\text{water} \mid \text{ice})$ is high.
+2. $P(\text{water} \mid \text{steam})$ is high.
+3. The ratio $\frac{P(\text{water} \mid \text{ice})}{P(\text{water} \mid \text{steam})}$ is close to 1 (since water is related to both).
 
-INSERRT LIST OF WHY THE HYPERPARAMS MAKE IT BETTER 1-7
+Now consider the probe word "Solid":
+1. $P(\text{solid} \mid \text{ice})$ is high.
+2. $P(\text{solid} \mid \text{steam})$ is low.
+3. The ratio $\frac{P(\text{solid} \mid \text{ice})}{P(\text{solid} \mid \text{steam})}$ is very large.
 
-# disadvants of low density reps
+GloVe is designed so that the vector differences capture these ratios. This is why it is so good at analogies—the math is explicitly built to preserve these proportional relationships.
 
-dimensions are un-interpretable; no way of knowing what dim reps what
+In LSA, rare co-occurrences (noise) and extremely frequent ones ("the", "and") carry too much weight. GloVe introduces a weighting function that: 
+1. Caps the influence of very frequent words (so "the" doesn't dominate).
+2. Ignores zeros (so sparse data doesn't break the model).
+3. Gives more weight to pairs that appear together more often, but only up to a point.
 
-non-determinism; random init, diff solution each each, new local minima, cannot find global min even if there was, cannot compare runs between corpus (silverlining; allows use to test of stat sign, if we get same neighbours if diff run then this is important)
+#### GloVe vs. Word2Vec
+In Word2Vec, the model might see "Ice" and "Water" together 1,000 times and think they are related.
+In GloVe, the model looks at the ratio: How much more often does "Ice" appear with "Solid" compared to how often "Steam" appears with "Solid"? It is this contrast between words across the entire dataset that creates the high-precision vector space GloVe is famous for.
 
-# where next with distribution semantics... what about phrases?
+## Correlation with Human Judgement
 
-sim of nurse to man?
+In the paper "Don’t count, predict! A systematic comparison of context-counting vs. context-predicting semantic vectors" (Baroni et al., 2014), researchers wanted to settle a debate: Is it better to build a giant table and count word overlaps (PPMI/LSA), or is it better to use the Word2Vec approach of predicting neighbors?
 
-# comosition intersective
+Baroni compared two main types of models:
+* Count-based: Traditional distributional models that use PPMI weighting and sometimes SVD (like LSA). These models literally "count" frequencies across the whole corpus.
+* Predict-based: Neural models like Word2Vec (Skip-gram/CBOW). These models "predict" the context in which a word appears.
 
-INCLUDE FORMULA
+The study found that predict-based models (Word2Vec) consistently outperformed count-based models across almost all tasks. These tasks included:
+* Synonym detection: Finding which word is most similar to a target.
+* Concept categorization: Grouping "apple" and "pear" as fruits.
+* Analogy solving: The $King - Man + Woman = Queen$ tests.
 
-male nurse associated with nurse and maleness 
+The "Human Judgement" part of your note refers to Intrinsic Evaluation. To see if a model is "good," we compare its mathematical similarity scores to human scores.
 
-cpatures the intitution that features of the phase must have occured with all of the constituents of the prhase
+The Test: Humans are asked to rate word pairs (e.g., "How similar are Cup and Mug on a scale of 1–10?").
 
-a fearture is associated with male nurse if its associated with male and nurse
+The Metric: Researchers use Spearman’s Rank Correlation. If the humans rank Cup/Mug as very similar and Cup/Cloud as very different, and the model’s vector distances show the exact same ranking, the model has a high correlation with human judgment.
 
-commonly implemented with pointwise mutliplication of vectors
+The Result: Baroni showed that Word2Vec vectors "aligned" with human intuition much more closely than the old PPMI counting methods.
 
-as the wordsin the phase are increaseed, this will tend towards a 0 zero vector due to sparsity. 
+Your note "dont bother counting just predict cooccurences" captures the radical conclusion of the paper. It suggested that the neural "prediction" task is a more powerful way to extract meaning than raw statistical counting.
 
-# coomposite addtive
+The neural network acts as a smarter filter—it ignores the noise and focuses on the underlying semantic "slots" that words fill, which is closer to how humans perceive meaning.
 
-INCLUDE FORMULA
+## What is Specical About Word2Vec and Glove
 
-more common way to think about composotion
+This section refers to the landmark paper "Neural Word Embedding as Implicit Matrix Factorization" (Levy & Goldberg, 2014).
 
-CPATURES THE INTITUATION THAT FEATURES of the phase must have occured with one of the consts of the prhases
+Before this paper, people thought Word2Vec worked because of "neural magic." Levy and Goldberg proved that Word2Vec wasn't doing anything mathematically "new"—it was actually just a very efficient way of doing Matrix Factorization on a PPMI matrix.
 
-feature will be associated with male nurse if it associated with male or nurse
+The reason Word2Vec seemed better than the old counting methods wasn't the neural network itself; it was the hyperparameters (the settings) used during training. The authors showed that if you apply these same "tricks" to traditional PPMI/SVD models, the old models perform just as well as Word2Vec.
 
-inplemented with additonal of vectors 
+These hyperparameters are the real reason Word2Vec and GloVe outperform basic counting.
 
-can re-normalise to get the constistuents
+#### 1. Dynamic Context Window
+Instead of treating all words in a window ($+/- 5$) equally, the model weights them by distance. Words closer to the target get more weight than words further away. This captures the intuition that immediate neighbors are more semantically relevant.
 
-as more words are compused will tends to the centre of the semantic space
+#### 2. Subsampling
+Frequent words like "the" or "and" carry very little information but appear constantly. Subsampling randomly removes these words from the training data, forcing the model to focus on more meaningful relationships (like "coffee" and "cup").
 
-after a while every feature will start to be come hihgly rated with target feature (phrase)
+#### 3. Deleting Rare Words
+Words that appear only once or twice are mostly noise (spelling mistakes, rare names). By deleting them entirely before building the context windows, you reduce the size of the vocabulary and stop the model from trying to learn "nonsense" patterns.
 
-# evaltion of compsition model 
+#### 4. Context Distribution Smoothing (CDS)
+When calculating PMI, the "negative" impact of frequent words is often too strong. CDS raises the context word frequencies to a power (usually $0.75$), which effectively "boosts" the probability of rare contexts and prevents common words from dominating the math.
 
-very difficult to get human phrase evaluaiton. rememebr it was hard just for words
+#### 5. Negative Sampling / Shifted PMI
+As you noted, this shifts the PMI values by a constant $k$. Mathematically: $PMI(w,c) - \log(k)$. This acts as a filter. It ensures that the model only considers a context "important" if its association is significantly higher than a random baseline.
 
-the eval is correlation with human simialrtity judgements for phrases
+#### 6. Combining Word and Context Vectors
+In Word2Vec/GloVe, every word ends up with two vectors (Target $W$ and Context $W'$). Levy and Goldberg found that simply adding these two vectors together ($W + W'$) often produces a better, more robust embedding than just using one.
 
-sementatic similarity in context tasks; application based eval;
+#### 7. Eigenvalue Weighting in SVD
+In traditional SVD (LSA), we often treat all "latent dimensions" equally. This trick suggests weighting the dimensions by their singular values (the eigenvalues). It helps the model prioritize the "strongest" semantic signals over the weaker ones.
 
-"do these two senteneces mean the same"
+---
 
-# chanllegnes of comp models 
+## Disadvantages of Low-Density (Dense) Representations
 
-note all phrases are composoiton
+#### Lack of Interpretability (The "Black Box")
+In a traditional co-occurrence matrix, if Dimension 405 has a high value, you can look it up and see it represents the word "banana." You know exactly why two words are similar. In a 300-dimensional Word2Vec space, Dimension 42 doesn't have a name. It is a mathematical abstraction. You cannot "interrogate" the vector. If the model says "Doctor" and "Hospital" are similar, you can't easily ask it which specific feature led to that conclusion. The meaning is "distributed" across all 300 dimensions.
 
-word order is surely important but adding vectors ignores order
+#### Non-Determinism (The "Random" Factor)
+Because Word2Vec and GloVe use Neural Optimization (Gradient Descent), they are non-deterministic. Every time you start training, the vectors are initialized with different random numbers. The model "descends" a loss landscape. Depending on where it starts, it might get stuck in a different "valley" (local minimum) each time. It can never be 100% sure it found the "perfect" global minimum. If you train the exact same model on the exact same data twice, you will get two different sets of vectors.
 
-negation? how to do we same something is not this
+#### Incomparability
+Because of this non-determinism, you cannot compare two different runs directly. If you train a model on 1990s news and another on 2020s news, you can't just subtract the vectors to see how the word "Amazon" has changed. The "coordinate systems" are completely different; Dimension 1 in the first run might correspond to Dimension 200 in the second. You would need to use a technique called Procrustes Alignment to "rotate" one space to match the other before comparing. 
 
+#### The "Silver Lining" of Non-Determinism
+Stability as a Proxy for Truth: If you run the model 10 times with 10 different random seeds, and "nurse" is a top-5 neighbor of "doctor" in all 10 runs, you can be statistically confident that the relationship is "real" and not just a fluke of the random initialization. If a neighbor only appears in 1 out of 10 runs, it's likely just noise.
 
+---
 
+## Compositional Distributional Semantics
 
-INSSERT IMAGE
+This is the "final boss" of distributional semantics: Compositionality. While we have mastered representing individual words, language is built on phrases and sentences. How do we mathematically combine two vectors into one?
 
+The core question is: If we have $\vec{u}$ (male) and $\vec{v}$ (nurse), what is $\vec{p}$ (male nurse)? Mitchell and Lapata (2008) introduced two primary models for this.
 
-**is this possible with sparse representations? seems like something that would need to have embeddings to acheive**
+#### Option 1: Intersective (Multiplicative) Composition
+This model assumes a feature is only relevant if it is associated with all parts of the phrase.
+* Intuition: "Male nurse" is the intersection of "maleness" and "nursing.
+* "Formula: $\vec{p} = \vec{u} \odot \vec{v}$ (Pointwise Multiplication).
+* The Math: For each dimension $i$, $p_i = u_i \times v_i$.
+* The Problem: Pointwise multiplication is "aggressive." If a feature has a $0$ in the "male" vector but a high value in "nurse," the result is $0$.
+* Result: As you add more words (e.g., "young male nurse"), the vector becomes sparser and tends toward zero, eventually losing all information.
 
+#### Option 2: Additive Composition
+This model assumes a feature is relevant if it is associated with any part of the phrase.
+* Intuition: A "male nurse" inherits features from both "male" and "nurse."
+* Formula: $\vec{p} = \vec{u} + \vec{v}$ (Vector Addition).
+* The Math: For each dimension $i$, $p_i = u_i + v_i$.
+* The "Centroid" Problem: As you add more and more words (e.g., a whole paragraph), the vector tends toward the geometric center of the entire semantic space. It becomes a "generic" vector that is slightly related to everything but specifically describes nothing.
+* Fix: Often, we use a weighted addition or re-normalization to keep the vector length manageable.
 
+---
 
+## Challenges of Compositional Models
+Even with complex math, these simple operations struggle with the nuances of human language:
+
+#### Non-Compositional Phrases (Idioms)
+"Kick the bucket" does not mean the addition of "kicking" + "buckets." Distributional models that rely on composition will completely fail on metaphors and idioms because the meaning of the whole is not the sum of its parts.
+
+#### Word Order (The "Bag of Words" Problem)
+Vector addition and multiplication are commutative.
+
+* $\vec{v}(\text{dog}) + \vec{v}(\text{bites}) + \vec{v}(\text{man})$
+* $\vec{v}(\text{man}) + \vec{v}(\text{bites}) + \vec{v}(\text{dog})$
+
+The resulting vector is identical, even though one is a common occurrence and the other is news. Simple composition ignores the vital information found in syntax and word order.
+
+#### Negation and Function Words
+How do you represent "not"? If you add "not" to "happy," you get a vector that is still very close to "happy" (since they share many contexts). Logic requires "not happy" to be the opposite or an inversion, but simple vector math doesn't handle logical operators well.
+
+---
+
+## Evaluation: How do we know it worked?
+Evaluation moves from word similarity to Sentence/Phrase Similarity.
+
+Intrinsic: Human Similarity Judgments. We ask humans to rate the similarity of "male nurse" and "doctor." We then see if our composed vector for "male nurse" has a high cosine similarity to "doctor."
+
+Extrinsic (Application-based): Paraphrase Detection. Can the model tell that "The boy ate the apple" and "The fruit was consumed by the child" mean the same thing? If the composed vectors for both sentences are close together, the model is successful.
+
+--- 
+
+# Composition Summary 
+
+Compositionality in distributional semantics explores how to mathematically combine individual word vectors to represent the meaning of phrases or sentences. Additive composition ($u + v$) treats the resulting phrase as a union of features, where a "male nurse" inherits characteristics from both "male" and "nurse"; however, this approach risks "diluting" the meaning into a generic centroid as more words are added. Conversely, intersective or multiplicative composition ($u \odot v$) acts as a filter, retaining only the features shared by all words in the phrase. While this captures specific overlaps well, it often leads to "sparsity," where the vector quickly collapses toward zero. Despite these methods, compositionality remains a major challenge because simple vector algebra struggles to account for word order ("man bites dog" vs. "dog bites man"), logical negation, and non-compositional idioms like "kick the bucket," where the total meaning is not found in the sum of its parts.
+
+--- 
+
+<br>
+<br>
+<br>
 
 ## Week 4: Seminar
 
-In distributional semantics, a composition model is a mathematical framework used to combine the meanings of individual words (represented as vectors) to form a representation for larger linguistic units, such as phrases or whole sentences. While standard distributional models are great at representing isolated words, they face a challenge: human language is infinite and hierarchical. We cannot have a pre-stored vector for every possible sentence ever spoken. Composition models solve this by allowing the system to "build" the meaning of a sentence from its parts.
+The seminar was largely a recover of the lecture content 
 
-# Human Synonymy Judgements
+## Week 4: Paper 
 
-game skip
+> Linguistic Regularities in Continuous Space Word Representations by Mikolov, Yih, and Zweig (2013)
 
-# Q1
+This 2013 paper (by Mikolov, Yih, and Zweig) is the one that really "sold" word embeddings to the world. While the other Mikolov papers focus on the speed and the RNN architecture, this specific paper focuses on the linguistic beauty of the vector space. Before this paper, word vectors were evaluated based on how well they helped a model predict the next word (perplexity). This paper proposed a much more exciting idea: word vectors actually capture human-like reasoning. The authors showed that vectors aren't just arbitrary points; they encode linguistic relationships as geometric offsets (vectors).
 
-# What do you under be prob of sparsity
+The paper proved that semantic and syntactic relationships are represented by consistent vector distances.The Logic: If you take the vector for "King" and subtract the vector for "Man", you are left with a "royalty" vector. If you add that to "Woman", the result is closest to the vector for "Queen".The Formula: $V(Queen) \approx V(King) - V(Man) + V(Woman)$
 
-* words are rare
-* co-occuring words are even rarer
-* dist model = co-occuring in sentence = context
+#### 1. What are the main findings of this paper? Are you convinced?
 
-# possible solutions
+The paper demonstrates that word representations learned by neural network language models (specifically RNNs) capture consistent linguistic regularities as linear vector offsets. By using a new analogy-based evaluation ($A:B :: C:D$), the authors show that relationships like verb tense or capital cities are encoded geometrically, allowing for vector arithmetic such as $King - Man + Woman \approx Queen$. This is a convincing shift in evaluation because it moves beyond simple similarity to prove that the model captures structured, relational knowledge.
 
-smoothing; dim red; embed with fixed dim (lang models)
+#### 2. What do the authors claim is the main advantage of using distributed representations of words (aka. embeddings) over classical n-gram language models?
 
-# distributional smooth
+The primary advantage is the ability to generalize to unseen sequences by mapping words into a continuous, dense vector space. While classical n-grams suffer from sparsity—having no information about word sequences not explicitly seen in the training data—embeddings "smooth" the space so that semantically similar words (e.g., "sapphire" and "azure") share similar coordinates. This allows the model to assign high probabilities to novel phrases based on their components' proximity to known examples, effectively solving the "zero-count" problem and reducing perplexity.
 
-get post estimate by looking at the cooccureances of the target word + its neighbours
+#### 3. What is meant by a syntactic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing syntactic regularities. Do you think the same would apply to other distributional word representations?
 
-requiers a good and robust way to obtain similar instances
+A syntactic analogy relates to the grammatical form of words, such as "walking : walk :: climbing : climb." Word2Vec captures these because words with the same grammatical suffix or tense appear in nearly identical functional contexts (e.g., following auxiliary verbs like "is" or "was"), leading to parallel vector offsets for specific rules like pluralization or tense. While traditional models like LSA often "wash out" these subtle cues by using large context windows, newer models like FastText improve on this further by representing words as bags of character n-grams, allowing them to calculate syntactic positions even for rare or unseen word forms.
 
-# alternative to smoothing
+#### 4. What is meant by a semantic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing semantic regularities. Do you think the same would apply to other distributional word representations?
 
-# QUESTIONS 
+A semantic analogy captures conceptual relationships and real-world knowledge, such as "London : England :: Paris : France." Word2Vec excels here because the vector "jump" between a country and its capital represents a specific semantic direction that remains consistent across the entire space. While earlier global models like LSA are better at broad topical association (grouping "doctor" with "hospital"), they often lack the fine-grained directional precision of Word2Vec or GloVe, the latter of which was explicitly engineered to preserve these relational ratios in its global statistics.
 
-# 1. What are the main findings of this paper? Are you convinced?
+#### 5. Explain the vector offset method used to answer an analogy question. In particular, what happens when no word exists at the predicted position?
 
-
-
-
-
-# 2. What do the authors claim is the main advantage of using distributed representations of words (aka. embeddings) over classical n-gram language models?
-
-The main advantage is the ability of distributed representations to generalize to unseen word sequences. Words are mapped to a continuous vector space where semantically similar words are close to one another. Classical N-grams: These models rely on exact matches of word sequences. If a specific n-gram (e.g., "the sapphire sky") was not seen in the training data, the model has no information about it, leading to the "sparsity" problem. Because the model represents "sapphire" and "azure" as similar vectors, a model trained on "the sapphire sky" can naturally assign a high probability to "the azure sky," even if that specific phrase never appeared in the training set. 
-
-The authors demonstrate that RNN-based distributed representations capture multi-dimensional semantic and syntactic relationships as constant vector offsets.
-
-Because embeddings "smooth" the language space continuously, they often achieve lower perplexity (a measure of how well a probability distribution predicts a sample) than n-gram models.
-
-
-
-
-
-
-# 3. What is meant by a syntactic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing syntactic regularities. Do you think the same would apply to other distributional word representations?
-
-In the context of word embeddings, a syntactic analogy refers to a relationship based on the grammatical structure or "form" of words rather than their core meaning. While a semantic analogy relates to concepts (e.g., Paris : France), a syntactic one relates to linguistic rules like verb tense, pluralization, or degrees of comparison. These follow the pattern $A : B :: C : D$ (read as "$A$ is to $B$ as $C$ is to $D$"):
-
-Word2Vec (specifically architectures like CBOW and Skip-gram) captures these because of the Distributional Hypothesis: words that appear in similar contexts have similar meanings. In syntax, "form" dictates context just as much as "meaning" does.
-
-Consider the words "climbing" and "climb":
-
-Shared Semantic Context: Both will appear near words like "mountain," "rope," or "steep."
-
-Unique Syntactic Context: "Climbing" will frequently be preceded by auxiliary verbs like "is," "was," or "are" (e.g., "He is climbing"). "Climb" will follow modals or "to" (e.g., "They want to climb").
-
-The Result: The model learns a specific vector offset for the "-ing" suffix. Because the context shift from "walk" to "walking" is statistically almost identical to the shift from "climb" to "climbing," the vectors for these changes become parallel in the embedding space.
-
-Early distributional models based on large co-occurrence matrices (like Latent Semantic Analysis) are generally weaker at capturing fine-grained syntactic analogies. They tend to capture "topical" similarity (e.g., doctor and hospital). Because they often use large context windows or bag-of-words approaches, the subtle word-order cues required to distinguish "walk" from "walking" often get washed out.
-
-Models like FastText (an evolution of Word2Vec) are actually better at syntactic regularities. FastText represents a word as a sum of its character n-grams (e.g., "climbing" = cl, li, im, mb, bi, in, ng). Even if the model has never seen a specific rare verb, it recognizes the -ing or -ed ending and can mathematically "calculate" its syntactic position based on those sub-parts.
-
-
-# 4. What is meant by a semantic analogy? Give some examples of your own. Use some examples to explain why word2vec embeddings might be good at capturing semantic regularities. Do you think the same would apply to other distributional word representations?
-
-A semantic analogy refers to a relationship based on the meaning, concepts, or real-world knowledge associated with words, rather than their grammatical form. In a vector space, this is represented by the idea that the "distance" and "direction" between two concepts (like a country and its capital) remain constant across different pairs.
-
-These follow the proportional relationship $A : B :: C : D$:Capital Cities: London : England :: Tokyo : Japan 
-
-Word2Vec (specifically Skip-gram and CBOW) excels here because it treats words as dense vectors learned from their surrounding context. The model relies on the fact that words with similar meanings appear in similar environments.
-
-The specific vector offset—the "jump" you take to get from the country to the city—represents the concept of "being the capital of." Because the model sees the same pattern for Berlin and Germany, the vector $\vec{v}(Berlin) - \vec{v}(Germany)$ ends up pointing in the same direction and having the same length as $\vec{v}(Paris) - \vec{v}(France)$.
-
-Earlier models like Latent Semantic Analysis (LSA) capture thematic similarity (e.g., bee is near honey), but they often struggle with specific relational analogies. Because they use global matrix factorization, the fine-grained directional relationships (the "offset") are often not as precisely preserved as they are in the prediction-based Word2Vec.
-
-Yes, the same applies here, and often even better. GloVe was designed specifically to capture these linear regularities by training on the ratio of co-occurrence probabilities. It explicitly forces the global statistics of the corpus into a model where the differences between word vectors represent meaning.
-
-
-
-
-
-
----
-
-**what is lsa**
-LSA is a form of dimensionality reduction. Its goal is to take a massive, sparse matrix (where most values are zero) and transform it into a compact, dense representation that captures the "thematic neighborhood" of words rather than just their exact spelling. LSA relies on a mathematical process called Singular Value Decomposition (SVD): The Matrix: You start with a "term-document matrix" that tracks how often every word appears in every document. The Compression: SVD factorizes this matrix into smaller pieces, effectively "throwing away" the noise and keeping only the most important statistical dimensions. The Result: Words that frequently appear in the same types of documents are pushed together in a multi-dimensional space, even if those words never actually appear in the same sentence.
-
-A major advantage of LSA is its ability to handle synonyms. In a traditional system, "physician" and "doctor" are treated as completely different things because they are spelled differently. In LSA, because "physician" and "doctor" both tend to appear in documents about hospitals and medicine, the model learns that they are nearly identical features.
-
-In our more recent discussions, we compared LSA to neural approaches like Word2Vec:LSA (Global): Analyzes the entire corpus at once to find global themes. It is generally better at capturing "topical" similarity (e.g., bee and honey).Word2Vec (Local): Uses a "sliding window" to look at immediate neighbors. It is often better at capturing specific relational analogies like $King - Man + Woman = Queen$.
-
-Speed & Efficiency: It makes classification models faster and less prone to overfitting by compressing thousands of unique words into a few hundred "concepts".
-
-Thematic Understanding: It allows a computer to understand that a document about "strikeouts" relates to Sports, even if the word "sports" is never mentioned.
-
-While your intuition is correct—LSA definitely learns that "Paris" and "France" "go together"—there is a technical reason why it struggles with relational analogies (like the city:country pair) compared to Word2Vec.
-
-It comes down to the difference between Topical Association and Relational Linearities.
-
-Topical Association vs. Relational Direction
-LSA is excellent at Topical Association. If you search for "Paris," LSA will likely return "France," "Eiffel Tower," and "baguette" because they all co-occur in the same documents. In the vector space, these words will form a "cloud" or cluster.
-
-However, a Semantic Analogy requires more than just being in the same cloud; it requires a consistent directional vector.
-
-To solve Paris : France :: Tokyo : Japan, the model needs the "step" from France to Paris to be the same mathematical direction as the "step" from Japan to Tokyo.
-
-LSA vectors are built using Singular Value Decomposition (SVD), which focuses on reconstructing the global variance of the data. This often "squashes" the specific directional relationships into a general "topic" dimension. You know they are related, but the math doesn't necessarily preserve the specific nature of the relationship (e.g., "is the capital of") as a straight line.
-
-The "Bag of Words" Limitation
-As we discussed earlier, LSA typically uses a Term-Document Matrix This means it looks at whether words appear in the same document. Because documents are large, the relationship it learns is broad: "These words are about French things". Word2Vec uses a tiny local window (5–10 words). By looking only at immediate neighbors, it captures the specific linguistic "slots" words fill. The precision of these small windows is what allows the linear "offset" (the analogy math) to emerge so clearly.
-
-Global Statistics vs. Local Prediction
-LSA (Global): It is great for Document Classification because it knows the "gist" of a text. It knows "Paris" belongs in the "France" topic. Word2Vec (Local): It is better at Linguistic Regularities because it treats word relationships like a map with specific coordinates and directions.
-
-LSA does learn they go together, but it maps them as a cluster (a neighborhood). Word2Vec maps them as a displacement (a specific path).
-
----
-
-
-
-
-
-
-
-
-
-
-# 5. Explain the vector offset method used to answer an analogy question. In particular, what happens when no word exists at the predicted position?
-
-The vector offset method is a technique used in distributional semantics to solve word analogies by treating semantic relationships as geometric displacements. This method relies on the finding that in a well-trained vector space (like Word2Vec), the relationship between two words is represented by the constant distance and direction between them.
-
-How the Vector Offset Method WorksTo solve an analogy of the form "$A$ is to $B$ as $C$ is to $D$" (e.g., King : Man :: Queen : Woman), the model follows these steps:Calculate the Relationship Vector: The model calculates the difference between the vectors for words $A$ and $B$: $\vec{v}(B) - \vec{v}(A)$. This represents the "relational shift" (like gender or capital city).Apply the Offset: This vector is added to the vector for word $C$. This points the model toward a location in the vector space where $D$ should theoretically reside: $\vec{v}(D) \approx \vec{v}(C) + (\vec{v}(B) - \vec{v}(A))$.Find the Result: The model then looks for the word vector in the dictionary that is closest to this new coordinate.
-
-Because word embeddings inhabit a continuous space, the mathematical result of the calculation ($\vec{v}(C) + \vec{v}(B) - \vec{v}(A)$) will almost certainly point to a precise coordinate where no actual word vector is located. To resolve this, the model uses the following strategies:
-
-Cosine Similarity Search
-The model does not look for an exact match. Instead, it performs a nearest-neighbor search using a metric like Cosine Similarity. It scans the entire vocabulary to find the word vector that has the smallest angular distance from the predicted coordinate.
-
-To prevent the model from simply returning one of the words used in the query (which are often very close to the target area), the inputs $A, B,$ and $C$ are typically excluded from the search results. For example, if the model calculates $King - Man + Woman$, it will ignore those three words and find the next closest neighbor, which is usually Queen. 
-
-
-
+The vector offset method solves analogies by calculating the displacement between two words ($\vec{v}(B) - \vec{v}(A)$) and adding it to a third ($\vec{v}(C)$) to predict the position of the fourth. Because the resulting coordinate exists in a continuous space, it rarely lands exactly on a pre-existing word vector; instead, the model performs a nearest-neighbor search using cosine similarity to find the closest word in the vocabulary. To ensure meaningful results, the input words $A, B,$ and $C$ are typically excluded from the search results to avoid the model simply returning the starting words.
 
 # 6. What do you think of the results for identifying syntactic regularities? Is answering more than 1 in 3 questions correctly a good result? Are there any obvious trends in the results?
 
+Answering more than 1 in 3 questions (approx. 33%–40% in this early paper) was a significant breakthrough at the time, as previous models often performed near 0% on such precise relational tasks. A clear trend in the results is that syntactic regularities are often easier for these models to capture than semantic ones, as grammatical rules (like pluralization) are applied more consistently across the corpus than world-knowledge relationships, which can be affected by data sparsity or polysemy.
 
 
 # 7. Do you think the comparisons with other methods are fair? Why do the authors use a different test set when comparing with Collobert & Weston (2008) and Mnih & Hinton (2009)? Does this test set appear to be easier or harder than the original one?
 
+The comparisons are somewhat limited because the authors had to use different test sets for models like Collobert & Weston (2008) to accommodate the original researchers' specific vocabulary and training constraints. This second test set is generally considered easier than the original because it often features more common words and simpler relationships. While this makes a direct "head-to-head" comparison difficult, it was a necessary compromise to evaluate different architectures that weren't trained on the same massive Google News datasets.
 
 # 8. What do you think of the results for identifying semantic regularities? Why are results given for
-Spearman’s Rank and MaxDiff Accuracy rather than Accuracy (as before)?
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Semantic results are reported using Spearman’s Rank Correlation and MaxDiff Accuracy because semantic similarity is often subjective and continuous rather than binary. Spearman’s Rank measures how well the model’s similarity ordering aligns with human intuition (e.g., ranking "cat/dog" higher than "cat/spoon"), while MaxDiff asks the model to identify the most and least similar pairs in a set. This provides a more nuanced view of the model’s conceptual "common sense" than a simple correct/incorrect accuracy score used for rigid syntactic rules.
 
 ---
 
-**Glvoe vs Word2Vec**
-
-The fundamental difference between GloVe (Global Vectors for Word Representation) and RNNs (Recurrent Neural Networks) lies in their mathematical objective: GloVe is a count-based, global matrix factorization model, whereas an RNN is a prediction-based, sequential model.
-
-While both ultimately produce dense word embeddings, they "look" at the data through very different lenses.
-
-1. Global Statistics vs. Local Context
-GloVe (Global): GloVe operates on a Global Co-occurrence Matrix. It looks at the entire corpus at once and counts how often every word in the dictionary appears near every other word. It focuses on the ratio of these probabilities to determine word meaning.
-
-RNN (Sequential): An RNN processes text one word at a time in a specific order. It builds a representation by trying to predict the next word in a sequence based on the "hidden state" (memory) of the words that came before it.
-
-Feature,GloVe,RNN (as used by Mikolov et al.)
-Input Data,A pre-computed word-word co-occurrence matrix.,Raw sequences of text (sentences).
-Goal,To ensure the dot product of two vectors equals the log of their co-occurrence count.,"To minimize ""perplexity""—making the predicted next word as accurate as possible."
-Handling Order,"Generally order-insensitive; it knows words are ""near"" each other but doesn't care which came first.",Strictly order-sensitive; the meaning of the hidden state changes based on word sequence.
-
-GloVe produces Static Embeddings. Once training is finished, the word "bank" has one fixed vector regardless of whether you are talking about a river or a vault.
-
-RNNs produce two types of representations. While the "input weights" $(\mathbf{U})$ are static, the Hidden State $(\mathbf{s}(t))$ is a Contextual Summary. It is a unique, composed vector that represents the meaning of the entire sentence up to that point.
-
-4. Which is better for Analogy Tasks?GloVe was specifically engineered to be excellent at the vector offset method ($King - Man + Woman = Queen$). Because it is forced to learn the global ratios of word occurrences, these linear regularities are often very "clean" and consistent across the whole space.RNNs capture these regularities as a byproduct of learning language. While they are very good at it, the primary "finding" of the Mikolov paper was that it was surprising a sequential prediction model would produce such neat linear geometry at all.
-
-If you want to understand global themes and solve analogies quickly, GloVe is the standard tool. If you want to understand sentence structure, word order, and compositional meaning, the RNN approach (or its modern successor, the Transformer) is required.
-
-In a broad sense, yes, the resulting vectors from GloVe and the weights in an RNN represent the same thing—semantic coordinates in a continuous space—but they are constructed using very different mathematical "blueprints."
-
-While they both end up as dense matrices where each row is a word vector, the internal logic of those values differs.
-
-1. Functional Similarity: The Lookup TableIn both models, the "word representations" act as a lookup table.In GloVe: The dense matrix is the result of factorizing a global co-occurrence table.In RNNs: The dense matrix (specifically the input weight matrix $\mathbf{U}$) is trained via backpropagation to help the model predict the next word.The Result: In both cases, if you take the row for "sofa" and the row for "couch," the numbers in those rows will be very similar because both models learned from context.
-
-3. The "Static" vs "Contextual" DistinctionThis is the most critical difference in how these weights behave during use:GloVe Weights: These are static. Once the matrix is trained, the vector for "bank" is fixed. It is essentially a "dead" file you look up.RNN Weights: While the matrix $\mathbf{U}$ is also static, it is just the starting point. The RNN uses these weights to build a dynamic hidden state $\mathbf{s}(t)$.If the RNN sees "River" followed by "bank," the hidden state $\mathbf{s}(t)$ will be a unique vector representing a "water-related bank."If it sees "Investment" followed by "bank," $\mathbf{s}(t)$ becomes a "finance-related bank".
-
-Which one is "Better"?
-GloVe is often preferred for Relational Analogies because its global objective forces the "geometry" of the space to be very consistent (e.g., the King - Man + Woman math). RNN Weights (and the resulting hidden states) are better for Syntactic Tasks and Compositionality, as they were trained to understand how words interact sequentially.
-
-In the context of models like GloVe or LSA, factorizing a global co-occurrence table is a mathematical process used to compress a massive, sparse record of language into a compact, dense "map" of meaning.
-
-First, you build a Global Co-occurrence Matrix.
-
-Factorization is a linear algebra technique that breaks one large matrix into two (or more) smaller matrices which, when multiplied together, recreate the original as closely as possible.In distributional semantics, we factor our giant $V \times V$ matrix into two smaller matrices of size $V \times d$ (where $d$ is a small number like 300).Matrix $W$: Represents the "Word" vectors.Matrix $C$: Represents the "Context" vectors.
-
-The magic of factorization is that it forces the model to find latent (hidden) dimensions.
-Because the model only has 300 dimensions to explain billions of co-occurrence counts, it has to find the "common denominators" of language.
-
-While an RNN learns these vectors by "reading" sentences one by one and predicting what comes next, Factorization looks at the "big picture" statistics of the whole language at once.
-
-Factorizing a co-occurrence table is essentially mathematical summarization. You take the "raw evidence" (who hangs out with whom) and condense it into "character traits" (the dense vectors).
-
-While both GloVe and SVD (the engine behind Latent Semantic Analysis) are global matrix factorization techniques, they differ fundamentally in what they factorize and how they handle the math. If SVD is a "brute force" mathematical compression, GloVe is a "linguistically motivated" optimization.
-
-1. The Matrix they Factorize
-The most significant difference is the "preprocessing" of the data before the math starts:
-* SVD (Latent Semantic Analysis): Typically factorizes a Term-Document Matrix. This matrix tracks which words appear in which documents. Because it looks at the document level, it excels at identifying broad topics (e.g., seeing that "stadium" and "referee" both belong to the "Sports" topic).
-+1
-* GloVe: Factorizes a Word-Word Co-occurrence Matrix. Instead of looking at documents, it looks at a "sliding window" of local context across the entire corpus. It tracks how often "ice" appears near "cold" versus how often "steam" appears near "hot."
-
-2. The Objective: Linear RatiosThe "magic" of GloVe that makes it superior for analogies (like King - Man + Woman = Queen) is its specific mathematical objective.SVD: Aims for Reconstruction. It tries to find a lower-dimensional version of the matrix that has the minimum possible error compared to the original. It treats every "count" with similar importance.GloVe: Aims to model the ratio of co-occurrence probabilities.The Logic: If you want to know the difference between ice and steam, looking at the probability of water appearing near them doesn't help (it's high for both). But the ratio of $P(solid|ice) / P(solid|steam)$ will be very high.GloVe forces the word vectors' dot products to equal the logs of these co-occurrence counts, which preserves these linear ratios much better than SVD.
-
-In GloVe, deciding the size of the learned matrices involves two distinct dimensions: the Vocabulary Size ($V$) and the Embedding Dimension ($d$).
-
-1. The Vocabulary Size ($V$)This determines the number of rows in your word and context matrices.Thresholding: Rather than including every single string of characters found in a crawl (which would include typos and rare gibberish), researchers typically set a minimum frequency count (e.g., a word must appear at least 5 times).Computational Limits: A larger $V$ increases the memory footprint of the co-occurrence matrix exponentially ($V^2$). Most standard models cap $V$ between 50,000 and 400,000 words to balance coverage with hardware constraints.
-
-2. The Embedding Dimension ($d$)This is the number of columns in your matrices (the length of the word vector). Choosing this is a "Goldilocks" problem:Too Small ($d < 50$): The model suffers from underfitting. There aren't enough dimensions to capture the nuance between complex concepts (e.g., the subtle difference between "remorse" and "regret" might be lost).Too Large ($d > 1000$): The model begins to overfit to the noise in the training data. Furthermore, you encounter "diminishing returns" where the marginal gain in accuracy is outweighed by the massive increase in training time and memory.The "Sweet Spot": For most general-purpose NLP tasks, $d$ is set between 100 and 300. The original GloVe researchers found that performance on analogy tasks improves rapidly up to 200 dimensions, but plateaus significantly after 300.
-
-3. Hyperparameter TuningBecause there is no "perfect" number that works for every dataset, researchers use empirical validation:Downstream Task Performance: They train multiple versions (e.g., 50d, 100d, 300d).Evaluation: They test each on a specific task, like the Analogy Test ($King - Man + Woman = ?$) or Sentiment Analysis.Selection: They choose the smallest dimension that achieves the highest required accuracy.
-
-Actually, it’s quite the opposite! While GloVe is based on global statistics, it uses an iterative training process almost identical to modern neural networks.
-
-To be clear: GloVe has a specific loss function and uses Stochastic Gradient Descent (SGD) to minimize it.
-
-Even though GloVe factorizes a matrix, it doesn't use the standard closed-form math of SVD. Instead, it defines a Weighted Least Squares objective function. The goal is to make the dot product of two word vectors plus some "bias" terms equal to the log of their actual co-occurrence count:
-
-$$J = \sum_{i,j=1}^{V} f(X_{ij}) \left( w_i^T \tilde{w}_j + b_i + \tilde{b}_j - \log X_{ij} \right)^2$$
-
-$w_i^T \tilde{w}_j$: The dot product of the word and context vectors (the "predicted" similarity).
-$\log X_{ij}$: The "ground truth" (how often they actually appeared together in the corpus).
-$f(X_{ij})$: The weighting function (explained below).
-
-2. The Use of Gradient DescentBecause this is a massive optimization problem ($V^2$ possible pairs), you can't solve it in one go.
-* Initialization: The matrices (the rows of word vectors) are initialized with random numbers.
-* Sampling: The model iterates through all the non-zero entries in the global co-occurrence matrix.
-* Error Calculation: It calculates the "loss" (the difference between the dot product and the actual log-count).
-* Gradient Descent: It uses Stochastic Gradient Descent (SGD) to nudge the values in those vectors so that the error decreases.
-
-This is what makes GloVe different from a standard matrix factorization. In a normal factorization, every "zero" or "one" in the table has the same weight. In language, that's a disaster because:Rare words are noisy.Common words (like "the") appear so often they would dominate the whole model.GloVe’s loss function uses a weighting curve that caps the influence of very frequent words and ignores pairs that never co-occurred ($X_{ij} = 0$).
-
-People often think that "Global Statistics" means "No Training." However, in this case, the Global Statistics are just the Training Data.
-
-* RNNs: Train on raw text (word by word).
-* GloVe: Trains on a summary of the text (the co-occurrence matrix).
-
-Both use Loss Functions and Gradient Descent to turn that data into dense vectors
-
----
-
-## Week 4: Lab Content
-
-## Week 4: Additional Reading
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # [Week 5 - Applications in NLP](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-5-applications-in-nlp)
 
-This week we will be looking at different types of applications in NLP. In particular, we will focus on sequence classification applications and sequence labelling applications.  We will give a broad overview of what it means to be one of these types of application and how performance of an approach can be evaluated.  We will discuss a range of different approaches, contrasting traditional approaches to approaches which have been developed which make use of language models.  This will pave the way for us to be able to consider transformer-based approaches and large language models in a few weeks time. 
+The ultimate goal of language modeling is rarely just to calculate the probability of a string of words or to find the mathematical distance between two vectors; rather, these models serve as the foundational engine for real-world applications. By treating language as a sequence of discrete units, we can apply different computational frameworks to solve diverse problems: Sequence Classification allows us to categorize entire documents (such as detecting sentiment or spam), while Sequence Labelling enables us to interrogate the internal structure of a sentence (such as identifying parts of speech or named entities). This week, we transition from theoretical word representations to practical architectures, exploring how traditional Bayesian methods like Hidden Markov Models (HMMs) have paved the way for modern, high-performance neural pipelines. Understanding these applications now provides the necessary grounding for when we eventually substitute these basic models with more advanced Transformer-based architectures in the coming weeks.
 
-#### Week 6: Contents
+#### Week 5: Contents
 
-1. [Lecture](#week-6-lecture)
-2. [Seminar]()
-4. [Additional Readings]()
+1. [Lecture](#week-5-lecture)
+2. [Seminar](#week-5-seminar)
+3. [Paper](#week-5-paper)
+4. [Additional Readings](#week-5-additional-reading)
 
-## Week 6: Lecture
+---
+
+## Week 5: Lecture
 
 ## Applications of Language Modelling
 
@@ -1900,59 +1683,129 @@ Application types: for almost all app we will think of the input as a seq of wor
 
 approachs: traditional, language models, more advanced models; how out avs models slot it
 
-* [Part 1: Sequence Classifciaiton]()
-* [Part 2: Sequence Labelling]()
+* [Part 1: Sequence Classifciaiton](#part-1-sequence-classifciaiton)
+* [Part 2: Sequence Labelling](#part-2-sequence-labelling)
 
-## Part 1: Sequence Classifciaiton
+## Part 1: Sequence Classification
+
+Sequence classification is the cornerstone of many practical NLP tasks. In this section, we move from understanding individual words to making high-level decisions about entire blocks of text.
+
+#### What is Sequence Classification?
+
+In sequence classification, we take an input sequence of words—which could be a tweet, a product review, or an entire legal document—and map it to a single label. The term "sequence" is used because it imposes no constraints on the length or type of the text; the model simply processes a string of tokens as a unit.
+
+* Sentiment Analysis: (e.g., Positive, Negative, Neutral)
+* Topic Labeling: (e.g., Sports, Finance, Politics)
+* Spam Detection: (e.g., Spam, Not Spam)
+* Relevance: Determining if a document matches a specific query.
+
+Before we train a model, we define the label space (the possible outputs). This determines the type of classification we are performing:
+* Binary Classification: Choosing between two mutually exclusive classes (e.g., Spam or Not Spam).
+* Multi-class Classification: Choosing one class from a set of three or more (e.g., classifying a news article as either "Technology," "Health," or "Business").
+
+We can also distinguish between how the model "makes" its decision:
+* Hard Classification: The model makes a final, definitive choice, placing the sequence into a single "bucket."
+* Soft Classification: The model outputs a probability distribution across all possible classes (e.g., 60% Hate Speech, 30% Offensive, 10% Neutral). This is much more common in modern NLP, as it accounts for the fact that a long document might touch on multiple topics to varying degrees.
+
+#### How do we represent the sequence?
+To classify text, the computer needs to turn that sequence of words into a numerical format. We will explore three main ways to do this:
+* The Traditional Approach (BoW): Counting word occurrences and ignoring order.
+* Composition of Embeddings: Adding or averaging word vectors (Word2Vec/GloVe) to find a "centroid" for the document.
+* Neural Models: Using RNNs or LSTMs to build a representation that respects word order.
+
+#### The Subtle Different Betwween Word2Vec and Neural Models
+The fundamental difference lies in how word order and context are handled: Composition of Embeddings (such as averaging or summing) is a "bag-of-words" approach that treats words as independent units, meaning the sentence "man bites dog" would result in the exact same vector as "dog bites man" because simple addition ignores sequence. In contrast, Neural Models like RNNs or LSTMs process words sequentially, using a mathematical "hidden state" that updates at each step to maintain a memory of what came before. This allows the neural approach to be order-aware and contextual, meaning it can distinguish between different meanings of the same word based on its position in the sentence, whereas simple composition merely calculates the "semantic center" of the vocabulary used.
+
+Word2Vec is a neural model used to create the embeddings, but "Composition" is how you use them later. We use a neural network (like Word2Vec) to learn that the word "bank" should be represented by a specific vector. During this stage, it does use a context window to learn that meaning. Once the training is done, we "freeze" that vector and throw the neural network away. We are left with a static dictionary of vectors. Now you want to classify the sentence "I went to the bank.":
+* If you choose Composition, you just grab the frozen vectors for those five words and add them together. You are no longer using a neural network; you are just doing simple math on the "output" of a previous neural network.
+* If you choose a Neural Model (RNN/LSTM), you feed those frozen vectors into a new moving neural network that reads them one by one.
+
+The Key Distinction: "Static" vs. "Dynamic"
+* Composition is Static: It treats the word "bank" as the same fixed vector regardless of the other words in your specific sentence. The "context" was used to create the vector months ago, but it isn't being used to process the sentence right now.
+* Neural Models (RNNs) are Dynamic: They re-evaluate the context of every word as they read your sentence in real-time. The vector for "bank" is modified by the "memory" of the word "river" that the model just read two tokens ago.
+
+Summary: Word2Vec uses a context window to define a word's identity, but an RNN uses a sequential approach to define a word's specific role in a sentence.
+
+This in phase of research, pre-transformers, the progression was to train Word2Vec on a large unlabled corpus and then feed the word embeddings into another RNN/LSTM. The RNN doesn't have to learn what "bank" or "river" means from scratch; it already knows their general identities. Its only job is to learn how those words interact in a specific sequence to determine a label (like Sentiment or Topic). This second step is in leiu of doing composition on the derived vectors. 
+
+---
 
 
-wht is seq classification
 
-how to represent document/sequence representation
 
-how to evaluation the classification
 
-the traditional approach for constast and basis of learning
 
-language modelling approaches: baysian, composition of embeddings, neural classification models
 
-## Seq Classication
+## Sequence Classification: Evalulation
 
-could be doc, text classification
+Now that we have these two ways to classify (the "Smoothie" Additive method or the "Chef" Neural method), how do we decide which one is better? We use a set of metrics that look beyond just "Accuracy."
 
-we call seq as there is no constraint on what the serquence is 
+#### Evaluation: Precision, Recall, and F1
 
-we are making a sequence level classification. 
+In classification, Accuracy (Total Correct / Total Samples) can be a "trap," especially if your classes are imbalanced (e.g., if 99% of your emails are NOT spam, a model that always guesses "Not Spam" is 99% accurate but totally useless).
 
-could be sentiment, topic, relvlance, spam, machine gnereated
+To fix this, we use the Confusion Matrix to track four metrics:
+* True Positives (TP): We said it was Spam, and it was.
+* False Positives (FP): We said it was Spam, but it was a normal email (The "Annoyance").
+* False Negatives (FN): We said it was normal, but it was Spam (The "Failure").
+* True Negatives (TN): We said it was normal, and it was.
 
-there is an input seq and just 1 label
+---
+| Metric | Formula | Intuition |
+| :--- | :--- | :--- |
+| Precision | TP+FPTP​ | When the model says it's Spam, how often is it right? (Quality) |
+| Recall | TP+FNTP​ | Of all the actual Spam out there, how much did we catch? (Quantity) |
+| F1-Score | $2⋅Prec+RecPrec⋅Rec$​ | The balanced middle ground (Harmonic Mean). |
+---
 
-classifcation could be minary or mutli-class but whatever it is be know the possible outputs before hand
+#### Macro vs. Micro Averaging
 
-classif could be hard or soft; hard = put each seq into a single class, soft = interested in learning the correct probabilit, i.e. 60% likely to be hate speec. soft approachs are more common for mutliclass approaches, as large docs will have mutli topics thus valid for moere than one, and by different extents
+When we move beyond binary (Yes/No) classification to Multi-Class classification, we calculate Precision, Recall, and F1 for each individual class. To get a single score for the whole model, we have to aggregate those results.
 
-## Evalulation
+#### Macro-Average (The "Class-Centric" Approach)
+Macro-averaging treats every class as equally important, regardless of how many samples it contains.
 
-How to eval seq class?
+You calculate the F1 for each class separately and then take the simple arithmetic mean.
 
-accuracy; how many decision right out of total. 
+If you have 3 classes (A, B, and C), the formula is $\frac{F1_A + F1_B + F1_C}{3}$
 
-moves into int of confusion matrix: TP, FP, FN, TN
+You use this when you want to ensure the model performs well on small, rare classes. If your model is great at the common classes but fails on the rare ones, your Macro-F1 will be very low. It punishes the model for neglecting the "underdogs."
 
-these are the simplist measures and are at the mercy of class disribution which can trick a high accuracy. 
+#### Micro-Average (The "Sample-Centric" Approach)
 
-this means to **precision, recall and f1**
+Micro-averaging treats every individual sample as equally important.
 
-[INSERT QUICK DEFINITION OF THESE ARE THEIR FORMULAS WHICH RESPRECT TO CONFUSION MATRIX]
+You aggregate the TPs, FPs, and FNs from all classes together first, and then calculate a single F1 score from those totals.
 
-[INSERT IMAGE FOR MUTLI CLSAS CONFUSION MATRIX]
+This is essentially weighted by class size. If Class A has 900 samples and Class B has 10 samples, Class A will dominate the Micro-average result.
 
-This results in duplicates of prec, recall or f1
+When you care about the overall success rate across the entire dataset and aren't specifically worried about whether the model is struggling with a tiny subset of the data.
 
-THe most common approach is to average one of the metrics for each of the classes, usually F1
-* macro average: unweighted average
-* micro average: average weighted by size of each class
+When we calculate the Micro-average for a multi-class problem (where each instance has exactly one ground-truth label and one predicted label), it turns out that Micro-Precision, Micro-Recall, and Micro-F1 all become mathematically identical to Accuracy.
+
+In a single-label multi-class system, every mistake is a "double-edged sword":
+* The False Positive: If the model wrongly predicts "Dog" for a picture that is actually a "Cat," it creates a False Positive for the "Dog" class.
+* The False Negative: At the exact same time, it creates a False Negative for the "Cat" class (because it missed a real cat).
+
+Because every single error is simultaneously a False Positive for one class and a False Negative for another, the total sum of FPs across the whole dataset will always equal the total sum of FNs. When $FPs = FNs$ in the micro-level math, the distinction between Precision and Recall vanishes.
+
+Because Micro-F1 just collapses into Accuracy, it inherits all of Accuracy's weaknesses:
+* It hides minority failure: If your model is 99% accurate because it correctly identifies the massive "Standard" class but gets 0% correct on the "Danger" class, the Micro-F1 will still be 0.99.
+* It creates a false sense of security: It makes the model look high-performing even if it hasn't learned the "hard" parts of the data.
+
+The only reason we keep it around is to check for global system robustness. If you are running a massive commercial system (like a spam filter for millions of users), you might care more about the total number of people affected by errors than the specific performance on a rare sub-type of spam.
+
+However, for scientific research and model development, the Macro-average is considered the "true" test. It forces the model to be a "specialist" in every category, not just a "generalist" that wins by sheer volume.
+
+---
+
+Analogy: Imagine a school with a Math class of 100 students and an Art class of 5 students. A Macro-average gives the Math teacher and the Art teacher the same "weight" in the school's performance rating. A Micro-average says the Math class is 20 times more important because it contains more students.
+
+---
+
+
+
+
 
 ## Representing Sequences for Classifcation
 
@@ -2129,6 +1982,12 @@ last bi dir layer is the seq rep
 
 
 ---
+
+
+
+
+
+
 
 ## Part 2: Sequence Labelling
 
@@ -2390,23 +2249,33 @@ seq of words > seq of labels
 
 test of diff net archs and hypernmater opt
 
+---
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
 
 
 ## Week 5: Seminar
 
 ## Sequence Classification Labelling
 
-### Warm Up
-
-Machine Translation is transduction. It is slightly different because it not 1-to-1, i.e. diff languages. Not strictly sequence labelling, though it can be used to help. 
-
 ### Week 5 Overview
 
 This week is just classification and labelling. Next week will be transduction and generation. Then we will look into the basic/traditional approaches to these, this we can later in the module substitute in more advanced, transformer models. 
 
-### Part 1 Questions: Sequence Classification
+## Part 1 Questions: Sequence Classification
 
-1. Unbal
+#### 1. Give examples of balanced and unbalanced class distributions. Why does class balance matter when developing and evaluating sequence classification models?
 
 Macro average if more informative than Micro average. micro average revert to accuracy (how?)
 
@@ -2414,7 +2283,7 @@ Good to do both and comment on them both.
 
 > The evaluation measure for subtask TC is micro-average F1. Note that as we have converted this into a **single-label task**, micro-average F1 is equivalent to Accuracy (as well as to Precision and to Recall).
 
-2. Lang Models used for Seq Classifcation
+#### 2. Describe 3 different ways in which language models might be used in sequence classification
 
 ---
 
@@ -2440,7 +2309,7 @@ Better approach is to use a network, i.e. a bi-directional RNN or LSTM, to build
 
 ---
 
-3. Different methods might be used to compose word embeddings? What are the advtanges and disadvantage?
+#### 3. Different methods might be used to compose word embeddings? What are the advtanges and disadvantage?
 
 Additive, mutliplicative, pooling to create a single context vector. 
 
@@ -2450,13 +2319,13 @@ Adding, or averaging, word vectors looses the context of the order of the vector
 
 ---
 
-### Part 2: Sequence Labelling
+## Part 2: Sequence Labelling
 
-1. Give an example sentence and show how it might be annotated using an IOB encoding for Named Entity Recognition (e.g. PER, ORG, LOC etc)
+#### 1. Give an example sentence and show how it might be annotated using an IOB encoding for Named Entity Recognition (e.g. PER, ORG, LOC etc)
 
 ---
 
-2. What do understand by each of the following; HMM, MEMM, CRF. 
+#### 2. What do understand by each of the following; HMM, MEMM, CRF. 
 
 **Hidden Markov Model:** Bayesian Approach, State Transition Probs, Emissions, MLE underlying probabilites from training corpus. Prob for each (all) states give the previous `n` states. Can be used to generate tag or word sequence.
 
@@ -2466,13 +2335,80 @@ Adding, or averaging, word vectors looses the context of the order of the vector
 
 ---
 
-3. Describe the typical components in a neural model for sequence labelling. 
+#### 3. Describe the typical components in a neural model for sequence labelling. 
 
 Embed, RNN/LSTM/iterative/memory-based model, sequence predictor
 
 Word embeddings from glove to provide contextual info
 
 Char reps to learn word structure. this compliemnet where word embeddings are not strong reps (convolutional model)
+
+---
+
+## Week 5: Paper
+
+SemEval-2020 Task 11: Detection of Propaganda Techniques in News Articles
+
+Da San Martino et al. (2020) introduce a competition to detect and classify propaganda techniques in text. When reading this paper, do not be overly concerned with the different systems which took part in the competition. You will learn about the best-performing methods (transformer-based approaches including BERT) in a few weeks time. For now, we will focus on the overall idea of propaganda detection, the two tasks introduced in this paper (span identification and technique classification), the dataset and the evaluation metrics. Once you have read the paper, consider the following questions.
+
+#### 1. What do you understand by the term propaganda and why might it be important to develop systems which can automatically detect propaganda in text?
+
+
+---
+
+#### 2. Why is automatic propaganda detection difficult?
+
+
+---
+
+#### 3. Give examples of 3 different propaganda techniques being used in text. Explain why this is propaganda.
+
+
+---
+
+#### 4. What textual features might be useful to help a system detect propaganda?
+
+
+---
+
+#### 5. Describe the pipeline proposed by the paper for propaganda identification. Can you think of any alternatives? What advantages / disadvantages are there of each?
+
+
+---
+
+#### 6. How was the PTC-SemEval20 corpus collected and annotated? What do you understand by “the γ agreement on the annotated articles is on average 0.6”?
+
+
+---
+
+#### 7. How do the authors evaluate systems on the span identification task?
+
+
+---
+
+#### 8. Micro-average F1 is used to evaluate systems on the technique classification task. The authors state that for a single-label task, this is equivalent to accuracy. Explain
+
+
+---
+
+#### 9. Outline one method which could be used to carry out span identification.
+
+
+---
+
+#### 10. Outline one method which could be used to carry out techniques classification.
+
+
+---
+
+#### 11. Systems were evaluated for span identification on both the development set and the test set. Why do you think the results are not the same on both?
+
+
+---
+
+#### 12. What is the predominant propaganda technique found in the corpus? If a system labelled every propaganda snippet with this label, how would it do? What do you think of the system results for techniques classification (Table 6)?
+
+---
 
 ## Week 5: Additional Reading
 
@@ -2482,10 +2418,12 @@ Jurafsky and Martin Chapter 17: Sequence Labelling for Parts of Speech and Named
 
 ---
 
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # [Week 6 - Machine Translation](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-6-machine-translation)
 
@@ -2824,10 +2762,7 @@ inability to generalise; similar phases don't share statistical weight. they are
 
 ## PART 3: Neural Machine Translation
 
-
-
 ### NMT
-
 
 ### Basic Arch of NMT
 
@@ -2953,28 +2888,22 @@ performance than LSTMS and GRUs
 
 ---
 
+<br>
+<br>
+<br>
+
 ## Week 6: Seminar
 
-### Lecture Questions
+## Machine Translation Questions
 
-1. 
-
-2. 
-
-3. 
-
-4. 
-
-5. 
-
-cont reps (w2v embs) are able to capture morph, synt and smenatic sim
-
-train on parrell corpora (correct?)
+#### 1. What makes Machine Translation a hard problem?
+#### 2. What aspect of MT can be evaluated by monolingual raters and what aspect requires bilingual raters?
+#### 3. What do BLEU and chrF have in common? How are they different?
+#### 4. What are some of the key components / choices in setting up a statistical MT system?
+#### 5. Why should neural MT work better?
 
 
-
-
-
+---
 
 ## Week 6: Lab Content
 
@@ -2982,12 +2911,8 @@ I won't be publishing solutions this week as this lab forms the basis of the ass
 
 ## Week 6: Additional Reading
 
-Jurafsky and Martin (2026), Chapter 12 Machine Translation
-
-**READ THIS CHAPTER**
-
+* [Jurafsky and Martin (2026), Chapter 12 Machine Translation](https://web.stanford.edu/~jurafsky/slp3/12.pdf) **READ THIS CHAPTER**
 * [Examining Large Pre-Trained Language Models for Machine Translation: What You Don't Know About It](https://arxiv.org/abs/2209.07417)
-
 * [Improving Transformer based Neural Machine Translation with Source-side Morpho-linguistic Features](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9355969&tag=1)
 
 ---
