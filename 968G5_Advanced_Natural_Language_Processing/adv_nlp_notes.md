@@ -1803,451 +1803,196 @@ Analogy: Imagine a school with a Math class of 100 students and an Art class of 
 
 ---
 
+## Traditional Representation: Bag-of-Words (BoW)
+The classical baseline for sequence classification is the Bag-of-Words. It represents a document by the frequency of the words it contains, entirely discarding word order.
+* Benefits: It is simple, fast, and highly effective for topic classification where the presence of certain keywords is enough to determine the class.
+* Limitations: By losing order, it loses sentiment and nuance. It cannot distinguish between "The film was not good, it was bad" and "The film was not bad, it was good," as both contain the same counts. It also fails to capture semantic relationships (e.g., "sofa" and "couch" are treated as completely unrelated).
 
+--- 
 
+## The Bayesian Strategy: Naive Bayes
+The traditional machine learning approach uses the Naive Bayes classifier. It is "Naive" because it assumes that every word in a document is independent of every other word.
 
+Using Bayes' Theorem, we find the most likely class $C$ for a sequence of words $w$:
 
-## Representing Sequences for Classifcation
+$$P(C|w) = \frac{P(w|C)P(C)}{P(w)}$$
 
-classically, doc level is a BoW. no order just counts of words
+In practice, we ignore the denominator ($P(w)$) because it is constant for all classes, and we maximize:
 
-What are the benefits and limitations of bow? 
+$$P(C) \prod_{i=1}^{n} P(w_i|C)$$
 
-Loose context of order and sentimate. 
+#### Generative Language Modeling
+We can extend this by building a separate Language Model for each class. We calculate the probability of the entire sequence given the class-specific model, $P(\text{seq} | \text{class})$. While $n$-gram models can do this, they have largely been superseded by embedding-based approaches.
 
-Same, similar sentences, in terms of comoposition of words will be represeent the same
+## The Embedding Approach: Principle of Compositionality
+Following the Distributional Hypothesis, we use word embeddings (Word2Vec/GloVe) to represent meaning. To move from word-level to sequence-level representations, we rely on Compositionality.
 
-Limited in knowing semantic relationships between words and effect of order
+#### Additive Composition (Pooling)
+The most common "quick" rule is to add or average the vectors of the words in a sequence to find the Centroid.
 
-but it is a simokle approach that allows us to create and analyse something quickly with a good enough result
+Mechanism: You take your word embeddings, pass them through a "Pooling" layer (Mean or Sum), and feed the resulting sequence vector into a standard classifier (Logistic Regression or SVM).
 
-## Tradityionall Approach
+Drawback: These are uncontextualized. The vector for "head" is the same whether it means "body part" or "leader." Furthermore, word order is still ignored because vector addition is commutative.
 
-ML classifer, i..e naive bayes, log reg, ff net, svm
+## Modern Neural Approach: Bi-directional Sequence Modeling
+To truly capture context and order, we use a Bi-directional RNN or LSTM. This creates a full, "order-aware" representation of the sequence.
 
-Train on train split, test on split. need labelled data
+1. Forward Pass ($f_y$): Reads the sequence from left to right, building a state based on the history of what came before.
+2. Backward Pass ($b_y$): Reads from right to left, building a state based on the "future" context.
+3. Concatenation: We take the final hidden states from both directions and concatenate them.
 
-Bayes approach is about finding most likely class based on feature
-
-[quickly insert bayes summary formulas]
-
-* bayes
-*ingore denomin
-* apply anive
-
-## Using Language Models in Classification
-
-Know we know about language models, distributed reps and embeedding. How to us this for classifc
-
-lang model tells us the prob of a seq, how can this help us classify it into some categories?
-
-* Baysian Approach NB
-* WOrd embbed based approach
-* Neural Approahc (leads us inot trans later)
-
-## Baysian Approach to classifcation
+This resulting vector is a fixed-length representation that contains the entire "story" of the sequence from both perspectives. This final representation is then fed into a prediction network for classification.
 
 ---
 
-In simple terms, taking a Bayesian approach means treating probability as a "degree of belief" that gets updated as new evidence comes in.
-
-While traditional (Frequentist) statistics focuses on how often an event happens in the long run, Bayesian statistics focuses on how certain we are about a hypothesis right now, given what we already know.
-
-A Bayesian analysis always follows a specific logical flow, often summarized by Bayes' Theorem:
-
-$$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$$
-
-A measure of certainty or belief.
-
-The output is Posterior distributions and Credible Intervals.
-
-Small Sample Sizes: If you don't have much data, your "Prior" knowledge can help steer the analysis so the results aren't wildly skewed by a few outliers.
-
-A Bayesian "95% Credible Interval" actually means there is a 95% chance the value falls in that range—which is how most people wish traditional statistics worked.
-
-It is ideal for machine learning and AI because the model can constantly update its "beliefs" every time a new piece of data arrives, rather than restarting from scratch.
-
-Most standard neural networks are not Bayesian by default, but there is a specific subfield called Bayesian Neural Networks (BNNs).
-
-Strictly speaking, no. Batching (or Mini-batch Stochastic Gradient Descent) is a frequentist optimization tool, not a Bayesian one.
-
-Batching was invented for efficiency. Calculating the gradient (the direction to update weights) for a dataset of 1 million images at once is too slow and memory-intensive. We break it into "batches" of 32 or 64 simply so the computer can handle the math.
-
-Even though batching isn't "Bayesian" by design, it introduces noise. Because each batch is just a random slice of the data, the "direction" the model moves in vibrates slightly.
-
-In Bayesian terms, this noise can be seen as a way of exploring the "probability space" of the weights.
-
-There is a specific technique called Stochastic Gradient Langevin Dynamics (SGLD) that essentially uses batching noise to turn a regular neural network into a Bayesian one.
-
-The math for BNNs is incredibly "expensive." Instead of learning one value for a weight, the computer has to learn the mean and the variance, effectively doubling the parameters and making the calculus much harder.
+| Method | Order Sensitive? | Semantic Aware? | Complexity |
+| :--- | :--- | :--- | :--- | 
+| BoW | No | No | Very Low | 
+| Embedding Pooling | No | Yes (Word2Vec) | Low |
+| Bi-directional LSTM | Yes | Yes (Contextual) | High | 
 
 ---
-
-Build a seperat lang model of each class, i.e.  P(seq|class)
-
-[INSERT FORMULAS]
-
-build a model for each class; n-gram, neural 
-
-n-gram model could give us a prob for each work to a class. apply to sequences (i.e. not a BoW) to work out the prob of class
-
-however, this approach has largely been superseeded by word embedding approachs 
-
-## Word Embedding Approach
-
-Distribution hypothesis: words which which eman similar things tend to behave in similar ways
-
-i.e. they co-occur with sim words
-
-i.e. they have simi.ar word embeds
-
-build a occurance matrix 
-
-[insert cooccur matix]
-
-but how can we go from represenations of words to res of seqs or docus
-
-## The princ of compositionality
-
-"The meaning of a complex epression is determined by the meanings of its constitut express and the rules used to combine them"
-
-## composition for meaning repres
-
-constit expressions are words
-
-words are represented by distitubional rep/embeddings, i..e word2vec or glove, taken from nn models
-
-to get rep of seq, we need to compos the embed of the words
-
-how to we do that? rules of composutions? (from the orgin quiote)
-
-## additive composiotion
-
-add the vectors (of the individual words)
-
-OR average the vectors (find the centriod)
-
-the result is often the same as the direction is the similar
-
-remember we are interested in the cosine similariyy so it is the direction that matters
-
-## using word embeedings
-
-whatever rule we decide, sum/contriod/max, for all of the word emdbeds for words in the seq
-
-pass the input to a classifer: log reg, svm, nn
-
-
-[insert image going to from words to seq using embbed > pool > mean> > classif]
-
-i.e. you have obtained a seq embed that can be used
-
-## disad of adding word embeds
-
-word embeds are uncontextualised
-
-it individual word embedds were just of the raw word (in our example)
-
-they didn't take into account their context or surroundings, just words
-
-head:body, head:leader
-
-the word order was not taken into account (depending on the method). This is def true is adding the vectors, order never matters for adding vectors (i think?)
-
-but it is easy to implelent. 
-
-## Language Model of r Seq Rep
-
-Previously we were taking the word embeddings out of our networks and using them in various ways
-
-Other approach, is a bidirectional rnn or lstm to build a full representation of the sequence. 
-
-put word embeds into a forward and backwards rnn
-
-i.e. represent a seq by what is predicted to the left, or the right of it
-
-the forward rep is telling us what might come next and has knowledge of what came before it 
-
-backward predicts the previous words, gives us a diff view of the seq
-
-note that we want a fixed them rep
-
-and then concatenate the reps b_Y, f_y (back, for), this is the rep of the seq
-
-[insert bi dir image]
-
-[insert bi dir going into prediuction net]
-
-last bi dir layer is the seq rep
-
-
----
-
-
-
-
-
-
 
 ## Part 2: Sequence Labelling
 
-what do we mean by seeq lab?
+In contrast to sequence classification, where we assign one label to an entire document, Sequence Labelling requires us to assign a label to every individual element (or token) within that sequence.
 
-have input seq of someomthing, probably words, but culd be chars, parts
+The input is typically a sequence of words, but depending on the task, it could also be a sequence of characters or sub-word units. The goal is to produce an output sequence of labels that is exactly the same length as the input sequence.
 
-seq label we want to label each part of the input seq
+Traditionally, sequence labelling has been the engine behind two fundamental NLP tasks:
+* Part-of-Speech (PoS) Tagging: Identifying the grammatical category of each word, such as whether it is a noun, verb, or adjective.
+* Named Entity Recognition (NER): Identifying and categorizing "entities" within text, such as people, organizations, or locations.
 
-[insert image of example]
-
-traddiitonally, the mainapproach for this was Part of Speech tagging
-
-another is named entity recognition
-
-these approaches are often layered on top of each other
-
-## IOB encoding 
-
-i inside, o outside, b begining 
-
-again layered with named enttiy 
-
-B-per 
-B-In
-
-first name, last name, 
-
-turn span ident into seq label problem using iob encoding, i.e. we just have 1 tag per token, not layering seq tabs
-
-find the correct span of text that constititie an entity
-
-## evaluation
-
-precision
-
-recall
-
-f1
-
-[include formauls and definitions]
-
-tethered to notion of correct entitiies
-
-## classification 
-
-seq label task is essentially a classsifcation task for each word/token
-
-however, we want to assign the most likely sequence of labels given the observed tokens
-
-NOT the most liekly label for each token given all of the other tokens
-
-we want to predeict a seq, not an individual 
-
-so this might rule out simple classifs like bayes or log reg
-
-## approaches to seq labelling
-
-* rule-based
-* baysian (HMMs) updating knowledge as now evidence arises
-* discriminative (memm, cpf) (what???)
-* rnn, lstm
-* LATER: transform/attenion (bert)
-* LATER: hynbrid
-
-## rule-based
-
-still v common in pracrice, cheap and easy to implement based on domain knowledge
-
-lists, atlases, varying degreees of supervised ML
-
-not going to talk abou thtis much
-
-## baysian models
-
-mldel join prob dists fgrom trainind data
-
-labels are viewed as latnent of hidden staes which generates observed seq
-
-bayes theorme us used to obtain a conditional probability to label unseeen data
-
-for seq lab probs; we emplore Hidden Markov Models
-
-## Simple HMM 
-
-2 states to consider; per, not
-
-thouhg normally there would be alot more
-
-hmm looks that state transition probability
-
-the probabiliy of trans from PER to NOT, or PER TO PER
-
-there is an indep assumoption that the current state only depends on the previous state
-
-often given as a state transition matrix
-
-the emssion probabilities are P(obs word|state)
-
-the prob of the rpevious word emiiting the next stte
-
-the probability are derived from labell corpora using maximum likelihood estimate
-
-learn the underlying probs from the trainng data
-
-apply the baysian on the sequenceusing the underlying probs
+These tasks are rarely performed in isolation; in complex pipelines, they are often layered on top of each other, where the output of a PoS tagger might be used as a feature to improve the accuracy of a Named Entity Recognizer.
 
 ---
 
-In the world of statistics, MLE (Maximum Likelihood Estimation) is the "Frequentist" way of finding the best fit, while MAP (Maximum A Posteriori) is the "Bayesian" version of that same goal.
+## IOB Encoding: Identifying Spans as Sequences
 
-MLE asks: "Which parameter values make the data I just saw most likely to occur?"The Logic: It assumes you have no prior knowledge. It only cares about the current evidence.The Math: It only maximizes the Likelihood ($P(\text{Data} | \theta)$).The Flaw: If you flip a coin once and it lands on heads, MLE will tell you the coin is 100% rigged to heads. It has no "common sense" to tell it that most coins are fair.
+A major challenge in sequence labelling is that entities often span multiple words (e.g., "New York City" or "Elon Musk"). Since our model predicts one label per token, we need a way to tell the computer that these individual words belong together as a single unit. We solve this using IOB Encoding (Inside, Outside, Beginning).
 
-The reason is that Hidden Markov Models (HMMs) are Generative Models, and in the early days of ML, we often mixed Bayesian logic with Frequentist optimization to save on computing power.
+Instead of simply labelling a word as a "Person" or "Location," we add a prefix to the tag to indicate its position within a span:
+* B- (Beginning): Indicates the first token of a named entity.
+* I- (Inside): Indicates any subsequent tokens that are part of the same entity.
+* O (Outside): Indicates that the token is not part of any named entity.
 
-An HMM is considered Bayesian (specifically a Bayesian Network) because of its Conditional Dependency: It assumes there is a "Hidden State" (the truth) that you can't see. It assumes the "Observation" (the data) is generated based on that state. When you run the model, you use Bayes’ Rule to "invert" the logic: "Given these observations, what is the most likely hidden state?"
-
-the inference (using the model) is purely Bayesian. You are updating your belief about the hidden state as you see each new observation in the sequence.
-
-To make an HMM work, you need three things: Transition probabilities, Emission probabilities, and Initial state probabilities.
-
-MLE HMMs are fast. You can solve them with dynamic programming (the Viterbi algorithm) in linear time.
-
-The HMM is a Bayesian Architecture usually trained with Frequentist Tools.
+By using IOB encoding, we turn a span identification problem (finding the start and end of a phrase) into a simple sequence labelling problem (assigning one tag per token). This allows us to use standard classification architectures without needing complex "layering" or multi-token logic. The model simply learns that an I- tag must logically follow a B- tag of the same type, which helps it maintain the structural integrity of the entity spans.
 
 ---
 
-## More on HMMs
+## IOB - Evaluation
 
-To maximise the probabiltiy of tag sequence give word sequence, Bayes is applied
+Evaluating sequence labelling is more demanding than simple classification because we aren't just checking if we got a word's category right; we are checking if we identified the entire span correctly.
 
-[INSERT FORMULA]
+In Named Entity Recognition (NER) using IOB encoding, we typically use strict evaluation. For an entity to be counted as a "True Positive," the model must correctly identify:
+1. The boundary (the exact start and end tokens).
+2. The label (e.g., PER vs. LOC).
 
-p(tags|words) = 
+If the model predicts "New York" as a location but misses "City," it is often counted as both a False Negative (for the correct span "New York City") and a False Positive (for the incorrect span "New York").
 
-us viberti algo to find the tag seqwhich opt the prob (not going into this here)
+* Precision: Of all the entity spans the model predicted, how many were exactly right?
+* Recall: Of all the actual entity spans in the text, how many did the model successfully find?
+* F1-Score: The harmonic mean used to balance the trade-off between missing entities and hallucinating incorrect ones.
 
-## Hiddem Markow Model (HMM)
+While sequence labelling looks like a series of individual classifications (word by word), we treat it as a Global Task. We want to find the most likely sequence of labels given the entire sequence of tokens.
 
-Drawbacks arise from the two simplifiying assumptions
+This is a critical distinction: we don't just want the best tag for word #5; we want the best path of tags from word #1 to word #10. This requirement is why simple classifiers like Naive Bayes or Logistic Regression are often replaced by models that can handle dependencies between tags, such as HMMs or CRFs.
 
-Bi-gram (what whartever order chosen), limits model history [INSRERTT FORMULA]
+#### Approaches to Sequence Labelling
+* Rule-based: Using dictionaries and regular expressions (still common for specific domains like medical IDs).
+* Bayesian Models (HMMs): Treating labels as hidden states that "generate" words.
+* Discriminative Models (CRFs): Modeling the dependencies between labels directly.
+* Neural Models (Bi-LSTMs): Using deep learning to extract features without manual engineering.
 
-much prevous tags are not considered
+---
 
-feature independance limits model richness [INSERT FORMULA]. independ assump allows us to product but we know in practise this isnt true
+## Rule-Based Sequence Labelling
+Before the dominance of machine learning, sequence labelling relied entirely on human-defined logic. Despite the rise of neural networks, rule-based systems remain very common in practice because they are transparent, "cheap" to build for specific domains, and require zero training data.
 
-## Discrimitate Model 
+In modern industry, these are often used as "baselines" or combined with supervised ML in hybrid systems to catch "easy" entities while the model handles the complex ones.
 
-Max Ent Mark Model (MEMM)
+---
 
-Conditioan Random Field (CRF)
+## Bayesian Models: Hidden Markov Models (HMMs)
+Moving into probabilistic territory, we encounter Hidden Markov Models (HMMs). This approach treats labels as hidden states that "generate" the observed words.
 
-Get away from indepdn assumptiopn
+An HMM assumes that there is an underlying sequence of tags (the truth) that you cannot see, and this sequence follows a Markov Chain. The fundamental assumption is that the current tag depends only on the previous tag.
 
-and leverage interdependance between features
+To solve a sequence with an HMM, we need to learn three things from our training data:
+* Transition Probabilities: How likely are we to move from one tag to another? (e.g., how likely is I-PER to follow B-PER?)
+* Emission Probabilities: How likely is a specific state to "emit" a specific word? (e.g., how likely is the state B-LOC to produce the word "London"?)
+* Initial State Probabilities: How likely is a sentence to start with a specific tag?
 
-in order to discfrim between different classes
+We typically use Maximum Likelihood Estimation (MLE) to count these frequencies in a labeled corpus to "train" the model. During inference (testing), we use the Viterbi Algorithm—a dynamic programming tool—to find the single most likely path of hidden tags that could have produced the observed sequence of words.
 
-## MEMM
+While we use frequentist counts (MLE) to train, the inference is purely Bayesian. We are constantly updating our "belief" about which hidden state we are in as each new word in the sentence is observed.
 
-not going into too much details
+#### Drawbacks of HMMs
+The power of HMMs is limited by two major simplifying assumptions:
+* Limited History (Markov Assumption): Because it only looks at the one previous tag, it has a very short memory.
+* Feature Independence: It assumes the only thing that matters for a word is the current tag, ignoring the rich interaction between surrounding words and other linguistic features.
 
-in HMM model: P(obs|tag)
+---
 
-in MEMM model: P(Tag|Obs)
+## Discriminative Models: MEMMs and CRFs
+This section marks the shift from Generative models (like HMMs), which try to model how words are "born" from tags, to Discriminative models, which focus purely on the best way to choose a tag given the words.
 
-## label bias problem 
+Discriminative models don't care about the probability of the words themselves; they only care about the boundary between classes. This allows them to "leverage interdependence," meaning they can look at many features at once—capitalization, word endings, neighboring words—without worrying about how those features relate to each other.
 
-memms use a per-state expon model
+---
 
-couldn't dedice tags intil later in the seqenece
+## Maximum Entropy Markov Models (MEMMs)
+The MEMM was an attempt to make HMMs more powerful by switching the direction of the probability:
+* HMM Logic: $P(\text{Observation} | \text{Tag})$ — "Given the tag 'Person', how likely is the word 'Elon'?"
+* MEMM Logic: $P(\text{Tag} | \text{Observation}, \text{Prev\_Tag})$ — "Given the word 'Elon' and the previous tag, how likely is this to be 'Person'?"
 
-wasnt able to make use of early info (is that right?)
+MEMMs have a fatal flaw called Label Bias. Because a MEMM makes a "hard" decision at every state based only on the current local evidence, it can get "stuck." If a state has very few outgoing transitions, the model is effectively forced into those transitions regardless of what the future words say. It can't "reach back" and change a past decision even if later information proves it was wrong.
 
-solution was COnditional Random Fields (CRFs)
+---
 
-srps have a single expo model for the joint prob of the entire label seq
+## Conditional Random Fields (CRFs)
+CRFs were designed to solve the Label Bias problem by moving from "local" decisions to a Global decision.
+* The Global Approach: Instead of having a separate probability model for every state (like MEMMs), a CRF uses a single exponential model for the entire sequence.
+* The Graph: A Linear Chain CRF is an undirected graphical model. While HMMs have arrows (indicating a "direction" of generation), CRFs have simple lines (indicating a "relationship" or correlation).
+* The Benefit: It calculates a "score" for the entire path of tags. This means it can use information from the very end of a sentence to help decide the very first tag. It optimizes the whole output sequence given the whole input sequence.
 
-more complex model
+In modern NLP, we rarely use "pure" CRFs, but we frequently use CRF Layers at the top of Neural Networks (like Bi-LSTMs).
+* The Neural Network acts as the "Feature Extractor" (understanding the words).
+* The CRF acts as the "Interpreter" (ensuring the sequence of tags makes sense, e.g., preventing an I-PER from following an O tag).
 
-memm created a model for each state/label
+The evolution from HMM to CRF represents a move toward global context. While HMMs are limited by strict independence assumptions and MEMMs suffer from the Label Bias problem due to their per-state local decisions, CRFs provide a superior solution by modeling the conditional probability of the entire label sequence at once. By treating the sequence as an undirected graph, CRFs allow every part of the sentence to influence the labeling of every other part, ensuring that the final output is the most statistically likely "path" for the whole input.
 
-crf just one model for whole seq
+---
 
-## what is a crf
+## Neural Models for Sequence Labelling
+The major advantage of neural approaches is that they are end-to-end. In traditional models (like CRFs), humans had to manually engineer "features" (e.g., "is the word capitalized?", "does it end in -ing?"). Neural networks, however, learn these features automatically from the raw sequence of words or characters.
 
-an indurected graph where 
+While vanilla RNNs and GRUs were used, the Bi-directional LSTM (Bi-LSTM) became the most popular non-transformer choice because it can maintain long-range dependencies from both the past and the future context simultaneously.
 
-## linear cgain crf
+## The Ma and Hovy (2016) Architecture
+This model is famous for its "sandwich" design: CNN + Bi-LSTM + CRF. It processes information at three different levels:
 
-[insert graph showing diff]
+#### Level 1: Character-level Representations (CNN)
+For every word, the model looks at its individual characters.
+* A CNN slides over character embeddings to capture morphological patterns (prefixes, suffixes).
+* The Benefit: This solves the "Out-of-Vocabulary" (OOV) problem. Even if the model hasn't seen a specific rare word before, it can recognize that it looks like a name because of its structure (e.g., capitalization or specific endings).
 
-## graphical comp among hmm, memm, cpir
-
-no arrows, output depds on whole seq
-
-[insert diagram]
-
-## linear chain crf
-
-details about details for crf, but we arent going to worry about the details on how to train one
-
-We just want to know that they exist
-
-NN can have crf layers
-
-just know that we are modelling the distribution of the entire set of a seqouence output given the entire sequence of input ariables
-
-rather than having a single model per state
-
-or you using the latnest approach from hmm based on prev tag label 
-
-## Neural Models
-
-Bi-dir lstm is most popular non trandformuler for serq label 
-
-vanilla RNN and GRU were also used
-
-NN allow anytihn input (word, char, embedd) to be used
-
-ma and hovy (20216) good based for bi-lstm arch
-
-## ma and hovy
-
-a char rep for each word is generated from a cnn based on char embeddings (similar to kim et al)
-
-char rep is then conccanated (into words?) using glove word embed
-
-gives a rep of a word based on cooccurenaces with other words (other words come from the glove)
-
-char rep from CNN + other words context form glove
-
-char talks issues with low freq words as learn structure of words
-
-glvoe works well for high freq words and context unpacks semantics (is taht the right topic?)
-
-bi-dir lstm is acheived by concatenating left to right and right to left lstm hidden states
-
-cpr is used as output layer (rather than softmax) to decode label seqs
-
-[INSERRT PAPER DIAGRAMS]
-
-char embed > comvo > max pool > char rep
-
-then char and glove reps are collections are the inputs and put into the networks
-
-f lstm, b lstm, both into cpf
-
-cpf means inputs to not optimise on a token basis, but other the whole output seq
-
-this is the basic archiecture to approach this
-
-## adv of neural approach
-
-end-to-end seq label, no feature engingeering
-
-seq of words > seq of labels
-
-test of diff net archs and hypernmater opt
+#### Level 2: Word-level Context (Glove + Bi-LSTM)
+The character representation is concatenated with a pre-trained GloVe embedding.
+* GloVe provides the "global" semantic meaning (unpacked from billions of co-occurrences).
+* This combined vector is fed into a Bi-LSTM. The forward and backward hidden states are concatenated to create a context-aware representation of each word in the specific sentence.
+
+#### Level 3: Sequence Decoding (CRF Layer)
+Instead of using a simple Softmax to predict a tag for each word independently, the model uses a CRF as the final layer.
+* The Logic: A Softmax might accidentally predict I-PER immediately after an O tag, which is grammatically impossible in IOB encoding.
+* The Benefit: The CRF layer considers the entire sequence of labels. It ensures the "path" of tags is logically consistent, optimizing for the best global sequence rather than just the best local token.
+
+## Advantages of the Neural Approach
+* No Feature Engineering: You don't need to write rules for grammar or capitalization; the CNN and LSTM learn them.
+* Robustness: By combining character and word embeddings, the model is equally good at handling high-frequency common words (via GloVe) and low-frequency/unseen words (via the CNN).
+* Flexibility: You can easily swap out components (e.g., using a GRU instead of an LSTM) or tune hyperparameters to fit different languages or domains.
+
+The Ma and Hovy (2016) architecture represents the pinnacle of pre-transformer sequence labelling by effectively combining local morphological cues with global contextual logic. By using a CNN to extract sub-word features from characters, a Bi-LSTM to capture bi-directional word context, and a CRF layer to ensure a grammatically valid output sequence, the model provides an end-to-end solution that requires no manual feature engineering. This hybrid approach remains a fundamental baseline in NLP, as it addresses the core challenges of word ambiguity, out-of-vocabulary terms, and label dependency in a single, unified framework.
 
 ---
 
@@ -2257,13 +2002,6 @@ test of diff net archs and hypernmater opt
 <br>
 <br>
 <br>
-
-
-
-
-
-
-
 
 ## Week 5: Seminar
 
