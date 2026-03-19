@@ -1795,12 +1795,12 @@ This focuses on Computational Complexity. It asks: "How many neurons do we need 
 
 #### Week N: Contents
 
-1. [Mini-Videos](#week-3-mini-videos)
-2. [Lecture Content](#week-3-lecture-content)
-3. [Additional Reading](#week-3-additional-reading)
+1. [Mini-Videos](#week-n-mini-videos)
+2. [Lecture Content](#week-n-lecture-content)
+3. [Additional Reading](#week-n-additional-reading)
 
-## Week 3: Mini-Videos
+## Week N: Mini-Videos
 
-## Week 3: Lecture Content
+## Week N: Lecture Content
 
-## Week 3: Additional Reading
+## Week N: Additional Reading

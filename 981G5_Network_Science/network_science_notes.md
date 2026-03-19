@@ -2019,3 +2019,604 @@ Handling Overfitting: The Bayesian approach in graph-tool includes statistical r
 
 ---
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Week 7 - Dynamics on Networks
+[Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1b719114-dbce-4ce7-8c43-b40b00b59b26)
+
+This week marks a pivotal shift from Network Anatomy to Network Physiology. While our previous sessions focused on the static "map" of a system—identifying hubs, measuring betweenness, and mapping communities—Week 7 explores the Dynamics ON Networks: the lived processes that flow through those connections. We will treat the network as a fixed stage where information, viruses, and opinions compete for dominance. By examining models ranging from deterministic thresholds to stochastic cascades, we will uncover why some ideas "fizzle out" while others become global contagions. Crucially, we will see how the structural lessons of previous weeks—like the influence of hubs and the density of communities—directly dictate the speed, reach, and ultimate survival of everything from a Twitter rumor to a viral pandemic.
+
+---
+
+The lecture follows a logical progression of complexity in how "states" move across a network:
+* Simple Diffusion: Information and "viral" cascades.
+* Threshold Models: Deterministic rules where peer pressure (absolute or fractional) triggers activation.
+* Stochastic Models: The Independent Cascade (IC) model, where activation is a probabilistic "one-shot" chance.
+* Epidemiology: Mathematical compartmental models (SIS, SIR) and the critical role of $R_0$.
+* Opinion Dynamics: Moving from binary (0/1) to continuous spectra and the concept of "Bounded Confidence".
+* Coevolution: The final bridge where dynamics on and of the network interact (Selection vs. Influence).
+
+---
+
+## Dynamics on networks
+The defining characteristic of Dynamics ON the Network is the presence of a static "substrate". While the internal states of the nodes change—from susceptible to infected, or from one opinion to another—the physical connections (the "pipes") remain fixed.
+
+In network science, we distinguish between these processes based on whether the network is the stage or the actor:
+
+**Dynamics ON the Network (Fixed Stage):** The topology acts as a constraint. The focus is on the flow of features, features, or states between neighbors. **Examples:** The spread of a computer virus through a server network or a rumor traveling through a fixed social circle.
+
+**Dynamics OF the Network (Evolving Stage):** The network itself is in flux. Nodes and links are being added, removed, or rewired. Examples: **Preferential Attachment** (growth), social networks adding new "friends," or targeted attacks removing hubs.
+
+#### Pure Dynamics vs. Co-evolution
+While this lecture focuses on "pure" dynamics where the infrastructure is kept constant, real-world systems often exhibit co-evolution. In a co-evolving system, a process spreading on the network (like a scary rumor) might cause nodes to change the structure of the network (like unfriending the person who shared it).
+
+#### Key Examples covered in this Module
+1. **Information Diffusion:** How a tweet "goes viral" or a new product is adopted.
+2. **Epidemic Spreading:** The mathematical modeling of biological and digital contagions.
+3. **Opinion Dynamics:** How consensus or polarization emerges through social influence.
+4. **Network Search:** The efficiency of finding information within a graph (often covered in textbooks).
+
+--- 
+
+## Information diffusion
+Information diffusion explores how ideas, behaviors, or products travel through social structures. This process is often termed **social contagion** because it mimics biological infection: an "active" individual influences a "susceptible" neighbor to adopt a specific state.
+
+Unlike biological viruses, social contagion depends heavily on the quality and structure of social ties.
+
+**Influence Mechanisms:** We might adopt a new technology (like a smartphone) or a belief because of direct peer observation or information forwarding.
+
+**Structural Dependency:** Whether you are influenced depends on your local network topology. A node isolated on a "leaf" has little power to spread a rumor, whereas a hub can trigger massive adoption.
+
+#### Standard Model Setup
+To simulate how a rumor or innovation spreads, we follow a specific sequence:
+1. **Initial Activation (Seeds):** A small set of nodes, often called influencers or "patient zeros," are activated at $t=0$.
+2. **Activation Rules:** Every inactive node evaluates its neighbors. It becomes active (or stays inactive) based on a predefined rule (e.g., "if 2 friends buy it, I buy it").
+3. **The Influence Cascade:** As nodes activate in sequence, they create a "cascade"—the scientific term for a piece of content "going viral".
+
+#### Possible Outcomes
+* Local Cascade: The information fizzles out, affecting only a handful of nodes near the source.
+* Global Cascade: The information hits a critical mass and spreads to a major proportion of the entire network.
+
+**Key Intuition:** For any diffusion to occur, at least one neighbor must be active. However, the position of the seed matters; starting a rumor with a hub in the network's core is far more likely to trigger a global cascade than starting at the periphery.
+
+Note: There are too many textbooks/papers to consider here but for most topics discussed in this lecture, see [Dynamical processes on complex networks](https://www.cambridge.org/core/books/dynamical-processes-on-complex-networks/D0173F07E0F05CEE9CF7A6BDAF48E9FC).
+
+Specifically for information diffusion networks, read [Anatomy of an online misinformation network](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0196087) and [The spread of lowcredibility content by social bots](https://doi.org/10.1371/journal.pone.0196087).
+
+---
+
+## Threshold models 
+Threshold models, famously introduced by Mark Granovetter, describe collective behavior based on the idea of peer pressure. In these models, an individual adopts a behavior (becomes "active") only if a sufficient number of their peers have already done so.
+
+$$I(i) = \sum_{j:\text{active}} w_{ji} \geq \theta_i$$
+
+[M. Granovetter, Threshold Models of Collective Behaviour. American Journal of Sociology, 83 (1978) 1420–1443.](https://www.jstor.org/stable/2778111)
+
+---
+
+#### 1. The Linear Threshold Model (LTM)
+In the LTM, each neighbor $j$ exerts a certain amount of influence $w_{ji}$ on node $i$. A node activates if the sum of influences from its active neighbors meets or exceeds its internal threshold $\theta_i$.
+
+$$I(i) = \sum_{j:\text{active}} w_{ji} \geq \theta_i$$
+* Where $w_{ji}$ is the weight of the link from $j$ to $i$
+
+**Activation condition:** $I(i) \geq \theta_i$, Where $\theta_i$ is the threshold of node $i$, indicating its tendency to be influeced.
+
+**Unweighted Networks:** If all links are equal, the influence is simply the count of active neighbors ($n_i^{on}$).
+
+$$I(i) = n_{i}^{on} \geq \theta$$
+
+**Simplification:** While each node can have a unique threshold (representing individual stubbornness), models often start with a universal threshold $\theta$ to isolate the impact of network structure.
+
+> This section can be quite detailed but little things like this matter. You can take an existing model and query a little detail in its implementation. For example, you could start with a condition that says each node has its own threshold, instead of having the same threshold. Math and science tend to start with this latter simplifcation as it is easier to constrol and then you integrate new things and interrogate how the changes work in the system.
+
+---
+
+#### 2. Model Dynamics & Termination
+The simulation follows a clear, iterative process to **ensure the "cascade" eventually finishes:**
+1. **Seed Activation:** A small set of nodes is initially activated (the "Patient Zeros").
+2. **Irreversibility:** Once a node is active, it stays active. This ensures the dynamics don't loop infinitely and the "rumor" eventually reaches a stable state.
+3. **Iteration:** Only inactive nodes are evaluated against the activation condition. If they flip, they may trigger their own neighbors in the next step.
+
+> Note, "Model Dynamics" means how we implement something. 
+
+---
+
+#### 3. Updating Strategies: Synchronous vs. Asynchronous
+How we implement the "loop" matters for scientific accuracy. We must ensure the result is a property of the **network**, not the **algorithm**. The order in which nodes are considered **should not** affect the outcome in models of network dynamics. 
+
+This does not mean you cannot have a probabilistic model wherby the outcome can change for each run. But the result should not change based on implementation factors, i.e. order. This is why you need to think of the different ways of updating to ensure this doesn't happen.  
+
+| Update Method	| How it Works | Pros/Cons |
+| :--- | :--- | :--- | 
+| Asynchronous| Nodes are updated one by one in random order. A node can react to a neighbor that just activated in the same time step. | More realistic for human behavior, but introduces potential **order bias.** |
+| Synchronous | All nodes look at the state of the network at the start of the step, decide their change, and all flip at once. | Order becomes irrelevant; ensures everyone has the same "view" of the network. | 
+
+Note on Determinism: Traditional threshold models are deterministic — if the math hits the threshold, you must activate. This is a simplification; real-world behavior is often better modeled using the probabilistic approaches we see in independent cascades.
+
+---
+## Fractional threshold model
+The Fractional Threshold Model shifts the focus from the absolute number of active neighbors to the proportion of the neighborhood that has been activated. This is a more realistic representation of social norms or "groupthink," where an individual's decision is often based on the majority consensus within their immediate social circle.
+
+A node $i$ becomes active if the ratio of its active neighbors $n_i^{on}$ to its total degree $k_i$ meets or exceeds the threshold $\theta_i$:
+
+$$\frac{n_{i}^{on}}{k_i} \geq \theta_i$$
+
+Example: If $\theta = 0.5$, a node will only activate if at least 50% of its friends have already adopted the behavior.
+
+---
+
+#### The Concept of "Vulnerable Nodes"
+In sparse networks, the success of a global cascade depends on the presence of vulnerable nodes—nodes that can be triggered by just a single active neighbor.
+* **Condition for Vulnerability:** A node is vulnerable if its degree $k_i \leq 1/\theta_i$.
+* For a cascade to spread beyond a small cluster, the network must contain a sufficiently large "backbone" of these vulnerable nodes.
+
+---
+
+#### Structural Gatekeepers: Hubs and Communities
+The fractional rule introduces unique structural challenges that differ from the simple linear model:
+* **The Hub Paradox:** While hubs have many connections, they are often **harder to influence** under a fractional rule. If a hub has 1,000 neighbors and $\theta = 0.5$, it needs 500 active neighbors to flip. A hub might spread information to its "leaves" easily, but if those leaves are the hub's only connections, the information may never reach the rest of the network.
+* **Community Barriers:** Influence spreads rapidly within dense communities (where everyone is connected) but struggles to **cross community boundaries**. Because nodes in "Community B" have few links to "Community A," even if all of Community A is active, it may not represent a high enough fraction of the neighbors for a node in Community B to flip.
+
+#### Cascade Control and Strategic Seeding
+Understanding the topology allows for "unblocking" stalled cascades.
+* **Key Influencers:** These are not always the nodes with the highest degree (hubs), but rather those in the core of the network or those that bridge specific communities.
+* **Viral Marketing:** Strategically activating a "bridge" node can turn a dying local cascade into a global one by providing the necessary fractional influence to a new, unreached community.
+
+Caveat: being a hub does not necessarily imply being a good influencer: [Makse, Identification of influential spreaders in complex networks](https://www.nature.com/articles/nphys1746)
+
+---
+
+## Independent cascade models
+While threshold models rely on "peer pressure" (collective influence), the Independent Cascade Model focuses on individual, one-to-one interactions. This model reflects scenarios where a single passionate person or a specific trusted source is enough to trigger a change, regardless of what the rest of the group thinks.
+
+---
+
+#### The Core Principle: The "One-Shot" Probability
+In the IC model, influence is probabilistic and asymmetric ($p_{ij} \neq p_{ji}$). When node $i$ becomes active, it has a single chance to activate each of its inactive neighbors $j$ with a success probability $p_{ij}$.
+
+**The Single Chance Rule:** If node $i$ fails to activate neighbor $j$ on its first attempt, it never tries again. If nodes were allowed infinite attempts, the entire network would eventually activate every time, making the model useless for studying the limits of viral spread.
+
+**Stochastic Nature:** Because each link is a "roll of the dice," the same starting nodes (seeds) will produce different results in every simulation run.
+
+#### Model Dynamics
+1. **Start:** A set of seed nodes is activated at $t=0$.
+2. **Propagation:** Each newly activated node $i$ attempts to influence its inactive neighbors $j$.
+3. **Independence:** The success of node $i$ influencing $j$ is independent of any other attempts from other nodes.
+4. **Termination:** The process stops when no more nodes are successfully activated in a time step.
+
+#### Measuring "Success": Influence Spread
+Because one run might "fizzle out" while another "goes viral," we cannot rely on a single simulation.
+
+**Monte Carlo Simulation:** Researchers run the model thousands of times (e.g., 10,000 runs) and take the average of the results.
+
+**Influence Spread:** The resulting average is the expected number of nodes activated by the initial seeds.
+
+---
+
+#### Comparison: Threshold vs. Independent Cascade
+
+| Feature |	Threshold Models | Independent Cascade |
+| :--- | :--- | :--- | 
+| Philosophy | Peer Pressure (Collective) | Word-of-Mouth (Individual) | 
+| Logic | Deterministic (Rule-based) | Probabilistic (Stochastic) | 
+| Focus | On the Inactive node's limit | On the Active node's influence | 
+| Persistence | Neighbor always exerts pressure | Active node gets one chance |
+
+If $p_{ji} = 1$, it means node $i$ has complete trust in node $j$. If $j$ says something, $i$ will adopt it. Influence flows from $j \to i$.
+
+Also, it may me more correct to frame the only check once rule by saying that in each iteration we only check the the newly activated nodes. It is also can easier way to look at it from a coding perstived it because it can populate lists in each round to look at in the next iteration
+
+A clear distinction of the probabilistic models is that technically speaking, the number of neighbours is no longer strictly the main detmerinant of influence, where as it was for the deterministic theshlding approaches. This is because the probabilities proxy "trust". A node may have many neighbours but its is doesn't have much trust in them their influences will be weak. Additionally, a node may only have 1 neighbour but its trust in that node make be very strong, meaning it can be influence it more easily. 
+
+---
+
+## Toward more realistic information diffusion
+While the Linear Threshold and Independent Cascade models provide a strong theoretical foundation, they are often too simplified to capture the nuance of human behavior. To bridge this gap, network scientists use more sophisticated variants that blend these rules or introduce non-linear dynamics.
+
+---
+
+#### Blending Thresholds and Probabilities
+A common improvement is the Probabilistic Threshold Model. Instead of a binary "yes/no" flip once a threshold is met, the probability of activation grows as more neighbors become active. Having 1 active neighbor might give you a 5% chance of flipping; 2 neighbors might give you 20%, and 5 neighbors might give you 90%. It accounts for the fact that even if you aren't "fully persuaded" yet, your resistance weakens as the social pressure mounts.
+
+---
+
+#### Dependent Influences
+Standard IC models assume neighbors act independently. Realistic models often assume Synergistic Influence, where the combined effort of two friends is greater than the sum of their individual parts. Active neighbours do not exert influence independently of each other
+
+---
+
+#### Simple vs. Complex Contagion
+One of the most important developments in modern network science is the distinction between these two types of spread:
+
+| Feature | Simple Contagion | Complex Contagion |
+| :--- | :--- | :--- | 
+| Mechanism | Needs only one contact (like a flu or a basic link). | Needs multiple independent sources of reinforcement. |
+| Best Structure | Spreads best via Long Ties (random bridges) that reach distant parts of the network. | Spreads best through Clusters where multiple neighbors can "verify" the idea. |
+| Example | A viral YouTube video or a cold virus. | Adopting a controversial political opinion or a risky new technology. |
+
+The "Weakness" of Long Ties: In complex contagion, the "weak ties" (the bridges between communities) are actually weak at spreading the idea because they rarely provide the multiple points of contact needed to overcome a node's threshold.
+
+
+Complex contagion [ ]: each new person exposing us to a new idea or product has greater influence than the previous ones: [Complex contagions and the weakness of long ties](https://www.journals.uchicago.edu/doi/10.1086/521848)
+
+---
+
+## Epidemic spreading: the Black Death
+Probably originated in Central Asia, it spread throughout all of Europe between 1346 and 1353.
+
+The Black Death is estimated to have killed 30-60% of Europe’s population
+
+Nowadays the speed of epidemic spreading has increased enormously due to advances in transportation: someone contracting Ebola in Africa can travel to Europe, America and Asia and spread the disease before being aware of it.
+
+Technology has created new types of epidemics: computer viruses & malware spread over the Internet. Mobile phone viruses spread via Bluetooth or MMS. Misinformation spreads through social media, etc.
+
+---
+
+## Contact networks
+In network science, a Contact Network is the specific "underlying map" that defines how a contagion can move from person to person (or computer to computer). The main takeaway of this section is that the "spread" is only as fast as the "connections" allow. Depending on what you are studying, the "contact" changes:
+
+Biological Epidemics: The contact network is defined by physical proximity or touch. For the Black Death, this was based on trade routes and ship movements. For COVID-19, it included international flight paths (transportation networks).
+
+Digital Epidemics: For a computer virus, the "contact" is an email sent or a shared server connection. For misinformation, it is a "Follow" or "Retweet" on a social media network.
+
+The link to SocioPatterns.org is important because they specialize in High-Resolution Contact Networks. They use wearable sensors to track exactly who stood next to whom in a school, a hospital, or an office. Traditional View: "People in a school interact." Network View: "Student A stood within 1 meter of Student B for 4 minutes.". This data allows scientists to build a real-time graph where an edge only exists if there was a high-probability "contact" event.
+
+---
+
+#### The "Substrate" of the Disease
+The contact network is the substrate (the material) on which the dynamics occur.
+* If the contact network is a Grid, the disease moves slowly and predictably.
+* If the contact network is Scale-Free (with airline hubs or social media influencers), the disease can "teleport" across the world in hours.
+
+---
+
+**Summary:** You cannot model an epidemic accurately without first defining the Contact Network. A virus in a small village has a different "map" than a virus in a global airport hub.
+
+---
+
+## Epidemic Compartmental Models
+Epidemic modeling uses compartments to segment a population based on their health status relative to a disease. By moving individuals between these blocks, we can mathematically track the "flow" of an outbreak.
+
+#### The Core Compartments
+* **Susceptible (S):** Healthy individuals who can catch the disease.
+* **Infected (I):** Individuals who have the disease and can spread it.
+* **Recovered (R):** Individuals who have cleared the infection and (in some models) gained immunity.
+
+--- 
+
+## The SIS Model (No Immunity)
+The SIS Model is used for diseases where recovery does not grant lasting immunity (e.g., the common cold or some bacterial infections). Individuals cycle directly back from Infected to Susceptible.
+
+#### The Dynamics: Mean-Field Equations 
+In a Mean-Field approach, we assume **Homogeneous Mixing** — meaning we ignore the specific network structure and assume everyone is equally likely to meet everyone else. Meanfield was generally the approach used for COVID modelling.
+
+#### Change in Susceptibles ($\dot{S}$): 
+&$\dot{S} = -\frac{\beta SI}{N} + \mu I$*
+* The negative term ($-\beta SI/N$) represents healthy people getting sick.
+* The positive term ($+\mu I$) represents sick people recovering and becoming healthy (but susceptible) again.
+
+#### Change in Infected ($\dot{I}$):
+$$\dot{I} = \frac{\beta SI}{N} - \mu I$$
+* This is the inverse: people enter the $I$ compartment from $S$ and leave it via recovery.
+
+These are "closed population" models. We assume the time-scale of the epidemic is short enough that births and natural deaths don't significantly shift the numbers. If we included them, we would call them "Vital Dynamics".
+
+--- 
+
+## The SIR Model (Lasting Immunity)
+The SIR Model is the gold standard for diseases like measles or mumps where once you recover, you are "Removed" from the infectious cycle.
+
+**Key Difference:** Once an individual moves to the Recovered (R) compartment, they are effectively invisible to the disease dynamics; they can no longer be infected nor infect others.
+
+**Simulation on Networks:** On a real contact network, the $R$ nodes act as "dead ends" or buffers that eventually halt the spread by physically blocking the path of the virus to the remaining $S$ nodes.
+
+---
+
+## Network Simulation Logic
+When moving from abstract math to a Network Simulation, we don't use the differential equations. Instead, we use a step-by-step algorithm:
+1. **Initialize:** Infect a random fraction of nodes.
+2. **S-to-I Step:** For every susceptible node, look at its direct neighbors. If any neighbor is infected, roll the dice (probability $\beta$) to see if the node flips to $I$.
+3. **I-to-S/R Step:** For every infected node, roll the dice (probability $\mu$) to see if they recover.
+4. **Repeat:** Continue until the disease either dies out or reaches a steady state.
+
+---
+
+## Epidemic Spreading and the $R_0$ Threshold
+Epidemic dynamics usually follow a predictable curve: an initial slow burn, an exponential ramp-up, and finally a stationary state (where the disease either becomes endemic or is eradicated). Whether a disease takes off depends on the Basic Reproduction Number ($R_0$).
+
+---
+
+#### The $R_0$ Threshold in Homogeneous Networks
+In a homogeneous network where every node has roughly the same number of contacts ($\langle k \rangle$), $R_0$ represents the average number of secondary infections produced by a single infected individual.
+
+To calculate if a disease will spread, we compare the rate of new infections ($I_{sec}$) against the rate of recovery ($I_{rec}$):
+* New Infections: $I_{sec} = \beta \langle k \rangle I$
+* Recoveries: $I_{rec} = \mu I$
+
+The epidemic spreads if $I_{sec} > I_{rec}$, which simplifies to the threshold condition:
+$$R_0 = \frac{\beta \langle k \rangle}{\mu} > 1$$
+* $\beta$ (Virality): How easy it is to catch.
+* $\mu$ (Recovery): How fast people stop being infectious.
+* $\langle k \rangle$ (Contact): How many people you interact with.
+
+Policy Insight: Since $\beta$ and $\mu$ are biological constants of the virus, the only way society can lower $R_0$ during a pandemic (like COVID-19) is by reducing $\langle k \rangle$ through social distancing or lockdowns.
+
+--- 
+
+#### The Hub Effect: Vanishing Epidemic Thresholds
+The $R_0$ math above assumes everyone is "average." However, in Scale-Free networks, the presence of hubs (super-spreaders) fundamentally breaks this logic.
+
+**The Vanishing Threshold:** On heterogeneous networks, the threshold effectively disappears. Even a disease with a very low infection rate ($\beta$) will eventually hit a hub.
+
+**The Hub as a Megaphone:** Once a hub is infected, it can infect hundreds of neighbors in a single step, who then pass it to other hubs. This creates a "highway" for the virus that homogeneous models fail to predict.
+
+Hubs drastically change the scenario. On contact networks with hubs there is effectively no epidemic threshold even diseases with low infection rate and/or high recovery rate may end up affecting a sizable fraction of the population! [Epidemic spreading in scale-free networks.](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.3200)
+
+--- 
+
+#### Strategic Vaccination: "Vaccinate Your Friends"
+Because hubs are the drivers of the epidemic, random vaccination is inefficient. You could vaccinate 50% of the population randomly and still miss the hubs that keep the virus alive.
+
+**Targeted Immunization:** The most effective strategy is to vaccinate individuals with high centrality (hubs).
+
+**The Friendship Paradox Strategy:** Since we often don't know who the hubs are, we can use the Friendship Paradox: pick a random person and vaccinate one of their friends. Statistically, a randomly chosen "friend" is much more likely to be a hub than a randomly chosen "person".
+
+[Epidemic spreading in scale-free networks.](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.3200)
+
+[Social network sensors for early detection of contagious outbreaks.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0012948)
+
+---
+
+## Rumour Spreading
+Rumour spreading is often modeled as a social variant of the SIR model, but with a fundamental psychological twist: the transition from "spreader" to "recovered" is not biological (recovery over time), but social (loss of interest).
+
+#### The Three Compartments
+* **Ignorant (S):** Those who have not yet heard the rumour.
+* **Spreader (I):** Those who know the rumour and are actively telling others.
+* **Stifler (R):** Those who know the rumour but have stopped spreading it because it feels like "old news".
+
+---
+
+#### The Dynamics of "Social Boredom"
+The critical difference between a biological virus and a rumour is how you "recover." In the SIR model, you recover spontaneously ($\mu$). In Rumour Spreading, you only stop spreading when you realize everyone else already knows.
+
+**Transmission** ($\beta$): When a Spreader meets an Ignorant, the Ignorant becomes a Spreader with probability $\beta$.
+
+Stifling ($\alpha$): * If a Spreader meets a **Stifler**, the Spreader realizes the news is stale and becomes a Stifler with probability $\alpha$.
+
+If a Spreader meets **another Spreader**, they both realize the news is common knowledge and both become Stiflers with probability $\alpha$.
+
+--- 
+
+#### Comparison: Epidemic vs. Rumour
+
+| Feature | SIR (Epidemic) | ISR (Rumour) | 
+| :--- | :--- | :--- | 
+| Recovery Mechanism | Spontaneous / Biological (Time-based) | Interaction-based (Social-based). | 
+| Stop Trigger | Your own immune system. | Finding out your neighbors already know the info. |
+| End State | Herd immunity or eradication. | A mix of Ignorants (who never heard it) and Stiflers. |
+
+---
+
+#### The Lack of a Threshold
+Unlike biological epidemics, where a low $\beta$ or high $\mu$ can kill an outbreak before it starts ($R_0 < 1$), rumours are remarkably resilient. Because they don't rely on spontaneous recovery, they can survive and eventually reach a large portion of the network even with low transmission probabilities, provided the network is connected. A rumour dies not because it "cures" itself, but because it becomes redundant. Once the network is saturated with people who already know the information, the motivation to spread it vanishes.
+
+---
+
+## Opinion Dynamics: Foundations
+While rumor and epidemic models focus on states (aware vs. unaware), Opinion Dynamics explores how individuals shape each other's beliefs through social interaction. It is the study of how personal perspectives transform into collective societal phenomena like **Consensus, Polarization, or Fragmentation**.
+
+[Statistical physics of social dynamics](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.81.591)
+
+---
+
+#### Discrete vs. Continuous Opinions
+The "granularity" of the opinion determines which mathematical model we use:
+* **Discrete Models:** Opinions are limited to distinct categories (e.g., Binary: 0 or 1; or Multiple: A, B, C). This represents choices like voting for a specific candidate or choosing between competing technologies.
+* **Continuous Models:** Opinions are real numbers on a spectrum (e.g., -1.0 to +1.0). This represents degrees of belief, such as political leanings from "strongly progressive" to "strongly conservative".
+
+--- 
+
+#### Discrete Dynamics and Steady States
+In a discrete setup, we typically start with a random distribution (e.g., 50% hold opinion 0, 50% hold opinion 1). As the simulation loops, neighbors influence each other based on specific rules until the system hits a **stationary state**:
+* **Consensus:** Every single node in the network eventually holds the same opinion (all 0s or all 1s).
+* **Polarization:** The network splits into stable "camps" that disagree with each other but are internally unified.
+* **Fluctuating State:** In some models, nodes never stop flipping, though the average opinion of the population might stabilize.
+
+--- 
+
+#### Key Measurement Variables
+To track how a "belief war" is progressing, we use two primary metrics:
+
+| Variable | Definition | What it Tells Us |
+| :--- | :--- | :--- | 
+| Average Opinion ($\langle o \rangle$) | The arithmetic mean of all node opinions. | The "mood" of the network. If it shifts from 0.5 to 0.8, Opinion 1 is winning the majority. | 
+| Exit Probability ($E$) | The likelihood that the network will reach consensus for a specific opinion. | If you start with 40% "Option 1" supporters, what are the odds they convert the other 60%? It measures the "momentum" of the initial minority. | 
+
+Example: we run the model dynamics 100 times, starting from 100 different random configurations. In each initial configuration we assign opinion one to every node with probability 0.4, so that approximately 40% of the nodes will have opinion one. If all runs lead to consensus and 30 of them to consensus opinion one, then the value of the exit probability for initial probability 0.4 of opinion one is 30/100 = 0.3
+
+---- 
+
+#### Simulation Mechanics: The Importance of Randomness
+To avoid algorithmic bias, nodes are usually updated asynchronously in random order. If you always updated Node 1 before Node 2, Node 1 would have an unfair "first-mover" advantage in influencing its neighbors. Randomizing the update order ensures that the final result—whether it's consensus or polarization—is a result of the network's structure and the interaction rules, not the code's execution order.
+
+---
+
+## Majority model
+[Time‐dependent statistics of the ising mode](https://doi.org/10.1063/1.1703954)
+
+The Majority Model is a deterministic rule where a node’s opinion is entirely dictated by the most common opinion in its immediate neighborhood. It is the social equivalent of "going with the crowd" to avoid being the odd one out.
+
+---
+
+#### The Update Rule
+At each time step, a node $i$ looks at all its neighbors:
+- Majority Wins: If more than 50% of neighbors hold Opinion 1, Node $i$ switches to 1.
+- The Tie-Breaker: If the neighbors are perfectly split (e.g., 2 neighbors with Opinion 0 and 2 with Opinion 1), the node flips a coin to decide.
+
+---
+
+#### Connection to Threshold Models
+This model is mathematically identical to a Fractional Threshold Model with a threshold of $\theta = 1/2$. The "influence" required to change your mind is exactly half of your social circle.
+
+---
+
+#### The Reality of "Opinion Coexistence"
+While we might expect everyone to eventually agree, the Majority Model often fails to reach Consensus on complex, real-world networks.
+- Local Stabilities: The system often gets stuck in a state of Polarization (coexistence). This happens because "Opinion 0" clusters and "Opinion 1" clusters can form stable borders where every node on the boundary is already in the majority of its own local group.
+- Topology Matters: Global consensus is typically only guaranteed on very simple, structured topologies like 1D or 2D grids, which do not reflect the "small-world" or "scale-free" nature of human society.
+
+---
+
+#### The Exit Probability "Step"
+The Exit Probability for the Majority Model follows a step-like profile:
+- If you start with even a slight majority (e.g., 51% of nodes have Opinion 1), the deterministic nature of the rule makes it almost certain that Opinion 1 will eventually win the entire network (if it reaches consensus at all).
+- This creates a sharp "jump" at the 0.5 mark, rather than a smooth diagonal line.
+
+On most networks encountered in this module, the majority model never reaches consensus. Consensus is obtained on one and two-dimensional grids which is not very realistic. 
+
+---
+
+## Voter model
+[A model for spatial conflict](https://academic.oup.com/biomet/article-abstract/60/3/581/217208?redirectedFrom=fulltext)
+
+The Voter Model represents a more "fluid" and stochastic approach to social influence than the Majority Model. Instead of looking at the group consensus, an individual simply mimics the opinion of a single, randomly chosen neighbor.
+
+---
+
+#### The Rule of Mimicry
+In each time step, a node $i$ selects one neighbor $j$ at random and adopts $j$’s opinion.
+
+The "Passionate" Influence: This means that even if 9 out of 10 friends have Opinion 0, there is still a 10% chance you will pick that one friend with Opinion 1 and switch sides.
+
+---
+
+#### The Guarantee of Consensus
+Unlike the Majority Model, the Voter Model always reaches consensus on any connected network.
+
+Why it persists: Because the rule is probabilistic, "stable borders" between clusters cannot form permanently. As long as there is an edge between a 0-node and a 1-node, there is a non-zero probability that one will eventually convert the other. This "random walk" of opinions eventually leads the entire network to collapse into a single state.
+
+---
+
+#### Exit Probability: The Linear Diagonal
+The Voter Model lacks the "momentum" of the Majority Model. Its Exit Probability is a perfectly linear diagonal:
+* If you start with 30% of nodes holding Opinion 1, there is exactly a 30% chance that Opinion 1 will win the entire network.
+* The "initial weight" of an opinion in the population is the only predictor of its success.
+
+---
+
+#### Voter Model Variants
+To make the model more realistic, researchers add "features" that prevent or bias the march toward consensus:
+* **Zealots (Inflexible Nodes):** These are "stubborn" nodes that never change their opinion. If all zealots share an opinion, they act as a "gravitational pull" that eventually forces the whole network into their camp. If zealots disagree (some for 0, some for 1), consensus is never reached; the network stays in a state of perpetual fluctuation.
+* **Bounded Interactions:** Nodes only interact if their opinions are "close enough." If a node has Opinion 1 and its neighbor has Opinion 3, they might ignore each other, leading to fragmentation.
+* **Spontaneous Change (Noise):** Nodes might change their opinion randomly, even without neighbor influence. This represents independent thinking or external media influence.
+
+---
+
+
+
+
+
+
+
+## Continuous opinions
+Dynamics where the opinions can vary smoothly from one extreme to the other of a range of possible choices
+
+Example: political alignment on a spectrum from very progressive (–1) to very conservative (+1)
+
+Initial configuration: opinions chosen randomly within the range of possible values
+
+Stopping criterion: the largest variation of any opinion must be smaller than a predefined threshold. If this occurs the system has reached a stationary state
+
+Possible stationary states: consensus, polarization, or fragmentation, depending on whether opinions are concentrated around one, two, or more values, respectively
+
+## Bounded confidence model
+[Mixing beliefs among interacting agents](https://www.worldscientific.com/doi/abs/10.1142/S0219525900000078)
+
+Principle: two opinions can affect each other only if their difference is smaller than a given amount, which is called confidence bound, or tolerance 
+
+In the bounded confidence model there are two parameters: 
+- The confidence bound $\epsilon$
+- The convergence parameter $\mu$
+
+Dynamics: 
+At iteration $t$, each node $i$ has opinion $o_i(t)$, which is a real number between, say, zero and one
+
+An iteration consists of a sweep over all nodes, synchronously or in random order 
+
+At iteration $t+1$, for each node $i$ we pick one neighbour $j$ at random. If:
+
+$$|o_i(t) - o_j(t)| < \epsilon$$
+
+
+the opinions of $i$ and $j$ are changed as
+
+$$o_i(t + 1) = o_i(t) + \mu [o_j(t) - o_i(t)]$$
+
+$$o_j(t + 1) = o_j(t) + \mu [o_i(t) - o_j(t)]$$
+
+If $\mu = 1/2$ the opinions converge to their average. If $\mu = 1$ they switch. The parameter $u$ usually varies between 0 and 1/2
+
+If we sum the opinion update equations side by side and divide by two, we see that the average opinion of $i$ and $j$ is the same before and after the update the average opinion of the population is preserved by the dynamics
+
+Consequence: if the initial opinions are taken at random from the range $[0,1]$, their average is 1/2 (with possible small deviations). So, if the system eventually reaches consensus, the opinions of all nodes will cluster around $1/2$
+
+Starting from a random initial opinion configuration, the dynamics always lead to a stationary state, on any network 
+
+The convergence parameter only affects the number of iterations needed to reach convergence 
+
+The number of clusters of opinions in the stationary state depends on the confidence bound and on the structure of the network. The lower the confidence bound, the larger the number of final opinion clusters 
+
+for $\epsilon > \frac{1}{2}$ For the system always reaches consensus, on any network, with the opinions centered around $\frac{1}{2}$
+
+## Bounded confidence model: variants
+Several variants of the bounded confidence model exist, obtained by adding features and/or making suitable modifications to the basic version. These include: 
+- Using individual values of $\epsilon$, to account for the fact that not everybody can be convinced as easily as everybody else. The confidence bound of a node can also be coupled with the individual’s opinion. For instance, if the opinion is close to the extremes of the range, the confidence bound is small because extremists are more difficult to persuade than most people.
+- The possibility for individuals to change their opinion spontaneously. As in the voter and other models, this can be implemented by letting nodes change their opinion with some probability at each iteration. 
+
+## Coevolution of networks and dynamics
+Network assortativity: nodes are similar to their neighbours
+
+In social networks there are two mechanisms that determine the observed assortativity:
+- Selection: nodes become connected because they are similar 
+- Social influence: nodes become similar because they are connected
+
+Limits of traditional opinion dynamics models:
+- The network is fixed. Selection is not allowed, nodes with very similar opinions do not have the option to become neighbours, unless they already are. Likewise, neighbours with very dissimilar opinions cannot become disconnected
+
+Coevolution models: opinion changes may induce modifications in the network structure, which could in turn affect the opinions, and so on
+
+We consider a coevolution model with discrete opinions, initially randomly assigned to the nodes
+
+Dynamics: 
+
+Each iteration is a sweep over the nodes, synchronously or in random order 
+
+For each node $i$ select a random neighbour $j$ with different opinion from $i$:
+- With $p$, the link between $i$ and $j$ is rewired
+from $i$ to a randomly selected nonneighbour holding the same opinion as $i$ (selection)
+- with probability $1-p$, $i$ takes the opinion of $j$ (influence)
+
+
+Both selection and influence tend to decrease the number of neighbouring node pairs with different opinions: the network eventually reaches a state in which all pairs of neighbours have the same opinion
+
+The network will then be divided into a set of separate components, disconnected from one another, with all members of each component holding the same opinion, which may differ across components 
+
+Such a scenario is a stable state: no more changes in opinions or network structure take place and the dynamics stop
+
+When $p$ is close to zero, influence dominates and the network structure barely changes. The system will basically homogenize the opinions within the connected components of the initial network
+
+When $p$ is close to one, selection dominates and opinions hardly influence each other. Here the final components of the system are the groups of nodes with the same opinion as in the initial configuration
+
+What happens when the number of opinions is large? 
+- If we start from a random network with average degree larger than one, we know that it has a giant component
+- For $p$ near zero, in the long run there will be a giant community holding the majority opinion, and many small communities with different opinions
+- For $p$ near one, the link dynamics will break the network into many small components, each made mostly of nodes that were initially assigned one of the distinct opinions
+- There is an abrupt transition between the scenario with a large majority opinion and the scenario with many smaller opinion communities of comparable size
+
