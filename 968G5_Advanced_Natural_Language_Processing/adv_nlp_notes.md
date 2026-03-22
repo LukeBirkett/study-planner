@@ -2549,6 +2549,10 @@ I won't be publishing solutions this week as this lab forms the basis of the ass
 
 # [Week 7 - Pre-trained Large Language Models](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-7-pre-trained-large-language-models?module_item_id=1602174)
 
+* [Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b96e8892-d9f8-4cea-b882-b40400d5565b&start=147.986053)
+* [Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=59c201de-b7eb-40a6-9857-b40400dc767e&start=7.674165)
+* [Part 3](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=92b62899-8491-499e-826b-b40400e48bda&start=0)
+
 This week we will start looking at pre-trained large language models:
 * paraphrase identification and semantic matching
 * contextualised word embeddings
@@ -2558,14 +2562,15 @@ This week we will start looking at pre-trained large language models:
 
 #### Week 7: Contents
 
-1. [Lecture]()
-2. [Seminar]()
-3. [Lab]()
-4. [Additional Readings]()
+1. [Lecture](#week-7-lecture)
+2. [Seminar](#week-7-seminar)
+3. [Lab](#week-7-paper)
+4. [Additional Readings](#week-7-additional-reading)
 
 ## Week 7: Lecture
+This week moves from Static Embeddings (Word2Vec/GloVe), which give a word the same vector regardless of context, to Contextualized Embeddings, where the vector for "bank" changes depending on whether you are talking about money or a river. We are leaving behind Recurrence (LSTMs), which process words one-by-one, for Parallelism (Transformers), which look at the whole sentence simultaneously using Self-Attention. This is the era of Pre-training and Fine-tuning. Instead of training a model from scratch for one task, we train a massive model (like BERT) to "understand language" generally, then tweak it for specific tasks.
 
-## Overview 
+#### Overview 
 * Paraphrase and semantic matching
     * Applications
     * Composition of distributional representations of meaning
@@ -2578,445 +2583,568 @@ This week we will start looking at pre-trained large language models:
 
 ---
 
-## Paraphrase Identification and Semantic Matching
-* text simplification
-* automated marking
-* question answering
-* text summarization
-* information retrieval
-* recommendation systems
-* document clustering
-
-See: Yang et al. (2020) for a discussion of 4
-different categories of semantic matching
-problems in NLP
-(https://arxiv.org/pdf/2004.12297.pdf)
+## Semantic Matching and Paraphrase Identification
+At the sequence level, we move beyond classifying individual words to understanding the relationship between entire strings of text. Paraphrase Identification is the task of determining if two sequences mean exactly the same thing. Semantic Matching is a broader category that measures the degree of similarity in meaning between two sequences.
 
 ---
 
-## Semantic Matching in ... Question Anwswering 
-¡ “Who became the head of the UK government in 1951?”
-¡ “Who was elected as British prime minister in 1951?”
-¡ If we know the answer to one of these questions …
-¡ we probably know the answer to the other one too
+#### Core Applications
+Understanding semantic similarity is vital for several high-stakes NLP tasks:
+* **Question Answering (QA):** Identifying that "Who is the head of the UK government?" and "Who is the British PM?" require the same answer.
+* **Text Simplification & Summarization:** Ensuring that a shorter or simpler version of a text retains the original meaning without "hallucinating" new information.
+* **Automated Marking:** Checking if a student's open-ended answer matches the semantic intent of a marking scheme.
+* **Information Retrieval & Recommendation:** Clustering documents or suggesting content based on topical and conceptual similarity rather than just keyword matches.
 
-
----
-
-## Simple Text Matching
-
-* Word overlap; e.g., using Jaccard’s coefficient
-* Bag-of-words representations of sentences / documentsl; weight words using TF-IDF; cosine similarity between vectors
-* TF-IDF = “term frequency, inverse document frequency”; gives more weight to: higher frequency terms, more discriminating terms
-
+See: [Yang et al. (2020)](https://arxiv.org/pdf/2004.12297.pdf) for a discussion of 4 different categories of semantic matching problems in NLP 
 
 ---
 
-## Disadvantaged of Simple Text Matching
-What about words which mean similar things?
-What about word order?
+#### The Evolution of Text Matching
+To determine if two sentences match, we have moved from "shallow" surface statistics to "deep" semantic representations.
+
+#### 1. Surface-Level Matching (Lexical Overlap)
+The simplest way to match text is to look for shared words.
+* **Jaccard’s Coefficient:** A simple measure of the intersection of words divided by the union of words in two sets.
+* **TF-IDF (Term Frequency-Inverse Document Frequency):** A weighting scheme that prioritizes "important" words. It gives high weight to words that appear often in a specific document but rarely across the whole collection (e.g., "Prime Minister" gets more weight than "the").
+* **Vector Space Models:** Representing documents as Bag-of-Words vectors and calculating the Cosine Similarity between them.
+
+#### 2. The Disadvantages of Simple Matching
+While fast, surface-level matching is easily "blinded" by the following:
+* **Lack of Synonymy:** Two sentences can share zero words but be identical in meaning. In your example:
+    * "Who became the **head of the UK government** in 1951?"
+    * "Who was elected as **British prime minister** in 1951?"
+
+    A TF-IDF or Jaccard model would see very little overlap here because the key entities ("head of UK gov" vs "PM") use entirely different tokens.
+* **Word Order Ignorance:** Bag-of-words models cannot distinguish between "The dog bit the man" and "The man bit the dog."
+* **Polysemy:** Simple matching treats every instance of "bank" the same, whether it refers to a river or a financial institution.
+
+--- 
+
+## The Principle of Compositionality
+To solve the failures of simple matching, we rely on the Principle of Compositionality (attributed to Gottlob Frege). It states that the meaning of a complex expression is determined by:
+1. The meanings of its constituent expressions (the individual words/embeddings).
+2. The rules used to combine them (the syntax/structure).
+The goal of modern NLP is to find a mathematical way to "compose" individual word embeddings into a single sequence-level representation that captures both the definitions of the words and the logic of their arrangement.
 
 ---
 
-## The Principle of Compositionality
-widely attributed to Gottlieb Frege, but assumed by others
-e.g., George Boole
-
-“The meaning of a complex expression is determined by the meanings of its constituent expressions and the rules used to combine them”
-
-
----
-
-## Composition for Meaning Representations
-Constituent expressions are words
-
-Words can be represented by distributional representations / embeddings (e.g., Word2Vec or GloVe)
-
-So, to get a representation of a sequence we need to … compose the embeddings of the constituent words
+#### Composition for Meaning Representations
+Constituent expressions are words; could also extend to phrases where appropriate. Words can be represented by distributional representations / embeddings (e.g., Word2Vec or GloVe). So, to get a representation of a sequence we need to compose the embeddings of the constituent words
 
 How? What are the rules for composition?
 
 ---
 
-## Additive Composition
-
-Add/average the vectors (find the centroid)
-
-Remember, we are interested in cosine similarity between vectors, à direction, so very little difference between adding and averaging
-
-For semantic matching, we would expect “British leader” to be close to “head of UK government”
-
-Do you think this will be the case if you add word embeddings?
+#### Additive Composition (Centroid Models)
+A simple approach to sequence representation is Additive Composition, where we combine individual word embeddings to create a single vector for the entire phrase or sentence.
+* **The Method:** We calculate the sum or the average (the centroid) of the word vectors in the sequence.
+* **Vector Geometry:** Because we typically use Cosine Similarity to measure how close two sequences are, the magnitude (length) of the vector matters less than its direction. Mathematically, adding vectors and averaging vectors results in the same directional orientation, meaning they are functionally identical for similarity tasks.
+* **The Goal:** In an ideal semantic matching system, the sum of "head" + "of" + "UK" + "government" should result in a vector that is spatially very close to the sum of "British" + "leader".
 
 ---
 
-## Disadvantages of Adding Word Embeddings
+#### Why Adding Word Embeddings Fails
+While additive composition is computationally "cheap," it is a "lossy" process that fails to capture true linguistic meaning for three critical reasons:
 
-Word embeddings are uncontextualised: contain a mixture of usages of all senses of the word; e.g., head as part of the body and head as leader; but only one sense is intended in a given sentence.
+#### 1. Uncontextualized "Senses" (The Polysemy Problem)
+Static word embeddings (like Word2Vec or GloVe) are uncontextualized. They represent a word as a single point that collapses all its possible meanings into one "average" vector.
 
-Pays no attention to word order or syntax
+Example: The word "head" has multiple senses (part of the body vs. leader of a country). In a static embedding, the vector for "head" is a mixture of both. When you add it to a sentence, the model cannot "discard" the body-part meaning, leading to a noisy and inaccurate representation.
 
-Unintuitive to “add” meaning of function words such as of, in,
-on, every and not
+#### 2. Loss of Syntax and Word Order
+Addition is commutative ($A + B = B + A$). This means an additive model is functionally "blind" to the order of words, which is often where the meaning resides.
 
----
+Example: "Glass house" and "house glass" result in the exact same vector, despite referring to two completely different objects. The syntax (the rules of combination) is completely erased.
 
-## Language Modelling for Sequence Representations
-Represent a sequence by what is predicted to the left and right of it
+#### 3. The "Noise" of Function Words
+Additive models struggle with function words (e.g., of, in, on, the, not).
 
-e.g., concatenation of [b_y0,f_yn]
-
----
-
-## Contextualised Word Embeddings 
-Represent each word based on its context
-
-e.g., concatenation of [b_yt,f_yt]
-
-compose contextualised word embeddings as before
+In the phrase "head of UK government," the word "of" performs a specific logical function. However, in a global vector space, "of" is such a common and generic word that its vector is often "diluted" or acts as mathematical noise, contributing nothing to the specific semantics of the leadership role.
 
 ---
 
-## ELMo (Peters et al. 2018)
-Embeddings from Language Models
+## From Sequence Representations to Contextualized Embeddings
+To move beyond the limitations of simple addition, we must look at how words interact within a sentence. This shift relies on **Language Modeling**, where the meaning of a sequence is derived from the way words predict one another. In a Recurrent Neural Network (RNN) framework, we process a sentence in two directions: a **Forward RNN** reads from left to right, while a **Backward RNN** reads from right to left. By concatenating the final hidden states of both—the last state of the forward pass and the first state of the backward pass—we create a **Sequence Representation**. This single vector acts as a summary of the entire sentence, "remembering" the history of word transitions from both ends.
 
+The leap from a "sequence summary" to **Contextualized Word Embeddings** happens when we shift our focus from the end of the sentence to each individual time step. Instead of one vector for the whole sentence, we produce a unique vector for every word in the sentence by concatenating the forward and backward hidden states at that specific position ($t$). While the input to the RNN is still a static, uncontextualized embedding (like Word2Vec), the RNN’s internal "memory" infuses that word with the influence of its neighbors.
 
-representations are functions of the entire word sequence
-
-computed: on top of two-layer biLSTMs with character convolutions; as a linear function of internal network states.
-
-multiple representations of the same word: higher-level layers capture context dependent aspects of word embeddings; lower-level layers capture aspects of syntax. 
-
-semi-supervised learning: biLSTMs can be pre-trained at a large scale; final layers fine-tuned on smaller / task-specific data-set. 
+The intuition here is that the word "head" at time step $t$ is no longer just a generic point in space; it is now a vector informed by the words that came before it (e.g., "British") and the words that follow it (e.g., "government"). This process effectively "disambiguates" the word in real-time. Once we have these rich, contextualized embeddings, we can compose them—through averaging or more complex layers—to create a sequence representation that is far more accurate than one built from static, "context-blind" vectors.
 
 ---
 
-## ElMo Base Model
-
-
----
-
-## ELMo Deep Model 
-Stack L biLSTMs on top of each other
-
-Inputs to second layer are contextualised by the words either side of a target word
-
-Inputs to third layer are contextualised by 2 words either side of target word
-
-Higher layers better at capturing longer-range semantic dependencies
+## ELMo: Embeddings from Language Models
+ELMo (Peters et al., 2018) marked a major milestone in NLP by formalizing the shift from static to contextualized word embeddings. Unlike Word2Vec, which gives "bank" the same vector every time, ELMo produces word representations that are dynamic functions of the entire input sentence.
 
 ---
 
-## ELMo Embeddings
-* Each layer learns its own vector representation for every token
-* These are combined and a final softmax layer is trained to collapse these vectors into a single vector and a task-specific scalar
-* Trained ELMo word embeddings can be used as input to another neural model!
+#### The Deep Bi-LSTM Architecture
+ELMo is built on a stack of Bidirectional LSTMs (Bi-LSTMs). In this deep model, the representation of a word isn't just a single output; it is a linear combination of all the internal layers of the network. This "stacked" approach allows the model to capture a hierarchy of linguistic information:
+* **Lower Layers:** Tend to capture syntactic information (e.g., part-of-speech tags or grammatical structure).
+* **Higher Layers:** Capture more semantic, context-dependent meaning (e.g., word sense disambiguation).
+As you move up the stack—from the first Bi-LSTM layer to the second or third—the "receptive field" of each word grows. The second layer is contextualized by the immediate neighbors, while higher layers can resolve long-range dependencies across the entire sentence.
 
 ---
 
-## Transformers (Vashwani et al. 2017)
-Sequence transduction model using stacked self-attention; no convolutions or recurrence; easier to parallelize than RNNs; faster to train than RNNs; captures more long-range dependencies than CNNs with fewer parameters. 
-
-* What’s a sequence transduction model?
-* What’s stacked self-attention?
-
----
-
-## Sequence Transduction
-
-Sequence to sequence models; Input: Sequence A; Output: Sequence B
-
-learning to convert one string into another
+#### How ELMo Embeddings are Formed
+Rather than just using the top layer of the network, ELMo creates a final embedding by collapsing all internal layer representations into one.
+1. Layer-Specific Vectors: For every token, each layer (the character-convolution input and the multiple Bi-LSTM layers) produces its own vector.
+2. Weighted Sum: These layers are combined using a weighted sum. During the "fine-tuning" phase for a specific task (like sentiment analysis), the model learns which layers are most important for that task.
+3. Task-Specific Scaling: A scalar parameter is applied to the final result, allowing the model to scale the ELMo representation to fit the needs of the subsequent neural model.
 
 ---
 
-## Encoder-Decoder Networks
-Encode the input sequence into a point in some latent space (encoder vector)
-
-Decode the point in latent space (encoder vector) into the output sequence
-
-The encoders and decoders can be any kind of neural networks, typically RNNs or attention-based
-
+#### Semi-Supervised Learning Paradigm
+The brilliance of ELMo lies in its two-step training process. First, the Bi-LSTMs are pre-trained at a massive scale on unlabeled text using a language modeling objective (predicting the next word). Then, these "frozen" pre-trained weights are used to generate rich embeddings that can be plugged into a smaller, task-specific model. This allowed researchers to achieve state-of-the-art results on various benchmarks with significantly less labeled data.
 
 ---
 
-## Stacked Encoder and Decoder Networks
-typically:
-* same number of decoders as encoders
-* typically 6 of each
-* each decoder as access to the output of the last encoder (the encoder vector) as well as the previous decoder in the stack
+## The Transformer Revolution: Beyond Recurrence
+The introduction of the Transformer (Vaswani et al., 2017) represents the next logical evolution from ELMo and LSTMs. While ELMo improved word representations by using bidirectional LSTMs, it was still hampered by the fundamental nature of recurrence. In an RNN or LSTM, words must be processed sequentially; the model cannot understand word 10 until it has processed words 1 through 9. This creates a computational bottleneck and makes it difficult to capture relationships between words that are far apart in a long sentence.
+
+The Transformer breaks this mold by abandoning recurrence entirely in favor of Global Self-Attention. This allows the model to look at every word in a sentence simultaneously, regardless of their distance.
+
+#### Key Innovations
+* **Parallelization:** Because there is no "waiting" for the previous time step, Transformers can be trained much faster on modern hardware (GPUs). This efficiency allowed researchers to train much larger models on significantly more data.
+* **Sequence Transduction:** At its core, a Transformer is a sequence **transduction model** — a system designed to "transform" one sequence (like a French sentence) into another (like an English sentence). It does this through an **Encoder-Decoder** framework where the encoder builds a map of the input and the decoder uses that map to generate the output.
+* **Stacked Self-Attention:** Instead of using layers of LSTMs, the Transformer uses "stacks" of **Self-Attention** layers. Each layer allows every word in the sequence to "attend" to every other word, gradually building up a deep, multi-layered understanding of the sentence's structure and meaning.
 
 ---
 
-## Transformer Architecture 
+## Encoder-Decoder Architecture in Transformers
+The Transformer architecture follows a classic Sequence-to-Sequence (Seq2Seq) framework, but it replaces the traditional recurrent units (LSTMs/RNNs) with attention-based blocks. The primary goal is Sequence Transduction: taking an input sequence (like a sentence in French) and "transducing" it into an output sequence (like the English translation).
 
-![Transformer Diagram](./files/week_7/transformer_diagram.png)
+#### The Encoder's Role: Building the Latent Space
+The Encoder is responsible for "understanding" the input. It takes the raw sequence and processes it through a series of layers to produce a high-dimensional representation in a latent space. Unlike older RNNs that produced a single "summary vector" at the very end, the Transformer Encoder produces a set of encodings that capture the relationship between every word in the sentence simultaneously. This result is often called the Encoder Vector or Context, which serves as the "map" for the decoder to follow.
 
----
-
-## Encoder
-
-a stack of N=6 identical layers
-
-all layers and sublayers are 512-dimensional
-
-Each layer consists of 2 sublayers; one multi-headed self-attention layer; one position-wise fully connected layer
-
-Each sublayer has a residual connection and is normalised: LayerNorm(x+Sublayer(x))
-
-![encoder diagram](./files/week_7/encoder_diagram.png)
-
+#### The Decoder's Role: Generating the Output
+The Decoder is the "writer" of the system. It takes the latent representations from the encoder and generates the output sequence one token at a time. It is auto-regressive, meaning it uses the words it has already generated as part of the input for the next word. It has a unique "Cross-Attention" mechanism that allows it to look back at the Encoder's map to ensure it is staying faithful to the original input.
 
 ---
 
-## Decoder
-stack of N=6 identical layers
-
-all layers and sublayers are 512-d
-
-Each layer consists of 3 sublayers: one multi-headed self-attention layer over decoder output (ignore future tokens); one multi-headed attention layer over encoder
-
-output; one position-wised fully connected layer
-
-each sublayer has a residual connection and is normalised: LayerNorm(x+Sublayer(x))
+#### Stacked Networks: Depth and Complexity
+In the standard "Vanilla" Transformer (Vaswani et al., 2017), the model is not just one encoder and one decoder, but a **stack** of them—typically **six layers deep** for each.
+* **N=6 Layers:** By stacking six identical layers, the model can learn increasingly abstract features. The first layer might focus on simple grammar (syntax), while the sixth layer understands complex relationships and intent (semantics).
+* **Inter-connectivity:** Every decoder in the stack has access to the output of the final encoder. This ensures that no matter how deep the decoding process goes, the model never "loses sight" of the original source text.
+* **Dimensionality:** In the original paper, all layers and sub-layers produce outputs of 512 **dimensions**. This consistent size allows the data to flow through the "stack" without needing to be resized, maintaining a stable representation across the entire network.
 
 ---
 
-## Self-Attention (High Level)
-What to pay attention to when encoding or decoding
-
-Attention: in previous layer
-
-Self-attention: in the same layer
-
-When encoding the word it in the sentence “The animal didn’t cross the street because it was too tired” , self-attention should allow the model to associate it with animal
-
+## The Transformer Architecture: Detailed Components
+The Transformer is a sophisticated "sandwich" of identical layers designed to process sequences in parallel. Unlike RNNs, which pass a hidden state from one word to the next, the Transformer uses its entire stack to build a multi-dimensional "map" of the input all at once.
 
 ---
 
-## Self-Attention - Step 1
-Step 1: from the encoder’s input vector (e.g., word embedding), create 3 vectors: Query, Key and Value
+#### The Encoder Stack
+The Encoder consists of a stack of $N=6$ **identical layers**. Each layer acts as a filter that refines the representation of the input.
 
-Q,K, and V embeddings usually smaller in number of dimensions e.g., § input 512 § output 64
+**Dimensionality:** Every layer and sub-layer maintains a constant size of 512 dimensions. This uniformity allows information to flow through the stack without needing to be resized.
 
----
+**The Two Sub-layers:** Each encoder layer is split into two parts:
+1. **Multi-Head Self-Attention:** This allows the word at a specific position to "look" at all other words in the input to gather context.
+2. **Position-wise Feed-Forward Network:** A fully connected network applied to each position separately and identically.
 
-## Self-Attention Score
-Step 2: To work out how much the word in positioni (e.g., “it”) should pay attention to a word in positionj(e.g., ”animal”), we take the dot product of the Qi (the query vector for it) with the Kj (the key vector for animal)
-
-self att(w_i,w_j) = Q_i.K_j
-
-Do this for every word in the sentence with every other word in the sentence
+The **"Safety" Mechanism:** To ensure that the signal doesn't degrade as it goes deeper, each sub-layer uses a **Residual Connection** followed by **Layer Normalization**. The formula is effectively: $\text{LayerNorm}(x + \text{Sublayer}(x))$. This helps the model stay stable during training and prevents "vanishing gradients."
 
 ---
 
-## Normalise 
-Step 3: Divide all of the scores by 8 
-* the square root of the dimension of the key vectors which is 64 here
-* this is the default and seems to lead to more stable gradients
+#### The Decoder Stack
+The Decoder is more complex because it has two jobs: it must understand the output it has already generated and it must refer back to the information provided by the Encoder. Like the Encoder, it also consists of a stack of $N=6$ identical layers.
 
-Step 4: Apply a softmax to the scores
-* this results in them all being positive
-* and summing to 1
-* so can be thought of a as a probability / proportion – “what proportion of my attention should I pay to word j?”
+The Three Sub-layers: Each decoder layer has an extra component compared to the encoder:
+1. Masked Multi-Head Self-Attention: This looks at the words the decoder has already written. It is "masked" so that the model cannot "cheat" by looking at future words during training.
+2. Encoder-Decoder Attention: This is the bridge. It allows the decoder to "attend" to the final output of the encoder stack, ensuring the translation stays accurate to the source.
+3. Position-wise Feed-Forward Network: Similar to the encoder, this refines the final representation for that specific time step.
 
 ---
 
-## Weight sum of the value vectors
-Step 5: For each word wi, multiply the value vector (Vj) of each other word wj by its softmax score with wi
-
-Step 6: Sum to produce output embedding (at this layer) for wi
-
-𝑍_i = \sum s𝑜𝑓𝑡𝑚𝑎𝑥_𝑠𝑐𝑜𝑟𝑒(𝑤_i , 𝑤,_j)×V_j
+#### Summary of the Flow
+The process starts with Positional Encodings being added to the input embeddings to give the model a sense of word order. The data then flows through the Encoder Stack, resulting in a set of vectors (the encoder output). This output is then fed into every layer of the Decoder Stack, which generates the final sequence one token at a time by balancing its own internal history with the information from the encoder.
 
 ---
 
-## Self-attention Summary
-Image taken from Chapter 10,
-Jurafsky and Martin
-• This is actually for uni-directional
-self-attention
-• However, it would be the same for
-the a3 in the bidirectional case
-assuming an input sequence which is
-3 tokens long!
+## The Self-Attention Mechanism
+Self-attention is the "engine" of the Transformer. It allows the model to look at an entire sentence and decide which other words are most relevant to the word currently being processed. For example, in the sentence "The animal didn't cross the street because it was too tired," self-attention allows the model to link the word "it" specifically to "animal" rather than "street."
 
+---
+
+#### The Q, K, V "Fuzzy Lookup" (Step 1)
+For every word in the input sequence, the model creates three distinct vectors by multiplying the word's input embedding by three trained weight matrices. These are:
+* **Query ($Q$):** "What am I looking for?" (The current word's search criteria).
+* **Key ($K$):** "What do I contain?" (The label or index of a word to be searched against).
+* **Value ($V$):** "What information do I offer?" (The actual content that will be passed forward).
+
+In the standard Transformer, the input embedding is 512 dimensions, while these three vectors are reduced to 64 dimensions.
+
+---
+
+#### Calculating the Attention Score (Steps 2–4)
+To determine the relationship between words, the model follows a specific mathematical pipeline:
+1. **The Dot Product:** To see how much word $i$ ("it") should attend to word $j$ ("animal"), we calculate the dot product: $Score = Q_i \cdot K_j$. A higher score indicates that the Query of $i$ is a strong match for the Key of $j$. Note: This is **asymmetric.** The score for "it" attending to "animal" is calculated using $Q_{it} \cdot K_{animal}$, while the reverse uses $Q_{animal} \cdot K_{it}$.
+2. **Scaling (Normalizing):** The scores are divided by the square root of the dimension of the key vectors ($\sqrt{d_k}$). Since $d_k = 64$, we divide by 8. This prevents the dot products from growing too large, which would result in extremely small gradients during training.
+3. **Softmax:** We apply a **Softmax function** to the scaled scores. This turns the scores into a set of probabilities that sum to 1. This value represents the "percentage of attention" word $i$ should give to word $j$.
+
+--- 
+
+#### Producing the Output Embedding (Steps 5–6)
+The final step is to use those attention percentages to extract information:
+1. **Weighting the Values:** We multiply each word's **Value vector ($V_j$)** by its softmax score relative to the current word $i$. This ensures that irrelevant words are "muted" (multiplied by a number close to 0) while important words are preserved.
+2. **Summing:** We sum these weighted value vectors together. The result is $Z_i$, the new contextualized embedding for word $i$.
+
+$$Z_i = \sum_{j} \text{softmax}\left(\frac{Q_i \cdot K_j}{\sqrt{d_k}}\right) V_j$$
+
+---
+
+#### Summary: Why this works
+By the end of this process, the embedding for "it" is no longer just a generic pronoun vector. Because the attention score for "animal" was high, the final $Z_{it}$ vector is now heavily composed of the Value vector for "animal." The model has effectively "re-written" the word based on its context within that specific sentence.
 
 ---
 
 ## Multi-Head Attention
-* Paying attention to multiple things at the same time!
-* Multiple “representation subspaces”
-* Multiple sets of Query/Key/Value weight matrices
-* Typical transformer uses 8 attention heads per self-attention layer
-* that’s 8 sets of Q,K,V matrices for each encoder and 16 for each decoder
-* All randomly initialised
-* Embeddings produced by multiple heads are concatenated and then multiplied by an additional weights matrix before passing to the feed-forward layer
+While single-head self-attention allows a word to "attend" to another, it is limited because it can only focus on one type of relationship at a time. Multi-Head Attention solves this by running multiple self-attention mechanisms in parallel, allowing the model to capture different types of linguistic relationships simultaneously.
+
+#### Multiple "Representation Subspaces"
+Think of each "head" as a different perspective. One head might focus on syntax (matching a verb to its subject), while another focuses on semantics (linking a pronoun to its noun), and a third might focus on local context (looking at the immediate neighboring words).
+
+The Setup: Instead of one set of Q, K, and V matrices, a typical Transformer uses 8 attention heads.
+
+Parameters: This means we have 8 independent sets of Query, Key, and Value weight matrices. Each set is randomly initialized, allowing them to learn different features during training.
+* To be clear: we don’t initialize 8 heads "per word"; rather, we initialize 8 sets of Weight Matrices ($W^Q, W^K, W^V$) for the entire layer.
+* Think of these matrices as the "Global Knowledge" of that specific layer. When a sentence passes through, every word in that sentence is multiplied by those same 8 sets of matrices.
+* Global Weights: At the start of training, the layer creates 8 different "viewpoints" (Heads). Each head has its own $W^Q_n, W^K_n, W^V_n$ matrices.
+* The word "cat" is multiplied by Head 1's weights, then Head 2's weights... all the way to Head 8. The word "sat" is also multiplied by those exact same 8 sets of weights.
+* Result: For every single word ($x_i$), you end up with 8 different $Z$ vectors ($Z_0 \dots Z_7$).
+* Think of the Weight Matrices ($W^Q, W^K, W^V$) as the "Filters" or "Lenses" that the model has learned during its training. The words themselves are just data (vectors) passing through those filters.
+
+Dimensionality: To keep the total computational cost similar to single-head attention, the dimensions are split. If the total input is 512, each of the 8 heads works on a 64-dimensional subspace ($512 / 8 = 64$).
+
+#### Combining the Heads 
+Once each head has performed its self-attention calculation, the model needs to "stitch" those different perspectives back together into a single vector that can be passed to the next layer of the Transformer.
+
+1. Concatenation: The 8 individual output vectors ($Z_0, Z_1, \dots, Z_7$) are concatenated side-by-side into one long vector.
+2. Final Linear Transformation: This long concatenated vector is multiplied by an additional weight matrix ($W^O$). This "condenses" the information from all 8 heads back into the standard 512-dimensional space.
+3. Feed-Forward Ready: This final, unified vector now contains a rich, multi-layered understanding of the word's role in the sentence, ready to be processed by the position-wise feed-forward layer.
+
+---
+
+## Positional Encoding: Giving the Model a Sense of Order
+Unlike RNNs, which process words sequentially (Step 1, then Step 2), Transformers process every word in a sentence simultaneously. While this is great for speed, it means the model is "position-blind"—it can't naturally tell the difference between "The dog bit the man" and "The man bit the dog." To solve this, we use Positional Encoding. We create a unique vector that represents a word's specific position in the sequence and add it to the word's input embedding. This ensures that the same word (e.g., "dog") has a slightly different mathematical representation depending on whether it appears at the start or the end of a sentence.
+
+---
+
+#### The Sine and Cosine Method (Static Encoding)
+The original Transformer used a fixed mathematical function to generate these position vectors. The intuition is to use waves of different frequencies so that each dimension of the encoding follows a unique pattern.
+
+* Even dimensions ($2i$): Use the Sine function.
+* Odd dimensions ($2i+1$): Use the Cosine function.
+
+$$PE_{(pos, 2i)} = \sin(pos / 10000^{2i/d_{model}})$$
+$$PE_{(pos, 2i+1)} = \cos(pos / 10000^{2i/d_{model}})$$
+
+**Why this works:** These trigonometric functions allow the model to easily learn **relative positions.** Because of the mathematical properties of sine and cosine, the position at $pos+k$ can be expressed as a linear function of the position at $pos$. This helps the model determine not just where a word is, but how far apart words are from each other.
+
+--- 
+
+#### Positional Encoding Alternatives
+While the sine/cosine method is "static" (it never changes), modern models often use other approaches:
+* **Learned Absolute Position Embeddings:** Instead of using a fixed formula, the model starts with a set of randomly initialized "position vectors" (e.g., a vector for "Position 1," a vector for "Position 2"). These are updated during training just like word embeddings. The model literally learns what "third place in a sentence" looks like.
+* **Relative Position Embeddings:** Instead of assigning an absolute coordinate to a word, the model focuses on the distance between words during the attention step. It learns that "the word 3 places to my left" has a specific type of relationship to the current word.
+
+---
+
+#### Summary for Notes:
+* Transformers are inherently "bag-of-words" models without a sense of order.
+* We solve this by injecting a "timestamp" vector into the word embedding.
+* Now the model can distinguish word order and measure the distance between tokens, which is essential for understanding syntax and grammar.
+
+---
+
+## BERT: Bidirectional Encoder Representations from Transformers
+BERT (Devlin et al., 2019) is a landmark model that shifted the NLP paradigm from task-specific architectures to a "Pre-train then Fine-tune" workflow. By using only the Encoder portion of the Transformer, BERT focuses entirely on language "understanding" rather than generation.
+
+#### The Power of Bidirectionality
+Traditional Language Models (like LSTMs or GPT) are unidirectional; they process text from left-to-right to predict the next word. While this is great for writing, it limits understanding because a word’s meaning often depends on what comes after it.
+
+**Unidirectional (Auto-regressive):** Builds context incrementally (e.g., "The cat sat on the...").
+
+**Bidirectional (BERT):** Uses the "whole of the sentence" at once. Words can "see themselves" in the context of both their left and right neighbors simultaneously.
+
+---
+
+#### Input Representation: The Embedding "Sum"
+BERT doesn't just take a word and turn it into a vector; it constructs a highly structured input by summing three distinct types of embeddings:
+1. **Token Embeddings:** Uses a WordPiece vocabulary (30k tokens). Words are broken into subwords (e.g., "playing" → "play" + "##ing") to handle rare words and morphology effectively.
+2. **Segment Embeddings:** When processing two sentences at once (Sentence A and Sentence B), these tell the model which tokens belong to which sentence (e.g., Sentence 1 vs. Sentence 2).
+3. **Positional Embeddings:** Learns the absolute position of each token in the sequence (up to 512 tokens).
+
+---
+
+#### Special Tokens:
+* **[CLS]:** Added to the very beginning of every sequence. Its final hidden state is used as the aggregate representation for classification tasks.
+* **[SEP]:** A separator token used to mark the boundary between two sentences.
+
+--- 
+
+#### Pre-training Task: Masked Language Model (MLM)
+Since a bidirectional model could "see" the answer if it just tried to predict the next word, BERT uses the **Masked Language Model** objective—often called the "Cloze" task.
+
+* **The Process:** Randomly mask out 15% of the input tokens (replacing them with a [MASK] token).
+* **The Goal:** The model must use the surrounding context (from both directions) to predict what the hidden word was.
+* **The Balance:** Google found that 15% is the "sweet spot." If $k$ is too small, training is too expensive (not enough learning per sentence); if $k$ is too large, there isn’t enough context left to make a good guess.
+
+Example: "The animal didn’t cross the **[MASK]** because it was **[MASK]** tired."
+
+--- 
+
+#### The Result: A Universal Encoder
+By training on massive datasets (Wikipedia and BookCorpus), BERT learns a deep, hierarchical representation of language.
+* **Multi-headed self-attention** models the complex relationships between words.
+* **Feed-forward layers** extract non-linear features.
+* **Layer norm and residuals** keep the deep network (12 or 24 layers) stable and "healthy" during training.
+
+The result is a pre-trained "brain" that can be downloaded from places like HuggingFace and **fine-tuned** on specific tasks (like sentiment analysis or Q&A) with very little additional data.
+
+---
+
+## Next Sentence Prediction (NSP)
+While the Masked Language Model (MLM) teaches BERT how words relate to their immediate neighbors, Next Sentence Prediction (NSP) is designed to teach the model how entire sentences relate to one another. This is crucial for higher-level tasks like Question Answering (QA) and Natural Language Inference (NLI), where understanding the logical flow between two pieces of text is essential.
+
+#### How it Works
+During pre-training, BERT is fed pairs of sentences ($A$ and $B$). The model must perform a binary classification task to determine if Sentence $B$ logically follows Sentence $A$.
+
+**Positive Examples (50%)**: Sentence $B$ is the actual consecutive sentence from the original corpus (labeled as IsNext).
+
+**Negative Examples (50%):** Sentence $B$ is a random sentence pulled from a completely different document (labeled as NotNext).
+
+Example: 
+**Sentence A:** "The man went to the store."
+**Sentence B:** "He bought a gallon of milk."
+Label: IsNextSentence (Logical connection: "He" refers to "man", "bought" relates to "store").
+
+**Sentence A:** "The man went to the store."
+**Sentence B:** "Penguins are flightless."
+Label: NotNextSentence (No topical or logical connection).
+
+#### The Role of the [CLS] Token
+o make this prediction, the model looks at the final hidden state of the [CLS] token (the "Classification" token at the very start of the sequence). Because of the self-attention mechanism, the [CLS] token's vector has "attended" to every single word in both Sentence $A$ and Sentence $B$. This makes it a perfect mathematical summary of the relationship between the two sentences, which is then fed into a simple classifier to produce the IsNext or NotNext result.
+
+---
+
+## Pre-Trained Model Details: Scale and Hardware
+The original BERT models were trained on a massive scale that was unprecedented at the time (2018–2019). This required specialized hardware and enormous datasets to ensure the model captured a "universal" understanding of language.
+
+The Data: BERT was trained on a combined 3.3 billion words:
+* Wikipedia: 2.5 billion words (excellent for factual knowledge).
+* BookCorpus: 800 million words (excellent for narrative flow and long-range context).
+
+The Hardware: Google used their proprietary TPUs (Tensor Processing Units). Training the "Large" version of BERT took 4 days on 64 TPU chips.
+
+Model Variants:
+    * BERT-Base: 12 layers, 768 hidden units, 12 attention heads (110M parameters).
+    * BERT-Large: 24 layers, 1024 hidden units, 16 attention heads (340M parameters).
+
+Optimization: Used AdamW with a linear learning rate decay. Interestingly, they used a massive batch size (up to 128,000 words per update) to stabilize the learning of such a complex network.
+
+---
+
+## Is BERT supervised training?
+This is a great point of clarification—the terminology in NLP often gets blurred. The short answer is: BERT's pre-training is self-supervised, but it still relies on a mathematical "ground truth" to calculate error and update weights.
+
+To clear this up, let’s distinguish between the labels and the data:
+
+#### 1. The Pre-training Phase: Self-Supervised
+BERT is trained on raw, unlabelled text (like Wikipedia). It doesn't need a human to go through and label sentences as "Subject" or "Object." Instead, it creates its own labels from the structure of the data itself.
+
+The Ground Truth: In the Masked Language Model (MLM) task, the "ground truth" is simply the original word that was hidden. If the original sentence was "The cat sat on the mat" and the model sees "The [MASK] sat on the mat," the ground truth is "cat."
+
+The Loss: The model makes a guess (a probability distribution over 30,000 words). If it guesses "dog," the mathematical difference between "dog" and "cat" is the Loss, which is then backpropagated to update the weights.
+
+Key Intuition: It is "self-supervised" because the "supervision" comes from the data itself, not a human-annotated label.
+
+#### 2. The Fine-tuning Phase: Supervised
+Once BERT is pre-trained, it is essentially a "language expert" that doesn't know how to do a specific job yet. To make it useful for a task (like Sentiment Analysis), we move into Supervised Learning. 
+
+The Data: Now we need a labelled dataset (e.g., 10,000 movie reviews, each marked as "Positive" or "Negative" by a human).
+
+The Process: We put a small classification layer on top of BERT’s [CLS] token. The model predicts a label, compares it to the human "ground truth" (the label), and updates its weights accordingly.
+
+--- 
+
+## Week 7 Summary
+This was a foundational week that officially moved us from "Old School" NLP (counting words and fixed vectors) to the "Modern Era" of Deep Learning. To recap, here is the logical progression of how we got to BERT:
+
+#### 1. The Core Problem: Static vs. Context
+We started by realizing that simple Additive Composition (adding Word2Vec vectors together) is a "bag-of-words" approach. It fails because it doesn't understand that "bank" means something different in a "river" context than in a "money" context. It also ignores word order, treating "dog bites man" and "man bites dog" as identical.
 
 
 ---
 
-## Positional Encoding
-* How does the model account for word order?
-* Adds a positional encoding vector to each input embedding
-* Positional encoding follows a fixed pattern; enables the model to determine the position of each word and distance between them
+#### 2. The First Solution: ELMo (Bi-LSTMs)
+ELMo introduced the idea of Contextualized Word Embeddings. By stacking Bi-LSTMs, ELMo looked at the words to the left and right of a target word to create a dynamic vector.
 
----
-
-## Positional Encoding Visualisation
-Position function P(k,j) for mapping a position k and dimension j
-
-Even dimensions use sin
-
-odd dimensions us cos 
-
-k: position of token in input sequence
-d: dimensionality of output embedding space (e.g., 512)
-n: user-defined scalar (e.g., 10000)
-i: used for mapping to column indices j, i=j/2 if j even, i=(j-1)/2 if j odd
-
-Positional encoding matrix for n=10,000,
-d=512, sequence length = 100
-
-See https://machinelearningmastery.com/a-gentle-introduction-topositional-encoding-in-transformer-models-part-1/
-
----
-
-## Positional Encoding Alternatives
-Static function maps integer real-valued vectors 
-
-E.g., the combination of sines and cosines on previous slide
-
-Alternatives include absolution position and relative position embeddings – learnt during training
-
-E.g., in absolution position
-
-Start with randomly initialized embeddings corresponding to each possible input position up to some maximum length
-
-We have embeddings for 
-- words e.g., student 
-- Absolute positions e.g., position 3 (or relative position to word attention score is being computed for)
-
-Positional embeddings are learned / updated during training
-
----
-
-## BERT (Devlin et al. 2019)
-Bidirectional Encoder Representations from Transformers
-
-just uses the encoder portion of the transformer architecture
-
-uses left and right context of a target word to build representation
-
-Pre-trained on general language modelling tasks
-
-masked language modelling task
-
-next sentence prediction
-
-fine-tuned on task-specific training data
-
-Pre-trained models available from Google:
-
-https://github.com/google-research/bert
-
----
-
-## Encoder Representation
-Multi-headed self-attention
-• models context
-• Feed-forward layers
-• non-linear hierarchical features
-• Layer norm and residuals
-• makes training deep networks healthy
-• Positional embeddings
-• learn relative positioning
+Key Insight: Lower layers in the stack handle syntax (grammar), while higher layers handle semantics (meaning)
 
 
 ---
 
-## Input Representation 
-Each token is sum of three embeddings
+#### 3. The Architecture Shift: Transformers
+We then moved away from RNNs/LSTMs entirely. RNNs are slow because they process words one-by-one (sequential). The Transformer replaced recurrence with Self-Attention, allowing the model to process every word in a sentence simultaneously (parallel).
 
-30,000 WordPiece vocabulary à morphology à better representations for rare words
+Self-Attention: Uses Query, Key, and Value vectors to perform a "fuzzy lookup," letting each word decide which other words in the sentence are most important to its meaning.
 
-sentences are separated by a special “SEP” token
+Multi-Head Attention: Allows the model to track multiple relationships at once (e.g., one head for grammar, one for pronouns).
 
-a special “CLS” token is added at the beginning of the chunk; often used in classification
-
----
-
-## Unidirectional vs Bidirectional Models
-unidirectional contenxt; builds representation incrementally
-
-bidirectional context; words can see themselves
-
-Most language models trained to predict the next word in sequence
-
-Known as auto-regressive or unidirectional
-
-BERT uses the whole of the sentence to predict missing or masked word
-
-masked language model is bidirectional
+Positional Encoding: Since Transformers process everything at once, we "inject" sine and cosine waves to tell the model the order of the words.
 
 ---
 
-## Masked Language Model 
-Mask out k% of the input words, and predict the masked words
+#### 4. The Powerhouse: BERT
+Finally, we looked at BERT, which is essentially the Encoder half of a Transformer trained on a massive scale.
 
-if k is too small à expensive to train
-
-if k is too large à not enough context
-
-Google use k=15
-
-the animal didn’t cross the [MASK] because it was [MASK] tired
-
----
-
-## Next Sentence Prediction
-To learn relationships between sentences, predict whether sentence B is actual sentence that follows sentence A or is a random sentence
-
-sentence A = The man went to the store
-sentence B = He bought a gallon of milk
-Label = IsNextSentence
-
-sentence A = The man went to the store
-sentence B = Penguins are flightless
-Label = NotNextSentence
+Bidirectionality: Unlike previous models that only read left-to-right, BERT sees the whole sentence at once.
 
 
----
+Self-Supervised Pre-training: It learns from raw text (Wikipedia) by playing two games: Masked Language Modeling (predicting hidden words) and Next Sentence Prediction (determining if two sentences follow each other).
 
-## Pre-Trained Model Details
-Data: Wikipedia (2.5B words) + BookCorpus (80OM
-words)
-Batch Size: 131,072 words (1024 sequences * 128
-length or 256 sequences * 512 length)
-Training Time: 1M steps (~40 epochs)
-Optimizer: AdamW, 1e-4 learning rate, linear decay
-BERT-Base: 12-layer, 768-hidden, 12-head
-• BERT-Large:24-layer, 1024-hidden, 16-head
-Trained on 4x4 or 8x8 TPU slice for 4 days
+--- 
 
-
----
-
-## Fine-tuning Procedure 
-
-(more covered in next weeks lecture)
-
-
----
-
-## General Language Understanding Evaluaiton (GLUE) Results
-
-
+| Feature | Word2Vec / GloVe | ELMo | BERT | 
+| :--- | :--- | :--- | :--- |
+| Context | Static (Same vector everywhere) | Contextual (Changes per sentence) | Deeply Contextual (Bidirectional) |
+| Architecture | Lookup Table | Bi-LSTM (Recurrent) | Transformer (Attention) | 
+| Input Unit | Whole Words | Characters / Words | Subwords (WordPiece) | 
+| Training | Shallow (Window-based) | Deep (Language Modeling) | Deep (MLM + NSP) | 
 
 ---
 
 ## Week 7: Seminar
 
+#### 1. Imagine you have a 100M word corpus of news articles with a vocabulary of size 50K. Explain the difference between static word embeddings and contextualized word embeddings derived from this corpus.
+
+In a 100M word corpus, static word embeddings (like Word2Vec or GloVe) assign a single, fixed-dimensional vector to each of the 50K words in the vocabulary. This vector represents the "average" meaning of a word across the entire dataset, meaning the word "bank" would have the same mathematical representation whether the news article was about a river or a financial institution. In contrast, contextualized word embeddings (like those from BERT or ELMo) do not use a fixed lookup table; instead, they generate a unique vector for a word based on the specific sentence it appears in. By looking at the surrounding 100M words during pre-training, these models learn to "compute" a representation that changes according to the neighboring tokens, effectively resolving polysemy and capturing specific nuances of meaning that static vectors ignore.
+
+ELMo and BERT do not have a single, fixed vector for the word "bank." In a static model (like Word2Vec), there is a literal "lookup table" (like a dictionary) where the word "bank" always equals [0.1, -0.5, 0.8]. In contrast, ELMo and BERT are functions, not just tables. When the word "bank" enters the model, the self-attention (in BERT) or the Bi-LSTM (in ELMo) looks at the surrounding words and mathematically computes a vector on the fly.
+
+If you pass 100 different sentences containing the word "bank" through BERT, you will get 100 different vectors for that word. Each vector will be slightly shifted in high-dimensional space to reflect whether the "bank" in that specific sentence is a financial institution, a river edge, or even a verb (to "bank" a shot in basketball). This is why we say the embeddings are "functions of the entire input sequence" rather than a static entry in a vocabulary list.
+
+---
+
+#### 2. Why are transformers now generally preferred to LSTMs in the NLP community?
+
+Transformers are now generally preferred to LSTMs because they solve the two biggest bottlenecks of recurrent architectures: **sequential processing** and **long-range dependencies**. LSTMs must process words one by one, meaning the model cannot calculate the vector for the 10th word until it has finished the 9th; this makes them impossible to parallelize and slow to train on large datasets. In contrast, Transformers use **Self-Attention** to see every word in a sentence simultaneously, allowing for massive parallelization on GPUs and significantly faster training speeds. Furthermore, while LSTMs often "forget" information from the beginning of a long sentence due to the vanishing gradient problem, Transformers maintain a direct mathematical connection between all words regardless of their distance, allowing them to capture much more complex, global context.
+
+---
+
+#### 3. In the sentence, “A few faint stars glimmered in the sky.”, what words might need to pay attention to other words in the sentence, in order for a good contextualized word representation to be derived?
+
+In the sentence, "A few faint stars glimmered in the sky," specific words must "attend" to others to build a high-quality contextual representation:
+
+The word "stars" is the semantic anchor of the sentence; it would need to pay heavy attention to its modifiers, "few" and "faint," to understand the specific visual context (quantity and brightness). Simultaneously, "stars" must attend to the verb "glimmered" to capture the action being performed and to "sky" to establish its spatial location. Conversely, the verb "glimmered" must pay attention back to "stars" to identify the subject performing the action, as the "glimmering" quality is physically tied to the light of the stars. Even a word like "in" relies on attention to "sky" to resolve its prepositional role. By allowing every word to "vote" on the relevance of every other word, the Transformer ensures that the final vector for "stars" isn't just a generic celestial body, but specifically a small group of dimly lit objects located in a nighttime firmament.
+
+---
+
+#### 4. Explain how the output of an attention head is derived (for one of the words in the sentence above).
+
+To explain how the output of an attention head is derived for a word like "stars", we follow a specific mathematical "lookup" process using three vectors: Query (Q), Key (K), and Value (V).
+
+First, the input embedding for "stars" is multiplied by three learned weight matrices to create its specific $Q$, $K$, and $V$ vectors. To determine how much "stars" should "pay attention" to another word like "glimmered," the model calculates a Score by taking the dot product of the Query for "stars" ($Q_{stars}$) and the Key for "glimmered" ($K_{glimmered}$). This score is then scaled (divided by $\sqrt{d_k}$) and passed through a Softmax function to turn it into a probability, such as 0.4, which represents the "weight" of that relationship.
+
+Finally, the model multiplies this probability (0.4) by the Value vector of "glimmered" ($V_{glimmered}$). This process is repeated for every other word in the sentence (including "stars" attending to itself). All these weighted Value vectors are then summed together to produce the final output vector ($Z_{stars}$). This resulting vector is no longer just a static representation of a celestial body; it is a contextualized embedding that has literally "absorbed" the relevant information from "faint," "glimmered," and "sky.
+
+---
+
+#### Follow Up question, when do we compute the words matrices?
+In a single pass of the model, we compute the Query ($Q$), Key ($K$), and Value ($V$) vectors for every word in the sentence simultaneously.
+
+When the sentence "A few faint stars glimmered..." enters the Transformer, the model doesn't wait until it is processing "stars" to figure out what "glimmered" means. Instead, it performs a massive matrix multiplication where the entire sequence of input embeddings is multiplied by the three weight matrices ($W^Q, W^K, W^V$).
+
+This creates a "pool" of $Q$, $K$, and $V$ vectors for every single word in the sentence. When we specifically calculate the representation for "stars", the model simply "looks up" the pre-computed $Q_{stars}$ and compares it (via dot product) against the pre-computed $K$ vectors of all the other words—including $K_{glimmered}$, $K_{faint}$, and $K_{sky}$. This is the secret to the Transformer's speed: because all these vectors are calculated at once rather than one-by-one (like an LSTM), the model can leverage the full power of a GPU to handle the entire sentence in one "heartbeat."
+
+---
+
+#### FOLLOW UP: What is that comes out of a transformer? 
+The short answer is: The Weight Matrices ($W^Q, W^K, W^V$) are the "Brain" of the model, but they are not the "Output" of a single run. 
+
+When Google or OpenAI "trains" a model, they are trying to find the perfect values for $W^Q, W^K,$ and $W^V$.At the start of training, these matrices are just random numbers.As the model reads billions of sentences, it uses backpropagation to tweak those numbers.By the end, the matrices have "learned" linguistic rules (e.g., "If I am a Query for a pronoun, I should look for a Key that is a noun").
+
+When you actually use the model (Inference), the Weight Matrices are frozen. They are the static "tools" you use to process new data.You feed in a new sentence: "The cat sat."You multiply those words by the pre-trained $W^Q, W^K,$ and $W^V$ matrices.The Result: You get a Contextualized Embedding ($Z$).
+
+At the end of Training: You come out with the Weight Matrices. This is the "Knowledge" you can use elsewhere or share with the world.
+
+At the end of a single Model Run (Inference): You come out with Contextualized Word Embeddings. These are the vectors you use for your specific task, like deciding if a movie review is positive or negative.
+
+Analogy: The Weight Matrices are like a recipe book (the knowledge of how to cook). The Contextualized Embeddings are the actual meal you produced today using that book and a specific set of ingredients (your input sentence).
+
+---
+
+#### FOLLOW UP: What to do with the outputs of a transformer (the Contextualized Embedding ($Z$))
+That is exactly the point where the "modular" nature of modern NLP shines. Once you have those Contextualized Embeddings ($Z$), you have several options depending on whether you are still inside the Transformer "stack" or if you are ready to solve a specific task.
+
+#### 1. Moving to the Next Layer (Inside the Transformer)
+If you are in the 1st layer of a 12-layer BERT model, those $Z$ vectors aren't the "final" result yet. 
+* They are passed through a Position-wise Feed-Forward Network (a small MLP that works on each word individually).
+* The output of that MLP then becomes the input for the 2nd Transformer layer.
+* This repeats 12 times. Each layer uses the context from the previous layer to build an even deeper, more abstract understanding.
+
+The word embeddings of the each word in a sentence are getting "better" with each stack. 
+
+#### 2. Using them for a Task (The "Head")
+Once the data has passed through the final Transformer layer, you have the "ultimate" contextualized embeddings. Now, you can plug them into whatever you want:
+* Sequence Classification (e.g., Sentiment Analysis): You take the embedding of the [CLS] token and pass it into a simple MLP (Multi-Layer Perceptron). The MLP then outputs a probability for "Positive" or "Negative."
+* Token Classification (e.g., Named Entity Recognition): You take the embedding for every word and pass each one into an MLP to decide if that word is a "Person," "Location," or "Organization."
+* Question Answering: You pass the embeddings into a linear layer to predict which word in the text is the "Start" of the answer and which is the "End."
+
+---
+
+#### 5. Will the encoder of a transformer produce the same representation of the sentences, “The dog bit the boy.” and the “The boy bit the dog.” Why/ why not?
+
+No, the encoder will produce different representations for these two sentences, primarily due to the inclusion of Positional Encodings.
+
+In a pure self-attention mechanism, the model is "permutation invariant," meaning it would treat both sentences as an identical "bag of words" ({The, dog, bit, boy}). However, the Transformer architecture prevents this by adding a unique positional vector to each word embedding before it enters the first encoder layer.
+
+In the first sentence, "dog" is at Position 2 and "boy" is at Position 5; in the second sentence, those positions are swapped. Because these positional "time-stamps" are added to the word's data, the Query, Key, and Value vectors for "dog" at Position 2 will look mathematically different than those for "dog" at Position 5.
+
+When the self-attention layer runs, it uses these position-aware vectors to calculate the relationships. In "The dog bit the boy," the verb "bit" will attend most strongly to "dog" as the subject (the one doing the biting). In "The boy bit the dog," that same verb will attend to "boy" as the subject. Consequently, the final contextualized embeddings for every word—and the overall sequence representation—will accurately reflect the distinct meanings of the two sentences.
+
+---
+
+#### FOLLOW UP: Do transformers just produce representations of words or also of whole sequences?
+By default, a Transformer is a "sequence-to-sequence" or "token-to-token" engine. If you put in 5 tokens, the final layer spits out 5 contextualized word embeddings. It does not inherently collapse them into a single "sentence vector" the way a simple RNN might produce one final hidden state.
+
+However, in practice, we derive a sequence representation from those embeddings in two main ways:
+
+#### The "Special Token" Shortcut (The BERT approach)
+As we discussed with the [CLS] token, we insert a dummy token at the start. Because of self-attention, the embedding for [CLS] at the final layer has "attended" to every other word. We treat the final vector of this single token as the representation of the entire sentence. It is a proxy for the whole sequence.
+
+#### Pooling (The Composition approach)
+Alternatively, we can mathematically "compose" the individual word embeddings ourselves. Common methods include: 
+* Mean Pooling: Taking the average of all the word embeddings in the sentence.
+* Max Pooling: Taking the maximum value across each dimension of the word embeddings.
+* Summation: Adding them all together.
+
+These "pooled" vectors are what we actually use as a Sequence Representation when we want to compare the similarity of two different sentences (like in Paraphrase Detection).
+
+Summary:
+Strictly speaking: The Transformer Encoder produces a set of contextualized word embeddings ($Z_1, Z_2, \dots, Z_n$).
+
+In practice: we create a Sequence Representation by either using a dedicated summary token ([CLS]) or by pooling (averaging/summing) the individual word embeddings together.
+
+#### Random Final BERT Notes 
+* **Does BERT encode words or sentences?** BERT is unique because it actually encodes both, but in very different ways. To understand BERT, it helps to think of it as a "context machine" that processes individual pieces to understand the whole.
+* **It encodes Words (as Contextual Embeddings)** BERT produces a unique vector for every single word in a sentence. Unlike older models like Word2Vec where the word "bank" always had the same vector, BERT changes the vector based on the surrounding words.
+* **It encodes Sentences (via the [CLS] Token)** it also creates a single "summary" vector for the entire input. It does this by inserting a special token called [CLS] (short for "Classification") at the very beginning of every sentence. Because of BERT's Self-Attention mechanism, the [CLS] token "looks" at every other word in the sentence and absorbs their collective meaning. By the time the data reaches the final layer, the vector for [CLS] acts as a representative "fingerprint" for the entire sentence.
+* When you feed BERT a sentence, it breaks it down into three layers of information to create those encodings: Token Embeddings, Segment Embeddings, Position Embeddings
+* Use Word Encodings if you are doing tasks like Named Entity Recognition (NER) where you need to label specific words (e.g., "Is this word a person or a place?").
+* Use Sentence Encodings (the [CLS] token) if you are doing Sentiment Analysis or Topic Classification (e.g., "Is this whole review positive or negative?").
+* When we talk about BERT "encoding" or "producing a vector," we are typically referring to the Inference Phase (or the forward pass during training).
+* When you feed a sentence into a trained BERT model: Raw text is tokenized (e.g., "The bank is open"). The model passes these tokens through its layers of self-attention. You get a fixed-size vector (usually 768 dimensions for BERT-base) for every single token, including the [CLS] token. You then grab the [CLS] vector to represent the whole sentence or the specific word vectors for token-level tasks.
+* The training/pre-training phases for BERT are the Masked Language Model (MLM) and Next Sentence Prediction (NSP)
+* In MLM hides 15% of the words and tries to predict them. This forces it to create deep word-level encodings based on context.
+* Next Sentence Prediction (NSP): BERT is given two sentences and must guess if Sentence B logically follows Sentence A. This is what trains the [CLS] token to act as a "sentence-level summary."
+* The [CLS] token is a permanent part of the input architecture, but it is primarily "trained" by Next Sentence Prediction (NSP), not MLM.
+* MLM doesn't really care about the [CLS] token; it cares about the tokens labeled [MASK]. This forces BERT to create high-quality word/token-level encodings.
+* During the pre-training phase, BERT does both of these tasks together. Though some modern approaches such as RoBERTa may not do the NSP task. 
+* THe [CLS] token is always a part of BERT architecture. Because of the Self-Attention mechanism, it naturally attends to every other word in the sentence, making it a "summary" by default.
+* It’s worth noting that after the original 2018 paper, researchers found that NSP (the [CLS] training task) wasn't actually that helpful. Models like RoBERTa (a "Robustly Optimized" BERT) actually removed the Next Sentence Prediction task entirely and just trained on MLM for longer. Even without the specific NSP training, the [CLS] token still works as a sentence representation because it sees every other word through the attention layers.
 
 ---
 
@@ -3025,9 +3153,81 @@ Trained on 4x4 or 8x8 TPU slice for 4 days
 
 Reimers and Gurevych (2019) present Sentence-BERT (SBERT), a modification of the BERT netowrk using siamese and triplet networks that they claim is able to derive semantically meaningful sentence embeddings. Once you have read the paper, consider the following questions.
 
+#### Paper Introduction
+The provided sources introduce Sentence-BERT (SBERT), a modification of the BERT network designed to create efficient and semantically meaningful sentence embeddings. While standard BERT models achieve high accuracy on sentence-pair tasks, they are computationally too slow for large-scale applications like clustering or semantic search due to their need for pairwise comparisons. SBERT addresses this by utilizing siamese and triplet network structures, allowing sentences to be processed into fixed-sized vectors that can be compared instantly using cosine similarity. Extensive evaluations show that SBERT significantly outperforms previous embedding methods on Semantic Textual Similarity (STS) tasks and transfer learning benchmarks like SentEval. Beyond its improved performance, the model is highly computationally efficient, reducing the time required to find similar sentences in large datasets from hours to mere seconds. Ultimately, these documents detail the architecture, training strategies, and superiority of SBERT in making transformer-based models practical for real-world information retrieval.
+
 ---
 
 #### 1. For a pair regression task, the standard BERT set-up requires pairs of sentences to be presented as input to the encoder network. Why is this set-up unfeasible if you want to find the most similar sentences in a collection?
+
+Standard BERT uses a cross-encoder setup that requires both sentences to be fed into the network simultaneously, creating massive computational overhead. For example, finding the most similar pair in a collection of 10,000 sentences requires roughly 50 million inference computations, taking approximately 65 hours on a modern GPU.
+
+If you have a collection of $n = 10,000$ sentences and you want to find the "most similar pair," you have to compare every sentence against every other sentence.In combinatorics, the number of ways to choose 2 items from a set of $n$ is calculated using the formula:$$\frac{n \times (n - 1)}{2}$$For 10,000 sentences:$$\frac{10,000 \times 9,999}{2} = 49,995,000$$
+
+That is where the ~50 million comes from. Each one of those pairs requires a full forward pass (inference) through the BERT network.
+
+---
+
+During it's initial birth pre-training, Google feed two seteneces at a time for 50% of its training data. This was for the Next Sentence Prediction (NSP) task. Sentence A: "The man went to the store." [SEP] Token: (A divider). Sentence B: "He bought a gallon of milk." 
+
+The model's job was to look at both and output a "True" or "False" through the [CLS] token. This is why the BERT input limit is usually 512 tokens—it was built to have enough "room" to fit two sentences comfortably.
+
+You can train/fine-tune BERT with just one single sentence. Thi requires a labelled tasked. Sentiment Analysis: "This movie was great!" $\rightarrow$ [Positive]. Token Classification: "Barack Obama was born in Hawaii." $\rightarrow$ [Person, Person, O, O, Location]. In these cases, you just leave the "Sentence B" part empty. The model handles it perfectly fine.
+
+--- 
+
+The 50 million computation problem refers to when you use BERT for Sentence Similarity, aka cross-encoder. 
+
+Even though BERT can take one sentence, it wasn't designed to produce a "meaningful" vector in a vacuum. If you feed Sentence A into BERT alone and Sentence B into BERT alone, and then compare their outputs, the results are actually pretty bad.
+
+To get high accuracy for similarity, you are forced to use the Cross-Encoder setup: You feed `[Sentence A] [SEP] [Sentence B]` into the model together. The Self-Attention mechanism allows the words in A to "talk" to the words in B. This "interaction" is what makes BERT so accurate at comparing them, but it’s also what makes it so slow—because you have to re-run the whole model for every new pair.
+
+The [CLS] token always sits at the very first position (index 0) of the entire input sequence. [CLS] + Sentence A + SEP + Sentence B + SEP. If you put the [CLS] token at the end, it would still work (technically), but putting it at Index 0 is a standardized convention. It makes it incredibly easy for developers to extract the "sentence meaning" after inference.
+
+This important to recognise because it it is the reason why standard BERT is Cross Encodeer and why it is so comp expensive. The `[CLS]` token is a representation of the relationship between the entire input sequence. If you feed it two sentences, that vector is "contaminated" (in a good way for accuracy, but a bad way for speed) by the interaction between them.
+
+Because BERT uses Self-Attention, every single token in the input "looks at" every other token.When the [CLS] token is being processed in Layer 1, it sees words from Sentence A.In Layer 2, it sees words from Sentence B.By Layer 12, the [CLS] vector is a mathematical soup of $A + B$.
+
+If the [CLS] token was a "pure" representation of a sentence in isolation, you could just: Feed "Sentence A" into BERT $\rightarrow$ Save the [CLS] vector.Feed "Sentence B" into BERT $\rightarrow$ Save the [CLS] vector. Compare the two vectors.But standard BERT doesn't work well that way. If you feed them separately, the [CLS] token only has Sentence A to look at. The "features" it extracts are different than if it had Sentence B there to provide context. To get the highest accuracy, BERT needs to see them both at the same time so the attention mechanism can compare them word-for-word.
+
+This is the fundamental difference that led to the creation of Sentence-BERT (S-BERT):
+
+| Setup | How [CLS] works | Speed | Accuracy |
+| :--- | :--- | :--- | :--- |
+| Cross-Encoder (Standard) | "Interactive: [CLS] represents the pair (A,B)." | Slow: Must re-run for every pair. | Very High: Can see nuances between words. |
+| Bi-Encoder (S-BERT) | Independent: [CLS] represents Sentence A only. | "Fast: Embed once |  compare millions of times." | High: Good enough for most search/retrieval. |
+
+#### So, is [CLS] ever a "Sentence" representation?
+Only if you only feed it one sentence.
+
+If your input is [CLS] The cat sat on the mat [SEP], then yes, the [CLS] token is a representation of that single sentence. But the moment you add a second sentence, it becomes a representation of the joint context of both.
+
+You would assume that a model as powerful as BERT would naturally "organize" sentences into a logical space and could compare single sentences using cosine similarity, but "out-of-the-box" BERT is actually quite messy for this specific task.
+
+
+#### The "Anisotropy" Problem (The Narrow Cone)
+Research has shown that BERT’s internal vector space is anisotropic. This is a fancy way of saying that BERT’s vectors are not spread out evenly. Instead, they all cluster together in a very narrow, high-dimensional cone. If you take two completely unrelated sentences (e.g., "I like turtles" and "The stock market is down"), their BERT vectors will still have a cosine similarity of 0.9 or higher. Because they are all pointing in almost the same direction within that narrow cone. This makes it nearly impossible to use cosine similarity to distinguish between "very similar" and "completely different."
+
+#### Lack of "Semantic" Training for Embeddings
+BERT was trained on two tasks: Masked Language Modeling (MLM) and Next Sentence Prediction (NSP). MLM teaches BERT about word relationships. NSP teaches BERT how Sentence A relates to Sentence B.  
+Notice what is missing: BERT was never trained to make the distance between two separate vectors represent their semantic similarity. During pre-training, BERT only cares about how words interact within the input. It doesn't care if the final [CLS] vector of "The cat is happy" is close to the [CLS] vector of "A cheerful feline."
+
+#### Word Bias (The "Non-Semantic" Dimensions)
+Standard BERT vectors are heavily influenced by word frequency and punctuation. If two sentences both happen to use the word "the" many times or have a period at the end, their vectors will look very similar to BERT, even if the actual "meaning" is different. Without specific fine-tuning (like what SBERT does), the model doesn't know it should ignore the "functional" words and focus only on the "meaning" words when building that final vector.
+
+
+SBERT (Sentence-BERT) took the original BERT and "forced" it to create a useful vector space by using a Siamese Network structure during training:
+1. It takes Sentence A and Sentence B.
+2. It creates a standalone vector for each.
+3. It calculates the distance between them.
+4. Crucially: It uses a loss function (like Triplet Loss) to physically push unrelated sentences apart and pull related sentences together in the vector space.
+
+
+#### Summary: Cross-Encoder vs. Bi-Encoder
+**Standard BERT (Cross-Encoder):** "I will look at both sentences together and tell you if they match." (Highly Accurate, Very Slow)
+
+**SBERT (Bi-Encoder):** "I will give each sentence a 'coordinate' in a logical map so you can compare them yourself later." (Fast, requires special training)
+
 
 ---
 
@@ -3071,7 +3271,7 @@ Reimers and Gurevych (2019) present Sentence-BERT (SBERT), a modification of the
 
 ---
 
-## Week 7: Additional Reading
+2## Week 7: Additional Reading
 * [Jurafsky and Martin Chapter 8: Transformers](https://web.stanford.edu/~jurafsky/slp3/8.pdf)
 * [Jurafksy and Martin Chapter 10: Masked Language Models](https://web.stanford.edu/~jurafsky/slp3/10.pdf)
 * [(Jurafksy and Martin Chapter 7: Large Language Models)](https://web.stanford.edu/~jurafsky/slp3/7.pdf)
