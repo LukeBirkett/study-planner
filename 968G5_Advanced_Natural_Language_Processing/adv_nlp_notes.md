@@ -3328,19 +3328,98 @@ The only reason we don't use SBERT for everything is that it is slightly less ac
 
 ---
 
+#### Is SBERT a Siamese Architecture at Inference? 
+No. At inference, you don't need the Siamese "twin" structure anymore. You only need one of those networks.
+
+Remember that in a Siamese network, the two networks are identical. They share the exact same weights. This means that "Model A" and "Model B" are actually just two copies of the same file.
+
+During Training you need both "twins" because you are teaching the model how to calculate the distance between two different things. You feed Sentence A into Twin 1 and Sentence B into Twin 2 simultaneously to calculate the error (loss) and update the weights.
+
+At Inference, since both twins are identical, having two of them is redundant. You just take one of those trained BERT models, load it into memory, and use it as a standalone "Encoder."
+
+Even though you only use one model at inference, we call it a Bi-Encoder (or Siamese) because of how it was "raised."
+* Cross-Encoder: The model is a "Bilingual Dictionary." You can't use it unless you have both languages in front of you at the same time.
+* Bi-Encoder (SBERT): The model is a "Translator." It takes one sentence and turns it into a universal "Coordinate" (the vector). Once you have the coordinates, you don't need the translator anymore to see which points on the map are close to each other.
+
+---
+
 #### 5. What are the different pooling strategies that the authors experiment with? What works best?
+The SBERT authors (Reimers and Gurevych) experimented with three primary pooling strategies to collapse the token-level embeddings into a single sentence vector.
+
+##### MEAN Strategy (Default)
+This calculates the element-wise average of all contextualized word embeddings in the sentence. It is the most "democratic" approach, as it ensures every word contributes to the final vector.
+
+##### MAX Strategy
+This takes the maximum value over each dimension across all token embeddings. It is designed to capture the most "salient" or prominent features (like specific keywords) rather than a general summary.
+
+##### CLS-Token Strategy
+This simply uses the output vector of the special [CLS] token. While this was the intended "summary" token during BERT's original pre-training, SBERT uses it as an alternative baseline.
+
+#### What Works Best?
+In their ablation studies across multiple Semantic Textual Similarity (STS) benchmarks, the authors found a clear winner: **Mean Pooling (MEAN-strategy)** consistently performed the best.
+
+According to the SBERT paper, using the raw [CLS] token or simply averaging BERT’s outputs without SBERT’s Siamese training actually resulted in embeddings that were worse than basic GloVe vectors. However, once the Siamese fine-tuning was applied, Mean Pooling emerged as the most robust method for capturing semantic meaning.
+
+The authors found that MAX pooling significantly underperformed (for example, scoring roughly 69.9 on the STS-benchmark compared to Mean's 87.4). This is likely because Max pooling focuses too much on individual "extreme" values, which works for some classification tasks but fails to capture the subtle relational meaning needed for sentence similarity.
+
+Mean pooling, by contrast, smooths out the noise and captures the collective context of the entire sequence, making it the most stable representation for the cosine similarity math that SBERT relies on.
+
 
 ---
 
 #### 6. Outline the 4 evaluation tasks used for semantic textual similarity.
 
+To measure how well SBERT actually "understands" meaning compared to standard BERT, the authors evaluated it on four distinct types of Semantic Textual Similarity (STS) tasks. These tasks range from simple sentence pairs to complex image captions.
+
+##### Semantic Textual Similarity (STS) 2012–2016
+This is the "gold standard" benchmark for sentence embeddings. It consists of thousands of sentence pairs from various sources (news, image captions, forums) that have been manually labeled by humans on a scale of **0 (completely different)** to **5 (exactly the same meaning).**
+* **The Goal:** SBERT must calculate the cosine similarity between the two sentence vectors.
+* **Evaluation:** The model’s score is compared to the human score using **Spearman’s rank correlation**. If the humans say two sentences are a "5" and SBERT gives them a high similarity, the model wins points.
+
+> Evaluation (Testing): Uses a Metric. This is for the humans. It doesn't have to be differentiable or smooth; it just has to represent how "good" the model is at the real-world task. Spearman’s Rank is perfect here because it tells us: "If a human ranked these 100 pairs from most-similar to least-similar, did the AI put them in the same order?"
+
+##### SentEval: Argument Facet Similarity (AFS)
+This task is significantly harder than standard STS because it involves social media style debates. It uses the "Argument Facet Similarity" dataset, where people are arguing about controversial topics like gun control or the death penalty.
+* The Challenge: Two sentences might use the exact same words but take opposite stances, or use different words to make the same point.
+* Why it matters: This tests if SBERT can handle "noisy" text and deep logical meaning rather than just simple surface-level word matching.
+
+##### Wikipedia Sections Mapping
+The authors created a task to see if SBERT could understand the structure of a document. They took sentences from different sections of Wikipedia (e.g., the "History" section vs. the "Geography" section of a page about a city).
+* The Task: A "Triple" is created: an Anchor sentence, a Positive sentence (from the same section), and a Negative sentence (from a different section).
+* The Goal: SBERT must place the Anchor vector closer to the Positive vector than the Negative one. This proves the model understands topical context.
+
+##### SICK-R (Sentences Involving Compositional Knowledge)
+This dataset focuses specifically on compositional logic and negation. It contains pairs that are very similar in structure but different in meaning.
+* Example: "A man is biting a dog" vs. "A dog is biting a man."
+* The Challenge: Standard BERT often fails here because the word overlap is 100%. SBERT is evaluated on its ability to recognize that these two sentences should have a lower similarity score despite having identical words.
+
+#### Summary of Results
+In all four tasks, the authors found that SBERT outperformed both vanilla BERT and RoBERTa by massive margins. For example, on the STS benchmarks, SBERT improved the score from a mediocre ~54.0 (standard BERT) to a state-of-the-art ~85.0+.
+
 ---
 
 #### 7. Why would Spearman’s rank correlation coefficient be better than Pearson’s product-moment correlation coefficient when comparing ratings of semantic textual similarity?
+Spearman’s rank correlation is preferred over Pearson’s for Evaluating Semantic Textual Similarity because human-assigned scores (0–5) are ordinal rather than strictly linear; the perceived "distance" between a 1 and a 2 may not be mathematically identical to the distance between a 4 and a 5. While Pearson’s coefficient is highly sensitive to outliers and requires a straight-line relationship to show success, Spearman’s coefficient only cares about the relative rank order of the pairs. This makes it a more robust and accurate reflection of human logic, as it rewards the model for correctly identifying that Sentence A is "more similar" than Sentence B, even if the model's raw numerical output follows a curved or non-linear distribution.
 
 ---
 
 #### 8. What are the different objective functions that the authors experiment with? When is each used?
+The SBERT authors experimented with three main objective functions, each designed for a different type of training data. Because BERT doesn't naturally produce "comparable" vectors, these functions are the "tools" used to physically reshape the vector space.
+
+##### Classification Objective Function
+This is used when you have labeled categories for sentence pairs, most commonly the Natural Language Inference (NLI) dataset (which labels pairs as Entailment, Neutral, or Contradiction). 
+* The Math: It takes the two sentence embeddings $u$ and $v$ and concatenates them with their absolute difference: $(u, v, |u - v|)$. This is then multiplied by a trainable weight matrix $W_t \in \mathbb{R}^{3n \times k}$ (where $n$ is the embedding dimension and $k$ is the number of labels) and passed through a Softmax classifier.
+* The Goal: To optimize the Cross-Entropy Loss. By forcing the model to categorize the relationship between $u$ and $v$, the model learns to place "Entailing" sentences close together in the vector space.
+
+##### Regression Objective Function
+This is used when you have a specific numerical score for how similar two sentences are, such as the STS (Semantic Textual Similarity) benchmark where pairs are rated from 0 to 5.
+* The Math: The model calculates the Cosine Similarity between the two embeddings $u$ and $v$.
+* The Goal: To minimize the Mean Squared Error (MSE) between the model's predicted similarity and the actual human-labeled score. This is the most direct way to teach the model that "similarity" should equal "small distance" in the vector space.
+
+##### Triplet Objective Function
+This is used when you have a "reference" sentence and want to distinguish between a "good" match and a "bad" match. It requires three inputs: an Anchor ($a$), a Positive ($p$), and a Negative ($n$).
+* The Math: The loss function is defined as :$$\max(||s_a - s_p|| - ||s_a - s_n|| + \epsilon, 0)$$ (where $|| \cdot ||$ is a distance metric like Euclidean distance and $\epsilon$ is a margin).
+* The Goal: To ensure that the distance between the Anchor and the Positive sentence is smaller than the distance between the Anchor and the Negative sentence by at least a margin of $\epsilon$. This is often used for training models on Wikipedia sections or triplets where "closeness" is relative.
 
 ---
 
