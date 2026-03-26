@@ -4045,7 +4045,7 @@ The prefix acts as a Conditioning Signal. Think of it like a "mood" for the enti
 
 ---
 
-### T5 also uses MLM 
+## T5 also uses MLM 
 Pre-training involves unsupervised objectives which are similar to the MLM of BERT and “word dropout” regularization technique (Bowman et al. 2015)
 
 Figure 2: Schematic of the objective we use in our baseline model. In this example, we process the sentence “Thank you for inviting me to your party last week.” The words “for”, “inviting” and “last” (marked with an x) are randomly chosen for corruption. Each consecutive span of corrupted tokens is replaced by a sentinel token (shown as <X> and <Y>) that is unique over the example. Since “for” and “inviting” occur consecutively, they are replaced by a single sentinel <X>. The output sequence then consists of the dropped-out spans, delimited by the sentinel tokens used to replace them in the input plus a final sentinel token <Z>.
@@ -4065,20 +4065,25 @@ This process is known as Span-denoising, which is T5’s version of BERT's Maske
 
 ---
 
-### T5 Fine-Tuning 
+## T5 Fine-Tuning 
 T5 (Text-to-Text Transfer Transformer) achieves its "unified" nature through a unique approach to fine-tuning. Unlike BERT, which requires swapping out architectural "heads" for different tasks, T5 is fine-tuned by feeding it a variety of supervised tasks simultaneously using the exact same objective: generating the correct target string. Because every task—from translation to regression—shares the same global parameters, the model can leverage cross-task transfer, where learning the structural nuances of one task (like linguistic acceptability) can actually improve its performance on another (like summarization).
 
 To successfully use a fine-tuned T5 model, you must adhere to the Prompt Format it was trained on. This is because the model relies on Task Prefixes to "trigger" the correct internal logic. If you want a summary, you cannot simply provide the text; you must prepend the specific string the model expects (e.g., "summarize: "). These prefixes act as a conditioning signal, shifting the Transformer's attention weights to focus on the specific linguistic features required for that output style.
 
 ---
 
-### Still to come (weeks 9 and 10) 
+## Still to come (weeks 9 and 10) 
 ¡ ChatGPT and open-source alternatives
 ¡ Retrieval Augmented Generation (RAG)
 ¡ Prompt engineering
 ¡ Reasoning with LLMs
 ¡ Trustworthy and responsible LLMs / AI
 ¡ Environmental impact of LLMs / AI
+
+## Week 8 Summary
+This week’s study marks the transition from Transformer theory to the engineering reality of **Transfer Learning**, focusing on how to adapt "generalist" models like BERT to specific "specialist" tasks. We explored the **Distributional Hypothesis** at scale, moving from word-level embeddings to **Sentential Contexts** and specialized models like **SBERT** for semantic similarity. The core of the week centered on the fine-tuning pipeline: utilizing the `[CLS]` **token** as a global aggregator for text classification, navigating the trade-offs of **freezing layers** to prevent catastrophic forgetting, and leveraging the **Hugging Face** `Trainer` **API** alongside the **GLUE benchmark** for standardized evaluation.
+
+We also examined the broader ecosystem of the **BERT Family**—including optimized variants like **RoBERTa**, **ALBERT**, and **DistilBERT** — before looking toward the future of NLP with **GPT-3** and **T5**. While BERT remains an encoder-only model requiring custom heads, GPT-3 introduces the **Prompting/In-Context Learning** paradigm (Zero/Few-shot), and T5 unifies all NLP tasks into a **Text-to-Text** framework. This shift from task-specific architectures to unified, prompt-driven generative models sets the stage for upcoming discussions on RAG, reasoning, and the responsible deployment of Large Language Models.
 
 ---
 
@@ -4089,7 +4094,7 @@ No Questions
 ## Week 8: Paper
 Schick and Schütze (2021): Exploiting Cloze Questions for Few Shot Text Classification and Natural Language Inference
 
-Schick and Sch¨utze (2021) introduce Pattern-Exploiting Training (PET), a semi-supervised training procedure that reformulates input examples as cloze-style phrases to help language models understand a given task. Once you have read the paper, consider the following questions.
+Schick and Schutze (2021) introduce Pattern-Exploiting Training (PET), a semi-supervised training procedure that reformulates input examples as cloze-style phrases to help language models understand a given task. Once you have read the paper, consider the following questions.
 
 1. What do you understand by the term few-shot learning? Why is it important /challenging in NLP?
 2. What is a Cloze question or Cloze-style phrase?
