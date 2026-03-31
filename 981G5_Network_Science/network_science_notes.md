@@ -1,9 +1,28 @@
 # Network Science
 
+Network science, the study of complex systems represented as interconnected nodes and edges, provides a powerful framework for describing and analysing the structure, dynamics, and behaviour of networks in various domains. The module will equip you with practical tools and techniques for analysing and visualising networks, generally enhancing your data analysis skills. This module is not a formal module in graph theory. Rather it is a problem-driven practical module which should appeal to a broad audience. We will study applications of network science in fields as varied as social media analysis, transport, computer network communication, epidemiology and neuroscience to foster a broader perspective, benefitting your research and problem-solving abilities.
+
+#### Learning Outcomes
+By the end of this module a successful student should be able to:
+* Abstract real-world scenarios in terms of dynamics on networks
+* Systematically characterise network properties
+* Visualise networks and communicate network properties effectively
+
+#### Teaching Methods
+The module will consist of 2h lectures and 2h lab classes each week. Lectures in the first half of the module will introduce you to key concepts in network science. In the second half, lectures will mostly be presentations of how network science is being deployed to tackle real-world problems. These presentations will feature external guest speakers as well as researchers from the University of Sussex. These presentations might also include in-class activities / discussions. During the lab classes, you will be asked to answer practical questions using standard network science libraries such as NetworkX. 
+
+
 1. [Week 1 - Introduction](#week-1---introduction) 
 2. [Week 2 - Network Elements ](#week-2---network-elements)
 3. [Week 3 - Small World](#week-3---small-worlds)
-
+4. [Week 4 - Hub](#week-4---hubs)
+5. [Week 5 - Network Models](#week-5---network-models)
+6. [Week 6 - Modularity and Stochastic Block Modelling](#week-6---modularity-and-stochstic-block-modelling)
+7. [Week 7 - Dynamics on Networks](#week-7---dynamics-on-networks)
+8. [Week 8 - ]()
+9. [Week 9 - ]()
+10. [Week 10 - ]()
+11. [Week 11 - ]()
 
 
 # Week 1 - Introduction
@@ -20,42 +39,65 @@ Dynamics on network means things that happen on the network, i.e. firing. There 
 
 # Week 2 - Network Elements 
 
-Learning Outcomes:
+[Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0ece3bab-fd56-4e7c-a136-b3e100b56ad1)
+
+In Week 2, we cover the fundamental language and data structures of Network Science. Our goal this week was to establish a rigorous taxonomy of networks—moving beyond simple diagrams to distinguish between **undirected**, **directed**, and **weighted** architectures. By defining a network $G$ as a formal set of nodes $N$ and links $L$, we’ve created a framework to describe everything from asymmetrical Twitter follows (**digraphs**) to the varied intensities of traffic flow in transportation systems (**weighted graphs**). We also examined specific topologies like **bipartite networks**, where interactions only occur between two distinct sets, and **tree networks**, the most "fragile" connected state where exactly $L=N−1$ links hold the system together.
+
+A key focus of our discussion was the concept of network sparsity. By deriving the maximum possible links $L_{max}$ (calculated as $\binom{N}{2}$ for undirected graphs), we demonstrated why real-world systems like Facebook are mathematically "empty," with densities $d$ often approaching $10^{-6}$. This observation dictates our computational approach: while the **Adjacency Matrix** is our primary tool for mathematical derivation, it is memory-inefficient for large-scale data. Consequently, we’ve introduced **Adjacency Lists** and **Edge Lists** as the practical standards for implementation in `NetworkX`. You should now be comfortable identifying not just the **degree** ($k$) of a node, but its **strength** ($s$) in a weighted context and the **average degree** $\langle k \rangle$ of the collective.
+
+Perhaps the most vital takeaway this week is the bridge between linear algebra and network topology. The intuition behind **matrix multiplication** ($A^n$) allows us to calculate the number of paths of length $n$ between any two nodes. This isn't just an abstract exercise; by analyzing the **Trace** (the diagonal) of $A^3$, we have a formal "Triangle Detector" to measure clustering and "cliquiness." As we move forward, these metrics—specifically the **Heterogeneity Parameter** ($\kappa$) and **excess degrees** — will become the backbone of our study into network robustness and the dynamics of how information or disease spreads across a population.
+
+#### Learning Outcomes:
 * Learn the language of networks
 * The components: nodes, links
 * Types of networks and representations
 * Features of nodes and links
-
-We want to be able to talk about:
-* properties to characterize structure & behavior of networks
-* roles of networks in affecting processes occurring on network structures
-
 ---
 
 #### Lecture 2: Contents 
 
-* []()
-
+* [Formal Definitions](#formal-definitions)
+* [Python and NetworkX](#python-and-networkx)
+* [Undirected Networks](#undirected-networks)
+* [Directed Networks](#directed-networks)
+* [Weighted Network](#weighted-network)
+* [Biparite Networks](#biparite-networks)
+* [Tree Network](#tree-network)
+* [Density and Sparsity](#density-and-sparsity)
+* [Case Study: The Sparsity of Facebook](#case-study-the-sparsity-of-facebook)
+* [Subnetworks](#subnetworks)
+* [Degree](#degree)
+* [Average Degree](#average-degree)
+* [Excess Degrees](#excess-degrees)
+* [Strength](#strength)
+* [Network Representations (Adjacency Matrix)](#network-representations)
+* [Adjacency List](#adjacency-list)
+* [Edge List](#edge-list)
+* [Adjanency Matrices and Matrix Multiplication](#adjanency-matrices-and-matrix-multiplication)
+* [How Hubs Impact Adjacency Matrices?](#how-hubs-impact-adjacency-matrices)
+* ["Cliquiness" and the Diagonal](#cliquiness-and-the-diagonal)
 
 <br>
 
 ---
 
-## Formal Definitions 
+# Formal Definitions 
 
 A network or graph $G$ has two parts: a set of $N$ elements, called **nodes** or vertices, and a set of $L$ pairs of nodes, called links or **edges**. The link $(i, j)$ joins the nodes $i$ and $j$. Two nodes are adjacent or connected or neighbours if there is a link between them.
-* this definition excludes temporal nets works as $i,j$ implies the edge exists at all times
+> this definition excludes temporal nets works as $i,j$ implies the edge exists at all times
 
-A network can be **undirected or directed**. A directed network is also called a digraph (relevant for netx).
-* In directed networks, links are called directed links and the order of the nodes in a link reflects the direction: the link $(i, j)$ goes from the source node $i$ to the target node $j$. 
-* In undirected networks, all links are bi-directional and the order of the two nodes in a link does not matter.
+A network can be **undirected or directed**. A directed network is also called a **digraph** (relevant for netx).
+
+In **directed networks**, links are called directed links and the order of the nodes in a link reflects the direction: the link $(i, j)$ goes from the source node $i$ to the target node $j$. 
+
+In **undirected networks**, all links are bi-directional and the order of the two nodes in a link does not matter.
 
 A network can be unweighted or weighted. In a weighted network, links have
 associated weights: the weighted link $(i,j,w)$ between nodes $i$ and $j$ has weight $w$. A network can be both directed and weighted, in which case it has directed weighted links.
 
 ---
 
-## Python and NetworkX
+# Python and NetworkX
 
 ### Undirected Networks
 
@@ -83,7 +125,11 @@ for u,v in G.edges:18
 print(u, v)
 ```
 
-![Undirected Network](./week_2/screenshots/undir_net.png)
+![Undirected Network](./files/week_2/screenshots/undir_net.png)
+
+<br>
+
+---
 
 ### Directed Networks
 
@@ -111,7 +157,11 @@ D.neighbors(2)
 for s in D.successors(2):
 ```
 
-![Directed Network](./week_2/screenshots/dir_net.png)
+![Directed Network](./files/week_2/screenshots/dir_net.png)
+
+<br>
+
+---
 
 ### Weighted Network
 
@@ -137,29 +187,37 @@ nx.draw(W, pos,
     with_labels=True,
 ```
 
-![Weighted Network](./week_2/screenshots/weight_net.png)
+![Weighted Network](./files/week_2/screenshots/weight_net.png)
+
+<br>
 
 ---
 
-## Biparite Networks
+### Biparite Networks
 
 In a bipartite network, there are two groups of nodes such that links only connect nodes from different groups and not nodes from the same group. This could be though of at product::input relationships, i.e. songs and artists, product and customers, classes and students. 
 
-![Biparite Network](./week_2/screenshots/biparite.png)
+![Biparite Network](./files/week_2/screenshots/biparite.png)
 
---- 
+<br>
 
-## Tree Network 
+---
+
+### Tree Network 
 
 A tree network is a special class of undirected, connected network such that the deletion of any one link will disconnect the network into two components. The number of links in a tree is $L = N - 1$, where N is the nodes. 
 
 Examples of tree networks include phylogenetic trees, water distribution or power grids, broadcasting networks, food webs
 
-![Tree Network](./week_2/screenshots/tree.png)
+![Tree Network](./files/week_2/screenshots/tree.png)
 
-**What is the sparestest type of network?** Technically a straight line but in terms of a true network, a tree. This is ebcause each time you add a new node, you add one more possible edge, this is why Links/Edges = $N-1$. There cannot exist a network with less edges than $N-1$, removing any link in a tree would result in a disconnected components. 
+<br>
 
-**Why do we care about components and disconnects?** This is linked to redunancy, reliliance and robustness measures. We test these by attacking the network. Interconnectness and Density is a big factor in how these attacks are handled, and/or spread. A high density network means more redundancy, which means it will be more resiliant to attack/changes. 
+---
+
+> **What is the sparsetest type of network?** Technically a straight line but in terms of a true network, a tree. This is ebcause each time you add a new node, you add one more possible edge, this is why Links/Edges = $N-1$. There cannot exist a network with less edges than $N-1$, removing any link in a tree would result in a disconnected components. 
+
+> **Why do we care about components and disconnects?** This is linked to redunancy, reliliance and robustness measures. We test these by attacking the network. Interconnectness and Density is a big factor in how these attacks are handled, and/or spread. A high density network means more redundancy, which means it will be more resiliant to attack/changes. 
 
 <br>
 
@@ -169,20 +227,33 @@ Examples of tree networks include phylogenetic trees, water distribution or powe
 
 ### Undirected Networks
 
-For an undirected network of size $N$ (nodes) with $L$ links:
+For an undirected network of size $N$ (nodes) with $L$ links
 
 This is the formula for the maximum number of links ($L_{max}$) in a network with $N$ nodes, provided in LaTeX:
 
 $$L_{max} = \binom{N}{2} = \frac{N(N-1)}{2}$$
 
-* $L_{max}$: The maximum possible number of links (edges) in a simple undirected network.
+---
+| Component | Definition | Intuition |
+| :--- | :--- | :--- |
+| **$L_{max}$** | Maximum possible links | The total capacity of a simple undirected network of size $N$. |
+| **$\binom{N}{2}$** | Binomial coefficient | "N choose 2"—the number of unique pairs that can be formed from $N$ nodes. |
+| **$\frac{N(N-1)}{2}$** | Algebraic expansion | Each of the $N$ nodes has $N-1$ potential partners; we divide by 2 to avoid double-counting the same link. |
+---
 
-* $\binom{N}{2}$: The binomial coefficient "N choose 2," representing the number of ways to pick a pair of nodes to connect. Given N, how many pairs (2) can you make?
+Now that we have the maximum possible number of links we can use it calculate the density $d$ which is given by: 
 
-* $N(N-1)/2$: The algebraic expansion. Since each of the $N$ nodes can connect to $N-1$ other nodes, you multiply them; you then divide by 2 because a link between node A and B is the same as the link between B and A.
+$$\frac{L}{L_max} = \frac{2L}{N(N-1)}$$
 
+We say a network is sparse if $d << 1$.
 
-This notion, $\binom{total}{groups}$ could have anything on the bottom. If you wanted to find make number of triangles within the nodes you would put a 3:
+> $<<$ means much less than. Scientists use >> when a simple inequality doesn't tell the whole story.
+
+---
+
+#### Binomial Coefficient and Combinations
+
+This concept $\binom{total}{groups}$ could have anything on the bottom. If you wanted to find make number of triangles within the nodes you would put a 3:
 
 $$\binom{N}{3} = \frac{N(N-1)(N-2)}{3 \times 2 \times 1}$$
 
@@ -194,9 +265,7 @@ $$\frac{N \times (N-1) \times (N-2) \times \color{red}{(N-3) \times (N-4) \dots 
 
 The formula cancels out and effectivly flips the fraction so that the simple bit is on the denominiator. 
 
-Now that we have the maximum possible number of links we can use it calculate the density $d$ which is given by: $\frac{L}{L_max} = \frac{2L}{N(N-1)}$. We say a network is space is $d << 1$$.
-
-$<<$ means much less than. Scientists use >> when a simple inequality doesn't tell the whole story.
+<br>
 
 ---
 
@@ -211,41 +280,62 @@ $$L_{max} = N(N - 1)$$
 Because direction matters, we don't "collapse" the pairs. You can have a link from $A \to B$ AND a separate link from $B \to A$.
 
 
-| Feature | Undirected (Lmax​) | Directed (Lmax​) |
+| Feature | Undirected ($L_{max}​$) | Directed ($L_{max}$​) |
 | :--- | :--- | :--- |
-| Formula | 2N(N−1)​ | N(N−1) |
+| Formula | $2N(N−1)$​ | $N(N−1)$ |
 | Logic | Pairs of nodes | Ordered pairs (Source → Target) |
 | Example (3 nodes) | 3 possible links | 6 possible links | 
 
 ---
 
-## Example Network: Facebook
-
-$N \approx 10^9$; $L \approx 10^3 * N$
-
-This also means the average degree $\langle k \rangle$ is approx 1,000 (or $10^3$). Strictly speaking, if we start with the average degrees formula $\langle k \rangle = \frac{2L}{N}$, sub in our total links $\langle k \rangle = \frac{2 \times (10^3 \times N)}{N}$, and then factorise $\langle k \rangle = 2 \times 10^3 = 2,000$. We will then tend to drop the constant because the squared order of magniute swamps out the $2$.
-
-
-Using the previous formula, $L_{max} = \frac{N(N-1)}{2}$. For a network as huge as Facebook ($N \approx 10^9$), $N-1$ is basically just $N$. So, scientists often approximate the maximum links as $L_{max} \approx \frac{N^2}{2}$.
-
-The density formula is $d = \frac{L}{L_{max}}$. Plugging in we get $d \approx \frac{10^3 \times N}{N^2}$, we cancel out the N's leaving you with $10^3/N$. With $N = 10^9$, the density is $10^{-6}$.
-
-This extremely low density ($0.000001$) tells you that Facebook is a sparse network. Even though there are trillions of links, it is nearly empty compared to its maximum capacity because most people are only connected to a tiny fraction of the total population.
-
-Most (but not all) real-world networks are similarly sparse because the number of
-links scales proportionally to , whereas the maximum scales with 
+# Case Study: The Sparsity of Facebook
+Using a network size of roughly 1 billion users ($N \approx 10^9$) where each user has roughly 1,000 friends ($k \approx 10^3$), we can see how massive networks behave.
 
 ---
 
-## Subnetworks
+#### 1. Total Links ($L$) and Average Degree ($\langle k \rangle$)
+$$N = 10^9$$
+$$L \approx 10^3 \times N = 10^{12}$$
+$$\langle k \rangle = \frac{2L}{N} = \frac{2 \times 10^{12}}{10^9} = 2,000$$
 
-A subnetwork is a network obtained by selecting a subset of the nodes and all of the links among these nodes. A complete subnetwork is called a clique, where complete means each node connected to all othernodes. We look as subnetworks because we are interested to see details in certain areas of networks.
+In Network Science, we often ignore the constant ($2$) and simply say $\langle k \rangle \sim 10^3$ to focus on the order of magnitude.
+
+---
+
+#### 2. Maximum Possible Links ($L_{max}$)
+For a network this large, $N-1$ is effectively $N$.
+
+$$L_{max} = \frac{N(N-1)}{2} \approx \frac{N^2}{2}$$
+
+$$\frac{(10^9)^2}{2} = \frac{10^{18}}{2} = 5 \times 10^{17}$$
+
+--- 
+
+#### 3. Network Density ($d$)
+Density tells us what percentage of all possible links actually exist.
+
+$$d = \frac{L}{L_{max}} \approx \frac{10^3 \times N}{N^2/2} = \frac{2 \times 10^3}{N}$$
+
+$$d \approx \frac{2,000}{1,000,000,000} = \mathbf{10^{-6}}$$
+
+---
+
+#### The "Big Picture" Takeaway
+Even with one trillion links, the density of Facebook is 0.000001.
+
+This demonstrates that Facebook is a sparse network. Most real-world networks are sparse because while the number of links ($L$) usually grows linearly with $N$, the capacity for links ($L_{max}$) grows quadratically ($N^2$). As a network grows, it becomes mathematically "emptier."
+
+---
+
+# Subnetworks
+
+A subnetwork is a network obtained by selecting a subset of the nodes and all of the links among these nodes. A **complete subnetwork** is called a clique, where complete means each node connected to all othernodes. We look as subnetworks because we are interested to see details in certain areas of networks.
 
 ```S = nx.subgraph(G, node_list)```
 
 ---
 
-## Degree
+# Degree
 
 The degree of a node is its number of links, or neighbours. The degree of node $i$ is typically denoted by $k_i$. A node without any neighbours is called a singleton ($k=0$)
 
@@ -268,7 +358,7 @@ D.degree(4) # total degree
 
 ---
 
-## Average Degree
+# Average Degree
 
 The average degree of a (undirected network) is $\langle k \rangle = \frac{\sum_{i} k_{i}}{N}$. This tells you the average number of edges a network's node has. 
 
@@ -282,15 +372,53 @@ While the "Average Degree" tells you the typical connectivity, it doesn't tell y
 
 ---
 
-## Excess Degrees
+# Excess Degrees
+The excess degree of a node with degree $k$ is formally defined as $k - 1$. This represents the number of available edges to continue a process—such as the spread of a rumor or a virus—after accounting for the specific edge used to arrive at that node.
 
-The excess degree of a node $k$ with degree is $k-1$. It represents the number of edges connected to that node excluding the edge that was used to reach it.
+The core intuition here is that we aren't simply looking at nodes in isolation; we are looking at them as "stepping stones" in a path. Because we reach a node by following an edge, we are subject to a significant sampling bias.
 
-We can then define the mean excess degree of a network, which is the average number of connections a randomly chosen neighbour of a node has excluding the link to the starting node. This concept is important when considering spreading on a network (e.g., in epidemiology). The famous Friendship paradox (not to be confused with the Friendship theorem!) is closely related to that.
+An edge is statistically far more likely to lead to a "hub" with many connections than to a "singleton" with very few. This means the probability of reaching a node is not uniform across the network but is instead proportional to the node's degree $k$.
+
+Consequently, when we calculate the expected degree of a neighbor, we cannot simply use the average degree $\langle k \rangle$. Instead, we must use the ratio of the second moment to the first moment of the degree distribution, expressed as $\frac{\langle k^2 \rangle}{\langle k \rangle}$. 
+
+From this, we derive the Mean Excess Degree ($q$) by subtracting the "entry" edge from that expectation: $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$.
+
+This mathematical reality is the engine behind the Friendship Paradox, which famously states that "on average, your friends have more friends than you do." While your own degree is a random sample from the standard distribution $P(k)$, your friends’ degrees are samples from the biased distribution of neighbors, which inherently favors high-connectivity hubs.
+
+This distinction is critical for understanding network dynamics like epidemiology. In a spreading process, the virus doesn't "see" the average degree of the population; it "sees" the mean excess degree. If a network is highly heterogeneous—meaning it has a high variance in degrees ($k^2$)—the mean excess degree will be much higher than the average degree.
+
+This explains why infections can surge through a population far faster than a simple average of social contacts would suggest. By linking these concepts to the Heterogeneity Parameter ($\kappa$), we can see that as a network becomes more "hub-heavy," its capacity to transport information or disease increases exponentially, regardless of how sparse the overall network might appear.
+
+#### Node-Based vs Network-Based Metric
+Excess Degree is a node-based property, but Mean Excess Degree is a network-wide metric.
+* At the individual level, the excess degree is simply a count. If a specific node has a degree $k=10$, and you arrive at it via one edge, it has an excess degree of $9$.
+
+When we talk about the Mean Excess Degree, we are calculating a single value that characterizes the entire network. It represents the "expected" number of new edges you will find when you follow a random edge to a node.
+
+It works as a network-wide metric because it uses the Degree Distribution of the whole system. As we saw in the formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$, it relies on the first and second moments of all degrees in the network.
+
+#### Formula vs Recursive/Loop
+The formula shown above using the first and second moments gives us the same result as if we were to brute force through the network, checking every node and following its edges to compute the neighbours degrees minus the travelled edge into a global average. 
+
+The logic behind this is easier to see when you consider what happens in the loops. If a node has degree $k$, you will land on it exactly $k$ times (once for each edge connected to it).Each time you land there, you count $(k-1)$ excess edges.So, that specific node contributes $k \times (k-1)$ to your total sum. Ultimately, this is just another way to sum all of the excess degrees and then divide it by the total number of "arrival" edges to turn it into an average, i.e. the first moment. **Mean Excess Degree is essentially a weighted average.**
+
+> #### The "Global" Way (The Formula)
+> The formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$ is just the algebraic "collapsed" version of that manual process.
+>
+> Let’s look at the math:
+> 
+> 1. The Sum of Excess Degrees: If we sum $k(k-1)$ for every node in the network, we get:
+> $$\sum k(k-1) = \sum k^2 - \sum k$$
+>
+> 2. The Average: We divide that sum by the total number of "arrivals" (which is $2L$, or $\sum k$):
+> $$q = \frac{\sum k^2 - \sum k}{\sum k} = \frac{\sum k^2}{\sum k} - 1$$
+>
+> 3. The Shift to Moments: Since the average degree $\langle k \rangle$ is $\frac{\sum k}{N}$, and the second moment $\langle k^2 \rangle$ is $\frac{\sum k^2}{N}$, the $N$ constants cancel out, leaving you with:
+> $$q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$$
 
 ---
 
-## Strength
+# Strength
 
 In a weighed undirected network, the strength of a node $s_{i} = \sum_{j} w_{ij}$. This is also known as weighted between. In weighted networks, this is the total "weight" of all connections attached to that specific node. While the degree formula ($\langle k \rangle = \frac{\sum k_i}{N}$) counts the number of links, the strength formula accounts for how important or heavy those links are. 
 
@@ -304,7 +432,7 @@ In a weighted and directed network, we have:
 
 ---
 
-## Simplifying Assumptions
+# Simplifying Assumptions
 
 There are some rules that we apply to networks for simplification purposes:
 * Single-layer networks with a single type of nodes and a single type of link (unless using a temporal structure).
@@ -313,7 +441,7 @@ There are some rules that we apply to networks for simplification purposes:
 
 ---
 
-## Network Representations
+# Network Representations
 
 Adjacency Matrix: $N × N$ matrix where each element $a_{ij} = 1$ if $i$ and $j$ are adjacent, otherwise $0$. The diagonal elements ($a_{ii}$) will always be zero because of the no self-loops rule. 
 
@@ -351,7 +479,7 @@ However, it should be noted that matrices are poor respresenations for networds 
 
 ---
 
-## Adjacency List
+# Adjacency List
 
 While an adjacency matrix is a grid of 0s and 1s, an adjacency list is a more compact "address book" for a network. Instead of a giant table showing every possible connection (even the ones that don't exist), you only list the connections that actually are there.
 
@@ -399,8 +527,7 @@ Meaning each key entry in the adj list is a node, and the numbers to the right a
 
 ---
 
-## Edge List 
-
+# Edge List
 An edge list is the simplest and most common way to store network data. While an adjacency list organizes connections by node, an edge list is just a two-column (or three-column) list where each row represents a single link $(node_1, node_2)$. In a weighted matrix the weight is also included $(node_1, node_2, weight)$.
 
 For an undirected network, you do not write the bi-directional entries twice. If $1 \to 2$ there will be an edge list entry but this won't exist for $2 /to 1$. 
@@ -418,7 +545,7 @@ W2 = nx.read_weighted_edgelist("wf.edges")
 
 ---
 
-## Adjanency Matrices and Matrix Multiplication
+# Adjanency Matrices and Matrix Multiplication
 
 The intuition behind multiplying an adjacency matrix by itself is that it reveals connectivity over multiple steps within the netowrk. 
 
@@ -429,7 +556,6 @@ When you perform matrix multiplication $\mathbf{A}^2 = \mathbf{A} \cdot \mathbf{
 * $\mathbf{A}^2$: Tells you how many ways you can go from $i \to k \to j$ in 2 steps.
 * $\mathbf{A}^3$: Tells you how many ways you can go from $i \to k \to m \to j$ in 3 steps.
 
-
 Let take an example where the network is: $X \to Y \to Z \to X$:
 
 The First Matrix ($\mathbf{A}$) captures the direct link relationships: $X \to Y$ is 1, $Y \to Z$ is 1, $Z \to X$ is 1. All other values in the matrix are 0 because you can't get anywhere else in exactly one jump. $Y \to X$ is 0 for example. 
@@ -437,7 +563,7 @@ The First Matrix ($\mathbf{A}$) captures the direct link relationships: $X \to Y
 With the Squared Matrix ($\mathbf{A}^2$) the 1's have shifted. The first row represents $X$. Originally, it only had a $1$ in the middle column which was its connectioned to $Y$. Now, the $1$ has shifted to the end column. This means there is example 1 path of length 2 from $X$ to $Z$ ($X \to Y \to Z$). You cannot get from $X$ back to $X$ in 2 steps, so the diagonal is 0.
 
 
-![a2](./week_2/screenshots/a2.png)
+![a2](./files/week_2/screenshots/a2.png)
 
 This calculation and the intution is the backbone behind many other concepts in network science. 
 
@@ -473,6 +599,11 @@ However, with $\mathbf{A}^3$, the diagonal is the "Triangle Detector". If the en
 
 ---
 
+# Week 2 - References/Readings
+
+#### [Scott L. Feld (1991) – Why Your Friends Have More Friends Than You Do](./files/week_2/Feld-FriendsFriends-1991.pdf)
+This is the "Friendship Paradox" paper, tt is a sociology paper, not physics or math. Feld explains the sociological implications of the Mean Excess Degree. He demonstrates that because popular people (hubs) belong to more social circles, they are disproportionately represented when you look at anyone’s list of friends.
+
 <br>
 <br>
 <br>
@@ -480,12 +611,11 @@ However, with $\mathbf{A}^3$, the diagonal is the "Triangle Detector". If the en
 
 # Week 3 - Small Worlds
 
-**||** [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c9b0c637-df69-41ee-a755-b3ef00b54cbd) **||**
+[Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c9b0c637-df69-41ee-a755-b3ef00b54cbd), Book Chapter 2
 
-This week correlates to the **second chapter** (small worlds) of the textbook and we will be thinking about the structure of networks, as well as, important concepts. 
 
-Lecture Outline:
 
+#### Lecture Outline:
 * **Birds of a feather**; things that are similar tend to group. 
 * **Paths and distances**; understand but also quantify in order to look into things like spread. Also important for optimization tasks. 
 * **Connectedness and components**
@@ -496,9 +626,37 @@ Lecture Outline:
 
 ---
 
-#### Lecture 2: Contents 
+#### Lecture 3: Contents 
 
-* []()
+* [Birds of a Feather](#birds-of-a-feather)
+* [Assortativity](#assortativity)
+* [Degree Assortativity](#degree-assortativity)
+* [Calcualting Assortativity](#calcualting-assortativity)
+* [1. Average Nearest-Neighbor Degree for a specific node $i$](#1-average-nearest-neighbor-degree-for-a-specific-node)
+* [2. Average Nearest-Neighbor Degree for all nodes with degree $k$](#2-average-nearest-neighbor-degree-for-all-nodes-with-degree)
+* [3. How this identifies Assortativity](#3-how-this-identifies-assortativity)
+* [Python Implementation]()
+* [NetworkX Different Approaches](#networkx-different-approaches)
+* [Categorical Attribute Assortativity](#categorical-attribute-assortativity)
+* [Numerical Attribute Assortativity](#numerical-attribute-assortativity)
+* [Degree Assortativity](#degree-assortativity-1)
+* [Paths: definitions](#paths-definitions)
+* [Shortest Path](#shortest-path)
+* [APL and Diameter](#apl-and-diameter)
+* [Undefined Path](#undefined-path)
+* [Connectedness and Components](#connectedness-and-components)
+* [In/Out Components](#inout-components)
+* [Trees](#trees)
+* [Finding Shortest Paths](#finding-shortest-paths)
+* [Breadth-First Search](#breadth-first-search)
+* [Small Worlds](#small-worlds)
+* [Milgrams Experiment](#milgrams-experiment)
+* [Short Paths](#short-paths)
+* [Small Worlds](#small-worlds)
+* [Friend of a Friend](#friend-of-a-friend)
+* [Clustering Coefficent](#clustering-coefficent)
+* [Network Clustering Coefficent](#network-clustering-coefficent)
+* [Alternative Clustering: Triplets](#alternative-clustering-triplets)
 
 ---
 
@@ -989,7 +1147,7 @@ nx.transitivity(G) # network's global clustering coefficient
 
 # Week 4 - Hubs
 
-[Lecture Video](), Chapter: 3
+[Lecture Video](), Book Chapter: 3
 
 ---
 This lecture explains the structural properties of complex networks, focusing on how centrality measures like degree, closeness, and betweenness identify significant nodes known as hubs. Real-world networks are described as heterogeneous, meaning they possess a heavy-tailed degree distribution where a few massive hubs coexist with many low-connection nodes. This unique architecture is often the result of preferential attachment, creating a "rich-get-richer" effect that makes the system robust against random failures but highly vulnerable to targeted attacks. Mathematical tools such as log-log plots and the heterogeneity parameter help researchers visualize these patterns and understand why certain networks lack a characteristic scale. Finally, the text introduces core decomposition as a recursive method for pruning peripheral nodes to reveal a network's dense, stable backbone.
@@ -1000,6 +1158,42 @@ Learning Outcomes:
 * Talk about hubs and notion of centrality
 * How to look at resilience in networks
 * Start with network models (later week but it is a big topic)
+
+---
+
+#### Lecture 4: Contents 
+
+* [Real World Networks are Hetrogeneous](#real-world-networks-are-hetrogeneous)
+* [Centrality Measures](#centrality-measures)
+* [Degree Centrality](#degree-centrality)
+* [Limitations:](#limitations)
+* [Closeness Centrality](#closeness-centrality)
+* [Python Implementation]()
+* [Key Intuition]()
+* [Betweenness Centrality](#betweenness-centrality)
+* [Python Implementation]()
+* [Centrality Summary Metrics](#centrality-summary-metrics)
+* [Centrality Distrubtion](#centrality-distrubtion)
+* [From Histograms to Probability Distributions](#from-histograms-to-probability-distributions)
+* [Discrete vs. Continuous Metrics](#discrete-vs-continuous-metrics)
+* [Log-Log Scale ](#log-log-scale)
+* [Degree Distributions and the Heavy Tail](#degree-distributions-and-the-heavy-tail)
+* [Measuring Heterogeneity ($\kappa$)](#measuring-heterogeneity-)
+* [The Origin: Preferential Attachment](#the-origin-preferential-attachment)
+* [Structural Consequences](#structural-consequences)
+* [What is a "Scale-Free" Network?](#what-is-a-scale-free-network)
+* [Betweenness Distribution](#betweenness-distribution)
+* [Why This Matters for Bottlenecks](#why-this-matters-for-bottlenecks)
+* [The Friendship Paradox](#the-friendship-paradox)
+* [Ultra-Small World](#ultra-small-world)
+* [Robustness and Resilience](#robustness-and-resilience)
+* [Core Decompostion](#core-decompostion)
+* [The Concept: Finding the Indestructible Core](#the-concept-finding-the-indestructible-core)
+* [The Algorithm: $k$-shell Decomposition](#the-algorithm--shell-decomposition)
+* [Why Recursive Pruning is Necessary](#why-recursive-pruning-is-necessary)
+* [Visualizing the Result](#visualizing-the-result)
+* [Week 4 Summary](#week-4-summary)
+
 
 ---
 
@@ -1339,14 +1533,62 @@ core_numbers = nx.core_number(G)
 | Core Decomp. | What is the stable backbone? | Recursive k-core pruning | Filters "noise" to reveal the most interconnected indestructible center. |
 ---
 
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # Week 5 - Network Models
 
+- []()
+- Chapter 4; 
+
+#### Learning Outcomes
+* Random Networks
+* Small-world networks
+* The configuration model
+* Preferential Attatchment
+* Other preferential model
+
+#### Lecture 5: Contents
+* [Models](#models)
+* [Random networks](#random-networks)
+* [Random Networks: Number of Links, Density ](#random-networks-number-of-links-density)
+* [The Expected Number of Links $\langle L \rangle$](#the-expected-number-of-links)
+* [Expected Density of Links $d$](#expected-density-of-links)
+* [The Sparsity Constraint](#the-sparsity-constraint)
+* [Random Networks: Average Degree](#random-networks-average-degree)
+* [Random Networks: Degree Distribution](#random-networks-degree-distribution)
+* [Random Network: Small World Property](#random-network-small-world-property)
+* [The Logarithmic Diameter](#the-logarithmic-diameter)
+* [Random Networks: Clustering Coefficient](#random-networks-clustering-coefficient)
+* [Random Network: Summary](#random-network-summary)
+* [Small World Networks](#small-world-networks)
+* [Watts Strogatz](#watts-strogatz)
+* [Small-Worldedness Index ($S$)](#small-worldedness-index-)
+* [Limitations and Summary](#limitations-and-summary)
+* [Configuration Model](#configuration-model)
+* [The Construction Principle: The "Stub" Method](#the-construction-principle-the-stub-method)
+* [Why Use This Model?](#why-use-this-model)
+* [Implementation and Constraints](#implementation-and-constraints)
+* [Exponential Random Graphs](#exponential-random-graphs)
+* [The Statistical Framework](#the-statistical-framework)
+* [Analytical Power and Inference](#analytical-power-and-inference)
+* [Simulation via Triangle Bias](#simulation-via-triangle-bias)
+* [D-k Randomization](#d-k-randomization)
+* [Network Growth](#network-growth)
+* [The Limitation of Static Models](#the-limitation-of-static-models)
+* [Preferential Attachement](#preferential-attachement)
+* [The Core Mechanism](#the-core-mechanism)
+* [The Barabási-Albert (BA) Model](#the-barabási-albert-ba-model)
+* [Why Growth Alone Isn't Enough](#why-growth-alone-isnt-enough)
+* [Non-Linear Preferential Attachment](#non-linear-preferential-attachment)
+* [Week 5 Summary](#week-5-summary)
+
+---
 
 # Models
 
@@ -1564,7 +1806,7 @@ G3 = nx.connected_watts_strogatz_graph(N,k,p)  # Guaranteed to be connected
 
 # Configuration Model
 
-The Configuration Model addresses a specific problem: how to build a network that has a pre-defined degree sequence (a specific list of degrees for every node, $(k_1, k_2, ..., k_n)$ while keeping all other connections random. This is essential because many different network structures can share the same degree distribution, and researchers need a way to isolate the effects of the distribution itself.
+The Configuration Model addresses a specific problem: how to build a network that has a pre-defined degree sequence a specific list of degrees for every node, $(k_1, k_2, ..., k_n)$ while keeping all other connections random. This is essential because many different network structures can share the same degree distribution, and researchers need a way to isolate the effects of the distribution itself.
 
 #### The Construction Principle: The "Stub" Method
 

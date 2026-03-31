@@ -22,16 +22,7 @@ In the end, there should be a finding that revolves around how many "odd-degree"
 
 Within this question, it is important to think about "Complete Graphs" ($K_n$). We are asked about the "sum of all pairwise distances between all pairs of stakes." If a graph is complete, then there is a pair (edge) between every single node which the circuit needs to cover exactly onces. 
 
----
-#### Why is this point relevant?
-3. Spanning Trees vs. Graph Traversals
-
-Think about what the rope represents. Is it just a path ($A \to B \to C$), or is it trying to "solve" the graph?
-
-Review: The difference between a Path (a sequence of edges) and a Tree (a connected graph with no cycles).
-
-Key Concept: The worker’s method ($A \to B \to C$) covers two edges. If there are more stakes (D, E, F...), would that single rope still work?
---- 
+The worker’s goal is not just to connect the stakes (which a tree would do); his goal is to measure every single pairwise distance (the Complete Graph). This means that touching every node is simply not good enough, you needs to traverse every edge in the complete graph. If the graph was just a tree, the worker's logic ($A \to B \to C$) would work perfectly. Because it's a complete graph, it fails for almost all $N$.
 
 There are few different things to know, or workout, in order to know if this problem can be acheived:
 * How many edges are there in a "Complete Graph" of $N$ stakes?
@@ -76,9 +67,16 @@ This means the conditions where is it possible to "measure the sum of the pairwi
 * If $N=2$: The worker can tie to A and C. 
 * If $N=$ any odd number (3, 5, 7...): It is possible to measure all distances, but the worker would have to tie both ends of the rope to the same stake (A to A), creating a circuit.
 
+1. If $N=2$: A simple path works.
+2. If $N$ is odd ($N \ge 3$): A circuit is required (the rope starts and ends at the same stake).
+3. If $N$ is even ($N > 2$): It is impossible.
+
 ---
 #### Does this carry over to non-complete graphs?
-This is question holding underlying theory can can carry over to over problems? for exmaple, if we have a non-complete graph where some nodes are not traversable, are we bound by the same conditions? i.e. only 2 odds to create a path?
+Yes, the Eulerian rules are universal laws of graph topology meaning the odd rule holds true.
+* If there are 0 odd nodes you can complete a circuit but you must end up where you began. 
+* If there are 2 odd nodes you must begin at one and end at the other. 
+* If there are more than 2 odd nodes, it is physically impossible to cover every edge exactly once with one rope, regardless of how the nodes are positioned.
 
 ---
 
