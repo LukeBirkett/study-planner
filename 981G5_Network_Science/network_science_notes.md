@@ -1,5 +1,4 @@
 # Network Science
-
 Network science, the study of complex systems represented as interconnected nodes and edges, provides a powerful framework for describing and analysing the structure, dynamics, and behaviour of networks in various domains. The module will equip you with practical tools and techniques for analysing and visualising networks, generally enhancing your data analysis skills. This module is not a formal module in graph theory. Rather it is a problem-driven practical module which should appeal to a broad audience. We will study applications of network science in fields as varied as social media analysis, transport, computer network communication, epidemiology and neuroscience to foster a broader perspective, benefitting your research and problem-solving abilities.
 
 #### Learning Outcomes
@@ -19,7 +18,7 @@ The module will consist of 2h lectures and 2h lab classes each week. Lectures in
 5. [Week 5 - Network Models](#week-5---network-models)
 6. [Week 6 - Modularity and Stochastic Block Modelling](#week-6---modularity-and-stochstic-block-modelling)
 7. [Week 7 - Dynamics on Networks](#week-7---dynamics-on-networks)
-8. [Week 8 - ]()
+8. [Week 8 - GUEST LECTURE (SKIPPED)]()
 9. [Week 9 - ]()
 10. [Week 10 - ]()
 11. [Week 11 - ]()
@@ -28,7 +27,6 @@ The module will consist of 2h lectures and 2h lab classes each week. Lectures in
 # Week 1 - Introduction
 
 ## What is a Complex System? 
-
 In a discussion, some students suggeted that a jet engine is a complex system. The lecturer said this could be true depending on the definition but for this module it is not a complex system. We would not want components jet engine to be a complex system because we wish a jet engine to be work exactly as planned everytime. With a complex system we can never fully understand then and know their outcomes as they are too complex. A complex system is not the same as complicated system for which a jet engine would be. A brain is an example of a complex system. It has a very large number of small components all working together in various ways. Emergence is a key theme in complex systems. 
 
 Dynamics on network means things that happen on the network, i.e. firing. There is also the dynamics of a the network, i.e. how many neurons there are. 
@@ -57,25 +55,35 @@ Perhaps the most vital takeaway this week is the bridge between linear algebra a
 #### Lecture 2: Contents 
 
 * [Formal Definitions](#formal-definitions)
-* [Python and NetworkX](#python-and-networkx)
-* [Undirected Networks](#undirected-networks)
-* [Directed Networks](#directed-networks)
-* [Weighted Network](#weighted-network)
-* [Biparite Networks](#biparite-networks)
-* [Tree Network](#tree-network)
+    * [Python and NetworkX](#python-and-networkx)
+    * [Undirected Networks](#undirected-networks)
+    * [Directed Networks](#directed-networks)
+    * [Weighted Network](#weighted-network)
+    * [Biparite Networks](#biparite-networks)
+    * [Tree Network](#tree-network)
 * [Density and Sparsity](#density-and-sparsity)
-* [Case Study: The Sparsity of Facebook](#case-study-the-sparsity-of-facebook)
+   * [Facebook Case Study: Sparse](#case-study-the-sparsity-of-facebook)
 * [Subnetworks](#subnetworks)
 * [Degree](#degree)
 * [Average Degree](#average-degree)
 * [Excess Degrees](#excess-degrees)
+    * [Node-Based vs Network-Based Metric](#node-based-vs-network-based-metric)
+    * [Formula vs Recursive/Loop](#formula-vs-recursiveloop)
+    * [The "Global" Way (The Formula)](#the-global-way-the-formula)
+    * [Computational Issues with Recursive Approach](#computational-issues-with-recursive-approach)
 * [Strength](#strength)
 * [Network Representations (Adjacency Matrix)](#network-representations)
-* [Adjacency List](#adjacency-list)
-* [Edge List](#edge-list)
-* [Adjanency Matrices and Matrix Multiplication](#adjanency-matrices-and-matrix-multiplication)
-* [How Hubs Impact Adjacency Matrices?](#how-hubs-impact-adjacency-matrices)
-* ["Cliquiness" and the Diagonal](#cliquiness-and-the-diagonal)
+    * [Adjacency Matrix](#adjacency-matrix)
+        * [AM, Undirected, Degrees in Cols/Rows](#am-undirected-degrees-in-colsrows)
+        * [AM, Directed, In/Out Degrees in Cols/Rows](#am-directed-inout-degrees-in-colsrows)
+        * [AM, Weighted, Stength in Cols/Rows](#am-weighted-stength-in-colsrows)
+        * [Matrix Poor Respresentation of Networks](#matrix-poor-respresentation-of-networks)
+    * [Adjacency List](#adjacency-list)
+    * [Edge List](#edge-list)
+    * [Adjanency Matrices and Matrix Multiplication](#adjanency-matrices-and-matrix-multiplication)
+    * [How Hubs Impact Adjacency Matrices?](#how-hubs-impact-adjacency-matrices)
+    * ["Cliquiness" and the Diagonal](#cliquiness-and-the-diagonal)
+    * [Week 2 - References/Readings](#week-2---referencesreadings)
 
 <br>
 
@@ -92,7 +100,7 @@ In **directed networks**, links are called directed links and the order of the n
 
 In **undirected networks**, all links are bi-directional and the order of the two nodes in a link does not matter.
 
-A network can be unweighted or weighted. In a weighted network, links have
+A network can be **unweighted** or **weighted**. In a **weighted network**, links have
 associated weights: the weighted link $(i,j,w)$ between nodes $i$ and $j$ has weight $w$. A network can be both directed and weighted, in which case it has directed weighted links.
 
 ---
@@ -416,6 +424,24 @@ The logic behind this is easier to see when you consider what happens in the loo
 > 3. The Shift to Moments: Since the average degree $\langle k \rangle$ is $\frac{\sum k}{N}$, and the second moment $\langle k^2 \rangle$ is $\frac{\sum k^2}{N}$, the $N$ constants cancel out, leaving you with:
 > $$q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$$
 
+#### Computational Issues with Recursive Approach
+If you calculate the mean excess degree by looping through every edge, your complexity is $O(L)$.
+* On a small graph with 100 nodes, a loop is instant.
+* On Facebook ($L \approx 10^{12}$), a simple loop that visits every edge to check the neighbor's degree would take days or weeks on a standard CPU.
+* By contrast, calculating $\langle k \rangle$ and $\langle k^2 \rangle$ only requires one pass over the nodes ($O(N)$), and since $N$ is usually much smaller than $L$ in dense sub-networks, the formula is significantly faster.
+
+Additionally, there is the issue of memory allocation itself. If you use recursion to "walk" the network, you risk a Stack Overflow. Every time a function calls itself to move to the next neighbor, the computer stores the "return address" in memory. In a "Small World" network where everyone is connected, a recursive search can quickly spiral out of control, consuming all available RAM just to keep track of where the search started.
+
+Furthermore, navigating undirected networks in a manual calculation becomes prohibatively difficult. In an indurected network, every edge $(i, j)$ is technically two "stubs" or "half-edges." This means as the loop progresses you need to be careful to avoid (not count) already traversed edges. The formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$ handles this "stubs" logic automatically because it is derived from the First and Second Moments of the degree distribution.
+
+In your NetworkX labs, you will see this in action. If you try to calculate metrics using for loops over G.edges(), your code will hang as soon as you load a large dataset (like a protein-interaction map or a web crawl).
+
+Using the Degree Distribution—which is essentially just a list of numbers—allows you to use Vectorized Operations (via NumPy). Instead of moving node-by-node, you tell the computer: "Take this entire array of degrees, square it, and find the average." This happens at the hardware level and is thousands of times faster than a Python loop.
+
+> You’ve hit on a core identity in network science! You are exactly right: $N \times \langle k \rangle$ is essentially the same as $L$ (specifically, it is $2L$). When we say a manual loop is $O(L)$, we are saying the time it takes to run scales linearly with the number of edges. Because the relationship between nodes, average degree, and links is so tight, $O(L)$ and $O(N \langle k \rangle)$ are functionally the same complexity. If doing the calcualtion manaually, it is really important to not visit the same edge twice, hence, in the end you just visit every edge twice, even if in practice you get there by following nodes to their neighbours. 
+> 
+> The reason we $2L$ is because $\langle k \rangle$ is "ignorant" of the fact that an edge has two ends meaning they are double counting in the summation of the average calcuation. 
+
 ---
 
 # Strength
@@ -427,8 +453,8 @@ In an unweighted network, every link weight $w_{ij}$ is simply 1. In that specif
 We use degrees for unweighted networks but will tend to use strength for weighted degree because this gives us additional information on the context and importance of nodes. 
 
 In a weighted and directed network, we have:
-* **in-strength:** $s_{i}^{in} = \sum_j w_{ji}$
-* **out-strength:** $s_{i}^{out} = \sum_j w_{ji}$
+* **In-strength:** $s_i^{in} = \sum_j w_{ji}$ (Summing weights coming into $i$)
+* **Out-strength:** $s_i^{out} = \sum_j w_{ij}$ (Summing weights going out of $i$)
 
 ---
 
@@ -443,6 +469,8 @@ There are some rules that we apply to networks for simplification purposes:
 
 # Network Representations
 
+#### Adjacency Matrix
+
 Adjacency Matrix: $N × N$ matrix where each element $a_{ij} = 1$ if $i$ and $j$ are adjacent, otherwise $0$. The diagonal elements ($a_{ii}$) will always be zero because of the no self-loops rule. 
 
 In an undirected network, this matrix will be symmetric on either side of the diagonal: $a_{ij} = a_{ji}$
@@ -454,15 +482,21 @@ G[3][4]['color']='blue'
 print(G[4])
 ```
 
+#### AM, Undirected, Degrees in Cols/Rows
+
 In an undirected network, the degree for a node can be calculated by summing the matrix accross the relevant row or column:
 
 $$k_{i} = \sum_{j} a_{ij} = \sum_{j} a_{ji}$$
+
+#### AM, Directed, In/Out Degrees in Cols/Rows
 
 This does not work exactly the same for a directed network because the matrix is not symmetric meaning the rows and columns do not mean the same thing. Here the rows hold a nodes out-degree and the columsn hold the in-degree. 
 
 $$k_{i}^{out} = \sum_{j} a_{ij}$$
 
 $$k_{i}^{in} = \sum_{j} a_{ji}$$
+
+#### AM, Weighted, Stength in Cols/Rows
 
 In weighted networks, element $w_ij$
 represents the weight of the link between $i$ and $j$. It is $0$ if there is no link.
@@ -473,7 +507,9 @@ If undirected, the strength is obtained by summing adjacency matrix elemetns acr
 W.degree(4, weight='weight') # strength
 ```
 
-However, it should be noted that matrices are poor respresenations for networds because networds are sparse, meaning a lot of the space in the matrix will be empty but the memory will be allocated. The best repsresentation will be an edge list/dictionary. 
+#### Matrix Poor Respresentation of Networks
+
+However, it should be noted that matrices are poor respresenations for networks because networks are sparse, meaning a lot of the space in the matrix will be empty but the memory will be allocated. The best repsresentation will be an edge list/dictionary. 
 
 **If a matrix is not efficent then why use them?** Becuase it allows us to use linear algebra for the maths. 
 
@@ -611,42 +647,71 @@ This is the "Friendship Paradox" paper, tt is a sociology paper, not physics or 
 
 # Week 3 - Small Worlds
 
-[Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c9b0c637-df69-41ee-a755-b3ef00b54cbd), Book Chapter 2
+[Lecture Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c9b0c637-df69-41ee-a755-b3ef00b54cbd)
 
+---
 
+Week 3 moves beyond the basic definitions of nodes and edges to explore **topology** and **connectivity**, specifically focusing on why most real-world systems are classified as **"Small Worlds"**
+
+---
+
+The week begins with the concept of **Assortativity**, or **"Birds of a Feather"**, which examines the mixing patterns of a network. You explored how nodes don't connect at random; instead, they often demonstrate **Homophily** (connecting to those with similar attributes) or **Degree Assortativity** (where high-degree hubs tend to link to other hubs). This creates a "dense core" in social networks, contrasted with the "hub-and-spoke" disassortative structures often found in biological or technological networks.
+
+By calculating the **Average Nearest-Neighbor Degree** ($k_{nn}$), we can mathematically determine if a network is assortative ($r > 0$) or disassortative ($r < 0$), providing a high-level view of its social or functional behavior.
+
+---
+
+The second major pillar of the week is the study of **Paths** and **Distances**. You transitioned from local neighbor counts to global metrics like **Average Path Length (APL**) and the **Diameter** ($\ell_{\max}$), which represent the efficiency and "width" of the network, respectively. A critical technical takeaway is the use of the **Harmonic Mean** for calculating distances in disconnected networks; this formula prevents "infinite" distances between unreachable components from breaking the average, allowing for a meaningful measure of connectivity even in fragmented systems. This naturally leads into the study of **Components**, where you distinguished between **Strongly Connected** (feedback loops respecting edge direction) and **Weakly Connected** (feed-forward structures) components in directed graphs.
+
+---
+
+To actually find these shortest paths, you explored the **Breadth-First Search (BFS)** algorithm. By treating the search like a "ripple" in a pond, BFS systematically labels nodes layer-by-layer, guaranteeing the discovery of the most efficient route. While a single BFS is efficient at $O(N+L)$, calculating a full network's APL requires running it $N$ times, leading to a computational cost of $O(N(N+L))$. This algorithmic foundation is what allows us to verify **Milgram’s "Six Degrees of Separation" theory**. You learned that a true **Small World** network must satisfy two distinct conditions: a short average path length that scales logarithmically with size ($\langle \ell \rangle \sim \log N$) and a high **Clustering Coefficient** ($C$), indicating that the network is both globally efficient and locally "cliquey".
+
+---
 
 #### Lecture Outline:
-* **Birds of a feather**; things that are similar tend to group. 
-* **Paths and distances**; understand but also quantify in order to look into things like spread. Also important for optimization tasks. 
-* **Connectedness and components**
-* **Finding shortest paths**
-* **Social distance**
-* **Six degrees of separation**
-* **Friend of a friend**
+* Birds of a feather
+* Paths and distances
+* Connectedness and components
+* Finding shortest paths
+* Social distance
+* Six degrees of separation
+* Friend of a friend
 
 ---
 
 #### Lecture 3: Contents 
-
 * [Birds of a Feather](#birds-of-a-feather)
 * [Assortativity](#assortativity)
 * [Degree Assortativity](#degree-assortativity)
-* [Calcualting Assortativity](#calcualting-assortativity)
+* [Assortative Network](#assortative-network)
+* [Disassortative Network](#disassortative-network)
+* [Assortativity in `NetworkX`](#assortative-network)
+    * [Categorical](#categorical)
+    * [Numerical](#numerical)
+    * [Structural (Degree)](#structural-degree)
+---
+* [Calcualting Structural (Degree) Assortativity]()
 * [1. Average Nearest-Neighbor Degree for a specific node $i$](#1-average-nearest-neighbor-degree-for-a-specific-node)
 * [2. Average Nearest-Neighbor Degree for all nodes with degree $k$](#2-average-nearest-neighbor-degree-for-all-nodes-with-degree)
 * [3. How this identifies Assortativity](#3-how-this-identifies-assortativity)
-* [Python Implementation]()
-* [NetworkX Different Approaches](#networkx-different-approaches)
-* [Categorical Attribute Assortativity](#categorical-attribute-assortativity)
-* [Numerical Attribute Assortativity](#numerical-attribute-assortativity)
-* [Degree Assortativity](#degree-assortativity-1)
-* [Paths: definitions](#paths-definitions)
+* [Assortivity Python Implementation](#assortivity-python-implementation)
+---
+* [Why Paths Matter](#why-paths-matter)
+* [The "Efficiency" of a Network](#the-efficiency-of-a-network)
+* [Paths Definitions](#paths-definitions)
 * [Shortest Path](#shortest-path)
 * [APL and Diameter](#apl-and-diameter)
 * [Undefined Path](#undefined-path)
+    * [Harmonic mean of path lengths](#harmonic-mean-of-path-lengths)
+    * [Calculating Disconnected Networks](#calculating-disconnected-networks)
+* [Path Related Functions in `NetworkX`](#path-related-functions-in-networkx)
+---
 * [Connectedness and Components](#connectedness-and-components)
+    * [Strong vs Weakly Connected Components](#strong-vs-weakly-connected-components)
 * [In/Out Components](#inout-components)
 * [Trees](#trees)
+---
 * [Finding Shortest Paths](#finding-shortest-paths)
 * [Breadth-First Search](#breadth-first-search)
 * [Small Worlds](#small-worlds)
@@ -654,26 +719,36 @@ This is the "Friendship Paradox" paper, tt is a sociology paper, not physics or 
 * [Short Paths](#short-paths)
 * [Small Worlds](#small-worlds)
 * [Friend of a Friend](#friend-of-a-friend)
-* [Clustering Coefficent](#clustering-coefficent)
-* [Network Clustering Coefficent](#network-clustering-coefficent)
+* [Clustering Coefficent of 1 Node](#clustering-coefficent-of-1-node)
+* [Clustering Coefficent of the Network](#network-clustering-coefficent)
+* [NetworkX Clusting Functions](#networkx-clusting-functions)
 * [Alternative Clustering: Triplets](#alternative-clustering-triplets)
 
 ---
 
 ## Birds of a Feather
 
-In network science, "Birds of a Feather" usually refers to two distinct but related concepts: Homophily (similarity of node attributes) and Clustering (structural density). The principle that "similar things tend to group together" is a defining feature of real-world networks.
+In network science, "Birds of a Feather" usually refers to two distinct but related concepts: **Homophily** (similarity of node attributes) and **Clustering** (structural density). The principle that **"similar things tend to group together"** is a defining feature of real-world networks.
 
 Similar things tend to group together; like minded people, similar poeple etc. We wont go into quantifying this yet, this is covered in a later lecture. 
 
-Homophily is the tendency of nodes to connect to others with similar attributes (e.g., interests, demographics, or "like-mindedness"). A common quantitative approach is calculating the probability that a node connects to a node of the same "type" versus a different type. This is computationally cheaper than path-based metrics because it only requires looking at a node’s immediate neighbors (its degree) rather than the entire network map.
+> **Homophily** is the tendency of nodes to connect to others with similar attributes (e.g., interests, demographics, or "like-mindedness"). 
 
-Path based measures look at the distance between nodes. How many steps does it take to get from one to another. However, this is often a global approach and comutationally expensive. Additionally, there are often several ways to get from Node A to Node B, we are only interested in the shortest path possible generally. Although, this opens up the additional problem of comparing options. In a large enough network, if the problem is uncontrainsed, a path from A to B is infinite. 
+A common quantitative approach is calculating the probability that a node connects to a node of the same "type" versus a different type. This is computationally cheaper than path-based metrics because it only requires looking at a node’s immediate neighbors (its degree) rather than the entire network map.
 
-The focus needs to be on the density of connections to the "same" type. As we will see througout the module, "same" can mean a number of different things. If we just consisder the probability that a node connects to the same "same", or not, then we dont need to consider path length and physical distances. This is also a local computation, you just need to look at a nodes connections/neighbours, not the travse the whole network looking for a route. Recall, that in Networks, we call the number of connections a of a node is called the "Degree". 
+> **Path** based measures look at the distance between nodes. 
 
-In the previous week(s), we looked at the Friendship Paradox and "Friends of Friends". This notion of connectivity is called clustering, or at least it forms the basis of clustering and the clustering coefficent which measures how "cliquey" the local neighborhood is. The quantantive way to approach clustering is to count the triangles $\binom{N}{3}$ in the network, or areas of a network, i.e. around a given node. That being said, it shoul be noted that these structures do not equal identity. Clustering only tells you that people are connected in groups. It doesn't tell you why. Homophily (the "Birds of a Feather" concept) is the actual measure of similarity—like-minded people grouping together.
+How many steps does it take to get from one to another. However, this is often a global approach and comutationally expensive. Additionally, there are often several ways to get from Node A to Node B, we are only interested in the **shortest path possible** generally. Although, this opens up the additional problem of comparing options. In a large enough network, if the problem is **uncontrainsed**, a path from A to B is infinite. 
 
+> The focus needs to be on the **density** of connections to the "same" type. 
+
+As we will see througout the module, "same" can mean a number of different things. If we just consisder the probability that a node connects to the same "same", or not, then we **dont** need to consider **path length** and **physical distances**. This is also a **local computation**, you just need to look at a nodes connections/neighbours, not the travse the whole network looking for a route. Recall, that in Networks, we call the number of connections a of a node is called the "Degree". 
+
+> In the previous week(s), we looked at the **Friendship Paradox** and "Friends of Friends". This notion of connectivity is called **clustering**, or at least it forms the basis of clustering and the **clustering coefficent** which measures how **"cliquey"** the local neighborhood is. 
+
+The quantantive way to approach clustering is to count the triangles $\binom{N}{3}$ in the network, or areas of a network, i.e. around a given node. That being said, it should be noted that these structures do not equal identity. **Clustering** only tells you that people are connected in groups. It doesn't tell you why. **Homophily** (the "Birds of a Feather" concept) is the actual measure of similarity—like-minded people grouping together.
+
+---
 | Concept | Method | Requirement |
 | :--- | :--- | :--- |
 | Clustering | Counting triangles / $\mathbf{A}^3$ diagonal | Only the Links ($L$) |
@@ -681,44 +756,86 @@ In the previous week(s), we looked at the Friendship Paradox and "Friends of Fri
 
 ---
 
-## Assortativity
-
-[Mixing patterns in networks](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.67.026126)
-* This is a foundation paper in network science
+# Assortativity
 
 In network science, assortativity (or assortative mixing) is a preference for a network's nodes to attach to others that are similar in some way.
 
-Assortativity (or assortative mixing) describes the preference for nodes to attach to others that are similar in some way. This similarity can be structural (degree) or attribute-based (homophily).
+**Assortativity** (or assortative mixing) describes the preference for nodes to attach to others that are similar in some way. This **similarity** can be structural (degree) or attribute-based (homophily).
 
 There are two possible mechanisms by which assortativity emerges naturally: 
-* Selection (Homophily): similar nodes become connected
-* Influence (Social Contagion): connected nodes become more similar.
+* **Selection (Homophily):** similar nodes become connected
+* **Influence (Social Contagion):** connected nodes become more similar.
 
-**Selection or Homophily:** You like people who are like yourself. Neurons that have similar reactions to the same input. Human cells die so need several that know and do the same thing. Similar nodes become connected and "word" together. In social sciences this is very common topic, think about social media and echo chambers. Homopily causes echo chambers and radicalness as bias reinforced. 
+<br>
 
-**Influence:** This can also be a way that connectivity occurs. There is something that pulls you into a network/cluster. "You become who you hang out with." In this mechanism, the connection exists before the similarity develops. Change, and attributes, changing based on the "physical" neighbors.
+> **Selection or Homophily:** You like people who are like yourself. Neurons that have similar reactions to the same input. Human cells die so need several that know and do the same thing. Similar nodes become connected and "word" together. In social sciences this is very common topic, think about social media and echo chambers. Homopily causes echo chambers and radicalness as bias reinforced. 
+
+<br>
+
+> **Influence:** This can also be a way that connectivity occurs. There is something that pulls you into a network/cluster. "You become who you hang out with." In this mechanism, the connection exists before the similarity develops. Change, and attributes, changing based on the "physical" neighbors.
 
 ---
 
-## Degree Assortativity
+# Degree Assortativity
+This is a very common topic in Network Science, also known as **degree correlation**. **Degree Assortativity** means that nodes group with other nodes that have **similar degrees**. 
 
-This is a very common topic in Network Science, also known as degree correlation. Degree Assortativity means that nodes group with people that have similar degrees. 
+Assortative networks have a **core-periphery structure** with **hubs** in the core, e.g. social networks. 
 
-Assortative networks have a core-periphery structure with hubs in the core, e.g. social networks. In an assortative network, nodes do group with nodes that have similar degrees. High-degree nodes (hubs) tend to connect to other high-degree nodes, while low-degree nodes connect to other low-degree nodes. This creates a "dense core" of highly connected individuals.
+### Assortative Network
+In an assortative network, nodes do group with nodes that have similar degrees. High-degree nodes (hubs) tend to connect to other high-degree nodes, while low-degree nodes connect to other low-degree nodes. This creates a **"dense core"** of highly connected individuals.
 
-![assortative_network]()
+![assortative_network](./files/week_3/assortative.png)
+
+### Disassortative Network
 
 Disassortative networks have hub-and-spoke (or star) structure, e.g.  Web, Internet, food webs, bio networks. In a disassortative network, nodes do not group with nodes of similar degrees. High-degree nodes tend to connect to low-degree nodes. 
 
-![disassortative_network]()
+![disassortative_network](./files/week_3/disassort.png)
+
+### Assortativity in `NetworkX`
+Measuring Assortativity is essentially measuring similarity and there are different ways to do this depending on what you consider "similar" or the "same" to be. There are 3 main optons: Categorical, Numerical and Structural
+
+#### Categorical
+This is used for labels or discrete groups (e.g., "blue vs. red," "UK vs. US"). "Are you more likely to be connected to someone in your same category than we would expect by random chance?". If 90% of your friends share your political party, this will return a high positive number (close to 1). This sort of metric is useful for analysis on things like social echo chambers or "tribal" grouping. 
+
+```
+assort_a = nx.attribute_assortativity_coefficient(G, category)
+```
+
+#### Numerical
+This is used for continuous values or ordered numbers. It calculates the correlation between the numerical values of connected nodes. Unlike categories (where you are either "in" or "out"), this accounts for how close the numbers are. If 20-year-olds connect with 21-year-olds, the "similarity" is high. If 20-year-olds only connect with 80-year-olds, the assortativity would be negative. It answers: "Is there a linear relationship between the 'score' of one node and its neighbor?". It could be used to analysis wealth gaps in social networks or age-gated interactions.
+
+```
+assort_n = nx.numeric_assortativity_coefficient(G, quantity)
+```
+
+#### Structural (Degree)
+This is the "pure" network science metric because it ignores external metadata and looks only at the degrees ($k$) which it treats as an attribute. It calculates the Pearson correlation between the degrees ($k$) of adjacent nodes. In an assortative social network, hubs ($k=1000$) connect to other hubs ($k=800$). In a disassortative tech network, hubs connect to spokes ($k=1$). This is what the previous $k_{nn}$ formulas were exploring. It answers: "Do popular nodes hang out with other popular nodes?". This is used for if a network has a "dense core" (Assortative) or a "star-like" structure (Disassortative).
+
+```
+r = nx.degree_assortativity_coefficient(G)
+```
 
 ---
+| Approach | Attribute Type | Key Question |
+| :--- | :--- | :--- |
+| Categorical | "Labels (Gender, Race, Job)" | Do nodes pick the same group? |
+| Numerical | "Numbers (Age, Income, Height)" | Do nodes pick similar values? |
+| Degree | "Structure (ki​,kj​)" | Do hubs pick hubs? |
+---
 
-## Calcualting Assortativity
+# Calcualting Structural (Degree) Assortativity
 
 By comparing a node's own degree to the average degree of the nodes it hangs out with, we can see if "hubs connect to hubs" (assortative) or "hubs connect to spokes" (disassortative).
 
-#### 1. Average Nearest-Neighbor Degree for a specific node $i$
+There are a few steps to achieving this which grow in scope at each step: 
+1. **Local** ($k_{nn}(i)$): "Who are my neighbors?" (Answering for one node).
+2. **Aggregated** ($\langle k_{nn}(k) \rangle$): "Who do nodes of my rank usually hang out with?" (Answering for a class of nodes).
+3. **Global (Trendline/$r$)**: "Is the whole system a dense core or a star-spoke system?" (Answering for the entire network).
+
+---
+
+### 1. Average Nearest-Neighbor Degree for a specific node $i$
 
 This formula calculates the average degree of all nodes directly connected to node $i$. You are adding up the degrees of all your friends and dividing by the number of friends you have.
 
@@ -728,7 +845,9 @@ $$k_{nn}(i) = \frac{1}{k_i} \sum_{j} a_{ij}k_j$$
 * $a_{ij}$: The adjacency matrix entry. It acts as a "filter" that only includes nodes $j$ that are actually connected to $i$.
 * $k_j$: The degree of neighbor $j$.
 
-#### 2. Average Nearest-Neighbor Degree for all nodes with degree $k$
+---
+
+### 2. Average Nearest-Neighbor Degree for all nodes with degree $k$
 
 This formula aggregates the values from above to see the general trend for all nodes of a certain "rank" or degree. 
 
@@ -738,21 +857,23 @@ $$\langle k_{nn}(k) \rangle = \langle k_{nn}(i) \rangle_{i:k(i)=k}$$
 * $k_{nn}(k)$: This is the Average Nearest-Neighbor Degree for all nodes that have a degree of exactly $k$.
 * $i:k(i)=k$: This is the "filter". It says: "Only look at nodes ($i$) where their degree ($k(i)$) is equal to $k$".
 
-#### 3. How this identifies Assortativity
+---
+
+### 3. How this identifies Assortativity
 
 Scientists plot $\langle k_{nn}(k) \rangle$ against $k$ to see the relationship:
-* Assortative ($r > 0$): If the graph increases, it means high-degree nodes connect to other high-degree nodes.
-* Disassortative ($r < 0$): If the graph decreases, it means high-degree nodes (hubs) are connected to low-degree nodes (spokes).
+* **Assortative ($r > 0$):** If the graph increases, it means high-degree nodes connect to other high-degree nodes.
+* **Disassortative ($r < 0$):**  If the graph decreases, it means high-degree nodes (hubs) are connected to low-degree nodes (spokes).
 
 This part of the process is essentially looking for a trendline on a scatter plot. Once you have calculated $\langle k_{nn}(k) \rangle$ for every possible degree $k$ in your network, you plot them to see the "social behavior" of the hubs versus the spokes.
 
-Scientists use the Degree Correlation Function, which is a plot where:
-* The x-axis ($k$): Represents the degree of a node.
-* The y-axis ($\langle k_{nn}(k) \rangle$): Represents the average degree of that node's neighbors.
+Scientists use the **Degree Correlation Function**, which is a plot where:
+* **The x-axis** ($k$): Represents the degree of a node.
+* **The y-axis** ($\langle k_{nn}(k) \rangle$): Represents the average degree of that node's neighbors.
 
 ---
 
-#### Python Implementation
+### Assortivity Python Implementation
 
 ```
 import scipy.stats
@@ -767,84 +888,44 @@ r, p_value = scipy.stats.pearsonr(k, knn)
 * `list(knn_dict.values())`: These are your $\langle k_{nn}(k) \rangle$ values (the average neighbor degrees on your y-axis).
 * `scipy.stats.pearsonr(k, knn)`: This calculates the Assortativity Coefficient ($r$). It measures the strength and direction of the linear relationship between a node's degree and its neighbors' average degree.
 
----
-
-#### NetworkX Different Approaches
-
-There are different ways to measure Assortativity depending on what attribute you are using to define "similarity" between nodes. It could be on labels, numbers or the structure of the network itself. 
-
----
-
-#### Categorical Attribute Assortativity
-
-`nx.attribute_assortativity_coefficient(G, category)`
-
-This approach is used when your nodes have labels or discrete categories. It measures the probability that a node connects to another node in the same group versus a different group. If people in a social network mostly connect with others of the same gender, the coefficient will be close to 1. This is the most direct measure of Homophily (Selection). It answers: "Are people sticking to their own kind?"
-
----
-
-#### Numerical Attribute Assortativity 
-
-`nx.numeric_assortativity_coefficient(G, quantity)`
-
-This is used for continuous values or ordered numbers. It calculates the correlation between the numerical values of connected nodes. Unlike categories (where you are either "in" or "out"), this accounts for how close the numbers are. If 20-year-olds connect with 21-year-olds, the "similarity" is high. If 20-year-olds only connect with 80-year-olds, the assortativity would be negative. It answers: "Is there a linear relationship between the 'score' of one node and its neighbor?".
-
----
-
-#### Degree Assortativity 
-
-`nx.degree_assortativity_coefficient(G)`
-
-This is a structural measure that ignores external metadata and looks only at the network's links. It calculates the Pearson correlation between the degrees ($k$) of adjacent nodes. In an assortative social network, hubs ($k=1000$) connect to other hubs ($k=800$). In a disassortative tech network, hubs connect to spokes ($k=1$). This is what the previous $k_{nn}$ formulas were exploring. It answers: "Do popular nodes hang out with other popular nodes?".
-
-
----
-| Approach | Attribute Type | Key Question |
-| :--- | :--- | :--- |
-| Categorical | "Labels (Gender, Race, Job)" | Do nodes pick the same group? |
-| Numerical | "Numbers (Age, Income, Height)" | Do nodes pick similar values? |
-| Degree | "Structure (ki​,kj​)" | Do hubs pick hubs? |
----
-
+<br>
 <br>
 <br>
 
-Note, these functions give a single "summary number" ($r$) where as `nx.average_degree_connectivity(G)` gives you the raw data points needed to see the full relationship across the whole network. 
+---
 
-This function calculates the Average Nearest-Neighbor Degree for every degree $k$ found in the network. It returns a dictionary where: 
-* The Key ($k$): Is the degree of a node. 
-* The Value ($\langle k_{nn}(k) \rangle$): Is the average degree of all nodes connected to nodes of degree $k$.
+# Why Paths Matter
+Up to this point, we have focused on Local Topology: how many neighbors a node has (Degree) and whether those neighbors are similar to the node (Assortativity). However, a network's primary function is usually to transport something—information, electricity, viruses, or people.
 
-It is the direct implementation of the formula:
-
-$$\langle k_{nn}(k) \rangle = \frac{1}{N_k} \sum_{i:k_i=k} k_{nn}(i)$$
-
-The three coefficients (assort_a, assort_n, and r) give you a final verdict: "The network is assortative".
-`nx.average_degree_connectivity(G)` is used when you want to visualize the trend.
-* Coefficients: Best for a quick summary or comparison between different networks.
-* Average Degree Connectivity: Best for plotting a degree correlation function. It allows you to see if the relationship is linear or if only specific hubs behave strangely.
+To understand how a network performs this function, we must move from Local to Global measures. If Assortativity tells us who is sitting next to whom, Paths tell us how easily a message can travel from one side of the room to the other.
 
 ---
 
-## Paths: definitions
-
-**Path:** sequence of links traversed to go from a source to a target node. Directed networkds must be traversed according to their directions. There may not be a path between two nodes (directed). 
-
-**Cycle:** path where source and target node are the same. i.e. a loop. 
-
-**Simple path:** no traversing the same link more than once. This module deals only with simple paths.
-
-**Path length:** number of links in path. 
+# The "Efficiency" of a Network
+The study of paths allows us to quantify two critical real-world concepts:
+1. **Speed and Efficiency:** How many "hops" does it take for a signal to reach its destination? A network with short average paths is "efficient" (like a Small World).
+2. **Robustness and Redundancy:** If a specific path is blocked, are there alternative routes? By identifying shortest paths, we can find the "bottlenecks" or "bridges" that, if broken, would paralyze the system.
 
 ---
 
-## Shortest Path
+# Paths Definitions
+
+| Term | Definition |
+| :--- | :--- |
+| **Path:** | Sequence of links traversed to go from a source to a target node. Directed networkds must be traversed according to their directions. There may not be a path between two nodes (directed). |
+| **Cycle:** | path where source and target node are the same. i.e. a loop. |
+| **Simple path:** | no traversing the same link more than once. This module deals only with simple paths. |
+| **Path length:** | number of links in path. | 
+
+---
+
+# Shortest Path
 
 This is the minimum length path between two nodes. There may be more than one, we just want the shortest. In a weighted network, the weight may mean distances. 
 
 ---
 
-## APL and Diameter
+# APL and Diameter
 
 In network science, the longest shortest path is formally known as the Diameter of the network. While it sounds like a contradiction, the term describes the maximum distance you would ever have to travel between any two nodes using the most efficient route available. 
 
@@ -856,13 +937,17 @@ $$\ell_{\max} = \max_{i, j} \ell_{ij}$$
 
 The average path length (APL) is the average of the shortest path lengths across all pairs of nodes
 
+---
+
 **Undirected:**
 For undirected networks, you divide by the total number of possible pairs $\binom{N}{2}$.
 
 $$\langle \ell \rangle = \frac{\sum_{i,j} \ell_{ij}}{\binom{N}{2}} = \frac{2 \sum_{i,j} \ell_{ij}}{N(N-1)}$$
 
-* Numerator: The sum of all shortest path distances ($\ell_{ij}$) between every pair of nodes.
-* Denominator: $N(N-1)/2$ is the total number of unique pairs in an undirected network. We multiply the sum by 2 to account for the $1/2$ in the denominator.
+* **Numerator:** The sum of all shortest path distances ($\ell_{ij}$) between every pair of nodes.
+* **Denominator:** $N(N-1)/2$ is the total number of unique pairs in an undirected network. We multiply the sum by 2 to account for the $1/2$ in the denominator.
+
+---
 
 **Directed:** 
 For directed networks, the direction of the link matters, so you divide by the total number of ordered pairs.
@@ -873,13 +958,16 @@ $N(N-1)$: This represents the total number of directed pairs (where $A \to B$ is
 
 ---
 
-## Undefined Path
+# Undefined Path
 
-The biggest issue here is if there is an undefined path. Netx will highlight this as a dissconected network, this risks excluding all connected elements. The solution is to do the harmonic mean.
+The biggest issue here is if there is an **undefined path**. `Netx` will highlight this as a **disconnected network**, this risks excluding all connected elements. The solution is to do the **harmonic mean**.
 
+---
+
+### Harmonic mean of path lengths
 In standard arithmetic average formulas, like the ones in your other slides, an "undefined" path (where nodes $i$ and $j$ are not connected) is treated as having a distance of infinity ($\infty$). If you try to sum infinity into an average, the entire result becomes infinity, which doesn't tell you anything useful about the network's structure.
 
-The formula you’ve shared (the harmonic mean of path lengths) is the key to calculating distances in networks that are disconnected.
+The harmonic mean of path lengths is the key to calculating distances in networks that are disconnected.
 
 $$\langle \ell \rangle = \left( \frac{\sum_{i,j} \frac{1}{\ell_{ij}}}{\binom{N}{2}} \right)^{-1}$$
 
@@ -889,14 +977,29 @@ $$\langle \ell \rangle = \left( \frac{\sum_{i,j} \frac{1}{\ell_{ij}}}{\binom{N}{
 * $\sum_{i,j}$: The sum over all pairs of nodes $i$ and $j$.$\binom{N}{2}$: The total number of possible pairs in the network.
 * $(\dots)^{-1}$: After averaging the reciprocals, you flip the fraction back to return the result to the scale of "steps" or "links".
 
-In this formula, you are not summing the distances ($\ell_{ij}$) directly. Instead, you are summing their reciprocals: $\frac{1}{\ell_{ij}}$. If a path is defined: A distance of 2 becomes $1/2$, a distance of 10 becomes $1/10$, etc. If a path is undefined: The distance is $\infty$. The reciprocal of infinity is zero ($\frac{1}{\infty} = 0$). Because undefined paths turn into zeros in this calculation, they simply drop out of the summation without "breaking" the math. The formula effectively counts the pairs that are connected and ignores the ones that aren't. The resulting $\langle \ell \rangle$ gives you a finite, meaningful number that represents the "efficiency" of communication across the reachable parts of the network.
+---
 
-Note, that this formula allows us to do calculation on networks which are not complete, i.e. there isn't a connection between every node. But it also allows for use to calculate when there is an entire break in a network, where it may be broken down into seperate components but we consider it to be the "same" network. 
+In this formula, you are not summing the distances ($\ell_{ij}$) directly. Instead, you are summing their reciprocals: $\frac{1}{\ell_{ij}}$. 
+* If a path is defined a distance of 2 becomes $1/2$, a distance of 10 becomes $1/10$, etc. 
+* If a path is undefined the distance is $\infty$. The reciprocal of infinity is zero ($\frac{1}{\infty} = 0$). 
+
+Because undefined paths turn into zeros in this calculation, they simply drop out of the summation without "breaking" the math. 
+
+The formula effectively counts the pairs that are connected and ignores the ones that aren't. The resulting $\langle \ell \rangle$ gives you a finite, meaningful number that represents the "efficiency" of communication across the reachable parts of the network.
+
+---
+
+### Calculating Disconnected Networks
+
+This formula allows us to do calculation on networks which are not complete, i.e. there isn't a connection between every node. But it also allows for use to calculate when there is an entire break in a network, where it may be broken down into seperate components but we consider it to be the "same" network. 
 
 We use this formula when the network is disconnected (composed of two or more separate "islands" of nodes). It treats the "infinite" distance between these islands as zero in the summation, allowing us to measure the efficiency of the parts that are reachable.
 
-Note, that another route to handling undefined, or disconnected sub-nets, is to just measure the APL and Diameter of the largest component. However, this is a topic for later so we don't loook at it here. 
+Note, that another route to handling undefined, or disconnected sub-nets, is to just measure the APL and Diameter of the largest component. However, this is a topic for later so we don't look at it here. 
 
+---
+
+# Path Related Functions in NetworkX
 
 Below are various path related functions in NetworkX:
 
@@ -924,15 +1027,16 @@ nx.shortest_path_length(W, 'a', 'b', 'weight')
 
 ---
 
-## Connectedness and Components
+# Connectedness and Components
+A network is connected if there is a path between any two nodes. These don't need to be 1 step apart, there just needs to be an availble route through the network. If a network is not connected, it is disconnected but will have mutliple components which are connected. 
 
-A network is connected with there is a path between any two nodes. These don't need to be 1 step apart, there just needs to be an availble route through the network. If a network is not connected it is disconnected but will have mutliple components which are connected. 
+A **connected component** is a **connected subnetwork**. The largest one is called **giant component**, it often includes a substantial portion of the network. A **singleton** is the smallest-possible connected component. 
 
-A connected component is a connected subnetwork. The largest one is called giant component, it often includes a substantial portion of the network. A singleton is the smallest-possible connected component. 
+### Strong vs Weakly Connected Components
 
-A directed network can be strongly connected or weakly connected if there is a path between any two nodes, respecting or disregarding the link directions, respectively. 
-* Strongly Connected: You must follow the arrows. To get from node $A$ to node $B$, there must be a sequence of directed links ($A \to \dots \to B$). To be a strongly connected network, every node must be able to reach every other node while respecting these one-way streets. For two nodes to be strongly connected, you need a path that goes $i \to j$ and a path that comes back $j \to i$. In the simplest possible loop involving three nodes, this forms a directed triangle (a 3-cycle).
-* Weakly Connected: You are allowed to "disregard" the direction of the arrows. This means you treat the directed links as if they were simple, undirected edges. If you can get from $A$ to $B$ by traveling "the wrong way" down a one-way street, the nodes are weakly connected.
+A directed network can be **strongly** connected or **weakly** connected if there is a path between any two nodes, **respecting or disregarding** the link directions, respectively. 
+* **Strongly Connected:** You must **follow the arrows**. To get from node $A$ to node $B$, there must be a sequence of directed links ($A \to \dots \to B$). To be a strongly connected network, every node must be able to reach every other node while respecting these one-way streets. For two nodes to be strongly connected, you need a path that goes $i \to j$ and a path that comes back $j \to i$. In the simplest possible loop involving three nodes, this forms a directed triangle (a 3-cycle).
+* **Weakly Connected**: You are allowed to **"disregard"** the direction of the arrows. This means you treat the directed links as if they were simple, undirected edges. If you can get from $A$ to $B$ by traveling **"the wrong way"** down a one-way street, the nodes are weakly connected.
 
 If a directed network is not strongly connected, many node pairs will have a shortest path $\ell_{ij} = \infty$ because you simply can't "get there from here" following the arrows. This is why we measure Diameter or APL using the harmonic mean or Largest Connected Component. It's very common for directed networks (like the Web or Twitter) to have many nodes that are weakly connected but cannot reach each other "strongly".
 
@@ -944,31 +1048,34 @@ A strongly connected network represents a "feedback" loop. No matter where you a
 
 ---
 
-## In/Out Components
+# In/Out Components
+The **in-component** of a strongly connected component $S$ is the set of nodes from which one can reach $S$, but that cannot be reached from $S$
 
-The in-component of a strongly connected component $S$ is the set of nodes from
-which one can reach $S$, but that cannot be reached from $S$
+The **out-component** of a strongly connected component $S$ is the set of nodes that can be reached from $S$, but from which one cannot reach $S$
 
-The out-component of a strongly connected component $S$ is the set of nodes that can be reached from $S$, but from which one cannot reach $S$
-
-A Strongly Connected Component (SCC) covers both of these, i.e. you can get to and from a node. Disconnected nodes have no path to or from the SCC at all.
+A **Strongly Connected Component (SCC)** covers both of these, i.e. you can get to and from a node. Disconnected nodes have no path to or from the SCC at all.
 
 ---
 
-## Trees
-
+# Trees
 * A tree is a connected network without cycles
 * A tree is a connected network with N -1 links
 * In a tree there is a single path between any two nodes
-* Trees are hierarchical: you can pick a node as the root . Each node is connected to a parent node (toward the root) and to one or more children nodes (away from the root).  The root has no parent. The leaves have no children
+* Trees are hierarchicalm you can pick a node as the root. 
+* Each node is connected to a parent node (toward the root) and to one or more children nodes (away from the root).  
+* The root has no parent. 
+* The leaves have no children
 
 ---
 
 # Finding Shortest Paths
+Whether you are calculating the **Average Path Length** ($\langle \ell \rangle$), the **Diameter** ($\ell_{\max}$), or checking for **Strong/Weak Connectivity**, you need a way to actually find those shortest paths.
 
-Whether you are calculating the Average Path Length ($\langle \ell \rangle$), the Diameter ($\ell_{\max}$), or checking for Strong/Weak Connectivity, you need a way to actually find those shortest paths.
+The main algorithm used to find shortest paths is called **breadth-first search**. It looks like a tree in structure but it is not as it has cycles.
 
-The main algorithm used to find shortest paths is called breadth-first search. It looks like a tree in structure but it is not as it has cycles.
+---
+
+# Breadth-First Search
 
 Think of BFS like dropping a stone into a still pond. The stone hits a single node. The "ripples" expand outward one layer at a time. You must visit every node at distance 1 before you are allowed to look at anyone at distance 2. Because you explore layer-by-layer, the first time you encounter a node, you are guaranteed to have found the absolute shortest path to it. 
 
@@ -976,15 +1083,15 @@ You can start from any node and treat it as the root. This allows you to form th
 
 In BFS, Layer 1 contains every node exactly 1 step away. Layer 2 contains every node exactly 2 steps away.
 
-BFS is efficient at finding the shortest path because it never has to "re-visit" a node to see if there's a better route. Once a node is labeled with a distance, that is guaranteed to be its minimum. The "slowness" ($O(N^2)$) comes only from the fact that you have to repeat this entire process for every single node to get the full network APL.
+BFS is efficient at finding the shortest path because it never has to "re-visit" a node to see if there's a better route. Once a node is labeled with a distance, that is guaranteed to be its minimum. The "slowness" ($O(N^2)$) comes only from the fact that you have to **repeat this entire process for every single node** to get the **full network APL**.
 
-It feels like brute force because, in a way, it is! You are systematically checking every neighbor. However, BFS is considered "efficient" compared to a true random brute force because it never explores the same path twice and never looks deeper than it needs to. BFS keeps a list of nodes it has already visited. If another route tries to go to that same node later, the algorithm says, "Stop, I've already been here via a shorter or equal path". This prevents the algorithm from going in circles or re-calculating the same distances over and over.
+It feels like **brute force** because, in a way, it is! You are systematically **checking every neighbor**. However, BFS is considered **"efficient"** compared to a **true random brute force** because it never explores the same path twice and never looks deeper than it needs to. BFS keeps a **list of nodes** it has already visited. This prevents the algorithm from going in circles or re-calculating the same distances over and over.
 
 To find the Average Path Length, you have to run this BFS "ripple" starting from every single node in the network. If there are $N$ nodes, you run BFS $N$ times. That is where the $O(N^2)$ (or more accurately $O(N(N+L))$) comes from.
 
 The Cost of a Single BFS is $O(N+L)$. You start from a node, and traverse every link it has to find the nodes one step away. Then from each new node, you traverse every link it has. There is a lookup table of recorded nodes so if a link heads back to a node, you don't go there, i.e. the next step you are just at new nodes. You repeat the searching steps again. At the final step, you have exhausted all nodes and links. You have visted every node once and traversed every link once, hence, $O(N+L)$. 
 
-However, a single BFS only tells you the distance from one specific node to everyone else. To calculate metrics like the Average Path Length ($\langle \ell \rangle$) or the Diameter ($\ell_{\max}$), you need the distance between every possible pair of nodes. Therefore, you have to repeat the algo for every node in the network ($N$ times). Resulting in $O(N(N+L))$.
+However, a **single BFS** only tells you the distance from one specific node to everyone else. To calculate metrics like the **Average Path Length** ($\langle \ell \rangle$) or the **Diameter** ($\ell_{\max}$), you need the distance between every possible pair of nodes. Therefore, you have to repeat the algo for every node in the network ($N$ times). Resulting in $O(N(N+L))$.
 
 If the network is sparse (like a Tree where $L \approx N$), this looks like $O(N \times 2N)$, which simplifies to $O(N^2)$. If the network is dense (where $L \approx N^2$), this can climb toward $O(N^3)$.
 
@@ -999,112 +1106,111 @@ Recall, that the max links a network can have is:
 | Directed | $N(N−1)$ | $≈N^2$ | 
 ---
 
----
-
-## Breadth-First Search
-
-Every node starts with a distance of $l = -1$. This is a "flag" that tells the algorithm, "I haven't visited this node yet". The source node is manually set to $l = 0$. When you find a neighbor $j$ from node $i$, you set its distance to $l(j) = l(i) + 1$. This ensures you are always building the path one step at a time. 
-
-The FIFO (First-In, First-Out) Queue (The Frontier) is the mechanical "brain" of the BFS. The first node added is the first one processed. This queue holds the "frontier" of the search. By always removing the next node in the queue, the algorithm is forced to finish everyone at distance 1 before it can even start looking at anyone at distance 2. The algorithm stops only when this queue is empty, meaning every reachable node has been processed. 
-
-As the BFS runs, it doesn't just find numbers; it builds a directed shortest-path tree. Initially, this tree has all nodes but no links. Every time a new node $j$ is discovered from node $i$, a directed link ($i \to j$) is added to this tree. This tree is the "proof" of the shortest route. If you want to know how to get from the source to node 10 in the shortest way, you just follow the arrows in this tree. 
-
-The algo has a check: "For each neighbour/successor $j$ of $i$ with $l(j) = -1$". In ensures, that only non-visited nodes are considered. 
-
----
-
-## Small Worlds
-
+# Small Worlds
 What have we learned so far:
-* Social networks tend to have very short paths
-* Six degrees of separation: the idea that any two people are at most six steps away from each other in the social network
+* Social networks tend to have **very short paths**
+* **Six degrees of separation:** the idea that any two people are at most six steps away from each other in the social network
 
 ---
 
-## Milgrams Experiment
-
-[J. Travers & S. Milgram, An Experimental Study of the Small World Problem](https://www.jstor.org/stable/2786545?origin=crossref)
-
+# Milgrams Experiment
 Stanley Milgram’s 1967 experiment, often called the "Small World" study, is the foundational research behind the "six degrees of separation" concept. It aimed to measure how connected people are within a large social network.
 
-The Setup
-* The Goal: Participants in the Midwestern U.S. (Omaha, Nebraska, and Wichita, Kansas) were asked to send a folder to a specific "target" person: a stockbroker in Boston.
-* The Rule: Participants could only send the folder to someone they knew personally (on a first-name basis) who they thought might be "closer" to the target.
-* The Chain: Each person who received the folder would repeat the process until it eventually reached the stockbroker in Boston.
+#### The Setup:
+* **The Goal:** Participants in the Midwestern U.S. (Omaha, Nebraska, and Wichita, Kansas) were asked to send a folder to a specific "target" person: a stockbroker in Boston.
+* **The Rule:** Participants could only send the folder to someone they knew personally (on a first-name basis) who they thought might be "closer" to the target.
+* **The Chain:** Each person who received the folder would repeat the process until it eventually reached the stockbroker in Boston.
 
-The Results
-* Success Rate: Only about 20% of the chains actually reached the target.
-* Path Length: For the chains that did succeed, the average number of intermediate "handshakes" was approximately six.
-* The Outcome: This led to the famous phrase "Six Degrees of Separation," suggesting that any two people on Earth can be connected through a short chain of acquaintances.
+#### The Results:
+* **Success Rate:** Only about 20% of the chains actually reached the target.
+* **Path Length:** For the chains that did succeed, the average number of intermediate "handshakes" was approximately six.
+* **The Outcome:** This led to the famous phrase **"Six Degrees of Separation,"** suggesting that any two people on Earth can be connected through a short chain of acquaintances.
 
-Milgram’s experiment discovered a fundamental property of social networks: they have a very small Average Path Length ($\langle \ell \rangle$) despite having millions of nodes.
+Milgram’s experiment discovered a fundamental property of social networks: they have a **very small Average Path Length** ($\langle \ell \rangle$) despite having millions of nodes.
 
+**Small World Property:** This is defined as a network where the average distance $\langle \ell \rangle$ between nodes **grows very slowly (logarithmically)** as the number of nodes $N$ increases.
 
-Small World Property: This is defined as a network where the average distance $\langle \ell \rangle$ between nodes grows very slowly (logarithmically) as the number of nodes $N$ increases.
-
-The "Six Degrees" Paradox: Even though most people only know a tiny fraction of the world's population, the existence of "hubs" or long-range acquaintances (people who know people in different cities/social circles) keeps the overall diameter of the network remarkably small.
+**The "Six Degrees" Paradox:** Even though most people only know a tiny fraction of the world's population, the existence of **"hubs"** or long-range acquaintances (people who know people in different cities/social circles) keeps the overall **diameter** of the network remarkably small.
 
 ---
 
-## Short Paths
+# Short Paths
+What do we mean by **“short paths”?** When can we call a path “short”? **depends on the network**
 
-What do we mean by “short paths”? When can we call a path “short”? **depends on the network**
+We need to observe the relationship between **Average Path Length (APL)** and **Network Size**.
 
-We need to observe the relationship between Average Path Length (APL) and Network Size.
-
-We say that the average path length is short when it grows very slowly with the size of the network, say, logarithmically:
+We say that the **average path length** is short when it grows very slowly with the size of the network, say, **logarithmically**:
 
 $$\langle \ell \rangle \sim \log N$$
 
+This relationship (the **small world propery**) is the mathematical heart of Milgram's experiment and the "Six Degrees of Separation." It means that as a network grows larger (as $N$ increases), the average distance between nodes ($\langle \ell \rangle$) increases incredibly **slowly** — specifically, **logarithmically**.
 
-This relationship (the small world propert) is the mathematical heart of Milgram's experiment and the "Six Degrees of Separation." It means that as a network grows larger (as $N$ increases), the average distance between nodes ($\langle \ell \rangle$) increases incredibly slowly—specifically, logarithmically.
+It acts as both a **definition** and a **benchmark** (check). In network science, we use this specific scaling behavior to distinguish **"Small World"** networks from other structures like **grids** or **lattices**. 
 
-It acts as both a definition and a benchmark (check). In network science, we use this specific scaling behavior to distinguish "Small World" networks from other structures like grids or lattices. The formula $\langle \ell \rangle \sim \log N$ is the formal requirement for a network to be considered "Small World". If you increase the number of nodes $N$ by a factor of 10, and the average path length $\langle \ell \rangle$ only increases by a small constant amount, the network satisfies the Small World property.
-* Lattice/Grid: $\langle \ell \rangle \sim N^{1/d}$ (where $d$ is dimension). This grows much faster than $\log N$.
-* Small World: $\langle \ell \rangle \sim \log N$. This grows much slower.
+The formula $\langle \ell \rangle \sim \log N$ is the formal requirement for a network to be considered "Small World". If you increase the number of nodes $N$ by a factor of 10, and the average path length $\langle \ell \rangle$ only increases by a small constant amount, the network **satisfies the Small World property**.
+
+---
+| Type | Formula | Explanation | 
+| :--- | :--- | :--- | 
+| **Lattice/Grid:** | $\langle \ell \rangle \sim N^{1/d}$  |  This grows much faster than $\log N$ (where $d$ is dimension).  |
+| **Small World:** | $\langle \ell \rangle \sim \log N$ | This grows much slower. |
+
+Many other types of networks are small worlds, too. Air transportation networks, the Internet, the Web, and Wikipedia, all have short paths. Most real-world networks are small worlds. >
+
+> #### The Significance of Logarithmic Scaling
+> When you say $\langle \ell \rangle \sim \log N$, remember how powerful that is.
+> * If $N = 10^3$, $\log_{10} N = 3$
+> * If $N = 10^6$, $\log_{10} N = 6$
+> 
+> Doubling the "distance" allows the network to hold 1,000 times more nodes. This is exactly why Facebook ($N \approx 10^9$) can have an average path length of only ~4.7.
 
 ---
 
-## Small Worlds
-
-Many other types of networks are small worlds, too. Air transportation networks, the Internet, the Web, and Wikipedia, all have short paths. Most real-world networks are small worlds. 
-
----
-
-## Friend of a Friend
-
+# Friend of a Friend
 Another feature of social (and some other) networks is the presence of triangles: if Alice and Bob are both friends with Charlie, they are also likely friends of each other. In other words, many friends of my friends are also my friends. In directed networks, we can consider only certain types of directed triangles, like shortcuts (in a follower-network). This is known as transitivity, there may be a triangle, but all 3 arent actually connected. 
 
-## Clustering Coefficent
+---
 
-We can measure the number of triangles that a node actually has relative to how many it could have. The clustering coefficient of a node is the fraction of pairs of the node’s neighbours that are connected to each other:
+# Clustering Coefficent of 1 Node
+We can measure the number of triangles that a node actually has relative to how many it could have. The **clustering coefficient of a node** is the fraction of pairs of the node’s neighbours that are connected to each other:
 
 $$C(i) = \frac{\tau(i)}{\tau_{max}(i)} = \frac{\tau(i)}{\binom{k_i}{2}} = \frac{2\tau(i)}{k_i(k_i - 1)}$$
 
-* $C(i)$: The clustering coefficient of node $i$. This measures how close node $i$'s neighbors are to being a complete graph (a "clique").
-* $\tau(i)$: The actual number of links existing between the neighbors of node $i$ (forming triangles).
-* $\tau_{max}(i)$: The maximum possible number of links that could exist between those neighbors.
-* $k_i$: The degree of node $i$ (how many neighbors it has).
-* $\binom{k_i}{2}$: The mathematical combination representing the total possible pairs of neighbors.
+---
+| Element | Explanation |
+| :--- | :--- |
+| $C(i)$:  | The clustering coefficient of node $i$. This measures how close node $i$'s neighbors are to being a complete graph (a "clique").  |
+| $\tau(i)$: | The actual number of links existing between the neighbors of node $i$ (forming triangles).  |
+| $\tau_{max}(i)$: | The maximum possible number of links that could exist between those neighbors.  |
+| $k_i$:  | The degree of node $i$ (how many neighbors it has). |
+| $\binom{k_i}{2}$: | The mathematical combination representing the total possible pairs of neighbors. |
+---
 
-If there are 8 neighbours, each neighbour can connect to 7 (excluding itself) and that is true for all 8 neighbours, hence, the $\tau_{max}(i)$ is $k_i(k_i - 1)$.
+> If there are 8 neighbours, each neighbour can connect to 7 (excluding itself) and that is true for all 8 neighbours, hence, the $\tau_{max}(i)$ is $k_i(k_i - 1)$.
 
-This too if a check for Small World-ness and works alongside the other one ($\langle \ell \rangle \sim \log N$):
-* Small distances: $\langle \ell \rangle \sim \log N$ (as we discussed).
-* High clustering: A high average $C(i)$ across the network.
+This too if a check for **Small World-ness** and works alongside the other one ($\langle \ell \rangle \sim \log N$):
+* **Small distances:** $\langle \ell \rangle \sim \log N$ (as we discussed).
+* **High clustering:** A high average $C(i)$ across the network.
 
 While the $\log N$ formula checks if people are "close" in terms of steps, this $C(i)$ formula checks if your friends also know each other. In real social networks, clustering is usually much higher than in a purely random network.
 
-## Network Clustering Coefficent 
+---
 
-The above formula was the clustering coefficient of 1 node. To work out the coefficient for the network we look at the average clusteirng coefficient of the nodes: 
+# Clustering Coefficent of the Network
+The above formula was the clustering coefficient of **1 node**. To work out the coefficient for the network we look at the average clustering coefficient of the nodes: 
 
 $$C = \frac{\sum_{i:k_i > 1} C(i)}{N_{k > 1}}$$
 
-* $C$: The overall average clustering coefficient for the network.
-* $C(i)$: The local clustering coefficient for an individual node $i$.
-* $\sum_{i:k_i > 1}$: This instructs you to sum the local clustering coefficients only for nodes that have a degree ($k_i$) greater than 1.
-* $N_{k > 1}$: This represents the total count of nodes in the network that have a degree greater than 1.
+---
+| Element | Explanation |
+| :--- | :--- |
+| $C$ | The overall average clustering coefficient for the network. |
+| $C(i)$ | The local clustering coefficient for an individual node $i$. |
+| $\sum_{i:k_i > 1}$ | This instructs you to sum the local clustering coefficients only for nodes that have a degree ($k_i$) greater than 1. |
+| $N_{k > 1}$ | This represents the total count of nodes in the network that have a degree greater than 1. |
+---
+
+# NetworkX Clusting Functions
 
 Here are the valid NetworkX functions:
 
@@ -1118,23 +1224,22 @@ nx.clustering(G) # dict node -> clustering coefficient
 nx.average_clustering(G) # network's clustering coefficient
 ```
 
-## Alternative Clustering: Triplets
+---
+
+# Alternative Clustering: Triplets
 
 An alternative option is the look at the triplets:
 
 $$C = \frac{closed}{triplets}$$
 
-where a triplet consists of three nodes where at least two edges exist (i.e., a wedge or a
-triangle). A closed triplet is a triplet where all three nodes are connected (i.e., a triangle).
+where a triplet consists of three nodes where at least two edges exist (i.e., a wedge or a triangle). A closed triplet is a triplet where all three nodes are connected (i.e., a triangle).
 
-This provides an intuitive measure of transitivity, i.e., how often a friend of a friend is also
-a direct friend
+This provides an intuitive measure of transitivity, i.e., how often a friend of a friend is also a direct friend
 
 ```
 nx.average_clustering(G) # network's average clustering coefficient
 
 nx.transitivity(G) # network's global clustering coefficient
-
 ```
 
 ---
@@ -1147,36 +1252,61 @@ nx.transitivity(G) # network's global clustering coefficient
 
 # Week 4 - Hubs
 
-[Lecture Video](), Book Chapter: 3
-
----
-This lecture explains the structural properties of complex networks, focusing on how centrality measures like degree, closeness, and betweenness identify significant nodes known as hubs. Real-world networks are described as heterogeneous, meaning they possess a heavy-tailed degree distribution where a few massive hubs coexist with many low-connection nodes. This unique architecture is often the result of preferential attachment, creating a "rich-get-richer" effect that makes the system robust against random failures but highly vulnerable to targeted attacks. Mathematical tools such as log-log plots and the heterogeneity parameter help researchers visualize these patterns and understand why certain networks lack a characteristic scale. Finally, the text introduces core decomposition as a recursive method for pruning peripheral nodes to reveal a network's dense, stable backbone.
+[Lecture Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=31c20411-0c24-4d60-a278-b3f600b5134e)
 
 ---
 
-Learning Outcomes:
-* Talk about hubs and notion of centrality
-* How to look at resilience in networks
-* Start with network models (later week but it is a big topic)
+Week 4 marks a shift from the "Global Shape" of the network to the "Power and Inequality" that exists within its structure. The lecture begins by defining Centrality, moving beyond simple link counting to identify the diverse ways a node can be "important." We explored three primary metrics: **Degree Centrality** (the local heavyweights), **Closeness Centrality** (the optimal **broadcasters** who can reach everyone quickly), and **Betweenness Centrality** (the structural **bottlenecks** that control the flow of traffic). By comparing these, we learned that a node doesn't need a high degree to be powerful; a single "bridge" node with a low degree can hold a massive amount of betweenness if it is the only connection between two large communities.
+
+---
+
+The core mathematical focus of the week is the **Degree Distribution** and the emergence of the **Heavy Tail**. You transitioned from looking at individual nodes to a statistical view of the entire system, using **Log-Log plots** to identify **Scale-Free** networks. Unlike "Normal" systems (like human height) that have a **characteristic average**, real-world networks follow a **Power Law** ($P(k) \sim k^{-\gamma}$), where **a few massive hubs** coexist with a vast majority of low-degree nodes. This structural diversity is quantified by the **Heterogeneity Parameter** ($\kappa$). When $\kappa$ is high, the network lacks a typical scale, leading to the **"Ultra-Small World"** property—where hubs act as super-highways that shrink the distance between any two points to a **handful of hops**.
+
+---
+
+Finally, the lecture examines the **Robustness** and **Resilience** of these scale-free architectures. You learned that these systems are **"Robust-yet-Fragile"**: they are nearly indestructible against **random failures** because a random error is **unlikely to hit a hub**, but they are exceptionally vulnerable to **Targeted Attacks**. Removing just the top 1% of hubs can cause the entire network to shatter. To find the most stable part of this structure, you explored **Core Decomposition**. This recursive "peeling" process prunes away peripheral nodes to reveal the **$k$-core** — the **dense, interconnected backbone** that represents the most **resilient** and **influential** center of the network.
+
+---
+
+#### Learning Outcomes:
+* Centrality measures
+* Centrality distributions
+* The friendship paradox
+* Ultra-small worlds
+* Robustness
+* Core decomposition
 
 ---
 
 #### Lecture 4: Contents 
 
 * [Real World Networks are Hetrogeneous](#real-world-networks-are-hetrogeneous)
+---
 * [Centrality Measures](#centrality-measures)
-* [Degree Centrality](#degree-centrality)
-* [Limitations:](#limitations)
-* [Closeness Centrality](#closeness-centrality)
-* [Python Implementation]()
-* [Key Intuition]()
-* [Betweenness Centrality](#betweenness-centrality)
-* [Python Implementation]()
+---
+* [Measure 1: Degree Centrality](#measure-1-degree-centrality)
+    * [Degree Centrality in Undirected Networks](#degree-centrality-in-directed-networks)
+    * [Degree Centrality in Directed Networks](#degree-centrality-in-undirected-networks)
+    * [Using NetworkX to Derive Average Degree](#using-networkx-to-derive-average-degree)
+    * [Limitations of Degree Centrality:](#limitations)
+---
+* [Measure 2: Closeness Centrality](#measure-2-closeness-centrality)
+    * [The Concept: The Optimal Broadcaster](#the-concept-the-optimal-broadcaster)
+    * [Closeness Python Implementation](#closeness-python-implementation)
+    * [Closeness Key Intuition](#closeness-key-intuition)
+---
+* [Measure 3: Betweenness Centrality](#measure-3-betweenness-centrality)
+    * [Betweeness as a Middleman Metric](#betweeness-as-a-middleman-metric)
+    * [Betweeness Key Observations:](#betweeness-key-observations)
+    * [Betweeness Python Implementation](#betweeness-python-implementation)
+---
 * [Centrality Summary Metrics](#centrality-summary-metrics)
+---
 * [Centrality Distrubtion](#centrality-distrubtion)
 * [From Histograms to Probability Distributions](#from-histograms-to-probability-distributions)
 * [Discrete vs. Continuous Metrics](#discrete-vs-continuous-metrics)
 * [Log-Log Scale ](#log-log-scale)
+* [Summary of Log Scale Advantages](#summary-of-log-scale-advantages)
 * [Degree Distributions and the Heavy Tail](#degree-distributions-and-the-heavy-tail)
 * [Measuring Heterogeneity ($\kappa$)](#measuring-heterogeneity-)
 * [The Origin: Preferential Attachment](#the-origin-preferential-attachment)
@@ -1184,51 +1314,61 @@ Learning Outcomes:
 * [What is a "Scale-Free" Network?](#what-is-a-scale-free-network)
 * [Betweenness Distribution](#betweenness-distribution)
 * [Why This Matters for Bottlenecks](#why-this-matters-for-bottlenecks)
+---
 * [The Friendship Paradox](#the-friendship-paradox)
 * [Ultra-Small World](#ultra-small-world)
 * [Robustness and Resilience](#robustness-and-resilience)
+---
 * [Core Decompostion](#core-decompostion)
-* [The Concept: Finding the Indestructible Core](#the-concept-finding-the-indestructible-core)
+* [Finding the Indestructible Core](#finding-the-indestructible-core)
 * [The Algorithm: $k$-shell Decomposition](#the-algorithm--shell-decomposition)
 * [Why Recursive Pruning is Necessary](#why-recursive-pruning-is-necessary)
 * [Visualizing the Result](#visualizing-the-result)
+* [Decomposition Python Implementation](#decomposition-python-implementation)
+---
 * [Week 4 Summary](#week-4-summary)
 
+---
+
+# Real World Networks are Hetrogeneous
+
+Real-world networks are fundamentally **heterogeneous**, meaning node and link **importance is highly unequal** rather than uniform. This structural diversity is defined by a **long-tail distribution**, where the vast majority of nodes have few connections while a small number of **"hubs"** act as massive **super-connectors**.
 
 ---
 
-Moving from general concepts to technical details, this lecture focuses on the identification and impact of hubs—the highly connected nodes that define a network's structure and function. We begin by exploring centrality measures, which provide various domain-dependent metrics to quantify a node's "importance" based on its position in the network topology. Because manual node-level analysis is impossible in large-scale systems, we shift toward a statistical perspective, using degree distributions and histograms to understand the global picture. This statistical lens allows us to revisit the friendship paradox and explain the ultra-small world property, where a surprisingly small number of hops can connect any two nodes due to the presence of hubs. Finally, we examine the dual nature of these super-connectors: while they provide efficiency and robustness against random failures, they also represent critical vulnerabilities under targeted attack. We conclude with core decomposition, a recursive method used to strip away peripheral nodes and reveal the dense, stable backbone of a network.
+# Centrality Measures
+
+**Centrality** is a numerical measure used to quantify the **importance** of a node within a network. While there are **over 100** different metrics available — including specialized options for multilayer and temporal networks — no single measure can capture every dimension of importance.
+
+The primary goal is to understand the mechanics behind the **three core types** to determine which best fits your specific system:
+* **Degree Centrality:** Identifies local "heavyweights" by simply counting links.
+* **Closeness Centrality:** Measures how fast a node can broadcast information based on its average distance to others.
+* **Betweenness Centrality:** Pinpoints structural "bottlenecks" by tracking how often a node sits on the shortest paths between others.
 
 ---
 
-## Real World Networks are Hetrogeneous
-
-Real-world networks are fundamentally heterogeneous, meaning node and link importance is highly unequal rather than uniform. This structural diversity is defined by a long-tail distribution, where the vast majority of nodes have few connections while a small number of "hubs" act as massive super-connectors.
-
----
-
-## Centrality Measures
-
-Centrality is a numerical measure used to quantify the importance or "centrality" of a node within a network. While there are over 100 different metrics available—including specialized options for multilayer and temporal networks—no single measure can capture every dimension of importance.
-
-The primary goal is to understand the mechanics behind the three core types to determine which best fits your specific system:
-* Degree Centrality: Identifies local "heavyweights" by simply counting links.
-* Closeness Centrality: Measures how fast a node can broadcast information based on its average distance to others.
-* Betweenness Centrality: Pinpoints structural "bottlenecks" by tracking how often a node sits on the shortest paths between others.
+# Measure 1: Degree Centrality
+Degree centrality is the most fundamental measure of importance, identifying the **local "heavyweights"** of a network by simply **counting** their connections. In an undirected network, the degree $k_i$ of node $i$ is defined as the number of its neighbors. Nodes with an exceptionally high degree **relative** to the rest of the network are referred to as **hubs**.
 
 ---
 
-## Degree Centrality
+### Degree Centrality in Undirected Networks
 
-Degree centrality is the most fundamental measure of importance, identifying the local "heavyweights" of a network by simply counting their connections. In an undirected network, the degree $k_i$ of node $i$ is defined as the number of its neighbors. Nodes with an exceptionally high degree relative to the rest of the network are referred to as hubs.
-
-The average degree $\langle k \rangle$ of an undirected network is calculated by summing the degrees of all nodes and dividing by the total number of nodes $N$. Because each link $L$ is connected to two nodes, the sum of all degrees is exactly $2L$.
+The average degree $\langle k \rangle$ of an **undirected network** is calculated by summing the degrees of all nodes and dividing by the total number of nodes $N$. Because each link $L$ is connected to two nodes, the sum of all degrees is exactly $2L$.
 
 $$\langle k \rangle = \frac{1}{N} \sum_{i=1}^{N} k_i = \frac{2L}{N}$$
 
-This formula applies specifically to undirected networks. In directed networks, we must distinguish between in-degree (incoming links) and out-degree (outgoing links), as their roles in centrality (e.g., prestige vs. influence) differ significantly.
+---
 
-Using NetworkX, you can easily compute the degree of every node or find the average degree of the system:
+### Degree Centrality in Directed Networks
+
+In **directed networks**, we must distinguish between in-degree (incoming links) and out-degree (outgoing links), as their roles in centrality (e.g., prestige vs. influence) differ significantly.
+
+---
+
+### Using NetworkX to Derive Average Degree
+
+Using `NetworkX`, you can easily compute the degree of every node or find the average degree of the system:
 
 ```
 import networkx as nx
@@ -1238,67 +1378,91 @@ degree_dict = dict(G.degree())
 
 # Calculate average degree
 avg_degree = sum(dict(G.degree()).values()) / G.number_of_nodes()
+
+G.degree(2) # returns the degree of node 21
+G.degree() # dict with the degree of all nodes of G
 ```
-
-#### Limitations:
-
-The primary drawback of degree centrality is its local focus; it treats all links as equal ($+1$) and fails to account for the wider geometry of the network or the "quality" of the connections.
 
 ---
 
-## Closeness Centrality
+### Limitations of Degree Centrality:
+
+The primary drawback of degree centrality is its **local focus**; it **treats all links as equal** ($+1$) and fails to account for the wider geometry of the network or the **"quality"** of the connections.
+
+---
+
+# Measure 2: Closeness Centrality
 
 Closeness centrality moves beyond local counts to consider the wider geometry of the network. It is based on the idea that a node is more central if it is, on average, "closer" to all other nodes in the network.
 
-#### The Concept: The Optimal Broadcaster
+### The Concept: The Optimal Broadcaster
 
 This metric measures the efficiency of information spread. If a node has high closeness centrality, it can "broadcast" information throughout the entire network at the lowest possible cost (fewer hops). Conversely, a node with low closeness is structurally isolated and requires more steps to reach others.
 
-Closeness centrality $C_i$ for a node $i$ is the inverse of the sum of the shortest path distances $d_{ij}$ between node $i$ and every other node $j$ in the network.
+**Closeness** centrality $C_i$ for a node $i$ is the inverse of the sum of the shortest path distances $d_{ij}$ between node $i$ and every other node $j$ in the network.
 
 $$C_i = \frac{1}{\sum_{j \neq i} d_{ij}}$$
 
-The Summation: The formula sums the distances to all other nodes, which is why it captures the global structure.
+---
+| Component | Formula | Explanation | 
+| :--- | :--- | :--- | 
+| Summation | $\sum_{j \neq i} d_{ij}$ | The formula sums the distances to all other nodes, which is why it captures the global structure. | 
+| Inverse | $\frac{1}{X}$ | We use the inverse so that lower distances (closer nodes) result in a higher centrality score. | 
+---
 
-The Inverse: We use the inverse so that lower distances (closer nodes) result in a higher centrality score.
+### Closeness Python Implementation
 
-#### Python Implementation
-
-In NetworkX, the function automatically normalizes the value (multiplying by $N-1$) so that the score stays between 0 and 1.
+In `NetworkX`, the function automatically normalizes the value (multiplying by $N-1$) so that the score stays between 0 and 1.
 
 ```
 import networkx as nx
 
 # Calculate closeness centrality for all nodes
 closeness_dict = nx.closeness_centrality(G)
+
 ```
 
-#### Key Intuition
+### Closeness Key Intuition
 
-* High Closeness: Sitting "in the middle" of the network; excellent for spreading a virus or a message quickly.
-* Low Closeness: Sitting on the periphery; information takes a long time to reach these nodes.
+* **High Closeness:** Sitting "in the middle" of the network; excellent for spreading a virus or a message quickly.
+* **Low Closeness:** Sitting on the periphery; information takes a long time to reach these nodes.
 
 ---
 
-## Betweenness Centrality
+# Measure 3: Betweenness Centrality
 
-Betweenness centrality captures a fundamentally different dimension of importance compared to degree or closeness. Rather than focusing on how many neighbors a node has or how fast it can broadcast, this metric identifies nodes that act as structural bottlenecks or bridges between different parts of the network.
+**Betweenness** centrality captures a fundamentally different dimension of importance compared to degree or closeness. Rather than focusing on how many neighbors a node has or how fast it can broadcast, this metric identifies nodes that act as structural bottlenecks or bridges between different parts of the network.
 
-A node has high betweenness if it frequently lies on the shortest paths between other pairs of nodes. These nodes are critical for transport and communication; if a node with high betweenness is removed or attacked, it can effectively "cut off" entire sections of the network, causing a total collapse of efficiency.
+A node has **high betweenness** if it frequently **lies on the shortest paths between other pairs of nodes**. These nodes are critical for transport and communication; if a node with high betweenness is removed or attacked, it can effectively **"cut off"** entire sections of the network, causing a total collapse of efficiency.
 
-The betweenness centrality $g_i$ of node $i$ is the ratio of the number of shortest paths between nodes $h$ and $j$ that pass through $i$, compared to the total number of shortest paths between $h$ and $j$:
+The **betweenness** centrality $g_i$ of node $i$ is the ratio of the number of shortest paths between nodes $h$ and $j$ that pass through $i$, compared to the total number of shortest paths between $h$ and $j$:
 
 $$g_i = \sum_{h \neq i \neq j} \frac{\sigma_{hj}(i)}{\sigma_{hj}}$$
 
-* $\sigma_{hj}$: The total number of shortest paths between nodes $h$ and $j$.
-* $\sigma_{hj}(i)$: The number of those shortest paths that pass through node $i$.
-* The Summation: The calculation iterates through all possible pairs of nodes in the network to determine node $i$'s global "control" over traffic.
+---
+| Element | Explanation |
+| :--- | :--- |
+| $\sigma_{hj}$ | The total number of shortest paths between nodes $h$ and $j$ |
+| $\sigma_{hj}(i)$ | The number of those shortest paths that pass through node $i$ |
+| **The Summation** | The calculation iterates through all possible pairs of nodes in the network to determine node $i$'s global "control" over traffic |
+---
 
-#### Key Observations
-* Not Always a Hub: While hubs (high-degree nodes) often have high betweenness, a node with a very low degree can still have a massive betweenness score if it acts as the only bridge between two large communities (e.g., a single bridge connecting two islands).
-* Link Betweenness: This logic can be extended to edges. Link betweenness identifies critical connections (like a main highway) that, if broken, would disconnect the system.
+### Betweeness as a Middleman Metric
+Betweeness is inherently a "middle-man" metric. It is entirely dependent on the pairs ($h, j$). You cannot calculate betweenness for a node $i$ in isolation. You have to look at the "traffic" flowing between every other possible pair of nodes in the network and see how much of that traffic is forced to pass through node $i$.
 
-#### Python Implementation
+$h$ and $j$ are just indices that represent two nodes in the network. The summation in the formula means that to compute this, you need to loop through every pair of nodes (that doesn't include $i$,  $h \neq i \neq j$), compute the ratio of shortest paths passing through $i$ and add the value to the summation. Note, if a path doesn't pass through $i$ then the ratio is $0$ which adds nothing to the summations
+
+This is why Betweenness is the most "expensive" metric to compute ($O(N^3)$ or $O(NM)$). While Degree only requires looking at one node's list of neighbors, Betweenness requires knowing the global map.
+
+---
+
+### Betweeness Key Observations:
+* **Not Always a Hub:** While hubs (high-degree nodes) often have high betweenness, a node with a very low degree can still have a massive betweenness score if it acts as the **only bridge** between two large communities (e.g., a single bridge connecting two islands).
+* **Link Betweenness:** This logic can be extended to edges. **Link betweenness** identifies critical connections (like a main highway) that, if broken, would disconnect the system.
+
+---
+
+### Betweeness Python Implementation
 
 ```
 import networkx as nx
@@ -1312,37 +1476,44 @@ edge_betweenness = nx.edge_betweenness_centrality(G)
 
 ---
 
-## Centrality Summary Metrics
+# Centrality Summary Metrics
 
+---
 | Metric | Role| Identifies... |
 | :--- | :--- | :--- |
 | Degree | Local Heavyweight | Nodes with many direct connections |
 | Closeness | Optimal Broadcaster | Nodes that can reach the whole network quickly |
 | Betweenness | Structural Bottleneck | Nodes that control the flow of information/traffic |
+---
 
-Below are some examples of how the different networkds can be visualised in nodes/networks. It comes form *F. A. Rodrigues, Network centrality: An introduction. (2019)*. Note how different nodes are highlighted as important, or central, depending on the metric used:
+> Below are some examples of how the different networks can be visualised in nodes/networks utilising centrality. It comes form **F. A. Rodrigues, Network centrality: An introduction. (2019)**. 
 
 ![Centrality Metric Networks](./files/week_4/cent_net_visuals.png)
 
 ---
 
-## Centrality Distrubtion
+# Centrality Distrubtion
+In large-scale networks with millions or billions of nodes, it is computationally and practically impossible to analyze the importance of **individual** nodes or links. Instead, we shift to a statistical approach, focusing on how these metrics are **distributed across the entire system**.
 
-In large-scale networks with millions or billions of nodes, it is computationally and practically impossible to analyze the importance of individual nodes or links. Instead, we shift to a statistical approach, focusing on how these metrics are distributed across the entire system.
+---
 
-#### From Histograms to Probability Distributions
-To understand the "big picture," we group nodes with similar properties into classes and calculate a probability distribution. This process typically begins with a normalized histogram:
+# From Histograms to Probability Distributions
+To understand the "big picture", we group nodes with similar properties into classes and calculate a probability distribution. This process typically begins with a normalized histogram:
 1. **Count ($n_k$):** Determine how many nodes have a specific degree or centrality value ($k$).
 2. **Normalize ($f_k$):** Divide that count by the total system size ($N$) to find the fraction of nodes with that value.
 3. **Probabilistic View ($P_k$):** As $N$ approaches infinity, this fraction represents the probability distribution $P_k$ — the likelihood that any randomly selected node will have a degree of $k$.
 
-#### Discrete vs. Continuous Metrics
+![Histogram](./files/week_4/histogram.png)
+
+---
+
+# Discrete vs. Continuous Metrics
 
 The way we visualize these distributions depends on whether the metric is discrete or continuous:
-* Discrete Metrics (e.g., Degree $k$): We can use a standard Probability Mass Function (PMF) because nodes have integer values.
-* Continuous Metrics (e.g., Betweenness): In massive networks, each node may have a hyper-specific decimal value. A standard histogram would look like a flat "noise" because no two nodes share the exact same value.
+* **Discrete Metrics (e.g., Degree $k$):** We can use a standard **Probability Mass Function (PMF)** because nodes have integer values.
+* **Continuous Metrics (e.g., Betweenness):** Metrics like betweeness are a continious, decimal value. In massive networks, each node may will a hyper-specific decimal value. A standard histogram would look like a flat "noise" because no two nodes share the exact same value.
 
-To solve this, we use Cumulative Distributions.
+To solve this, we use **Cumulative Distributions**.
 
 Instead of asking for the probability of a specific value, we define an interval and ask: "What is the probability that a node has a value greater than $x$?". This smooths out the variance and reveals the underlying topological signal.
 
@@ -1350,165 +1521,172 @@ We compute this by summing (or integrating) all values $v$ that are greater than
 
 $$P(x) = \sum_{v=x}^{\infty} P(v)$$
 
-Cumulative distributions are especially useful when the range of values is extremely broad, which is common in real-world networks where some nodes have 1 connection and others have 1,000,000.
+**Cumulative distributions** are especially useful when the range of values is extremely broad, which is common in real-world networks where some nodes have 1 connection and others have 1,000,000.
 
 ---
 
-## Log-Log Scale 
+# Log-Log Scale 
 
-When analyzing real-world networks, we often encounter a significant visualization problem: the range of values is too vast. In a typical network, you might have thousands of nodes with only 1 connection (the "singles") and a few massive hubs with 1,000,000 connections. If you plot this on a standard linear scale, the massive hubs swamp the resolution of the smaller nodes, making it impossible to see the behavior of the majority of the system.
+When analyzing real-world networks, we often encounter a significant visualization problem: the range of values is too vast. In a typical network, you might have thousands of nodes with only 1 connection (the "singles") and a few massive hubs with 1,000,000 connections. If you plot this on a standard **linear scale**, the massive hubs swamp the **resolution** of the smaller nodes, making it impossible to see the behavior of the majority of the system.
 
-To solve this, we transform the data by taking the logarithm of both the x-axis (the variable, such as degree $k$) and the y-axis (the probability $P_k$).
-* Linear Scale: Equal distances represent equal sums (1, 2, 3, 4...).
-* Log-Log Scale: Equal distances represent equal factors or powers ($10^1, 10^2, 10^3, 10^4$).
+To solve this, we transform the data by taking the **logarithm** of both the **x-axis** (the variable, such as degree $k$) and the **y-axis** (the probability $P_k$).
+* **Linear Scale**: Equal distances represent equal sums (1, 2, 3, 4...).
+* **Log-Log Scale:** Equal distances represent equal factors or powers ($10^1, 10^2, 10^3, 10^4$).
 
-In network science, a log-log plot reveals whether a distribution is heavy-tailed. If the data points follow a straight downward-sloping line, it indicates that the distribution follows a Power Law.
-* A "Collapsing" Distribution: In a standard Bell Curve or exponential distribution, the probability of extreme events drops so fast that the line on a log-log plot "crashes" or dives downward almost vertically. This means the system has a "characteristic scale" (e.g., no one is 20 feet tall).
-* A "Non-Collapsing" Distribution: A straight line means the distribution stays "spread out" across many orders of magnitude. There is no single characteristic scale, which is why we call these Scale-Free networks.
-
-#### Summary of Advantages
-* Visibility: Allows us to view "micro" nodes and "mega" hubs on the same canvas.
-* Identification: Provides the visual signature of a power law ($P(k) \sim k^{-\gamma}$).
-* Predictability: Shows that "unlikely" high-degree nodes appear at a steady, predictable rate rather than vanishing as they would in a random system.
+In network science, a **log-log plot** reveals whether a distribution is **heavy-tailed**. If the data points follow a **straight downward-sloping** line, it indicates that the distribution follows a **Power Law**.
+* **A "Collapsing" Distribution:** In a standard Bell Curve or exponential distribution, the probability of extreme events drops so fast that the line on a log-log plot **"crashes"** or dives downward almost **vertically**. This means the system has a **"characteristic scale"** (e.g., no one is 20 feet tall).
+* **A "Non-Collapsing" Distribution:** A **straight line** means the distribution stays **"spread out**" across many **orders of magnitude**. There is no single characteristic scale, which is why we call these **Scale-Free networks**.
 
 ---
 
-## Degree Distributions and the Heavy Tail
-
-A degree distribution is essentially a "census" of a network, recording how many nodes have exactly $k$ connections. While random systems follow a standard Bell Curve where most nodes cluster around an average, real-world networks exhibit heavy-tailed distributions.
-* The Heavy Tail: In these systems, extreme events (massive hubs) occur far more frequently than "normal" statistics would predict.
-* Visual Proof: On a linear scale, the probability for large hubs is nearly invisible. On a Log-Log plot, a heavy tail appears as a straight downward-sloping line, indicating a Power Law ($P(k) \sim k^{-\gamma}$).
-* Scale-Free Nature: Because the distribution follows a power law, the network lacks a "characteristic scale". Whether you look at a small sub-section or the entire graph, the statistical pattern of hubs and loners remains the same.
+# Summary of Log Scale Advantages
+* **Visibility:** Allows us to view "micro" nodes and "mega" hubs on the same canvas.
+* **Identification:** Provides the visual signature of a power law ($P(k) \sim k^{-\gamma}$).
+* **Predictability:** Shows that "unlikely" high-degree nodes appear at a steady, predictable rate rather than vanishing as they would in a random system.
 
 ---
 
-## Measuring Heterogeneity ($\kappa$)
+# Degree Distributions and the Heavy Tail
 
-To quantify how "diverse" or uneven a network is, we use the heterogeneity parameter ($\kappa$). This is the ratio between the second moment (average of squared degrees) and the square of the first moment (square of the average degree).
+A **degree distribution** is essentially a "census" of a network, recording how many nodes have exactly $k$ connections. While random systems follow a **standard Bell Curve** where most nodes cluster around an average, real-world networks exhibit **heavy-tailed distributions**.
+* **The Heavy Tail:** In these systems, extreme events (massive hubs) occur far more frequently than "normal" statistics would predict.
+* **Visual Proof:** On a linear scale, the probability for large hubs is nearly invisible. A Heavy Tail does not "crash" to zero; it persists as a diagonal line across many orders of magnitude. On a Log-Log plot, a straight diagonal (linear slope) is the visual proof of a Power Law, confirming that the network has no "cutoff" or characteristic scale.
+* **Scale-Free Nature:** Because the distribution follows a power law, the network lacks a **"characteristic scale"**. Whether you look at a small sub-section or the entire graph, the statistical pattern of hubs and loners remains the same.
+
+---
+
+# Measuring Heterogeneity ($\kappa$)
+To quantify how "diverse" or uneven a network is, we use the heterogeneity parameter ($\kappa$). This is the ratio between the **second moment** (average of squared degrees) and the square of the **first moment** (square of the average degree).
 
 $$\kappa = \frac{\langle k^2 \rangle}{\langle k \rangle^2}$$
 
-Homogeneous Networks ($\kappa \approx 1$): Nodes have roughly the same number of links (e.g., a grid). The variance is small because $\langle k^2 \rangle$ is close to $\langle k \rangle^2$.
+**Homogeneous Networks** ($\kappa \approx 1$): Nodes have roughly the same number of links (e.g., a grid). The variance is small because $\langle k^2 \rangle$ is close to $\langle k \rangle^2$.
 
-Heterogeneous Networks ($\kappa \gg 1$): A few massive hubs cause the second moment $\langle k^2 \rangle$ to explode. For example, in Wikipedia, $\kappa$ is significantly higher than the average degree because the hubs disproportionately weight the math.
+**Heterogeneous Networks** ($\kappa \gg 1$): A few massive hubs cause the **second moment** $\langle k^2 \rangle$ to explode. For example, in Wikipedia, $\kappa$ is significantly higher than the average degree because the hubs disproportionately weight the math.
 
 ---
 
-## The Origin: Preferential Attachment
-
-Heavy tails and scale-free structures usually arise from Preferential Attachment, also known as the "Rich-Get-Richer" effect.
-* Feedback Loops: When a new node joins, it is more likely to connect to a node that already has many links.
-* Hub Growth: This preference ensures that existing hubs grow faster than smaller nodes, pushing the distribution into the extreme tail.
+# The Origin: Preferential Attachment
+**Heavy tails** and **scale-free** structures usually arise from **Preferential Attachment**, also known as the "Rich-Get-Richer" effect.
+* **Feedback Loops:** When a new node joins, it is more likely to connect to a node that already has many links.
+* **Hub Growth:** This preference ensures that existing hubs grow faster than smaller nodes, pushing the distribution into the extreme tail.
 
 --- 
 
-## Structural Consequences
-
+# Structural Consequences
 The presence of a heavy tail ($\kappa \gg 1$) fundamentally changes how a network functions:
-* Vanishing Epidemic Threshold: In homogeneous networks, a virus needs high virulence to spread. In heterogeneous networks, even a "weak" virus can persist indefinitely because hitting a single hub allows it to broadcast to the entire system.
-* Robustness vs. Vulnerability: These networks are "Robust-yet-Fragile". They can survive the random failure of many nodes because you are likely to hit insignificant loners. However, a targeted attack on just a few hubs can cause the entire system to collapse into isolated pieces.
-* Ultra-Small World: High heterogeneity creates super-highways. Hubs act as bridges that drastically shorten the path length between any two nodes in the network.
+* **Vanishing Epidemic Threshold:** In homogeneous networks, a virus needs high virulence to spread. In heterogeneous networks, even a "weak" virus can persist indefinitely because hitting a single hub allows it to broadcast to the entire system.
+* **Robustness vs. Vulnerability:** These networks are "Robust-yet-Fragile". They can survive the **random failure** of many nodes because you are likely to hit insignificant loners. However, a **targeted attack** on just a few hubs can cause the entire system to collapse into isolated pieces.
+* **Ultra-Small World:** High heterogeneity creates **super-highways**. Hubs act as bridges that drastically shorten the path length between any two nodes in the network.
 
 ---
 
-## What is a "Scale-Free" Network?
-
-A Scale-free network is a network whose degree distribution follows a Power Law. In simpler terms, it is a system where there is no "typical" node that represents the scale of the entire network.
+# What is a "Scale-Free" Network?
+A **Scale-free** network is a network whose degree distribution follows a **Power Law**. In simpler terms, it is a system where there is no "typical" node that represents the scale of the entire network.
 
 In most systems we are familiar with, there is a characteristic scale or "average".
-* A "Scaled" System (The Bell Curve): Think of human height. Most people are between 5 and 6 feet tall. You will never meet someone who is 100 feet tall or 1 inch tall. The "average" gives you a clear scale of what a human looks like.
-* A "Scale-Free" System (The Power Law): If human height were scale-free, most people would be 1 inch tall, but you would regularly encounter people who are 500 feet tall. Because the "giants" (hubs) are so diverse in size, the "average" height becomes a meaningless number that doesn't describe anyone.
+* **A "Scaled" System (The Bell Curve):** Think of human height. Most people are between 5 and 6 feet tall. You will never meet someone who is 100 feet tall or 1 inch tall. The "average" gives you a clear scale of what a human looks like.
+* **A "Scale-Free" System (The Power Law):** If human height were scale-free, most people would be 1 inch tall, but you would regularly encounter people who are 500 feet tall. Because the "giants" (hubs) are so diverse in size, the "average" height becomes a meaningless number that doesn't describe anyone.
 
-The name "scale-free" comes from the fact that if you "zoom in" or "zoom out" on the network's degree distribution, the functional form remains the same. Mathematically, if you multiply the degree $k$ by a constant, the shape of the power-law distribution $P(k) \sim k^{-\gamma}$ doesn't change—it just shifts. This means the ratio of "massive hubs" to "small nodes" is constant regardless of whether you are looking at a small sub-section or the entire internet.
+The name **"scale-free"** comes from the fact that if you "zoom in" or "zoom out" on the network's degree distribution, the functional form remains the same. Mathematically, if you multiply the degree $k$ by a constant, the shape of the **power-law distribution** $P(k) \sim k^{-\gamma}$ doesn't change—it just shifts. This means the ratio of "massive hubs" to "small nodes" is constant regardless of whether you are looking at a small sub-section or the entire internet.
 
 You can identify a scale-free network by its appearance on different graph scales:
-* On a Linear Plot: It looks like an "L" shape—a huge spike at the start that drops instantly to a flat line.
-* On a Log-Log Plot: It appears as a straight downward-sloping line. This straight line is the "fingerprint" of a scale-free system.
+* **On a Linear Plot:** It looks like an "L" shape—a huge spike at the start that drops instantly to a flat line.
+* **On a Log-Log Plot:** It appears as a straight **downward-sloping** line. This straight line is the "fingerprint" of a scale-free system.
 
+---
 | Feature | Random Network (Erdős-Rényi) | Scale-Free Network (Barabási-Albert) | 
 | :--- | :--- | :--- |
 | Distribution | Bell Curve (Poisson) | Power Law |
 | Typical Node | Most nodes are near the average | Most nodes are tiny; hubs are massive |
 | Scale | Has a characteristic scale | Scale-Free (no characteristic scale) | 
-| Formation | Random connections | "Preferential Attachment (""Rich-get-Richer"")" | 
+| Formation | Random connections | "Preferential Attachment (""Rich-get-Richer"")" |
+---
+
+# Betweenness Distribution
+Just as with **degree centrality**, analyzing the **betweenness distribution** in large-scale networks reveals that structural **bottlenecks** do not follow a "normal" pattern. 
+
+In many real-world systems like Twitter or Wikipedia, the **betweenness distribution** follows a **heavy-tailed power law**, meaning the vast **majority of nodes** rarely participate in **shortest paths**, while a tiny handful of nodes control almost all the traffic.
+
+In statistics, a distribution "collapses" if, as you add more data, the average stabilizes into a narrow, predictable range (like human height). However, in **heavy-tailed networks**, the distribution does **not** collapse.
+* **The Moving Target:** In a scale-free network, the larger the system grows, the more likely you are to encounter a "Black Swan" — a node with such high betweenness that it shifts the entire average.
+* **Visual Signature:** On a **log-log plot**, the betweenness distribution appears as a straight line that spans many orders of magnitude rather than crashing downward. This indicates that the "scale" of traffic control keeps growing with the system size.
 
 ---
 
-## Betweenness Distribution
+# Why This Matters for Bottlenecks
+The fact that **betweenness** does not collapse tells us that bottlenecks are a **permanent, structural** feature of these networks.
 
-Just as with degree centrality, analyzing the betweenness distribution in large-scale networks reveals that structural bottlenecks do not follow a "normal" pattern. In many real-world systems like Twitter or Wikipedia, the betweenness distribution follows a heavy-tailed power law, meaning the vast majority of nodes rarely participate in shortest paths, while a tiny handful of nodes control almost all the traffic.
+**Vulnerability:** Because a few nodes sit on an "overrepresented" number of shortest paths, the network's efficiency is highly dependent on a few critical points.
 
-In statistics, a distribution "collapses" if, as you add more data, the average stabilizes into a narrow, predictable range (like human height). However, in heavy-tailed networks, the distribution does not collapse.
-* The Moving Target: In a scale-free network, the larger the system grows, the more likely you are to encounter a "Black Swan"—a node with such high betweenness that it shifts the entire average.
-* Visual Signature: On a log-log plot, the betweenness distribution appears as a straight line that spans many orders of magnitude rather than crashing downward. This indicates that the "scale" of traffic control keeps growing with the system size.
-
-#### Why This Matters for Bottlenecks
-The fact that betweenness does not collapse tells us that bottlenecks are a permanent, structural feature of these networks.
-
-Vulnerability: Because a few nodes sit on an "overrepresented" number of shortest paths, the network's efficiency is highly dependent on a few critical points.
-
-Infrastructure: In transport networks, this "non-collapse" explains why certain hubs (like a major airport or a central train station) remain high-pressure bottlenecks regardless of how much the surrounding network expands.
+**Infrastructure:** In transport networks, this "non-collapse" explains why certain hubs (like a major airport or a central train station) remain high-pressure bottlenecks regardless of how much the surrounding network expands.
 
 ---
 
-## The Friendship Paradox
-
-The heterogeneity of these distributions leads to a counter-intuitive phenomenon known as the Friendship Paradox: On average, your friends have more friends than you do:
-* Sampling Bias: If you pick nodes at random, every node has an equal chance of being chosen. However, if you pick links at random, you are far more likely to end up at a hub because hubs have more links pointing to them.
-* The Math: Because your "friends" are reached via links, your sample of friends is naturally biased toward high-degree hubs. The average degree of a neighbor is actually weighted by the square of the degrees, making it consistently higher than the average degree of the nodes themselves.
+# The Friendship Paradox
+The **heterogeneity** of these distributions leads to a counter-intuitive phenomenon known as the **Friendship Paradox**: On average, your friends have more friends than you do:
+* **Sampling Bias:** If you pick nodes at random, every node has an equal chance of being chosen. However, if you pick **links** at random, you are far more likely to end up at a hub because hubs have **more links** pointing to them.
+* **The Math:** Because your **"friends"** are reached via links, your sample of friends is naturally biased toward high-degree hubs. The average degree of a neighbor is actually weighted by the square of the degrees, making it consistently higher than the average degree of the nodes themselves.
 
 ---
 
-## Ultra-Small World
+# Ultra-Small World
+While many networks exhibit the **"small world" property** (where path lengths grow logarithmically with network size), networks with **hubs** often fall into the category of **ultra-small worlds**. In these systems, the distance between any two nodes is exceptionally short because the hubs act as **high-speed super-highways** that **bridge** distant parts of the graph.
 
-While many networks exhibit the "small world" property (where path lengths grow logarithmically with network size), networks with hubs often fall into the category of ultra-small worlds. In these systems, the distance between any two nodes is exceptionally short because the hubs act as high-speed super-highways that bridge distant parts of the graph.
+In a **heterogeneous network**, you don't need to wander through many random connections to reach a destination. Instead, you are statistically likely to find a **"super-connector"** nearby. Once you reach a hub, you can "teleport" across the network in a single hop.
 
-In a heterogeneous network, you don't need to wander through many random connections to reach a destination. Instead, you are statistically likely to find a "super-connector" nearby. Once you reach a hub, you can "teleport" across the network in a single hop.
+If you plot the distribution of **shortest path lengths** in these networks, you will notice a distinct pattern:
+* **The Peak:** There is usually a **"preferred"** or most common path length (e.g., 3 or 4 hops).
+* **Exponential Collapse:** Unlike the **degree distribution**, the path length distribution **collapses** quickly. There is no **"heavy tail"** here; it is extremely rare to find two nodes that are 20 or 30 hops apart because the hubs have effectively **"shrunk"** the network.
 
-If you plot the distribution of shortest path lengths in these networks, you will notice a distinct pattern:
-* The Peak: There is usually a "preferred" or most common path length (e.g., 3 or 4 hops).
-* Exponential Collapse: Unlike the degree distribution, the path length distribution collapses quickly. There is no "heavy tail" here; it is extremely rare to find two nodes that are 20 or 30 hops apart because the hubs have effectively "shrunk" the network.
+> **The "Ultra-Small World" vs. "Small World":**
+> A Small World is where the **Average Shortest Path Distance** $\langle \ell \rangle \sim \log N$. An Ultra-Small World (thanks to hubs) is even faster: $\langle \ell \rangle \sim \log \log N$. It's a tiny mathematical difference that represents a massive physical "shrinkage" of the network.
+
+---
 
 # Robustness and Resilience
-
-A network is considered robust if it can maintain its primary functions (like connectivity) even when some of its components fail. In network science, we measure this by removing nodes and tracking the size of the Largest Connected Component ($S$).
+A network is considered **robust** if it can maintain its **primary functions** (like connectivity) even when some of its components fail. In network science, we measure this by **removing nodes** and tracking the size of the **Largest Connected Component ($S$)**.
 
 $$S = \frac{\text{Size of largest component remaining}}{\text{Original total nodes } (N)}$$
 
-Because of their scale-free nature ($\kappa \gg 1$), real-world networks exhibit a dual personality regarding resilience:
-
-1. Random Failures (Robust): If nodes fail at random, the network is incredibly resilient. Since the vast majority of nodes are low-degree "nobodies," a random failure is unlikely to hit a hub. You can remove a large fraction of the network, and it will remain held together by its super-connectors.
-2. Targeted Attacks (Fragile): If an attacker deliberately targets hubs, the network is exceptionally vulnerable. Removing even a small percentage of the highest-degree nodes can cause the Largest Connected Component ($S$) to drop to zero almost instantly, shattering the network into isolated, non-functional fragments.
+Because of their **scale-free** nature ($\kappa \gg 1$), real-world networks exhibit a dual personality regarding resilience:
+1. **Random Failures (Robust):** If nodes fail at **random**, the network is incredibly resilient. Since the vast majority of nodes are low-degree "nobodies," a random failure is unlikely to hit a hub. You can remove a large fraction of the network, and it will remain held together by its super-connectors.
+2. **Targeted Attacks (Fragile):** If an attacker deliberately targets hubs, the network is exceptionally vulnerable. Removing even a small percentage of the highest-degree nodes can cause the **Largest Connected Component ($S$)** to drop to zero almost instantly, shattering the network into isolated, non-functional fragments.
 
 ---
 
-## Core Decompostion
+# Core Decompostion
+Core decomposition is a **recursive, iterative** process used to reveal the "backbone" or the **dense**, **stable core** of a network. While centrality measures identify important **individual nodes**, core decomposition identifies dense clusters of nodes that are resilient to both random failures and targeted attacks.
 
-Core decomposition is a recursive, iterative process used to reveal the "backbone" or the dense, stable core of a network. While centrality measures identify important individual nodes, core decomposition identifies dense clusters of nodes that are resilient to both random failures and targeted attacks.
+---
 
-#### The Concept: Finding the Indestructible Core
-
+# Finding the Indestructible Core
 The goal is to prune away the peripheral, low-degree nodes to see what remains. A $k$-core is defined as the maximal subgraph where every node has a degree of at least $k$. Unlike a simple degree filter, this is a recursive process: removing one node might cause its neighbor's degree to drop below the threshold, triggering further removals.
 
-#### The Algorithm: $k$-shell Decomposition
+---
 
-1. Start with $k=0$: No nodes are removed.
-2. Iterative Pruning: To find the $k$-core, remove all nodes with a degree less than $k$.
-3. Recursion: After removing a node, re-evaluate the degrees of its neighbors. If a neighbor's degree now falls below $k$, remove it too. Repeat until no more nodes can be removed.
-4. $k$-shells: The set of nodes removed when moving from a $k$-core to a $(k+1)$- core is known as the $k$-shell.
-5. Termination: Increment $k$ and repeat until the network is empty.
+# The Algorithm: $k$-shell Decomposition
+1. **Start with $k=0$:** No nodes are removed.
+2. **Iterative Pruning:** To find the $k$-core, remove all nodes with a degree less than $k$.
+3. **Recursion:** After removing a node, re-evaluate the degrees of its neighbors. If a neighbor's degree now falls below $k$, remove it too. Repeat until no more nodes can be removed.
+4. **$k$-shells:** The set of nodes removed when moving from a $k$-core to a $(k+1)$- core is known as the $k$-shell.
+5. **Termination:** Increment $k$ and repeat until the network is empty.
 
-#### Why Recursive Pruning is Necessary
+---
 
+# Why Recursive Pruning is Necessary
 A node might have a high degree (e.g., $k=10$), but if all its connections are to "leaves" (nodes with degree 1), it is not part of the network's stable core. Once those leaves are pruned in the $k=1$ or $k=2$ rounds, the high-degree node's connections vanish, eventually causing it to be pruned as well.
 
-#### Visualizing the Result
+---
 
+# Visualizing the Result
 Core decomposition helps simplify massive, complex networks:
-* Low $k$ values: Show the overall "hairball" including peripheral nodes.
-* High $k$ values: Prune the noise to show the "super-stable core"—the nodes that are the most tightly interconnected and critical for the network's structural integrity.
+* **Low $k$ values:** Show the overall "hairball" including peripheral nodes.
+* **High $k$ values:** Prune the noise to show the "super-stable core" — the nodes that are the most tightly interconnected and critical for the network's structural integrity.
 
-#### Python Implementation
+---
+
+# Decomposition Python Implementation
 
 ```
 import networkx as nx
@@ -1518,9 +1696,16 @@ k5_core = nx.k_core(G, k=5)
 
 # Get the core number for every node (which k-shell it belongs to)
 core_numbers = nx.core_number(G)
+
+nx.core_number(G)
+nx.k_core(G,2)
+nx.k_shell(G,2)
+nx.k_core(G)
 ```
 
-## Week 4 Summary
+---
+
+# Week 4 Summary
 
 ---
 | Concept | Key Question | Mathematical Signature | Structural Impact |
@@ -1539,12 +1724,18 @@ core_numbers = nx.core_number(G)
 <br>
 <br>
 <br>
-<br>
 
 # Week 5 - Network Models
 
-- []()
-- Chapter 4; 
+- [Lecture Recording ](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=15272f00-9da6-46f1-b4dc-b3fd00b4266c)
+
+Week 5 shifts the focus from observing existing structures to the engineering challenge of Network Models, providing a set of instructions to build synthetic networks that mimic real-world characteristics.
+
+The week follows a logical progression of "trial and error," beginning with the **Random Network (Erdős-Rényi/Gilbert)** model. While this model successfully predicts the **Small World property** (logarithmic path lengths), it fails significantly in two areas: it produces almost no clustering and lacks the massive hubs found in reality. Mathematically, its peaked Binomial degree distribution means almost every node stays close to the average, making it a poor representation of heterogeneous systems like the Internet or social media.
+
+To solve the clustering problem, we explored the **Watts-Strogatz model**, which bridges the gap between a predictable, "cliquey" lattice and a random graph. By starting with a ring lattice and "rewiring" a small fraction of links with probability $p$, the model creates shortcuts that collapse the average path length while preserving the local triangles that provide high clustering. This creates the "Small-World" regime. However, like the random model, Watts-Strogatz is static and still fails to generate **hubs**, as the rewiring process keeps the degree distribution centered around the original lattice degree.
+
+The final transition moves from static structures to **Network Growth** and the **Barabási-Albert (BA) model**. This introduces the "Rich-Get-Richer" mechanism of **Preferential Attachment**, where new nodes entering the system are more likely to link to existing high-degree nodes. This dynamic growth is the essential ingredient for creating the **Heavy-Tail (Power Law)** distributions observed in Week 4. We also examined **Non-Linear Preferential Attachment**, discovering that only **Linear growth ($\alpha = 1$)** provides the stable scale-free structure seen in nature; sub-linear growth fails to produce hubs, while super-linear growth leads to a "winner-takes-all" super-hub that dominates the entire system.
 
 #### Learning Outcomes
 * Random Networks
@@ -1555,130 +1746,217 @@ core_numbers = nx.core_number(G)
 
 #### Lecture 5: Contents
 * [Models](#models)
-* [Random networks](#random-networks)
-* [Random Networks: Number of Links, Density ](#random-networks-number-of-links-density)
-* [The Expected Number of Links $\langle L \rangle$](#the-expected-number-of-links)
-* [Expected Density of Links $d$](#expected-density-of-links)
+---
+* [Random Networks: The ER/Gilbert Model](#random-networks-the-ergilbert-model)
+* [The Algorithm](#the-algorithm)
+* [The "Coin Toss" Analogy](#the-coin-toss-analogy)
+* [Network Evolution and the Giant Component](#network-evolution-and-the-giant-component)
+* [What is a Giant Component?](#what-is-a-giant-component)
+* [The Evolution Process](#the-evolution-process))
+* [Special Cases of $p$](#special-cases-of)
+* [Emergence of Connectivity, Null Models](#emergence-of-connectivity-null-models)
+* [NetworkX ER Graphs Distinction](#networkx-er-graphs-distinction)
+* [The $G(n, m)$ Model (The "Fixed-Edge" Model)](#the--model-the-fixed-edge-model)
+* [The $G(n, p)$ Model (The "Coin-Flip" Model)](#the--model-the-coin-flip-model)
+* [Erdős-Rényi vs Gilbert](#erdős-rényi-vs-gilbert)
+* [Number of Links and Density of a Random Networks](#number-of-links-and-density-of-a-random-networks)
+    * [The Expected Number of Links $\langle L \rangle$](#the-expected-number-of-links)
+    * [Expected Density of Links $d$](#expected-density-of-links)
 * [The Sparsity Constraint](#the-sparsity-constraint)
-* [Random Networks: Average Degree](#random-networks-average-degree)
-* [Random Networks: Degree Distribution](#random-networks-degree-distribution)
-* [Random Network: Small World Property](#random-network-small-world-property)
-* [The Logarithmic Diameter](#the-logarithmic-diameter)
-* [Random Networks: Clustering Coefficient](#random-networks-clustering-coefficient)
-* [Random Network: Summary](#random-network-summary)
+* [Average Degree of a Random Network](#average-degree-of-a-random-network)
+* [Degree Distribution of a Random Networks](#degree-distribution-of-a-random-networks)
+* [Small World Property of a Random Network](#small-world-property-of-a-random-network)
+    * [The Logarithmic Diameter of a Random Network](#the-logarithmic-diameter-of-a-random-network)
+* [Clustering Coefficient of Random Networks](#clustering-coefficient-of-random-networks)
+* [The Modeling Failures Between Random Network Models and Reality](#the-modeling-failures-between-random-network-models-and-reality)
+* [Random Network Summary](#random-network-summary)
+---
 * [Small World Networks](#small-world-networks)
 * [Watts Strogatz](#watts-strogatz)
 * [Small-Worldedness Index ($S$)](#small-worldedness-index-)
-* [Limitations and Summary](#limitations-and-summary)
+* [Is the Watts-Strogatz a Generative Model?](#is-the-watts-strogatz-a-generative-model)
+* [NetworkX Watts-Strogatz Implementation](#networkx-watts-strogatz-implementation)
+    * [1. The "Strict" Model: `nx.watts_strogatz_graph`](#1-the-strict-model-nxwatts_strogatz_graph)
+    * [2. The "Additive" Model: `nx.newman_watts_strogatz_graph`](#2-the-additive-model-nxnewman_watts_strogatz_graph)
+    * [3. The "Lab" Model: `nx.connected_watts_strogatz_graph`](#3-the-lab-model-nxconnected_watts_strogatz_graph)
+* [Using Watts-Strogatz model as a Benchmark or Null Model](#using-watts-strogatz-model-as-a-benchmark-or-null-model)
+    * [1. Calculating the Small-Worldness Index ($S$)](#1-calculating-the-small-worldness-index-)
+    * [2. The "Rewiring" Sensitivity Analysis](#2-the-rewiring-sensitivity-analysis)
+    * [3. Testing for "Structural Logic"](#3-testing-for-structural-logic)
+* [How to use a WS Network](#how-to-use-a-ws-network)
+* [Watts-Strogatz model: Degree Distribution](#watts-strogatz-model-degree-distribution)
+* [Watts-Strogatz model: Limitations and Summary](#watts-strogatz-model-limitations-and-summary)
+---
 * [Configuration Model](#configuration-model)
 * [The Construction Principle: The "Stub" Method](#the-construction-principle-the-stub-method)
-* [Why Use This Model?](#why-use-this-model)
-* [Implementation and Constraints](#implementation-and-constraints)
+* [Why Use The Configuration Model?](#why-use-the-configuration-model)
+* [What is Static and Variable in a Configuration Model](#what-is-static-and-variable-in-a-configuration-model)
+* [Configuration Model Implementation and Constraints](#configuration-model-implementation-and-constraints)
+---
 * [Exponential Random Graphs](#exponential-random-graphs)
 * [The Statistical Framework](#the-statistical-framework)
 * [Analytical Power and Inference](#analytical-power-and-inference)
 * [Simulation via Triangle Bias](#simulation-via-triangle-bias)
+* [ERGM Python Implementation](#ergm-python-implementation)
+* [Case A: The edge already exists (`G.has_edge`)](#case-a-the-edge-already-exists-ghas_edge)
+* [Case B: The edge doesn't exist (The "Opportunity")](#case-b-the-edge-doesnt-exist-the-opportunity)
+* [Why use `np.exp`?](#why-use-npexp)
+* [How to Utilise ERGM in Analysis](#how-to-utilise-ergm-in-analysis)
+---
 * [D-k Randomization](#d-k-randomization)
+---
 * [Network Growth](#network-growth)
-* [The Limitation of Static Models](#the-limitation-of-static-models)
+    * [The Limitation of Static Models](#the-limitation-of-static-models)
 * [Preferential Attachement](#preferential-attachement)
 * [The Core Mechanism](#the-core-mechanism)
+* [Polya's Urn](#polyas-urn)
 * [The Barabási-Albert (BA) Model](#the-barabási-albert-ba-model)
+* [Picking Nodes at Random in Python](#picking-nodes-at-random-in-python)
 * [Why Growth Alone Isn't Enough](#why-growth-alone-isnt-enough)
+* [Barabási-Albert Python Implementation](#barabási-albert-python-implementation)
 * [Non-Linear Preferential Attachment](#non-linear-preferential-attachment)
 * [Week 5 Summary](#week-5-summary)
 
 ---
 
 # Models
-
-set of intructions to build a net
-
-goal: find models that generate networs with the same chars as irl nets
+A model is a set of intructions to build a network. The goal of this week is to find models that generate networks with the same characteristics as real-world networks.
 
 ---
 
-# Random networks
+# Random Networks: The ER/Gilbert Model
+The simplest way to build a synthetic network is to place links between pairs of nodes entirely by chance. This is formally known as the Gilbert Random Network Model. 
 
-Simple idea: placing links at random between pairs of nodes
-
-Algo: Gilbert random network model
-
-Start with N nodes and zero links
-
-Go over all pairs of nodes; for each pair of nodes i and j, generate a random number r between 0 and 1
-
-i r < p; i and j get connected
-if r >= pl; i and j remain disconnected
-
-[random networks; evolution]
-
-focus connected components
-
-p=0 no connections, just nodes
-
-p=1 there are links with n nodes; all links are there; one compoenent (complete) nextwork with n nodes
-
-what happens as we add nodes to to network? 
-
-naive: smooth increase of size of largest comp with number of links
-
-wrong: there is a abrputpt increase for a given value of the link prob p
-
-somthing about fraction of nodes in a giant component  (what is a giant component)
-
-network evolution shows jumps
-
-in the start random links create pairs on average, there is not giant component
-
-suddenly, these components become connected, this caused the jumps
-
-often will plateu again, might be building 2 gaints, then suddely these get joined and another jump
-
-[tossing of a coin]
-
-(using this int to follow respresentation of building a netowrk randomly)
-
-using a biased coin which yeilds help with prob p
-
-t: num indep trails (tosses)
-h: num heads after t trials
-
-getting head is like building a link
-
-special cases:
-* p = 0 -> the coin never yeilds heads -> h = 0 
-* p = 1 -> the coin always yeilds heads -> h = 1
-* p = 1/2 -> the coin yeilds heads (about) half of the times -> h ~ 1/2
-* general rule: h ~ pt
+"Random Network" is a broad category, but in almost every introductory textbook or lecture, it is synonymous with the Erdős-Rényi (ER) or Gilbert models. Technically, any network with stochastic elements is "random," but when scientists say "The Random Network Model," they are talking about this specific "coin-flip" logic.
 
 ---
 
-# Random Networks: Number of Links, Density 
+# The Algorithm 
+The model follows a straightforward stochastic process:
+1. **Start:** Begin with $N$ nodes and zero links.
+2. **Iterate:** Go over every possible pair of nodes $(i, j)$ in the system.
+3. **Flip a "Biased Coin":** For each pair, generate a random number $r$ between 0 and 1.
+    * If $r < p$: The nodes are connected (a "Success" or "Heads").
+    * If $r \geq p$: The nodes remain disconnected.
 
-This slide explores how to mathematically define the basic properties of a Random Network, specifically focusing on the expected number of links and the overall link density. The model relies on the logic of a binomial process, where creating a network is compared to tossing a biased coin for every possible pair of nodes to decide if a link should exist. 
+---
 
-#### The Expected Number of Links $\langle L \rangle$
+# The "Coin Toss" Analogy
+Building a random network is mathematically identical to a series of independent Bernoulli trials (coin tosses):
+* **Trials ($t$):** The total number of possible pairs, $\frac{N(N-1)}{2}$
+*** Probability ($p$):** The bias of the coin (how likely a link is to form).
+* **Successes ($h$):** The resulting number of links $L$ in the network.
+* **General Rule:** On average, the number of links will be $L \approx p \times t$.
+
+--- 
+
+# Network Evolution and the Giant Component
+A fascinating property of random networks is that they do not grow "smoothly." Instead, they undergo a phase transition as the probability $p$ increases.
+
+---
+
+### What is a Giant Component?
+A Giant Component is a connected sub-graph that contains a significant fraction (e.g., more than half) of the total nodes in the network.
+
+---
+
+# The Evolution Process
+As you gradually increase the link probability $p$, the network's structure changes in "jumps" rather than a steady line:
+* **Sub-critical Phase ($p$ is very low):** The network consists of many tiny, isolated "islands" (pairs or triplets). There is no way to get from one side of the network to the other.
+* **The Phase Transition:** Once $p$ reaches a critical threshold (specifically when the average degree $\langle k \rangle = 1$), these isolated islands suddenly "snap" together.
+* **The "Jumps":** You might see two medium-sized components suddenly get joined by a single random link. This causes an abrupt jump in the size of the largest component.
+* **Super-critical Phase ($p$ is high):** Eventually, one massive "Giant Component" swallows almost every node in the network.
+
+---
+
+# Special Cases of $p$
+| Probability Value | Resulting Structure |
+| :--- | :--- |
+| p=0 | Empty Graph: Only nodes, no connections. |
+| p=1 | Complete Graph: Every possible link exists; every node is connected to every other node. |
+| p=1/N | Threshold: This is the critical point where the Giant Component typically begins to emerge. |
+---
+
+# Emergence of Connectivity, Null Models
+It is a common mistake to assume that the largest component grows linearly with the number of links. In reality, the emergence of connectivity is a sudden, non-linear event. This is a key reason why random networks are used as "null models"—they help us understand the bare minimum requirements for a system to become globally connected.
+
+---
+
+# NetworkX ER Graphs Distinction
+NetworkX says that `gnp_random_graph` returns a random graph, also known as an Erdős-Rényi random graph [2] or a binomial graph, but this is not quite accurate. For large graphs, it is equivalent. The NetworkX function for an ER graph is `gnm_random_graph` which specifies the number of edges. 
+
+Note that for maximum confusion, the function `nx.erdos_renyi_graph` is an alias for `nx.gnp_random_graph` rather than `nx.gnm_random_graph`.
+
+### The $G(n, m)$ Model (The "Fixed-Edge" Model)
+**Function:** `nx.gnm_random_graph(n, m)`
+
+You set a fixed number of edges ($m$). The computer randomly places exactly that many links.  The total number of edges is guaranteed. It will always be exactly $m$.  
+
+This is technically the version Erdős and Rényi first described, which is why the warning says the NetworkX naming is "not quite accurate."
+
+Use $G(n, m)$ when you have a specific dataset and you want to build a random version that has the exact same number of links as your real network.
+
+---
+
+### The $G(n, p)$ Model (The "Coin-Flip" Model)
+**Function:** `nx.gnp_random_graph(n, p)`
+
+You set a probability ($p$). For every possible pair of nodes, you flip a coin. The total number of edges is random. You might get 48 edges one time and 52 the next. This is what `nx.erdos_renyi_graph` points to.
+
+Use $G(n, p)$ when you want to model a process where connections happen independently (like people meeting at a party with a 5% chance of becoming friends). This is the most common one in your course.
+
+---
+
+# Erdős-Rényi vs Gilbert
+In 1959, Erdős and Rényi defined a random graph by taking a fixed number of nodes ($N$) and a fixed number of edges ($M$), then choosing a graph uniformly at random from all possible graphs with those parameters. This is the $G(n, m)$ model.
+
+At roughly the same time (1959), Edgar Gilbert proposed the model where every edge is chosen independently with a probability ($p$). This is the $G(n, p)$ model.
+
+Because Gilbert's $G(n, p)$ model is much easier to work with mathematically and computationally, it became the "standard" version people use. NetworkX named their main function `erdos_renyi_graph`, but they actually used Gilbert's logic ($p$) under the hood.
+
+---
+
+| Model | Function Name | Parameter 2 | Edge Count
+| :--- | :--- | :--- | :--- |
+| Gilbert / Binomial | `gnp_random_graph` | `p` (Probability) | Variable (Average = `p*t`) |
+| Erdős-Rényi (Strict) | `gnm_random_graph` | `m` (Total Links) | Fixed (Exactly `m`) |
+
+---
+
+# Number of Links and Density of a Random Networks
+
+This slide explores how to mathematically define the basic properties of a Random Network, specifically focusing on the expected number of links and the overall link density. The model relies on the logic of a binomial process, where creating a network is compared to tossing a biased coin (Gilbert) for every possible pair of nodes to decide if a link should exist. 
+
+---
+
+### The Expected Number of Links $\langle L \rangle$
 
 To find the expected number of links, we first determine the total number of "trials," which is the total number of all possible node pairs in a network of $N$ nodes. This value, represented as $t$, is calculated using the formula $t = N(N - 1)/2$. By multiplying these possible pairs by the probability $p$ that any two nodes are connected, we arrive at the expected number of links:
 
-$$\langle L \rangle = \frac{pN(N-1)}{2}$$
+$$\langle L \rangle = \frac{p*N(N-1)}{2}$$
 
-#### Expected Density of Links $d$
+---
+
+### Expected Density of Links $d$
 
 The density of a network is defined as the ratio of actual links to the total number of potential links. When we take the expected number of links $\langle L \rangle$ and divide it by the total possible pairs $N(N - 1)/2$, the formula simplifies significantly. The resulting density $d$ is exactly equal to the connection probability $p$.
 
-#### The Sparsity Constraint
+$$d = \frac{\langle L \rangle}{N(N-1)/2} = \frac{pN(N-1)/2}{N(N-1)/2} = p$$
 
-The slide concludes with a critical warning about the application of this model to real-world scenarios. Because most real-world networks are sparse—meaning they have very few links relative to the total number of possible connections—the random network model is only a good representation if the probability $p$ is kept very small.
+---
+
+### The Sparsity Constraint
+
+There exists. a critical warning about the application of this model to real-world scenarios. Because most real-world networks are sparse—meaning they have very few links relative to the total number of possible connections—the random network model is only a good representation if the probability $p$ is kept very small.
 
 $p$ is potentially a parameter to be set when constructing a random network. A $p$ of 0.8 is way to high to relfect any notion of a real network, thus won't tell us anything about the real world.
 
 --- 
 
-## Random Networks: Average Degree
+# Average Degree of a Random Network
+Moving into average degree, the lecture transitions from looking at the network as a whole to looking at the connectivity of a single node. 
 
-Moving into average degree, the lecture transitions from looking at the network as a whole to looking at the connectivity of a single node. The (expected) average degree, represented as $\langle k \rangle$, is defined by the number of "heads" or successful connections a node makes, given a probability $p$ and a set number of trials $t$. In this specific context, the number of trials $t$ is equal to the number of potential neighbors a node could have, which is $N-1$.
+The (expected) average degree, represented as $\langle k \rangle$, is defined by the number of "heads" or successful connections a node makes, given a probability $p$ and a set number of trials $t$. In this specific context, the number of trials $t$ is equal to the number of potential neighbors a node could have, which is $N-1$.
 
 By applying the same logic used for the total number of links, the formula for the average degree in a random network simplifies to:
 
@@ -1688,9 +1966,9 @@ This calculation is particularly important for practical applications, such as i
 
 ---
 
-## Random Networks: Degree Distribution
+# Degree Distribution of a Random Networks
 
-The lecture then connects this to the degree distribution, asking what the probability is that any given node has exactly $k$ neighbors. This is modeled using the Binomial distribution, expressed as:
+This then leads into degree distribution, asking what the probability is that any given node has exactly $k$ neighbors. This is modeled using the Binomial distribution, expressed as:
 
 $$P(k) = \binom{N-1}{k} p^k (1-p)^{(N-1-k)}$$
 
@@ -1702,23 +1980,28 @@ In a random network, the degree distribution follows a "bell-shaped" curve. This
 
 In contrast, real-world networks like Twitter or Wikipedia are heterogeneous. They have "heavy tails," meaning that while most nodes have few links, there is a statistically significant number of massive hubs that the Binomial distribution simply cannot account for.
 
+The degree distribution for random vs real networks should be identifiably different
+
+![Degree Distribution Random](./files/week_5/random_degree_distribution.png)
+
 ---
 
-# Random Network: Small World Property
-
+# Small World Property of a Random Network
 The small-world property asks how many steps it takes to reach all nodes in a network, starting from the premise that nodes in a random network have roughly the same degree $k$.
 
 To understand how a network is "covered," we assume every node has exactly $k$ links. This is the assumption for random networks and we do this because all nodes have approximately the same degree (normal distribution).
 
 If you start at a single node and move out one step ($d=1$), you find $k$ nodes. At two steps away ($d=2$), you find $k(k-1)$ nodes, and by the time you reach a distance $d$, the number of nodes reached is approximately $k^d$. This exponential growth demonstrates how quickly you can move through a random network.
 
-If $k4 is not too small, the total number of nodes within a distance $d$ from a given node is approximately: 
+If $k$ is not too small, the total number of nodes within a distance $d$ from a given node is approximately: 
 
 $$N_{d} \sim k(k-1)^{d-1} \sim k^{d}$$
 
 This formula represents the approximate number of nodes reached within a specific distance in a network where every node is assumed to have the same degree. It is used to demonstrate how the "small-world property" arises from exponential growth.
 
-#### The Logarithmic Diameter
+---
+
+# The Logarithmic Diameter of a Random Network
 
 The "diameter" of a network, or the maximum distance $d_{max}$ needed to cover all $N$ nodes, is derived from the relationship $N \sim k^{d_{max}}$. Solving for $d_{max}$ reveals that the diameter grows only as the logarithm of the network size:
 
@@ -1728,7 +2011,7 @@ The lecture provides a striking example using "Dunbar's number" ($k=150$) and a 
 
 ---
 
-## Random Networks: Clustering Coefficient
+# Clustering Coefficient of Random Networks
 
 The clustering coefficient of a specific node $i$ is defined as the probability that two of its neighbors are connected to each other.
 
@@ -1736,16 +2019,16 @@ In a random network, links are placed independently of one another. Because of t
 
 $$C_{i} = p = \frac{\langle k \rangle}{N-1} \sim \frac{\langle k \rangle}{N}$$
 
-#### The Modeling Failure
+---
 
-This is major failure between random network models and reality:
-* Small Values: In most large networks, the number of nodes $N$ is massive, while the average degree $\langle k \rangle$ is relatively small.
-* Low Clustering: Because $N$ is so large in the denominator, the resulting clustering coefficient $C$ is a very tiny number.
-* Real-World Contrast: Empirical data shows that real networks have clustering coefficients much higher than what this random model predicts.
+### The Modeling Failures Between Random Network Models and Reality
+* **Small Values:** In most large networks, the number of nodes $N$ is massive, while the average degree $\langle k \rangle$ is relatively small.
+* **Low Clustering:** Because $N$ is so large in the denominator, the resulting clustering coefficient $C$ is a very tiny number.
+* **Real-World Contrast:** Empirical data shows that real networks have clustering coefficients much higher than what this random model predicts.
 
 ---
 
-# Random Network: Summary
+# Random Network Summary
 
 While random networks are a useful mathematical starting point, they are not good models for most real-world networks. 
 
@@ -1755,85 +2038,241 @@ They correctly predict the small-world property (short distances) but they produ
 
 # Small World Networks 
 
-Small-World Model as a solution to the shortcomings of the random network model, specifically its inability to produce high clustering. The goal here is to create a model that captures both the short path lengths seen in random networks and the high clustering observed in real-world social structures, 
+We need **Small-World Model** as a solution to the shortcomings of the **random network model**, specifically its inability to produce **high clustering**. The goal here is to create a model that captures both the short path lengths seen in random networks and the high clustering observed in real-world social structures, 
 
-To build this, the lecture first looks at a regular lattice (like a grid or ring). In a lattice where each internal node has $k=6$ neighbors, there are 15 possible pairs of neighbors. Because 6 of those pairs are actually connected, the clustering coefficient $C$ is $6/15$, which equals 0.4. This is a very high clustering value compared to a random network, but lattices fail because their average path length is too large; moving across a large grid takes many steps. They have a large **average shortest path length**. 
+To build this, the lecture first looks at a **regular lattice** (like a grid or ring). 
+
+![Lattice](./files/week_5/lattice.png)
+
+In a lattice where each internal node has $k=6$ neighbors, there are 15 possible pairs of neighbors. Because 6 of those pairs are actually connected, the clustering coefficient $C$ is $6/15$, which equals 0.4. This is a very high clustering value compared to a random network, but lattices fail because their average path length is too large; moving across a large grid takes many steps. They have a large **average shortest path length**. 
 
 The "Small-World" property will be achieved by interpolating between these two extremes: the high-clustering lattice and the short-path random network.
 
 --- 
 
 # Watts Strogatz
-
-Building a comprehensive understanding of the Watts-Strogatz model requires looking at how it bridges the gap between the predictable structure of a lattice and the randomness of an Erdős-Rényi graph. The goal of this model is to build a network that possesses both the small-world property (short paths) and a high clustering coefficient.
+Building a comprehensive understanding of the **Watts-Strogatz model** requires looking at how it bridges the gap between the predictable structure of a lattice and the randomness of an Erdős-Rényi graph. The goal of this model is to build a network that possesses both the **small-world property** (short paths) and a **high clustering coefficient**.
 
 The model starts with $N$ nodes arranged in a regular ring lattice, where each node is connected to its $k$ nearest neighbors (where $k$ is an even integer).
 
 The process then introduces randomness through a parameter $p$, representing the rewiring probability.  For every link in the network, you rewire it with probability $p$ by moving one end of the link to a new node chosen uniformly at random:
 
-* $p = 0$: The network remains a regular lattice. It has high clustering but a large average path length.
-* $0 < p < 1$: This is the "Small-World" regime. Even a small number of rewired links act as "shortcuts" that drastically reduce the distance between distant parts of the network.
-* $p = 1$: Every link is rewired, and the network effectively becomes a random network with short paths but very low clustering.
+---
+| Value | Outcome | 
+| :--- | :--- | 
+| $p = 0$ | The network remains a regular lattice. It has high clustering but a large average path length | 
+| $0 < p < 1$ | This is the "Small-World" regime. Even a small number of rewired links act as "shortcuts" that drastically reduce the distance between distant parts of the network |
+| $p = 1$ | Every link is rewired, and the network effectively becomes a random network with short paths but very low clustering |
+---
+
+<br>
 
 ![Rewiring Probabilties](./files/week_4/rewire_probs.png)
 
+<br>
+
 The brilliance of this model is revealed when you plot the average path length ($L$) and the clustering coefficient ($C$) against the rewiring probability ($p$).
-* **Rapid Drop in Distance:** As $p$ increases slightly from zero, the average path length drops almost immediately. This is because even a single shortcut can connect two nodes that were previously on opposite sides of the ring.
-* **Persistent Clustering:** Unlike the path length, the clustering coefficient remains high for much larger values of $p$. This is because a few rewired links don't destroy the majority of the local "triangles" (connected neighbors) that define a lattice.
-* The Result: There exists a significant range of $p$ where the network is "small-world"—it has a short path length (like a random graph) but a high clustering coefficient (like a lattice)
 
-#### Small-Worldedness Index ($S$)
 
-To quantify how "small-world" a network actually is, the lecture introduces a specific index ($S$):
+![Rewrire Plot](./files/week_5/rewiring_probability.png)
+
+**Rapid Drop in Distance:** As $p$ increases slightly from zero, the average path length drops almost immediately. This is because even a single shortcut can connect two nodes that were previously on opposite sides of the ring.
+
+**Persistent Clustering:** Unlike the path length, the clustering coefficient remains high for much larger values of $p$. This is because a few rewired links don't destroy the majority of the local "triangles" (connected neighbors) that define a lattice.
+
+**The Result:** There exists a significant range of $p$ where the network is "small-world"—it has a short path length (like a random graph) but a high clustering coefficient (like a lattice)
+
+---
+
+# Small-Worldedness Index ($S$)
+
+To quantify how "small-world" a network actually is we can use a specific index ($S$):
 
 $$S = \frac{C/C_{rand}}{L/L_{rand}}$$
 
 In this formula, $C$ and $L$ are the properties of your network, while $C_{rand}$ and $L_{rand}$ are the properties of a comparable Erdős-Rényi random graph. A value of $S > 1$ typically indicates that the network exhibits small-world characteristics.
 
-#### Limitations and Summary
+A "comparable" graph matches two qualities:
+1. **The Number of Nodes ($N$):** The size of the system must be identical.
+2. **The Average Degree ($\langle k \rangle$):** The "density" of the links must be identical.
+
+By matching both $N$ and $\langle k \rangle$, you ensure that the total number of links ($L$) is the same. This is crucial because a network with more links will naturally have shorter paths and higher clustering; you want to see if your network has "special" small-world properties beyond what you'd get from just having a lot of random connections.
+
+---
+
+# Is the Watts-Strogatz a Generative Model?
+The Watts-Strogatz (WS) model is a generative model, but unlike the Gilbert model (which starts with empty space and flips coins), the WS model follows a very specific "Initial State" and "Transformation" logic.
+
+1. **The Foundation (Lattice):** You start by creating a perfectly ordered circle of $N$ nodes. Each node is connected to its $k$ nearest neighbors. This gives you High Clustering (everyone knows their immediate neighbors) but a Huge Path Length (it takes forever to get to the other side of the circle).
+2. **The Intervention (Rewiring):** You iterate through every edge in that lattice. With a probability $p$, you "snip" one end of the edge and re-attach it to a completely random node somewhere else in the circle.
+3. **The Result (Small World):**
+    * If $p = 0$, you still have a boring lattice.
+    * If $p = 1$, you've rewired everything and created a random graph.
+    * If $0 < p < 1$ (the "sweet spot"), you have a Small-World Network. You’ve kept most of the local "triangles" from the lattice, but the few rewired edges act as "shortcuts" that leap across the circle.
+
+Starts with total order. It assumes that in the real world, people usually group together locally (cliques), and then "randomness" is just the occasional long-distance friendship that bridges those groups. WS is a generative model that evolves a structured starting point into a disorganized one. The "Generative" part is the rewiring algorithm.
+
+---
+
+# NetworkX Watts-Strogatz Implementation
+There are 3 main approaches to Watts-Strogatz:
+
+### 1. The "Strict" Model: `nx.watts_strogatz_graph`
+This follows the original 1998 paper exactly.
+
+It takes an existing edge $(u, v)$ from the lattice and, with probability $p$, moves one end to a new node $w$. The total number of edges ($L$) remains exactly the same as the starting lattice. You aren't adding new links; you are just "re-routing" existing ones. Because you are moving edges randomly, you might accidentally "break" the circle, leaving some nodes isolated. This can result in a disconnected network, which makes calculating the Average Path Length ($L$) impossible without using the harmonic mean.
+
+--- 
+
+### 2. The "Additive" Model: `nx.newman_watts_strogatz_graph`
+Proposed by Mark Newman, this is often preferred for simulation because it’s "safer." 
+
+Instead of moving an edge, it adds a new random edge with probability $p$. The original lattice edges are never touched. The total number of edges ($L$) increases. Since you never remove the original lattice edges, the network is guaranteed to stay connected (as long as the original ring was connected). It’s much easier to work with mathematically because you never have to deal with "Infinite" distances.
+
+--- 
+
+### 3. The "Lab" Model: `nx.connected_watts_strogatz_graph`
+This is a "Quality of Life" function provided by NetworkX.
+
+It runs the original Watts-Strogatz algorithm (the one that moves edges). If the resulting network is disconnected, it throws it away and tries again (up to a set number of attempts) until it successfully generates a connected one. This is what you should use in your assignments if the question asks for the "Original WS model" but you need to calculate Path Lengths without the code crashing due to disconnected components.
+
+---
+
+# Using Watts-Strogatz model as a Benchmark or Null Model
+The most powerful way to use the Watts-Strogatz (WS) model on a real-world dataset is to use it as a **Benchmarking Tool** or a **Null Model**.
+
+When you have a real network (e.g., a map of a power grid, a corporate email network, or a metabolic pathway), you don't just want to know its clustering coefficient is $0.3$; you want to know if that $0.3$ is special or just a result of the network's size.
+
+There are three specific pieces of analysis commonly performed:
+
+---
+
+### 1. Calculating the Small-Worldness Index ($S$)
+This is the "gold standard" test. You use the WS logic to determine if your network is a "Small World" or just a random mess.
+
+**Step A:** Measure the Clustering ($C_{real}$) and Path Length ($L_{real}$) of your real network.
+
+**Step B:** Generate a "Comparable" Random Network (using the Gilbert/ER model) with the same $N$ and $\langle k \rangle$. Measure its $C_{rand}$ and $L_{rand}$.
+
+**Step C:** Apply the formula:$$S = \frac{C_{real} / C_{rand}}{L_{real} / L_{rand}}$$
+
+**Analysis:** If $S > 1$, your network has "Watts-Strogatz-like" properties. It is efficiently organized for both local processing and global communication.
+
+---
+
+### 2. The "Rewiring" Sensitivity Analysis
+If you want to know how robust your network's efficiency is, you can perform an "Inverse Watts-Strogatz" test.
+
+**The Experiment:** Take your real network and start "rewiring" its edges at random (just like the WS algorithm) with an increasing probability $p$.
+
+If the Path Length ($L$) drops significantly after only $1\%$ of rewiring, your real network was not optimized for distance—it was too "lattice-like."
+
+If the Clustering ($C$) crashes immediately, your network’s "communities" were very fragile and relied on specific, non-random connections.
+
+---
+
+### 3. Testing for "Structural Logic"
+You can use WS to figure out the origin of your network.
+
+**The Question:** Is my network the result of geography or randomness?
+
+Watts-Strogatz models are essentially "Geography + a little bit of Randomness." 
+
+If your real-world network metrics ($C$ and $L$) perfectly match a WS model with a very low $p$ (e.g., $p = 0.01$), you can conclude that your network is driven by spatial constraints (like a physical fiber-optic layout).
+
+If it matches a high $p$, the geography doesn't matter; the connections are likely driven by social interests or digital links that ignore physical distance.
+
+---
+
+# How to use a WS Network
+
+| Analysis Question | WS Tool/Metric |
+| :--- | :--- |
+| "Is my network efficient?" | Compare $L_{real}$ to $L_{ws}$ |
+| "Is my network cliquey?" | Compare $C_{real}$ to $C_{ws}$ |
+| "Is it a Small World?" | Calculate the Index $S$"How much 'chaos' is in my system?"Find the best-fit $p$ (rewiring prob) |
+
+It should also be noted that there is no single WS Model. Each model generated is dependant on the $p$ value used to rewire and different levels of $p$ have vastly different interpretations. A low level of $p$ means the WS network retains it lattice qualites of high clustering (local groups) and long paths. 
+
+Comparing a given network to a low-$p$ WS network could be a sense check on whether the network is man-made, centrally planned or inhertently constrained. Perhaps something like the UK National Grid or the London Underground whereby the only "shortcuts" are the ones purposefully placed by a central authority to move traffic between major hubs.
+
+If your network looks nothing like a WS lattice and instead has a very high $p$ it suggests a Decentralized/Organic system. In social media or the Web, there is no "cost" to distance. I can follow someone in Tokyo as easily as someone in Brighton. The spatial "order" of the lattice vanishes. People connect based on Interest or Popularity (Preferential Attachment) rather than Geography.
+
+In Python, you can find the best-fit WS model for your data by iterating through values of $p$ until the generated WS graph's $C$ and $L$ values most closely match your real-world data.
+
+| If the Network is... | $S$ Index Result | Likely Origin |
+| :--- | :--- | :--- |
+| Highly Ordered | S is high, L is high | **Centrally Planned:** Optimized for local cost/delivery (Lattice-heavy). |
+| Optimized Small World | S is very high,  L is low | **Hybrid:** A planned system that has added "shortcuts" for efficiency (WS Sweet Spot). |
+| Total Chaos / Organic | S is near 1 | **Organic/Random:** No central control; connections happen by chance or global preference. |
+
+---
+
+# Watts-Strogatz model: Degree Distribution
+Regardless of the $p$-value chosen, the degree distribution of a WS model is peaked. This means there is a clearly identifiable peak in the distribution from which all of the nodes cluster around. This is because most nodes have the same distribution, there are no **hubs**. 
+
+THE Watts-Strogatz model fails to re-produce the broad degree distributions observed in many real-world networks. 
+
+![Peaked Distribution](./files/week_5/peaked_dist.png)
+
+---
+
+# Watts-Strogatz model: Limitations and Summary 
 
 While the Watts-Strogatz model fixed the clustering problem found in random networks, it still has a major flaw when compared to real-world data: the degree distribution.
 * **Degree Distribution:** Because the model starts with a regular lattice where everyone has degree $k$, even after rewiring, the degrees remain "peaked" around $k$.
 * **Missing Hubs:** The model fails to produce the broad, heavy-tailed distributions seen in real-world networks. In Watts-Strogatz, there are no "hubs"—nodes with a disproportionately high number of links.
 
-```
-G1 = nx.watts_strogatz_graph(N,k,p)            # The original model
-G2 = nx.newman_watts_strogatz_graph(N,k,p)     # No edges are removed
-G3 = nx.connected_watts_strogatz_graph(N,k,p)  # Guaranteed to be connected
-```
-
 ---
 
 # Configuration Model
 
-The Configuration Model addresses a specific problem: how to build a network that has a pre-defined degree sequence a specific list of degrees for every node, $(k_1, k_2, ..., k_n)$ while keeping all other connections random. This is essential because many different network structures can share the same degree distribution, and researchers need a way to isolate the effects of the distribution itself.
+The Configuration Model addresses a specific problem: how to build a network that has a pre-defined degree sequence, a specific list of degrees for every node, $(k_1, k_2, ..., k_n)$, while keeping all other connections random. 
 
-#### The Construction Principle: The "Stub" Method
+This is essential because many different network structures can share the same degree distribution, and researchers need a way to isolate the effects of the distribution itself.
+
+---
+
+# The Construction Principle: The "Stub" Method
 
 The model follows a straightforward mechanical process to ensure every node ends up with exactly the degree assigned to it:
-* Assign Degrees: Each of the $N$ nodes $N_i$ is assigned a degree $k_i$ based on a desired distribution or data from a real-world network.
-* Place Stubs: Every node is given a number of "stubs" (half-links) equal to its assigned degree
-* Random Matching: Pairs of stubs are chosen at random and attached to form full links until no stubs remain.
+* **Assign Degrees:** Each of the $N$ nodes $N_i$ is assigned a degree $k_i$ based on a desired distribution or data from a real-world network.
+* **Place Stubs:** Every node is given a number of "stubs" (half-links) equal to its assigned degree
+* **Random Matching:** Pairs of stubs are chosen at random and attached to form full links until no stubs remain.
 
-#### Why Use This Model?
+![Config Model](./files/week_5/configuration_model.png)
 
-The primary use of the configuration model is degree-preserving randomization. By generating a randomized version of an existing network that keeps the exact same degree sequence, scientists can perform a "control" experiment:
+---
 
-If a property (like a specific path length) is maintained in the randomized version, it proves that the degree distribution is the main driver of that property.
+# Why Use The Configuration Model?
+The primary use of the configuration model is **degree-preserving** randomization. By generating a randomized version of an existing network that keeps the exact same degree sequence, scientists can perform a "control" experiment:
 
-If the property disappears after randomization, then other factors—such as social preferences or geographical constraints—must be responsible for it.
+If a property (like a specific path length) is maintained in the randomized version, it proves that the **degree distribution** is the main driver of that property.
 
-#### Implementation and Constraints
+If the property disappears after randomization, then other factors — such as social preferences or geographical constraints — must be responsible for it.
 
-n practical terms, you can implement this in Python using NetworkX with the command nx.configuration_model(D), where $D$ is your list of degrees. However, it is important to note that this purely random matching can sometimes result in self-loops (a node connecting to itself) or multi-edges (two nodes sharing more than one link).
+---
+
+# What is Static and Variable in a Configuration Model
+When you use the Configuration Model, you are "locking" the Nodes and Degrees, but you are "releasing" the Structure.
+* **Fixed:** $N$, $L$, $\langle k \rangle$, and the Degree Distribution $P(k)$.
+* **Variable:** Clustering ($C$), Path Length ($L$), Assortativity ($r$), and Community Structure.
+
+The reason we use the Configuration Model is to ask the "Why" question. "Is my network's high clustering ($C=0.4$) just a lucky accident because I have a few big hubs?". You run the Configuration Model. It keeps your hubs but randomizes the links. If the new random version also has $C=0.4$, then the clustering was just a side-effect of the hubs. The hubs are the "important" part. If the new random version has $C=0.01$, then your hubs weren't enough to explain the clustering. There must be some social/biological force (like homophily) pushing those nodes together.
+
+---
+
+### Configuration Model Implementation and Constraints
+In practical terms, you can implement this in Python using NetworkX with the command `nx.configuration_model(D)`, where $D$ is your list of degrees. However, it is important to note that this purely random matching can sometimes result in **self-loops** (a node connecting to itself) or multi-edges (two nodes sharing more than one link).
 
 ---
 
 # Exponential Random Graphs
+**Exponential Random Graphs (ERGMs)** represent a shift from purely algorithmic models to a statistical framework. Instead of describing how to build a network step-by-step, ERGMs describe the probability of a specific network structure based on observed features or "statistics" like the number of edges or triangles.
 
-Exponential Random Graphs (ERGMs) represent a shift from purely algorithmic models to a statistical framework. Instead of describing how to build a network step-by-step, ERGMs describe the probability of a specific network structure based on observed features or "statistics" like the number of edges or triangles.
+---
 
-#### The Statistical Framework
+### The Statistical Framework
 
 The probability $P(G)$ of a given network $G$ is determined by an exponential function: 
 
@@ -1841,22 +2280,71 @@ $$P(G) \propto \exp(\theta^{T}x(G))$$
 
 In this formula, $x(G)$ represents the network statistics (such as the count of links or clusters), and $\theta$ represents the parameters that determine the weight or importance of those statistics. This allows researchers to distinguish between structures that occur purely by chance and those that are driven by specific formation processes.
 
-#### Analytical Power and Inference
+---
+
+### Analytical Power and Inference
 
 Unlike the models discussed previously, ERGMs enable statistical inference. This means they can be used to:
 
-Identify Drivers: Determine if certain structural patterns, like high clustering, are statistically significant given the number of nodes and edges.
+**Identify Drivers:** Determine if certain structural patterns, like high clustering, are statistically significant given the number of nodes and edges.
 
-Generate Synthetic Data: Create new networks that maintain the same statistical properties as an empirical dataset
+**Generate Synthetic Data:** Create new networks that maintain the same statistical properties as an empirical dataset
 
-Unified Theory: The model is highly flexible; for instance, the Gilbert random network model is actually a special case of an ERGM where the only constraint is the average number of links
+**Unified Theory:** The model is highly flexible; for instance, the Gilbert random network model is actually a special case of an ERGM where the only constraint is the average number of links
 
-#### Simulation via Triangle Bias
+---
+
+### Simulation via Triangle Bias
 
 The lecture demonstrates the power of ERGMs by showing how adjusting a single parameter—Triangle Bias—affects network structure:
-* Low Bias: Results in a network that looks essentially random.
-* Moderate Bias: Leads to the emergence of some clustering and small communities.
-* High Bias: Produces a network with strong, dense clustering throughout.
+* **Low Bias:** Results in a network that looks essentially random.
+* **Moderate Bias:** Leads to the emergence of some clustering and small communities.
+* **High Bias:** Produces a network with strong, dense clustering throughout.
+
+![ERGM Networks](./files/week_5/ermg_networks.png)
+
+---
+
+### ERGM Python Implementation
+This code is a Markov Chain Monte Carlo (MCMC) simulation for an Exponential Random Graph Model (ERGM). While the Gilbert and Watts-Strogatz models follow a rigid recipe, this code is "negotiating" with the network. It’s trying to find a balance between being random and being "cliquey" (having triangles).
+
+The function starts by creating a standard Erdős-Rényi (Random) network. At this stage, the clustering is very low because links are placed without any regard for "friend-of-a-friend" logic.
+
+The code runs for a set number of steps (e.g., 5,000). In each step, it picks two nodes ($u$ and $v$) at random and asks: "Should there be a link between these two?"
+
+This line then checks how many neighbours two nodes have in common: `common_neighbors = len(list(nx.common_neighbors(G, u, v)))`. If they have many common neighbors, adding a link between them will create many new triangles. In social terms, this is checking for Transitivity: "Are my friends also friends with each other?"
+
+The code then checks if a link already exists and decides whether to keep, remove, or add it based on the `triangle_bias`.
+
+> The `triangle_bias` is a weight (formally called a parameter, $\theta$) that tells the model how much it should "value" triangles compared to a purely random link.
+> * **If `triangle_bias` is 0:** The model is "blind" to triangles. It treats every potential link as a 50/50 coin flip. You end up with a Random Graph.
+> * **If `triangle_bias` is positive (e.g., 2.0):** The model "rewards" the network for every triangle it forms. The higher the number, the more "desperate" the nodes are to connect with their "friends of friends."
+> * **If `triangle_bias` is negative:** The model "penalizes" triangles. It will actively try to prevent cliques from forming, resulting in a very sparse, spread-out network (like a technological grid where you want to avoid redundancy).
+
+#### Case A: The edge already exists (`G.has_edge`)
+If an edge exists but it isn't part of many triangles (`low common_neighbors`), the probability of keeping it is high. However, if `triangle_bias` is high, the model "hates" edges that don't contribute to clustering and is more likely to prune them.
+
+```
+if random.random() < np.exp(-triangle_bias * common_neighbors):
+    G.remove_edge(u, v)  
+```
+
+Notice the negative sign ($-\text{bias}$). This is the "Cooling" mechanism. If `common_neighbors` is high (e.g., 5), then `exp(-0.5 * 5)` is $e^{-2.5} \approx 0.08$. $0.08$ is much smaller than 1. There is only an 8% chance the random number will be lower than that. The model is unlikely to remove an edge that is part of many triangles. It "protects" the clusters it has built.
+
+#### Case B: The edge doesn't exist (The "Opportunity")
+This is where the clustering happens. If $u$ and $v$ share 5 friends, `np.exp(triangle_bias * 5)` will be a large number. The model is highly likely to add that edge because it "wants" to close those triangles.
+
+```
+if random.random() < np.exp(triangle_bias * common_neighbors):
+    G.add_edge(u, v)
+```
+
+If triangle_bias is positive, then `np.exp(...)` will almost always be greater than 1. If two nodes have any common neighbors, the condition is almost always True. The model becomes extremely "aggressive." It will snap up every possible triangle it can find until the network is a dense cluster of cliques.
+
+---
+
+### Why use `np.exp`?
+We use the exponential function because it ensures that even a small increase in common_neighbors leads to a massive increase in the "desire" to form a link. This mimics how real-world social "gravity" works—the more mutual friends you have with someone, the exponentially more likely you are to meet them.
 
 ```
 import networkx as nx
@@ -1887,21 +2375,37 @@ def generate_ergm_network(n, edge_prob, triangle_bias, steps=5000):
     return G
 ```
 
+> This approach here is known as a **Generative Path**. It is simply a forward pass of an existing model. Things like the `triangle_bias` are known and in-practice would be derived from a network that we want to analyse or recreate. We are inputting parameters and getting out a synthetic network.
+>
+> Another approach would be the **Analytical Path**. This is Inverse Modeling (Inference). This is what you do when you have a real-world network (like the Sussex student Facebook data) and you have no idea what the triangle bias is. Here you input a real-world network $G$ into a solver. The solver does something like running our `generate_ergm_network` function thousands of times with random initalised parameters and comparing the generated network to the synetically created one until there is a "match". The output is the estimated value of `triangle_bias` ($\theta$).
+
+---
+
+### How to Utilise ERGM in Analysis
+In practice, using an **Exponential Random Graph Model (ERGM)** on a real-world network is akin to performing a **"structural autopsy"** to uncover the specific social or biological forces that shaped its evolution. Unlike simpler models that only tell you if a network is a small world, ERGMs allow you to test competing hypotheses—such as whether a network’s structure is driven by random chance, the tendency for friends-of-friends to connect (**Transitivity**), or the tendency for similar people to bond (**Homophily**). By treating the network's features as "statistics," the model seeks to identify the underlying "DNA" that makes your specific system unique.
+
+The analysis begins by feeding your real-world data into an ERGM solver, which performs **Parameter Estimation**. The solver essentially asks: "What 'weights' or 'biases' ($\theta$) would I need to apply to a random graph to make it evolve into a shape that matches this real network?" If the solver returns a high positive weight for **triangles**, you have mathematical proof that clustering is a dominant, non-random force in your system. Conversely, if the weight is near zero, you know the clusters you see are likely just a statistical accident. This allows researchers to move beyond mere observation and actually quantify the "pressure" of different structural drivers.
+
+Once these weights are identified, the next step is a **Goodness of Fit** test, where you use the model to generate thousands of synthetic networks based on those discovered rules. By comparing these "fake" networks to your "real" one, you can see if your model successfully captures the global properties like average path length or diameter. If the synthetic versions match the real one, you have successfully isolated the core mechanics of the network. If they don't, it signals that a "missing variable"—perhaps geography or a specific node attribute—is still unaccounted for, requiring you to refine your "autopsy" further.
+
+This methodology has profound applications across various fields. In **corporate sociology**, it can reveal if two departments aren't communicating because of physical distance or a lack of mutual collaborators. In **epidemiology**, it helps determine if a virus is spreading through "super-spreaders" or within tight-knit, isolated communities. Ultimately, ERGMs transform network analysis from a descriptive exercise into a predictive and explanatory tool, allowing you to isolate the specific "engine" that drives the connectivity of your system.
+
 ---
 
 # D-k Randomization
-
-The d-k randomization framework (specifically the $d-k$ series) provides a more sophisticated way to randomize networks while preserving increasingly complex structural properties. While the basic configuration model only keeps the degree sequence, $d-k$ randomization allows you to choose exactly how much of the original network's "DNA" you want to keep.
+The d-k randomization framework (specifically the $d-k$ series) provides a more sophisticated way to randomize networks while preserving increasingly complex structural properties. While the basic configuration model only keeps the **degree sequence**, $d-k$ randomization allows you to choose exactly how much of the original network's "DNA" you want to keep.
 
 The "d" in $d-k$ refers to the level of detail or the "dimension" of connectivity preserved.
 
-**d0-randomization ($0k$):** This is the most basic level. It preserves only the average degree $\langle k \rangle$ of the network. All other structure is completely randomized.
+**d0-randomization ($0k$):** This is the most basic level. It preserves only the **average degree** $\langle k \rangle$ of the network. All other structure is completely randomized.
 
-**d1-randomization ($1k$):** This is equivalent to the Configuration Model. It preserves the exact degree sequence (how many links each specific node has) but connects them randomly.
+**d1-randomization ($1k$):** This is equivalent to the **Configuration Model**. It preserves the exact **degree sequence** (how many links each specific node has) but connects them randomly.
 
-**d3-randomization ($3k$):** This preserves even more complex features, such as clustering and the connectivity between neighbors.
+**d3-randomization ($3k$):** This preserves even more complex features, such as **clustering** and the **connectivity** between neighbors.
 
-A key takeaway from your slides is that these models are nested—each higher level of $k$ automatically includes all the constraints of the levels below it. For example, a $d2$ randomized network naturally has the same degree sequence as a $d1$ network. As you increase $k$, the "ensemble" of possible random networks shrinks until eventually, if $k$ is high enough ($Dk=G$), the only possible network left is the original one.
+![dk](./files/week_5/dk_random.png)
+
+A key takeaway from your slides is that these models are nested — each higher level of $k$ automatically includes all the constraints of the levels below it. For example, a $d2$ randomized network naturally has the same degree sequence as a $d1$ network. As you increase $k$, the "ensemble" of possible random networks shrinks until eventually, if $k$ is high enough ($Dk=G$), the only possible network left is the original one.
 
 This is the ultimate "stress test" for network science. By randomizing a network at the $d2$ level, researchers can ask: "Is this community structure I'm seeing just a result of who connects to whom based on their degree, or is there something more social/biological going on?"
 
@@ -1909,36 +2413,51 @@ This is the ultimate "stress test" for network science. By randomizing a network
 
 # Network Growth
 
-Shifts focus from static models to Network Growth, recognizing that real-world networks are dynamic systems that expand over time. Rather than having a fixed number of nodes, these networks are constantly adding new members and connections.
+Shifts focus from static models to **Network Growth**, recognizing that real-world networks are dynamic systems that expand over time. Rather than having a fixed number of nodes, these networks are constantly adding new members and connections.
 
-The World Wide Web: In 1991, it consisted of a single node; today, it contains trillions.
+Foe example, in 1991 rhe World Wide Web consisted of a single node; today, it contains trillions.Scientific Networks, Citation and collaboration networks grow continuously as new papers are published and new researchers enter the field.
 
-Scientific Networks: Citation and collaboration networks grow continuously as new papers are published and new researchers enter the field.
+---
 
-#### General Procedure
+### General Procedure
 The general procedure for modeling this growth involves two main steps:
 1. **Node Arrival:** A new node enters the system with a specific number of "stubs," representing the number of future neighbors it will have.
 2. **Attachment:** These stubs are attached to existing nodes in the network according to a specific rule or mechanism.
 
-#### The Limitation of Static Models
-A key takeaway from this transition is that the models discussed earlier—such as the Random (Gilbert) and Watts-Strogatz models—are static. They assume a fixed number of nodes from the start, which fails to capture the "rich-gets-richer" phenomenon observed in expanding systems.
+---
+
+### The Limitation of Static Models
+A key takeaway from this transition is that the models discussed earlier — such as the Random (Gilbert) and Watts-Strogatz models—are static. They assume a fixed number of nodes from the start, which fails to capture the "rich-gets-richer" phenomenon observed in expanding systems.
 
 ---
 
 # Preferential Attachement
+To explain how real-world networks develop massive hubs, the lecture introduces the concept of **Preferential Attachment**, often described as the "rich-gets-richer" phenomenon. This mechanism moves beyond random connectivity by suggesting that new nodes have a bias toward connecting to existing nodes that are already well-connected.
 
-To explain how real-world networks develop massive hubs, the lecture introduces the concept of Preferential Attachment, often described as the "rich-gets-richer" phenomenon. This mechanism moves beyond random connectivity by suggesting that new nodes have a bias toward connecting to existing nodes that are already well-connected.
+---
 
-#### The Core Mechanism
-
+### The Core Mechanism
 The fundamental idea is that popularity is attractive. In the real world, this is visible in several systems:
 * **The Web:** We are more likely to discover and link to popular, highly-cited pages than obscure ones.
 * **Scientific Citations:** Researchers are more familiar with highly-cited papers and therefore tend to cite them more frequently than poorly-cited ones.
 * **Collaboration:** Popular actors who have been in many movies are more likely to be cast in new projects, further increasing their number of connections.
 
-#### The Barabási-Albert (BA) Model
-The BA model formally combines Growth and Preferential Attachment to create networks that look like the real world. The procedure follows these steps:
-1. **Initial State:** Start with a small group of $m_0$ nodes, usually fully connected.
+---
+
+# Polya's Urn
+Polya’s Urn is the "conceptual bridge" between the general idea of Preferential Attachment and the formal Barabási-Albert (BA) model. It uses a classic probability thought experiment to show exactly why a system starts to favor certain nodes over others.
+
+The **Polya’s Urn** model serves as a classic probability thought experiment used to explain the mathematical "logic" behind the **rich-get-richer** phenomenon. In this model, you start with an urn containing a few white balls ($X$) and black balls ($Y$). The process is simple: you draw a ball at random, see its color, and then put it back into the urn along with an additional ball of that same color. This creates a powerful **positive feedback loop** known as **Path Dependence**. If a white ball is picked early on, the proportion of white balls in the urn increases, making it statistically more likely that white will be picked again in the next round.
+
+This model is a perfect analogy for **Preferential Attachment** in growing networks. In a network, a "ball" represents a link and a "color" represents a specific node. When a new node joins the network and connects to an existing node, that existing node "gains a ball," increasing its "popularity" (degree). Because the probability of being picked for a new connection is proportional to current popularity, nodes that were lucky enough to get links early in the process—the "early birds"—quickly snowball into massive hubs.
+
+The significance of Polya's Urn in your notes is that it provides a universal explanation for **heavy-tail distributions** found across many different fields. Whether it is the population of cities, the wealth of individuals, or the number of citations a scientific paper receives, the underlying math is the same: systems that grow by rewarding current success will inevitably result in a few "super-winners" and a long tail of "losers." This is why the Barabási-Albert model is able to so accurately recreate the scale-free structures we see in the real world.
+
+---
+
+# The Barabási-Albert (BA) Model
+The BA model formally combines **Growth** and **Preferential Attachment** to create networks that look like the real world. The procedure follows these steps:
+1. **Initial State:** Start with a small group of $m_0$ nodes, usually **fully connected**.
 2. **Growth:** At each time step, a new node $i$ is added and creates $m$ links to existing nodes.
 3. **Preferential Attachment:** The probability $\Pi$ that the new node $i$ connects to an existing node $j$ is proportional to the degree $k_j$ of that node.
 
@@ -1946,13 +2465,35 @@ $$\Pi(i \leftrightarrow j) = \frac{k_{j}}{\sum_{l} k_{l}}$$
 
 The procedure ends when the given number of $N$ nodes is reached. 
 
-#### Why Growth Alone Isn't Enough
+---
 
+# Picking Nodes at Random in Python
+
+#### Picking Nodes at Random with Uniform Probability
+```
+import random
+nodes = [1 ,2, 3, 4]
+selected_node = random.choice(nodes)
+```
+
+#### Picking Nodes with Different Probabilities, e.g. using the degree
+```
+import random
+nodes = [1 ,2, 3, 4]
+degrees = [3, 1, 2, 2]
+selected_node = random.choice(nodes, degrees)
+```
+
+---
+
+# Why Growth Alone Isn't Enough
 The lecture poses a critical question: if older nodes have more time to gather links, do we even need preferential attachment? To test this, researchers compared the BA model against a model with growth but random attachment.
 
 The Conclusion: Growth combined with random attachment fails to generate hubs. Preferential attachment is the essential ingredient required to produce the heavy-tailed degree distributions seen in real-world networks.
 
-#### Python Implementation
+---
+
+# Barabási-Albert Python Implementation
 
 ```
 import networkx as nx
@@ -1972,21 +2513,25 @@ plt.title(f"Barabási-Albert Model (N={N}, m={m})")
 plt.show()
 ```
 
+![ba net](./files/week_5/ba_net.png)
+
+![rand pref attatch](./files/week_5/rand_pref_att.png)
+
 --- 
 
 # Non-Linear Preferential Attachment
 
-In this final part of the lecture, the Non-Linear Preferential Attachment model is explored to determine if a simple "rich-gets-richer" logic is enough to generate hubs, or if the specific linearity of that growth is the secret ingredient
+In this final part of the lecture, the **Non-Linear Preferential Attachment** model is explored to determine if a simple "rich-gets-richer" logic is enough to generate hubs, or if the specific linearity of that growth is the secret ingredient. Note, the BA models uses **Linear Preferential Attachment**.
 
-The procedure for this model is nearly identical to the standard Barabási-Albert model, starting with a small clique and adding nodes one by one. However, the probability $\Pi_{\alpha}$ that a new node $i$ connects to an existing node $j$ is modified by a power $\alpha$:
+The procedure for this model is nearly identical to the standard **Barabási-Albert** model, starting with a **small clique** and adding nodes one by one. However, the probability $\Pi_{\alpha}$ that a new node $i$ connects to an existing node $j$ is modified by a power $\alpha$:
 
 $$\Pi_{\alpha}(i \leftrightarrow j) = \frac{k_{j}^{\alpha}}{\sum_{l} k_{l}^{\alpha}}$$
 
 The behavior of the network changes drastically depending on the value of $\alpha$:
 
-* Sub-linear Attachment ($\alpha < 1$): In this regime, the linking probability does not grow fast enough with the degree. Consequently, high-degree nodes do not gain a large enough advantage, the heavy-tail distribution fails to form, and hubs disappear
-* Linear Attachment ($\alpha = 1$): This recovers the original Barabási-Albert model. It is the "goldilocks" zone that successfully generates the broad degree distributions and hubs seen in real-world networks.
-* Super-linear Attachment ($\alpha > 1$): High-degree nodes accumulate new links much faster than low-degree ones. This leads to a "winner-takes-all" effect, where one node eventually connects to a fraction of all other nodes. If $\alpha > 2$, a single node may connect to every other node in the system
+* **Sub-linear Attachment ($\alpha < 1$)**: In this regime, the linking probability does not grow fast enough with the degree. Consequently, high-degree nodes do not gain a large enough advantage, the heavy-tail distribution fails to form, and hubs disappear
+* **Linear Attachment ($\alpha = 1$)**: This recovers the original Barabási-Albert model. It is the "goldilocks" zone that successfully generates the broad degree distributions and hubs seen in real-world networks.
+* **Super-linear Attachment ($\alpha > 1$)**: High-degree nodes accumulate new links much faster than low-degree ones. This leads to a "winner-takes-all" effect, where one node eventually connects to a fraction of all other nodes. If $\alpha > 2$, a single node may connect to every other node in the system
 
 The lecture concludes that linear preferential attachment is the only way to go if you want to accurately model the hub structure of real-world networks. Sub-linear attachment fails to make hubs, while super-linear attachment makes one "super-hub" that dominates the entire network.
 
