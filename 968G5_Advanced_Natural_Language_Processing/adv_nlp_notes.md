@@ -1,5 +1,4 @@
 # Advanced Natural Language Proccessing Notes (Spring 26)
-
 This is the main file for the Advanced Natural Language Proccessing module taken in Spring 26. It will act as the location for note taking accross all mediums, i.e. lectures, videos, labs and additional readings, as well as a directory for file locations. It will be recorded chronologically with a section for each week. 
 
 Advanced Natural Language Processing focuses on the application of data-driven and machine learning methods which have transformed the field of Natural Language Processing over the past couple of decades.  It does build on foundations provided by the level 7 Applied Natural Language Processing module. Students will develop their knowledge and understanding of key topics including word vector space models of semantics, language modelling, contextualised word embeddings, large language models, generative language models and their applications. 
@@ -16,16 +15,15 @@ Labs will provide the opportunity for students to improve their python programmi
 
 The textbook is [Speech and Language Processing](https://web.stanford.edu/~jurafsky/slp3/) by Dan Jurafsky and James H. Martin
 
-
 # Table of Contents
 1. [Week 1 - Lexical and Distributional Semantics Revisited](#week-1---lexical-and-distributional-semantics-revisited)
 2. [Week 2 - Language Modelling w/ N-grams](#week-2---language-modelling-with-n-grams)
 3. [Week 3 - Neural Networks and Neural Language Modelling](#week-3---neural-language-models)
-4. [Week 4 - Word Embeddings]()
-5. [Week 5 - Applications in NLP]()
-6. [Week 6 - Machine Translation]()
-7. [Week 7 - Pre-Trained Large Language Models]()
-8. [Week 8 - Transfer Learning with Pre-Train Large Language]()
+4. [Week 4 - Word Embeddings](#week-4---lexical-and-distributional-semantics-2)
+5. [Week 5 - Applications in NLP](#week-5---applications-in-nlp)
+6. [Week 6 - Machine Translation](#week-6---machine-translation)
+7. [Week 7 - Pre-Trained Large Language Models](#week-7---pre-trained-large-language-models)
+8. [Week 8 - Transfer Learning with Pre-Train Large Language](#week-8---transfer-learning-with-pretrained-large-language-models)
 9. [Week 9 - ]()
 10. [Week 10 - ]()
 11. [Week 11 - ]()
@@ -48,109 +46,413 @@ This week is for reviewing the core concepts from lexical semantics and distribu
 #### Week 1: Contents
 
 1. [Lecture](#week-1---lecture)
-3. [Seminar](#week-1---seminar)
-4. [Additional Readings](#week-1---additional-readings)
+2. [Seminar](#week-1---seminar)
+3. [Paper](#week-1---paper)
+3. [Additional Readings](#week-1---additional-readings)
 
-## Week 1 - Lecture 
+# Week 1 - Lecture 
 
 | [Slides](/Users/lukebirkett/Repos/study-planner/968G5_Advanced_Natural_Language_Processing/files/week_1/week_1_lecture_lexical_distributional_semantics.pdf) | [Lecture Video Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c7d2751c-0820-4e87-8b8d-acb400db8436&start=1.23467) | [Lecture Video Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=15631590-2d19-4dcd-98bf-acb400db95f6&start=0) |
 
-## Week 1 - Seminar 
-
-* [Seminar Session](#week-1---seminar-session)
-* [Seminar Reading](#week-1---seminar-session)
-
-### Week 1 - Seminar Session 
-
-| [Seminar Questions](files/week_1/week_1_seminar_questions.pdf) | [Seminar Slides]()
-
-This seminar session was a mix of mild lecturing before breaking out into small groups to discuss questions. After which as a whole class we would put forward answers. In this section I will put down the questions and some notes for the answers. 
-
-**Prompt: Imagine you have been given a set of 1000 
-documents, each of which have been annotated as 
-relevantor irrelevant to a particular topic.  Your 
-task is to build a classifier which can assign the 
-correct label (relevantor irrelevant) to a previously 
-unseen document.  How would you go about doing 
-this?**
-
-In my group we discussed pre-processing, identifying words and their sense, naive bayes as an approach to unpack frequeniques and probablities and finally we spoke about feature vectors from a linear algebra perspective. 
+#### Week 1: Contents
+1. [Part 1: Lexical Semantics](#part-1-lexical-semantics)
+---
+* [Word Senses and Ambiguity](#word-senses-and-ambiguity)
+---
+* [Lexical Semantic Relationships](#lexical-semantic-relationships)
+    * [Synonymy](#synonymy)
+    * [Antonymy](#antonymy)
+    * [Hyponymy & Hypernymy](#hyponymy--hypernymy)
+    * [Meronymy & Holonymy](#meronymy--holonymy)
+---
+* [WordNet Structure](#wordnet-structure)
+    * [Synsets](#synsets)
+    * [Sense Specificity](#sense-specificity)
+    * [Hierarchical Organization](#hierarchical-organization)
+---
+* [Semantic Similarity Measures](#semantic-similarity-measures)
+    * [Path Length Similarity](#path-length-similarity)
+    * [Information Content (IC)](#information-content-ic)
+    * [Probability of "Carnivore:](#probability-of-carnivore)
+    * [Lowest Common Subsumer (LCS)](#lowest-common-subsumer-lcs)
+    * [Resnik Similarity](#resnik-similarity)
+    * [Lin Similarity](#lin-similarity)
+---
+* [Evaluation of Lexical Semantics](#evaluation-of-lexical-semantics)
+---
+2. [Part 2: Distributional Semantics](#part-2-distributional-semantics)
+* [The Distributional Hypothesis](#the-distributional-hypothesis)
+* [Facets of Meaning & Context Windows](#facets-of-meaning--context-windows)
+* [Vector Space Models & Cosine Similarity](#vector-space-models--cosine-similarity)
+* [Weighting Features (PMI and PPMI)](#weighting-features-pmi-and-ppmi)
+* [Challenges in Distributional Semantics](#challenges-in-distributional-semantics)
 
 ---
 
-### Document Classification using Naive Bayes
+# Part 1: Lexical Semantics
+Lexical Semantics is the subfield of linguistics and NLP focused on the study of the meaning of individual words, or "lexical units". Rather than looking at how words function in a sentence (syntax), it explores how words represent distinct concepts, how those meanings can be ambiguous across different senses, and how words relate to one another through structured networks. It provides the framework for understanding relationships like synonymy (sameness) and hyponymy (class inclusion), which are essential for mapping the human vocabulary into computational models like WordNet.
 
-Here, documents are respected as a bag-of-words where the features are the observed words. There is no notion of order meaning the structure of sentances is lost. NB selected a class/label based on the cumulative probabilites of the feature vector that respresents the document. 
+---
+
+# Word Senses and Ambiguity
+Lexical semantics begins with the realization that the "word" is not the smallest unit of meaning; the sense is.
+
+| Term | Definition | 
+| :--- | :--- |
+| Ambiguity | Most common words possess multiple senses, which dictionaries attempt to enumerate and define . |
+| Homonymy | This refers to broad distinctions between meanings that share the same spelling/sound but have unrelated origins (e.g., plant as a living organism vs. plant as a factory) |
+| Polysemy | This refers to fine-grained, related distinctions within a single word (e.g., book as a physical object vs. book as a set of accounts) |
+| Dictionary Variation | Different resources (WordNet vs. Oxford) often disagree on the exact number of senses for a word due to the difficulty of drawing these boundaries |
+
+---
+
+# Lexical Semantic Relationships
+Meaning is often defined by how a word relates to others in a linguistic network.
+
+---
+
+### Synonymy: 
+Words that mean the same thing and can be substituted in context without changing the meaning . True synonyms are rare; usually, they differ in connotation or register (e.g., car vs. automobile)
+
+---
+
+### Antonymy:
+Words with opposite meanings . Paradoxically, antonyms are semantically very similar as they usually share all features except for one specific dimension, like temperature (hot/cold) or direction (rise/fall).
+
+---
+
+### Hyponymy & Hypernymy:
+These capture ISA-relationships (class inclusion).
+* A Hyponym is a subclass (e.g., poodle is a hyponym of dog)
+* A Hypernym is a superclass (e.g., animal is a hypernym of dog).
+
+---
+
+### Meronymy & Holonymy:
+These represent Part-Whole relationships (e.g., wheel is a meronym of car).
+
+---
+
+# WordNet Structure
+WordNet is an electronic lexical database that functions more as a network than a standard dictionary.
+
+### Synsets:
+The core unit of WordNet. It is a set of synonymous word senses (e.g., {plant, flora, plant life}).
+
+---
+
+### Sense Specificity:
+Each synset is associated with one distinct definition; polysemous words appear in multiple synsets.
+
+---
+
+### Hierarchical Organization:
+Synsets are primarily connected via hyponymy, creating a tree-like structure where general concepts are at the top and specific instances are at the leaves .
+
+---
+
+# Semantic Similarity Measures
+
+### Path Length Similarity
+The simplest way to quantify similarity is to count the number of edges between two synsets in the WordNet hierarchy. As the path length increases, the similarity score decreases. A path length of 1 (synonyms) results in a similarity of 1.0.
+
+$$sim_{path}(c_1, c_2) = \frac{1}{\text{path\_length}(c_1, c_2)}$$
+
+---
+
+### Information Content (IC)
+Information Content is based on the probability of a concept appearing in a corpus. 
+
+**Concept Probability ($P(c)$):** The frequency of a concept $c$ is the sum of the frequencies of that concept and all of its descendants in the hierarchy. Where $N$ is the total number of concepts in the corpus (Total Corpus Size ($N$)).
+
+$$P(c) = \frac{\text{freq}(c)}{N}$$
+
+**IC Formula:** Frequent, general concepts (like vertebrate) have high probability and low IC; rare, specific concepts (like poodle) have low probability and high IC.
+$$IC(c) = -\log P(c)$$
+
+---
+
+#### Probability of "Carnivore:
+To find the frequency of "Carnivore," we must sum its own occurrences plus everything below it in the tree (dogs, poodles, cats, etc.)
+* $\text{freq}(carnivore)$: $10 (\text{poodles}) + 5 (\text{terriers}) + 20 (\text{dogs}) + 15 (\text{cats}) = \mathbf{50}$.
+* $P(carnivore)$: $\frac{50}{100} = \mathbf{0.50}$.
+* Result: High probability $\rightarrow$ Low Information Content ($IC$).
+
+> Note, $N$ is the Total Corpus Size
+
+---
+
+### Lowest Common Subsumer (LCS)
+Before calculating advanced similarity, we must identify the LCS, which is the most specific ancestor that two concepts share.
+* Example: The LCS of tabby and tiger is feline.
+* Example: The LCS of poodle and tiger is carnivore.
+
+---
+
+### Resnik Similarity
+Proposed by Resnik (1995), this measure assumes that the similarity of two concepts is determined by the information they share, represented by their LCS directly. If the most specific thing two words share is a very general concept, they aren't very similar. If their shared ancestor is very specific (high IC), they are highly similar.
+
+$$sim_{resnik}(c_1, c_2) = IC(LCS(c_1, c_2))$$
+
+---
+
+### Lin Similarity
+Proposed by Lin (1998), this measure refines Resnik's work by normalizing the shared information by the total information contained in the two individual concepts. This provides a ratio of shared information content to total information content, resulting in a score between 0 and 1.
+
+$$sim_{lin}(c_1, c_2) = \frac{2 \times IC(LCS(c_1, c_2))}{IC(c_1) + IC(c_2)}$$
+
+--- 
+
+# Evaluation of Lexical Semantics
+To determine if a computational measure is "correct," it must be compared against human benchmarks.
+
+**Gold Standards:** Researchers use datasets of human synonymy judgments, such as **WordSim-353** or the **MEN** dataset
+
+**Correlation:** Success is measured using **Pearson’s** or **Spearman’s** rank correlation to see how closely the AI's similarity scores match the human scores
+
+---
+
+# Part 2: Distributional Semantics
+Distributional Semantics is a computational approach to meaning based on the Distributional Hypothesis, which states that words occurring in similar contexts tend to have similar meanings. Unlike Lexical Semantics, which relies on human-curated dictionaries, this method "bootstraps" meaning directly from large bodies of text (corpora). It is famously summarized by linguist J.R. Firth’s 1957 dictum: "You shall know a word by the company it keeps"
+
+In practice, this means representing a word as a mathematical vector based on the counts of other words (features) that appear near it within a defined context window. By comparing these vectors—typically using cosine similarity—computers can automatically discover that words like beer and wine are related because they share "facets of meaning," such as being the object of the verb drink or appearing near the word bottle.
+
+---
+
+# The Distributional Hypothesis
+The foundational philosophy of distributional semantics is that a word’s meaning is defined primarily by its environment. This is famously captured by Firth’s Dictum (1957), which states, "You shall know a word by the company it keeps". The core hypothesis posits that words occurring in similar contexts tend to possess similar meanings. This allows for bootstrapping, a process where the meaning of an unknown word—such as tezguino—can be inferred by observing its co-occurrence with known words like bottle, corn, and drunk, leading to the conclusion that it is likely an alcoholic beverage . Practical applications of this theory include the automatic construction of thesauruses and overcoming data sparseness in classifiers. For instance, if a model has been trained on the word beer but encounters the unseen word tezguino, it can utilize distributional similarity to treat them as semantically equivalent.
+
+---
+
+# Facets of Meaning & Context Windows
+To represent meaning computationally, we must extract specific "features" from the text.
+
+**Facets of Meaning:** Words share different dimensions of meaning based on their roles. For example, banana and credit card both share the facet of "being eaten" if they appear as objects of the verb eat.
+
+**Context Windows:** A common way to capture these features is by looking at a fixed number of words ($\pm m$) around a target word.
+* **Small Windows ($\pm 1$):** Capture local, often syntactic or functional relationships.
+* **Large Windows:** Capture more general topical or thematic relationships.
+
+**Dependency Features:** A more complex method involves using grammatical relationships (e.g., "is subject of...") rather than just proximity, though this is harder to parse.
+
+---
+
+# Vector Space Models & Cosine Similarity
+Once we count co-occurrences, we represent each word as a high-dimensional vector (or distributional representation).
+
+**Cosine Similarity:** This is the standard measure for how similar two word vectors are. Instead of looking at the distance between points, we look at the angle ($\theta$) between the vectors. A small angle (high cosine) means high similarity. A 90° angle (zero cosine) means no similarity.
+
+$$sim(w_1, w_2) = \cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{\|\vec{a}\|*\|\vec{b}\|}$$
+
+---
+
+# Weighting Features (PMI and PPMI)
+Raw counts are often misleading because common words (like the or is) appear frequently with everything but carry little information
+
+**Pointwise Mutual Information (PMI):** Measures whether a word and a feature co-occur more often than would be expected by chance.
+
+$$PMI(w, f) = \log \frac{P(w, f)}{P(w)P(f)}$$
+
+**Positive PMI (PPMI):** Since $PMI$ results in $-\infty$ for words that never co-occur, $PPMI$ replaces all negative values with 0. This emphasizes informative features and de-emphasizes "noise" from high-frequency function words.
+
+--- 
+
+# Challenges in Distributional Semantics
+Despite its power, this approach has three major hurdles:
+
+**Word Ambiguity:** Vectors represent the word (the string), not the sense. A vector for bow is a "mush" of its ribbon, weapon, and ship meanings.
+
+**Semantic Relationships:** Distributional models find "related" words, but not necessarily synonyms . Antonyms often appear in identical contexts (e.g., hot and cold), making them appear highly similar.
+
+**Sparsity (Zipf's Law):** Most words occur very rarely (Hapax Legomena). This results in massive vectors filled with zeros, making them difficult to compare.
+
+---
+
+# Week 1 - Seminar 
+This seminar session was a mix of mild lecturing before breaking out into small groups to discuss questions. After which as a whole class we would put forward answers. In this section I will put down the questions and some notes for the answers. 
+
+#### Week 1: Contents
+* [Document Classification using Naive Bayes](#document-classification-using-naive-bayes)
+* [Towards More Intelligent NLP](#towards-more-intelligent-nlp)
+---
+* **[Week 1: 1.1 Questions]()**
+---
+* [Give an example of lexical ambiguity](#1-give-an-example-of-lexical-ambiguity)
+---
+* [Give an example of lexical variation](#2-give-an-example-of-lexical-variation)
+---
+* [What is a WordNet synset?](#3-what-is-a-wordnet-synset)
+    * [What does the number of synsets that a word form occurs in tell us?](#what-does-the-number-of-synsets-that-a-word-form-occurs-in-tell-us)
+    * [What does the size of a synset tell us?](#what-does-the-size-of-a-synset-tell-us)
+    * [How are synsets connected?](#how-are-synsets-connected)
+---
+* [Describe 2 ways WordNet can be used to calculate the  similarity of 2 concepts?  Which is the best way and how do you know?](#4-describe-2-ways-wordnet-can-be-used-to-calculate-the--similarity-of-2-concepts--which-is-the-best-way-and-how-do-you-know)
+---
+* **[Week 1: 1.2 Questions]()**
+---
+* [What is the distributional hypothesis?](#1-what-is-the-distributional-hypothesis)
+---
+* [Explain how distributional semantics might help us in another application e.g. document classification](#2-explain-how-distributional-semantics-might-help-us-in-another-application-eg-document-classification)
+---
+* [In traditional distributional semantics (aka vector  semantics), how is the association between 2 words often  measured?](#3-in-traditional-distributional-semantics-aka-vector--semantics-how-is-the-association-between-2-words-often--measured)
+---
+* [In traditional distributional semantics, how is the similarity between 2 words often measured?](#4-in-traditional-distributional-semantics-how-is-the-similarity-between-2-words-often-measured)
+
+---
+
+# Document Classification using Naive Bayes
+Here, documents are respected as a **bag-of-words** where the features are the observed words. There is no notion of order meaning the structure of sentances is lost. NB selected a class/label based on the cumulative probabilites of the feature vector that respresents the document. 
 
 $$y = \text{argmax}_y P(y) \prod_{i=1}^{n} P(x_i \mid y)$$
 
-It is important to remember Naive Bayes is a similifiation of Bayes Rule. To simplifiy the model we assume that features, the words, are all indepent, i.e. the use of one word does not increase or decrease the use of a another, this is how we end up with our bag-of-words srtucture. Clearly this is not true but it makes the formula mathematically possible, allowing us to compute at least something. 
+It is important to remember Naive Bayes is a simplification of Bayes Rule. To simplifiy the model we assume that features, the words, are all indepent, i.e. the use of one word does not increase or decrease the use of a another, this is how we end up with our bag-of-words structure. Clearly this is not true but it makes the formula mathematically possible, allowing us to compute at least something. 
 
 ---
 
-### Towards More Intelligent NLP
-
+# Towards More Intelligent NLP
 This slide highlights that a Naive Bayes approach to NLP is a little too basic. It treats word tokens as atomic building blocks but obscures too much of the characteristics required for human understanding of language: the meaning. Meaning is generally inferred through words relationships with other words and/or their similarity to other words. This notion is the basis for Lexical Semnatics which is the focus of this weeks content. 
 
 ---
 
-### Seminar 1.1 Questions
+# Week 1: 1.1 Questions
 
-**1. Give an example of lexical ambiguity**: These are words that are spelt exactly the same but have different senses. 
-
-**2. Give an example of lexical variation**: These are different words that mean the same thing/sense
-
-**3. What is a WordNet synset?** a WordNet synset (short for "synonym set") is a group of words that mean the same thing in a specific context.
-
-* **What does the number of synsets that a word form occurs in tell us?**: This is a measure of its polysemy, i.e. its multiple meanings.
-* **What does the size of a synset tell us?** The "size" of a synset refers to the number of lemmas (individual word forms) that are grouped together within it. While the number of synsets for a word tells you about ambiguity, the size of a single synset tells you about lexical density and synonymy. If a sense has many different words for it then this may be a culturally important word that is used often, or something that requires different words to represent an emotional context. Additionally, a large sysnet might imply that the word is high-level and broad. A sysnset with only 1 word is monosemous, these words are very specific and can only ever mean 1 thing. 
-* **How are synsets connected?** Synsets are linked in a semantic network of Hyponymy and Hypernymy. This is hiearchical structure which denotes an "Is-A" relationship. Hypernym (Superordinate): A more general term. (Furniture is a hypernym of Chair). Hyponym (Subordinate): A more specific term. (Oak is a hyponym of Tree)
-
-
-**4. Describe 2 ways WordNet can be used to calculate the 
-similarity of 2 concepts?  Which is the best way and how do you know?** 
-
-The two main ways of using WordNet are PathLength and Information Content. 
-
-PathLength is a distance based metric with traverses edges and counts the shortest route from one term to another. It introduces the concept of a Lowest Common Subsumer (LCS) which is the lowest (first) mutual Hypernymy that two terms share. Shorter paths are assumed to be more similar words. 
-
-The other measure, Information Content is considered to be node based. It assumes that the similarity of two concepts depends on how much "information" they share. It requires the addition of an external corpus to popualiton the statistics. The "Information Content" of a concept is based on its frequency in a large body of text. Rare, specific words (like Pomeranian) have high IC, while common, general words (like Entity) have low IC. There are many different IC metrics each with their own pros and cons. 
-
-The Information Content (IC) measures (specifically Lin or Jiang-Conrath) are generally considered superior to simple Path-Based measures. However, this something with a trade-off which is generally linked to data robustness and specifically data sparisty. Language is naturally sparse and miss values often lead to formulas failing. 
+### 1. Give an example of lexical ambiguity
+These are words that are spelt exactly the same but have different senses. This has two main sources: 
+* **Homonymy (Broad Distinctions):** When the senses are entirely unrelated, often just by historical coincidence. Plant as a living organism vs. Plant as an industrial factory.
+* **Polysemy (Fine-grained Distinctions):** When the senses are distinct but clearly related to a single core concept. Book as a printed work vs. Book as a set of accounts.
 
 ---
 
-### Seminar 1.2 Questions
+###  2. Give an example of lexical variation: 
+These are different words that mean the same thing/sense
 
-**1. What is the distributional hypothesis?** 
+---
 
+### 3. What is a WordNet synset? 
+A **WordNet** synset (short for "synonym set") is a group of words that mean the same thing in a specific context.
+
+#### What does the number of synsets that a word form occurs in tell us?: 
+This is a measure of its polysemy, i.e. its multiple meanings. The higher the count, the more "ambiguous" or highly polysemous the word is. "counter" occurs in 9 noun synsets in WordNet, making it significantly more polysemous than "chicken", which occurs in 4.
+
+#### What does the size of a synset tell us? 
+The "size" of a synset refers to the number of lemmas (individual word forms) that are grouped together within it. While the number of synsets for a word tells you about ambiguity, the size of a single synset tells you about lexical density and synonymy. If a sense has many different words for it then this may be a culturally important word that is used often, or something that requires different words to represent an emotional context. Additionally, a large sysnet might imply that the word is high-level and broad. A sysnset with only 1 word is monosemous, these words are very specific and can only ever mean 1 thing. 
+
+#### How are synsets connected?
+Synsets are linked in a semantic network of Hyponymy and Hypernymy. This is hiearchical structure which denotes an "Is-A" relationship. 
+* **Hypernym (Superordinate):** A more general term. (Furniture is a hypernym of Chair). 
+* **Hyponym (Subordinate):** A more specific term. (Oak is a hyponym of Tree)
+
+---
+
+### 4. Describe 2 ways WordNet can be used to calculate the  similarity of 2 concepts?  Which is the best way and how do you know? 
+
+The two main ways of using WordNet are **PathLength** and **Information Content**. 
+
+**PathLength** is a distance based metric with traverse edges and counts the shortest route from one term to another. It introduces the concept of a **Lowest Common Subsumer (LCS)** which is the lowest (first) mutual Hypernymy that two terms share. Shorter paths are assumed to be more similar words. 
+
+The other measure, **Information Content** is considered to be node based. It assumes that the similarity of two concepts depends on how much "information" they share. It requires the addition of an external corpus to populate the statistics. The "Information Content" of a concept is based on its frequency in a large body of text. Rare, specific words (like Pomeranian) have **high IC**, while common, general words (like Entity) have **low IC**. There are many different IC metrics each with their own pros and cons. 
+
+The Information Content (IC) measures (specifically **Lin** or **Jiang-Conrath**) are generally considered superior to simple **Path-Based** measures. However, this something with a trade-off which is generally linked to data robustness and specifically **data sparisty**. Language is naturally sparse and missing values often lead to formulas failing. 
+
+---
+
+# Week 1: 1.2 Questions
+
+### 1. What is the distributional hypothesis?** 
 The Distributional Hypothesis is a foundational concept in linguistics and Natural Language Processing (NLP) that suggests the meaning of a word is determined by the words that frequently appear around it.
 
-**2. Explain how distributional semantics might help us in another application e.g. document classification**
+---
 
-Distribution semantics allows us to transfer learnings from one application to the next and fill in missing information based on contextual clues. We may on know the exact meaning on a rare type of drink. However, we may see that is used similar to beer, also an alchoholic drink. By applying distribution demantics to a very large corpus we can learn that the rare drink is similar to beer even if the specific training sample wasn't able to tell us that. 
+### 2. Explain how distributional semantics might help us in another application e.g. document classification
+Distribution semantics allows us to transfer learnings from one application to the next and fill in missing information based on contextual clues. We may not know the exact meaning on a rare type of drink. However, we may see that is used similar to beer, also an alchoholic drink. By applying distribution demantics to a very large corpus we can learn that the rare drink is similar to beer even if the specific training sample wasn't able to tell us that. 
 
-**3. In traditional distributional semantics (aka vector 
-semantics), how is the association between 2 words often 
-measured?** 
+---
 
-Note that there is a different between association and similartity. **Similarity** refers to words that share the same features or occupy the same spot in a hierarchy. These words are often "substitutable"—you could swap one for the other in a sentence and the basic meaning would remain intact. **Association** (also called Relatedness) refers to words that "go together" in the real world. They don't look or act alike, but they frequently appear in the same context or sequence. They are not substitutable.
+### 3. In traditional distributional semantics (aka vector  semantics), how is the association between 2 words often  measured?
+Note that there is a different between association and similartity. 
+
+**Similarity** refers to words that share the same features or occupy the same spot in a hierarchy. These words are often "substitutable" — you could swap one for the other in a sentence and the basic meaning would remain intact. 
+
+**Association** (also called Relatedness) refers to words that "go together" in the real world. They don't look or act alike, but they frequently appear in the same context or sequence. They are not substitutable.
 
 To measure Association we need to look at the words around a word. Frequency and/or simple conditional probability do not capture the intuition that some features are more informative than others. "the" and "is" appear relatively frequently with all of the word so their contribution to similarity should be smaller. They do not provide any specificity. PMI measures the amount of information gained by seeing a word and a feature together. A feature which co-occurs with a target word more than we would expect (if words and features occurred independently) has more weight in the similarity calculation.
 
-**4. In traditional distributional semantics, how is the similarity between 2 words often measured?**
+---
 
+### 4. In traditional distributional semantics, how is the similarity between 2 words often measured?
 The main method is to compare two vectors using cosine similarity. he more similar two words are, the  smaller the angle θ between their  vectors will be.
 
 ---
 
-## Week 1 - Additional Readings
+# Week 1 - Paper 
+> Ted Pedersen. 2010. Information content measures of semantic similarity perform better without sense-tagged text. In Proceedings of NAACL
 
-### <u> Vector Semantics </u>
+Figure 1 shows part of the WordNet noun hypernym hierarchy. This is an ISA hierarchy where each concept in the tree IS A type of its parent. The parent concept is referred to as a hypernym (of the child) and the child concept is referred to as a hyponym (of the parent). Pedersen (2010) presents an empirical comparison of similarity measures for pairs of concepts in WordNet based on Information Content.
+
+![WordNet Hierarchy](./files/week_1/wordnet_isa.png)
+
+In the 2010 paper "Information Content Measures of Semantic Similarity Perform Better Without Sense-Tagged Text," Ted Pedersen explores a critical challenge in WordNet-based similarity: how to accurately calculate the Information Content (IC) of a concept. Traditionally, computing the probability of a concept $P(c)$ required a sense-tagged corpus (like SemCor), where human annotators manually mapped each word to its specific WordNet sense. This allowed researchers to precisely increment the frequency of a specific synset whenever it appeared. However, Pedersen hypothesized that the extreme scarcity and small size of these manually labeled datasets might actually hinder the accuracy of similarity measures like those proposed by Resnik, Lin, and Jiang-Conrath.
+
+To test this, Pedersen compared similarity scores derived from a small, sense-tagged corpus against those derived from a massive, untagged corpus (the British National Corpus). Since the untagged text lacks labels, Pedersen used a simple heuristic: every time a word appeared, he incremented the frequency counts for all of its potential senses in WordNet. This "all-senses" approach essentially treats the data as noisy but comprehensive.
+
+The experimental results provided a surprising and influential conclusion: similarity measures derived from the large, untagged corpus consistently showed a higher correlation with human similarity judgments than those derived from the high-quality, sense-tagged text. This suggested that in the realm of distributional semantics, data quantity can effectively compensate for a lack of precision. The sheer volume of raw text allowed the model to build more robust probability distributions that smoothed over the noise of individual ambiguous words, proving that expensive human annotation is not always a prerequisite for high-performing semantic models.
+
+---
+
+### 1. With reference to Figure 1, what concept is the hypernym of ungulate? How many hyponyms does carnivore have? Give an example. Why do you think the word cat appears twice in the hierarchy?
+Hypernym is the broader term, where as,  hyponyms is the more specific sub-term. Therefore, the hypernym of ungulate is placental_mammal.
+
+Carnivore has 2 direct hyponyms: Canine and Feline. However, is has many more **Transitive Hyponyms** which cover all descendants. 
+
+Cat appears twice because it is an ambious term that words as the hypernym for two different senses. 
+
+---
+
+### 2. What do you understand by path length? Give some examples of pairs of words which have a path length of 2. What limitations can you think of in using path length as a measure of semantic similarity?
+Path length is the most intuitive measure of semantic similarity within a taxonomic hierarchy like WordNet. It is calculated by counting the number of "edges" (the links connecting nodes) that must be traversed to get from one concept to another. In this model, the "shorter" the path, the more semantically similar the words are.
+
+While simple, path length has several significant flaws that information-based measures (like Resnik or Lin) try to solve:
+* **The "Uniform Distance" Fallacy:** Path length assumes that all edges in the hierarchy represent the same "semantic distance." However, in reality, the distance between Animal and Mammal (a massive jump in biological complexity) is treated the same as the distance between Poodle and Toy Poodle (a very specific distinction).
+* **Density Bias:** Some parts of WordNet are much more "densely" populated than others. For example, the "Biota" section has thousands of specific types of plants and animals, while the "Abstract Entity" section is much sparser. Path length doesn't account for how specific or general the nodes are.
+* **The Root Problem:** As you move higher up the tree toward the "Root" (e.g., Entity or Object), words become less and less similar, yet they may still be only 2 or 3 steps apart. Path length doesn't capture the intuition that sharing a "specific" parent makes you more similar than sharing a "general" parent.
+
+---
+
+### 3. How is information content for a WordNet concept computed from a sense-tagged corpus? How can information content for a WordNet concept be estimated from untagged data?
+
+Computing Information Content ($IC$) for a WordNet concept relies on determining the probability $P(c)$ of that concept appearing in a corpus, a process that varies significantly depending on whether the data is sense-tagged or untagged. 
+
+In a sense-tagged corpus, such as SemCor, every word is manually labeled by humans with its specific WordNet synset. This allows for high precision, as a count is only incremented for the exact sense intended in the text. Furthermore, because WordNet is a hierarchy, this count is propagated upward; an instance of "poodle" increments the frequency of the poodle synset as well as its hypernyms like dog, mammal, and animal. This ensures that more general concepts naturally have higher probabilities and, consequently, lower Information Content.
+
+Conversely, estimating $IC$ from untagged data requires a heuristic approach because the specific sense of a word is unknown. Pedersen (2010) describes an "all-senses" method where, upon encountering a word like "bank," the frequency count is incremented for every possible sense that word possesses in WordNet. While this introduces a significant amount of noise—counting a financial "bank" as a "river bank," for example—the theory suggests that over a massive, multi-million-word corpus, the correct semantic signals will eventually outweigh the coincidental noise. Because untagged corpora are vastly larger than manually labeled ones, the resulting $P(c)$ estimates are often more robust and provide a more accurate reflection of general language usage than small, sense-tagged datasets.
+
+---
+
+### 4. What is the lowest common subsumer (LCS) of dog and big cat? What is the LCS of mammal and reptile? What is the LCS of poodle and tabby? Which of these three pairs would have the greatest similarity according to the res measure? What about if you used the lin measure? Or a measure based on path length?
+
+---
+
+### 5. What is the main experimental conclusion of the paper? Are you convinced?
+The main experimental conclusion of Pedersen (2010) is that Information Content (IC) measures of semantic similarity perform better when the underlying word frequencies are calculated from large, untagged corpora using a simple "all-senses" heuristic, rather than from smaller, manually sense-tagged datasets. By testing these measures against human gold-standard benchmarks (like the Miller-Charles or Rubenstein-Goodenough datasets), Pedersen demonstrated that the statistical power gained from a massive amount of "noisy" raw text outweighs the precision gained from a tiny amount of "perfect" human-labeled data.
+
+#### The Case for "Yes"
+**Data Hunger:** Natural language is famously sparse. Even the best sense-tagged corpora (like SemCor) only cover a fraction of the English vocabulary. A model cannot calculate an accurate $IC$ for a word it has only seen once. Using the British National Corpus (BNC) provides millions of data points, which "smooths" the probability distribution.
+
+**The Power of Averaging:** While incrementing all senses of an ambiguous word (like "bank") is technically "wrong" for any single instance, the "wrong" senses (like "river bank" in a financial document) are essentially random noise. Over millions of words, the "true" sense signal remains consistent and rises above that noise.
+
+#### The Case for "Caution":
+**Domain Sensitivity:** If you calculate $IC$ from the BNC but then try to measure similarity in a specialized medical or legal context, the "general" frequencies might mislead the model.
+
+**Modern Context:** In 2026, we now have "Contextualized Embeddings" (like BERT) that solve the sense-tagging problem automatically. However, for **taxonomic** similarity (using WordNet), Pedersen’s conclusion remains a fundamental proof that "more data beats better algorithms" (The Silver Lining of Big Data).
+
+---
+
+# Week 1 - Additional Readings
+
+### Vector Semantics
 The additional readings for this week are based on Vector Semantics:
-
-* <u> [Chapter 5 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_chapter_5.pdf) </u> sections 5.1-5 4 
-* <u> [Lecture 3 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_lecture_3.pdf) </u>
+* [Chapter 5 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_chapter_5.pdf), sections 5.1-5 4 
+* [Lecture 3 of Jurafsky and Martin](files/week_1/week_1_add_read_vector_semantics_lecture_3.pdf)
 
 ---
 
@@ -158,11 +460,6 @@ The additional readings for this week are based on Vector Semantics:
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-
 
 # [Week 2 - Language Modelling with n-grams](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-2-language-modelling-with-n-grams?module_item_id=1602169)
 
@@ -179,11 +476,15 @@ This week we will be looking at n-gram language models.  In particular, we will 
 2. [Seminar](#week-2---seminar)
 4. [Additional Readings](#week-2---additional-readings)
 
-## Week 2 - Lecture
+---
+
+# Week 2 - Lecture
 
 | [Lecture Slides](files/week_2/week_2_lecture_slides.pdf) |
 
-This week we are looking at **Probabilitic Language Models**. This includes: n-gram modelling and their evaluation methods (perplexity), generation and generalisation.
+This week we are looking at **Probabilitic Language Models**. This includes: n-gram modelling and their evaluation methods (perplexity), generation and generalisation. This week marks a shift from the meaning of words (Week 1) to the probability of sequences, providing the foundational logic for how computers "predict" text. 
+* Week 1 established that we can represent words as vectors based on context.
+* Week 2 takes that context and turns it into a predictive tool. Instead of just saying "beer" is similar to "wine," we are now calculating exactly how likely "wine" is to appear after the words "I would like a glass of...".
 
 * [Why do we want to be able to assign a prob to a sentence?](#why-do-we-want-to-be-able-to-assign-a-prob-to-a-sentence)
 * [Probability language modelling](#probability-language-modelling)
@@ -198,8 +499,7 @@ This week we are looking at **Probabilitic Language Models**. This includes: n-g
 
 ---
 
-### Why do we want to be able to assign a prob to a sentence?
-
+# Why do we want to be able to assign a prob to a sentence?
 The starting desire to acheive this comes form machine translation. If we wish to translate a sequence of tokens from source to other language then we want to select the most probable sequence in the target. 
 
 However, the sentence, or words, chosen need to follow the cultural rules of a language. Semantically, there may be several phrases whereby the choice of words results in a high probability. i.e. high winds and large winds but the former is much more likely in action. If we derive our probabilites from large corpuses then the statistics will tell us that high winds is a much more common phases. 
@@ -212,17 +512,16 @@ This was the motivation for early language modelling
 
 ---
 
-### Probability language modelling
-
+# Probability language modelling
 What is a probabilistic language model? It has the goal of computing 1 of 2 things:
 * Compute the probability of a sentence as represented by a sequences of words: $P(W) = P(W_1,W_2,...,W_n)$
-* Or the related but different task of computing the probability of an upcoming word given an input of a sequence of words: $P(W_5|W_1, W_2, W_3, W_4)$
+* Or the related but different task of computing the probability of an upcoming (next) word given an input of a sequence of words: $P(W_5|W_1, W_2, W_3, W_4)$
 
-If a model does either of these tasks, it is a language mnodel (LM).
+If a model does either of these tasks, it is a language model (LM).
 
 ---
 
-### Chain Rule for Probabilties 
+# Chain Rule for Probabilties 
 
 Conditional probability is given by: $P(B|A) = \frac{P(A, B)}{P(A)}$. 
 
@@ -253,13 +552,13 @@ This logic can easily be applied to sentances whereby each most recent word in t
 
 ---
 
-### Estimating Probabilities
+# Estimating Probabilities
 
 The issue we run into here is data sparsity. As the sentence continues and the length of the dependant chain grows, the probability that the exact sentence has occured before starts to become extremely unlikely and our results will be unreliable. 
 
 ---
 
-### Markov Assumptions
+# Markov Assumptions
 
 To fix sparsity in n-grams we use Markov Assumptions. Here, we simplying the dependency criteria from the entire previous chain to orders. The most common is first-order Markov Chains whereby each newest word depends only on the previous word. This 1 previous state is considered to be a proxt for the entire previous sentence, for the previous state will occur given a specific set of previous states, i.e. the context of the sentence. This is an assumption of independence whereby all previous context is held intrinsically in the state. In practice, we know this isn't true but it is a simple assumption that allows us to calculate some sort of probability. The markov model can be extended in its orders. A second order model allows each words to look at the previous 2. 
 
