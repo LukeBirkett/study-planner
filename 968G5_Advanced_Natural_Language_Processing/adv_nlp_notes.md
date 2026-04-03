@@ -483,8 +483,8 @@ This week we will be looking at n-gram language models.  In particular, we will 
 | [Lecture Slides](files/week_2/week_2_lecture_slides.pdf) |
 
 This week we are looking at **Probabilitic Language Models**. This includes: n-gram modelling and their evaluation methods (perplexity), generation and generalisation. This week marks a shift from the meaning of words (Week 1) to the probability of sequences, providing the foundational logic for how computers "predict" text. 
-* Week 1 established that we can represent words as vectors based on context.
-* Week 2 takes that context and turns it into a predictive tool. Instead of just saying "beer" is similar to "wine," we are now calculating exactly how likely "wine" is to appear after the words "I would like a glass of...".
+
+#### Week 2: Lecture Content
 
 * [Why do we want to be able to assign a prob to a sentence?](#why-do-we-want-to-be-able-to-assign-a-prob-to-a-sentence)
 * [Probability language modelling](#probability-language-modelling)
@@ -499,36 +499,52 @@ This week we are looking at **Probabilitic Language Models**. This includes: n-g
 
 ---
 
-# Why do we want to be able to assign a prob to a sentence?
-The starting desire to acheive this comes form machine translation. If we wish to translate a sequence of tokens from source to other language then we want to select the most probable sequence in the target. 
+Week 2 of the module marks the transition from static word meanings to **Probabilistic Language Modeling**, shifting the focus from what a word means to how likely a word is to occur in a specific sequence. By utilizing the **Chain Rule of Probability**, we attempt to calculate the joint probability of entire sentences, which is essential for applications like Machine Translation, Speech Recognition, and Spelling Correction. To overcome the computational impossibility of calculating infinite histories, we apply the **Markov Assumption**, which simplifies the model into **N-grams** — predictive chains that only look at the previous $n-1$ words. This allows us to use **Maximum Likelihood Estimation (MLE)** to "train" a model by simply counting occurrences within a corpus.
 
-However, the sentence, or words, chosen need to follow the cultural rules of a language. Semantically, there may be several phrases whereby the choice of words results in a high probability. i.e. high winds and large winds but the former is much more likely in action. If we derive our probabilites from large corpuses then the statistics will tell us that high winds is a much more common phases. 
+However, N-gram models face a major hurdle in **Data Sparsity**, where many perfectly valid word combinations never appear in the training data, resulting in a mathematically "broken" probability of zero. To build robust models that can generalize to unseen text, we move beyond simple counting to **Smoothing** techniques. This includes using **Absolute Discounting** to steal probability mass from frequent events and reallocate it to unobserved ones, and employing the <unk> token to handle **Out-of-Vocabulary (OOV)** words.
 
-This desire to assign probabilities to tokens, or sequence of tokens, also applies to spelling corrections. By detailing the probability of sentences, we can work out which spelling/usage of a word if most likely and therefore more probable to be the correct spelling. 
-
-This concept is most easy to think about within the topic of speech recognition. A computer can parse sounds into words but we have many words, sounds and prases that in terms of pure noise, sounds the same but mean completely different things. Merely constructing sounds from the entire lexicon can result in an unintelligence sentence. A real sentence will be distinguished by its probability: `P("I saw a van") > P(eyes awe of an)`.
-
-This was the motivation for early language modelling
+Finally, we evaluate these models using **Perplexity**, an intrinsic metric that measures a model's "uncertainty." A lower perplexity indicates a superior model that is less surprised by the test data, serving as the benchmark for how well our statistical patterns have captured the underlying structure of the language.
 
 ---
 
-# Probability language modelling
-What is a probabilistic language model? It has the goal of computing 1 of 2 things:
-* Compute the probability of a sentence as represented by a sequences of words: $P(W) = P(W_1,W_2,...,W_n)$
-* Or the related but different task of computing the probability of an upcoming (next) word given an input of a sequence of words: $P(W_5|W_1, W_2, W_3, W_4)$
+# Why do we want to be able to assign a probabily to a sentence?
+Assigning a probability to a sentence allows a model to distinguish "natural" language from random or incorrect sequences. This is essential for resolving ambiguity across several key NLP tasks:
 
-If a model does either of these tasks, it is a language model (LM).
+---
+| Task | Explanation | 
+| :--- | :--- | 
+| Machine Translation | Choosing the most fluent output among several semantically correct options (e.g., "high winds" vs. "large winds"). |
+| Speech Recognition | Disambiguating similar-sounding phrases by identifying which is more linguistically probable (e.g., `P("I saw a van") > P("eyes awe of an")`). |
+| Spelling & Grammar Correction | Predicting the intended word based on the surrounding context to fix errors in usage or orthography. |
+
+---
+
+# Probability Language Modelling
+What is a probabilistic language model? It has the goal of computing 1 of 2 things:
+
+---
+| Goal | Description | Formula | 
+| :--- | :--- | :--- |
+| Compute Sequence | Compute the probability of a sentence as represented by a sequences of words | $P(W) = P(W_1,W_2,...,W_n)$ |
+| Compute Next Word | Computing the probability of an upcoming (next) word given an input of a sequence of words | $P(W_5|W_1, W_2, W_3, W_4)$ |
+---
+
+If a model does either of these tasks, it is a **language model (LM)**.
 
 ---
 
 # Chain Rule for Probabilties 
-
-Conditional probability is given by: $P(B|A) = \frac{P(A, B)}{P(A)}$. 
+**Conditional probability** is given by: $P(B|A) = \frac{P(A, B)}{P(A)}$. 
 
 It defines the probability of event B occurring, given that event A has already happened. We want to find the probability of $B$ in a world where $A$ has already happened. The solution to computing this is to find the overlap where both happen and normailze it against the total size of $A$
-* $P(B|A)$: The probability of $B$ given $A$.
-* $P(A, B)$: The joint probability (the chance that both $A$ and $B$ happen).
-* $P(A)$: The probability of event $A$ happening on its own.
+
+---
+| Element | Function | 
+| :--- | :--- | 
+| $P(B\|A)$ | The probability of $B$ given $A$ |
+| $P(A, B)$ | The joint probability (the chance that both $A$ and $B$ happen) |
+| $P(A)$ | The probability of event $A$ happening on its own |
+---
 
 By multiplying both sides by $P(A)$ you get:
 
@@ -538,11 +554,11 @@ This is a fundamental rule used to find the probability of a sequence of events.
 
 In other words, to find the chance of two things happening together, you multiply the probability of the first event by the probability of the second event given the first has already occurred.
 
-The Naive Bayes formula is essentially a clever rearrangement of this Product Rule. It takes the probability of a "Class" and "Features" happening together and flips them around to predict the class based on the features.
+The **Naive Bayes** formula is essentially a clever rearrangement of this Product Rule. It takes the probability of a "Class" and "Features" happening together and flips them around to predict the class based on the features.
 
 This can be extended to many more variables where each new event is dependant on everything that came before it:
 
-$$P(A, B, C, D) = P(A)P(B|A)P(C|A, B)P(D|A, B, C)$$
+$$P(A, B, C, D) = P(A)* P(B|A) * P(C|A, B) * P(D|A, B, C)$$
 
 For any number of variables $n$, the joint probability is the product of each variable conditioned on all previous ones: 
 
@@ -553,22 +569,19 @@ This logic can easily be applied to sentances whereby each most recent word in t
 ---
 
 # Estimating Probabilities
-
-The issue we run into here is data sparsity. As the sentence continues and the length of the dependant chain grows, the probability that the exact sentence has occured before starts to become extremely unlikely and our results will be unreliable. 
+The issue we run into here is **data sparsity**. As the sentence continues and the length of the **dependant chain** grows, the probability that the exact sentence has occured before starts to become **extremely unlikely** and our results will be **unreliable**. 
 
 ---
 
 # Markov Assumptions
-
-To fix sparsity in n-grams we use Markov Assumptions. Here, we simplying the dependency criteria from the entire previous chain to orders. The most common is first-order Markov Chains whereby each newest word depends only on the previous word. This 1 previous state is considered to be a proxt for the entire previous sentence, for the previous state will occur given a specific set of previous states, i.e. the context of the sentence. This is an assumption of independence whereby all previous context is held intrinsically in the state. In practice, we know this isn't true but it is a simple assumption that allows us to calculate some sort of probability. The markov model can be extended in its orders. A second order model allows each words to look at the previous 2. 
+To fix **sparsity in n-grams** we use **Markov Assumptions**. Here, we simplify the dependency criteria from the entire previous chain to **orders**. The most common is **first-order Markov Chains** whereby each newest word depends only on the previous word. This **1 previous state** is considered to be a proxy for the entire previous sentence, for the previous state will occur given a specific set of previous states, i.e. the context of the sentence. This is an **assumption of independence** whereby all previous context is held **intrinsically** in the state. In practice, we know this **isn't true** but it is a simple assumption that allows us to calculate some sort of probability. The markov model can be extended in its orders. A **second order model** allows each words to look at the previous 2. 
 
 ---
 
-### N-gram Language Model
-
- Calculating the probability of a word based on every preceding word is computationally difficult, or even impossible, the N-gram model introduces a simplifying assumption:
- * It fixes the history and only considers $n$ words at a time: the current word ($w_i$) and the previous $n-1$ words.
- * Maximum Likelihood Estimation (MLE): The model estimates these probabilities by looking at a training corpus and calculating frequencies. In statistics, Maximum Likelihood Estimation is a method of estimating the parameters of a model that makes the observed data "most probable."
+# N-gram Language Model
+ Calculating the probability of a word based on every preceding word is computationally difficult, or even impossible, the **N-gram model** introduces a simplifying assumption:
+ * It **fixes** the history and only considers $n$ words at a time: the current word ($w_i$) and the previous $n-1$ words.
+ * **Maximum Likelihood Estimation (MLE):** The model estimates these probabilities by looking at a training corpus and calculating frequencies. In statistics, **Maximum Likelihood Estimation** is a method of estimating the parameters of a model that makes the observed data "most probable."
 
  $$P(w_i \mid w_{i-(n-1)}, \dots, w_{i-1}) = \frac{freq(all\ n\ words\ together)}{freq(the\ previous\ n-1\ words)}$$
 
@@ -579,7 +592,6 @@ In this context, if you see the phrase "the cat sat" 10 times in your data, and 
 ---
 
 ### Unigram Model
-
 This is the most simplistic type of n-gram model whereby `n=1`. It doesn't look at any previous words meaning probabilites are all independent, i.e. words have probabilities which get chained together: `P("he fell over) = P(he) * P(fell) * P(over)`
 
 This approach is very simple but atlest it gives an estimate which can be used as a baseline for further comparison.
@@ -589,68 +601,61 @@ $$P(w_1, w_2, w_3, \dots, w_k) = \prod_{i=1}^{k} P(w_i)$$
 ---
 
 ### Bigram Model
-
-A bigram model is a first order markov model meaning that each word in a given sentence depends on the previous word:
+A bigram model is a **first order markov model** meaning that each word in a given sentence depends on the **previous word**:
 
 `P("then we hovered") = P("then|start") * P("he|then") * P("hovered|he") * P("over|hovered")`
 
 ---
 
 ### Trigrams and Beyond
-
 This logic pravails for any `n` number of terms to look back on. Rememeber `n=1` is a unigram which only looks at itself, so `n>1` looks back `n-1` terms. e.g. trigrams (3), quadrigrams (4), 5-grams (5). Higher terms will be able to capture more long range association dependencies but the models will be become more sparse and unreliable.
 
 ---
 
-### Products of Probabilties
+# Products of Probabilties vs Logarithmic Addition
+When calculating the probability of a long sequence (like a sentence in an **N-gram model**), we prefer **logarithmic addition** over raw multiplication for two main technical reasons: **numerical stability** and **computational efficiency**.
 
-When calculating the probability of a long sequence (like a sentence in an N-gram model), we prefer logarithmic addition over raw multiplication for two main technical reasons: numerical stability and computational efficiency.
+Probabilites are always betwene 0 and 1, this means when you mutliple many probabilites together, like the **chain rules**, the result is a **tiny** output which quickly becomes **infinitesimally small**. Computers cannot represent numbers this small with high precision, leading to a **"floating-point underflow"** where the computer simply rounds the result down to zero.
 
-Probabilites are always betwene 0 and 1, this means when you mutliple many probabilites together, like the chain rules, the result is a tiny output which quickly becomes infinitesimally small. Computers cannot represent numbers this small with high precision, leading to a "floating-point underflow" where the computer simply rounds the result down to zero.
-
-By taking the logarithm, these tiny probabilities are converted into manageable negative numbers (e.g., $log(0.0001) = -4$). Adding these values avoids the precision "death" that occurs with multiplication. 
+By taking the **logarithm**, these tiny probabilities are converted into manageable negative numbers (e.g., $log(0.0001) = -4$). Adding these values avoids the precision "death" that occurs with multiplication. 
 
 Addtionally, from a hardware perspective, computers are generally faster at performing addition than multiplication, especially when dealing with billions of calculations in modern AI models.
 
-In Maximum Likelihood Estimation (MLE), the goal is to find the parameters that maximize the probability of the data. Since the $log(x)$ function is monotonically increasing, the value of $x$ that maximizes the probability is the same value that maximizes the log of that probability. 
+In **Maximum Likelihood Estimation (MLE)**, the goal is to find the parameters that **maximize the probability** of the data. Since the $log(x)$ function is monotonically increasing, the value of $x$ that maximizes the probability is the same value that maximizes the log of that probability. However, log probabiltiy is no longer a "true" probability, i.e. 0.5 is no longer 50%, but that is fine for our computations as we just want to identify the highest. 
 
 $$log(a \times b) = log(a) + log(b)$$
 
 ---
 
-### Lanugage Model Evaluation
-
+# Lanugage Model Evaluation
 We want to be able to evaluate how good a language model is. The outputs need to be determined as good or bad sentences. Real sentences, that is grammatically and plausible sentences, should be assigned higher probabilities than "fake' ones.
 
 ---
 
 ### Extrinsic Evaluation
-
 This is where you evaluate a model by applying it to a task, i.e. spelling, translation, speech recognition. You run the task and get an accuracy for each model. 
 * How many words spelt correctly.
 * How many translations correct. 
 
-The issues with this approach is that it is time consuming to set up the conditions for such an experiement and even then there are other factors which may affects the task. The language model is not tested in isolation. 
+The issue with this approach is that it is **time consuming** to set up the conditions for such an experiement and even then there are **other factors** which may affects the task. The language model is not tested in isolation. 
 
 ---
 
 ### Intrinstic Evaluation
+While extrinsic evaluation measures a model's performance on a final, real-world task, intrinsic evaluation measures the model's quality in **isolation**, based on its **internal properties**. 
 
-While extrinsic evaluation measures a model's performance on a final, real-world task, intrinsic evaluation measures the model's quality in isolation, based on its internal properties. 
-
-Intrinsic evaluation tests a language model on a specific sub-task that is independent of any external application. The goal is to see how well the model has learned the underlying patterns of the language itself rather than how well it helps a spellchecker or translator.
+**Intrinsic evaluation** tests a language model on a specific sub-task that is independent of any external application. The goal is to see how well the model has learned the underlying patterns of the language itself rather than how well it helps a spellchecker or translator.
 
 A models parameters are trainined on a training set and then tested/evaluated on a test set. We are checking the probabilities applied to sentences. Does the model assign higher probabilties to seen sentences vs unseen?
 
 ---
 
-### Perplexity
+# Perplexity
+To evaluate any model we need a metric. The best language model is one that best predicts an unseen test set, i.e. it returns the highest `P(sentences)`. A common metric used for language models is **Perplexity**.
 
-To evaluate any model we need a metrix. The best language model is one that best predicts an unseen test set, i.e. it returns the highest `P(sentences)`. A common metric used for language models is Perplexity.
+To calculate the **Perplexity**, we look at the probability it assigns to a test set of words. Essentially, perplexity is the inverse probability of the test set, normalized by the number of words.
 
-To calculate the Perplexity, we look at the probability it assigns to a test set of words. Essentially, perplexity is the inverse probability of the test set, normalized by the number of words.
-
-A lower perplexity score indicates that the model is less "surprised" by the test data, meaning it has a better grasp of the language's structure. If high then the model is "confused" and the test data was unexpected.
+A **lower** perplexity score indicates that the model is **less "surprised"** by the test data, meaning it has a better grasp of the language's structure. If **high** then the model is **"confused"** and the test data was **unexpected**.
 
 $$PP(W) = P(w_1, w_2, w_3, ..., w_N)^{-1/N}$$
 
@@ -658,16 +663,16 @@ This formula can also be converted to logarithms to maintain numerical stablilit
 
 $$PP(W) = e^{-1/N \log P(w_1, w_2, w_3, ..., w_N)}$$
 
-Because Perplexity is the inverse of probability, minimising perplexity is the same as maximising probability. 
+Because **Perplexity** is the inverse of probability, minimising perplexity is the same as maximising probability. 
 
 
 ## Part 2: Generalisation in n-Gram Models
 
-### Toy Example
+# Toy Example
 
-In this example we will be a example built from a very small corpus which highlights a n-grams inability to generalise. 
+In this example we will be a example built from a very small corpus which highlights a **n-grams inability to generalise**. 
 
-A bigram is a good type of model to demonstrate this as we can represent this infomration as a tabular table/matrix. Recall, that a bigram is the probability a word coming up given the previous word. Given this, we can represent the previous word along the x-axis and the possble next word along the y-axis. Note that, the entire corpus' tokens will be entered on both the x and y axis. 
+A **bigram** is a good type of model to demonstrate this as we can represent this infomration as a tabular table/matrix. Recall, that a bigram is the probability a word coming up given the previous word. Given this, we can represent the previous word along the x-axis and the possble next word along the y-axis. Note that, the entire corpus' tokens will be entered on both the x and y axis. 
 
 | $P(w_2\|w_1)$ | _ST. | I | They | like | want | to | cook | eat | Chinese | dinner | Indian | food | _END |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -688,13 +693,13 @@ From here we can use these probabilites to chain into sentences.
 
 --- 
 
-### Generation 
+# Generation 
+One approach to sentence generation is to use the **shannon-visualations** to analyse possible sentences. The flow starts with the opening tag and then given this start looks and what is possible to come next give the edvidence in the corpus and the associated probabilities. From this distribution, you select a word, usually the one with the **highest probabilities**. You repeat this process and this is how you generate new sentences. 
 
-Once approach to sentence generation is to use the shannon-visualations to analyse possible sentences. The flow starts with the opening tag and then given this start looks and what is possible to come next give the edvidence in the corpus and the associated probabilities. From this distribution, you select a word, usually the one with the highest probabilities. You repeat this process and this is how you generate new sentences. 
+![Shan Vis](./files/week_2/shan_vis.png)
 
 ---
-### Approximating Shakespeare
-
+# Approximating Shakespeare
 We can generate sentence based on a corpus using the probabilies computed by different n-grams:
 
 | gram | text | 
@@ -704,7 +709,7 @@ We can generate sentence based on a corpus using the probabilies computed by dif
 | 3 | This shall forbid it should be branded, if renown made it empty."
 | 4 | King Henry. What! I will go seek the traitor Gloucester. Exeunt some of the watch. A great banquet serv’d in; - It cannot be but so.
 
-Has the n-grams increase it starts to increasing sounds like Shakespear. However, there is a problem. The reason it seems like this is because it is Shakespear. There is no generalisation, the 4-gram begins to pick up and reproduce chains of sentences as they exist in the text. This is because as the n-gram context window increase, the instances of the exact 3 chained example become increasly limited and often only include the one instnce that a particle set of words was used in. 
+Has the n-grams increase it starts to increasing sounds like Shakespeare. However, there is a problem. The reason it seems like this is because **it is Shakespeare**. There is **no generalisation**, the 4-gram begins to pick up and reproduce chains of sentences as they exist in the text. This is because as the n-gram context window increase, the instances of the exact 3 chained example become **increasly limited** and often only include the one instnce that a particle set of words was used in. 
 
 Shakespeare used $884,647$ tokens from a total vocabulary of $29,066$. With this vocabulary size, there is 840 million possible bigrams but only 300k approx actually occured in the corpus. This means 99.96% of bigrams did not occur. 
 
@@ -712,49 +717,42 @@ The way we are constructing the model and using it to generate sentences means t
 
 ---
 
-### Overfitting
+# N-Gram Overfitting
+**N-grams** only work well for word prediction if the test corpus looks like the training copurus. Note that, in the context of n-grams, the test corpus is just the present, i.e. what is being generated. The idea is to see if the probabilities learned during training actually apply to **new, real-world sentences**. We want to see if the model can accurately predict the next word in the test set based on what it learned in the training set. 
 
-N-grams only work well for word prediction if the test corpus looks like the training copurus. Note that, in the context of n-grams, the test corpus is just the present, i.e. what is being generated. The idea is to see if the probabilities learned during training actually apply to new, real-world sentences. We want to see if the model can accurately predict the next word in the test set based on what it learned in the training set. 
+If the test corpus contains a word sequence that **never appeared** in the training corpus (e.g., training had "bright sun" but test has "bright neon"), the N-gram model will mathematically **assign it a probability of zero**. Without advanced **"smoothing"** techniques, the model effectively breaks because it assumes that sequence is impossible. In almost all applications this will be the case as **language is sparse**. This is all an issue because models need to be robust and hold the ability to **generalise on unseen data**. For language, one of the main symptoms to fix is avoid **0 counts** and probabilties for data not seen in the training set.
 
-If the test corpus contains a word sequence that never appeared in the training corpus (e.g., training had "bright sun" but test has "bright neon"), the N-gram model will mathematically assign it a probability of zero. Without advanced "smoothing" techniques, the model effectively breaks because it assumes that sequence is impossible. In almost all applications this will be the case as language is sparse. This is all an issue because models need to be robust and hold the ability to generalise on unseen data. For language, one of the main symptoms to fix is avoid 0 counts and probabilties for data not seen in the training set.
-
-Any n-gram with a 0 count in the training set means that we assign a 0 probability to it in the test set, if it comes up. A 0 probability means that we cannot calculate perplexity. We need to somehow assign a probabiltiy mass to unseen instances. 
+Any n-gram with a 0 count in the training set means that we assign a 0 probability to it in the test set, if it comes up. **A 0 probability means that we cannot calculate perplexity**. We need to somehow assign a probabiltiy mass to unseen instances. 
 
 ---
 
-### Smoothing Intuition
-
+# Smoothing Intuition
 When we have sparse statistics, we can steal probabiltiy mass from observed events to generalise to unobserved events. This can be described as smoothing the counts because we are lowering the peaks and increasing (or just populating) the troughs.
 
 ---
 
-### Add-One Estimation (Laplace Smoothing)
-
+# Add-One Estimation (Laplace Smoothing)
 The intuition here is to pretend we saw each word one more time than we did. We just add on one to each count. It can be useful for some applications where the number of zeros isn't so huge. But for n-grams and language models, it is barely used. Assigning too much mass to unseen co-occurances leads to massive unwiedly models. The model becomes too large and complex. Recall that shakepear has 840 mill bigrams but only 300k used. Adding mass to nearly 839 million biagrams is too extreme.  
 
 ---
 
-### Unknown Words (Token)
-
-This the approach for language models. We need to account for words that appear in the test set but not the training set - and also those that appear in the train but not the test. First, we can focus on the words in the training set that we beleive are least likely to be in the test set. These will be the lowest frequency words. Here, we can just freeze/fix to vocabulary and only take the `n` top words (based on some criterea, i.e. volumne or just top `n`). For the rest of the entries, we create the `<unk>` token. We treat this token as the marker for out of vocab words. We can count it and use the counts to assign a probability to OOV words. If something is not in the vocab then it is assigned to `<unk>`. 
-
----
-
-### Unseen Bigrams
-
-The `<unk>` token allows us to estimate the probability of seeing an OOV in the test set. But it can also allow us to estimate the probability of seeing bi-grams which includes an `<unk>` token. But it does not help us in estimating the probability of two in-vocab words which have note been seen together.
+# Unknown Words (Token) `<unk>`
+This the approach for language models. We need to account for words that appear in the test set but not the training set - and also those that appear in the train but not the test. First, we can focus on the words in the training set that we beleive are least likely to be in the test set. These will be the lowest frequency words. Here, we can just freeze/fix to vocabulary and only take the `n` top words (based on some criteria, i.e. volume or just top `n`). For the rest of the entries, we create the `<unk>` token. We treat this token as the marker for out of vocab words. We can count it and use the counts to assign a probability to OOV words. If something is not in the vocab then it is assigned to `<unk>`. 
 
 ---
 
-### Absolute Discounting
+# Unseen Bigrams
+The `<unk>` token allows us to estimate the probability of seeing an OOV in the test set. But it can also allow us to estimate the probability of seeing bi-grams which includes an `<unk>` token. **But it does not help us in estimating the probability of two in-vocab words which have note been seen together.**
 
+---
+
+# Absolute Discounting
 Subtract a little from each bigram count in order to save probabiltiy mass for unseen events. Church and Gale (1991) did an experiement where they took a newswire corpus of 22 million words which they split into train and test sets. They looked as each bigram count in the trianing set and compared it to its average bi-gram count in the test set. They notice a relationship where the count in the test corpus is 0.75 lower in the test set.
 
 ---
 
-### Absolute Discounting Interpolation
-
-What is did it take `d` from each bigram count. `d` is a param that can be set but often 0.75 is used. Each time we discount a bigram $c(w_2|w_1)$, we add that discount to a dummy token lamda $Lc(L|w_1)$. We convert this count into a probabiltiy distribution as before, calculaing probabiltiy estimates for bigrams. 
+# Absolute Discounting Interpolation
+What it does is take `d` from each bigram count. `d` is a param that can be set but often 0.75 is used. Each time we discount a bigram $c(w_2|w_1)$, we add that discount to a dummy token lamda $Lc(L|w_1)$. We convert this count into a probabiltiy distribution as before, calculaing probabiltiy estimates for bigrams. 
 
 How do we then use these outputs? When we want to estimate a new word, we lookup the observed discounted probability of a word given the previous $P_d(w_2|w_1)$ and add the lamda given the previous word $P_d(L|w_1)$ 
 
@@ -766,63 +764,68 @@ The main reason we use the original formula is to handle the case where the bigr
 
 ---
 
-<br>
-<br>
-<br>
-<br>
+# Week 2 - Seminar
 
+# Week 2 Questions: 2.1
 
-## Week 2 - Seminar
+### 1. Give 3 examples of applications where one might want to assign a probability to a sequence of words.
+While you mentioned these in your lecture notes, for a seminar answer, we want to be as precise as possible about why the probability matters in each case. Here is a refined answer:
+* **Machine Translation:** To ensure the output is fluent and follows natural word order (e.g., $P(\text{"strong tea"}) > P(\text{"powerful tea"})$).
+* **Speech Recognition:** To resolve "homophones" or similar-sounding inputs based on context (e.g., $P(\text{"I saw a van"}) > P(\text{"eyes awe of an"})$).
+* **Predictive Text/Autocomplete:** To rank the most likely next word in a sequence to save user effort (e.g., $P(\text{"Happy Birthday"}) > P(\text{"Happy Anniversary"})$).
 
-### 2.1 Questions
+---
 
-The best language model is one that best predicts an unseen test set, i.e. returns the highest $P(sentences)$. Perplexity is the inverse probability of the test set, normalised by the number of words:
+### 2. Write down the product of probabilities which would need to be calculated to estimate the probability of “Then he hovered over the hill” using a trigram model.
+Recall that a Trigram Model looks back at the two previous words $(n-1 = 2)$. We also need to include the start tokens $(\langle s \rangle)$ to initialize the context.
 
-This is the standard definition of Perplexity ($PP$) for a sequence of words $W$:
+The sequence would be broken down as:
+1. $P(\text{Then} \mid \langle s \rangle, \langle s \rangle)$
+2. $P(\text{he} \mid \langle s \rangle, \text{Then})$
+3. $P(\text{hovered} \mid \text{Then}, \text{he})$
+4. $P(\text{over} \mid \text{he}, \text{hovered})$
+5. $P(\text{the} \mid \text{hovered}, \text{over})$
+6. $P(\text{hill} \mid \text{over}, \text{the})$
+7. $P(\langle /s \rangle \mid \text{the}, \text{hill})$ (Optional but standard for ending a sequence)
 
-$$PP(W) = P(w_1, w_2, w_3, ..., w_N)^{-1/N}$$
+--- 
 
-The second is the equivalent calculation using the log-probability (which is how computers actually calculate it to avoid tiny numbers):
+### 3. Is measuring perplexity for a language model an example of intrinsic or extrinsic evaluation?
+It is an Intrinsic Evaluation. It measures the model's performance on the specific task it was trained for (predicting words) in isolation, without considering how it performs in a larger application like translation or search.
 
-$$PP(W) = e^{-1/N \log P(w_1, w_2, w_3, ..., w_N)}$$
+---
 
-If the Training Corpus is how the model "learns," Perplexity is the "grade" it gets when it encounters the Test Corpus. Perplexity is a measure of uncertainty. A lower perplexity means the model is less "perplexed" (more confident) by the test data. A perplexity of $10$ means that every time the model predicts the next word, it is as confused as if it had to choose randomly between 10 equally likely words. 
+### 4. The perplexity of model A is measured as 85 and the perplexity of model B is measured as 143. Which is better and why?
+Model A is better. Perplexity is a measure of "uncertainty" or "branching factor." A lower score means the model was less "surprised" by the test data and assigned it a higher overall probability. Essentially, Model A is more confident in its predictions.
 
-We use the inverse ($P^{-1}$) because we want a better model (higher probability) to have a lower score. If the probability of a sentence is high, the perplexity is low.
+---
 
-We take the $N$-th root (or multiply by $1/N$ in the log version) so that the length of the sentence doesn't unfairly penalize the score. This allows you to compare the perplexity of a 5-word sentence against a 100-word essay.
+# Week 2 Questions: 2.2
 
-Using $e$ and $\log$ is a mathematical "trick." Multiplying many small probabilities (like $0.0001 \times 0.002...$) results in numbers so small that computers can't handle them (underflow). Adding logs is computationally "safer" and yields the same result.
-
-## 2.2 Questions 
-
-### Explain how a bigram language model can be used to generate possible sequences of tokens.
-
+### 1. Explain how a bigram language model can be used to generate possible sequences of tokens.
 A bigram language model generates text by treating word prediction like a chain reaction. Because a bigram only "looks back" at the single previous token, it uses the probability $P(w_n | w_{n-1})$ to decide what comes next.
 
 The Shannon-Visualisation method says to start with a random bigram. You then choose the next bigram based on this probability using the most recent token. If there are a range of possible tokens which follow the current token, then sample from this distribution, usually taking the highest token. Continue in a iterative loop until you hit then end token. 
 
 ---
 
-### What does OOV stand for?  How do we smooth a language model with respect to OOV tokens?
+### 2. Why do language models need to be smoothed?
+Language models must be smoothed because natural language is extremely sparse, meaning even massive datasets cannot capture every valid combination of words. Without smoothing, if a model encounters a word pair in the test set that never appeared in the training set, it assigns that pair a probability of zero. Because the probability of a sentence is the product of its parts, a single zero causes the entire sentence’s probability to collapse to zero, making it impossible to calculate Perplexity. Smoothing "shaves off" a tiny bit of probability mass from frequent, seen events and reallocates it to these unseen events, ensuring the model remains robust and capable of generalizing to new data without "breaking" mathematically.
 
+---
+
+### 3. What does OOV stand for? How do we smooth a language model with respect to OOV tokens?
 We smoothing using the `<unk>` token to handle OOV tokens. We only return the top `n` common words and turn less commmon tokens into the `<unk>` token. Add one smoothing is not good for language models as the number of parameters to populate is too vast. 
 
-Why throw away information? rare information means that we don't know much about it, at least interms of freq/probabiltiy setting. By modelling the `<unk>` token, we gather a better understanding of how rare words work in language, even if we loose the specifics. We can indentify the words that preceed or suceed rare words and identify the structure of sentence with rare word usage. 
+Why throw away information? rare information means that we don't know much about it, at least interms of freq/probabiltiy setting. By modelling the `<unk>` token, we gather a better understanding of how rare words work in language, even if we loose the specifics. We can indentify the words that preceed or suceed rare words and identify the structure of sentence with rare word usage.
+
 
 ---
 
-### Name 2 different methods for smoothing the probabilities of combinations of tokens.  Explain one of them.
+### 4. Name 2 different methods for smoothing the probabilities of combinations of tokens. Explain one of them.
+Two common methods for smoothing are **Absolute Discounting** and **Stupid Backoff**. Absolute Discounting works by subtracting a fixed constant (usually $0.75$) from every non-zero count and redistributing that "discounted" mass to lower-order models (like moving from a bigram to a unigram) through **interpolation**. This ensures every possible combination has at least some probability.
 
-* Absolute discounting
-* Stupid Backoff
-
-Used for web scale lang models; If a higher-order n-gram has a zero count then simply "back-off", i.e. if 4 gram has 0 but the 3-gram as a count, then used that take prob scaled by a fixed param, i.e. 0.4 (lamdba sign).
-
-$$S(w_i|w_{i-k+1}^{i-1}) = \begin{cases}
-\frac{\text{count}(w_{i-k+1}^i)}{\text{count}(w_{i-k+1}^{i-1})} & \text{if count}(w_{i-k+1}^i) > 0 \
-\lambda S(w_i|w_{i-k+2}^{i-1}) & \text{otherwise}
-\end{cases}$$
+In contrast, **Stupid Backoff** is a simpler, more "aggressive" method designed for web-scale data. It doesn't attempt to create a mathematically perfect probability distribution; instead, if a higher-order N-gram (like a 4-gram) has a count of zero, the model simply "backs off" to the 3-gram and multiplies that score by a fixed weight (often $0.4$). It continues backing off to smaller and smaller N-grams until it finds a non-zero count, prioritizing speed and simplicity over theoretical perfection.
 
 ---
 
@@ -830,7 +833,53 @@ $$S(w_i|w_{i-k+1}^{i-1}) = \begin{cases}
 <br>
 <br>
 
-## Paper: The Microsoft Research Sentence Completion Challenge (Zweig and Burges, 2011)
+# Paper: The Microsoft Research Sentence Completion Challenge (Zweig and Burges, 2011)
+Zweig and Burges (2011) introduce an evaluation task known as the Microsoft Research Sentence Completion Challenge. We will be looking at this task and its potential to evaluate language models. There are 1040 questions in the dataset, an example of which is given below:
+
+> Was she his **[client ‖ musings ‖ discomfiture ‖ choice ‖ opportunity]**, his friend or his mistress?
+
+The paper addresses a major limitation in N-gram models: while they are excellent at capturing local word order (fluency), they often struggle with long-range dependencies and global coherence. To test this, the authors created a dataset of 1,040 questions derived from five Sherlock Holmes novels by Sir Arthur Conan Doyle. Each question presents a sentence with one word removed and provides five candidate completions. Crucially, all five candidates are grammatically plausible, meaning the model cannot simply rely on part-of-speech rules; it must understand the semantic "fit" of the word within the entire sentence.
+
+The authors used this challenge to compare several models, including standard smoothed 4-grams, Log-Bilinear models, and Latent Semantic Analysis (LSA). Their findings highlighted that while N-grams are reliable for local syntax, they are easily "fooled" in this challenge because the clue for the correct answer often lies far away from the blank space. In contrast, vector-based methods like LSA—which look at the "global" context of the entire sentence—performed significantly better at identifying the semantically correct choice, even if the specific word sequence was rare. This paper essentially paved the way for the development of modern neural models that prioritize global context over local counting.
+
+
+#### 1. Explain what the task is, for a human or a computer system, for a question, as presented above. In the above example, what knowledge is needed in order to choose the correct answer?
+
+---
+
+#### 2. How was the dataset created? How and why were the incorrect answers selected in the way they were?
+
+---
+
+#### 3. How is performance measured on this task? What score must a method achieve to be better than the baseline of random guessing?
+
+---
+
+#### 4. What are the advantages and disadvantages of this evaluation task compare to ones based on human synonymy judgements such as WordSim353?
+
+---
+
+#### 5. How does the simple 4-gram model work?
+
+---
+
+#### 6. What do you understand by a smoothed n-gram model?
+
+---
+
+#### 7. Explain the method based on latent semantic analysis similarity. Why do you think this does better than the n-gram methods?
+
+
+---
+
+#### 8. How do you think you could do better on this task (without asking humans to help!)?
+
+---
+
+
+
+
+
 
 
 ### How was the dataset created? How and why were the incorrect answers selected in the way they were?
