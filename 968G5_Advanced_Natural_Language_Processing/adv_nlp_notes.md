@@ -842,37 +842,66 @@ The paper addresses a major limitation in N-gram models: while they are excellen
 
 The authors used this challenge to compare several models, including standard smoothed 4-grams, Log-Bilinear models, and Latent Semantic Analysis (LSA). Their findings highlighted that while N-grams are reliable for local syntax, they are easily "fooled" in this challenge because the clue for the correct answer often lies far away from the blank space. In contrast, vector-based methods like LSA—which look at the "global" context of the entire sentence—performed significantly better at identifying the semantically correct choice, even if the specific word sequence was rare. This paper essentially paved the way for the development of modern neural models that prioritize global context over local counting.
 
+---
 
-#### 1. Explain what the task is, for a human or a computer system, for a question, as presented above. In the above example, what knowledge is needed in order to choose the correct answer?
+### 1. Explain what the task is, for a human or a computer system, for a question, as presented above. In the above example, what knowledge is needed in order to choose the correct answer?
+The task in the Microsoft Research Sentence Completion Challenge is a **multiple-choice Cloze test**, where a human or a computer system must identify the single most appropriate word to fill a "gap" in a sentence from five given candidates. Unlike simple grammar tests, all five options are typically the same part of speech—in this case, all are nouns—meaning the sentence remains grammatically "legal" regardless of the choice. To solve it, the system must evaluate the **semantic coherence** and **lexical fit** of the word within the entire sentential context.
+
+In the specific example—"Was she his [client ‖ musings ‖ discomfiture ‖ choice ‖ opportunity], his friend or his mistress?"—the correct answer is "client." To choose this, a system needs two distinct types of knowledge:
+
+**Collocational and Proximity Knowledge:** The sentence provides a list of social or professional roles ("friend", "mistress"). The word "client" fits into this category of "human relationships/roles," whereas "musings" or "discomfiture" (an emotional state) do not.
+
+**Domain and World Knowledge:** Because the dataset is derived from Sherlock Holmes novels, the "correctness" is rooted in the specific 19th-century detective genre. In that world, a woman interacting with a protagonist is often a "client," a "friend," or a "mistress." A computer model needs to have seen these words appear in similar descriptive contexts to recognize that "client" is the most probable role to complete that specific social triad.
 
 ---
 
-#### 2. How was the dataset created? How and why were the incorrect answers selected in the way they were?
+### 2. How was the dataset created? How and why were the incorrect answers selected in the way they were?
+* Step 1: seed sents;
+* Step 2: generate alternatives, 30, using a n-gram model, remove extreme (obvious) sentence to retain hard questions
+* Step 3: human grooming, prune 30 down to 4 alts, prune with respect to rules
 
 ---
 
-#### 3. How is performance measured on this task? What score must a method achieve to be better than the baseline of random guessing?
+### 3. How is performance measured on this task? What score must a method achieve to be better than the baseline of random guessing?
+Performance on the Microsoft Research Sentence Completion Challenge is measured using accuracy, specifically the percentage of the 1,040 questions that the model answers correctly. Because each question is a multiple-choice task with exactly five candidates (one correct answer and four distractors), the measure is straightforward: the model's chosen word is compared against the "gold standard" ground-truth word from the original Sherlock Holmes text.
+
+To be considered better than a baseline of random guessing, a method must achieve a score higher than 20%. This is calculated simply as $1/5$, representing the statistical probability of picking the correct answer by sheer chance. In the original 2011 paper, the authors noted that while 20% is the theoretical floor, even basic N-gram models significantly outperform this, though they still fall well short of human performance, which typically sits above 90%.
 
 ---
 
-#### 4. What are the advantages and disadvantages of this evaluation task compare to ones based on human synonymy judgements such as WordSim353?
+### 4. What are the advantages and disadvantages of this evaluation task compare to ones based on human synonymy judgements such as WordSim353?
+The Microsoft Research Sentence Completion Challenge (SCC) and WordSim-353 represent two fundamentally different approaches to evaluating a model's linguistic "intelligence." While WordSim-353 focuses on lexical similarity (how similar are two isolated words?), the SCC focuses on compositional coherence (how well does this word fit into this specific sentence?).
+
+#### Advantages of the Sentence Completion Challenge
+The primary advantage of the SCC is that it evaluates a model in context. In WordSim-353, a model is given "bank" and "river" and asked for a score; however, this ignores the fact that in real-world usage, "bank" is almost always surrounded by other words that clarify its sense. The SCC forces a model to resolve ambiguity using the entire sentence, making it a more "natural" test of language understanding. Furthermore, the SCC is a discriminative task with an objective "gold standard" (the original word used by the author). This makes evaluation much more reliable than human similarity judgments, which are subjective, often inconsistent between different annotators, and require complex correlation statistics (like Spearman’s rho) to interpret.
+
+#### Disadvantages of the Sentence Completion Challenge
+The main disadvantage of the SCC is its domain specificity. Because the dataset is exclusively derived from 19th-century Sherlock Holmes novels, it rewards models that have been trained on similar Victorian-era literature and may penalize modern models that are better at general-purpose English but unfamiliar with Conan Doyle’s specific vocabulary and "high-style" prose. Additionally, the SCC is a "black or white" metric; a model gets zero points for picking a near-synonym that might be a perfectly valid poetic choice, whereas WordSim-353 allows for a gradient of similarity. Finally, the SCC can sometimes be solved through "low-level" statistical shortcuts (like simple bigram frequency) without the model actually "understanding" the logic of the sentence, whereas synonymy judgments require a deeper grasp of the underlying concepts.
 
 ---
 
-#### 5. How does the simple 4-gram model work?
+### 5. How does the simple 4-gram model work?
+The "simple" 4-gram model in the context of the Sentence Completion Challenge operates as a Maximum Likelihood Estimator (MLE) that calculates the probability of a sentence based on local, four-word windows. Specifically, to evaluate a candidate word for the blank space, the model calculates the joint probability of the entire sentence by breaking it into a chain of dependencies where each word is conditioned only on the three words immediately preceding it ($n-1=3$).
+
+In this specific challenge, the model works through a process of comparative scoring:
+1. **Candidate Substitution:** The model creates five versions of the sentence, inserting each of the five candidate words into the blank.
+2. **Probability Calculation:** For each version, the model calculates the total sentence probability (usually in the log-domain to avoid numerical underflow). It multiplies (or adds logs of) the probabilities of every 4-gram in the sentence, such as $P(w_4 | w_1, w_2, w_3)$.
+3. **Selection:** The candidate word that results in the highest overall sentence probability (or the lowest perplexity) is selected as the "winner."
+
+The primary limitation of this "simple" approach is its extreme locality. Because a 4-gram only "sees" three words into the past, it is excellent at checking if a word follows the local rules of grammar (e.g., ensuring an adjective follows a determiner), but it is completely "blind" to clues that appear earlier in the sentence. If the semantic hint for the blank word is ten words away, the 4-gram model will essentially ignore it, often leading it to choose a word that is locally fluent but globally nonsensical.
 
 ---
 
-#### 6. What do you understand by a smoothed n-gram model?
+### 6. What do you understand by a smoothed n-gram model?
 
 ---
 
-#### 7. Explain the method based on latent semantic analysis similarity. Why do you think this does better than the n-gram methods?
+### 7. Explain the method based on latent semantic analysis similarity. Why do you think this does better than the n-gram methods?
 
 
 ---
 
-#### 8. How do you think you could do better on this task (without asking humans to help!)?
+### 8. How do you think you could do better on this task (without asking humans to help!)?
 
 ---
 
