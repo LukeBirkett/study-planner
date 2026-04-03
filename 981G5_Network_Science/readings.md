@@ -68,10 +68,36 @@ It is an excellent resource if you are writing a Master's dissertation and need 
 # Week 5 
 Book Chapter: 4
 
+#### [E. N. Gilbert, Random Graphs. The Annals of Mathematical Statistics, 30 (1959) 1141–1144](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-30/issue-4/Random-Graphs/10.1214/aoms/1177706098.full)
+[1]
 
 #### P. Erdős and A. Rényi, "On Random Graphs I", Publicationes Mathematicae (1959).
+[2]
+
 In 1959, Erdős and Rényi defined a random graph by taking a fixed number of nodes ($N$) and a fixed number of edges ($M$), then choosing a graph uniformly at random from all possible graphs with those parameters. This is the $G(n, m)$ model.
 
 At roughly the same time (1959), Edgar Gilbert proposed the model where every edge is chosen independently with a probability ($p$). This is the $G(n, p)$ model.
 
 
+#### [D. J. Watts & S. H. Strogatz, Collective dynamics of “small-world” networks. Nature, 393 (1998) 440–442](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-30/issue-4/Random-Graphs/10.1214/aoms/1177706098.full)
+[3]
+
+#### [P. W. Holland & S. Leinhardt, An Exponential Family of Probability Distributions for Directed Graphs. Journal of the American Statistical Association, 76 (1981)](https://www.tandfonline.com/doi/abs/10.1080/01621459.1981.10477598)
+[4]
+
+#### [C. Orsini, M. M. Dankulov, P. Colomer-de-Simón, A. Jamakovic, P. Mahadevan, A. Vahdat, K. E.Bassler, Z. Toroczkai, M. Boguñá, G. Caldarelli, S. Fortunato, & D. Krioukov, Quantifying randomness in real networks. Nature Communications, 6 (2015) 8627](https://www.nature.com/articles/ncomms9627)
+[5]
+
+
+#### [A.-L. Barabási, Luck or reason. Nature, 489 (2012) 507–508.](https://www.nature.com/articles/nature11486)
+[6]
+
+
+#### [A.-L. Barabási & R. Albert, Emergence of Scaling in Random Networks. Science, 286 (1999) 509–512.](https://www.science.org/doi/10.1126/science.286.5439.509)
+[7]
+
+
+#### [P. L. Krapivsky, S. Redner, & F. Leyvraz, Connectivity of Growing Random Networks. Physical Review Letters, 85 (2000) 4629–4632](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.85.4629)
+[8]
+
+---
