@@ -665,8 +665,9 @@ $$PP(W) = e^{-1/N \log P(w_1, w_2, w_3, ..., w_N)}$$
 
 Because **Perplexity** is the inverse of probability, minimising perplexity is the same as maximising probability. 
 
+---
 
-## Part 2: Generalisation in n-Gram Models
+# Part 2: Generalisation in n-Gram Models
 
 # Toy Example
 
@@ -766,7 +767,7 @@ The main reason we use the original formula is to handle the case where the bigr
 
 # Week 2 - Seminar
 
-# Week 2 Questions: 2.1
+## Week 2 Questions: 2.1
 
 ### 1. Give 3 examples of applications where one might want to assign a probability to a sequence of words.
 While you mentioned these in your lecture notes, for a seminar answer, we want to be as precise as possible about why the probability matters in each case. Here is a refined answer:
@@ -800,7 +801,7 @@ Model A is better. Perplexity is a measure of "uncertainty" or "branching factor
 
 ---
 
-# Week 2 Questions: 2.2
+## Week 2 Questions: 2.2
 
 ### 1. Explain how a bigram language model can be used to generate possible sequences of tokens.
 A bigram language model generates text by treating word prediction like a chain reaction. Because a bigram only "looks back" at the single previous token, it uses the probability $P(w_n | w_{n-1})$ to decide what comes next.
@@ -881,7 +882,7 @@ The main disadvantage of the SCC is its domain specificity. Because the dataset 
 ---
 
 ### 5. How does the simple 4-gram model work?
-The "simple" 4-gram model in the context of the Sentence Completion Challenge operates as a Maximum Likelihood Estimator (MLE) that calculates the probability of a sentence based on local, four-word windows. Specifically, to evaluate a candidate word for the blank space, the model calculates the joint probability of the entire sentence by breaking it into a chain of dependencies where each word is conditioned only on the three words immediately preceding it ($n-1=3$).
+The "simple" 4-gram model in the context of the **Sentence Completion Challenge** operates as a **Maximum Likelihood Estimator (MLE**) that calculates the probability of a sentence based on local, four-word windows. Specifically, to evaluate a candidate word for the blank space, the model calculates the joint probability of the entire sentence by breaking it into a chain of dependencies where each word is conditioned only on the three words immediately preceding it ($n-1=3$).
 
 In this specific challenge, the model works through a process of comparative scoring:
 1. **Candidate Substitution:** The model creates five versions of the sentence, inserting each of the five candidate words into the blank.
@@ -893,52 +894,51 @@ The primary limitation of this "simple" approach is its extreme locality. Becaus
 ---
 
 ### 6. What do you understand by a smoothed n-gram model?
+A **smoothed n-gram model** is a probabilistic language model that has been modified to handle the "zero-probability" problem caused by data sparsity. In a simple (unsmoothed) model, if a specific sequence of $n$ words never appeared in the training corpus, the model assigns it a probability of exactly zero. This is catastrophic for performance because if a single zero occurs in a sentence, the **Chain Rule** (multiplication) causes the entire sentence's probability to collapse to zero, making it impossible to calculate metrics like **Perplexity**.
+
+Smoothing works by reallocating probability mass from frequently seen events to those that were unseen or rare. The core intuition is to "shave off" a small fraction of the counts from high-frequency n-grams and "spread" that count across the vast number of n-grams that have zero counts. This ensures that every possible word sequence has at least a tiny, non-zero probability, allowing the model to be robust when encountering new, "novel" sentences in the test set.
+
+Common techniques for smoothing include:
+
+| Type | Description | 
+| :--- | :--- | 
+| Laplace (Add-One) Smoothing: | The simplest method, which adds 1 to every possible n-gram count. | 
+| Absolute Discounting: | Subtracting a fixed constant (e.g., $0.75$) from seen counts to create a "reservoir" of probability for unseen sequences. | 
+| Backoff and Interpolation: | If a specific trigram is unknown, the model "backs off" to look at the bigram or unigram probabilities instead, ensuring that general linguistic knowledge supports specific gaps in the data. | 
 
 ---
 
 ### 7. Explain the method based on latent semantic analysis similarity. Why do you think this does better than the n-gram methods?
+**Latent Semantic Analysis (LSA)** approach treats the sentence completion task as a problem of **global** semantic fit rather than local word ordering. Instead of counting how often words appear next to each other, LSA uses **Singular Value Decomposition (SVD)** to reduce a massive word-context matrix into a **"dense"** lower-dimensional space. In this space, every word is represented as a vector. To solve a challenge question, the model represents the entire sentence (minus the blank) as a single vector—usually by averaging the vectors of all its constituent words—and then calculates the cosine similarity between that "context vector" and the vectors of the five candidate completions.
 
+LSA likely outperforms N-gram methods on this specific task for several reasons:
+
+**Long-Range Dependencies:** N-grams are "locally blind"; a 4-gram only sees the three words immediately preceding the blank. If the clue for the correct answer appears at the very beginning of a twenty-word sentence, the N-gram will completely miss it. LSA, however, considers every word in the sentence simultaneously, allowing it to capture the overarching "topic" or "theme" of the text.
+
+**Semantic Generalization:** N-grams suffer from the "zero-count" problem; if the model hasn't seen the exact four-word sequence before, it struggles. LSA operates in a continuous vector space where words with similar meanings (e.g., "client" and "customer") are placed close together. This allows the model to recognize that a word "fits" the topic even if that specific phrasing is entirely novel.
+
+**Topic Consistency:** The Sentence Completion Challenge often relies on high-level narrative logic (e.g., a detective story context) rather than just grammatical fluency. LSA is specifically designed to capture these "latent" relationships, making it much more robust at identifying which candidate word is most "at home" in a Sherlock Holmes mystery.
 
 ---
 
 ### 8. How do you think you could do better on this task (without asking humans to help!)?
+To outperform the 2011 benchmarks without human intervention, we would transition from "counting" and "linear algebra" to deep contextualized architectures and data augmentation. The primary goal is to solve the "short memory" of N-grams and the "bag-of-words" limitation of LSA.
+
+#### 1. Moving to Bi-directional Transformers (BERT)
+The most significant improvement would come from using a model like BERT (Bidirectional Encoder Representations from Transformers). Unlike N-grams, which look only at the past, or LSA, which loses word order, BERT uses a Masked Language Model (MLM) objective. This is identical to the SCC task: it masks a token and uses the "self-attention" mechanism to weigh the importance of every other word in the sentence (both left and right) to predict the fill. BERT would capture the Victorian syntax of Sherlock Holmes while maintaining a "global" view of the sentence's logic.
+
+#### 2. Domain-Specific "Intermediate" Pre-training
+As noted in the paper, the SCC is difficult because of its Victorian-era prose. A general-purpose model trained on Wikipedia might struggle with 19th-century vocabulary. We could improve performance by performing Domain Adaptation: taking a pre-trained model and fine-tuning it on a massive corpus of 19th-century literature (Project Gutenberg). This would "prime" the model’s internal embeddings to expect the specific collocations and formal registers used by Sir Arthur Conan Doyle.
+
+#### 3. Incorporating Discourse and Narrative Logic
+The SCC often requires understanding the "plot" or "character roles." We could use a Long-Context Transformer (like Longformer or Mistral) trained on entire chapters rather than single sentences. By providing the model with the previous five paragraphs of the story as "context," it could realize that the character being discussed is a "client" and not a "choice," even if the current sentence is ambiguous.
+
+#### 4. Ensemble Methods
+Finally, we could combine the strengths of different architectures. An Ensemble that averages the votes of a 5-gram model (for local fluency), an LSA model (for global topic consistency), and a Neural Transformer (for deep semantics) would likely be more robust than any single method. If the Transformer and LSA both agree on "client," but the N-gram is unsure, the consensus would lead to the correct answer.
 
 ---
-
-
-
-
-
-
-
-### How was the dataset created? How and why were the incorrect answers selected in the way they were?
-
-* Step 1: seed sents;
-* Step 2: generate alternatives, 30, using a n-gram model, remove extreme (obvious) sentence to retain hard questions
-* Step 3: human grooming, prune 30 down to 4 alts, prune with respect to rules
-
----
-
-### How does simple 4-gram model work?
-
-Paper talks about simple vs smooth 4-gram. 
-* simple model; look at bi, tri and quad gram and assign points with word existed in either types; scoring approach in n-gram matches,
-* smooth model; prob of word give previous words; actual implementation, calculating product of probs; good turing smoothing method used.
-
----
-
-### Explain the method based on latent semantic analysis similarity.  Why do you think this does better than the n-gram methods?
-
-This is similar distributional sematic methods. The construction of the vectors builds a cooccurance vector for each word in the sentence. The target word has context with all over words in the sentence. 
-
----
-
-<br>
-<br>
-<br>
 
 # Week 2 - Addtional Readings
-
 * Jurafsky and Martin Chapter 3 [N-gram Language Models]
 
 ---
@@ -971,16 +971,21 @@ This is similar distributional sematic methods. The construction of the vectors 
 * [Part 2 - RNN/LSTM/GRU](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9cae7217-e9c9-4e3f-894b-b3e800b7d5cc&start=0)
 * [Part 3 - CNNs](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=06ed8e74-ae66-4085-8d4d-b3e800be5350&start=0)
 
+Week 3 of the module marks a fundamental paradigm shift from the **counting-based** logic of N-grams to the **representation-based** logic of **Neural Language Models (NLMs)**. While previous methods struggled with the "curse of dimensionality" and data sparsity, NLMs solve these issues by projecting words into a continuous, high-dimensional vector space where semantically similar words are placed closer together. We begin by exploring the **Feed-Forward Neural Network (FFNN)**, which uses a fixed-length context window to predict the next word. While this architecture introduced the power of **dense embeddings** and non-linear hidden layers, it remained limited by its "short memory" and the requirement of a hard-coded input size.
+
+To overcome these structural limitations, we transition to **Recurrent Neural Networks (RNNs)**, which process language sequentially rather than in static windows. By maintaining a **hidden state** that acts as a persistent internal memory, RNNs can theoretically handle variable-length inputs and capture long-range dependencies across an entire sentence. However, because "Vanilla" RNNs suffer from the **vanishing gradient** problem—where the signal from the beginning of a sentence effectively disappears before reaching the end—we introduce the **Long Short-Term Memory (LSTM)**. Through a sophisticated system of **input, forget, and output gates**, the LSTM surgically manages a **"cell state,"** allowing the model to preserve critical information over much longer sequences.
+
+Finally, we address the limitations of word-level modeling by investigating **Character-Aware Neural Language Models**. By using **Convolutional Neural Networks (CNNs)** to scan the internal character structure of words, these models can identify sub-word features like prefixes and suffixes. This architectural shift provides a powerful solution to the **Out-of-Vocabulary (OOV)** problem and enhances the model's performance on morphologically rich languages. By stacking these character-level features into a highway network and then into an LSTM, we create a robust system that understands both the structural nuances of individual words and the global context of the entire discourse.
+
+
 ---
 
 # Part 1 - Neural Networks
-
 While traditional n-gram models rely on discrete counts and the Markov assumption, Neural Language Models (NLMs) represent words in a continuous, high-dimensional vector space. At a high level, the architecture focuses on transforming input tokens into dense embeddings, which are then processed through hidden layers to capture non-linear relationships. By using a Feed-Forward structure, the network learns to predict the next token by projecting the context into a "hidden" space, effectively bypassing the data sparsity issues that plague n-grams. In this module, the focus remains on how these architectures—specifically the Softmax output and Cross-Entropy Loss—allow the model to assign probabilities to sequences in a way that generalizes to unseen data.
 
 ---
 
 ## Neural Unit
-
 The fundamental building block of the network is the neuron (or unit). It performs two distinct operations: a linear transformation followed by a non-linear activation. 
 
 The unit first calculates the weighted sum ($z$) of its inputs. This is represented mathematically as the dot product of the input vector and the weight vector, plus a bias term:
@@ -996,31 +1001,29 @@ This output then serves as the input for the next layer in the network. Without 
 ---
 
 ## Feedforward Network 
-
 In a Feed-Forward Network (FFN), information flows in one direction: from the input layer, through one or more hidden layers, to the output layer. There are no cycles or loops in this architecture, distinguishing it from the Recurrent Neural Networks (RNNs) we see later in the module.
 
-* Input Layer: Represents the raw data (e.g., word embeddings).
-* Hidden Layers: Where the "learning" happens. These layers extract increasingly abstract features from the input.
-* Output Layer: Produces the final prediction (e.g., the probability of the next word).
-* Fully Connected (Dense): In a standard FFN, every unit in layer $i$ is connected to every unit in layer $i+1$. Each connection has its own weight.
+* **Input Layer:** Represents the raw data (e.g., word embeddings).
+* **Hidden Layers:** Where the "learning" happens. These layers extract increasingly abstract features from the input.
+* **Output Layer:** Produces the final prediction (e.g., the probability of the next word).
+* **Fully Connected (Dense):** In a standard FFN, every unit in layer $i$ is connected to every unit in layer $i+1$. Each connection has its own weight.
 
 Each hidden layer $h$ can be represented as a vector calculation. If $\mathbf{x}$ is our input, the first hidden layer is:
 $$\mathbf{h} = g(\mathbf{W}\mathbf{x} + \mathbf{b})$$
 
-For Language Modelling, the output layer typically has a size equal to the entire Vocabulary ($V$). To turn the raw output values (logits) into probabilities that sum to 1, we use the Softmax function:
+For **Language Modelling**, the output layer typically has a size equal to the entire **Vocabulary** ($V$). To turn the raw output values (logits) into probabilities that sum to 1, we use the Softmax function:
 $$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{|V|} e^{z_j}}$$
 
 This allows us to interpret the output as $P(w_t \mid \text{context})$, where the index with the highest probability is our predicted word.
 
 ---
 
-## Training Neural Networks
-
+# Training Neural Networks
 Training is the process of adjusting the network's weights and biases so that its predictions match the "ground truth" labels in the training data. In NLP, this usually means predicting the actual next word in a sentence.
 
 To improve, the network needs a mathematical measure of how "wrong" its current predictions are. This is the Loss Function ($J$).
 
-For language modelling, we use Cross-Entropy Loss (often referred to as Negative Log-Likelihood). If the model predicts a probability $P(w)$ for the correct word, the loss for that single instance is:
+For language modelling, we use **Cross-Entropy Loss** (often referred to as **Negative Log-Likelihood**). If the model predicts a probability $P(w)$ for the correct word, the loss for that single instance is:
 
 $$L = -\log P(w)$$
 
@@ -1028,30 +1031,38 @@ $$L = -\log P(w)$$
 * If the model is wrong or uncertain ($P \approx 0$), the loss becomes very large.
 * The goal of training is to minimize the average loss across the entire training corpus.
 
-Once we have the loss, we use Gradient Descent to update the parameters. This happens in three repeating steps:
-1. Forward Pass: Compute the prediction and the resulting loss.
-2. Backward Pass (Backpropagation): Use the chain rule from calculus to calculate the gradient—the partial derivative of the loss with respect to every weight in the network ($\frac{\partial J}{\partial W}$). This tells us which direction to "nudge" the weights to decrease the loss.
-3. Update: Adjust the weights in the opposite direction of the gradient, scaled by a Learning Rate ($\alpha$): $W = W - \alpha \frac{\partial J}{\partial W}$
+Once we have the loss, we use **Gradient Descen**t to update the parameters. This happens in three repeating steps:
 
-In practice, we don't update the weights after every single word (Stochastic Gradient Descent) because it's noisy and slow. Instead, we use Mini-batch Gradient Descent, where we calculate the average loss for a small group of sentences (e.g., 32 or 64) and perform one update step.
+| Step | Description |
+| :--- | :--- |
+| **Forward Pass:** | Compute the prediction and the resulting loss. |
+| **Backward Pass (Backpropagation):** | Use the chain rule from calculus to calculate the gradient—the partial derivative of the loss with respect to every weight in the network ($\frac{\partial J}{\partial W}$). This tells us which direction to "nudge" the weights to decrease the loss. |
+| **Update:** | Adjust the weights in the opposite direction of the gradient, scaled by a Learning Rate ($\alpha$): $W = W - \alpha \frac{\partial J}{\partial W}$ |
+---
+
+In practice, we don't update the weights after every single word **(Stochastic Gradient Descent)** because it's noisy and slow. Instead, we use **Mini-batch Gradient Descent**, where we calculate the average loss for a small group of sentences **(e.g., 32 or 64)** and perform one update step.
 
 ---
 
-## Feed-Forward Neural Language Model (Bengio et al., 2003)
-
+# Feed-Forward Neural Language Model (Bengio et al., 2003)
 This model treats language modeling as a supervised learning task: predicting the next word $w_t$ given a fixed-length history of $n-1$ words.
 
 #### Architecture & Process
-1. **Input:** A sequence of words (e.g., a 3-word window: $w_{t-3}, w_{t-2}, w_{t-1}$).
-2. **Projection Layer (Embeddings):** Each word is initially a high-dimensional "one-hot" vector. The model multiplies these by a shared weight matrix $C$ to produce a dense, lower-dimensional embedding vector.
-3. **Concatenation:** These embedding vectors are concatenated into a single large input vector for the hidden layer.
-4. **Hidden Layer:** A standard fully connected layer with a non-linear activation (usually tanh). This layer learns the "contextual interactions" between the input words.
-5. **Output Layer (Softmax):** The final layer has a size equal to the vocabulary ($|V|$). It outputs a probability distribution over all possible next words.
+---
+| Step | Description |
+| :--- | :--- | 
+| **Input:** | A sequence of words (e.g., a 3-word window: $w_{t-3}, w_{t-2}, w_{t-1}$). |
+| **Projection Layer (Embeddings):** | Each word is initially a high-dimensional "one-hot" vector. The model multiplies these by a shared weight matrix $C$ to produce a dense, lower-dimensional embedding vector. | 
+| **Concatenation:** | These embedding vectors are concatenated into a single large input vector for the hidden layer. |
+| **Hidden Layer:** | A standard fully connected layer with a non-linear activation (usually tanh). This layer learns the "contextual interactions" between the input words. | 
+| **Output Layer (Softmax):** | The final layer has a size equal to the vocabulary ($\|V\|$). It outputs a probability distribution over all possible next words. $P(w_t \| w_{t-1}, \dots, w_{t-n+1})$ |
+---
 
-$$P(w_t | w_{t-1}, \dots, w_{t-n+1})$$
+![Feedforward Bengio](./files/week_3/feed_forward_bengio.png)
 
-#### Advantages vs. Disadvantages
+---
 
+# Feedword Comparison to n-Gram
 | Feature, | Neural Language Model (NLM) | n-gram Models | 
 | :--- | :--- | :--- | 
 | Generalization | High. Similar words (e.g., "dog" and "cat") have similar embeddings, so the model knows they appear in similar contexts. | Low. Treats words as atomic units; "dog" and "cat" are as different as "dog" and "refrigerator." | 
@@ -1059,11 +1070,15 @@ $$P(w_t | w_{t-1}, \dots, w_{t-n+1})$$
 | Context | Can handle slightly longer histories than n-grams (though still fixed). | Becomes exponentially sparse as n increases. |
 | Training Speed | Slow. Backpropagation and softmax over a huge vocabulary are computationally expensive. | Fast. Simple counting and division. | 
 
-The "Hypothesis Space" Intuition: Unlike n-grams, which look for exact matches, the NLM moves into a "feature space." If the model has seen "The cat sat on the...", it can predict "mat" for "The dog sat on the..." because it recognizes that "cat" and "dog" occupy similar positions in the embedding space.
+---
 
-#### The Limitations of the Bengio Model
+# The "Hypothesis Space" Intuition: 
+Unlike n-grams, which look for exact matches, the NLM moves into a "feature space." If the model has seen "The cat sat on the...", it can predict "mat" for "The dog sat on the..." because it recognizes that "cat" and "dog" occupy similar positions in the embedding space.
 
-The primary limitation is the Fixed Window. Even though it's better than an n-gram, it still uses a "Markov-style" assumption where it only looks at the previous $n$ words. It cannot "remember" a subject introduced at the beginning of a long paragraph. In a Feed-Forward network, the input layer size is hard-coded into the weight matrix. You could just make the inital input size very large but as you increase the window size, the number of weights in the first hidden layer explodes. Also, the most subtle but critical issue is that with a concatenated vector, the model treats "Position 1" and "Position 2" as completely different sets of weights. The model may learn structurally that "The" is a common word at $w_t-1$ but it needs to learn this again for all positions. 
+---
+
+# The Limitations of the Bengio Model
+The primary limitation is the **Fixed Window**. Even though it's better than an n-gram, it still uses a **"Markov-style"** assumption where it only looks at the previous $n$ words. It cannot "remember" a subject introduced at the beginning of a long paragraph. In a **Feed-Forward** network, the input layer size is hard-coded into the weight matrix. You could just make the inital input size very large but as you increase the window size, the number of weights in the first hidden layer explodes. Also, the most subtle but critical issue is that with a concatenated vector, the model treats "Position 1" and "Position 2" as completely different sets of weights. The model may learn structurally that "The" is a common word at $w_t-1$ but it needs to learn this again for all positions. 
 
 ---
 
@@ -1073,120 +1088,184 @@ The primary limitation is the Fixed Window. Even though it's better than an n-gr
 
 # Part 2 - RNN/LSTM/GRU
 
-## Simple Recurrent Network
-
-While Feed-Forward Neural Networks (FFNNs) offer a significant leap over n-grams through dense embeddings and better generalization, they are fundamentally limited by a fixed-length context window. In natural language, dependencies often span far beyond the previous three or four words. To address this, we transition to Recurrent Neural Networks (RNNs). Unlike FFNNs, which process an entire window of text as a single static input, RNNs process language sequentially. By maintaining an internal "hidden state" that is updated at every time step, these models create a persistent memory of the past, allowing them to handle variable-length inputs and potentially capture long-range dependencies that a fixed window would simply miss.
-
-Key Shifts: 
-* From Fixed to Variable: Moving away from hard-coded window sizes to architectures that can process any number of tokens.
-* From Concatenation to Recurrence: Instead of stacking word vectors side-by-side, we feed the output of the previous step back into the network alongside the current word.
-* The Vanishing Gradient Problem: Identifying why "Vanilla" RNNs struggle with long-term memory and how LSTMs and GRUs use specialized "gates" to protect and maintain information over time.
-
-## Recurrent Neural Networks (RNN)
-
-An RNN is essentially a Feed-Forward network that "loops." At each time step $t$, the network takes two inputs: the current word $x_t$ and its own previous hidden state $h_{t-1}$.
-
-#### Advantages
-
-* Sequential Memory: The hidden layer acts as a "summary" or "bottleneck" of the previous context.
-* Variable Length: Unlike the Bengio model, the same weights ($U, V, W$) are used regardless of sentence length.
-* Parameter Sharing: The model learns the meaning of a word once, and that knowledge is applied no matter where the word appears in the sequence.
-
-#### Disadvantages
-
-* The Vanishing Gradient Problem: During backpropagation, the gradient is multiplied by the weight matrix repeatedly. If weights are small, the gradient shrinks to zero, meaning the model "forgets" the start of long sentences.
-* While it can theoretically remember everything, in practice, $h_t$ is heavily biased toward the most recent words.
+TODO: Intro for part 2
 
 ---
 
-## RNN Language Model (Mikolov et al., 2013)
+# Simple Recurrent Network
+While **Feed-Forward Neural Networks (FFNNs)** offer a significant leap over n-grams through **dense embeddings** and **better generalization**, they are fundamentally limited by a **fixed-length** context window. In natural language, dependencies often span far beyond the previous three or four words. To address this, we transition to **Recurrent Neural Networks (RNNs)**. Unlike FFNNs, which process an entire window of text as a **single static input**, RNNs process language **sequentially**. By maintaining an internal **"hidden state"** that is updated at every time step, these models create a persistent memory of the past, allowing them to handle **variable-length** inputs and potentially capture long-range dependencies that a fixed window would simply miss.
+
+#### Key Shifts: 
+* **From Fixed to Variable:** Moving away from hard-coded window sizes to architectures that can process any number of tokens.
+* **From Concatenation to Recurrence:** Instead of stacking word vectors side-by-side, we feed the output of the previous step back into the network alongside the current word.
+* **The Vanishing Gradient Problem:** Identifying why "Vanilla" RNNs struggle with long-term memory and how LSTMs and GRUs use specialized "gates" to protect and maintain information over time.
+
+![Simple RNN](./files/week_3/simple_rnn.png)
+
+---
+
+# Recurrent Neural Networks (RNN)
+
+An RNN is essentially a Feed-Forward network that "loops." At each time step $t$, the network takes two inputs: the current word $x_t$ and its own previous hidden state $h_{t-1}$.
+
+---
+
+# RNN Advantages
+
+* **Sequential Memory:** The hidden layer acts as a "summary" or "bottleneck" of the previous context.
+* **Variable Length:** Unlike the Bengio model, the same weights ($U, V, W$) are used regardless of sentence length.
+* **Parameter Sharing:** The model learns the meaning of a word once, and that knowledge is applied no matter where the word appears in the sequence.
+
+---
+
+# RNN Disadvantages
+
+* **The Vanishing Gradient Problem:** During backpropagation, the gradient is multiplied by the weight matrix repeatedly. If weights are small, the gradient shrinks to zero, meaning the model "forgets" the start of long sentences.
+* While it can theoretically remember everything, in practice, $h_t$ is heavily biased toward the **most recent** words.
+
+---
+
+# RNN Language Model (Mikolov et al., 2013)
 
 Mikolov’s implementation formalized how RNNs could be used for large-scale language modelling. The "memory" is stored in the hidden layer, which serves as a distributed representation of the history.
 
+Input and output vectors ($w$ and $y$) have dimensionality of the vocabulary. Output vector y is a probability distribution over words.
+
+Word representations are found in the columns of a matrix $U$ (selected by the 1 of $N$ encoding of the current word $w(t)$)
+
+The hidden layer $(s(t))$ maintains a representation of sentence history 
+
+Trained with back-propagation to maximise data log-likelihood
+
+![mik_rnn](./files/week_3/mik_rnn.png)
+
 To compute the state of an RNN at any time step $t$, we use the following formulas:
 
-#### 1. The Hidden Layer ($h_t$)
-The hidden state is a concatenation of the current input and the previous context, passed through a non-linear activation (usually $tanh$ or $sigmoid$):
+---
+
+# 1. The Hidden Layer ($h_t$)
+The **hidden state** is a concatenation of the **current input** and the **previous context**, passed through a **non-linear activation** (usually $tanh$ or $sigmoid$):
 $$h_t = \sigma(W x_t + U h_{t-1} + b)$$
 * $W$: Weights for the input-to-hidden connections.
 * $U$: Weights for the hidden-to-hidden (recurrent) connections.
 * $b$: Bias vector.
 
-#### 2. The Output Layer ($y_t$)
-The raw output (logits) is calculated from the current hidden state:
+---
+
+# 2. The Output Layer ($y_t$)
+The raw output (logits) is calculated from the current hidden state.
 $$a_t = V h_t + c$$
 * $V$: Weights for the hidden-to-output connections.
 * $c$: Output bias.
 
-#### 3. The Probability Distribution ($\hat{y}_t$)
+---
+
+# 3. The Probability Distribution ($\hat{y}_t$)
 Finally, we apply Softmax to get the probability of every word in the vocabulary:
 $$\hat{y}_t = \text{softmax}(a_t)$$
 
-#### 4. Distributed Representations in RNNs
+---
+
+# 4. Distributed Representations in RNNs
 One of the coolest things about the Mikolov model is that the matrix $W$ (the input weights) essentially becomes a lookup table for word embeddings. As the model learns to predict the next word, it naturally groups similar words together in the vector space because they lead to similar hidden states.
 
 ---
 
-## Long Short-Term Memory (LSTM)
-
-The core innovation of the LSTM is the Cell State ($C_t$), which acts as a "long-term memory" conveyor belt running through the top of the units. While the standard RNN squashes all information through a single $tanh$ layer, the LSTM uses gates to surgically add or remove information from the cell state.
+# Long Short-Term Memory (LSTM)
+The core innovation of the LSTM is the **Cell State** ($C_t$), which acts as a "long-term memory" conveyor belt running through the top of the units. While the standard RNN squashes all information through a single $tanh$ layer, the LSTM uses gates to surgically add or remove information from the cell state.
 
 Every LSTM unit at time $t$ considers:
 * $x_t$: The current input (the current word embedding).
-* $h_{t-1}$: The short-term memory (hidden state from the previous step).
-* $C_{t-1}$: The long-term memory (cell state from the previous step).
+* $h_{t-1}$: The **short-term memory** (hidden state from the previous step).
+* $C_{t-1}$: The **long-term memory** (cell state from the previous step).
 
-#### The Gating Mechanism
-Each gate uses a Sigmoid ($\sigma$) activation function. Because sigmoid outputs are between 0 and 1, they act as "valves":
-* 0: Close the gate (forget/block everything).
-* 1: Open the gate (keep/pass everything).
-
-#### The Forget Gate ($f_t$)
-It looks at $x_t$ and $h_{t-1}$ and decides which bits of the long-term memory ($C_{t-1}$) are no longer relevant.
-* Formula: $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$
-* Example: If the sentence subject changes from singular to plural, the forget gate might "erase" the singular verb constraint.
-
-#### The Input Gate ($i_t$) & Candidate State ($\tilde{C}_t$)
-This gate decides what new information to store in the cell state.
-1. The Input Gate ($\sigma$) decides which values to update.
-2. The Candidate State ($tanh$) creates a vector of new potential values to add to the state.
-3. The Update: These are multiplied and then added to the cell state.
-    * Crucial Point: Because we add rather than multiply, the gradient can flow back through time much more easily, solving the vanishing gradient problem.
-
-#### The Output Gate ($o_t$)
-
-This gate decides what the next Hidden State ($h_t$) should be. It takes the current cell state, runs it through a $tanh$ (to keep values between -1 and 1), and multiplies it by the output gate’s sigmoid filter.
-
-The result $h_t$ is used for the current prediction and passed to the next cell as short-term memory.
+![unroll lstm](./files/week_3/unroll_lstm.png)
 
 ---
 
-## Stacked RNNs (Deep RNNs)
+# The Gating Mechanism
+Each gate uses a **Sigmoid** ($\sigma$) activation function. Because sigmoid outputs are between 0 and 1, they act as "valves":
+* 0: **Close** the gate (forget/block everything).
+* 1: **Open** the gate (keep/pass everything).
+
+---
+
+# The Forget Gate ($f_t$)
+It looks at $x_t$ and $h_{t-1}$ and decides which bits of the **long-term memory** ($C_{t-1}$) are no longer relevant.
+* **Formula:** $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$
+* **Example:** If the sentence subject changes from singular to plural, the forget gate might "erase" the singular verb constraint.
+
+![forget](./files/week_3/forget.png)
+
+---
+
+# The Input Gate ($i_t$) & Candidate State ($\tilde{C}_t$)
+This gate decides what **new** information to store in the **cell state**.
+1. **The Input Gate** ($\sigma$) decides which values to update.
+2. **The Candidate State** ($tanh$) creates a vector of new potential values to add to the state.
+3. **The Update:** These are multiplied and then added to the cell state.
+    * **Crucial Point:** Because we add rather than multiply, the gradient can flow back through time much more easily, solving the vanishing gradient problem.
+
+![input](./files/week_3/input.png)
+
+---
+
+# The Output Gate ($o_t$)
+
+This gate decides what the next **Hidden State** ($h_t$) should be. It takes the current cell state, runs it through a $tanh$ (to keep values between -1 and 1), and multiplies it by the output gate’s sigmoid filter.
+
+The result $h_t$ is used for the current prediction and passed to the next cell as short-term memory.
+
+![output](./files/week_3/output.png)
+
+---
+
+# GRU Variant
+This is a simpler (smaller), more efficent RNN/LSTM where the forget and input gates merged into a single update gate. And the hidden and cell
+states are merged
+
+![GRU](./files/week_3/GRU.png)
+
+---
+
+# Stacked RNNs (Deep RNNs)
 
 In a Stacked RNN, the output (hidden state $h_t$) of one RNN layer is not used to predict a word immediately; instead, it becomes the input for the next RNN layer above it.
 
-#### Why Stack?
-* Hierarchical Abstraction: Just as CNNs learn edges before shapes, stacked RNNs learn different levels of linguistic abstraction.
+![Stacked RNN](./files/week_3/stacked_rnn.png)
+
+---
+
+# Why Stack RNNs?
+* **Hierarchical Abstraction:** Just as CNNs learn edges before shapes, stacked RNNs learn different levels of linguistic abstraction.
     * Lower layers tend to capture lower-level syntax (parts of speech, local morphology).
     * Higher layers tend to capture more abstract semantic concepts and long-range structure.
-* Increased Capacity: Stacking allows the model to learn more complex functions. Most modern systems use at least 2 to 4 layers.
+* **Increased Capacity:** Stacking allows the model to learn more complex functions. Most modern systems use at least 2 to 4 layers.
 
 --- 
 
-## Bidirectional RNNs (Bi-RNN)
+# Bidirectional RNNs (Bi-RNN)
 
-A standard RNN is "causal"—it only knows about the past. However, for many NLP tasks (like Part-of-Speech tagging or Named Entity Recognition), the future context is just as important as the past.
+A standard RNN is "causal" — it only knows about the past. However, for many NLP tasks (like **Part-of-Speech** tagging or **Named Entity Recognition**), the future context is just as important as the past.
 
-Example: In the sentence "The bank was flooded," you don't know if "bank" is a financial institution or a river bank until you see the word "flooded."
+**Example:** In the sentence "The bank was flooded," you don't know if "bank" is a financial institution or a river bank until you see the word "flooded."
 
-A Bidirectional RNN consists of two independent hidden layers:
-* Forward Pass: Processes the sequence from left to right ($w_1, w_2, \dots, w_n$).
-* Backward Pass: Processes the sequence from right to left ($w_n, w_{n-1}, \dots, w_1$).
+A **Bidirectional RNN** consists of two independent hidden layers:
+* **Forward Pass:** Processes the sequence from left to right ($w_1, w_2, \dots, w_n$).
+* **Backward Pass:** Processes the sequence from right to left ($w_n, w_{n-1}, \dots, w_1$).
 
 At each time step $t$, the hidden states from both directions are concatenated (joined together) to form the final representation:
 $$h_t = [h_t^{\text{forward}} ; h_t^{\text{backward}}]$$
 
-Constraint: You cannot use a Bidirectional RNN for generative language modeling (predicting the next word) because the "backward" pass would effectively "cheat" by seeing the word you are trying to predict. They are best for tasks where the entire sentence is available at once.
+![bi_dir](./files/week_3/bi_dir_rnn.png)
+
+**Constraint:** You **cannot** use a Bidirectional RNN for **generative language modeling** (predicting the next word) because the "backward" pass would effectively "cheat" by seeing the word you are trying to predict. They are best for tasks where the entire sentence is available at once.
+
+In NLP, a "task" refers to any objective where the model is mapping an input to an output. **Generative Modeling** (predicting the next word) is a massive part of modern AI, but there is a whole world of **Discriminative** and **Labeling** tasks where bidirectional context is superior.
+
+**Generative tasks** are about creation (one word at a time), whereas **Non-Generative** tasks are about analysis or tagging (looking at the whole sentence at once).
+
+Some non-generative tasks could be: Part-of-Speech (POS) Tagging, Named Entity Recognition (NER) and Sentence-Level Classification (Sentiment, Language Translation etc). Often times, these non-generative tasks are used to build an understanding of language to construct dense vectors which can be used in further downstream tasks. 
 
 ---
 
@@ -1195,40 +1274,46 @@ Constraint: You cannot use a Bidirectional RNN for generative language modeling 
 
 # Part 3 - CNNs
 
-In previous sections, we treated words as the "atomic" units of language. However, this creates a massive problem for Out-of-Vocabulary (OOV) words or rare morphological variants (e.g., "unapologetically"). If the model hasn't seen that specific word enough times in training, its embedding will be poor.
+In previous sections, we treated words as the "atomic" units of language. However, this creates a massive problem for **Out-of-Vocabulary (OOV)** words or rare **morphological variants** (e.g., "unapologetically"). If the model hasn't seen that specific word **enough** times in training, its embedding will be poor.
 
-Convolutional Neural Networks (CNNs) offer a solution by shifting the focus from words to characters. By using CNNs to "scan" the characters within a word, the model can learn to recognize sub-word patterns like prefixes, suffixes, and stems, allowing it to build a meaningful representation for words it has never seen before.
+**Convolutional Neural Networks (CNNs)** offer a solution by shifting the focus from words to **characters**. By using CNNs to "scan" the characters within a word, the model can learn to recognize sub-word patterns like prefixes, suffixes, and stems, allowing it to build a meaningful representation for words it has never seen before.
+
+![cnn](./files/week_3/cnn.png)
 
 ---
 
-## Convolutions in NLP
+# Convolutions in NLP
 Originally designed for computer vision to detect edges and shapes, CNNs in NLP are used to detect local features in a sequence.
 
 #### How it Works
-* Filters (Kernels): A filter is a small matrix of weights that slides over the input. In NLP, the input is usually a matrix of character embeddings.
-* Width of the Filter: Instead of a 2D square (like in images), NLP filters usually have a fixed width equal to the embedding dimension and a variable height (e.g., 2, 3, or 4 characters).
-* A height of 3 is effectively looking for character n-grams (trigrams).
-* Feature Maps: As the filter slides down the word, it performs a mathematical operation (dot product) to produce a "feature map"—a list of scores showing where a specific pattern (like "-ing") was detected.
+* **Filters (Kernels):** A filter is a small matrix of weights that slides over the input. In NLP, the input is usually a matrix of character embeddings.
+* **Width of the Filter:** Instead of a 2D square (like in images), NLP filters usually have a fixed width equal to the embedding dimension and a variable height (e.g., 2, 3, or 4 characters).
+* A height of 3 is effectively looking for character *n-grams (trigrams)*.
+* *Feature Maps:* As the filter slides down the word, it performs a mathematical operation (dot product) to produce a "feature map" — a list of scores showing where a specific pattern (like "-ing") was detected.
 
-#### Max Pooling
-After the convolution, we are left with many scores. We usually only care if a feature was present, not necessarily where it was. Max-over-time pooling takes the single highest value from the feature map. This makes the model position-invariant—it recognizes the "ing" feature regardless of whether it's in the middle or end of the string.
+--- 
 
-#### Stacking Convolutional Layers
-
-In a CNN, stacking means feeding the output of one convolutional layer as the input to a second (or third) convolutional layer.
-
-Think of it as a hierarchy of understanding: instead of just looking at the raw characters, the model starts looking at the "features of features."
+# Max Pooling
+After the convolution, we are left with many scores. We usually only care if a feature was present, not necessarily where it was. Max-over-time pooling takes the single highest value from the feature map. This makes the model position-invariant — it recognizes the "ing" feature regardless of whether it's in the middle or end of the string.
 
 ---
 
-## Kernel Functions 
+# Stacking Convolutional Layers
+In a CNN, stacking means feeding the output of one convolutional layer as the input to a second (or third) convolutional layer.
 
-In Natural Language Processing, Kernels (also called Filters) are the actual "detectors" within the convolutional layer. They are the matrices of weights that the network learns during training to identify specific patterns in the character or word sequences.
+Think of it as a hierarchy of understanding: instead of just looking at the raw characters, the model starts looking at the "features of features." This allows the detection of complex features composed from simpler features e.g., face detection requires eye detection
 
-A kernel is a small window of weights. In a character-level CNN, the kernel usually has a width that matches the size of the character embeddings and a height that defines the "window size" (the number of characters it looks at simultaneously).
-* Height 2: Looks for bigrams (e.g., "th", "re", "ed").
-* Height 3: Looks for trigrams (e.g., "ing", "pre", "ion").
-* Height 5+: Looks for longer root words or complex morphemes.
+![Stacked CNN](./files/week_3/stacked_cnn.png)
+
+---
+
+# Kernel Functions 
+In Natural Language Processing, Kernels (also called Filters) are the actual "detectors" within the convolutional layer. They are the **matrices of weights** that the network **learns** during training to identify specific patterns in the character or word sequences.
+
+A kernel is a **small window of weights**. In a character-level CNN, the kernel usually has a width that matches the size of the character embeddings and a height that defines the "window size" (the number of characters it looks at simultaneously).
+* **Height 2:** Looks for bigrams (e.g., "th", "re", "ed").
+* **Height 3:** Looks for trigrams (e.g., "ing", "pre", "ion").
+* **Height 5+:** Looks for longer root words or complex morphemes.
 
 As the kernel slides over the input matrix, it performs a pointwise multiplication between its own weights and the input values, then sums them up to produce a single value.
 
@@ -1237,44 +1322,51 @@ $$z = \sum (Weights \times Inputs) + bias$$
 If the characters in the current window match the pattern the kernel has "learned" to look for, the resulting score will be high. If they don't match, the score will be low or negative.
 
 Unlike traditional NLP, where we might manually define "suffixes" or "prefixes," a CNN learns these kernels through backpropagation:
-1. Initialization: At the start of training, kernels are filled with random numbers (noise).
-2. Feedback: If the model fails to predict a word because it didn't recognize a plural "-s", the loss function sends a signal back.
-3. Optimization: The weights inside the kernels are adjusted so that, next time, they "fire" more strongly when they see that specific character pattern.
+1. **Initialization:** At the start of training, kernels are filled with random numbers (noise).
+2. **Feedback:** If the model fails to predict a word because it didn't recognize a plural "-s", the loss function sends a signal back.
+3. **Optimization:** The weights inside the kernels are adjusted so that, next time, they "fire" more strongly when they see that specific character pattern.
 
 A single kernel can only detect one specific type of feature. In practical applications like the Kim et al. (2016) paper, the model uses hundreds or even thousands of kernels of varying heights. This allows the model to simultaneously detect a vast array of linguistic features, from simple plurals to complex semantic markers.
 
-## Advantages of Character-Aware Neural Language Models
+---
+
+# Advantages of Character-Aware Neural Language Models
 
 Character-aware models (like the CNN-LSTM architecture) provide a powerful middle ground between purely word-based models and character-only models. By looking "inside" the word, the model gains several key advantages:
 
-#### Sub-word Morphological Awareness:
+---
+
+### Sub-word Morphological Awareness:
 
 Traditional models treat "run" and "running" as completely unrelated tokens. A character-aware model, however, recognizes the shared "run" stem.
 
-Suffixes/Prefixes: The model learns that "-ing" often denotes a present participle or that "un-" denotes negation.
+**Suffixes/Prefixes:** The model learns that "-ing" often denotes a present participle or that "un-" denotes negation.
 
-Syntactic Clues: Even if the model doesn't know the root of a word, seeing an "-ly" ending allows it to predict that the word is an adverb, which helps constrain the possible grammatical structure of the sentence.
+**Syntactic Clues:** Even if the model doesn't know the root of a word, seeing an "-ly" ending allows it to predict that the word is an adverb, which helps constrain the possible grammatical structure of the sentence.
 
-#### Superior Handling of Sparse and OOV Data
+---
+
+### Superior Handling of Sparse and OOV Data
 Sparsity is the "enemy" of NLP. Character-level features act as a safety net:
-* Low-Frequency Words: If a word appears only twice in a 1-million-word corpus, a word-level model cannot learn a good embedding for it. A character-aware model uses its knowledge of the word's components (derived from more frequent words) to build a reliable representation.
-* Out-of-Vocabulary (OOV): When the model hits a word it has never seen before, it doesn't just return a generic <UNK> token. It "reads" the characters and builds a vector on the fly based on the morphemes it recognizes.
+* **Low-Frequency Words:** If a word appears only twice in a 1-million-word corpus, a word-level model cannot learn a good embedding for it. A character-aware model uses its knowledge of the word's components (derived from more frequent words) to build a reliable representation.
+* **Out-of-Vocabulary (OOV):** When the model hits a word it has never seen before, it doesn't just return a generic <UNK> token. It "reads" the characters and builds a vector on the fly based on the morphemes it recognizes.
 
-#### Robustness to Noise
+---
+
+### Robustness to Noise
 Human language is messy, especially on the web.
-* Misspellings: If a user writes "definitly" instead of "definitely," a word-level model fails. A character-CNN will see that 90% of the characters match the pattern for "definitely" and can still produce a nearly identical vector.
-* Slang & Variations: It can handle creative emphasis (e.g., "yesssssss") by recognizing the core "yes" feature within the string.
+* **Misspellings:** If a user writes "definitly" instead of "definitely," a word-level model fails. A character-CNN will see that 90% of the characters match the pattern for "definitely" and can still produce a nearly identical vector.
+* **Slang & Variations:** It can handle creative emphasis (e.g., "yesssssss") by recognizing the core "yes" feature within the string.
 
-#### Parameter Efficiency
+---
+
+### Parameter Efficiency
 In a standard NLM, the input embedding matrix grows linearly with the vocabulary size ($|V| \times \text{dimension}$). For a 100k word vocabulary, this is massive.
 * In a character-aware model, you only store embeddings for a small set of characters (usually ~100–250).
 * The "knowledge" of words is stored in the CNN kernels, which are much smaller than a massive word-lookup table.
 
 ---
 
-<br>
-<br>
-<br>
 <br>
 <br>
 <br>
@@ -1463,12 +1555,21 @@ Critique: It’s convincing because the model excels where word-level models fai
 * [Jurafsky and Martin Chapter 6: Neural Networks](https://web.stanford.edu/~jurafsky/slp3/6.pdf)
 * [Jurafsky and Martin Chapter 13: RNNs and LSTMs](https://web.stanford.edu/~jurafsky/slp3/13.pdf)
 
+---
+
+### References
+
+---
+| Title | Author | Year | Publication |
+| :--- | :--- | :--- | :--- |
+| A neural probabilistic language model. | Bengio, Y. et al. | 2003 | In Journal of Machine Learning Research. |
+| Compositional morphology for word representations and language modelling. | Botha, J., and Blunsom | 2014 | In Proceedings of ICML |
+| Character-aware neural language models | Kim, Y. et al | 2016 | In Proceedings of the AAAI |
+| Recurrent neural network based language model | Mikolov, T. et al | 2010 | In Proceedings of Interspeech |
+| A scalable hierarchical distributed language model. | Mnih and Hinton | 2008 | In Proceedings of NIPS |
 
 ---
 
-<br>
-<br>
-<br>
 <br>
 <br>
 <br>
@@ -1486,10 +1587,12 @@ This week, we explore two major solutions to this "Curse of Sparsity." First, we
 4. [Paper](#week-4-paper)
 4. [Additional Readings](#week-4-additional-reading)
 
-## Week 4: Lecture
+---
 
-* https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=353c47a5-1230-4ffa-b59c-b3ef010c79b0&start=0
-* https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75f1da88-d5ed-48f5-9451-b3ef0116d27c&start=0 
+# Week 4: Lecture
+
+| [Lecture Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=353c47a5-1230-4ffa-b59c-b3ef010c79b0&start=0) | [Lecture Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75f1da88-d5ed-48f5-9451-b3ef0116d27c&start=0 ) | 
+
 
 This week returns to the core principles of Lexical Semantics (word senses and hierarchical relationships) and Distributional Semantics (inferring meaning from context). While Week 1 focused on measuring similarity through vector space models and association via Pointwise Mutual Information (PMI), we now address the persistent challenge of sparsity that plagued both n-gram models and traditional count-based distributional models.
 
@@ -1497,7 +1600,7 @@ The transition from "counting" to "predicting" represents a shift from sparse, h
 
 ---
 
-## Challenges for Distributional Similarity Measures
+# Challenges for Distributional Similarity Measures
 
 1. Mixture of Senses (Polysemy); Traditional word vectors (i.e. hot one) are global—they collapse all meanings of a word into a single point in space. If a word like "bank" has two distinct senses (financial vs. river), its vector will be a mathematical "average" of both. The nearest neighbors of "bank" might include both "money" and "river," creating a blurred representation that doesn't accurately reflect either sense in a specific context.
 2. Mixture of Relationships: Distributional similarity is a "blind" metric; it knows two words are related but doesn't know how. Cosine similarity cannot distinguish between different lexical relations. Synonyms: Big/Large (Interchangeable). Hyponyms: Dog/Animal (Is-a relationship). The model treats "relatedness" as a monolith, making it difficult to perform tasks that require specific logic (like entailment).
