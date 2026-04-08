@@ -4831,15 +4831,17 @@ Because of these limitations, almost no professional system uses only SBERT. Ins
 
 ---
 
-## Week 7: Lab Content
+# Week 7: Lab Content
 
 ---
 
-## Week 7: Additional Reading
+# Week 7: Additional Reading
 * [Jurafsky and Martin Chapter 8: Transformers](https://web.stanford.edu/~jurafsky/slp3/8.pdf)
 * [Jurafksy and Martin Chapter 10: Masked Language Models](https://web.stanford.edu/~jurafsky/slp3/10.pdf)
 * [(Jurafksy and Martin Chapter 7: Large Language Models)](https://web.stanford.edu/~jurafsky/slp3/7.pdf)
 
+
+#### References
 * Devlin et al. (2019): Pre-training of Deep Bidirectional Transformers for Language Understanding in NAACL 2019, https://www.aclweb.org/anthology/N19-1423/
 * Peters et al. (2018): Deep contextualised word representations in Proceedings of NAACL 2018 https://arxiv.org/pdf/1802.05365.pdf
 * Peters et al. (2018): Dissecting Contextual Word Embeddings: Architecture and Representation in Proceedings of EMNLP 2018 https://www.aclweb.org/anthology/D18-1179.pdf
@@ -4859,7 +4861,6 @@ Because of these limitations, almost no professional system uses only SBERT. Ins
 # [Week 8 - Transfer Learning with Pretrained Large Language Models](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-8-transfer-learning-with-pretrained-large-language-models?module_item_id=1602175)
 Week 7 was the "Discovery" phase (how Transformers work and how BERT is pre-trained). Week 8 is the "Application" phase. We are moving from high-level theory to the engineering reality of Transfer Learning.
 
-
 This week we will be looking at how to use pre-trained large language models such as BERT.
 * transfer learning through fine-tuning
 * sequence classification with BERT
@@ -4870,7 +4871,7 @@ This week we will be looking at how to use pre-trained large language models suc
 * In-context learning / prompting
 * T5
 
-> Okay, so let's start by just recapping what we've done so far in the module. We've talked quite a lot about language models, including neural language models. We've talked about distributional representations of meaning that might be extracted from those language models and how we might once we've got representations for words/tokens, we might compose them to make, um, representations of larger units of meaning. We also started talking last week about contextualized word embeddings how we might update the representation of a word or token based on the other tokens around it. And we talked about Elmo and then we also introduced the transformer architecture as well as BERT, which, if you remember, stands for bidirectional encoder representations from Transformers. In the last part of um, the lecture last week, we were talking about techniques of pre-training large language models including and masked language modeling. So that's sort of quick kind of recap.
+> Okay, so let's start by just recapping what we've done so far in the module. We've talked quite a lot about language models, including neural language models. We've talked about distributional representations of meaning that might be extracted from those language models and how we might once we've got representations for words/tokens, we might compose them to make, um, representations of larger units of meaning. We also started talking last week about contextualized word embeddings how we might update the representation of a word or token based on the other tokens around it. And we talked about Elmo and then we also introduced the transformer architecture as well as BERT, which, if you remember, stands for bidirectional encoder representations from Transformers. In the last part of the lecture last week, we were talking about techniques of pre-training large language models including and masked language modeling.
 
 #### Week 8: Contents
 
@@ -4884,17 +4885,83 @@ This week we will be looking at how to use pre-trained large language models suc
 * [Recording Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2a5425eb-8d27-4bd6-a1dd-b40b00d35504&start=0)
 * [Recording Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ef3eb639-4686-4604-88b4-b40b00dcb15e&start=0)
 
-## The Distributional Hypothesis: for words 
-The Distributional Hypothesis serves as the theoretical foundation for modern vector-based language models, famously summarized by J.R. Firth’s idea that "a word is characterized by the company it keeps." It proposes that words appearing in similar linguistic contexts tend to share similar semantic meanings. In practice, this allows us to represent words as real-valued vectors where the dimensions represent the contexts in which the word occurs. For example, "beef" and "chicken" would share high values in dimensions representing "food" or "cooking," but would diverge in dimensions related to "living animals," as "beef" specifically refers to the meat rather than the creature itself.
+Week 8 marks the shift from the theoretical architecture of the Transformer to the engineering reality of **Transfer Learning**, focusing on how to adapt "generalist" models like BERT into "specialist" tools for specific applications.
+
+The week begins by scaling the **Distributional Hypothesis**—the idea that meaning is defined by context—from individual words to **Sentential Contexts**, exploring how models like SBERT use siamese architectures to create fixed-length vectors for entire documents. We dive deep into the two-stage lifecycle of modern NLP: **Self-Supervised Pre-training**, where a model learns the fundamental "rules" of language from massive unlabelled corpora, and **Supervised Fine-tuning**, where a task-specific "head" is attached to the model to solve niche problems like sentiment analysis or question answering.
+
+A significant portion of the week is dedicated to the practicalities of fine-tuning, particularly the strategic decision of **Freezing vs. Unfreezing** layers. By locking the pre-trained weights, we can treat BERT as a fixed feature extractor, which prevents "catastrophic forgetting" and saves computational resources. We explore the **Hugging Face** ecosystem, moving from the "black box" of pre-built classification classes to building custom **BertClassifier** heads in PyTorch. This technical grounding is evaluated against the **GLUE Benchmark**, a standardized suite of nine tasks that measure everything from linguistic acceptability to natural language inference, ensuring that our models possess a robust, generalizable understanding of language rather than just memorizing a single dataset.
+
+Finally, the week looks toward more "distant relatives" of the BERT family that are redefining the boundaries of the field. We examine optimized variants like **RoBERTa**, **ALBERT**, and **DistilBERT**, which prioritize efficiency and robust training. This culminates in a transition toward the generative paradigm: **GPT-3** introduces **In-Context Learning**, where a model "learns" a task through few-shot prompting without any weight updates, while **T5 (Text-to-Text Transfer Transformer)** unifies all of NLP into a single string-to-string framework. By treating every task—whether it's translation or regression—as a text generation problem, T5 removes the need for custom architectural heads and sets the stage for the unified, prompt-driven future of Large Language Models.
+
+#### Week 8: Lecture Content
+* [The Distributional Hypothesis: for words](#the-distributional-hypothesis-for-words)
+* [Contextualised Word Embeddings ](#contextualised-word-embeddings)
+* [Beyond words](#beyond-words)
+* [Principle of compositionality](#principle-of-compositionality)
+* [The distributional hypothesis: for sentences?](#the-distributional-hypothesis-for-sentences)
+* [Sentential contexts](#sentential-contexts)
+* [SBert (Reimers and Gurevych 2019) ](#sbert-reimers-and-gurevych-2019)
+* [Transfer Learning through Fine-tuning](#transfer-learning-through-fine-tuning)
+* [Fine-tuning](#fine-tuning)
+    * [Freezing](#freezing)
+    * [Full Fine-tuning](#full-fine-tuning)
+* [Text classification with BERT](#text-classification-with-bert)
+* [In practice with Huggingface transformers library](#in-practice-with-huggingface-transformers-library)
+* [Training the Sequence Classification Model](#training-the-sequence-classification-model)
+* [Training arguments](#training-arguments)
+* [The GLUE Benchmark tasks](#the-glue-benchmark-tasks)
+    * [1. Linguistic Acceptability & Sentiment (Single Sentence)](#1-linguistic-acceptability--sentiment-single-sentence)
+    * [2. Similarity & Paraphrasing (Sentence Pairs)](#2-similarity--paraphrasing-sentence-pairs)
+    * [3. Natural Language Inference / Entailment (Logic Pairs)](#3-natural-language-inference--entailment-logic-pairs)
+* [Compute metrics](#compute-metrics)
+* [Using the Sequence Classification Model](#using-the-sequence-classification-model)
+* [Drawbacks of using HuggingFace](#drawbacks-of-using-huggingface)
+* [High-Level Steps Towards Creating Your Own Classifying Head](#high-level-steps-towards-creating-your-own-classifying-head)
+* [Is Pre-training always better via Hugging Face?](#is-pre-training-always-better-via-hugging-face)
+* [Code for BERTclassifier (from lab)](#code-for-bertclassifier-from-lab)
+* [Freezing layers](#freezing-layers)
+    * [Computational Efficiency](#computational-efficiency)
+    * [Preventing "Catastrophic Forgetting"](#preventing-catastrophic-forgetting)
+    * [Feature Extraction](#feature-extraction)
+* [Pairwise Sequence Classificationc](#pairwise-sequence-classification)
+    * [The Cross-Encoder Approach (Standard BERT):](#the-cross-encoder-approach-standard-bert)
+    * [The Bi-Encoder Approach (SBERT):](#the-bi-encoder-approach-sbert)
+* [Sequence Labelling with BERT](#sequence-labelling-with-bert)
+    * [The CRF (Conditional Random Field) Solution:](#the-crf-conditional-random-field-solution)
+    * [The Subword Complication:]())
+* [Sequence Labelling with Huggingface Transformers](#sequence-labelling-with-huggingface-transformers)
+* [BERT Family](#bert-family)
+    * [ROBERTa](#roberta)
+    * [AlBERT](#albert)
+    * [DistilBERT](#distilbert)
+    * [SciBERT](#scibert)
+    * [MBert](#mbert)
+    * [More Distant Relatives of BERT](#more-distant-relatives-of-bert)
+* [GPT-3: Prompting & In-Context Learning](#gpt-3-prompting--in-context-learning)
+* [Text-to-Text Transfer Transformer (T5) ](#text-to-text-transfer-transformer-t5)
+    * [Task Prefixes:](#task-prefixes)
+    * [Span Denoising:](#span-denoising)
+* [T5 Framework: string-to-string problems](#t5-framework-string-to-string-problems)
+* [Are the Task Prefixes rule-based?](#are-the-task-prefixes-rule-based)
+* [T5 also uses MLM: Span-denoising](#t5-also-uses-mlm-span-denoising)
+    * [Key Mechanics of this Objective:](#key-mechanics-of-this-objective)
+* [T5 Fine-Tuning](#t5-fine-tuning)
+    * [Prompting vs Fine-Tuning](#prompting-vs-fine-tuning)
+* [Week 8 Summary](#week-8-summary)
 
 ---
 
-## Contextualised Word Embeddings 
-Building on the distributional hypothesis, Contextualized Word Embeddings (introduced by models like ELMo and BERT) move beyond static look-up tables by ensuring a word's representation is a function of its specific surroundings. Instead of assigning one fixed vector to a word like "bank," these models use bi-directional architectures to "read" the entire sentence, allowing them to capture deep semantic nuances and resolve polysemy. By accounting for the words to both the left and right of a target token, the resulting embedding becomes a dynamic reflection of that word's meaning in a specific instance rather than a generic average.
+# The Distributional Hypothesis: for words 
+The **Distributional Hypothesis** serves as the theoretical foundation for modern vector-based language models, famously summarized by J.R. Firth’s idea that "a word is characterized by the company it keeps." It proposes that words appearing in similar linguistic contexts tend to share similar semantic meanings. In practice, this allows us to represent words as real-valued vectors where the dimensions represent the contexts in which the word occurs. For example, "beef" and "chicken" would share high values in dimensions representing "food" or "cooking," but would diverge in dimensions related to "living animals," as "beef" specifically refers to the meat rather than the creature itself.
 
 ---
 
-## Beyond words 
+# Contextualised Word Embeddings 
+Building on the distributional hypothesis, **Contextualized Word Embeddings** (introduced by models like ELMo and BERT) move beyond static look-up tables by ensuring a word's representation is a function of its specific surroundings. Instead of assigning one fixed vector to a word like "bank," these models use bi-directional architectures to "read" the entire sentence, allowing them to capture deep semantic nuances and resolve polysemy. By accounting for the words to both the left and right of a target token, the resulting embedding becomes a dynamic reflection of that word's meaning in a specific instance rather than a generic average.
+
+---
+
+# Beyond words 
 We have a model for words, how does this scale up to: 
 * phrases
 * sentences
@@ -4906,66 +4973,60 @@ If we've got a representation for "noisy" and a representation of "chicken", how
 
 ---
 
-## Principle of compositionality 
-The Principle of Compositionality (attributed to thinkers like Frege and Boole) asserts that the meaning of a complex expression is a direct function of the meanings of its individual parts and the structural rules used to combine them. In the context of NLP, this allows us to move "Beyond Words" by asking how we can mathematically combine distributional word vectors to represent larger units like phrases ("noisy chicken") or entire documents. While humans use syntax and logic for this, models typically use Composition Methods—ranging from simple algebraic operations like Mean Pooling (averaging vectors) to more complex neural architectures—to ensure that a sentence-level representation remains grounded in the specific meanings of its constituent tokens.
+# Principle of compositionality
+The **Principle of Compositionality** (attributed to thinkers like Frege and Boole) asserts that the meaning of a complex expression is a direct function of the meanings of its individual parts and the structural rules used to combine them. In the context of NLP, this allows us to move "Beyond Words" by asking how we can mathematically **combine** distributional word vectors to represent larger units like phrases ("noisy chicken") or entire documents. While humans use syntax and logic for this, models typically use **Composition Methods** — ranging from simple algebraic operations like **Mean Pooling **(averaging vectors) to more complex neural architectures — to ensure that a sentence-level representation remains grounded in the specific meanings of its constituent tokens.
 
 ---
 
-## The distributional hypothesis: for sentences? 
-Applying the Distributional Hypothesis to sentences shifts the focus from word-level neighbors to Sentential Contexts. Just as a word is defined by the words around it, the meaning of a sentence can be inferred from the sentences that precede and follow it in a discourse. Under this intuition, two different sentences are considered semantically similar if they are interchangeable within the same larger narrative or document structure. While most models approximate this by mathematically composing word vectors (e.g., mean pooling), the goal remains the same: to create a unique "spatial" representation where sentences with similar communicative intents sit closer together in a high-dimensional vector space.
+# The distributional hypothesis: for sentences?
+Applying the **Distributional Hypothesis** to sentences shifts the focus from word-level neighbors to **Sentential Contexts**. Just as a word is defined by the words around it, the meaning of a sentence can be inferred from the sentences that precede and follow it in a discourse. Under this intuition, two different sentences are considered semantically similar if they are interchangeable within the same larger narrative or document structure. While most models approximate this by mathematically composing word vectors (e.g., mean pooling), the goal remains the same: to create a unique "spatial" representation where sentences with similar communicative intents sit closer together in a high-dimensional vector space.
 
 ---
 
-## Sentential contexts 
-The leap is made from words to Sentential Contexts, where a sentence’s meaning is defined by the other sentences surrounding it in a discourse. However, since the possible contexts for a sentence are infinite, most models rely on Composition Methods rather than direct lookup. Instead of treating a sentence as a single unit, we assume its meaning is a function of its constituent words. In practice, this usually involves a pooling operation, such as mean pooling (averaging) or addition (Mitchell and Lapata, 2010), to collapse individual word embeddings into a single vector that represents the entire phrase or document.
+# Sentential contexts 
+The leap is made from words to **Sentential Contexts**, where a sentence’s meaning is defined by the other sentences surrounding it in a discourse. However, since the possible contexts for a sentence are infinite, most models rely on **Composition Methods** rather than direct lookup. Instead of treating a sentence as a single unit, we assume its meaning is a function of its constituent words. In practice, this usually involves a pooling operation, such as mean pooling (averaging) or addition (Mitchell and Lapata, 2010), to collapse individual word embeddings into a single vector that represents the entire phrase or document.
 
 ---
 
-## SBert (Reimers and Gurevych 2019) 
+# SBert (Reimers and Gurevych 2019) 
 SBERT (Sentence-BERT) optimizes standard BERT by using a siamese network architecture to produce semantically meaningful sentence embeddings. While standard BERT requires passing sentence pairs together (which is computationally expensive), SBERT processes each sentence through identical BERT structures, applies a pooling operation (like mean pooling) to get fixed-sized vectors ($u$ and $v$), and then calculates their cosine similarity. By training on objectives like classification or regression, SBERT "tunes" the vector space so that sentences with similar meanings are mathematically closer together. This allows for massive scaling, as individual sentence embeddings can be computed once, stored, and compared instantly.
 
 ---
 
-## Today 
-* Transfer learning
-* Fine-tuning BERT-based models for
-    * text classification
-    * sequence labelling
-* The BERT family
-* More distant relatives; such as GPT (more for week 9)
-* Schick and Schütze (2021)
+# Transfer Learning through Fine-tuning 
+**Transfer learning** is the process of acquiring knowledge from one source task or domain and applying it to solve a new, specific task. In the world of **Large Language Models (LLMs)**, this is a two-stage process. First, the model undergoes pre-training on massive, unannotated corpora. Using self-supervised objectives like **Masked Language Modeling (MLM)** and **Next Sentence Prediction (NSP)**, the model teaches itself the fundamental rules, grammar, and nuances of language without requiring expensive human-tagged data. During this phase, the model is essentially a "generalist" that understands how words and sentences relate to one another.
 
+**Fine-tuning** is the second stage, where this general linguistic knowledge is transferred to a specific application, such as sentiment analysis, translation, or summarization. This involves taking the pre-trained model and training it further on a smaller, labeled dataset tailored to the final goal. While the model's "brain" is already built, fine-tuning acts as a specialized training program that teaches the model how to use its existing knowledge to solve the specific problem at hand.
+
+A key shift occurs in the role of specific tokens during this transition. In a raw, pre-trained BERT model, the [CLS] token is primarily trained to handle the NSP task, acting as a binary switch to determine if two sentences belong in the same story. However, once the model is fine-tuned for a task like sentiment analysis, the [CLS] token transforms into a **global aggregator**. It "sponges up" a summary of the entire input sequence, providing a single, dense vector that a classifier head (like an MLP) can use to make a final decision, such as whether a review is "Happy" or "Sad."
 ---
 
-## Transfer Learning through Fine-tuning 
-Transfer learning is the process of acquiring knowledge from one source task or domain and applying it to solve a new, specific task. In the world of Large Language Models (LLMs), this is a two-stage process. First, the model undergoes pre-training on massive, unannotated corpora. Using self-supervised objectives like Masked Language Modeling (MLM) and Next Sentence Prediction (NSP), the model teaches itself the fundamental rules, grammar, and nuances of language without requiring expensive human-tagged data. During this phase, the model is essentially a "generalist" that understands how words and sentences relate to one another.
-
-Fine-tuning is the second stage, where this general linguistic knowledge is transferred to a specific application, such as sentiment analysis, translation, or summarization. This involves taking the pre-trained model and training it further on a smaller, labeled dataset tailored to the final goal. While the model's "brain" is already built, fine-tuning acts as a specialized training program that teaches the model how to use its existing knowledge to solve the specific problem at hand.
-
-A key shift occurs in the role of specific tokens during this transition. In a raw, pre-trained BERT model, the [CLS] token is primarily trained to handle the NSP task, acting as a binary switch to determine if two sentences belong in the same story. However, once the model is fine-tuned for a task like sentiment analysis, the [CLS] token transforms into a global aggregator. It "sponges up" a summary of the entire input sequence, providing a single, dense vector that a classifier head (like an MLP) can use to make a final decision, such as whether a review is "Happy" or "Sad."
----
-
-## Fine-tuning 
-In the Fine-tuning phase, we move from general language modeling to task-specific application by adding and training application-specific parameters. The most common approach is to attach a simple "head"—such as a single-layer neural network (MLP)—directly on top of the pre-trained BERT architecture. This head is then trained using a labeled dataset (e.g., movie reviews labeled as "positive" or "negative") to map BERT's complex internal representations to the specific classes required by the task.
+# Fine-tuning 
+In the **Fine-tuning** phase, we move from general language modeling to task-specific application by adding and training application-specific parameters. The most common approach is to attach a simple **"head"** — such as a single-layer neural network (MLP) — directly on top of the pre-trained BERT architecture. This head is then trained using a labeled dataset (e.g., movie reviews labeled as "positive" or "negative") to map BERT's complex internal representations to the specific classes required by the task.
 
 During this process, we have a critical architectural choice regarding the model's weights: Freezing vs. Unfreezing.
-* Freezing: We can "lock" the pre-trained BERT parameters so they remain unchanged, training only the new classification head. This is computationally faster and prevents "catastrophic forgetting," where a model loses its general linguistic knowledge by over-specializing on a small dataset.
-* Full Fine-tuning: Alternatively, we can allow updates to be made to some or all of the original BERT layers. While more resource-intensive, this allows the "base" of the model to adapt its understanding of language to better suit the nuances of a specific domain, such as medical or legal text.
+
+### Freezing: 
+We can "lock" the pre-trained BERT parameters so they remain unchanged, training only the new classification head. This is computationally faster and prevents "catastrophic forgetting," where a model loses its general linguistic knowledge by over-specializing on a small dataset.
+
+### Full Fine-tuning: 
+Alternatively, we can allow updates to be made to some or all of the original BERT layers. While more resource-intensive, this allows the "base" of the model to adapt its understanding of language to better suit the nuances of a specific domain, such as medical or legal text.
 
 ---
 
-## Text classification with BERT 
-Text classification, also known as sequence classification, is the process of assigning a category to an entire string of text, such as determining if a movie review is positive or negative. To perform this with BERT, the input sequence must be prepended with the special [CLS] (Classification) token. Because this token is part of BERT's original vocabulary and was used during pre-training to aggregate sequence-level information, it must be present during fine-tuning to act as a mathematical proxy for the entire sentence.
+# Text classification with BERT
+Text classification, also known as **sequence classification**, is the process of assigning a category to an entire string of text, such as determining if a movie review is positive or negative. 
 
-During the forward pass, the input text moves through the Transformer layers to produce a contextualized vector for each token. For classification, we focus solely on the final output vector of the [CLS] token ($y_{CLS}$). This vector is fed into a classifier head—typically a linear layer with a learned set of weights ($W_C$)—which maps the high-dimensional embedding to a set of raw scores for each possible class. These scores are then passed through a Softmax function to produce a probability distribution across the target categories (e.g., 90% Positive, 10% Negative).
+To perform this with BERT, the input sequence must be prepended with the special [CLS] (Classification) token. Because this token is part of BERT's original vocabulary and was used during pre-training to aggregate sequence-level information, it must be present during fine-tuning to act as a mathematical proxy for the entire sentence.
 
-The training process is driven by Supervised Learning, requiring a dataset of sequences paired with their correct labels. By calculating the Cross-Entropy Loss between the Softmax output and the ground-truth label, the model uses backpropagation to update its parameters. Depending on the strategy, the optimizer might only update the weights of the classifier head ($W_C$) while keeping the BERT model frozen, or it may perform "full fine-tuning" where both the head and the underlying language model weights are updated simultaneously.
+During the **forward pass**, the input text moves through the **Transformer** layers to produce a contextualized vector for **each token**. For classification, we focus solely on the final output vector of the [CLS] token ($y_{CLS}$). This vector is fed into a classifier head — typically a linear layer with a learned set of weights ($W_C$) — which maps the high-dimensional embedding to a set of raw scores for each possible class. These scores are then passed through a **Softmax** function to produce a probability distribution across the target categories (e.g., 90% Positive, 10% Negative).
 
+The training process is driven by ***Supervised Learning,*** requiring a dataset of sequences paired with their correct labels. By calculating the **Cross-Entropy Loss** between the **Softmax** output and the ground-truth label, the model uses **backpropagation** to update its parameters. Depending on the strategy, the optimizer might only update the weights of the classifier head ($W_C$) while keeping the BERT model frozen, or it may perform "full fine-tuning" where both the head and the underlying language model weights are updated simultaneously.
 
 ---
 
-## In practice ... with Huggingface transformers library 
-In practice, the Hugging Face transformers library simplifies the fine-tuning process by providing specialized classes like `BertForSequenceClassification`. This class wraps a standard pre-trained BERT model with a task-specific "head"—usually a linear layer sitting on top of the pooled output (the [CLS] token representation). By inheriting from PreTrainedModel, it allows users to easily load weights (like bert-base-uncased), initialize a tokenizer that matches the model's expected vocabulary, and move the entire architecture to a GPU (CUDA) for efficient training. This high-level API handles the architectural complexity, leaving the user to focus on defining the number of labels and providing the data.
+# In practice with Huggingface transformers library
+In practice, the **Hugging Face** transformers library simplifies the fine-tuning process by providing specialized classes like `BertForSequenceClassification`. This class wraps a **standard pre-trained BERT** model with a task-specific "head" — usually a linear layer sitting on top of the pooled output (the [CLS] token representation). By inheriting from **PreTrainedModel**, it allows users to easily load weights (like bert-base-uncased), initialize a tokenizer that matches the model's expected vocabulary, and move the entire architecture to a GPU (CUDA) for efficient training. This high-level API handles the architectural complexity, leaving the user to focus on defining the number of labels and providing the data.
 * `transformers.BertForSequenceClassification`
 
 ```
@@ -4984,14 +5045,14 @@ model = BertForSequenceClassification.from_pretrained(model_name, num_labels=len
 
 ---
 
-## Training the Sequence Classification Model 
-To make the training process clearer, we can think of the Hugging Face Trainer API as the "engine" that automates the standard machine learning loop. Instead of writing manual code for backpropagation, validation, and saving models, you provide the Trainer with four key components:
+# Training the Sequence Classification Model
+To make the training process clearer, we can think of the `Hugging Face Trainer API` as the "engine" that automates the standard machine learning loop. Instead of writing manual code for backpropagation, validation, and saving models, you provide the Trainer with four key components:
 1. **The Model:** A pre-trained architecture with a classification head (e.g., `BertForSequenceClassification`).
 2. **Training Arguments:** A configuration object (`TrainingArguments`) that defines the "hyperparameters"—the rules of the race. This includes the **learning rate** (how fast to update weights), **batch size** (how many sentences to process at once), and the number of **epochs** (how many times to look at the entire dataset).
 3. **The Datasets:** Your tokenized and encoded training and validation sets.
 4. **Evaluation Metrics:** A function that tells the model how to measure its success (e.g., Accuracy or F1-score).
 
-Once these are set, calling trainer.train() initiates the fine-tuning process. The Trainer automatically handles the distribution of data to the GPU, calculates the Cross-Entropy Loss, updates the weights via the optimizer, and evaluates the model against the validation set at the end of each epoch to ensure it isn't just "memorizing" the training data.
+Once these are set, calling `trainer.train()` initiates the fine-tuning process. The **Trainer** automatically handles the distribution of data to the GPU, calculates the **Cross-Entropy Loss**, updates the weights via the optimizer, and evaluates the model against the validation set at the end of each epoch to ensure it isn't just "memorizing" the training data.
 
 See https://www.thepythoncode.com/article/finetuning-bert-using-huggingface-transformers-python 
 
@@ -5010,8 +5071,8 @@ trainer.train()
 
 ---
 
-## Training arguments 
-The TrainingArguments object is essentially the "instruction manual" for the HuggingFace Trainer. It defines the specific hyperparameters and strategies that dictate how the model learns during fine-tuning. Instead of manually writing loops for backpropagation or validation, you pass this configuration to the Trainer to automate the heavy lifting.
+# Training arguments
+The `TrainingArguments` object is essentially the "instruction manual" for the **HuggingFace Trainer**. It defines the specific hyperparameters and strategies that dictate how the model learns during fine-tuning. Instead of manually writing loops for backpropagation or validation, you pass this configuration to the Trainer to automate the heavy lifting.
 
 Key parameters in this configuration include:
 * **Strategy** (`evaluation_strategy` & `save_strategy`): Determines how often the model is tested against validation data and saved (e.g., at the end of every "epoch" or full pass through the data).
@@ -5020,7 +5081,7 @@ Key parameters in this configuration include:
 * **Weight Decay:** A regularization technique that prevents the model weights from becoming too large, which helps reduce **overfitting**.
 * **Model Selection (`load_best_model_at_end`):** Ensures that the final model saved is the one that performed best on your chosen `metric_name` (like Accuracy or F1), rather than just the model from the very last training step.
 
-When selecting a metric_name, we typically align it with the specific goals of the GLUE benchmark tasks to ensure our evaluation is standardized and comparable to other state-of-the-art models.
+When selecting a `metric_name`, we typically align it with the specific goals of the **GLUE benchmark tasks** to ensure our evaluation is standardized and comparable to other state-of-the-art models.
 
 ```
 args = TrainingArguments(
@@ -5040,21 +5101,27 @@ args = TrainingArguments(
 
 ---
 
-## The GLUE Benchmark tasks 
-The GLUE (General Language Understanding Evaluation) Benchmark is a standardized suite of nine distinct classification and regression tasks designed to evaluate how well a model understands the complexities of human language. Rather than testing a model on a single specific job, GLUE requires it to perform well across a variety of linguistic challenges, from grammar and sentiment to logical inference and paraphrasing.
+# The GLUE Benchmark tasks
+The **GLUE (General Language Understanding Evaluation) Benchmark** is a standardized suite of **nine** distinct classification and regression tasks designed to evaluate how well a model understands the complexities of human language. Rather than testing a model on a single specific job, GLUE requires it to perform well across a variety of linguistic challenges, from grammar and sentiment to logical inference and paraphrasing.
 
 To make these easier to reference for your notes, I’ve categorized the nine tasks by their linguistic "goal":
 
-#### 1. Linguistic Acceptability & Sentiment (Single Sentence)
+---
+
+### 1. Linguistic Acceptability & Sentiment (Single Sentence)
 * **CoLA (Corpus of Linguistic Acceptability):** Determines if a sentence is grammatically correct or "acceptable."
 * **SST-2 (Stanford Sentiment Treebank):** A classic binary sentiment task (Positive/Negative).
 
-#### 2. Similarity & Paraphrasing (Sentence Pairs)
+---
+
+### 2. Similarity & Paraphrasing (Sentence Pairs)
 * **MRPC (Microsoft Research Paraphrase Corpus):** Determines if two sentences from news sources are semantically equivalent.
 * **QQP (Quora Question Pairs):** Identifies if two questions asked on Quora are asking the same thing.
 * **STS-B (Semantic Textual Similarity Benchmark):** Assigns a similarity score from 1 to 5 to a pair of sentences.
 
-#### 3. Natural Language Inference / Entailment (Logic Pairs)
+---
+
+### 3. Natural Language Inference / Entailment (Logic Pairs)
 * **MNLI (Multi-Genre NLI):** Given a premise and a hypothesis, the model predicts if the hypothesis is true (entailment), false (contradiction), or neutral. It includes "Matched" and "Mismatched" (out-of-domain) test sets.
 * **QNLI (Question-answering NLI):** Based on SQuAD, the model must determine if the second sentence contains the answer to the question in the first sentence.
 * **RTE (Recognizing Textual Entailment):** A smaller entailment dataset similar to MNLI but with only two classes (Entailment vs. Not-Entailment).
@@ -5064,13 +5131,13 @@ See https://colab.research.google.com/github/huggingface/notebooks/blob/main/exa
 
 ---
 
-## Compute metrics 
-The compute_metrics function is the bridge between the raw numerical outputs of your model and the human-readable performance scores (like Accuracy or F1) defined by benchmarks like GLUE. During evaluation, the model provides "logits" (raw scores), but we need to compare these against the "references" (true labels) to see how well the model is actually performing.
+# Compute metrics
+The `compute_metrics` function is the bridge between the raw numerical outputs of your model and the human-readable performance scores (like Accuracy or F1) defined by benchmarks like GLUE. During evaluation, the model provides "logits" (raw scores), but we need to compare these against the "references" (true labels) to see how well the model is actually performing.
 
 In the Hugging Face ecosystem, this is typically handled using the datasets library to load a specific metric script that matches the task at hand. The process involves three main steps:
-1. **Loading the Metric:** You use load_metric("glue", "task_name") to fetch the specific evaluation logic for your data (e.g., sst-2 for sentiment).
-2. **Processing Predictions:** The eval_pred object contains the model's raw predictions and the true labels. Because the predictions are usually raw logits, you often need to apply np.argmax to select the index of the highest score as the predicted class.
-3. **Computing the Score:** These processed predictions and labels are passed into metric.compute(), which returns a dictionary of results (e.g., {'accuracy': 0.92}).
+1. **Loading the Metric:** You use `load_metric("glue", "task_name")` to fetch the specific evaluation logic for your data (e.g., sst-2 for sentiment).
+2. **Processing Predictions:** The `eval_pred` object contains the model's raw predictions and the true labels. Because the predictions are usually raw logits, you often need to apply np.argmax to select the index of the highest score as the predicted class.
+3. **Computing the Score:** These processed predictions and labels are passed into `metric.compute()`, which returns a dictionary of results (e.g., `{'accuracy': 0.92}`).
  
 
 ```
@@ -5088,15 +5155,15 @@ def compute_metrics(eval_pred):
     return metric.compute(predictions=predictions, references=labels)
 ```
 
-By providing this function to the Trainer, the model will automatically report its progress in terms of "Accuracy" or "F1" at the end of every epoch, rather than just showing the decreasing "Loss" value.
+By providing this function to the **Trainer**, the model will automatically report its progress in terms of "Accuracy" or "F1" at the end of every epoch, rather than just showing the decreasing "Loss" value.
 
 ---
 
-## Using the Sequence Classification Model 
-After fine-tuning is complete, the final step is Inference: using the trained model to make predictions on new, unseen data. Since the model expects specific numerical inputs, this process requires a coordinated pipeline between the **Tokenizer** and the **Model**.
+# Using the Sequence Classification Model 
+After fine-tuning is complete, the final step is **Inference**: using the trained model to make predictions on new, unseen data. Since the model expects specific numerical inputs, this process requires a coordinated pipeline between the **Tokenizer** and the **Model**.
 
 The inference process generally follows these four steps:
-1. **Preprocessing:** The raw input string must be passed through the same `tokenizer` used during training. This ensures the text is split into the correct WordPiece tokens, prepended with `[CLS]`, and converted into `input_ids` and `attention_masks`.
+1. **Preprocessing:** The raw input string must be passed through the **same** `tokenizer` used during training. This ensures the text is split into the correct **WordPiece** tokens, prepended with `[CLS]`, and converted into `input_ids` and `attention_masks`.
 2. **Forward Pass:** These tensors are fed into the model. By calling `model(**inputs)`, the data passes through the Transformer layers and the classification head.
 3. **Probabilistic Output:** The model returns "logits" (raw scores). To turn these into human-readable confidence levels, we apply a **Softmax** function, which scales the scores so they sum to 100%.
 4. **Label Selection:** Finally, we use `argmax` to find the index of the highest probability and map that index back to the original class name (e.g., index `1` $\rightarrow$ "Positive").
@@ -5117,18 +5184,18 @@ print(get_prediction(text))
 
 ---
 
-## Drawbacks 
-While the Hugging Face BertForSequenceClassification class is incredibly convenient for rapid prototyping, it can be somewhat opaque for students or researchers who want full control over their architecture.
+# Drawbacks of using HuggingFace
+While the Hugging Face `BertForSequenceClassification` class is incredibly convenient for **rapid prototyping**, it can be somewhat opaque for students or researchers who want full control over their architecture.
 
-The primary drawback is that it functions as a "Black Box." When you load this pre-built model, the classification head—the layers sitting on top of BERT that actually make the decision—is hidden. To see the specific weights or the exact mathematical operations (like whether it uses a single linear layer or multiple dense layers), you often have to dig deep into the library's source code.
+The primary drawback is that it functions as a "Black Box." When you load this pre-built model, the classification head — the layers sitting on top of BERT that actually make the decision — is hidden. To see the specific weights or the exact mathematical operations (like whether it uses a single linear layer or multiple dense layers), you often have to dig deep into the library's source code.
 
-Furthermore, the documentation frequently refers to a "pooled output" as the input for the classifier. While we know this is derived from the [CLS] token, the library’s internal pooling method (which involves a linear layer and a Tanh activation function) might not be the specific strategy you want. For example, you might prefer Mean Pooling (averaging all token vectors) or Max Pooling, but changing these defaults within the pre-built class is non-trivial.
+Furthermore, the documentation frequently refers to a **"pooled output"** as the input for the classifier. While we know this is derived from the [CLS] token, the library’s internal pooling method (which involves a linear layer and a Tanh activation function) might not be the specific strategy you want. For example, you might prefer **Mean Pooling** (averaging all token vectors) or **Max Pooling**, but changing these defaults within the pre-built class is **non-trivial**.
 
-Finally, there is a practical "overhead" to the ecosystem. To use some of the more advanced automated features, you are often encouraged to sign up for the Hugging Face Hub. For those who prefer a "from scratch" approach or need to understand every tensor operation for a custom research project, this abstraction can feel like a burden. This is precisely why building a Custom BertClassifier (as seen in your lab notes) is so valuable—it strips away the mystery and shows exactly how the [CLS] vector is transformed into a prediction.
+Finally, there is a practical **"overhead"** to the ecosystem. To use some of the more advanced automated features, you are often encouraged to sign up for the Hugging Face Hub. For those who prefer a "from scratch" approach or need to understand every tensor operation for a custom research project, this abstraction can feel like a burden. This is precisely why building a Custom BertClassifier (as seen in your lab notes) is so valuable—it strips away the mystery and shows exactly how the [CLS] vector is transformed into a prediction.
 
 ---
 
-#### High-Level Steps Towards Being Your Own Classifying Head
+# High-Level Steps Towards Creating Your Own Classifying Head
 1. **Initialize the "Base" Model:** You load the standard `BertModel` (without the classification head). This gives you the 768-dimensional hidden states for every token.
 2. **Define your Architecture in __init__:**
     * **The Base:** Set `self.bert = BertModel.from_pretrained('bert-base-uncased')`.
@@ -5141,14 +5208,14 @@ Finally, there is a practical "overhead" to the ecosystem. To use some of the mo
 
 ---
 
-#### Is Pre-training always better via Hugging Face?
+# Is Pre-training always better via Hugging Face?
 Yes, almost always. "Pre-training" (the stage where BERT learns English from Wikipedia) is incredibly expensive, requiring thousands of dollars in compute and weeks of time. It is always more practical to download the pre-trained weights from Hugging Face.
 
-The only time you would "pre-train" yourself is if you are doing Intermediate Pre-training (also called Domain Adaptation). This is when you take a pre-trained BERT and train it a little bit longer on a very specific type of text (like legal documents or medical records) using the Masked Language Model task before you ever add a classification head. This helps the model learn a "specialized vocabulary" before it starts its specific job.
+The only time you would "pre-train" yourself is if you are doing **Intermediate Pre-training** (also called **Domain Adaptation**). This is when you take a pre-trained BERT and train it a little bit longer on a very specific type of text (like legal documents or medical records) using the Masked Language Model task before you ever add a classification head. This helps the model learn a "specialized vocabulary" before it starts its specific job.
 
 ---
 
-## Code for BERTclassifier (from lab) 
+# Code for BERTclassifier (from lab) 
 
 This some code from the lab that we will use to build our own classifer head. Relies on `pytorch`. The `forward` part puts the inputs through the BERT, then takes the pooled output which is the CLS token and feeds it into a linear model which has been set up in the class init. 
 
@@ -5176,13 +5243,24 @@ class BertClassifier(nn.Module):
 ---
 
 
-## Freezing layers
-Freezing layers is a strategic choice during fine-tuning that determines which parts of the model’s "brain" are allowed to change. When we freeze the BERT layers, we set their parameters to be non-trainable (requires_grad_(False)), meaning the gradients from our loss function only update the weights of our newly added classification head.
+# Freezing layers
+**Freezing layers** is a strategic choice during fine-tuning that determines which parts of the model’s "brain" are allowed to change. When we freeze the BERT layers, we set their parameters to be non-trainable (`requires_grad_(False)`), meaning the gradients from our loss function only update the weights of our newly added **classification head**.
 
 This approach offers several practical advantages:
-* **Computational Efficiency:** Training only the final linear layer is significantly faster and requires less memory (VRAM) than updating all 110 million parameters of BERT-base.
-* **Preventing "Catastrophic Forgetting":** If our specific dataset is very small, full fine-tuning might cause the model to "overfit," essentially erasing the general linguistic knowledge it gained during pre-training to satisfy the patterns of a tiny sample. Freezing ensures the "Generalist" knowledge remains intact.
-* **Feature Extraction:** By freezing BERT, we are treating it as a fixed **feature extractor**. We trust that the vectors it produces are already "good enough" to represent language, and we only need to teach our custom head how to interpret those fixed vectors for our specific labels.
+### Computational Efficiency:
+Training only the final linear layer is significantly faster and requires less memory (VRAM) than updating all 110 million parameters of BERT-base.
+
+---
+
+### Preventing "Catastrophic Forgetting":
+If our specific dataset is very small, full fine-tuning might cause the model to "overfit," essentially erasing the general linguistic knowledge it gained during pre-training to satisfy the patterns of a tiny sample. Freezing ensures the "Generalist" knowledge remains intact.
+
+---
+
+### Feature Extraction:
+By freezing BERT, we are treating it as a fixed **feature extractor**. We trust that the vectors it produces are already "good enough" to represent language, and we only need to teach our custom head how to interpret those fixed vectors for our specific labels.
+
+---
 
 In practice, researchers often start by freezing BERT to train the head, and then "unfreeze" the top few layers of BERT for a few final epochs of training to subtly align the model's internal representations with the specific nuances of the target task.
 
@@ -5196,33 +5274,39 @@ model.bert.requires_grad_(False)
 
 ---
 
-## Pairwise Sequence Classification 
-Pairwise classification is the task of determining the relationship between two distinct sentences. The two primary ways to handle this represent a trade-off between accuracy and speed.
+# Pairwise Sequence Classification
+**Pairwise classification** is the task of determining the relationship between two distinct sentences. The two primary ways to handle this represent a trade-off between accuracy and speed.
 
-**The Cross-Encoder Approach (Standard BERT):** You concatenate Sentence A and Sentence B, separated by a `[SEP]` token: `[CLS] A [SEP] B [SEP]`.
+### The Cross-Encoder Approach (Standard BERT):
+ You concatenate Sentence A and Sentence B, separated by a `[SEP]` token: `[CLS] A [SEP] B [SEP]`.
 * **Advantage:** Higher accuracy. The model performs cross-attention between every word in Sentence A and every word in Sentence B simultaneously.
 * **Disadvantage:** Extremely slow for large-scale search. To find the most similar sentence in a collection of 10,000, you have to run the model 10,000 times for a single query.
 
-**The Bi-Encoder Approach (SBERT):** You pass Sentence A and Sentence B through the model separately to get two fixed vectors ($u$ and $v$).
+---
+
+### The Bi-Encoder Approach (SBERT):
+You pass Sentence A and Sentence B through the model separately to get two fixed vectors ($u$ and $v$).
 * **Advantage:** Massive speed. You can pre-calculate and store vectors for millions of sentences and compare them instantly using **Cosine Similarity**.
 * **Disadvantage:** Slight drop in accuracy because the model cannot "cross-reference" specific words between the sentences during the encoding process.
 
 ---
 
-## Sequence Labelling with BERT 
-In sequence labeling, we assign a tag to every token in the input. While the simplest method is to attach a classifier head to every output token, this ignores the interdependencies between tags (e.g., in Named Entity Recognition, an "Inside-Person" tag should never follow an "Outside" tag).
+# Sequence Labelling with BERT
+In **sequence labeling**, we assign a tag to every token in the input. While the simplest method is to attach a classifier head to every output token, this ignores the interdependencies between tags (e.g., in **Named Entity Recognition**, an "Inside-Person" tag should never follow an "Outside" tag).
 
 Simplest approach is to pass each output of each of the input tokens from BERT to a simple classifier
 
-**The CRF (Conditional Random Field) Solution:** A CRF acts as a "sanity check" layer on top of BERT. It learns a transition matrix that understands which tags are likely to follow one another.
+### The CRF (Conditional Random Field) Solution:
+A CRF acts as a "sanity check" layer on top of BERT. It learns a transition matrix that understands which tags are likely to follow one another.
 * Why use it? While BERT provides strong contextual features, the CRF ensures the final sequence of tags makes global sense, correcting "impossible" transitions.
 
-**The Subword Complication:** BERT uses WordPiece tokenization (e.g., "playing" $\rightarrow$ "play", "##ing").
+#### The Subword Complication:
+BERT uses WordPiece tokenization (e.g., "playing" $\rightarrow$ "play", "##ing").
 * Strategy: Usually, we only label the first subword of a word and provide a "dummy" or "ignored" label to the subsequent subwords during training to avoid biasing the model toward long words.
 
 ---
 
-## Sequence Labelling ... with Huggingface Transformers 
+# Sequence Labelling with Huggingface Transformers
 Simplest way to do SL is to use HF transformers library
 
 token classification pipeline 
@@ -5240,7 +5324,7 @@ model = AutoModelForTokenClassification.from_pretrained("distilbert-base-uncased
 
 ---
 
-## BERT Family 
+# BERT Family
 | Model | Primary Innovation | Key Takeaway |
 | :--- | :--- | :--- |
 | **RoBERTa** | Better Pre-training | Ditches NSP; uses larger batches and more data to prove BERT was "under-trained." |
@@ -5251,7 +5335,7 @@ model = AutoModelForTokenClassification.from_pretrained("distilbert-base-uncased
 
 ---
 
-## ROBERTa 
+## ROBERTa
 * Alternative to BERT from Facebook (Liu et al (2019)): a robustly optimized BERT pretraining approach
 * Pre-trained on even larger corpus
 * Ditches next sentence prediction and just uses MLM for pretraining
@@ -5316,7 +5400,7 @@ other shared vocab)
 
 ---
 
-## More Distant Relatives of BERT 
+## More Distant Relatives of BERT
 Other Pretrained Large Language Models, generally still
 based on transformers e.g.,
 * GPT,
@@ -5329,34 +5413,39 @@ Will talk about these in later weeks
 
 ---
 
-## GPT-3: Prompting & In-Context Learning
+# GPT-3: Prompting & In-Context Learning
 Brown et al. 2020: Language Models are Few Shot Learners
 
 GPT-3 marked a paradigm shift from Fine-tuning (updating weights) to Prompting (using the model as-is).
 
-Autoregressive Nature: Unlike BERT (Bi-directional), GPT is Uni-directional (Left-to-Right). It predicts the next token, which makes it a natural "writer."
+**Autoregressive Nature:** Unlike BERT (Bi-directional), GPT is Uni-directional (Left-to-Right). It predicts the next token, which makes it a natural "writer."
 
-#### The Prompting Paradigm:
-* Zero-shot: "Translate to French: Hello $\rightarrow$"
-* One-shot: "Apple $\rightarrow$ Pomme. Hello $\rightarrow$"
-* Few-shot: Providing 3–5 examples in the prompt to "prime" the model's logic.
+### The Prompting Paradigm:
+* **Zero-shot:** "Translate to French: Hello $\rightarrow$"
+* **One-shot:** "Apple $\rightarrow$ Pomme. Hello $\rightarrow$"
+* **Few-shot:** Providing 3–5 examples in the prompt to "prime" the model's logic.
 
 In-context learning does not update the model's weights. The "learning" happens entirely within the model's temporary attention span (context window). Once the session ends, the "knowledge" of those examples is gone.
 
 
 ---
 
-## Text-to-Text Transfer Transformer (T5) 
+# Text-to-Text Transfer Transformer (T5) 
 Raffel et al. 2020: Exploring the Limits of Transfer Learning with a Unified Text to-Text Transformer
 
-T5 (Text-to-Text Transfer Transformer) unified NLP by treating every problem—whether regression, classification, or translation—as a string-to-string task.
+**T5 (Text-to-Text Transfer Transformer)** unified NLP by treating every problem — whether regression, classification, or translation — as a **string-to-string** task.
 
-Task Prefixes: Instead of changing the model's architecture, you simply change the input text (e.g., "summarize: ..."). The model uses these prefixes as a conditioning signal to shift its internal attention weights toward a specific task.
+### Task Prefixes:
+Instead of changing the model's architecture, you simply change the input text (e.g., "summarize: ..."). The model uses these **prefixes** as a conditioning signal to shift its internal attention weights toward a specific task.
 
-Span Denoising: T5's unique pre-training replaces entire chunks of text with "sentinel tokens" (<X>, <Y>). This teaches the model to predict both the content and the length of missing information, making it more robust than BERT's single-word masking.
+### Span Denoising:
+T5's unique pre-training replaces entire chunks of text with "sentinel tokens" (<X>, <Y>). This teaches the model to predict both the content and the length of missing information, making it more robust than BERT's single-word masking.
 
+# T5 Framework: string-to-string problems
 
-Figure 1: A diagram of our text-to-text framework. Every task we consider—including translation, question answering, and classification—is cast as feeding our model text as input and training it to generate some target text. This allows us to use the same model, loss function, hyperparameters, etc. across our diverse set of tasks. It also provides a standard testbed for the methods included in our empirical survey. “T5” refers to our model, which we dub the “Text-to-Text Transfer Transformer”.
+**Figure 1:** A diagram of our text-to-text framework. Every task we consider—including translation, question answering, and classification—is cast as feeding our model text as input and training it to generate some target text. This allows us to use the same model, loss function, hyperparameters, etc. across our diverse set of tasks. It also provides a standard testbed for the methods included in our empirical survey. “T5” refers to our model, which we dub the “Text-to-Text Transfer Transformer”.
+
+![T5 Frameowrk](./files/week_8/t5_framework.png)
 
 | Task Category | Input String (Task Prefix + Context) | Output String (Target Text) |
 | :--- | :--- | :--- |
@@ -5365,7 +5454,7 @@ Figure 1: A diagram of our text-to-text framework. Every task we consider—incl
 | **Semantic Similarity (STS-B)** | "stsb sentence1: The rhino grazed on the grass. sentence2: A rhino is grazing in a field." | "3.8" |
 | **Summarization** | "summarize: state authorities dispatched emergency crews tuesday to survey the damage after an onslaught of severe weather in mississippi..." | "six people hospitalized after a storm in attala county." |
 
-The key takeaway here is that T5 treats everything as a string-to-string problem. Unlike BERT, which needs a custom "Classification Head" to turn vectors into labels, T5 literally "writes out" the answer. It uses the same decoder architecture to produce a sentiment label ("not acceptable") as it does to produce a translation or a summary. T5 represents a shift from the "Encoder-only" world of BERT to an Encoder-Decoder framework (where everything is a sequence-to-sequence problem)
+The key takeaway here is that T5 treats everything as a **string-to-string problem**. Unlike BERT, which needs a **custom "Classification Head"** to turn vectors into labels, T5 literally "writes out" the answer. It uses the **same decoder architecture** to produce a **sentiment label** ("not acceptable") as it does to produce a **translation** or a **summary**. **T5** represents a shift from the **"Encoder-only"** world of BERT to an **Encoder-Decoder framework** (where everything is a sequence-to-sequence problem)
 
 This diagram represents a major departure from the BERT-style fine-tuning we discussed earlier. While BERT requires you to build a custom "Classification Head" to turn vectors into labels, T5 (Text-to-Text Transfer Transformer) uses a Unified Framework:
 * **No Custom Heads:** T5 uses the exact same Encoder-Decoder architecture for every task. It doesn't output a class index; it literally generates the text of the answer.
@@ -5374,7 +5463,7 @@ This diagram represents a major departure from the BERT-style fine-tuning we dis
 
 ---
 
-#### Are the Task Prefixes rule-based?
+# Are the Task Prefixes rule-based?
 No, the prompt is the input to the encoder and the prefix, i.e. "summarise", is handled by the weights of the model directly. There is no hard-coded rule or "switch" inside the model that says, "If you see 'summarize', go to the summarization department." 
 
 Instead, the task prefix is treated as just another sequence of tokens. Because T5 was trained on a massive mixture of different tasks simultaneously, it learned through Gradient Descent that when the input starts with certain patterns (like translate English to German:), the output should follow a specific "style" or "logic" (like producing German words).
@@ -5390,12 +5479,14 @@ The prefix acts as a Conditioning Signal. Think of it like a "mood" for the enti
 
 ---
 
-## T5 also uses MLM 
-Pre-training involves unsupervised objectives which are similar to the MLM of BERT and “word dropout” regularization technique (Bowman et al. 2015)
+# T5 also uses MLM: Span-denoising
+Pre-training involves unsupervised objectives which are similar to the **MLM** of BERT and “word dropout” regularization technique (Bowman et al. 2015)
 
-Figure 2: Schematic of the objective we use in our baseline model. In this example, we process the sentence “Thank you for inviting me to your party last week.” The words “for”, “inviting” and “last” (marked with an x) are randomly chosen for corruption. Each consecutive span of corrupted tokens is replaced by a sentinel token (shown as <X> and <Y>) that is unique over the example. Since “for” and “inviting” occur consecutively, they are replaced by a single sentinel <X>. The output sequence then consists of the dropped-out spans, delimited by the sentinel tokens used to replace them in the input plus a final sentinel token <Z>.
+Figure 2: Schematic of the objective we use in our baseline model. In this example, we process the sentence “Thank you for inviting me to your party last week.” The words “for”, “inviting” and “last” (marked with an x) are **randomly chosen for corruption**. Each consecutive span of corrupted tokens is replaced by a sentinel token (shown as <X> and <Y>) that is unique over the example. Since “for” and “inviting” occur consecutively, they are replaced by a single sentinel <X>. The output sequence then consists of the dropped-out spans, delimited by the sentinel tokens used to replace them in the input plus a final sentinel token <Z>.
 
-This process is known as Span-denoising, which is T5’s version of BERT's Masked Language Modeling. Instead of masking single words, it masks whole "spans" (chunks) of text.
+![T5 MLMasking](./files/week_8/t5_mlm.png)
+
+This process is known as **Span-denoising**, which is T5’s version of BERT's Masked Language Modeling. Instead of masking single words, it masks whole "**spans**" (chunks) of text.
 
 | Stage | Text Content | 
 | :--- | :--- | 
@@ -5403,29 +5494,32 @@ This process is known as Span-denoising, which is T5’s version of BERT's Maske
 | Inputs (Corrupted) | Thank you <X> me to your party <Y> week. | 
 | Targets (Predicted) | <X> for inviting <Y> last <Z> | 
 
-#### Key Mechanics of this Objective:
+### Key Mechanics of this Objective:
 - **Sentinels:** Unlike BERT which uses a generic `[MASK]` token, T5 uses unique sentinel tokens (`<X>`, `<Y>`, `<Z>`) to act as placeholders for specific missing chunks.
 - **Span Collapse:** Notice that "for" and "inviting" are two words, but they are collapsed into a single `<X>`. This teaches the model to predict how many words might be missing, not just which ones.
 - **Efficient Decoding:** The model doesn't try to reconstruct the entire original sentence. It only generates the "missing pieces," which makes the training objective computationally efficient.
 
 ---
 
-## T5 Fine-Tuning 
-T5 (Text-to-Text Transfer Transformer) achieves its "unified" nature through a unique approach to fine-tuning. Unlike BERT, which requires swapping out architectural "heads" for different tasks, T5 is fine-tuned by feeding it a variety of supervised tasks simultaneously using the exact same objective: generating the correct target string. Because every task—from translation to regression—shares the same global parameters, the model can leverage cross-task transfer, where learning the structural nuances of one task (like linguistic acceptability) can actually improve its performance on another (like summarization).
+# T5 Fine-Tuning
+T5 (Text-to-Text Transfer Transformer) achieves its "unified" nature through a unique approach to fine-tuning. Unlike BERT, which requires swapping out architectural "heads" for different tasks, T5 is fine-tuned by feeding it a variety of supervised tasks simultaneously using the exact same objective: **generating the correct target string**. Because every task — from translation to regression — shares the **same global parameters**, the model can leverage **cross-task transfer**, where learning the structural nuances of one task (like linguistic acceptability) can actually improve its performance on another (like summarization).
 
 To successfully use a fine-tuned T5 model, you must adhere to the Prompt Format it was trained on. This is because the model relies on Task Prefixes to "trigger" the correct internal logic. If you want a summary, you cannot simply provide the text; you must prepend the specific string the model expects (e.g., "summarize: "). These prefixes act as a conditioning signal, shifting the Transformer's attention weights to focus on the specific linguistic features required for that output style.
 
 ---
 
-## Still to come (weeks 9 and 10) 
-¡ ChatGPT and open-source alternatives
-¡ Retrieval Augmented Generation (RAG)
-¡ Prompt engineering
-¡ Reasoning with LLMs
-¡ Trustworthy and responsible LLMs / AI
-¡ Environmental impact of LLMs / AI
+#### Prompting vs Fine-Tuning
+**Prompting (In-Context Learning):** You give a model (like GPT-4) a few examples in the text. The model's weights are frozen. It "learns" the pattern only for that specific conversation. Once you close the tab, it forgets everything you showed it.
 
-## Week 8 Summary
+**Fine-Tuning (T5's approach):** You take the T5 model and actually run **Backpropagation**. You show it thousands of examples, calculate the error, and permanently update the weights. T5 "learns" the task so deeply that it no longer needs the examples — **it just needs the "prefix."**
+
+---
+
+T5 is unique because it uses a **"Prompt-based Fine-tuning"** format. The reason it feels like prompting is because of those **Task Prefixes** (e.g., "summarize:"). During **Pre-training**, T5 is taught that when it sees a prefix, it should act a certain way. During **Fine-tuning**, we give it a specific new prefix (or use an old one) and update the weights so that the model becomes an absolute expert at that specific prefix. Essentially, T5 uses the interface of prompting to perform the act of fine-tuning.
+
+---
+
+# Week 8 Summary
 This week’s study marks the transition from Transformer theory to the engineering reality of **Transfer Learning**, focusing on how to adapt "generalist" models like BERT to specific "specialist" tasks. We explored the **Distributional Hypothesis** at scale, moving from word-level embeddings to **Sentential Contexts** and specialized models like **SBERT** for semantic similarity. The core of the week centered on the fine-tuning pipeline: utilizing the `[CLS]` **token** as a global aggregator for text classification, navigating the trade-offs of **freezing layers** to prevent catastrophic forgetting, and leveraging the **Hugging Face** `Trainer` **API** alongside the **GLUE benchmark** for standardized evaluation.
 
 We also examined the broader ecosystem of the **BERT Family**—including optimized variants like **RoBERTa**, **ALBERT**, and **DistilBERT** — before looking toward the future of NLP with **GPT-3** and **T5**. While BERT remains an encoder-only model requiring custom heads, GPT-3 introduces the **Prompting/In-Context Learning** paradigm (Zero/Few-shot), and T5 unifies all NLP tasks into a **Text-to-Text** framework. This shift from task-specific architectures to unified, prompt-driven generative models sets the stage for upcoming discussions on RAG, reasoning, and the responsible deployment of Large Language Models.
@@ -5435,6 +5529,7 @@ We also examined the broader ecosystem of the **BERT Family**—including optimi
 ## Week 8: Seminar
 No Questions
 
+---
 
 ## Week 8: Paper
 Schick and Schütze (2021): Exploiting Cloze Questions for Few Shot Text Classification and Natural Language Inference
