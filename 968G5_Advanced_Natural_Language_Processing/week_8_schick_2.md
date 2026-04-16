@@ -191,3 +191,336 @@ By setting $T > 1$, the ensemble’s output for a "Great" review might shift fro
 In the iPET loop, different patterns might focus on different nuances of the text. By averaging these "softened" distributions, the final classifier inherits the collective "wisdom" and uncertainty of all the teacher models, making it far more robust than if it had just been trained on 10 hard-labeled sentences.
 
 ---
+
+
+
+# Direct Paper Extracts
+
+## Abstract 
+Some NLP tasks can be solved in a fully unsupervised fashion by providing a pretrained language model with “task descriptions” in natural language (e.g., Radford et al., 2019)
+
+> Alec Radford, Jeff Wu, Rewon Child, David Luan, Dario Amodei, and Ilya Sutskever. 2019. [Language models are unsupervised multitask learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf). Technical report.
+
+---
+
+While this approach underperforms its supervised counterpart, we show in this work that the two ideas can be combined: We introduce **Pattern-Exploiting Training** (PET), a semi-supervised training procedure that reformulates input examples as cloze-style phrases to help language models understand a given task. 
+
+These phrases are then used to assign soft labels to a large set of unlabeled examples.
+
+Finally, standard supervised training is performed on the resulting training set.
+
+For several tasks and lan- guages, PET outperforms supervised training and strong semi-supervised approaches in low- resource settings by a large margin
+
+---
+
+## 1 Introduction
+
+Due to the vast number of languages, domains and tasks and the cost of annotating data, it is common in real-world uses of NLP to have only a small number of labeled examples, making few-shot learning a highly important research area.
+
+Unfortunately, applying standard supervised learning to small training sets often performs poorly; many problems are difficult to grasp from just looking at a few examples.
+
+---
+
+However, if we know that the underlying task is to identify whether the text says anything about prices, we can easily assign l′ to T3. This illustrates that solving a task from only a few examples becomes much easier when we also have a task description, i.e., a textual explanation that helps us understand what the task is about.
+
+---
+
+With the rise of pretrained language models (PLMs) such as GPT (Radford et al., 2018), BERT (Devlin et al., 2019) and RoBERTa (Liu et al., 2019), the idea of providing task descriptions has become feasible for neural architectures: We can simply append such descriptions in natural language to an input and let the PLM predict continuations that solve the task (Radford et al., 2019; Puri and Catanzaro, 2019)
+
+So far, this idea has mostly been considered in zero-shot scenarios where no training data is available at all.
+
+> Alec Radford, Jeff Wu, Rewon Child, David Luan, Dario Amodei, and Ilya Sutskever. 2019. [Language models are unsupervised multitask learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf). Technical report.
+
+> Raul Puri and Bryan Catanzaro. 2019. [Zero-shot text classification with generative language models](https://arxiv.org/abs/1912.10165). Computing Research Repository, arXiv:1912.10165.
+
+---
+
+In this work, we show that providing task descriptions can successfully be combined with standard supervised learning in few-shot settings
+
+---
+
+We introduce Pattern-Exploiting Training (PET), a semi-supervised training procedure that uses natural language patterns to reformulate input examples into cloze-style phrases
+
+---
+
+PET works in three steps: First, for each pattern a separate PLM is finetuned on a small training set T. The ensemble of all models is then used to annotate a large unlabeled dataset D with soft labels. Finally, a standard classifier is trained on
+the soft-labeled dataset.
+
+---
+
+We also devise iPET, an iterative variant of PET in which this process is repeated with increasing training set sizes
+
+---
+
+On a diverse set of tasks in multiple languages, we show that given a small to medium number of labeled examples, PET and iPET substantially outperform unsupervised approaches, supervised training and strong semi-supervised baselines.
+
+---
+
+## 2 Related Work
+
+Radford et al. (2019) provide hints in the form of natural language patterns for zero-shot learning of challenging tasks such as reading comprehension and question answering (QA). 
+
+---
+
+Another recent line of work uses cloze-style phrases to probe the knowledge that PLMs acquire during pretraining; this includes probing for factual and commonsense knowledge (Trinh and Le, 2018; Petroni et al., 2019; Wang et al., 2019; Sakaguchi et al., 2020), linguistic capabilities (Ettinger, 2020; Kassner and Sch  ̈utze, 2020), understanding of rare words (Schick and Schutze, 2020), and ability to perform symbolic reasoning (Talmor et al., 2019).
+
+---
+
+Jiang et al. (2020) consider the problem of finding the best pattern to express a given task
+
+---
+
+## 3 Pattern-Exploiting Training
+
+Let $M$ be a masked language model with vocabulary $V$ and mask token $\_\_\_\_ \in V$, and let $\mathcal{L}$ be a set of labels for our target classification task $A$.
+
+We write an input for task $A$ as a sequence of phrases $\mathbf{x} = (s_1, \dots, s_k)$ with $s_i \in V^*$; for example, $k = 2$ if $A$ is textual inference (two input sentences). 
+
+We define a $\textit{pattern}$ to be a function $P$ that takes $\mathbf{x}$ as input and outputs a phrase or sen- tence $P(\mathbf{x}) \in V^*$ that contains exactly one mask token, i.e., its output can be viewed as a cloze ques-
+tion. 
+
+Furthermore, we define a $\textit{verbalizer}$ as an injective function $v : \mathcal{L} \rightarrow V$ that maps each label to a word from $M$'s vocabulary. We refer to $(P, v)$ as a $\textit{pattern-verbalizer pair}$ (PVP).
+
+---
+
+Using a PVP $(P, v)$ enables us to solve task $A$ as follows: Given an input $x$, we apply $P$ to obtain an input representation $P(x)$, which is then processed by $M$ to determine the label $y ∈ L$ for which $v(y)$ is the most likely substitute for the mask
+
+For example, consider the task of identifying whether
+two sentences a and b contradict each other (label
+$y_0$) or agree with each other ($y_1$).
+
+For this task, we may choose the pattern $P(a,b) = a? <MASK>, b$. combined with a verbalizer $v$ that maps $y_0$ to “Yes” and $y_1$ to “No”. Given an example input pair
+
+> Just to be clear. The model is predicting `1` or `0`, the verbalizer is mapping this to a given subset of language.
+
+`x = (Mia likes pie, Mia hates pie)`
+
+the task now changes from having to assign a label
+without inherent meaning to answering whether the
+most likely choice for the masked position in
+
+$P(x)$ = `Mia likes pie? <MASK>, Mia hates pie`
+
+is “Yes” or “No”.
+
+> It is really important to understand what the authors are demonstrating here. 
+>
+> In standard pre-training (the Masked Language Model task), we take a real sentence like "The cat sat on the mat" and hide the word "mat." The model learns to predict "mat" because it was physically there in the training data.
+>
+> In PET, we are creating a Synthetic Cloze Task. The "imaginary" word (the Mask) doesn't exist in any original text. Instead, we insert it into a Pattern we created. The model isn't trying to recover a hidden word. It is using it's understanding of linguistics to decide what word should be there. 
+> 
+> PET transforms Classification into a "Completion" game
+
+---
+
+## 3.1 PVP Training and Inference
+Let $\mathbf{p} = (P, v)$ be a PVP. We assume access to a small training set $\mathcal{T}$ and a (typically much larger) set of unlabeled examples $\mathcal{D}$. For each sequence $\mathbf{z} \in V^*$ that contains exactly one mask token and $w \in V$, we denote with $M(w \mid \mathbf{z})$ the unnormalized score that the language model assigns to $w$ at the masked position. Given some input $\mathbf{x}$, we define the score for label $l \in \mathcal{L}$ as:
+
+$$s_{\mathbf{p}}(l \mid \mathbf{x}) = M(v(l) \mid P(\mathbf{x}))$$
+
+> The model output $M(\cdot)$ in this formula refers to the raw logit (a number), not a word. In a standard Transformer like BERT or RoBERTa, the very last layer before you see a "word" is a vector of thousands of numbers. nside the model $M$, there is a final linear layer (the "MLM Head") that has one output neuron for every word in the dictionary. These numbers are called Logits.
+> 
+> When the paper writes $M(v(l) \mid P(\mathbf{x}))$, it is saying:
+>
+> 1. Run the sentence with the pattern $P(\mathbf{x})$ through the model.
+> 2. Go to that final layer of 50,000 logits.
+>3. Find the specific index for the word $v(l)$ (e.g., the word "great").
+> 4. The "Output" of $M$ is just that one specific number (the logit) associated with that word.
+
+and obtain a probability distribution over labels using softmax:
+
+$$q_{\mathbf{p}}(l \mid \mathbf{x}) = \frac{e^{s_{\mathbf{p}}(l \mid \mathbf{x})}}{\sum_{l' \in \mathcal{L}} e^{s_{\mathbf{p}}(l' \mid \mathbf{x})}}$$
+
+We use the cross-entropy between $q_{\mathbf{p}}(l \mid \mathbf{x})$ and the true (one-hot) distribution of training example $(\mathbf{x}, l)$ — summed over all $(\mathbf{x}, l) \in \mathcal{T}$ — as loss for finetuning $M$ for $\mathbf{p}$.
+
+> If the human label for a review is "Positive," we tell the model the probability of "great" should have been 1.0. The model compares its calculated $q_{\mathbf{p}}$ to that 1.0, finds the error, and updates its weights so that next time, the word "great" gets a higher logit in that context.
+
+---
+
+## 3.2 Auxiliary Language Modeling
+
+As a PLM finetuned for some PVP is still a language model at its core, we address this by using language modeling as auxiliary task.
+
+With $L_CE$ denoting cross-entropy loss and $L_MLM$ language modeling loss, we compute the final loss as
+
+$L = (1 - \alpha) \cdot L_{\text{CE}} + \alpha \cdot L_{\text{MLM}}$
+
+As $L_MLM$ is typically much larger than LCE, in preliminary experiments, we found a small value of $α = 10^{−4}$ to consistently give good results, so we use it in all our experiments.
+
+To obtain sentences for language modeling, we use the unlabeled set $D$. However, we do not train directly on each $x \in D$, but rather on $P(x)$, where we never ask the language model to predict anything for the masked slot.
+
+---
+
+## 3.3 Combining PVPs
+A key challenge for our approach is that in the
+absence of a large development set, it is hard to
+identify which PVPs perform well. 
+
+To address this,
+we use a strategy similar to knowledge distillation
+(Hinton et al., 2015).
+
+First, we define a set $\mathcal{P}$ of PVPs that intuitively make sense for a given task $A$. 
+
+> To choose a "good" PVP (Pattern-Verbalizer Pair), you have to consider what the model already knows from its pre-training. You want to pick patterns that mimic how humans naturally write and verbalizers that use high-frequency, "pure" semantic words.
+
+| PVP | Pattern $(P)$ | Verbalizer $(v) $| 
+| :--- | :--- | :--- |
+| Opinion | `[Input Text] It was [MASK]` | Pos: "great", Neg: "terrible" | 
+| Reviewer | `[Input Text] The reviewer felt [MASK]` | Pos: "happy", Neg: "sad"
+| Summary | `[MASK] movie review: [Input Text]` | Pos: "Good", Neg: "Bad" |
+
+We then use these PVPs as follows:
+
+(1) We finetune a separate language model $M_{\mathbf{p}}$ for each $\mathbf{p} \in \mathcal{P}$ as described in Section 3.1. As $\mathcal{T}$ is small, this finetuning is cheap even for a large number of PVPs.
+
+(2) We use the ensemble $\mathcal{M} = \{M_{\mathbf{p}} \mid \mathbf{p} \in \mathcal{P}\}$ of finetuned models to annotate examples from $\mathcal{D}$. We first combine the unnormalized class scores for each example $\mathbf{x} \in \mathcal{D}$ as
+
+$s_{\mathcal{M}}(l \mid \mathbf{x}) = \frac{1}{Z} \sum_{\mathbf{p} \in \mathcal{P}} w(\mathbf{p}) \cdot s_{\mathbf{p}}(l \mid \mathbf{x})$
+
+where $Z = \sum_{\mathbf{p} \in \mathcal{P}} w(\mathbf{p})$ and the $w(\mathbf{p})$ are weighting terms for the PVPs. We experiment with two different realizations of this weighting term: either we simply set $w(\mathbf{p}) = 1$ for all $\mathbf{p}$ or we set $w(\mathbf{p})$ to be the accuracy obtained using $\mathbf{p}$ on the training set before training. We refer to these two variants as uniform and weighted. Jiang et al. (2020) use a similar idea in a zero-shot setting.
+
+We transform the above scores into a probability distribution $q$ using softmax. Following Hinton et al. (2015), we use a temperature of $T = 2$ to obtain a suitably soft distribution. All pairs $(\mathbf{x}, q)$ are collected in a (soft-labeled) training set $\mathcal{T}_C$.
+
+(3) We finetune a PLM $C$ with a standard sequence classification head on $\mathcal{T}_C$
+
+The finetuned model $C$ then serves as our classifier for $A$
+
+![Figure 1: PET for sentiment classification](./files/week_8/pet_figure_1.png)
+
+> Figure 1: PET for sentiment classification. (1) A number of patterns encoding some form of task description are created to convert training examples to cloze questions; for each pattern, a pretrained language model is finetuned. (2) The ensemble of trained models annotates unlabeled data. (3) A classifier is trained on the resulting soft-labeled dataset.
+
+---
+
+## 3.4 Iterative PET (iPET)
+Distilling the knowledge of all individual models into a single classifier C means they cannot learn from each other. As some patterns perform (possibly much) worse than others, the training set $T_C$ for our final model may therefore contain many mislabeled examples.
+
+To compensate for this shortcoming, we devise iPET, an iterative variant of PET. The core idea of iPET is to train several generations of models on datasets of increasing size
+
+To this end, we first enlarge the original dataset $T$ by labeling selected examples from Dusing a random subset of trained PET models (Figure 2a). We then train a new generation of PET models on the enlarged dataset (b); this process is repeated several times (c).
+
+More formally, let $\mathcal{M}^0 = \{M_1^0, \dots, M_n^0\}$ be the initial set of PET models finetuned on $\mathcal{T}$, where each $M_i^0$ is trained for some PVP $\mathbf{p}_i$. 
+
+We train $k$ generations of models $\mathcal{M}^1, \dots, \mathcal{M}^k$ where $\mathcal{M}^j = \{M_1^j, \dots, M_n^j\}$ and each $M_i^j$ is trained for $\mathbf{p}_i$ on its own training set $\mathcal{T}_i^j$. 
+
+In each iteration, we multiply the training set size by a fixed constant $d \in \mathbb{N}$ while maintaining the label ratio of the original dataset. That is, with $c_0(l)$ denoting the number of examples with label $l$ in $\mathcal{T}$, each $\mathcal{T}_i^j$ contains $c_j(l) = d \cdot c_{j-1}(l)$ examples with label $l$. This is achieved by generating each $\mathcal{T}_i^j$ as follows:
+
+After training $k$ generations of PET models, we use
+$\mathcal{M}^k$ to create $\mathcal{T}_C$ and train $C$ as in basic PET.
+
+With minor adjustments, iPET can even be used in a zero-shot setting
+
+![Figure 2: Schematic representation of PET (1-3) and iPET (a-c).](./files/week_8/pet_figure_2.png)
+
+> Figure 2: Schematic representation of PET (1-3) and iPET (a-c). **(1)** The initial training set is used to finetune an ensemble of PLMs. **(a)** For each model, a random subset of other models generates a new training set by labeling examples from D. **(b)** A new set of PET models is trained using the larger, model-specific datasets. **(c)** The previous two steps are repeated k times, each time increasing the size of the generated training sets by a factor of d. **(2)** The final set of models is used to create a soft-labeled dataset TC. **(3)** A classifier C is trained on this dataset.
+
+--- 
+
+
+## 4 Experiments
+We investigate the performance of PET and all baselines for different training set sizes; each model is trained three times using different seeds and average results are reported.
+
+As we consider a few-shot setting, we assume no access to a large development set on which hyperparameters could be optimized
+
+Our choice of hyperparameters is thus based on choices made in previous work and practical considerations. We use a learning rate of $1*10^{−5}$, a batch size of $16$ and a maximum sequence length of $256$.
+
+Unless otherwise specified, we always use the weighted variant of PET with auxiliary language modeling. For iPET, we set $λ = 0.25$ and $d = 5$; that is, we select 25% of all models to label examples for the next generation and quintuple the number of training examples in each iteration.
+
+---
+
+## 4.1 Patterns
+We now describe the patterns and verbalizers used for all tasks.
+
+$\textbf{Yelp}$ For the Yelp Reviews Full Star dataset (Zhang et al., 2015), the task is to estimate the rating that a customer gave to a restaurant on a 1- to 5-star scale based on their review's text. We define the following patterns for an input text $a$:
+
+$P_1(a) = \text{It was \_\_\_\_. } a \quad P_2(a) = \text{Just \_\_\_\_! } \| \ a$
+
+$P_3(a) = a. \text{ All in all, it was \_\_\_\_.}$
+
+$P_4(a) = a \ \| \ \text{In summary, the restaurant is \_\_\_\_.}$
+
+We define a single verbalizer v for all patterns as
+
+1. $v(1) =$ terrible 
+2. $v(2) =$ bad 
+3. $v(3) =$ okay
+4. $v(4) =$ good 
+5. $v(5) =$ great
+
+---
+
+Yahoo Yahoo Questions (Zhang et al., 2015) is a text classification dataset. Given a question a and an answer b, one of ten possible categories has to be assigned. We use the same patterns as for AG’s News, but we replace the word “News” in P5 with the word “Question”. We define a ver- balizer that maps categories 1–10 to “Society”, “Science”, “Health”, “Education”, “Computer”, “Sports”, “Business”, “Entertainment”, “Relation- ship” and “Politics”.
+
+---
+
+## 4.2 Results
+Zero-shot iPET clearly outperforms the unsupervised baselines for all datasets (L3 vs L1)
+
+on AG’s News, it even performs better than standard supervised training with 1000 examples (L3 vs L13)
+
+With just 10 training examples, standard supervised learning does not perform above chance (L4).
+
+In contrast, PET (L5) performs much better than the fully unsupervised baselines (L1–L2); 
+
+training multiple generations using iPET (L6) gives consistent improvements
+
+
+#### Comparison with SotA 
+We compare PET to UDA (Xie et al., 2020) and MixText (Chen et al., 2020), two state-of-the-art methods for semi- supervised learning in NLP that rely on data augmentation. Whereas PET requires that a task can be expressed using patterns and that such patterns be found, UDA and MixText both use backtranslation (Sennrich et al., 2016) and thus require thousands of labeled examples for training a machine translation model.
+
+We use RoBERTa (base) for our comparison as MixText is specifically tailored towards a 12-layer Transformer (Vaswani et al., 2017). Both Xie et al. (2020) and Chen et al. (2020) use large development sets to optimize the number of training steps. 
+
+Despite this, Table 2 shows that PET and iPET substantially outperform both methods across all tasks, clearly demonstrating the benefit of incorporating human knowledge in the form of PVPs.
+
+---
+
+## Analysis
+
+#### Combining PVPs
+We first investigate whether PET is able to cope with situations were some PVPs perform much worse than others. 
+
+Even after finetuning, the gap between the best and worst pattern is large, especially for Yelp.
+
+However, PET is not only able to compensate for this, but even improves accuracies over using only the best- performing pattern across all tasks.
+
+Distillation brings consistent improvements over the ensemble; additionally, it significantly reduces the size of the final classifier. We find no clear difference between the uniform and weighted variants of PET
+
+#### Auxiliary Language Modeling
+We analyze the influence of the auxiliary language modeling task on PET’s performance.
+
+Figure 3 shows performance improvements from adding the language modeling task for four training set sizes.
+
+We see that the auxiliary task is extremely valuable when training on just 10 examples. With more data, it becomes less important, sometimes even leading to worse performance.
+
+#### Iterative PET
+To check whether iPET is able to improve models over multiple generations, Figure 4 shows the average performance of all generations of models in a zero-shot setting.
+
+![Model Generation](./files/week_8/model_generation_analysis.png)
+
+Each additional iteration does indeed further improve the ensemble’s performance. 
+
+Another natural question is whether similar results can be obtained with fewer iterations by increasing the training set size more aggressively. To answer this question, we skip generations 2 and 3 for AG’s News and Yahoo and for both tasks directly let ensemble M1 annotate $10*5^4$ examples for M4. As indicated in Figure 4 through dashed lines, this clearly leads to worse performance, highlighting the importance of only gradually increasing the training set size.
+
+We surmise that this is the case because annotating too many examples too early leads to a large percentage of mislabeled training examples.
+
+#### In-Domain Pretraining
+Unlike our supervised baseline, PET makes use of the additional unlabeled dataset D. Thus, at least some of PET’s performance gains over the supervised baseline may arise from this additional in-domain data.
+
+To test this hypothesis, we simply further pre-train RoBERTa on in-domain data, a common technique for improving text classification accuracy (e.g., Howard and Ruder, 2018; Sun et al., 2019). As language model pretraining is expensive in terms of GPU usage, we do so only for the Yelp dataset.
+
+Figure 5 shows results of supervised learning and PET both with and without this in-domain pretraining. While pretraining does indeed improve accuracy for supervised training, the supervised model still clearly performs worse than PET, showing that the success of our method is not simply due to the usage of additional unlabeled data.
+
+Interestingly, in-domain pretraining is also helpful for PET, indicating that PET leverages unlabeled data in a way that is clearly different from standard masked language model pretraining
+
+---
+
+## 6 Conclusion
+We have shown that providing task descriptions to pretrained language models can be combined with standard supervised training.
+
+Our proposed method, PET, consists of defining pairs of cloze question patterns and verbalizers that help leverage the knowledge contained within pretrained language models for downstream tasks.
+
+We finetune models for all pattern-verbalizer pairs and use them to create large annotated datasets on which standard classifiers can be trained.
+
+When the initial amount of training data is limited, PET gives large improvements over standard supervised training and strong semi-supervised approaches.
+
+---
