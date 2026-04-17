@@ -54,58 +54,65 @@ The issue is that the weights in that new layer start as **random noise**. With 
 ## 2. The PET Solution: PVPs (Pattern-Verbalizer Pairs)
 This is where the paper introduces its core mechanism, the "cloze" question. Or in NLP terms, masked language modelling. 
 
-BERT is optimized for filling in blanks. The authors of the paper asked a simple questions: "instead of forcing the model to learn a new mathematical mapping to an arbitary label space from scratch, why don't we just reformat our classification task to look exactly like the pre-training task"
+BERT is optimized for filling in blanks. The authors of the paper asked a simple question: 
+> "Instead of forcing the model to learn a new mathematical mapping to an arbitary label space from scratch, why don't we just reformat our classification task to look exactly like the pre-training task"
 
-The paper introduces **PET** which bypasses the "bolt-on" layer by using the Masked Language Model (MLM) head already present in the pre-trained model. This allows us to "tell" the model the task through Linguistic Archeology. Additionally, removing the classifcation head means there are no freshly initalized weights to optimize. 
+The paper introduces **PET** which bypasses the "bolt-on" layer by using the **Masked Language Model (MLM) head** already present in the pre-trained model. This allows us to "tell" the model the task through **Linguistic Archeology**. Additionally, removing the classifcation head means there are no freshly initalized weights to optimize. 
 
 There are two parts to this approach the **The Pattern ($P$)** and **The Verbalizer ($V$)**.
 
-The Pattern ($P$) is the "Syntactic Scaffolding." It transforms the input into a **Cloze task**, with the input being a sequence/sentence. 
+**The Pattern ($P$)** is the "Syntactic Scaffolding." It transforms the input into a **Cloze task**, with the input being a sequence/sentence. 
 
 > "The sushi was overpriced." $\rightarrow$ Pattern: "It was [MASK]."
 
-The Verbalizer ($V$) is the mapping function. It maps your abstract labels (0 or 1) to real vocab words (terrible or great). The Verbalizer must be Injective (one-to-one). Each label must have a unique word to avoid ambiguous signals.
+**The Verbalizer ($V$)** is the mapping function. It maps your abstract labels (0 or 1) to real vocab words (terrible or great). The Verbalizer must be **Injective** (one-to-one). Each label must have a unique word to avoid ambiguous signals.
 
-> Positive $\rightarrow$ "great"; Negative $\rightarrow$ "terrible"
+> Positive $\rightarrow$ "great";  Negative $\rightarrow$ "terrible"
 
 ---
 
 ## 3. The Math: "Restricted Softmax"
-Standard MLM considers all 50,000+ words in a vocabulary. PET utilizes a Restricted Softmax that "slices" the logit vector to ignore everything except the words defined in the Verbalizer.
+Standard MLM considers all 50,000+ words in a vocabulary. PET utilizes a **Restricted Softmax** that "slices" the logit vector to ignore everything except the words defined in the **Verbalizer**.
 
 By forcing the model to distribute 100% of its probability mass among the task-relevant labels, the loss calculation becomes extremely stable. This effectively "narrows" the model's focus, making it a specialist without needing thousands of examples.
 
-#### How does the math work during training? 
-Once the masked input (e.g., "The food was [MASK]." ) is fed into the model, the following mathematical pipeline occurs:
+### How does the math work during training? 
+Once the masked input (e.g., `"The food was [MASK]."` ) is fed into the model, the following mathematical pipeline occurs:
 
-1. **Transformer Processing:** The sequence passes through the standard Transformer layers (Self-Attention and Feed-Forward), resulting in a contextualized hidden state for every token.
+
+---
+1. **Transformer Processing:** The sequence passes through the standard **Transformer** layers (**Self-Attention** and **Feed-Forward**), resulting in a contextualized hidden state for every token.
+---
 2. **Mask Extraction:** We isolate the hidden state vector ($h_{mask}$) specifically for the position of the [MASK]. The vectors for all other words are discarded.
+---
 3. **Vocabulary Projection:** The vector $h_{mask}$ is multiplied by the pre-trained MLM weights to project it across the entire vocabulary. This produces a massive vector of unnormalized logits ($z$)—typically 50,000+ values.
-4. **Verbalizer Slicing:** Instead of applying Softmax to the whole vector, we perform a lookup for the indices of our Verbalizer words (e.g., the indices for "great" and "terrible"). We "slice" the logit vector to extract only these specific values.
-    * The 12 or 24 layers of the Transformer are the Body. Their only job is to take raw text and turn it into a high-dimensional mathematical summary (the hidden state vector $h_{mask}$, which is usually 768 or 1024 dimensions).
-    * The MLM Head is a final, single linear layer that sits on top of that body. It consists of a massive matrix of weights that were learned during pre-training.
+---
+4. **Verbalizer Slicing:** Instead of applying **Softmax** to the whole vector, we perform a lookup for the indices of our Verbalizer words (e.g., the indices for "great" and "terrible"). We "slice" the logit vector to extract only these specific values.
+    * The 12 or 24 layers of the Transformer are the **Body**. Their only job is to take raw text and turn it into a high-dimensional mathematical summary (the hidden state vector $h_{mask}$, which is usually 768 or 1024 dimensions).
+    * The MLM **Head** is a final, single linear layer that sits on top of that body. It consists of a massive matrix of weights that were learned during pre-training.
     * When we say we "project" $h_{mask}$ across the vocabulary, we are doing a single matrix multiplication between the The Hidden Vector and Weight Matrix which produces a 1x50,000 vector of Logits.
+---
 5. **Restricted Softmax:** We apply the Softmax function only to these selected logits.
     * **The Math: **$P(v) = \frac{\exp(z_v)}{\sum_{v' \in V} \exp(z_{v'})}$
     * This ensures the model’s "attention" is locked exclusively onto the valid labels ($V$), ignoring the "noise" of the other 49,998 words in the dictionary.
+---
 6. **Loss Calculation:** We compare this restricted distribution to the **Ground Truth** (the actual label) using **Cross-Entropy Loss**.
     * If the review was 5-stars, the "target" is a one-hot vector where "great" = 1.0.
     * The model then uses backpropagation to update the weights of the entire Transformer based on how well it guessed "great" within that tiny restricted set.
-
 ---
 
 ## 4. Solving "Catastrophic Forgetting": The Auxiliary Loss
-During the training phase, PET initially utilizes standard Cross-Entropy Loss ($Loss_{Task}$). We compare the model’s restricted softmax distribution against the "ground truth" provided by our 10 labeled examples. Mathematically, this is a Negative Log-Likelihood calculation: we take the log of the probability the model assigned to the correct verbalizer (e.g., "terrible"), multiply it by 1, and backpropagate that error to update the Transformer's weights. While this works for the task at hand, it immediately encounters the "brick wall" of Catastrophic Forgetting.
+During the training phase, PET initially utilizes standard **Cross-Entropy Loss** ($Loss_{Task}$). We compare the model’s restricted softmax distribution against the "ground truth" provided by our 10 labeled examples. Mathematically, this is a **Negative Log-Likelihood** calculation: we take the log of the probability the model assigned to the correct verbalizer (e.g., "terrible"), multiply it by 1, and backpropagate that error to update the Transformer's weights. While this works for the task at hand, it immediately encounters the "brick wall" of **Catastrophic Forgetting**.
 
 #### The Vulnerability of Few-Shot Updates
-When a generalist model like RoBERTa-Large (350M parameters) is updated using a tiny dataset, the gradient updates become dangerously concentrated. The model effectively "warps" its latent space to satisfy the specific syntactic quirks of those 10 sentences, overwriting the vast, expensive linguistic knowledge it gained during pre-training. To prevent this "shattering" of the model’s internal logic, the authors leverage the reality of the data environment: while labeled data is scarce, unlabeled data from the same domain is usually abundant.
+When a generalist model like **RoBERTa-Large** (350M parameters) is updated using a tiny dataset, the gradient updates become dangerously concentrated. The model effectively "warps" its latent space to satisfy the specific syntactic quirks of those 10 sentences, overwriting the vast, expensive linguistic knowledge it gained during pre-training. To prevent this "shattering" of the model’s internal logic, the authors leverage the reality of the data environment: while labeled data is scarce, unlabeled data from the same domain is usually abundant.
 
 #### The "Anchor" Mechanism
-PET introduces an Auxiliary Language Modeling Loss ($L_{MLM}$) which acts as a mathematical anchor to the pre-trained state. The total loss becomes a weighted sum:
+PET introduces an **Auxiliary Language Modeling Loss** ($L_{MLM}$) which acts as a mathematical anchor to the pre-trained state. The total loss becomes a weighted sum:
 
 $$Loss = Loss_{Task} + (\alpha \cdot Loss_{MLM})$$
 
-While the model learns the specialist task, it is simultaneously forced to perform standard Masked Language Modeling on unlabeled sequences. It might seem that forcing the model to predict generic words like "the" or "restaurant" would dilute the fine-tuning, but this is intentional. The auxiliary task acts as a regularization term, creating "friction" against the specialist gradients. This friction ensures that the model adapts to the new task without destroying the multi-dimensional geometric balance that makes it a good general reasoner.
+While the model learns the specialist task, it is simultaneously forced to perform standard **Masked Language Modeling** on unlabeled sequences. It might seem that forcing the model to predict generic words like "the" or "restaurant" would dilute the fine-tuning, but this is intentional. The auxiliary task acts as a **regularization term**, creating "friction" against the specialist gradients. This friction ensures that the model adapts to the new task without destroying the multi-dimensional geometric balance that makes it a good general reasoner.
 
 #### Balancing the Scales with Alpha ($\alpha$)
 The relationship between these two losses is managed by the hyperparameter $\alpha$.
@@ -118,28 +125,36 @@ The authors found the "sweet spot" at a remarkably small value: $10^{-4}$. Even 
 --- 
 
 ## 5. iPET: The "Bootstrap" Loop
-The "Iterative" part of PET (iPET) is designed to solve a fundamental human problem: Pattern Uncertainty. When we design a Cloze prompt, we don't know which specific wording will resonate best with the model's internal latent space. Instead of gambling on one "perfect" pattern, iPET uses an ensemble to "rehabilitate" weak patterns through generational learning.
+The "Iterative" part of PET (iPET) is designed to solve a fundamental human problem: **Pattern Uncertainty**. When we design a **Cloze** prompt, we don't know which specific wording will resonate best with the model's internal latent space. Instead of gambling on one "perfect" pattern, iPET uses an ensemble to "rehabilitate" weak patterns through generational learning.
 
 #### How we utilize the Unlabeled Data
-A common question is whether we "pattern mask" the unlabeled data used for the auxiliary loss. The answer is yes: the unlabeled sentences are passed through the same PVP templates as the labeled data. However, the model is never asked to predict the label mask in these instances.
+A common question is whether we "pattern mask" the unlabeled data used for the auxiliary loss. The answer is **yes**: the unlabeled sentences are passed through the same PVP templates as the labeled data. However, the model is never asked to predict the label mask in these instances.
 * **The Process:** We mask random words in the surrounding context (e.g., "the," "restaurant") and ask the model to predict those.
 * **The Goal:** This reinforces the **structural syntax** of the pattern in the model's "mind" without providing it with biased labels. It keeps the model's general language skills sharp within the specific context of the task template.
 
 ### The 3-Step "Teacher-Student" Methodology
 Since 10 examples are too few for a reliable validation set, the authors use **Knowledge Distillation** to move from an ensemble of "Teachers" to a single, efficient "Student."
 
+---
+
 #### Step 1: The Teacher Ensemble
 We train several distinct models, each using a different PVP (Pattern-Verbalizer Pair). We don't know which pattern is best, so we let each model develop its own "perspective" on the task using the tiny labeled dataset.
+
+---
 
 #### Step 2: Confident Labeling (Knowledge Distillation)
 The ensemble is unleashed on a massive unlabeled dataset. Each model in the ensemble "votes" on the labels for these millions of sentences.
 * **Soft Labels:** We average the normalized scores to produce "soft labels" (probability distributions rather than 1/0 counts).
 * **The Synthetic Dataset:** This effectively transforms a pile of raw text into a massive, silver-standard training set.
 
+---
+
 #### Step 3: Training the Student Classifier
 Finally, we throw away the Cloze patterns and the PVPs entirely. We train a standard **BERT Sequence Classifier** (with a head bolted onto the `<CLS>` token) on the massive synthetic dataset.
 
 **Why this step?** PET/Prompting is slow at inference because you have to process the extra "scaffolding" tokens. A standard classifier is fast, simple, and takes advantage of the "data efficiency" of prompting while retaining the "inference speed" of traditional supervised models.
+
+---
 
 ### Why the Iteration? (The iPET "Generations")
 The danger in Step 2 is **Pollution**. If a human designs 5 patterns and 3 of them are "garbage" (misaligned with the model), those 3 models will produce inaccurate labels, dragging down the average and poisoning the student's training data.

@@ -5526,8 +5526,167 @@ We also examined the broader ecosystem of the **BERT Family**—including optimi
 
 ---
 
-## Week 8: Seminar
-No Questions
+# Week 8: Seminar
+
+* [Video](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=50969dc7-6b73-404c-900f-b42b011c43f8)
+
+### Previous Weeks Topics
+* Language models
+* Distributional representations of meaning
+* Composition
+* Contextualised word embeddings
+    * ELMo
+    * transformers
+    * BERT
+* Pre-training Large Language Models
+
+### This Weeks Topic
+* Transfer learning
+* Fine-tuning BERT-based models for 
+    * Text/sequence classification 
+    * sequence labelling
+* The BERT family
+* More distant relatives
+* Pattern Exploiting Training (PET) - Schick and Schütze (2021)
+
+---
+
+## Discussion Exercise
+You want to build a classifier which can detect racially offensive language in tweets.
+
+You have collected 500 examples of racially offensive tweets, all posted on X in the last 7 days.
+
+* What are your options in terms of building a classifier?
+* What are the advantages and disadvantages of each?
+* Are there any other considerations?
+
+---
+
+## Transfer Learning through Fine
+
+* **Transfer learning:** acquiring knowledge from one task or domain and then applying (transferring) it to solve a new task.
+* BERT-based models acquire knowledge about language through **pre-training** (masked language model prediction and next sentence prediction) on large unannotated corpora. BERT will know lots about language including what words are similar things to other. Its represenations are contenxualised, i.e. not static, they depend on the words around them. 
+* **Fine-tuning** is the process of transferring this knowledge to a specific task e.g., is a tweet racially offensive or not?
+
+---
+
+## Fine-tuning
+* Fine-tuning **uses labelled data** from the application to train **additional application-specific parameters**
+* Application-specific parameters could be a single layer neural network on top of the BERT architecture
+* Even though we are training a new model, maybe a classifier, we need signficantly less labelled data because there is a lot of language-based information already stored in the pre-train model which will be ultilsed for the task. 
+* Fine-tuning might:
+    * **freeze** the pre-trained language model parameters
+    * **allow updates** to be made to some or all of the pre-trained language model parameters
+
+--- 
+
+## Text classification with BERT
+* *E.g., Is a tweet **racially offensive** or **not**?*
+    * `[CLS]` token is used to stand for the entire sequence
+    * `[CLS]` is part of the vocabulary and  must be pre-pended to all input  sequences during pre-training and fine-tuning
+    * `[CLS]` is the input to a classifier head, e.g., logistic regression, which makes relevant **decision**
+    * learn a set of weights $W_c$ which maps output vector for `[CLS]` to a set of scores for the possible classes
+    * Pass input text through **pre-trained language model** to generate $y_{cls}$ (single cls token), multiply it by $W_c$ and then pass this through **softmax** $$𝒚=softmax(𝑾_c * 𝒚_{cls})$$
+    * Fine-tuning **requires** input sequences labelled with appropriate class
+    * **Cross-entropy loss** between softmax output and correct label drives backpropagation
+    * Weights can be updated just for $W_c$ (pre-trained language model is frozen) or in the pre-trained language model as well
+
+![BERT with Head](./files/week_8/bert_with_head.png)
+
+> Recall that the word representation input to a BERT is not raw strings, nor are you feeding in static "one-hot" vectors or pre-trained Word2Vec vectors. Instead, BERT uses a Trainable Embedding Layer that converts token IDs into high-dimensional vectors. 
+> 
+> A one-hot vector for a 30,000-word vocabulary would be 30,000 dimensions long (mostly zeros with a single "1"). This is incredibly inefficient for a neural network to process.
+> 
+> Instead, BERT uses an Embedding Matrix. Think of this as a giant "lookup table" of shape $30,000 \times 768$. Every word (token) in the vocabulary is assigned a unique ID (an integer from 0 to 30,000). When "pizza" (ID: 1074) enters the model, BERT simply "grabs" the 1074th row of that matrix. That row is a 768-dimensional vector of floating-point numbers. For the initial pre-trianing, this starts as a randomly initalized matrix of floating point numbers. 
+>
+> To get the final vector that actually enters the first Transformer layer, BERT sums three different types of embeddings together: Token Embeddings (768-dimensional vector),  Segment Embeddings (binary A or B), Positional Embeddings. 
+>
+> While Word2Vec produces vectors, those are static. In the BERT era, the embedding layer is part of the model itself.
+
+![BERT Full](./files/week_8/BERT_encoder_full.png)
+
+---
+
+## Code for BERTclassifer
+This is code from Lab 9 where we will be looking at doing classification with BERT. One thing we will be doing is using the simple `BertClassifier` class. 
+* We pick up a pre-trained BERT model using `self.bert = BertModel.from_pretrained('bert-base-uncased')`
+* The bolt on classifier is just a simple linear layer `self.linear = nn.Linear(768, num_classes)`
+* In the forwardpass, the input `input_id` goes into the `self.bert` layer. To generate the `last_hidden_layer` and the `pooled_output`.
+* We are only using the `pooled_output` but you could pick up the `last_hidden_layer` and apply a custom pooling. Could also adapt the bert so that the output is the `CLS` rather than a pooled output. 
+* Remember, in this pipeline, the linear part is what is being trained. 
+
+```
+#now we need to put a simple classification layer on top of BERT
+
+from torch import nn
+from transformers import BertModel
+
+class BertClassifier(nn.Module):
+
+    def __init__(self, dropout=0.5, num_classes=2):
+
+        super(BertClassifier, self).__init__()
+
+        self.bert = BertModel.from_pretrained('bert-base-uncased')
+        self.dropout = nn.Dropout(dropout)
+        self.linear = nn.Linear(768, num_classes)
+        self.relu = nn.ReLU()
+
+    def forward(self, input_id, mask):
+
+        last_hidden_layer, pooled_output = self.bert(input_ids=input_id, attention_mask=mask, return_dict=False)
+        dropout_output = self.dropout(pooled_output)
+        linear_output = self.linear(dropout_output)
+        final_layer = self.relu(linear_output)
+
+        return final_layer
+```
+
+---
+
+## Freezing layers
+* Switch off requiring the gradient for the BERT
+* Advantage of Freezing is speed and avoiding Catastrophic Forgetting through overfitting.
+
+``` 
+model = BERTClassifer(num_classes=len(labels.key())) #init model with labels
+
+# this will freeze the pre-trained BERT model and just make the classification head trainable 
+# can speed things up and avoid "catastophic forgetting"/overfitting on task-specific data
+model.bert.requires_grad(False)
+```
+
+---
+
+## Pairwise Sequence Classification
+Above we were thinking about a single sequence and how we might classify it by bolting on a classification head on top of the BERT and processing the CLS token. 
+
+Another common task we might be working with is Pairwise Sequence Classifcation. This is generally the task of trying to determine if two sequences entail or contradict each other?
+
+Entailment can be a complicated and needs to be defined, i.e. it could can directioned relationships where one sequence entails another but not the other way round.
+
+1. “I’m confused”
+2. “It is not completely clear to me”
+3. “I’m confused about transfer learning”
+4. “Everything is really clear to me”
+
+#### What are the ways of turning this into a classification task?
+* Concatenate the sentences, separated by the [SEP] token. This is the BERT method. Costly as it needs to cpature every pair but accurate.
+* Proceed as for single sequence classification. Much quicker in training and inference. 
+* OR use something like SBERT.
+
+---
+
+## Sequence Labelling with BERT
+*E.g., POS tagging or NER*
+
+Simplest approach is to pass each output from BERT to a simple classifier, or pass it to a CRF which considers tag-level transitions as well.
+
+Complications can arise from subword tokenization
+
+The simplest approach is to use the first subword token from each word
+
+![Seq Label with Bert](./files/week_8/bert_seq_label.png)
 
 ---
 
@@ -5536,17 +5695,85 @@ Schick and Schütze (2021): Exploiting Cloze Questions for Few Shot Text Classif
 
 Schick and Schutze (2021) introduce Pattern-Exploiting Training (PET), a semi-supervised training procedure that reformulates input examples as cloze-style phrases to help language models understand a given task. Once you have read the paper, consider the following questions.
 
-1. What do you understand by the term few-shot learning? Why is it important /challenging in NLP?
-2. What is a Cloze question or Cloze-style phrase?
-3. What is pattern-verbalizer pair (PVP)? Give some examples of your own that might be used for different tasks e.g., sentiment classification and paraphrasing
-4. How are the PVPs used in training and inference?
-5. What is catastrophic forgetting and how is it avoided?
-6. How are di↵erent PVPs used to create a final model?
-7. What is iPET?
-8. What experiments did the authors carry out to demonstrate the e↵ectiveness of their approach? What do you think of the results?
-9. What does the analysis in section 5 tell us?
-10. What are the main conclusions? Are you convinced? Would you use this approach?
+1. [What do you understand by the term few-shot learning? Why is it important /challenging in NLP?](#1-what-do-you-understand-by-the-term-few-shot-learning-why-is-it-important-challenging-in-nlp)
+2. [What is a Cloze question or Cloze-style phrase?](#2-what-is-a-cloze-question-or-cloze-style-phrase)
+3. [What is pattern-verbalizer pair (PVP)? Give some examples of your own that might be used for different tasks e.g., sentiment classification and paraphrasing](#3-what-is-pattern-verbalizer-pair-pvp-give-some-examples-of-your-own-that-might-be-used-for-different-tasks-eg-sentiment-classification-and-paraphrasing)
+4. [How are the PVPs used in training and inference?](#4-how-are-the-pvps-used-in-training-and-inference)
+5. [What is catastrophic forgetting and how is it avoided?](#5-what-is-catastrophic-forgetting-and-how-is-it-avoided)
+6. [How are different PVPs used to create a final model?](#6-how-are-different-pvps-used-to-create-a-final-model)
+7. [What is iPET?](#7-what-is-ipet)
+8. [What experiments did the authors carry out to demonstrate the effectiveness of their approach? What do you think of the results?](#8-what-experiments-did-the-authors-carry-out-to-demonstrate-the-effectiveness-of-their-approach-what-do-you-think-of-the-results)
+9. [What does the analysis in section 5 tell us?](#9-what-does-the-analysis-in-section-5-tell-us)
+10. [What are the main conclusions? Are you convinced? Would you use this approachy?](#10-what-are-the-main-conclusions-are-you-convinced-would-you-use-this-approach)
 
+---
+
+#### 1. What do you understand by the term few-shot learning? Why is it important /challenging in NLP?
+
+
+
+---
+
+#### 2. What is a Cloze question or Cloze-style phrase?
+
+---
+
+#### 3. What is pattern-verbalizer pair (PVP)? Give some examples of your own that might be used for different tasks e.g., sentiment classification and paraphrasing
+
+
+---
+
+#### 4. How are the PVPs used in training and inference?
+* Section 3.1
+* M is a masked language model
+* Find the score for each label given each training input by finding the unnormalized score that M assigns to each verbalizer at the masked position in the input
+* Obtain a probability distribution over labels using softmax
+* Use cross-entropy loss between predicted distribution and true distribution as loss for finetuning M for p.
+
+---
+
+#### 5. What is catastrophic forgetting and how is it avoided?
+Overfitting to the fine-tuning data and loosing the underlying langauge weights
+
+It is avoided in the paper by using language modelling as an auxiliary task to anchor the weights as sort of regularizer
+
+---
+
+#### 6. How are different PVPs used to create a final model?
+Fine-tune the language model for each PVP based on the small set of labelled examples
+
+Use the fine-tuned ensemble models to annotate **some** examples from the unlablled set D
+
+This provides a soft label for each other unlabled examples in the subset of D
+
+Fine-tune a new model is a standard seq classifciation head using this bolstered dataset of soft-labelled examples
+
+It is a way of essentially creating a larger dataset of synthetic training data
+
+---
+
+#### 7. What is iPET?
+
+
+---
+
+#### 8. What experiments did the authors carry out to demonstrate the effectiveness of their approach? What do you think of the results?
+
+---
+
+#### 9. What does the analysis in section 5 tell us?
+* Large gap in performance for different PVPs but PET compensates for this
+* Distillation helps
+* Auxiliary language modelling helps more for small number of training examples
+* More model generations seems to help iPET
+* In-domain pretraining helps PET and other models
+
+---
+
+#### 10. What are the main conclusions? Are you convinced? Would you use this approach?
+
+
+---
 
 ## Week 8: Lab
 Lab 9b; Bonus lab!
