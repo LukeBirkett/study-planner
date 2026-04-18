@@ -5551,17 +5551,6 @@ We also examined the broader ecosystem of the **BERT Family**—including optimi
 
 ---
 
-## Discussion Exercise
-You want to build a classifier which can detect racially offensive language in tweets.
-
-You have collected 500 examples of racially offensive tweets, all posted on X in the last 7 days.
-
-* What are your options in terms of building a classifier?
-* What are the advantages and disadvantages of each?
-* Are there any other considerations?
-
----
-
 ## Transfer Learning through Fine
 
 * **Transfer learning:** acquiring knowledge from one task or domain and then applying (transferring) it to solve a new task.
@@ -5708,70 +5697,200 @@ Schick and Schutze (2021) introduce Pattern-Exploiting Training (PET), a semi-su
 
 ---
 
-#### 1. What do you understand by the term few-shot learning? Why is it important /challenging in NLP?
-
-
-
----
-
-#### 2. What is a Cloze question or Cloze-style phrase?
+### 1. What do you understand by the term few-shot learning? Why is it important /challenging in NLP?
+**Few-shot learning** refers to the challenge of training a machine learning model to generalize to a new task using only a minimal amount of labeled data—typically ranging from 10 to 100 examples. In the context of NLP, this is critically **important** because the "messy engineering reality" often involves niche domains (like legal or medical sub-specialties) where human annotation is prohibitively expensive or time-consuming. It is **uniquely challenging** because standard supervised fine-tuning relies on a "signal" from gradients to update millions of parameters. When the training set is tiny, the gradient signal is too weak to overcome the "random noise" of newly initialized layers, often leading to **catastrophic forgetting** — where the model overfits to the idiosyncratic quirks of the few examples provided and loses its broader linguistic reasoning capabilities.
 
 ---
 
-#### 3. What is pattern-verbalizer pair (PVP)? Give some examples of your own that might be used for different tasks e.g., sentiment classification and paraphrasing
+### 2. What is a Cloze question or Cloze-style phrase?
+A **Cloze question** is a linguistic exercise where a portion of a sentence or phrase is replaced with a blank or a "mask" token, requiring the participant to provide the missing information based on the surrounding context. In traditional education, this is known as a "fill-in-the-blank" test.
 
-
----
-
-#### 4. How are the PVPs used in training and inference?
-* Section 3.1
-* M is a masked language model
-* Find the score for each label given each training input by finding the unnormalized score that M assigns to each verbalizer at the masked position in the input
-* Obtain a probability distribution over labels using softmax
-* Use cross-entropy loss between predicted distribution and true distribution as loss for finetuning M for p.
+In the context of NLP models like BERT, this format is the primary mechanism for **Masked Language Modeling (MLM)** during pre-training. By providing a Cloze-style phrase like `"The capital of France is [MASK],"` we force the model to use its internal distributional knowledge to predict the most likely token. The genius of the PET paper is that it repurposes this "cloze" format as a synthetic task description. Instead of asking the model to recover a word that was actually there, we append an artificial blank (e.g., `"The movie was great. It was [MASK]."`) to "trick" the model into expressing its latent semantic understanding of a specific classification task.
 
 ---
 
-#### 5. What is catastrophic forgetting and how is it avoided?
-Overfitting to the fine-tuning data and loosing the underlying langauge weights
+### 3. What is pattern-verbalizer pair (PVP)? Give some examples of your own that might be used for different tasks e.g., sentiment classification and paraphrasing
+A **Pattern-Verbalizer Pair (PVP)** is a two-part linguistic bridge that transforms a standard classification problem into a "completion" task that a pre-trained language model can understand without adding any new, noisy layers.
+* **The Pattern ($P$):** A template function that reformulates the input text into a sentence containing exactly one `[MASK]` token (e.g., adding `"It was [MASK]"` to a review).
+* **The Verbalizer ($v$):** A mapping function that connects your abstract data labels to real-world tokens in the model's vocabulary (e.g., mapping the label `1` to the word "great").
 
-It is avoided in the paper by using language modelling as an auxiliary task to anchor the weights as sort of regularizer
+By combining these, you provide the model with a "natural" context that allows it to use its pre-trained linguistic intuition rather than learning a mathematical mapping from scratch.
 
----
+#### 1. Sentiment Classification (Topic: Restaurant Reviews)
+* Input ($x$): "The pasta was cold and the waiter was rude."
+* Pattern ($P$): `[Input] Summary: The experience was [MASK].`
+* Verbalizer ($v$):
+    * `Negative` $\rightarrow$ "awful"
+    * `Positive` $\rightarrow$ "delightful"
 
-#### 6. How are different PVPs used to create a final model?
-Fine-tune the language model for each PVP based on the small set of labelled examples
+#### 2. Paraphrasing (Topic: Semantic Equivalence)
+* **Input ($x_1, x_2$):** "The sun is shining" and "It is a sunny day"
+* **Pattern ($P$):** `[Sentence 1]. In other words, [Sentence 2]. This is [MASK]`.
+* **Verbalizer ($v$)**:
+    * `Paraphrase` $\rightarrow$ "true"
+    * `Not Paraphrase` $\rightarrow$ "false"
 
-Use the fine-tuned ensemble models to annotate **some** examples from the unlablled set D
-
-This provides a soft label for each other unlabled examples in the subset of D
-
-Fine-tune a new model is a standard seq classifciation head using this bolstered dataset of soft-labelled examples
-
-It is a way of essentially creating a larger dataset of synthetic training data
-
----
-
-#### 7. What is iPET?
-
-
----
-
-#### 8. What experiments did the authors carry out to demonstrate the effectiveness of their approach? What do you think of the results?
-
----
-
-#### 9. What does the analysis in section 5 tell us?
-* Large gap in performance for different PVPs but PET compensates for this
-* Distillation helps
-* Auxiliary language modelling helps more for small number of training examples
-* More model generations seems to help iPET
-* In-domain pretraining helps PET and other models
+#### 3. Topic Classification (Topic: News Headlines)
+* **Input ($x$):** "Apple announces new MacBook Pro with M3 chip."
+* **Pattern ($P$):** Category: [MASK]. News: [Input]
+* **Verbalizer ($v$):**
+    * `Business` $\rightarrow$ "Economy"
+    * `Tech` $\rightarrow$ "Technology"
+    * `Sports` $\rightarrow$ "Games"
 
 ---
 
-#### 10. What are the main conclusions? Are you convinced? Would you use this approach?
+### 4. How are the PVPs used in training and inference?
+In PET, the Pattern-Verbalizer Pair (PVP) acts as a "filter" that repurposes the existing Masked Language Modeling (MLM) architecture for classification. Here is the step-by-step mathematical process for both training and inference:
 
+#### Step 1: Input Transformation
+Given a raw input $x$ (like a movie review), we apply the Pattern $P$ to transform it into a Cloze-style sequence $P(x)$ that contains exactly one [MASK] token.
+* "The film was boring." $\rightarrow$ "The film was boring. It was [MASK]."
+
+#### Step 2: Scoring the Labels ($s_{\mathbf{p}}$)
+We pass this sequence into the pre-trained model $M$. Instead of looking at the entire 50,000-word vocabulary output, we target only the specific indices of the words defined in our Verbalizer $v$.
+
+For each possible label $l \in \mathcal{L}$, we extract the unnormalized logit that the model assigns to the word $v(l)$ at the masked position. This is represented as:
+
+$$s_{\mathbf{p}}(l \mid \mathbf{x}) = M(v(l) \mid P(\mathbf{x}))$$
+
+If our labels are "Positive" and "Negative," and our verbalizer maps them to "great" and "terrible," we are simply grabbing the raw numerical "volume levels" the model produced for those two specific words.
+
+> When BERT/RoBERTa processes a sentence with a [MASK], its final hidden layer produces a single vector of numbers (usually 768 or 1024 dimensions) for that specific position.
+> 
+> The model then performs a Vocabulary Projection. It multiplies that hidden vector by a massive weight matrix (the "MLM Head") that has one row for every word in its vocabulary. The result is a 1x50,000 vector of raw scores (Logits). This is the "original" thing the model does. It calculates a "fit" score for every word it knows, from "aardvark" to "zebra."
+> 
+> In a standard pre-training task, the model would softmax all 50,000 scores to find the most likely word. In PET, we perform a "lookup and slice" operation: We look at our Verbalizer. If our verbalizer only uses the words "great" and "terrible," we find the specific ID numbers (indices) for those two words. We "reach in" to that massive 50,000-long vector and pull out only the scores sitting at those two indices.
+
+#### Step 3: Probability Distribution ($q_{\mathbf{p}}$)
+To turn these raw scores into a valid prediction, we apply a Restricted Softmax. This forces the model to distribute 100% of its probability mass only among our chosen labels, effectively ignoring the rest of the dictionary:
+
+$$q_{\mathbf{p}}(l \mid \mathbf{x}) = \frac{e^{s_{\mathbf{p}}(l \mid \mathbf{x})}}{\sum_{l' \in \mathcal{L}} e^{s_{\mathbf{p}}(l' \mid \mathbf{x})}}$$
+
+#### Step 4: Training (Loss Computation)
+During training, we have a small set of labeled examples $\mathcal{T}$. For each example, we know the "true" label. We calculate the Cross-Entropy Loss between our predicted distribution ($q_{\mathbf{p}}$) and the True (One-Hot) Distribution.
+* If the review is "Negative," the target is 1.0 for "terrible" and 0.0 for "great."
+* The error (difference) is backpropagated through the entire model $M$, updating the weights so that the model becomes better at predicting the correct verbalizer for that specific task.
+
+#### Step 5: Inference
+During inference, we follow the same scoring and softmax steps. We don't update any weights; we simply pick the label $l$ that achieved the highest probability $q_{\mathbf{p}}$. Because the model was already a "language expert" before we started, it requires very few of these updates to become a "task expert."
+
+---
+
+### 5. What is catastrophic forgetting and how is it avoided?
+**Catastrophic forgetting** occurs when a pre-trained model is fine-tuned on a very small, specific dataset and effectively "overwrites" the general linguistic knowledge it acquired during its massive pre-training phase. Because the gradient updates from only 10 or 50 examples are so concentrated, the model "warps" its internal weights to perfectly satisfy those few examples. While it might become a "specialist" for those 10 sentences, it loses its ability to reason about the general structure, grammar, and nuances of the broader language, becoming brittle and prone to overfitting.
+
+#### How PET Avoids It: The Auxiliary Loss
+The authors avoid this by forcing the model to multi-task. While the model is learning your specific classification task, it is simultaneously forced to keep doing its "day job" — **Masked Language Modeling (MLM)**. This is achieved through an **Auxiliary Loss** mechanism:
+1. **The Task Loss ($L_{\text{CE}}$):** This measures how well the model predicts your specific verbalizer words (e.g., "awful" vs "delightful").
+2. **The Anchor Loss ($L_{\text{MLM}}$):** Using the unlabeled dataset, the model is asked to predict random masked words (like "the," "restaurant," or "ate") in the same way it did during its original pre-training on Wikipedia.
+3. **The Weighted Combination:** The total loss is calculated as:
+$$L = (1 - \alpha) \cdot L_{\text{CE}} + \alpha \cdot L_{\text{MLM}}$$
+
+#### The Role of Alpha ($\alpha$)
+By setting $\alpha$ to a very small value (the paper uses $10^{-4}$), the auxiliary task acts as a **regularizer**. It creates mathematical "friction" against the task-specific updates. It tells the model: "You can change your weights to learn this new sentiment task, but you aren't allowed to change them so much that you forget how to predict basic English words in the unlabeled data." This constant "reminder" of what normal English looks like keeps the model's general reasoning "warm" while it learns the specialized patterns of your specific dataset.
+
+---
+
+### 6. How are different PVPs used to create a final model?
+
+#### Phase 1: Training the Ensemble of Teachers
+The process begins by training a set of "Teacher" models. Because it is difficult to know which specific pattern (the "Pattern") or which specific words (the "Verbalizer") will most effectively unlock the model's pre-trained knowledge, the researchers don't gamble on just one. Instead, they define a diverse set of PVPs—for example, one might use "It was [MASK]" while another uses "The reviewer felt [MASK]." A separate version of the language model is fine-tuned for every single PVP using the tiny available set of labeled examples. This results in an **ensemble**, where each model is a "specialist" in seeing the task through its own specific linguistic lens.
+
+#### Phase 2: Generating the Synthetic Dataset
+Once the ensemble is trained, it is used to annotate a much larger, unlabeled dataset. Each model in the ensemble "votes" on the label for every unlabeled sentence. Rather than producing a simple "True/False" answer, the ensemble produces **soft labels** — probability distributions that might indicate a sentence is 88% likely to be "Positive" and 12% likely to be "Negative." This step is crucial because it aggregates the "collective wisdom" of all the different patterns, effectively canceling out the noise or bias of any single poorly designed PVP. This phase transforms a pile of raw, unlabeled text into a massive "silver-standard" training set.
+
+#### Phase 3: Distilling Knowledge into the Student
+The final stage involves Knowledge Distillation, where the insights of the complex ensemble are transferred into a single "Student" model. This Student is a standard BERT model with a traditional sequence classification head—the kind that sits on the [CLS] token. We train this Student using the massive synthetic dataset created in the previous step. Because the Student is learning from "soft labels," it inherits the "Dark Knowledge" (the nuances and uncertainties) of the ensemble.
+
+#### Why this structure is preferred
+By the end of this process, the "Cloze" patterns and the multiple teacher models are discarded entirely.
+
+The final result is a single, fast, and high-performance classifier. This approach allows the final model to benefit from the data-efficiency of prompting (the teachers) while maintaining the inference speed and simplicity of a standard classifier (the student). Essentially, PET uses a sophisticated linguistic "scaffolding" to build a massive training set out of thin air, then removes that scaffolding to leave behind a polished, specialist model.
+
+---
+
+### 7. What is iPET?
+**iPET (Iterative Pattern-Exploiting Training)** is the advanced, recursive version of PET designed to overcome the "bottleneck" of human error in prompt design. While standard PET is a one-time process, iPET uses a **multi-generational approach** to help the model "self-correct" and improve its own training data.
+
+The core motivation for iPET is that some human-designed patterns are naturally weaker than others. In a standard ensemble, a "bad" pattern can poison the synthetic dataset with mislabeled examples. iPET solves this by letting the models "teach" each other across several rounds.
+
+#### The iPET Process: "Generational Learning"
+The iterative loop follows these logical stages:
+1. **Generation 0:** You start with the same 10-50 labeled examples and several different PVPs (Patterns). You train your initial ensemble of "Teachers."
+2. **The Confident Selection:** Instead of labeling the entire unlabeled dataset immediately, each model looks at a random subset of unlabeled data. It only "keeps" the examples where it is extremely confident (e.g., the top 100 highest-probability sentences).
+3. **Knowledge Sharing:** These new, "silver-labeled" examples are added to the original training pool. Critically, a model doesn't learn from its own predictions; it learns from a random subset of other models in the ensemble. This prevents a model from simply reinforcing its own mistakes (confirmation bias).
+4. **Generation 1, 2, 3...:** This larger dataset is used to train a new generation of Teachers. Because the training set has grown (e.g., from 10 to 500 examples), even the "awkward" patterns now have enough data to understand how they should behave.
+
+#### Why the Iteration is Necessary
+The authors found that increasing the training set size gradually is better than doing it all at once. If you label too many examples too early, the percentage of "noise" (mislabeled data) is too high, and the final model will be inaccurate. By using iPET, you are performing a "slow-cook" distillation: you only accept the most obvious labels first, and as the model becomes an "expert," it becomes qualified to label the more difficult, nuanced sentences in later generations.
+
+---
+
+### 8. What experiments did the authors carry out to demonstrate the effectiveness of their approach? What do you think of the results?
+The authors tested their framework across a diverse range of four distinct NLP tasks to ensure the results weren't specific to one type of logic:
+* **Sentiment Analysis (Yelp/Amazon):** Mapping 1-5 star reviews to their corresponding labels.
+* **Topic Classification (AG's News/Yahoo):** Sorting articles into categories like Business, Sci/Tech, or Sports.
+* **Natural Language Inference (MNLI/RTE):** Determining if a premise entails or contradicts a hypothesis.
+* **Paraphrasing (QQP):** Identifying if two questions share the same semantic meaning.
+
+They specifically targeted low-resource settings, simulating environments with only 10, 50, or 100 labeled examples. To ensure a fair fight, they compared PET against "Supervised BERT" (the standard fine-tuning you've studied) and "Unsupervised Prompting" (like GPT-style zero-shot).
+
+---
+
+#### Key Findings
+
+**The "Crushing" of Supervised Baselines:** With only 10 examples, standard supervised learning performed barely better than random chance. PET, however, achieved accuracies 20-40% higher, often matching the performance that a standard model would only reach with 1,000+ examples.
+
+**iPET vs. PET:** The iterative version consistently outperformed the one-shot version, proving that "generational learning" successfully filters out the noise from weak patterns.
+
+**Cross-Lingual Success:** They showed that PET works equally well in languages other than English (testing on German tasks), highlighting the universality of the Pattern-Verbalizer approach.
+
+---
+
+#### Analysis of the Results
+
+##### 1. The Myth of the "Small Data" Barrier
+The results prove that "lack of data" is often actually a "lack of communication." The model already knows the answer; it just doesn't understand the question when presented as an abstract label (0 or 1). By using PVPs, the authors proved that we can bridge this gap. The fact that 10 examples + PET can beat 1,000 examples + Standard Fine-tuning is a staggering win for data efficiency.
+
+##### 2. The Robustness of the Ensemble
+What I find most impressive is the Ablation Study where they intentionally included "bad" patterns. The results showed that the ensemble and distillation process were so robust that the final student model remained accurate despite being taught by a few "confused" teachers. This makes the approach practical for real-world engineers who might not be linguistic experts.
+
+---
+
+The results suggest that the "Classification Head" we've been bolting onto BERT for years is actually a bottleneck. PET reveals that the most powerful way to use a Language Model is to let it stay a Language Model and simply reframe our problems to fit its native tongue.
+
+---
+
+### 9. What does the analysis in section 5 tell us?
+
+#### The "Safety Net" of the Ensemble
+The analysis reveals a massive performance gap between different PVPs — sometimes as high as 10-15% accuracy. This confirms your earlier suspicion: human intuition is a bottleneck, and some "slices" are objectively worse than others. However, the data shows that the **PET ensemble effectively compensates** for this. The combined "wisdom" of the models consistently outperforms even the best single pattern in the set. This proves that you don't need to be a linguistic genius to use PET; you just need to provide a variety of "reasonable" patterns, and the math will filter out the duds.
+
+#### The Power of Distillation and Auxiliary Tasks
+The researchers found that **Distillation brings consistent improvements** over simply using the raw ensemble. By training a single student model on the collective soft labels, the model becomes more robust and significantly faster for real-world use. Furthermore, the Auxiliary Language Modeling task proved to be a critical "anchor" for very small datasets. The analysis shows that when you only have 10 examples, the auxiliary task is vital for preventing the model from "warping" its weights. Interestingly, as the dataset size grows to 1,000 examples, this anchor becomes less necessary, as the task-specific signal is finally strong enough to stand on its own.
+
+#### Iteration and Domain Adaptation
+Regarding **iPET**, the analysis confirms that **more model generations lead to better performance**, but only if the growth is gradual. If you try to jump from 10 examples to 10,000 in one step, the "noise" from early mislabeled examples poisons the model. Slow, generational learning is the key to high-fidelity synthetic data. Finally, the authors addressed the "Unlabeled Data" question. While **In-domain pre-training** (training on the raw text of Yelp or Yahoo before starting PET) helps all models, it doesn't close the gap. This proves that PET’s success isn't just because it "saw" more data — it’s because the **Cloze-style** formatting is a fundamentally better way to communicate with the model.
+
+---
+
+### 10. What are the main conclusions? Are you convinced? Would you use this approach?
+The paper concludes that Pattern-Exploiting Training (PET) is a highly effective semi-supervised method for low-resource NLP. By reformulating classification tasks as Cloze-style questions, the authors proved that we can leverage the "latent knowledge" already present in pre-trained models. The main takeaways are that task descriptions (prompts) are a more efficient interface than random classification heads for few-shot learning, and that Knowledge Distillation can turn a complex ensemble of "teachers" into a fast, standard "student" classifier.
+
+The paper solves two major problems: the "Initialization Bottleneck" (where a new head is too noisy for a small dataset) and "Catastrophic Forgetting" (where the model loses its general intelligence). The most compelling part of the results is the data-to-performance ratio; the fact that PET with 10 examples can rival a standard model with 1,000 examples suggests that we have been "under-utilizing" the native reasoning of Large Language Models by forcing them into rigid, non-linguistic output formats.
+
+#### When to use this approach?
+If you are working on a specialized project (e.g., classifying legal clauses or rare medical symptoms) where you only have a few dozen labeled examples but thousands of unlabeled ones. In this scenario, PET is a "practical lightweight weapon" compared to the brute force of trying to label more data.
+
+I would use the iPET loop if my task were nuanced and difficult to describe in one single pattern. The ability of the model to "self-correct" through generational learning makes it much safer than relying on a single, potentially flawed human prompt.
+
+#### When to skip this approach?
+If you have 10,000+ labeled examples, PET’s complexity (designing PVPs and training ensembles) is likely not worth the overhead, as standard fine-tuning will converge effectively with that much data.
+
+---
+
+Ultimately, PET is the perfect "bootstrap" tool. It allows you to move from a "Zero/Few-Shot" state to a "Supervised" state by using the model itself to generate the training data you need. It represents a smarter, more communicative way of working with AI.
 
 ---
 

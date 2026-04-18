@@ -171,6 +171,13 @@ Rather than jumping straight to the final classifier, we expand the training set
 * **PET:** One-shot distillation. You trust your patterns are good and train the student immediately.
 * **iPET:** Multi-stage distillation. You assume your patterns might be bad and use the model's own confidence to "self-correct" and grow the training data before the final distillation.
 
+| Feature | PET (Standalone) | iPET (Iterative) |
+| :--- | :--- | :--- |
+| Logic | Trust the patterns and the initial 10 examples. | Doubt the patterns; use the model to "fix" itself. |
+| Data | One-pass labeling of the unlabeled set. | Multi-pass labeling (growing the set). |
+| Speed | Fast to train; ready in one afternoon. | Slower; requires multiple training generations. |
+| Best Use Case | When your patterns are "obvious" or "gold."" |"When your task is nuanced or patterns are "experimental." |
+
 --- 
 
 ## 6. The "Dark Knowledge" (Temperature)
@@ -539,3 +546,4 @@ We finetune models for all pattern-verbalizer pairs and use them to create large
 When the initial amount of training data is limited, PET gives large improvements over standard supervised training and strong semi-supervised approaches.
 
 ---
+
