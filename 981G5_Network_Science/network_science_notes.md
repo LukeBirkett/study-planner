@@ -122,6 +122,7 @@ associated weights: the weighted link $(i,j,w)$ between nodes $i$ and $j$ has we
 <br>
 <br>
 
+
 # Python and NetworkX
 
 ### Undirected Networks
@@ -244,11 +245,12 @@ Examples of tree networks include phylogenetic trees, water distribution or powe
 
 > **Why do we care about components and disconnects?** This is linked to redunancy, reliliance and robustness measures. We test these by attacking the network. Interconnectness and Density is a big factor in how these attacks are handled, and/or spread. A high density network means more redundancy, which means it will be more resiliant to attack/changes. 
 
+---
+<br>
 <br>
 
----
 
-## Density and Sparsity
+# Density and Sparsity
 
 ### Undirected Networks
 
@@ -351,6 +353,9 @@ Even with one trillion links, the density of Facebook is 0.000001.
 This demonstrates that Facebook is a sparse network. Most real-world networks are sparse because while the number of links ($L$) usually grows linearly with $N$, the capacity for links ($L_{max}$) grows quadratically ($N^2$). As a network grows, it becomes mathematically "emptier."
 
 ---
+<br>
+<br>
+
 
 # Subnetworks
 
@@ -359,6 +364,9 @@ A subnetwork is a network obtained by selecting a subset of the nodes and all of
 ```S = nx.subgraph(G, node_list)```
 
 ---
+<br>
+<br>
+
 
 # Degree
 
@@ -382,6 +390,9 @@ D.degree(4) # total degree
 ```
 
 ---
+<br>
+<br>
+
 
 # Average Degree
 
@@ -396,6 +407,9 @@ This tells us that Density ($d$) is essentially the probability that any two nod
 While the "Average Degree" tells you the typical connectivity, it doesn't tell you if the network has "hubs." For that, we use $\kappa$ (Kappa). The Heterogeneity Parameter ($\kappa$): $$\kappa = \frac{\langle k^2 \rangle}{\langle k \rangle^2}$$
 
 ---
+<br>
+<br>
+
 
 # Excess Degrees
 The excess degree of a node with degree $k$ is formally defined as $k - 1$. This represents the number of available edges to continue a process—such as the spread of a rumor or a virus—after accounting for the specific edge used to arrive at that node.
@@ -414,7 +428,9 @@ This distinction is critical for understanding network dynamics like epidemiolog
 
 This explains why infections can surge through a population far faster than a simple average of social contacts would suggest. By linking these concepts to the Heterogeneity Parameter ($\kappa$), we can see that as a network becomes more "hub-heavy," its capacity to transport information or disease increases exponentially, regardless of how sparse the overall network might appear.
 
-#### Node-Based vs Network-Based Metric
+---
+
+### Node-Based vs Network-Based Metric
 Excess Degree is a node-based property, but Mean Excess Degree is a network-wide metric.
 * At the individual level, the excess degree is simply a count. If a specific node has a degree $k=10$, and you arrive at it via one edge, it has an excess degree of $9$.
 
@@ -422,10 +438,14 @@ When we talk about the Mean Excess Degree, we are calculating a single value tha
 
 It works as a network-wide metric because it uses the Degree Distribution of the whole system. As we saw in the formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$, it relies on the first and second moments of all degrees in the network.
 
-#### Formula vs Recursive/Loop
+---
+
+### Formula vs Recursive/Loop
 The formula shown above using the first and second moments gives us the same result as if we were to brute force through the network, checking every node and following its edges to compute the neighbours degrees minus the travelled edge into a global average. 
 
 The logic behind this is easier to see when you consider what happens in the loops. If a node has degree $k$, you will land on it exactly $k$ times (once for each edge connected to it).Each time you land there, you count $(k-1)$ excess edges.So, that specific node contributes $k \times (k-1)$ to your total sum. Ultimately, this is just another way to sum all of the excess degrees and then divide it by the total number of "arrival" edges to turn it into an average, i.e. the first moment. **Mean Excess Degree is essentially a weighted average.**
+
+---
 
 > #### The "Global" Way (The Formula)
 > The formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$ is just the algebraic "collapsed" version of that manual process.
@@ -441,7 +461,9 @@ The logic behind this is easier to see when you consider what happens in the loo
 > 3. The Shift to Moments: Since the average degree $\langle k \rangle$ is $\frac{\sum k}{N}$, and the second moment $\langle k^2 \rangle$ is $\frac{\sum k^2}{N}$, the $N$ constants cancel out, leaving you with:
 > $$q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$$
 
-#### Computational Issues with Recursive Approach
+---
+
+### Computational Issues with Recursive Approach
 If you calculate the mean excess degree by looping through every edge, your complexity is $O(L)$.
 * On a small graph with 100 nodes, a loop is instant.
 * On Facebook ($L \approx 10^{12}$), a simple loop that visits every edge to check the neighbor's degree would take days or weeks on a standard CPU.
@@ -460,6 +482,9 @@ Using the Degree Distribution—which is essentially just a list of numbers—al
 > The reason we $2L$ is because $\langle k \rangle$ is "ignorant" of the fact that an edge has two ends meaning they are double counting in the summation of the average calcuation. 
 
 ---
+<br>
+<br>
+
 
 # Strength
 
@@ -483,10 +508,15 @@ There are some rules that we apply to networks for simplification purposes:
 * There can only be a single link between nodes (or two for directed networks). 
 
 ---
+<br>
+<br>
 
 # Network Representations
 
-#### Adjacency Matrix
+<br>
+<br>
+
+## Adjacency Matrix
 
 Adjacency Matrix: $N × N$ matrix where each element $a_{ij} = 1$ if $i$ and $j$ are adjacent, otherwise $0$. The diagonal elements ($a_{ii}$) will always be zero because of the no self-loops rule. 
 
@@ -499,13 +529,17 @@ G[3][4]['color']='blue'
 print(G[4])
 ```
 
-#### AM, Undirected, Degrees in Cols/Rows
+---
+
+### AM, Undirected, Degrees in Cols/Rows
 
 In an undirected network, the degree for a node can be calculated by summing the matrix accross the relevant row or column:
 
 $$k_{i} = \sum_{j} a_{ij} = \sum_{j} a_{ji}$$
 
-#### AM, Directed, In/Out Degrees in Cols/Rows
+---
+
+### AM, Directed, In/Out Degrees in Cols/Rows
 
 This does not work exactly the same for a directed network because the matrix is not symmetric meaning the rows and columns do not mean the same thing. Here the rows hold a nodes out-degree and the columsn hold the in-degree. 
 
@@ -513,7 +547,9 @@ $$k_{i}^{out} = \sum_{j} a_{ij}$$
 
 $$k_{i}^{in} = \sum_{j} a_{ji}$$
 
-#### AM, Weighted, Stength in Cols/Rows
+---
+
+### AM, Weighted, Stength in Cols/Rows
 
 In weighted networks, element $w_ij$
 represents the weight of the link between $i$ and $j$. It is $0$ if there is no link.
@@ -524,15 +560,20 @@ If undirected, the strength is obtained by summing adjacency matrix elemetns acr
 W.degree(4, weight='weight') # strength
 ```
 
-#### Matrix Poor Respresentation of Networks
+---
+
+### Matrix Poor Respresentation of Networks
 
 However, it should be noted that matrices are poor respresenations for networks because networks are sparse, meaning a lot of the space in the matrix will be empty but the memory will be allocated. The best repsresentation will be an edge list/dictionary. 
 
 **If a matrix is not efficent then why use them?** Becuase it allows us to use linear algebra for the maths. 
 
 ---
+<br>
+<br>
 
-# Adjacency List
+
+## Adjacency List
 
 While an adjacency matrix is a grid of 0s and 1s, an adjacency list is a more compact "address book" for a network. Instead of a giant table showing every possible connection (even the ones that don't exist), you only list the connections that actually are there.
 
@@ -579,6 +620,8 @@ This output is to be interpetted as:
 Meaning each key entry in the adj list is a node, and the numbers to the right are the out-bound connections, from that node. If there are no out bound connections then the node entry will still exist but there will be not numbers to the right of it. 
 
 ---
+<br>
+<br>
 
 # Edge List
 An edge list is the simplest and most common way to store network data. While an adjacency list organizes connections by node, an edge list is just a two-column (or three-column) list where each row represents a single link $(node_1, node_2)$. In a weighted matrix the weight is also included $(node_1, node_2, weight)$.
@@ -597,6 +640,9 @@ W2 = nx.read_weighted_edgelist("wf.edges")
 ```
 
 ---
+<br>
+<br>
+
 
 # Adjanency Matrices and Matrix Multiplication
 
@@ -634,7 +680,9 @@ This calculation and the intution is the backbone behind many other concepts in 
 | $A_2$ | Friends-of-friends | Clustering, Indirect links |
 | $A_n$ | Long-distance paths | Network diameter, Robustness |
 
-#### How Hubs Impact Adjacency Matrices?
+---
+
+### How Hubs Impact Adjacency Matrices?
 
 When you add a hub, the row and column for H will be full of ones. This in turn will hugely impact the result for $\mathbf{A}^2$. In the examples before, $\mathbf{A}^2$ largely just results in the 1's being shifted around the matrix. Nodes that weren't able directly directly accessed in 1 step are opened up with 2 steps. However, with the introduction of a hub, the numbers in $\mathbf{A}^2$ will become larger than 1. 
 
@@ -642,7 +690,9 @@ If there is a path from $X \to H \to Z$ AND a path $X \to Y \to Z$, the entry fo
 
 This is important because the more paths of length 2 between nodes, the more "redundant" and robust the network becomes.
 
-#### "Cliquiness" and the Diagonal
+---
+
+### "Cliquiness" and the Diagonal
 
 To find if a network is "cliquey" (high clustering), we look at the diagonal of the matrix powers. The diagonal represents paths that start and end at the same node. 
 
@@ -651,6 +701,9 @@ For $\mathbf{A}^2$ in a simple directed network without "self-loops," the diagon
 However, with $\mathbf{A}^3$, the diagonal is the "Triangle Detector". If the entry at $(X, X)$ in $\mathbf{A}^3$ is 1, it means there is a path $X \to Y \to Z \to X$. By summing the diagonal of $\mathbf{A}^3$ (called the Trace), scientists count the total number of triangles in the network.
 
 ---
+<br>
+<br>
+
 
 # Week 2 - References/Readings
 
@@ -660,7 +713,9 @@ This is the "Friendship Paradox" paper, tt is a sociology paper, not physics or 
 <br>
 <br>
 <br>
-
+<br>
+<br>
+<br>
 
 # Week 3 - Small Worlds
 
@@ -742,6 +797,9 @@ To actually find these shortest paths, you explored the **Breadth-First Search (
 * [Alternative Clustering: Triplets](#alternative-clustering-triplets)
 
 ---
+<br>
+<br>
+
 
 ## Birds of a Feather
 
@@ -772,6 +830,9 @@ The quantantive way to approach clustering is to count the triangles $\binom{N}{
 | Homophily | Probability of "same-type" connection | Node Attributes (Metadata) |
 
 ---
+<br>
+<br>
+
 
 # Assortativity
 
@@ -792,16 +853,23 @@ There are two possible mechanisms by which assortativity emerges naturally:
 > **Influence:** This can also be a way that connectivity occurs. There is something that pulls you into a network/cluster. "You become who you hang out with." In this mechanism, the connection exists before the similarity develops. Change, and attributes, changing based on the "physical" neighbors.
 
 ---
+<br>
+<br>
+
 
 # Degree Assortativity
 This is a very common topic in Network Science, also known as **degree correlation**. **Degree Assortativity** means that nodes group with other nodes that have **similar degrees**. 
 
 Assortative networks have a **core-periphery structure** with **hubs** in the core, e.g. social networks. 
 
+---
+
 ### Assortative Network
 In an assortative network, nodes do group with nodes that have similar degrees. High-degree nodes (hubs) tend to connect to other high-degree nodes, while low-degree nodes connect to other low-degree nodes. This creates a **"dense core"** of highly connected individuals.
 
 ![assortative_network](./files/week_3/assortative.png)
+
+---
 
 ### Disassortative Network
 
@@ -809,8 +877,15 @@ Disassortative networks have hub-and-spoke (or star) structure, e.g.  Web, Inter
 
 ![disassortative_network](./files/week_3/disassort.png)
 
+---
+<br>
+<br>
+
+
 ### Assortativity in `NetworkX`
 Measuring Assortativity is essentially measuring similarity and there are different ways to do this depending on what you consider "similar" or the "same" to be. There are 3 main optons: Categorical, Numerical and Structural
+
+---
 
 #### Categorical
 This is used for labels or discrete groups (e.g., "blue vs. red," "UK vs. US"). "Are you more likely to be connected to someone in your same category than we would expect by random chance?". If 90% of your friends share your political party, this will return a high positive number (close to 1). This sort of metric is useful for analysis on things like social echo chambers or "tribal" grouping. 
@@ -840,6 +915,9 @@ r = nx.degree_assortativity_coefficient(G)
 | Numerical | "Numbers (Age, Income, Height)" | Do nodes pick similar values? |
 | Degree | "Structure (ki​,kj​)" | Do hubs pick hubs? |
 ---
+<br>
+<br>
+
 
 # Calcualting Structural (Degree) Assortativity
 
@@ -889,6 +967,9 @@ Scientists use the **Degree Correlation Function**, which is a plot where:
 * **The y-axis** ($\langle k_{nn}(k) \rangle$): Represents the average degree of that node's neighbors.
 
 ---
+<br>
+<br>
+
 
 ### Assortivity Python Implementation
 
@@ -910,6 +991,9 @@ r, p_value = scipy.stats.pearsonr(k, knn)
 <br>
 
 ---
+<br>
+<br>
+
 
 # Why Paths Matter
 Up to this point, we have focused on Local Topology: how many neighbors a node has (Degree) and whether those neighbors are similar to the node (Assortativity). However, a network's primary function is usually to transport something—information, electricity, viruses, or people.
@@ -917,6 +1001,9 @@ Up to this point, we have focused on Local Topology: how many neighbors a node h
 To understand how a network performs this function, we must move from Local to Global measures. If Assortativity tells us who is sitting next to whom, Paths tell us how easily a message can travel from one side of the room to the other.
 
 ---
+<br>
+<br>
+
 
 # The "Efficiency" of a Network
 The study of paths allows us to quantify two critical real-world concepts:
@@ -924,6 +1011,9 @@ The study of paths allows us to quantify two critical real-world concepts:
 2. **Robustness and Redundancy:** If a specific path is blocked, are there alternative routes? By identifying shortest paths, we can find the "bottlenecks" or "bridges" that, if broken, would paralyze the system.
 
 ---
+<br>
+<br>
+
 
 # Paths Definitions
 
@@ -935,12 +1025,18 @@ The study of paths allows us to quantify two critical real-world concepts:
 | **Path length:** | number of links in path. | 
 
 ---
+<br>
+<br>
+
 
 # Shortest Path
 
 This is the minimum length path between two nodes. There may be more than one, we just want the shortest. In a weighted network, the weight may mean distances. 
 
 ---
+<br>
+<br>
+
 
 # APL and Diameter
 
@@ -974,6 +1070,9 @@ $$\langle \ell \rangle = \frac{\sum_{i,j} \ell_{ij}}{N(N-1)}$$
 $N(N-1)$: This represents the total number of directed pairs (where $A \to B$ is counted separately from $B \to A$).
 
 ---
+<br>
+<br>
+
 
 # Undefined Path
 
@@ -1015,6 +1114,9 @@ We use this formula when the network is disconnected (composed of two or more se
 Note, that another route to handling undefined, or disconnected sub-nets, is to just measure the APL and Diameter of the largest component. However, this is a topic for later so we don't look at it here. 
 
 ---
+<br>
+<br>
+
 
 # Path Related Functions in NetworkX
 
@@ -1043,6 +1145,9 @@ nx.shortest_path_length(W, 'a', 'b', 'weight')
 ```
 
 ---
+<br>
+<br>
+
 
 # Connectedness and Components
 A network is connected if there is a path between any two nodes. These don't need to be 1 step apart, there just needs to be an availble route through the network. If a network is not connected, it is disconnected but will have mutliple components which are connected. 
@@ -1064,6 +1169,9 @@ A weakly connected network is a "feed-forward" loop. You can get to $k$ easily, 
 A strongly connected network represents a "feedback" loop. No matter where you are, you can reach everyone else. This is strongly connected.
 
 ---
+<br>
+<br>
+
 
 # In/Out Components
 The **in-component** of a strongly connected component $S$ is the set of nodes from which one can reach $S$, but that cannot be reached from $S$
@@ -1073,6 +1181,9 @@ The **out-component** of a strongly connected component $S$ is the set of nodes 
 A **Strongly Connected Component (SCC)** covers both of these, i.e. you can get to and from a node. Disconnected nodes have no path to or from the SCC at all.
 
 ---
+<br>
+<br>
+
 
 # Trees
 * A tree is a connected network without cycles
@@ -1084,6 +1195,9 @@ A **Strongly Connected Component (SCC)** covers both of these, i.e. you can get 
 * The leaves have no children
 
 ---
+<br>
+<br>
+
 
 # Finding Shortest Paths
 Whether you are calculating the **Average Path Length** ($\langle \ell \rangle$), the **Diameter** ($\ell_{\max}$), or checking for **Strong/Weak Connectivity**, you need a way to actually find those shortest paths.
@@ -1091,6 +1205,9 @@ Whether you are calculating the **Average Path Length** ($\langle \ell \rangle$)
 The main algorithm used to find shortest paths is called **breadth-first search**. It looks like a tree in structure but it is not as it has cycles.
 
 ---
+<br>
+<br>
+
 
 # Breadth-First Search
 
@@ -1122,6 +1239,9 @@ Recall, that the max links a network can have is:
 | Undirected | $\frac{N(N−1)}{2}$​ | $≈\frac{}{} N^2$ | 
 | Directed | $N(N−1)$ | $≈N^2$ | 
 ---
+<br>
+<br>
+
 
 # Small Worlds
 What have we learned so far:
@@ -1129,6 +1249,9 @@ What have we learned so far:
 * **Six degrees of separation:** the idea that any two people are at most six steps away from each other in the social network
 
 ---
+<br>
+<br>
+
 
 # Milgrams Experiment
 Stanley Milgram’s 1967 experiment, often called the "Small World" study, is the foundational research behind the "six degrees of separation" concept. It aimed to measure how connected people are within a large social network.
@@ -1150,6 +1273,9 @@ Milgram’s experiment discovered a fundamental property of social networks: the
 **The "Six Degrees" Paradox:** Even though most people only know a tiny fraction of the world's population, the existence of **"hubs"** or long-range acquaintances (people who know people in different cities/social circles) keeps the overall **diameter** of the network remarkably small.
 
 ---
+<br>
+<br>
+
 
 # Short Paths
 What do we mean by **“short paths”?** When can we call a path “short”? **depends on the network**
@@ -1182,11 +1308,17 @@ Many other types of networks are small worlds, too. Air transportation networks,
 > Doubling the "distance" allows the network to hold 1,000 times more nodes. This is exactly why Facebook ($N \approx 10^9$) can have an average path length of only ~4.7.
 
 ---
+<br>
+<br>
+
 
 # Friend of a Friend
 Another feature of social (and some other) networks is the presence of triangles: if Alice and Bob are both friends with Charlie, they are also likely friends of each other. In other words, many friends of my friends are also my friends. In directed networks, we can consider only certain types of directed triangles, like shortcuts (in a follower-network). This is known as transitivity, there may be a triangle, but all 3 arent actually connected. 
 
 ---
+<br>
+<br>
+
 
 # Clustering Coefficent of 1 Node
 We can measure the number of triangles that a node actually has relative to how many it could have. The **clustering coefficient of a node** is the fraction of pairs of the node’s neighbours that are connected to each other:
@@ -1212,6 +1344,9 @@ This too if a check for **Small World-ness** and works alongside the other one (
 While the $\log N$ formula checks if people are "close" in terms of steps, this $C(i)$ formula checks if your friends also know each other. In real social networks, clustering is usually much higher than in a purely random network.
 
 ---
+<br>
+<br>
+
 
 # Clustering Coefficent of the Network
 The above formula was the clustering coefficient of **1 node**. To work out the coefficient for the network we look at the average clustering coefficient of the nodes: 
@@ -1226,6 +1361,9 @@ $$C = \frac{\sum_{i:k_i > 1} C(i)}{N_{k > 1}}$$
 | $\sum_{i:k_i > 1}$ | This instructs you to sum the local clustering coefficients only for nodes that have a degree ($k_i$) greater than 1. |
 | $N_{k > 1}$ | This represents the total count of nodes in the network that have a degree greater than 1. |
 ---
+<br>
+<br>
+
 
 # NetworkX Clusting Functions
 
@@ -1242,6 +1380,9 @@ nx.average_clustering(G) # network's clustering coefficient
 ```
 
 ---
+<br>
+<br>
+
 
 # Alternative Clustering: Triplets
 
@@ -1346,12 +1487,18 @@ Finally, the lecture examines the **Robustness** and **Resilience** of these sca
 * [Week 4 Summary](#week-4-summary)
 
 ---
+<br>
+<br>
+
 
 # Real World Networks are Hetrogeneous
 
 Real-world networks are fundamentally **heterogeneous**, meaning node and link **importance is highly unequal** rather than uniform. This structural diversity is defined by a **long-tail distribution**, where the vast majority of nodes have few connections while a small number of **"hubs"** act as massive **super-connectors**.
 
 ---
+<br>
+<br>
+
 
 # Centrality Measures
 
@@ -1363,6 +1510,9 @@ The primary goal is to understand the mechanics behind the **three core types** 
 * **Betweenness Centrality:** Pinpoints structural "bottlenecks" by tracking how often a node sits on the shortest paths between others.
 
 ---
+<br>
+<br>
+
 
 # Measure 1: Degree Centrality
 Degree centrality is the most fundamental measure of importance, identifying the **local "heavyweights"** of a network by simply **counting** their connections. In an undirected network, the degree $k_i$ of node $i$ is defined as the number of its neighbors. Nodes with an exceptionally high degree **relative** to the rest of the network are referred to as **hubs**.
@@ -1407,6 +1557,9 @@ G.degree() # dict with the degree of all nodes of G
 The primary drawback of degree centrality is its **local focus**; it **treats all links as equal** ($+1$) and fails to account for the wider geometry of the network or the **"quality"** of the connections.
 
 ---
+<br>
+<br>
+
 
 # Measure 2: Closeness Centrality
 
@@ -1439,12 +1592,17 @@ closeness_dict = nx.closeness_centrality(G)
 
 ```
 
+---
+
 ### Closeness Key Intuition
 
 * **High Closeness:** Sitting "in the middle" of the network; excellent for spreading a virus or a message quickly.
 * **Low Closeness:** Sitting on the periphery; information takes a long time to reach these nodes.
 
 ---
+<br>
+<br>
+
 
 # Measure 3: Betweenness Centrality
 
@@ -1463,6 +1621,9 @@ $$g_i = \sum_{h \neq i \neq j} \frac{\sigma_{hj}(i)}{\sigma_{hj}}$$
 | $\sigma_{hj}(i)$ | The number of those shortest paths that pass through node $i$ |
 | **The Summation** | The calculation iterates through all possible pairs of nodes in the network to determine node $i$'s global "control" over traffic |
 ---
+<br>
+<br>
+
 
 ### Betweeness as a Middleman Metric
 Betweeness is inherently a "middle-man" metric. It is entirely dependent on the pairs ($h, j$). You cannot calculate betweenness for a node $i$ in isolation. You have to look at the "traffic" flowing between every other possible pair of nodes in the network and see how much of that traffic is forced to pass through node $i$.
@@ -1472,12 +1633,18 @@ $h$ and $j$ are just indices that represent two nodes in the network. The summat
 This is why Betweenness is the most "expensive" metric to compute ($O(N^3)$ or $O(NM)$). While Degree only requires looking at one node's list of neighbors, Betweenness requires knowing the global map.
 
 ---
+<br>
+<br>
+
 
 ### Betweeness Key Observations:
 * **Not Always a Hub:** While hubs (high-degree nodes) often have high betweenness, a node with a very low degree can still have a massive betweenness score if it acts as the **only bridge** between two large communities (e.g., a single bridge connecting two islands).
 * **Link Betweenness:** This logic can be extended to edges. **Link betweenness** identifies critical connections (like a main highway) that, if broken, would disconnect the system.
 
 ---
+<br>
+<br>
+
 
 ### Betweeness Python Implementation
 
@@ -1492,6 +1659,9 @@ edge_betweenness = nx.edge_betweenness_centrality(G)
 ```
 
 ---
+<br>
+<br>
+
 
 # Centrality Summary Metrics
 
@@ -1508,6 +1678,9 @@ edge_betweenness = nx.edge_betweenness_centrality(G)
 ![Centrality Metric Networks](./files/week_4/cent_net_visuals.png)
 
 ---
+<br>
+<br>
+
 
 # Centrality Distrubtion
 In large-scale networks with millions or billions of nodes, it is computationally and practically impossible to analyze the importance of **individual** nodes or links. Instead, we shift to a statistical approach, focusing on how these metrics are **distributed across the entire system**.
