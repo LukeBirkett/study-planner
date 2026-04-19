@@ -96,9 +96,9 @@ first lecture. Make sure that these networks are from different domains:
 
 ---
 
-* social network (e.g., Facebook, Twitter, or collaboration networks)
-* biological network (e.g., Protein-protein interactions)
-* technological network (e.g., Internet topology, power grid)
+* **Social network** (e.g., Facebook, Twitter, or collaboration networks)
+* **Biological network** (e.g., Protein-protein interactions)
+* **Technological network** (e.g., Internet topology, power grid)
 
 ---
 
