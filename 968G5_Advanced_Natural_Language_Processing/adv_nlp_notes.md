@@ -5963,14 +5963,19 @@ This week we will be looking at generative large language models. In particular,
 
 ---
 
-- More distant relatives of BERT
-    - GPT and ChatGPT
-- Generative applications with LLMs
-    - MT
-    - Summarization
-    - Question-answering
-- Variation
-- Prompt Engineering
+Week 9 represents the transition from understanding language through encoding to generating it through prediction, marking the culmination of your journey from Transformer theory to modern AI assistants. The following summary bridges the technical shift from BERT to GPT and highlights the critical research that defined this "Generative Era."
+
+### The Paradigm Shift: From Encoding to Generation
+While previous weeks focused on BERT, a bi-directional encoder that "understands" by filling in missing blanks, Week 9 introduces Generative Large Language Models (LLMs) like GPT-3 and Gemini. These models are autoregressive, meaning they predict the next token in a sequence from left to right. This architectural shift from a "cloze" task to a "completion" task transforms the model from a classifier into a conversational agent. You have moved from a model that represents the world (Encoders) to one that actively constructs responses based on that world (Decoders).
+
+### Scaling and the "Few-Shot" Breakthrough
+The cornerstone of this week is the **Brown et al. (2020)** paper, "Language Models are Few-Shot Learners." It demonstrates that by simply scaling a model to 175 billion parameters (GPT-3), the model develops "emergent abilities." It proves that we no longer need to fine-tune a model's weights for every task; instead, we can use **In-Context Learning**. By providing a few examples in a prompt (Few-Shot), the model can perform translation, coding, or reasoning without any permanent updates to its brain. This shift marks the birth of **Prompt Engineering**, where the "bottleneck" is no longer the architecture, but our ability to effectively "ask" the model for the right output.
+
+### Alignment and Reinforcement Learning (RLHF)
+Raw pre-training makes a model smart, but not necessarily helpful or safe. **The Ouyang et al. (2022)** paper, "Training Language Models to Follow Instructions with Human Feedback," introduced the **InstructGPT** methodology (the basis for ChatGPT). This process uses **Reinforcement Learning** from **Human Feedback (RLHF)** to "align" the model with human intentions. By training a **Reward Model** to act as a "judge" based on human preferences and updating the model's **Policy** (its generation strategy), researchers created models that are more truthful, less toxic, and better at following complex instructions than their raw, pre-trained ancestors.
+
+### Grounding and Reliability: RAG and Summarization
+To combat the inherent "hallucination" problem of LLMs, Week 9 introduces **Retrieval-Augmented Generation (RAG)**. This **Retrieve-Read** framework prevents the model from relying solely on its pre-trained memory by allowing it to "look up" facts in an external database before generating an answer. This is supported by evaluation research like **Zhang et al. (2024)**, which benchmarks LLMs for news summarization. Their findings suggest that **instruction-tuning**, rather than just model size, is the key to high-quality generation, showing that LLM-generated summaries are now frequently judged to be on par with those written by professional human writers.
 
 ---
 
@@ -5993,107 +5998,125 @@ Last week we looked at some derivatives of BERT, i.e. Roberta, distillbert, sber
 ---
 
 ## How to choose which LLM to use?
-You want to carry out a language task but how do you know which model use?
+Choosing the right Large Language Model (LLM) involves balancing technical performance against operational constraints. Because modern NLP has shifted from "building from scratch" to "selecting and adapting," this decision-making process is the first critical step in any engineering pipeline.
 
-**Consider:**
-- Size (number of parameters) – this is trade-off where larger is usually better  performance but more expensive.
-- The training data used in pre-training. A smaller model trained on more relevant data might be better for a given task.
-- Has the model been fine-tuned for specific task? For example, code models have usually been pre-trained on code and fine-tuned to  solve coding problems. 
-- Closed source vs open source – bigger, better models are often closed source (and priced per token), however open source models offer privacy, lower running costs (if you have appropriate hardware) and greater personalisation, i.e. continue pre-trianing or fine-tuning them.
+### Model Scale and Efficiency
+The **number of parameters** (the model's "size") is the primary predictor of performance, as larger models generally exhibit stronger reasoning and few-shot abilities. However, this comes with a significant trade-off in **computational cost** and latency. For simpler tasks like sentiment analysis or basic classification, a smaller, "distilled" model may offer comparable accuracy at a fraction of the price and speed.
+
+### Data Composition and Domain Expertise
+Performance is not just a function of size, but of the **pre-training data**. A mid-sized model trained on high-quality, domain-specific data (such as medical journals or legal documents) will often outperform a massive general-purpose model on specialized tasks. Furthermore, check if the model has undergone **task-specific fine-tuning**; for instance, models like CodeLlama have been specifically optimized on vast repositories of source code, making them inherently superior for programming tasks compared to standard models of the same size.
+
+### The Source Ecosystem: Open vs. Closed
+The choice between **Open Source** (e.g., Llama 3, Mistral) and **Closed Source** (e.g., GPT-4, Claude) models often dictates your project's long-term flexibility.
+
+**Closed Source** models typically offer the "state-of-the-art" ceiling and are easily accessible via API (priced per token), removing the need for local hardware.
+
+**Open Source models** provide critical advantages in **data privacy** and **personalization**. They allow you to host the model on your own servers and perform "Continual Pre-training" or "Supervised Fine-tuning" to tailor the weights to your specific brand voice or proprietary datasets.
 
 ---
 
 ## Generative Pre-Trained Transformer 3 (GPT-3)
-- GPT-3 was the first version of the GPT models that went mainstream
-- Brown et al. 2020: Language Models are Few Shot Learners. This is the key paper for GPT-3. TODO: Would be good to have a summary of the paper. 
-- autoregressive language model; this means it predicts the next token rather than masked tokens. generative models tend to predict the next token. this makes it different to bert whereby the classifcation heads are trained to predict masked tokens. 
-- variable length inputs but **uni-directional** in nature. there is no context window unlike make MLM models or representation encoders. However, remember that uni-directional can also be a downside, as the model is only looking at what happened previously. 
-- largest non-sparse language model: 175 billion parameters,  10x bigger than competitors. `TODO: what did this caveat of non-sparse mean?`
-- Trained on Common Crawl, WebText2, Google Books1, Google Books2 and Wikipedia. These are enormous web corpora. 
-- No fine-tuning. Used to generate answers using a few-shot training/prompting paradigm. `TODO: is few-shot and prompting synonymous here? I have thought they were different concepts. The lecture briefly mentioned that few-shot in this context means giving an example where as zero shot is a pure prompt` 
+The release of GPT-3 marked a definitive shift in the field of Natural Language Processing, moving the industry away from task-specific fine-tuning toward a "universal" model interface. This section focuses on the technical innovations and the landmark research that established the generative era.
+
+### The "Few-Shot Learner" Paradigm
+The defining research for this model is **Brown et al. (2020): Language Models are Few-Shot Learners**. Before this paper, the standard practice was to take a pre-trained model and fine-tune its weights on a specific dataset. Brown et al. proved that if you scale a model large enough, it develops the ability to perform **In-Context Learning**. This means the model can learn a new task simply by being shown a few examples within the prompt—without any updates to its underlying parameters. This introduced the "prompting" era, where a single model could suddenly handle translation, math, and coding based purely on the instructions provided.
+
+### Architecture: Autoregressive and Uni-directional
+Unlike BERT, which is a bi-directional encoder that "looks" at the whole sentence to fill in blanks, GPT-3 is a **uni-directional, autoregressive decoder**. This means it processes text from left to right, predicting the next token based solely on the preceding context. While this uni-directionality means it lacks the "global" context that BERT uses for word representations, it makes GPT-3 a natural "writer." It excels at generating coherent, long-form text because its architecture is designed specifically for continuous sequence generation.
+
+### Scale and Density: The 175 Billion Parameter Mark
+At the time of its release, GPT-3 was the largest **non-sparse** language model ever built, featuring **175 billion** parameters. In this context, "non-sparse" (or "dense") means that every single parameter is active and involved in the computation for every token generated. This massive scale allowed the model to "memorize" a significant portion of the internet, having been trained on the **Common Crawl**, **WebText2**, and the **Google Books** corpora. The sheer density of the model is what allowed the "emergent abilities" described in the Brown et al. paper to appear, proving that in NLP, "quantity has a quality of its own."
+
+### Clarification: Prompting vs. Few-Shot
+In the lecture and the Brown et al. paper, Prompting is the method of interaction, while Few-Shot is a specific type of prompt:
+- **Prompting:** The general act of giving the model a text input to trigger a response.
+- **Zero-Shot:** A prompt with only an instruction (e.g., "Translate 'cat' to French").
+- **Few-Shot:** A prompt that includes a few examples to "prime" the model's logic (e.g., "Apple -> Pomme, Dog -> Chien, Cat ->").
 
 ---
 
 ## Generating Responses
-Take a  prompt and use a language model to predict what comes next or what fills in the gaps (Masked Language Models). 
+Take a prompt and use a language model to predict what comes next or what fills in the gaps (Masked Language Models). 
 
 Working out what is the best prompt strategy (how to convert the user utterance into a prompt for the LLM) is known as prompt engineering
 
 ![Prompt Tree](./files/week_9/prompt_tree.png)
 
-Find the word(s) that fills in the blank(s) with the highest probability  according to the large language model (pretrained on the very large corpus)
+Find the word(s) that fills in the blank(s) with the highest probability according to the large language model (pretrained on the very large corpus)
 
 ---
 
 ## What could possibly go wrong?
-- Large Language Models are trained to give plausible/believable answers based on large text corpora
-- If 2 (or more words) often occur together in the training data, they may lead to a higher probability response even if factually incorrect in the specific context
-- This is referred to as “hallucination” where a large language model adds information which has no basis in say the text being summarized or translated
-- Text corpora may contain factually incorrect documents (e.g., fiction) and/or text which exhibits biases so these can be replicated in generated texts.
+While Large Language Models (LLMs) appear highly fluent and authoritative, their architecture and training methods introduce several significant risks. Understanding these failure modes—specifically hallucinations and biases—is essential for the responsible deployment of generative AI
+
+### The Problem of Hallucination
+One of the most persistent issues in generative AI is **hallucination**, where a model generates content that is syntactically correct and linguistically plausible but factually unsupported or entirely false. Research, including **Zhang et al. (2024)** and recent surveys, distinguishes between two primary types of this phenomenon:
+- **Intrinsic Hallucinations:** The generated output contradicts the information provided in the source text (e.g., misstating a date or name that was correctly provided in a summary prompt).
+- **Extrinsic Hallucinations:** The model adds "imaginary" information that wasn't in the source text at all (e.g., inventing a person's biography or adding legal citations that do not exist).
+
+These errors occur because LLMs are **probabilistic token predictors**, not knowledge databases. They prioritize the most likely word sequence over factual truth. If a model has seen two words appear together millions of times in its training data (like "Charles Dickens" and "Jane Austen" in literature discussions), it may mistakenly link them in a factual query even if the context is incorrect.
+
+### Bias Inheritance and Data Toxicity
+Because LLMs are trained on massive web corpora like Common Crawl, they inevitably absorb the **biases**, **stereotypes**, and **factual errors** present in human-generated text. This "Bias Inheritance" means models can replicate and even amplify societal prejudices regarding race, gender, and culture. For example:
+- **Gender Stereotypes:** If training data predominantly describes doctors as "he" and nurses as "she," the model's policy will naturally reflect these historical imbalances in its generations.
+- **Cultural Skew:** Most major LLMs are trained on a disproportionate amount of Western, English-language data. This results in a "cultural bottleneck" where the model may fail to understand or accurately represent the values and nuances of Eastern or Global South contexts.
+
+### The "Stochastic Parrot" Vulnerability
+Ultimately, these weaknesses stem from the fact that an LLM is a **stochastic generator** — it does not "know" or "understand" anything in the human sense. It mimics the patterns of its training data. If that data contains fiction, misinformation, or biased viewpoints, the model treats them with the same weight as objective facts. This makes techniques like **RLHF** (to align behavior) and **RAG** (to provide factual grounding) not just "extra features," but necessary safeguards to prevent the model from becoming a high-speed engine for misinformation.
 
 ---
 
 ## ChatGPT (OpenAI, 2023)
-The modern architecture of GPT models are called InstructGPT models:
-- Trained with humans in the loop
-- Deployed as default language models on OpenAI’s API
-- Better at following user intentions than GPT-3
-- More truthful and less toxic
-- Uses “alignment” technique; Reinforcement learning from human feedback (RLHF)
+The evolution from the raw GPT-3 model to ChatGPT represents a move away from simple "word prediction" toward instruction following. While GPT-3 was a powerful mimic of the internet, it often struggled to stay on task or provide helpful answers. OpenAI addressed this by developing **InstructGPT**, the architectural foundation of ChatGPT, which utilizes "Alignment" techniques to ensure the model behaves in a way that is useful and safe for humans.
 
 ---
 
 ## Reinforcement learning from human feedback (RLHF)
-- This is the approach that is used to go beyond the base GPT aprooach which is just pre-training and prompt. 
-- Customers submit prompts to the API
-- Human labelers provide demonstrations of desired model behaviours; This data is used to fine-tune GPT-3.
-- Human labelers then rank different model outputs; This data is used to train a reward model to predict which output labellers would prefer.
-- GPT-3 has an additional input known as its “policy”; this is fine-tuned to maximise the reward using proximal policy optimization (PPO) (Schulman et al. 2017).
-
----
-
-## Training ChatGPT (Ougang et al. 2022)
-This is the ChatGPT paper. 
-
-### Step 1
-**The first step is to collect some demonstration data and train a supervised policy.**
-
-You have a large dataset of prompts. A labler would demonstate the desired output behaviour, i.e. hand write the desired outcome. This is supervised learning. The GPT model would be fine-tuned using this data. 
-
-### Step 2
-**Collect comparison data and train a reward model.**
-
-Take a prompt and sample the model several times, i.e. get different responses. A labeler then ranks the outputs from best to worst. This is then used to train a reward model. 
-
-#### Step 3
-**Optimize a policy against the reward model using reinforcement learning.** 
-
-A new prompt is sampled from the dataset. The policy generates an output. Then the reward model calculates a reward for the output. THe reward is used to update the policy using PPO. 
-
-TODO: new some sort of explanation as to what a policy is because this isn't obivous from reading alone. Possibly for reward as well. 
+The core "engine" of this transformation is **Reinforcement Learning from Human Feedback (RLHF)**.To move from a raw predictor to a helpful assistant, the Ouyang paper outlines a three-step training pipeline:
+1. **Supervised Fine-Tuning (SFT):** Human labelers write out "gold standard" responses to prompts, teaching the model the desired "persona."
+2. **Reward Modeling:** Humans rank different model outputs from best to worst. This data trains a separate "Reward Model" to understand what humans prefer.
+3. **Reinforcement Learning:** The model is "incentivized" to generate responses that achieve high scores from the Reward Model using an optimization algorithm called **PPO (Proximal Policy Optimization)**.
 
 ![Ougang](./files/week_9/ouyang.png)
 
-Does this work? Acocording to OpenAI it makes the results less toxic, more truthful, less hallucinations and more appropriate. 
+---
+
+## The "Policy" and "Reward" Explained
+To understand the technical side of this alignment, it is helpful to define two key terms:
+
+### The Policy
+In reinforcement learning, the "Policy" is essentially the model's **decision-making strategy**. It is the internal logic (the weights) that the model uses to choose the next token. When we fine-tune ChatGPT, we are "updating the policy" to favor helpfulness over mere probability.
+
+### The Reward
+The "Reward" is a scalar value (a score) provided by the Reward Model. If the policy generates a helpful, polite response, it receives a high reward; if it generates a toxic or nonsensical response, it receives a low reward. The model’s goal during training is to **maximize this total reward**.
 
 ---
 
 ## Weakness
-ChatGPT is a pre-trained large language model
+The primary weakness of Generative LLMs stems from a fundamental disconnect: they are exceptional at **linguistic mimicry** but possess no internal model of **truth**, **logic**, or the **physical world**. Because they function as probabilistic engines rather than knowledge databases, their outputs are subject to several structural vulnerabilities.
 
-It doesn’t know or understand anything
+### 1. The Illusion of Understanding
+Despite their fluency, ChatGPT and similar models do not "understand" concepts; they calculate the statistical likelihood of token sequences. This leads to a specific failure in **reasoning** and **arithmetic**.
 
-It doesn’t look things up or carry out inferences
+For example, numbers and dates often share identical distributional contexts in training data (e.g., "The event happened in 19__"). Because the architecture treats these as similar "slots," the model can easily swap a "4" for a "5" or a "1998" for a "1999" without realizing the factual gravity of the change. It is not "looking up" a calendar; it is essentially playing a high-stakes game of Mad Libs.
 
-Words which mean “similar” things are easy for it to  mix up especially numbers and dates. Numbers have very similar distributional context so within the architecture of transformers is really easy to put in the wrong number. 
+### 2. Training Data and Cultural Bias
+An LLM is only as objective as the "snapshot" of the internet it was trained on. This creates several layers of bias:
+* **Temporal Bias:** The model's knowledge is frozen at its "knowledge cutoff" date. It cannot reason about events that happened after its training ended.
+* **Geographic and Cultural Skew:** Most dominant LLMs are trained on disproportionately Western, English-centric data. This results in a "cultural bottleneck" where the model may fail to grasp non-Western logic, minority languages, or specific regional traditions.
+* **Systemic Bias:** If the training corpus contains historical prejudices or toxic viewpoints, the model — unless heavily aligned — will reflect those biases as "normal" linguistic patterns.
 
-It has been trained on a very large corpus which is biased towards; a certain time period, particular geographic locations, culture and ways of thinking.
+### 3. The Brittleness of Alignment
+While **RLHF** (Reinforcement Learning from Human Feedback) makes models safer, this "safety layer" is often just a thin veneer over the base model.
+- **Subversion (Jailbreaking):** Creative prompting can bypass safety filters, forcing the model to ignore its "Policy" and revert to the raw, unaligned behavior of the base model.
+- **Hallucination:** Even with alignment, models still "hallucinate" information that sounds plausible but has no basis in reality. This happens because the model is incentivized to be "helpful" and "confident," sometimes leading it to invent an answer rather than admit it doesn't know.
 
-Fine-tuning process could be subverted
+### 4. Lack of Grounding
+LLMs lack a **"World Model."** They do not verify information against external databases or carry out formal logical inferences. They cannot "double-check" their work. Without an external framework like **RAG (Retrieval-Augmented Generation)**, the model is a "closed loop," limited entirely to the patterns it memorized during pre-training.
 
 ---
 
-## Using Generative Models
+## Using Generative Models: MT and Summarization
 Nearly all NLP applications can be posed as a prompt to a generative model:
 - Translate the following text from English to French: The cat sat on the mat
 - Summarise the following information in 3 sentences: 
@@ -6104,33 +6127,19 @@ The generative model will encode the prompt and then use that as a condition for
 
 --- 
 
-## Document-level Machine Translation (Wang et al. 2023)
-Introduces evaluation metric which are “discourse aware”
+## Document-Level Machine Translation (Wang et al. 2023)
+Historically, machine translation was performed sentence-by-sentence, often losing the "discourse" (the overall flow and consistency) of a document. The research by **Wang et al. (2023)** highlights that LLMs like ChatGPT are naturally "discourse-aware." Because they have a large context window, they can maintain consistent terminology and gender agreement across an entire document. The study found that while sentence-by-sentence translation is possible, providing the **entire document in a single prompt** yields the best results. However, challenges remain in handling extremely long documents and maintaining specific "stylized" tones across different cultures
 
-Shows the superiority of LLMs over other advanced Machine Translation systems
-
-Demonstrates the need for context-aware prompts:
-- ChatGPT can translate sentence-by-sentence but remember the  discourse-level context via the chat box
-- But best results generally by providing the whole document
+**Wang et al. (2023, MT):** Proves LLMs are superior for "Document-Level" tasks because they understand context better than traditional MT.
 
 ---
 
-## Machine Translation: Remaining Challenges
-- Long documents can still pose problems
-- Stylised translation
-- Interactivity
-- Multi-modal
-- Evaluation – quality and interpretability/explanations
+## News Summarization Benchmarking (Zhang et al., 2024)
+The task of summarization tests a model's ability to compress information without losing factual integrity. In Zhang et al. (2024), researchers compared summaries generated by models like GPT-3 (Davinci) against those written by professional freelance writers. The findings were twofold:
+- **Instruction-Tuning is King:** The researchers discovered that instruction-tuning (alignment), rather than just raw model size, was the primary driver of high-quality, zero-shot summaries. A smaller, well-aligned model often produces better summaries than a massive, unaligned one.
+- **Human-Parity:** The study found that LLM-generated summaries are now frequently judged to be on par with professional human writers, though they often exhibit different stylistic choices, such as a higher frequency of paraphrasing.
 
----
-
-## Benchmarking LLMs for News Summarization (Zhang et al. 2024)
-A very common task in language is to give summary. 
-
-Paper is comparing summaries between Davinci GPT-3 and a Freelance Writter. As well as a reference summary which is deemed to be the gold standard. 
-
-TODO: a quick summary of the evaluation methods as well as the results the paper found
-
+**Zhang et al. (2024, Summarization):** Proves that how a model is taught (instruction-tuning) matters more for summaries than how big it is.
 
 ![Zhang_1](./files/week_9/zhang_1.png)
 ![Zhang_2](./files/week_9/zhang_2.png)
@@ -6138,117 +6147,91 @@ TODO: a quick summary of the evaluation methods as well as the results the paper
 ---
 
 ## Retrieval Augmented Generation (Gao et al. 2023)
-A common tasks of language is question answering. In the modern era we have established and you can just ask a model the question and it will answer it based on its pre-training material and understanding of language. 
-
-Given this flow, it would be good if we had a way to encourage a model to use certain information to answer a question. This desire has led to the paradigm of RAG. 
-
-Can you achieved in pre-taining, fine-tuning or inference stages. 
-
-Inference is probably the most common way to use this. 
+While LLMs are impressive "reasoning engines," they often struggle with a lack of up-to-date knowledge and a tendency to hallucinate. Retrieval-Augmented Generation (RAG), as detailed in the landmark survey by Gao et al. (2023), provides a solution by giving the model an "open-book" to reference before it speaks. Instead of relying solely on its internal, frozen weights, the model retrieves relevant snippets from an external database to ground its responses in facts.
 
 ![RAG](./files/week_9/RAG.png)
 
 ---
 
-## Retrieve-Read Framework for RAG
-User has a query. 
+## The Evolution of RAG Paradigms
+The Gao et al. paper categorizes the development of RAG into three distinct evolutionary stages, moving from simple pipelines to complex, modular ecosystems:
 
-Could just pass this to an llm and it will attempt to answer the question.
-
-Framework allows us to breakdown the query into chunk/vectors for indexing/embeddings which can then be connected to relevant documents. This is the retrieval parts. The query is matched against documents in an database, or even just the web. 
-
-These documents can then be broken down themselves into vectors which are therefore information that can be directly used to answer the prompt by combining the prompt and the context (retreived).
+### Naive RAG/Retrieve-Read
+This is the foundational "Retrieve-Read" framework. It follows a linear path: **Indexing** (chopping documents into chunks and turning them into vectors), **Retrieval** (finding chunks that mathematically match the user's query), and **Generation** (feeding those chunks into the LLM as context). While simple, it is prone to "Retriever Noise" (fetching the wrong info) and "Generator Misalignment" (ignoring the info provided).
 
 ![Retrieve-Read Framework for RAG](./files/week_9/rr_rag.png)
 
----
+### Advanced RAG
+To fix the flaws of the Naive approach, Advanced RAG introduces "Pre-retrieval" and "Post-retrieval" optimizations. This includes **Query Rewriting** (refining the user's question to be more searchable) and **Reranking** (using a second, smaller model to double-check the relevance of the retrieved chunks before the LLM sees them).
 
-## More Advanced RAG
-Post-retrival processing
-
-Modular rag
+### Modular RAG
+This is the current state-of-the-art. It moves away from a fixed pipeline toward a "plug-and-play" architecture. It allows for specialized modules like a **Search module** for web access, a **Memory module** to recall past interactions, and **Routing** that decides whether a query even needs retrieval at all.
 
 ![Adv RAG](./files/week_9/adv_rag.png)
 
 ---
 
-## Does RAG Work?
-- A lot of the time!
-- Impossible to guarantee that generated answer is faithful to retrieved documents
-- Models are trained with RLHF so that they are more likely to generate answers which are faithful to retrieved documents
-- Humans would rank these answers higher
-- Reward should be maximal in this case
+## Does it work? The Role of RLHF
+A common concern is whether the model will actually "listen" to the retrieved documents or just keep hallucinating. Gao et al. point out that RLHF (**Reinforcement Learning from Human Feedback**) is essential here. During the alignment phase, models are specifically incentivized to prioritize the "provided context" over their own internal training data. When human labelers rank responses, they reward "Faithfulness" (sticking to the documents) and penalize "Extrinsic Hallucinations" (making things up), effectively training the model to be a better "researcher."
 
 ---
 
 ## Variation and Temperature
-During decode/generation, LLMs sample from the 
-probability distribution to generate the next token
+Generating a response from an LLM is not a simple "lookup" but a probabilistic selection process. At every step of the generation, the model calculates a probability distribution across its entire vocabulary, and the **Temperature** setting acts as the "tuning knob" for how the model samples from that distribution.
 
-Temperature controls this sampling
+### The Mechanism of Sampling
+When an LLM predicts the next word, it produces "logits" (raw scores) for every possible token. These logits are converted into probabilities via a Softmax function. Temperature ($T$) is a hyperparameter applied during this calculation that modifies the "shape" of that probability curve:
 
-Low temperature (->0): LLM will always choose the most 
-probable next token; Same response to the same prompt every time
+$$P(x_i) = \frac{\exp(\text{logit}_i / T)}{\sum_j \exp(\text{logit}_j / T)}$$
 
-High temperature (->1): LLM may choose any token 
-according to its probability; Different response each time the same prompt is posed
+### Low Temperature ($T \to 0$): Precision and Consistency
+When the temperature is set near zero (often called "Greedy Decoding" at exactly 0), the model becomes highly conservative.
+- **The Effect:** It exaggerates the differences between probabilities, making the most likely token much more dominant and "crushing" the probability of all other words.
+- **The Result:** The model will almost always choose the same, most probable next token. This makes the response predictable, factual, and consistent across multiple attempts. This is ideal for tasks like **coding**, **mathematical reasoning**, or **data extraction**, where there is a "correct" answer.
 
----
+### High Temperature ($T \to 1$): Creativity and Variation
+As the temperature increases toward 1 (or even higher), the model becomes more "adventurous."
+- **The Effect:** It flattens the probability distribution. While the most likely word is still more probable, the "gap" between it and the less likely words shrinks.
+- **The Result:** The model is much more likely to sample a "surprise" token from the "long tail" of the distribution. This leads to higher variation, more creative phrasing, and a lower chance of the model getting stuck in repetitive loops. This is preferred for **creative writing, brainstorming, or roleplay**.
 
-## Self-Consistency
-Often used to improve reliability of LLM responses
-
-Sample N responses from the model 
-- same prompt (with non-zero temperature)
-- varied prompts
-
-Use majority voting to decide final answer (and confidence score)
-
-See, for example, Wang et al 2023 
+### Self-Consistency and Temperature (Wang et al. 2023)
+The interaction between temperature and reliability is best demonstrated by the Self-Consistency technique. By setting a non-zero temperature, we can generate multiple "reasoning paths" for the same question. If the model is asked a complex math problem, it might reach different conclusions across five attempts. However, as Wang et al. (2023) demonstrated, the correct answer usually emerges as the "majority vote" among these paths. Using a bit of "temperature-driven randomness" actually helps filter out the logic errors that might occur in a single, rigid, low-temperature run.
 
 [SELF-CONSISTENCY IMPROVES CHAIN OF THOUGHT REASONING IN LANGUAGE MODELS](https://arxiv.org/pdf/2203.11171)
 
 ---
+| Task Type | Recommended Temperature | Goal |
+| :--- | :--- | :--- |
+| Classification / Logic | 0.0 - 0.2 | Accuracy & Reproducibility |
+| Summarization | 0.3 - 0.5 | Balance of fact and flow |
+| Creative Writing | 0.7 - 1.0+ | Novelty & Character |
+---
 
 ## Prompt Engineering
-Exact wording of the prompt can/will also affect the information content of the response
+The practice of Prompt Engineering is the art and science of optimizing the input text to ensure an LLM generates the most accurate, helpful, or safe response. Because generative models are conditioned on the prompt—meaning the input vector essentially "steers" the entire generation process—even minor linguistic variations can lead to vastly different outputs.
 
-Model encodes the prompt and this is the condition for  generating the response
+### The Logic of the Prompt
+From a technical perspective, when a model receives a prompt, it creates a high-dimensional encoding of that text. This encoding acts as the starting point for the decoder to begin predicting the next token. While we might assume that two prompts with the same meaning (e.g., "Summarize this" vs. "Give me a summary") would result in the same encoding, the high sensitivity of Transformer attention mechanisms means that word order, punctuation, and even white space can shift the model's internal "focus."
 
-Similar prompts should lead to similar encodings and  therefore similar responses – but NOT always!
-
-If we wanted to create an ensemble of voting models we could think about rewording the prompt
-
-Optimising prompt on a validation set is known as prompt engineering
+### Prompting as an Ensemble Strategy
+One of the most powerful applications of prompt engineering is in the creation of **voting ensembles**. Instead of relying on a single "perfect" prompt, researchers often use several variations of the same request. If five differently worded prompts all lead to the same conclusion, our confidence in the answer's reliability increases. This is a form of **Linguistic Robustness**; if a model's answer changes when you change "please" to "kindly," it suggests the model's reasoning is brittle rather than grounded in fact.
 
 --- 
 
-## Prompt Engineering Heuristics
+## Prompt Engineering: Optimization and Heuristics
+Optimizing a prompt is increasingly treated like a traditional machine learning task. This often involves testing multiple prompt versions on a **validation set** to see which phrasing yields the highest accuracy or lowest toxicity. Over time, several reliable "heuristics" have emerged to improve model performance:
 
-### Roles
-Assign roles to the language model and the user
-- “You are a helpful assistant”
-- “Explain to me as if I am a beginner in machine learning / a 5 year old.”
+### Role Prompting
+Assigning the model a persona (e.g., "You are an expert physicist") primes the model's "probability space" to favor technical and authoritative terminology.
 
-### Breakdown Prompt
-Break down complex tasks into a sequence of simpler prompts
+### Chain-of-Thought (CoT)
+Using phrases like "Think step-by-step" encourages the model to generate intermediate reasoning tokens. This prevents the model from "rushing" to a wrong answer by forcing it to calculate the logical path first.
 
-### Explicity Instructions
-Give explicit instructions on what kind of answers are allowed
-- ”You are only allowed to answer yes or no”
-- Give your answer in json using the following format: {“answer”: ... , “reasoning”: ....}
+### Few-Shot Examples
+Including 2-3 examples of high-quality inputs and outputs (the "In-Context Learning" we saw in the GPT-3 paper) is often more effective than providing a long list of instructions.
 
-### Repeating Words
-Repeat a specific word or phrase multiple times within a prompt
-
-### Includes Examples
-Include examples of good answers to other similar questions in your prompt (few-shot prompting)
-
-### Avoid Negatives
-Avoid negatives. Tell the model what to do rather than what not to do
-
-### Encouraging the Model
-Use statements which encourage the model to “think” about its answer; “Think step-by-step”
+### Instruction Clarity
+Explicitly defining the output format (e.g., "Return only JSON") or using negative constraints (though LLMs typically follow positive "do this" instructions better than negative "don't do that" ones) helps reduce post-processing errors.
 
 ---
 <br>
