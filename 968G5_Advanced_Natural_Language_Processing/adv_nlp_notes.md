@@ -5901,7 +5901,7 @@ Have a go at fine-tuning BERT for Named Entity Recognition
 
 ---
 
-## Week 8: Additional Reading
+# Week 8: Additional Reading
 * [Jurafsky and Martin 2026, Chapter 7: Large Language Models](https://web.stanford.edu/~jurafsky/slp3/7.pdf)
 * [Jurasfsky and Martin 2026, Chapter 9: Post-training: Instruction Tuning, Alignment, and Test-Time Compute](https://web.stanford.edu/~jurafsky/slp3/9.pdf)
 
@@ -5927,8 +5927,360 @@ Have a go at fine-tuning BERT for Named Entity Recognition
 
 ---
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# [Week 9 - Generative Large Language Models](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-9-generative-large-language-models?module_item_id=1602176)
+
+This week we will be looking at generative large language models. In particular, we will focus on:
+- More distant relatives of BERT such as GPT and ChatGPT.
+- Generative applications with LLMs including.
+    - machine translation
+    - summarization
+    - question answering
+- Variation in LLM responses
+- Prompt engineering
+- Chain-of-thought reasoning 
+
+---
+
+#### Week 9: Contents
+
+1. [Lecture](#week-9-lecture)
+2. [Seminar](#week-9-seminar)
+3. [Paper](#week-9-paper)
+3. [Additional Readings](#week-9-additional-reading)
+
+---
+
+# Week 9: Lecture
+- [Video Part 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7b8af2cf-612e-4e52-ba94-b41a00e181b9)
+- [Video Part 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7ed12e14-e1a4-4413-990f-b41a00e99806)
+
+---
+
+- More distant relatives of BERT
+    - GPT and ChatGPT
+- Generative applications with LLMs
+    - MT
+    - Summarization
+    - Question-answering
+- Variation
+- Prompt Engineering
+
+---
+
+## More Distant Relative of BERT
+Last week we looked at some derivatives of BERT, i.e. Roberta, distillbert, sbert. However, there are some other Pretrained Large Language Models, which do not expliticitly use the BERT architecture but are generally still based on transformers:
+
+- GPT (GPT-2, GPT-3, ChatGPT, GPT-4, GPT-5 ...) 
+- Gemini
+- Claude
+- Turing-NLG
+- XLNet
+- Electra
+- Dolly
+- NeMo
+- BLOOM
+- LLaMa
+- PaLM2
+- DeepSeek
+
+---
+
+## How to choose which LLM to use?
+You want to carry out a language task but how do you know which model use?
+
+**Consider:**
+- Size (number of parameters) – this is trade-off where larger is usually better  performance but more expensive.
+- The training data used in pre-training. A smaller model trained on more relevant data might be better for a given task.
+- Has the model been fine-tuned for specific task? For example, code models have usually been pre-trained on code and fine-tuned to  solve coding problems. 
+- Closed source vs open source – bigger, better models are often closed source (and priced per token), however open source models offer privacy, lower running costs (if you have appropriate hardware) and greater personalisation, i.e. continue pre-trianing or fine-tuning them.
+
+---
+
+## Generative Pre-Trained Transformer 3 (GPT-3)
+- GPT-3 was the first version of the GPT models that went mainstream
+- Brown et al. 2020: Language Models are Few Shot Learners. This is the key paper for GPT-3. TODO: Would be good to have a summary of the paper. 
+- autoregressive language model; this means it predicts the next token rather than masked tokens. generative models tend to predict the next token. this makes it different to bert whereby the classifcation heads are trained to predict masked tokens. 
+- variable length inputs but **uni-directional** in nature. there is no context window unlike make MLM models or representation encoders. However, remember that uni-directional can also be a downside, as the model is only looking at what happened previously. 
+- largest non-sparse language model: 175 billion parameters,  10x bigger than competitors. `TODO: what did this caveat of non-sparse mean?`
+- Trained on Common Crawl, WebText2, Google Books1, Google Books2 and Wikipedia. These are enormous web corpora. 
+- No fine-tuning. Used to generate answers using a few-shot training/prompting paradigm. `TODO: is few-shot and prompting synonymous here? I have thought they were different concepts. The lecture briefly mentioned that few-shot in this context means giving an example where as zero shot is a pure prompt` 
+
+---
+
+## Generating Responses
+Take a  prompt and use a language model to predict what comes next or what fills in the gaps (Masked Language Models). 
+
+Working out what is the best prompt strategy (how to convert the user utterance into a prompt for the LLM) is known as prompt engineering
+
+![Prompt Tree](./files/week_9/prompt_tree.png)
+
+Find the word(s) that fills in the blank(s) with the highest probability  according to the large language model (pretrained on the very large corpus)
+
+---
+
+## What could possibly go wrong?
+- Large Language Models are trained to give plausible/believable answers based on large text corpora
+- If 2 (or more words) often occur together in the training data, they may lead to a higher probability response even if factually incorrect in the specific context
+- This is referred to as “hallucination” where a large language model adds information which has no basis in say the text being summarized or translated
+- Text corpora may contain factually incorrect documents (e.g., fiction) and/or text which exhibits biases so these can be replicated in generated texts.
+
+---
+
+## ChatGPT (OpenAI, 2023)
+The modern architecture of GPT models are called InstructGPT models:
+- Trained with humans in the loop
+- Deployed as default language models on OpenAI’s API
+- Better at following user intentions than GPT-3
+- More truthful and less toxic
+- Uses “alignment” technique; Reinforcement learning from human feedback (RLHF)
+
+---
+
+## Reinforcement learning from human feedback (RLHF)
+- This is the approach that is used to go beyond the base GPT aprooach which is just pre-training and prompt. 
+- Customers submit prompts to the API
+- Human labelers provide demonstrations of desired model behaviours; This data is used to fine-tune GPT-3.
+- Human labelers then rank different model outputs; This data is used to train a reward model to predict which output labellers would prefer.
+- GPT-3 has an additional input known as its “policy”; this is fine-tuned to maximise the reward using proximal policy optimization (PPO) (Schulman et al. 2017).
+
+---
+
+## Training ChatGPT (Ougang et al. 2022)
+This is the ChatGPT paper. 
+
+### Step 1
+**The first step is to collect some demonstration data and train a supervised policy.**
+
+You have a large dataset of prompts. A labler would demonstate the desired output behaviour, i.e. hand write the desired outcome. This is supervised learning. The GPT model would be fine-tuned using this data. 
+
+### Step 2
+**Collect comparison data and train a reward model.**
+
+Take a prompt and sample the model several times, i.e. get different responses. A labeler then ranks the outputs from best to worst. This is then used to train a reward model. 
+
+#### Step 3
+**Optimize a policy against the reward model using reinforcement learning.** 
+
+A new prompt is sampled from the dataset. The policy generates an output. Then the reward model calculates a reward for the output. THe reward is used to update the policy using PPO. 
+
+TODO: new some sort of explanation as to what a policy is because this isn't obivous from reading alone. Possibly for reward as well. 
+
+![Ougang](./files/week_9/ouyang.png)
+
+Does this work? Acocording to OpenAI it makes the results less toxic, more truthful, less hallucinations and more appropriate. 
+
+---
+
+## Weakness
+ChatGPT is a pre-trained large language model
+
+It doesn’t know or understand anything
+
+It doesn’t look things up or carry out inferences
+
+Words which mean “similar” things are easy for it to  mix up especially numbers and dates. Numbers have very similar distributional context so within the architecture of transformers is really easy to put in the wrong number. 
+
+It has been trained on a very large corpus which is biased towards; a certain time period, particular geographic locations, culture and ways of thinking.
+
+Fine-tuning process could be subverted
+
+---
+
+## Using Generative Models
+Nearly all NLP applications can be posed as a prompt to a generative model:
+- Translate the following text from English to French: The cat sat on the mat
+- Summarise the following information in 3 sentences: 
+- Who played Hans Solo in Star Wars?
+- What is the sentiment of the following review:
+
+The generative model will encode the prompt and then use that as a condition for decoding and generating a response.
+
+--- 
+
+## Document-level Machine Translation (Wang et al. 2023)
+Introduces evaluation metric which are “discourse aware”
+
+Shows the superiority of LLMs over other advanced Machine Translation systems
+
+Demonstrates the need for context-aware prompts:
+- ChatGPT can translate sentence-by-sentence but remember the  discourse-level context via the chat box
+- But best results generally by providing the whole document
+
+---
+
+## Machine Translation: Remaining Challenges
+- Long documents can still pose problems
+- Stylised translation
+- Interactivity
+- Multi-modal
+- Evaluation – quality and interpretability/explanations
+
+---
+
+## Benchmarking LLMs for News Summarization (Zhang et al. 2024)
+A very common task in language is to give summary. 
+
+Paper is comparing summaries between Davinci GPT-3 and a Freelance Writter. As well as a reference summary which is deemed to be the gold standard. 
+
+TODO: a quick summary of the evaluation methods as well as the results the paper found
 
 
+![Zhang_1](./files/week_9/zhang_1.png)
+![Zhang_2](./files/week_9/zhang_2.png)
+
+---
+
+## Retrieval Augmented Generation (Gao et al. 2023)
+A common tasks of language is question answering. In the modern era we have established and you can just ask a model the question and it will answer it based on its pre-training material and understanding of language. 
+
+Given this flow, it would be good if we had a way to encourage a model to use certain information to answer a question. This desire has led to the paradigm of RAG. 
+
+Can you achieved in pre-taining, fine-tuning or inference stages. 
+
+Inference is probably the most common way to use this. 
+
+![RAG](./files/week_9/RAG.png)
+
+---
+
+## Retrieve-Read Framework for RAG
+User has a query. 
+
+Could just pass this to an llm and it will attempt to answer the question.
+
+Framework allows us to breakdown the query into chunk/vectors for indexing/embeddings which can then be connected to relevant documents. This is the retrieval parts. The query is matched against documents in an database, or even just the web. 
+
+These documents can then be broken down themselves into vectors which are therefore information that can be directly used to answer the prompt by combining the prompt and the context (retreived).
+
+![Retrieve-Read Framework for RAG](./files/week_9/rr_rag.png)
+
+---
+
+## More Advanced RAG
+Post-retrival processing
+
+Modular rag
+
+![Adv RAG](./files/week_9/adv_rag.png)
+
+---
+
+## Does RAG Work?
+- A lot of the time!
+- Impossible to guarantee that generated answer is faithful to retrieved documents
+- Models are trained with RLHF so that they are more likely to generate answers which are faithful to retrieved documents
+- Humans would rank these answers higher
+- Reward should be maximal in this case
+
+---
+
+## Variation and Temperature
+During decode/generation, LLMs sample from the 
+probability distribution to generate the next token
+
+Temperature controls this sampling
+
+Low temperature (->0): LLM will always choose the most 
+probable next token; Same response to the same prompt every time
+
+High temperature (->1): LLM may choose any token 
+according to its probability; Different response each time the same prompt is posed
+
+---
+
+## Self-Consistency
+Often used to improve reliability of LLM responses
+
+Sample N responses from the model 
+- same prompt (with non-zero temperature)
+- varied prompts
+
+Use majority voting to decide final answer (and confidence score)
+
+See, for example, Wang et al 2023 
+
+[SELF-CONSISTENCY IMPROVES CHAIN OF THOUGHT REASONING IN LANGUAGE MODELS](https://arxiv.org/pdf/2203.11171)
+
+---
+
+## Prompt Engineering
+Exact wording of the prompt can/will also affect the information content of the response
+
+Model encodes the prompt and this is the condition for  generating the response
+
+Similar prompts should lead to similar encodings and  therefore similar responses – but NOT always!
+
+If we wanted to create an ensemble of voting models we could think about rewording the prompt
+
+Optimising prompt on a validation set is known as prompt engineering
+
+--- 
+
+## Prompt Engineering Heuristics
+
+### Roles
+Assign roles to the language model and the user
+- “You are a helpful assistant”
+- “Explain to me as if I am a beginner in machine learning / a 5 year old.”
+
+### Breakdown Prompt
+Break down complex tasks into a sequence of simpler prompts
+
+### Explicity Instructions
+Give explicit instructions on what kind of answers are allowed
+- ”You are only allowed to answer yes or no”
+- Give your answer in json using the following format: {“answer”: ... , “reasoning”: ....}
+
+### Repeating Words
+Repeat a specific word or phrase multiple times within a prompt
+
+### Includes Examples
+Include examples of good answers to other similar questions in your prompt (few-shot prompting)
+
+### Avoid Negatives
+Avoid negatives. Tell the model what to do rather than what not to do
+
+### Encouraging the Model
+Use statements which encourage the model to “think” about its answer; “Think step-by-step”
+
+---
+<br>
+<br>
+<br>
+
+# Week 9: Seminar
+
+
+
+---
+<br>
+<br>
+<br>
+
+# Week 9: Paper
+
+
+
+---
+<br>
+<br>
+<br>
+
+# Week 9: Additional Reading
+- [Jurasfsky and Martin 2026, Chapter 9: Post-training: Instruction Tuning, Alignment, and Test-Time Compute](https://web.stanford.edu/~jurafsky/slp3/9.pdf)
+- [Jurafsky and Martin 2026, Chapter 11: Information Retrieval and Retrieval Augmented Generation](https://web.stanford.edu/~jurafsky/slp3/11.pdf)
+
+---
+<br>
+<br>
+<br>
 
 
 
