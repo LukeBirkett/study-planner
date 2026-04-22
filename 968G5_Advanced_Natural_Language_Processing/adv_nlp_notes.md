@@ -6239,8 +6239,68 @@ Explicitly defining the output format (e.g., "Return only JSON") or using negati
 <br>
 
 # Week 9: Seminar
+* [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9bceca1d-92c2-498d-80c0-b432012657ac)
 
+### 1. Why might someone prefer to use an open-source LLM over a closed source LLM?
+- lower costs potentially as open-source is priced by token but closed source cost is fixed base on the cost of your hardward
+- customizable, ability to inspect and edit code and weights. could add functions to the model. integrate other models as an ensemble or vote etc. 
+- privacy concerns, don't have to send sensitive data
+- could be futher fine-tuned or pre-training (not 100% sure this is exclusive to closed-source but probably alot easier and practical)
 
+---
+
+### 2. Outline the technique of Reinforcement Learning from Human Feedback (RLHF) as used in the training of generative large language models. Why is it used?
+
+---
+
+#### 1. Supervised Fine-Tuning (SFT)
+**Step:** Human labelers provide demonstrations of **desired model behaviors**. i.e. write responses to prompts as if they were the model. The model can use these to learn to by mimicking high-quality human examples, instead of just relying on generic internet corpora.
+
+---
+
+#### 2. Reward Model Training
+**Step:** You prompt an LLM several times for the same prompt and human labelers **rank** different model outputs. Then a separate, smaller model (the **Reward Model**) is trained on these rankings. It learns to mathematically "score" an answer based on how much a human would likely prefer it.
+
+---
+
+#### 3. Reinforcement Learning via PPO
+**Step:** GPT-3’s "policy" is fine-tuned to maximize the reward using **Proximal Policy Optimization (PPO)**. This is the final "tuning" phase. The model generates responses, the **Reward Model** scores them, and the **PPO** algorithm **updates** the model's weights to make high-scoring responses more likely in the future. (We don't go into detail on how **Proximal Policy Optimization (PPO)** works on this module)
+---
+
+This flow is also reflected in Ouyang et al. (2022) which is the ChatGPT paper. (Training language models to follow instructions
+with human feedback). IntructGPT was the original name they gave these models which were trainined with reinforement learning. They found that after applying this Reinforcement learning the models become less **RealToxicity**, more **TruthfulQA**, less likely to **Hallucinate** (but still more so than supervised fine-tuning) and more **CustomerAssistantAppropriate**. Note, all compared to the Baseline of GPT-3. 
+
+---
+
+### 3. What is RAG? Why is it used?
+- 'Retreival Augmented Generation'
+- Basic RAG uses a Read-Retreive framework where relevant documents are retrieved and combined with the prompt for the LLM.
+- Could find relevant documents by computing the cosine similarity with the prompt and the documents. 
+- RAG generally "works" but there is no way to force the model to generate an answer that is true to the context retrieved. 
+- Models can be trained with RLFH to be more true to the context. 
+---
+
+### 4. What is temperature and how does it affect LLMs? Is it better to have a high or low temperature?
+- During decode/generation LLMs samples from the probability distribution to generate the next token. 
+- Low = More deterministic, 0 is a one-to-one mapping between prompt and response. will choose the next most probable token. Greedy. 
+- Higher = More probablistic, encourages more creativity. may choose any token according to its prob
+- Whether to use higher or lower depends entirely on the task
+
+---
+
+### 5. What is the method of self-consistency?
+- Used to improve reliability of LLMs
+- Sample N responses from the model; could keep the prompt the same or use varied prompts. 
+- Use majority voting to determine the correct output
+- Wang et al 2023
+
+---
+
+### 6. Give examples of ways in which prompts can be optimized through prompt engineering
+- Roles
+- Break down tasks; "step-by-step"
+- Give explicity instructions, i.e. must be yes or no. 
+- Few-shot prompting examples
 
 ---
 <br>
@@ -6248,10 +6308,138 @@ Explicitly defining the output format (e.g., "Return only JSON") or using negati
 <br>
 
 # Week 9: Paper
+Large Language Models are Zero-Shot Reasoners (Kojima et al., 2022)
 
 
+### 1. Explain the terms: zero shot learning, few shot learning and in-context learning?
+In-context learning (ICL) is the underlying mechanism that enables a Large Language Model to adapt to a task purely through the information provided in its current input sequence (the prompt). Although termed "learning," it involves no gradient updates or changes to the model’s permanent weights; it is a purely feed-forward inference operation where the model utilizes its attention mechanism to recognize and replicate patterns found within the context window.
+
+Few-shot learning is a specific application of ICL where the prompt includes a small number of "demonstrations" or examples (typically 1 to 100) of the task being performed. By providing these input-output pairs, the user "primes" the model to follow a specific logic or formatting style, significantly boosting performance on complex or niche tasks that the model might struggle to solve with a simple instruction alone.
+
+Zero-shot learning occurs when the model is given a task description or instruction without any supporting examples. It relies entirely on the vast general knowledge and linguistic patterns absorbed during its pre-training phase. The rise of zero-shot capabilities has shifted the focus of research toward Prompt Engineering, specifically the search for task-agnostic "trigger phrases" (like "Let’s think step by step") that can elicit sophisticated reasoning behaviors without requiring human-intensive, hand-crafted examples.
+
+> Zero-Shot focuses on prompt engineering, it is specifically because we are trying to trigger "latent" abilities—capabilities the model already has but needs the right "key" to unlock.
 
 ---
+
+### 2. Why are mathematical reasoning problems potentially challenging for LLMs?
+Mathematical reasoning is fundamentally difficult for LLMs because they are probabilistic engines rather than symbolic calculators. While a model is trained to predict the most likely next token based on statistical patterns, mathematical truth is deterministic—there is only one correct answer, and "near-miss" answers are entirely wrong. Because all digits often have similar probability distributions in the model's vocabulary, the model may select a "plausible-looking" number that is mathematically incorrect, a phenomenon known as hallucination.
+
+Furthermore, the autoregressive nature of LLMs creates a "cascading error" problem. Since the model generates text one token at a time, a single minor error in an intermediate calculation becomes part of the permanent context for all subsequent steps. Because the model cannot "backtrack" or "re-think" once a token is produced, it is forced to continue its logic from a flawed premise
+
+While tools like Temperature are used to encourage creativity and generalization in prose, they are counter-productive for math, as they increase the likelihood of the model deviating from the single, discriminative path required to reach the correct solution.
+
+---
+
+### 3. Give an example of how a model can be encouraged to think “step-by-step” using a few-shot prompt-ing paradigm
+In a few-shot prompting paradigm, the model is encouraged to reason by being shown a **demonstration** that includes intermediate logical steps between the question and the final answer. This "primes" the model to follow a similar structural pattern when it encounters a new, unsolved problem. By providing these examples, we transition the model from a **direct mapping** (Input $\to$ Answer) to a **sequential mapping** (Input $\to$ Reasoning $\to$ Answer).
+
+#### Example Prompt:
+**Question:** I have 1 apple and my friend has 2 apples. If the travel limit is 2 apples per group, can we bring them all on the flight?
+
+**Answer:** We have 1 + 2 = 3 apples in total. The limit is 2. Since 3 is greater than 2, we are over the limit. Therefore, we cannot bring all the apples.
+
+This utilizes the model's In-Context Learning capability to adopt a "System 2" approach without any permanent changes to its underlying architecture.
+
+---
+
+### 4. Give an example of how a model can be encouraged to think “step-by-step” using a zero-shot prompting paradigm
+In a **zero-shot prompting** paradigm, a model is encouraged to reason by using specific "trigger phrases" that shift the model's probability distribution toward generating logical, sequential tokens. This does not require the user to provide any examples; instead, it leverages the model's **latent reasoning capabilities** developed during pre-training. By conditioning the model with an instruction to be methodical, we prevent it from attempting to calculate complex answers in a single, instinctive "System 1" pass.
+
+#### Examples of Zero-Shot Reasoning Triggers:
+- **"Let's think step by step":** The most famous example (from Kojima et al., 2022). This phrase serves as a "stochastic scratchpad" trigger, forcing the model to externalize each logical link before arriving at a final conclusion.
+- **"Show your work":** Often used in mathematical contexts to ensure the model provides a verifiable audit trail of its calculations.
+- **"Break this down into a logical sequence":** Useful for complex planning or coding tasks where the order of operations is critical.
+
+The effectiveness of these phrases highlights that LLMs often possess the "knowledge" required to solve a problem but lack the default "behavior" to process it sequentially. Zero-shot prompting provides the instructional template that bridges this gap, allowing for high-performance reasoning without the human overhead of writing few-shot demonstrations.
+
+---
+
+### 5. Outline the two stages of prompting proposed by the authors?
+The authors propose a "Reasoning-then-Extraction" pipeline. This decoupled process ensures that the model first focuses entirely on logical throughput before being forced to provide a concise, evaluatable result.
+
+---
+
+#### Stage 1: Reasoning Extraction:
+The original question is modified with a **"trigger" prompt**, most notably "Let's think step by step." The model then generates a long-form **Reasoning Path**. By outputting these intermediate tokens, the model essentially externalizes its "working memory." Each token generated becomes part of the context for the next, allowing the model to process complex dependencies that are impossible to solve in a single-pass response.
+
+#### Stage 2: Answer Extraction:
+The original question and the reasoning generated in Stage 1 are concatenated together, followed by an **Extraction Prompt** (e.g., "Therefore, the answer is"). The model is then run a second time to produce a clean, final answer (usually a single number or a specific choice). This stage prevents "verbosity noise" and ensures the final output is grounded in the logic developed during the first stage.
+
+---
+
+This two-stage approach effectively turns the LLM into a sequential processor, where the output of the first stage acts as the "logical foundation" for the final conclusion.
+
+---
+
+### 6. What are the four categories of reasoning tasks considered in the experiments? Give an example of each kind of problem?
+The experiments primarily focused on tasks where "System 1" intuition fails and "System 2" deliberation is required. The authors utilized benchmarks that require the model to maintain a logical state across multiple steps.
+
+#### Arithmetic Reasoning (Math Word Problems):
+These tasks require the model to extract numbers from a narrative and apply the correct sequence of mathematical operations.
+
+**Example (GSM8K):** "If a box contains 5 red balls and twice as many blue balls, and you remove 3 balls, how many remain?" (Requires: $5 + (5 \times 2) - 3 = 12$).
+
+---
+
+#### Commonsense Reasoning:
+These problems test the model's ability to combine general world knowledge with logical deduction to answer questions that aren't explicitly answered in the text.
+
+**Example (StrategyQA):** "Would a person living during the reign of Charlemagne have used a typewriter?" (Requires: Knowing Charlemagne’s dates vs. the invention of the typewriter).
+
+---
+
+#### Symbolic Reasoning (Algorithmic Tasks):
+These involve tracking specific symbols or object states through a series of transformations. These are often "synthetic" and don't rely on real-world facts.
+
+**Example (Coin Flip):** "A coin is heads up. You flip it. You don't flip it. You flip it. Is it heads or tails?" (Requires: Tracking the state changes: $H \to T \to T \to H$).
+
+---
+
+#### Logical Reasoning (Spatial & Temporal):
+These tasks, often pulled from the BIG-bench collection, require the model to understand dates, time, or the physical shuffling of objects.
+
+**Example (Tracking Shuffled Objects):** "Alice, Bob, and Charlie have cups. A ball is under Alice’s cup. Alice swaps with Bob. Bob swaps with Charlie. Where is the ball?" (Requires: Mapping the movement of the object).
+
+---
+
+### 7. What baselines do the authors compare their zero-shot-CoT approach to? How do the authors ensure determinism of the methods?
+The authors compare Zero-shot-CoT against three primary baseline categories to measure its relative impact:
+- **Zero-shot (Standard):** The most basic baseline where the model is given a question and asked for an immediate answer (e.g., "Q: [Question] A: [Answer]"). This measures the "System 1" performance.
+- **Few-shot (Standard):** The model is given several examples of questions and direct answers but no intermediate reasoning steps.
+- **Few-shot-CoT:** The "gold standard" baseline from the original Wei et al. (2022) paper, where the model is provided with hand-crafted, step-by-step reasoning demonstrations.
+
+#### Ensuring Determinism:
+To ensure that the results are reproducible and not the result of a "lucky" random guess, the authors employed two main strategies:
+- **Greedy Decoding (Temperature = 0):** The authors set the model's temperature to 0. This forces the model to always select the token with the highest probability at every step. This removes the "creativity" or randomness of the model, ensuring that if you ran the same prompt twice, you would get the exact same output.
+- **Fixed Answer Extraction:** By using a consistent, automated template for the second stage (e.g., "Therefore, the answer is"), they ensured that the final result was extracted in a uniform way that didn't rely on human interpretation of the model's long-form reasoning.
+
+---
+
+### 8. How do the authors carry out answer cleansing?
+Because Zero-shot-CoT generates a long "Chain of Thought" reasoning path, the final numerical or logical answer is often buried within a wall of text. To evaluate the model’s performance objectively, the authors use a two-step "cleansing" process:
+1. **The Extraction Prompt:** After the model has generated its reasoning path, the authors append a specific Answer Extraction Prompt to the end of the conversation. The most common template used is: `(Question) + (Generated Reasoning) + "Therefore, the answer (Arabic numerals) is"`. Then in the answer itself they extract the text after "The answer is...". There are a couple of rules to handle when the model says this twice where they take first instance. As well as, back up rule for where "The answer is..." is not presented in the answer, where they work backwards through the text to find something that fits.
+2. **Format Standardization:** This second prompt forces the model to look back at its own reasoning and summarize it into a concise format (like a single number or a multiple-choice letter). This makes the output "machine-readable," allowing the authors to compare the model's answer directly against the dataset's "gold standard" key without manual human interpretation.
+
+---
+
+### 9. How does zero-shot-CoT compare to the baselines at the different tasks? What other factors are there that affect performance?
+Zero-shot-CoT significantly outperforms the standard zero-shot baseline across nearly all reasoning tasks, often by a massive margin.
+
+For example, on the GSM8K grade school math benchmark, standard zero-shot prompting typically yields very low accuracy (sometimes near 10%), while the addition of "Let’s think step by step" can boost performance to over 40% or 50% without providing a single example.
+
+While it still generally trails behind **Few-shot-CoT** — which remains the "gold standard" because human-provided demonstrations offer a more precise logical template — Zero-shot-CoT proves that the ability to reason is a latent capability already present in the model, simply waiting to be activated by the right instruction.
+
+Beyond the prompt itself, the primary factor affecting performance is **model scale**.
+
+The experiments show that Zero-shot-CoT is an **emergent ability**; it provides almost no benefit to smaller models (e.g., those with fewer than 10B parameters) and only becomes effective once a model reaches a massive scale (roughly 100B+ parameters, like GPT-3 or PaLM).
+
+Additionally, performance is highly sensitive to the **choice of the trigger phrase**. While "Let’s think step by step" was found to be the most effective, other variations like "Let's work this out" still show improvements, whereas purely instructional prompts like "Solve this carefully" do not trigger the same sequential reasoning process.
+
+Finally, the **nature of the task matters**; the method is highly effective for multi-step arithmetic and symbolic logic but provides **diminishing returns** on simple **"System 1**" tasks like factual retrieval or sentiment analysis where no intermediate steps are required.
+
+---
+
 <br>
 <br>
 <br>
