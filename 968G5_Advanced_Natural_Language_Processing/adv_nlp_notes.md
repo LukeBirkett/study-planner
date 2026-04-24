@@ -6456,6 +6456,169 @@ Finally, the **nature of the task matters**; the method is highly effective for 
 
 
 
+---
+
+Bit of seminar content then onto revision. 
+
+Revision will contain lots MCQ. Any slides that aren't covered in this Friday session will be covered in the Monday session as there is many to cover
+
+---
+
+## Revision
+
+No new info in terms of slide contents. Often just copied from the lectures but these are the most important topics. 
+
+Examples of MCQ
+
+---
+
+## Lecical and Distribution Semantics
+*Week 1 & Week 4*
+
+* Revise types of relationships
+* Word net, synset, hyponmy, Lowest common subsumer
+* Information content definition. Can't directly compare outside of chains. But lower in chains has more IC
+* Need to siimilarity formulas/definitions. Related to subsumers. Resnik. lin
+* word similarity. max over product of sense
+* Path length definition and formula.
+* PPMI formula. And PMI
+* Zipf Law: formula/table. product of freq and rank is equal, i.e 1*most freq=most freq, calc for 200 would be 200*what = most freq
+* distribution semantics, hypothesis, representations, windowing, counts in windows/neibours, into table, derive vector based on counts, use for PPMI/PMI, also use Cosine Similarity to comare
+* Challenges for dist sim: senses, semantic relationships, sparsity. 
+* Dimensionality Red: PCA, SVD, NNMF (not apply but know their intution)
+* LSA proceees at high level (notes in seminar slides)
+* NNMF not negative solution to above (why?)
+* Avd; red dims, could capture similar itself between words
+* Dis; comp ecpen
+* Word Embeds; start with fix number of dims and learn values by optimising on some task. 
+* Word2Vec; not factorizing at all but it is learning 2 embeddings; target or; uses conttext window; number of dims is set by the user. CBOW, SKIP GRam.
+    - embed random init, iterate, objective function using target words 
+* Gradient Descent
+* GloVe Factorization; focal and context embeddings; 2 embeds for each word; start with co-ocurrance matric and factorize down into 2. trained with SDG to find matrices
+
+---
+
+## Language Modelling
+*Week 2*
+
+- n-grams; formula; mle explantion to get approx of components and formula; markov assumptions, words are indep of prior n; n-1 previous; 
+- intrinsic evaluation; seen vs unseen; train vs test; 
+- perplexity; best lang model is that best predicts an unseen dataset; returns highest P(sentence); perp = inverse of prob; formulas; min perp;
+- Generation; shanon-vis; chose next bi-gram based on highest prob; starting token; end token; 
+- Overfitting: 0 prob in training set means we assign zero to test and cant calc perp; very wrong; use methods to overcome; add-one, lapace, unk token for rare words for oov, extend to bigrams (i.e. oov together);
+- absolulte distcoutning interpolation
+- stupid backoff
+
+--- 
+
+## Neural Language Modelling
+*Week 3*
+
+- ealriest nn; feed-forward neural lang model; bengio; input one-hot; embedding layer, higgen layer; predict next word
+- adv; able to generalise over context of similar words due to embeddings (compared to cooruance); doesn't need smoothing; can handle long hists;
+- dis;
+- where to get embeddings from; start one-hot
+- rnns; mikoov; 
+- unrolling rnn and lstms; short-term and long term memory through cell state
+- Gates;
+- Stacked; deep learning; diff layers indivude diff reps;
+- bi-dir rnns;
+- problems for word-based nmls; sparsity; embedding issues; can generaise but how well is sprase
+- char level; convs; learn morpgolocial info; compose low freq words
+
+
+- lstm + diagrams; gates; (same for rnn)
+
+## 
+*Week*
+
+- evaltions
+- pos and neg (or just all classes)
+- Prec
+- Recall
+- F1
+- Acc
+- Macro and Micro Average
+
+- centroid; mean pooling
+
+- dot product tells you about vector similarity direction. 
+
+- label bias problem; memm problem
+
+- sequence classification; doc, text, seq to single class; binary or mutli; hard or soft; prob dist over classes
+
+
+- baysian approach to classification; bayes for each class
+
+- composiign words embeds into sentences; constineitent; additive composoition or mean pooling; 
+    - dis; word embeds are uncontext; contian all senses; no underdtanding of order; issue with connective words
+
+- sequence labelling; label each token; pos, named entity; 
+
+- ner appraochs:   
+    - rule; 
+    - generative/dayesian/hmm
+    - discrim
+
+- hmm; max prob of tag seq; formulas; drawbacks
+
+- memm
+
+- label bias problem; memm use a per-state expo model; solution is crf
+
+
+- ma and hovy architecture
+
+---
+
+## Machine Translation
+*week 6*
+
+- lexical diverages; diff between langes
+- morph difference; agglu vs fusions; iso vs poly
+
+---
+
+## Pre-trained Large Langauge Models
+*week 7 and 8*
+
+
+
+- Query,Key combinations for attention
+- Pre-training methods
+- Bert alts. often drop next sentences
+- Fine-tuning methods. transfer learning.
+- contextualised word embeddings
+- elmo; rnn, lstm, embeddings
+- transformers; transduction, paralles
+- self attention and scores
+- attention normailse and softscale
+- how to get output of attention
+- multi-head attention
+- positional encoding
+- BERT; pre; fine; encoder-only; input formatl token, segment, position
+- uni (autorefressive) vs bidir; 
+- transfer learning
+
+---
+
+## Generative Large Language Models
+
+- RLHF
+- Generative pre-training transformer (gpt-3)
+- in-context learning/prompting
+- zero, 1, few
+- hallicunation
+- boas
+- chatgtp, instructgpt
+- encode the prompt, decode to gen response
+- RAG; ret-red framework; add docs to prompt; reprompt
+- temp; variation; high prob, low det
+- self-cons; reliableily
+- prompt eng
+
+
 
 
 
