@@ -1,12 +1,15 @@
 # Lab class 3 Exercise Sheet
 Preliminary: If you haven’t completed last weeks’ lab class, I would suggest you do so. In particular, please make sure you have attempted the final question. If you have completed the worksheet, please proceed with the questions below.
 
+1. [Question 1](#question-1)
+2. [Question 2](#question-2)
+
 ---
 
 # Question 1:
-On a construction site, some stakes have been hammered into the ground. As you watch, a worker ties a rope to one of the stakes and then runs it around another stake, some distance away, pulling it tight. When you ask the worker what they are doing, they say, ‘See, I need to run a cable from stake A over there, via stake B, here, to stake C all the way over there. So I tie this rope to A, wind it around B and then tie the end to C. This way I know how long a cable I need to buy.’ 
-
-This makes you wonder: When is it possible to measure the sum of the pairwise distances between all pairs of stakes, by using a single rope in this way?
+> On a construction site, some stakes have been hammered into the ground. As you watch, a worker ties a rope to one of the stakes and then runs it around another stake, some distance away, pulling it tight. When you ask the worker what they are doing, they say, ‘See, I need to run a cable from stake A over there, via stake B, here, to stake C all the way over there. So I tie this rope to A, wind it around B and then tie the end to C. This way I know how long a cable I need to buy.’ 
+> 
+> This makes you wonder: When is it possible to measure the sum of the pairwise distances between all pairs of stakes, by using a single rope in this way?
 
 ---
 
@@ -80,47 +83,54 @@ Yes, the Eulerian rules are universal laws of graph topology meaning the odd rul
 
 ---
 
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ---
 
 # Question 2:
-In this exercise, I want you to pick two networks from one of the repositories mentioned in the
+> ---
+>
+> In this exercise, I want you to pick two networks from one of the repositories mentioned in the
 first lecture. Make sure that these networks are from different domains:
+> 
+> ---
+> 
+> * **Social network** (e.g., Facebook, Twitter, or collaboration networks)
+> * **Biological network** (e.g., Protein-protein interactions)
+> * **Technological network** (e.g., Internet topology, power grid)
+> 
+> ---
+> 
+> * [ICON - Colorado Index of Complex Networks](https://icon.colorado.edu/)
+> * [SNAP - Stanford Large Network Dataset Collection](https://snap.stanford.edu/data/)
+> * [Network Repository. An Interactive Scientific Network Data Repository.](https://networkrepository.com/index.php)
+> * [The KONECT Project](http://konect.cc/)
+> * [BCT - The Brain Connectivity Toolbox](https://sites.google.com/site/bctnet/datasets-and-demos)
+> * [STRING - Protein-Protein Interaction Networks](https://string-db.org/)
+> * [BioGRID - Biological General Repository for Interaction Datasets](https://thebiogrid.org/)
+> * [Aminer Citation and Co-Authorship Network](https://cn.aminer.org/data)
+> * [CAIDA - Center for Applied Internet Data Analysis](https://www.caida.org/catalog/datasets/overview/)
+> * [OSM - Open Street Maps](https://www.openstreetmap.org/query?lat=50.86734&lon=-0.08607)
+> * [WIOD - World Input Output Database](https://www.rug.nl/ggdc/valuechain/wiod/)
+> * [Movie Lens Dataset](https://grouplens.org/datasets/movielens/)
+> 
+> ---
+> 
+> Pick networks with roughly the same number of nodes. Preserving density here might not be particularly helpful so do feel free to pick networks of interest even if they have a very different number of edges for the same number of nodes
+> 
+> Download those two networks then write code to compute and visualize their k-core structure. What do you see and what does it tell you about those networks?
+> 
+> Next, write code to iteratively ‘attack’ the network such that at each iteration you delete a node, either picking it randomly or picking it according to some metric of your choice (e.g., degree is a common one but you could pick another one, e.g., betweenness centrality). At each iteration (including before the first removal), calculate the size of the largest connected component.
+> 
+> Plot the curve that shows the size of the largest connected component against the size of the network. Compare the curves when picking nodes at random vs picking nodes according to your metric. What does it tell you about the network? And how does that change depending on the network?
+>
+> ---
 
----
 
-* **Social network** (e.g., Facebook, Twitter, or collaboration networks)
-* **Biological network** (e.g., Protein-protein interactions)
-* **Technological network** (e.g., Internet topology, power grid)
 
----
 
-* [ICON - Colorado Index of Complex Networks](https://icon.colorado.edu/)
-* [SNAP - Stanford Large Network Dataset Collection](https://snap.stanford.edu/data/)
-* [Network Repository. An Interactive Scientific Network Data Repository.](https://networkrepository.com/index.php)
-* [The KONECT Project](http://konect.cc/)
-* [BCT - The Brain Connectivity Toolbox](https://sites.google.com/site/bctnet/datasets-and-demos)
-* [STRING - Protein-Protein Interaction Networks](https://string-db.org/)
-* [BioGRID - Biological General Repository for Interaction Datasets](https://thebiogrid.org/)
-* [Aminer Citation and Co-Authorship Network](https://cn.aminer.org/data)
-* [CAIDA - Center for Applied Internet Data Analysis](https://www.caida.org/catalog/datasets/overview/)
-* [OSM - Open Street Maps](https://www.openstreetmap.org/query?lat=50.86734&lon=-0.08607)
-* [WIOD - World Input Output Database](https://www.rug.nl/ggdc/valuechain/wiod/)
-* [Movie Lens Dataset](https://grouplens.org/datasets/movielens/)
 
----
-
-Pick networks with roughly the same number of nodes. Preserving density here might not be particularly helpful so do feel free to pick networks of interest even if they have a very different number of edges for the same number of nodes
-
-Download those two networks then write code to compute and visualize their k-core structure. What do you see and what does it tell you about those networks?
-
-Next, write code to iteratively ‘attack’ the network such that at each iteration you delete a node, either picking it randomly or picking it according to some metric of your choice (e.g., degree is a common one but you could pick another one, e.g., betweenness centrality). At each iteration (including before the first removal), calculate the size of the largest connected component.
-
-Plot the curve that shows the size of the largest connected component against the size of the network. Compare the curves when picking nodes at random vs picking nodes according to your metric. What does it tell you about the network? And how does that change depending on the network?
