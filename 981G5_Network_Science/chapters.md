@@ -1,5 +1,5 @@
 # A first course in network science
-> [Menczer, F., Fortunato, S. and Davis, C.A., 2020. A first course in network science. Cambridge University Press.]()
+> [Menczer, F., Fortunato, S. and Davis, C.A., 2020. A first course in network science. Cambridge University Press.](https://readinglists.sussex.ac.uk/leganto/public/44SUS_INST/citation/23771773640002461?auth=SAML)
 
 Primary source, in some case slides are directly taken, or modified, based on the material supplied by the authors. 
 

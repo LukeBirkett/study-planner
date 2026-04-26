@@ -272,7 +272,6 @@ The resilience of the Bitcoin OTC network isn't just about connectivity; it’s 
 | **In-γ (Tail) ($γ_{3,i}$)** | 2.27 | The power law exponent for the "In-degree" (trust received) in the tail. | Measures the distribution of "Reputation." A value > 2.0 suggests the "Trust" hubs are slightly less dominant than the "Activity" hubs, but still scale-free. |
 | **In-degree p-value ($p_i$)** | 0.002 | Statistical significance of the power law fit for in-degrees. | Similar to out-degree, the very low p-value indicates that while it looks scale-free, it fails the most rigid statistical tests for a "pure" power law across the whole dataset. |
 
----
 
 #### Points to highlight:
 1. **The "p-value" trap:** In the KONECT handbook (and the Clauset et al. methodology they use), a high p-value (usually > 0.1) means the Power Law is a plausible hypothesis. Your p-values are 0.00, which mathematically tells a researcher: "This network looks scale-free to the eye, but there are significant deviations from a perfect mathematical power law." This is very common in real-world human networks.
