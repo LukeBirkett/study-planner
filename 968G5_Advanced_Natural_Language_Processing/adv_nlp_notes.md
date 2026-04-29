@@ -24,7 +24,7 @@ The textbook is [Speech and Language Processing](https://web.stanford.edu/~juraf
 6. [Week 6 - Machine Translation](#week-6---machine-translation)
 7. [Week 7 - Pre-Trained Large Language Models](#week-7---pre-trained-large-language-models)
 8. [Week 8 - Transfer Learning with Pre-Train Large Language](#week-8---transfer-learning-with-pretrained-large-language-models)
-9. [Week 9 - ]()
+9. [Week 9 - Generative Large Language Models](#week-9---generative-large-language-models)
 10. [Week 10 - ]()
 11. [Week 11 - ]()
 
@@ -141,7 +141,7 @@ Words that mean the same thing and can be substituted in context without changin
 ---
 
 ### Antonymy:
-Words with opposite meanings . Paradoxically, antonyms are semantically very similar as they usually share all features except for one specific dimension, like temperature (hot/cold) or direction (rise/fall).
+Words with opposite meanings. Paradoxically, antonyms are semantically very similar as they usually share all features except for one specific dimension, like temperature (hot/cold) or direction (rise/fall).
 
 ---
 
@@ -171,7 +171,7 @@ Each synset is associated with one distinct definition; polysemous words appear 
 ---
 
 ### Hierarchical Organization:
-Synsets are primarily connected via hyponymy, creating a tree-like structure where general concepts are at the top and specific instances are at the leaves .
+Synsets are primarily connected via hyponymy, creating a tree-like structure where general concepts are at the top and specific instances are at the leaves.
 
 ---
 
@@ -239,7 +239,7 @@ To determine if a computational measure is "correct," it must be compared agains
 # Part 2: Distributional Semantics
 Distributional Semantics is a computational approach to meaning based on the Distributional Hypothesis, which states that words occurring in similar contexts tend to have similar meanings. Unlike Lexical Semantics, which relies on human-curated dictionaries, this method "bootstraps" meaning directly from large bodies of text (corpora). It is famously summarized by linguist J.R. Firth’s 1957 dictum: "You shall know a word by the company it keeps"
 
-In practice, this means representing a word as a mathematical vector based on the counts of other words (features) that appear near it within a defined context window. By comparing these vectors—typically using cosine similarity—computers can automatically discover that words like beer and wine are related because they share "facets of meaning," such as being the object of the verb drink or appearing near the word bottle.
+In practice, this means representing a word as a mathematical vector based on the counts of other words (features) that appear near it within a defined context window. By comparing these vectors — typically using cosine similarity — computers can automatically discover that words like beer and wine are related because they share "facets of meaning," such as being the object of the verb drink or appearing near the word bottle.
 
 #### Part 2: Contents 
 * [The Distributional Hypothesis](#the-distributional-hypothesis)
@@ -284,7 +284,14 @@ Raw counts are often misleading because common words (like the or is) appear fre
 
 $$PMI(w, f) = \log \frac{P(w, f)}{P(w)P(f)}$$
 
-**Positive PMI (PPMI):** Since $PMI$ results in $-\infty$ for words that never co-occur, $PPMI$ replaces all negative values with 0. This emphasizes informative features and de-emphasizes "noise" from high-frequency function words.
+**Positive PMI (PPMI):** Since $PMI$ results in $-\infty$ for words that never co-occur, $PPMI$ replaces all negative and `inf` values with 0. This emphasizes informative features and de-emphasizes "noise" from high-frequency function words.
+
+> PMI becomes negative when The Reality < The Expectation.
+> - PMI = 0: $x$ and $y$ are perfectly independent (like flipping a coin and the weather).
+> - PMI > 0: $x$ and $y$ co-occur more than expected (like "New" and "York").
+> - PMI < 0: $x$ and $y$ co-occur less than expected. Their presence actively discourages one another.
+>
+> Remeber that a LOG will turn a decimal into a minus. 
 
 --- 
 
@@ -293,7 +300,7 @@ Despite its power, this approach has three major hurdles:
 
 **Word Ambiguity:** Vectors represent the word (the string), not the sense. A vector for bow is a "mush" of its ribbon, weapon, and ship meanings.
 
-**Semantic Relationships:** Distributional models find "related" words, but not necessarily synonyms . Antonyms often appear in identical contexts (e.g., hot and cold), making them appear highly similar.
+**Semantic Relationships:** Distributional models find "related" words, but not necessarily synonyms. Antonyms often appear in identical contexts (e.g., hot and cold), making them appear highly similar.
 
 **Sparsity (Zipf's Law):** Most words occur very rarely (Hapax Legomena). This results in massive vectors filled with zeros, making them difficult to compare.
 
@@ -627,13 +634,13 @@ To fix **sparsity in n-grams** we use **Markov Assumptions**. Here, we simplify 
 ---
 
 # N-gram Language Model
- Calculating the probability of a word based on every preceding word is computationally difficult, or even impossible, the **N-gram model** introduces a simplifying assumption:
- * It **fixes** the history and only considers $n$ words at a time: the current word ($w_i$) and the previous $n-1$ words.
- * **Maximum Likelihood Estimation (MLE):** The model estimates these probabilities by looking at a training corpus and calculating frequencies. In statistics, **Maximum Likelihood Estimation** is a method of estimating the parameters of a model that makes the observed data "most probable."
+Calculating the probability of a word based on every preceding word is computationally difficult, or even impossible, the **N-gram model** introduces a simplifying assumption:
+* It **fixes** the history and only considers $n$ words at a time: the current word ($w_i$) and the previous $n-1$ words.
+* **Maximum Likelihood Estimation (MLE):** The model estimates these probabilities by looking at a training corpus and calculating frequencies. In statistics, **Maximum Likelihood Estimation** is a method of estimating the parameters of a model that makes the observed data "most probable."
 
- $$P(w_i \mid w_{i-(n-1)}, \dots, w_{i-1}) = \frac{freq(all\ n\ words\ together)}{freq(the\ previous\ n-1\ words)}$$
+$$P(w_i \mid w_{i-(n-1)}, \dots, w_{i-1}) = \frac{freq(all\ n\ words\ together)}{freq(the\ previous\ n-1\ words)}$$
 
- This formula represents the "training" phase of the model. It is the way the computer calculates the probability of a specific word appearing based on the context of the words that came right before it.
+This formula represents the "training" phase of the model. It is the way the computer calculates the probability of a specific word appearing based on the context of the words that came right before it.
 
 In this context, if you see the phrase "the cat sat" 10 times in your data, and 6 of those times the next word is "on," the MLE estimate for $P(on \mid the, cat, sat)$ is $6/10 = 0.6$. This is the "best guess" the model can make based solely on the evidence it has seen in its training text.
 
@@ -1898,9 +1905,15 @@ Zipf's Law is the empirical observation that in any large corpus of natural lang
 
 If we rank all words in a corpus by their frequency ($r=1$ for the most common, $r=2$ for the second most common, etc.), the frequency ($f$) of a word is approximately:
 
-$$f \propto \frac{1}{r}$$
+$$f \propto \frac{C}{r}$$
 
 This implies that the product of a word's frequency and its rank is roughly constant: $f \times r \approx C$.
+
+> While $C$ is practically equal to the frequency of the most common word, there are two small nuances to keep in mind:
+> 
+> **The "Ideal" vs. "Real" Constant:** In a perfect mathematical Zipf distribution, $C$ is a fixed number. In real-world data, the product $f \times r$ might fluctuate slightly for each word (e.g., Rank 1 might give you $C=40,000$ while Rank 2 gives you $C=39,800$). Researchers often "fit" a constant by averaging these products across the top words.
+> 
+> **The Exponent ($s$):** The more advanced version of the formula is $f = \frac{C}{r^s}$. In most natural languages, $s$ is so close to 1 that we ignore it. If $s$ were significantly different from 1, the frequency of Rank 1 would still be $C$, but the drop-off for higher ranks would be much steeper or shallower.
 
 ---
 
@@ -1960,7 +1973,7 @@ Rather than trying to fill a 82,000-dimensional matrix, we transform the data in
 ### 1. PCA (Principal Component Analysis)
 **Goal:** Find the axes (**Principal Components**) along which the data varies the most.
 
-**Intuition:** If you have a 3D cloud of data shaped like a pancake, PCA realizes that the "thickness" of the pancake is less important than its "width" and "length." It flattens the 3D data into 2D while losing as little information as possible.
+**Intuition:** If you have a 3D cloud of data shaped like a pancake, PCA realizes that the "thickness" of the pancake is less important than its "width" and "length." It flattens the 3D data into 2D while losing as little information as possible. Essentially a line of best fit. 
 
 ---
 
@@ -2243,6 +2256,28 @@ GloVe tries to solve the **matrix factorization problem** ($X = FC^\top$) but do
 * $F$: Focal/Target embeddings.
 * $C$: Context embeddings.
 * The Goal: Find vectors such that their dot product equals the log of their co-occurrence count: $w_i \cdot \tilde{w}_j \approx \log(X_{ij})$.
+
+> GloVe (Global Vectors for Word Representation) is definitely trained on a corpus, not just a database of dictionary definitions.
+> 
+> While it might seem like a "dictionary" because we often download pre-trained versions of it (like those trained on 6 billion words from Wikipedia), the vectors themselves are the result of a massive statistical calculation
+> 
+> GloVe is a Global Log-Bilinear Regression model. It bridges the gap between two worlds: the Global Statistics of matrix factorization (like LSA) and the Local Context window methods (like Word2Vec). It essentially "compresses" the massive co-occurrence statistics of a huge corpus into a dense vector space where mathematical shifts (vector offsets) correspond to semantic relationships.
+> 
+> Unlike Word2Vec, which "slides" a window over a sentence to learn local context, GloVe is a count-based model. It starts by building a massive Co-occurrence Matrix from a corpus (like all of Wikipedia). This matrix counts how many times word $i$ appears in the context of word $j$ across the entire dataset. It doesn't care about "definitions"; it cares about how often words hang out together in real-world usage.
+> 
+> The real "magic" of GloVe is that it trains word vectors so that their dot product equals the log of the co-occurrence probability.
+> 
+> The researchers found that the best way to distinguish meaning is to look at the ratio of probabilities. For example:
+> - If you look at the words "ice" and "steam":
+> - Both occur often with "water."
+> - "Ice" occurs often with "solid," but "steam" does not.
+> - "Steam" occurs often with "gas," but "ice" does not.
+> 
+> By calculating the ratio of these probabilities across the whole corpus, GloVe creates a vector space where distances represent these semantic relationships.
+>
+> People often think of it as a database because GloVe is rarely trained from scratch by individual users anymore. Because it requires a massive amount of memory to build that initial co-occurrence matrix, most people simply download the Pre-trained Embeddings.
+> 
+> Example: The "GloVe.6B" file is a lookup table of 400,000 words, each represented by a vector (usually 50, 100, 200, or 300 dimensions), all derived from 6 billion tokens of Wikipedia and Gigaword data.
 
 ---
 
@@ -2537,7 +2572,7 @@ Semantic results are reported using Spearman’s Rank Correlation and MaxDiff Ac
 
 # [Week 5 - Applications in NLP](https://canvas.sussex.ac.uk/courses/36171/pages/week-slash-topic-5-applications-in-nlp)
 
-The ultimate goal of language modeling is rarely just to calculate the probability of a string of words or to find the mathematical distance between two vectors; rather, these models serve as the foundational engine for real-world applications. By treating language as a sequence of discrete units, we can apply different computational frameworks to solve diverse problems: Sequence Classification allows us to categorize entire documents (such as detecting sentiment or spam), while Sequence Labelling enables us to interrogate the internal structure of a sentence (such as identifying parts of speech or named entities). This week, we transition from theoretical word representations to practical architectures, exploring how traditional Bayesian methods like Hidden Markov Models (HMMs) have paved the way for modern, high-performance neural pipelines. Understanding these applications now provides the necessary grounding for when we eventually substitute these basic models with more advanced Transformer-based architectures in the coming weeks.
+The ultimate goal of language modeling is rarely just to calculate the probability of a string of words or to find the mathematical distance between two vectors; rather, these models serve as the foundational engine for real-world applications. By treating language as a sequence of discrete units, we can apply different computational frameworks to solve diverse problems: **Sequence Classification** allows us to categorize entire documents (such as detecting sentiment or spam), while **Sequence Labelling** enables us to interrogate the internal structure of a sentence (such as identifying parts of speech or named entities). This week, we transition from theoretical word representations to practical architectures, exploring how traditional Bayesian methods like **Hidden Markov Models** (HMMs) have paved the way for modern, high-performance neural pipelines. Understanding these applications now provides the necessary grounding for when we eventually substitute these basic models with more advanced Transformer-based architectures in the coming weeks.
 
 #### Week 5: Contents
 
@@ -2549,13 +2584,18 @@ The ultimate goal of language modeling is rarely just to calculate the probabili
 ---
 
 # Week 5: Lecture
-Week 5 marks a critical transition in the module from the theoretical construction of word representations to their practical application in real-world systems. Having established how to represent language as dense vectors, we now explore the two primary frameworks for processing text: **Sequence Classification** and **Sequence Labeling**. In classification, the model acts as a "judge," mapping an entire input string—regardless of length—to a single global category, such as sentiment or topic. In labeling, the model acts as a "tagger," assigning a specific category to every individual token in the sequence. This distinction is vital for moving beyond simple word-sense identification toward structural analysis, such as **Named Entity Recognition** (NER) and **Part-of-Speech** (PoS) tagging.
+Week 5 marks a critical transition in the module from the theoretical construction of word representations to their practical application in real-world systems. Having established how to represent language as dense vectors, we now explore the two primary frameworks for processing text: **Sequence Classification** and **Sequence Labeling**. 
+
+- In classification, the model acts as a "judge," mapping an entire input string — regardless of length — to a single global category, such as sentiment or topic. 
+- In labeling, the model acts as a "tagger," assigning a specific category to every individual token in the sequence. 
+
+This distinction is vital for moving beyond simple word-sense identification toward structural analysis, such as **Named Entity Recognition** (NER) and **Part-of-Speech** (PoS) tagging.
 
 Architecturally, we trace the evolution of these tasks from traditional Bayesian strategies, like **Naive Bayes and Hidden Markov Models (HMMs)**, to modern deep learning pipelines. We examine how simple **additive composition** (pooling word vectors) serves as a fast baseline, but ultimately fails to capture the "logic" of word order. To solve this, we introduce the **Bi-directional LSTM**, which builds a context-aware representation by reading the text from both directions simultaneously. A key highlight of the week is the **Ma and Hovy (2016)** "sandwich" architecture, which demonstrates how combining **Character-level CNNs** (for morphology), **Bi-LSTMs** (for context), and **CRF layers** (for global sequence logic) creates a robust system capable of handling out-of-vocabulary words and complex label dependencies.
 
-Finally, the week addresses the rigorous nature of **Evaluation**. We move beyond simple Accuracy to explore the nuances of **Precision**, **Recall**, and the **F1-Score**, particularly in the context of unbalanced datasets. By comparing **Macro-averaging** (which protects minority "underdog" classes) with **Micro-averaging** (which focuses on overall sample success), we gain the analytical tools necessary to critique model performance in high-stakes applications like propaganda detection. This grounding in task-specific architectures and metrics provides the essential bridge to the generative and transformer-based models arriving in the final third of the course.
+Finally, the week addresses the rigorous nature of **Evaluation**. We move beyond simple **Accuracy** to explore the nuances of **Precision**, **Recall**, and the **F1-Score**, particularly in the context of unbalanced datasets. By comparing **Macro-averaging** (which protects minority "underdog" classes) with **Micro-averaging** (which focuses on overall sample success), we gain the analytical tools necessary to critique model performance in high-stakes applications like propaganda detection. This grounding in task-specific architectures and metrics provides the essential bridge to the generative and transformer-based models arriving in the final third of the course.
 
-#### Week 5: Lecture Contents
+#### Week 5: Lecture Contents
 * [**Part 1: Sequence Classifciaiton**](#part-1-sequence-classifciaiton)
     * [What is Sequence Classification?](#what-is-sequence-classification)
     * [How do we represent the sequence?](#how-do-we-represent-the-sequence)
@@ -2648,6 +2688,8 @@ In contrast, Neural Models like RNNs or LSTMs process words **sequentially**, us
 
 This in phase of research, pre-transformers, the progression was to train Word2Vec on a large unlabled corpus and then feed the word embeddings into another RNN/LSTM. The RNN doesn't have to learn what "bank" or "river" means from scratch; it already knows their general identities. Its only job is to learn how those words interact in a specific sequence to determine a label (like Sentiment or Topic). This second step is in leiu of doing composition on the derived vectors. 
 
+> The RNN iterates through every word/data point. Only the final hidden state ($h_n$) is passed into a fully connected layer with a Softmax activation to determine the class.
+
 ---
 
 # Sequence Classification: Evalulation
@@ -2659,25 +2701,60 @@ Now that we have these two ways to classify (the "Smoothie" Additive method or t
 
 In classification, **Accuracy** (Total Correct / Total Samples) can be a "trap," especially if your classes are imbalanced (e.g., if 99% of your emails are NOT spam, a model that always guesses "Not Spam" is 99% accurate but totally useless).
 
-To fix this, we use the Confusion Matrix to track four metrics:
+### Confusion Matrix: 
+
+|  | Actual Positive | Actual Negative | 
+| :--- | :--- | :--- | 
+| **Predicted Positive** | TP | FP (Type I Error) | 
+| **Predicted Negative** | FN (Type II Error) | TN |
+---
+
 * **True Positives (TP):** We said it was Spam, and it was.
 * **False Positives (FP):** We said it was Spam, but it was a normal email (The "Annoyance").
 * **False Negatives (FN):** We said it was normal, but it was Spam (The "Failure").
 * **True Negatives (TN):** We said it was normal, and it was.
+* TP + FN = Total Actual Positives.
+* TP + FP = Total Predicted Positives.
 
 ---
-| Metric | Formula | Intuition |
-| :--- | :--- | :--- |
-| Precision | TP+FPTP​ | When the model says it's Spam, how often is it right? (Quality) |
-| Recall | TP+FNTP​ | Of all the actual Spam out there, how much did we catch? (Quantity) |
-| F1-Score | $2⋅Prec+RecPrec⋅Rec$​ | The balanced middle ground (Harmonic Mean). |
+
+### Precision (The "Column" View)
+Focus only on the Predicted Positive column. Mental Shortcut: "How many did I get right out of everything I claimed was positive?"
+
+$$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}$$
+
 ---
+
+### Recall (The "Row" View)
+Focus only on the Actual Positive row (also known as Sensitivity). Mental Shortcut: "How many did I catch out of everything that actually exists?"
+
+$$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+
+---
+
+### F1-Score (The Harmonic Mean)
+The formula you had was slightly off in notation. The correct version is:
+
+$$\text{F1} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$
+
+**Mental Shortcut:** If Precision and Recall are the same, F1 is that same number. If they are different, F1 will always be closer to the smaller number than a standard average would be.
+
+---
+
+### Tips 
+* **Spotting 0 and 1:** 
+    * If FP = 0, Precision is 1.0 (100%).
+    * If FN = 0, Recall is 1.0 (100%).
+* **The F1 "Vibe Check":** On multiple-choice exams, you can often guestimate F1. It must be strictly between the Precision and Recall values. If $P = 0.70$ and $R = 0.90$, and the options are $0.65$, $0.79$, and $0.92$, the answer must be $0.79$.
+* **Precision vs. Recall Context:** 
+    * High Precision is needed when the cost of a False Positive is high (e.g., convicting an innocent person).
+    * High Recall is needed when the cost of a False Negative is high (e.g., missing a cancer diagnosis).
 
 ---
 
 # Macro vs. Micro Averaging
 
-When we move beyond binary (Yes/No) classification to Multi-Class classification, we calculate Precision, Recall, and F1 for each individual class. To get a single score for the whole model, we have to aggregate those results.
+When we move beyond **Binary** (Yes/No) classification to **Multi-Class** classification, we calculate Precision, Recall, and F1 for each individual class. To get a single score for the whole model, we have to aggregate those results.
 
 ---
 
@@ -2688,7 +2765,11 @@ You calculate the F1 for each class **separately** and then take the simple arit
 
 If you have 3 classes (A, B, and C), the formula is $\frac{F1_A + F1_B + F1_C}{3}$
 
-You use this when you want to ensure the model performs well on small, rare classes. If your model is great at the common classes but fails on the rare ones, your **Macro-F1** will be very low. It punishes the model for neglecting the "underdogs."
+1. Calculate F1 for Class A (using $P_A$ and $R_A$).
+2. Calculate F1 for Class B (using $P_B$ and $R_B$).
+3. Add them up and divide by the number of classes.
+
+You use this when you want to ensure the model performs well on small, rare classes. If your model is great at the common classes but fails on the rare ones, your **Macro-F1** will be very low. It punishes the model for neglecting the "underdogs." All classes = Equal weight.
 
 ---
 
@@ -2702,7 +2783,16 @@ This is essentially **weighted by class size**. If Class A has 900 samples and C
 
 When you care about the **overall success rate** across the entire dataset and aren't specifically worried about whether the model is struggling with a tiny subset of the data.
 
-When we calculate the Micro-average for a multi-class problem (where each instance has exactly** one ground-truth label** and one predicted label), it turns out that Micro-Precision, Micro-Recall, and Micro-F1 all become mathematically identical to **Accuracy**.
+When we calculate the Micro-average for a multi-class problem (where each instance has exactly **one ground-truth label** and one predicted label), it turns out that Micro-Precision, Micro-Recall, and Micro-F1 all become mathematically identical to **Accuracy**.
+
+1. Sum all TPs from every class.
+2. Sum all FPs from every class.
+3. Sum all FNs from every class.
+4. Plug them into the standard formulas:
+
+$$\text{Micro-Precision} = \frac{\sum TP}{\sum TP + \sum FP}$$
+
+$$\text{Micro-Recall} = \frac{\sum TP}{\sum TP + \sum FN}$$
 
 ---
 
@@ -2850,24 +2940,56 @@ Moving into probabilistic territory, we encounter **Hidden Markov Models (HMMs)*
 
 An HMM assumes that there is an underlying sequence of tags (the truth) that you cannot see, and this sequence follows a **Markov Chain**. The fundamental assumption is that the current tag depends only on the previous tag.
 
-To solve a sequence with an HMM, we need to learn three things from our training data:
-* **Transition Probabilities:** How likely are we to move from one tag to another? (e.g., how likely is I-PER to follow B-PER?)
-* **Emission Probabilities:** How likely is a specific state to "emit" a specific word? (e.g., how likely is the state B-LOC to produce the word "London"?)
-* **Initial State Probabilities:** How likely is a sentence to start with a specific tag?
+---
 
-We typically use **Maximum Likelihood Estimation (MLE)** to count these frequencies in a labeled corpus to "train" the model. During inference (testing), we use the **Viterbi Algorithm** — a dynamic programming tool—to find the single most likely path of hidden tags that could have produced the observed sequence of words.
+We can acheive this using the full **Bayes Theorem**. This formula is used to find the most likely tags for a given set of words:
+
+$$\Pr(tags|words) = \frac{\Pr(words|tags) \times \Pr(tags)}{P(words)}$$
+
+Although the denominator is usually ignored:
+
+$$\text{Best Tags} \propto P(words|tags) \times P(tags)$$
+
+Becuase are using the assumption that each word only depends on its previous word, we can calculate the Likelihood ($P(words|tags)$) compents easily by mutliplying all the probabilities together:
+
+$$P(\text{words}|\text{tags}) = \prod_{j=1}^{n} P(\text{word}_j|\text{tag}_j)$$
+
+---
+
+To solve a sequence with an HMM, we need to learn three things from our training data:
+
+#### Transition Probabilities ($a_{ij}$):
+This measures the probability of moving from state $i$ to state $j$. It is calculated by counting how many times $tag_j$ follows $tag_i$ and dividing by the total number of times $tag_i$ appears (e.g., how likely is I-PER to follow B-PER?):
+
+$$P(tag_j \mid tag_{i}) = \frac{Count(tag_i, tag_j)}{Count(tag_i)}$$
+
+---
+
+#### Emission Probabilities ($b_j(w)$): 
+measures the probability that a specific tag will "emit" a specific word. You count how many times a word $w$ was assigned a specific $tag$, divided by the total number of times that $tag$ appears in the data. (e.g., how likely is the state B-LOC to produce the word "London"?)
+
+$$P(word_i \mid tag_i) = \frac{Count(tag_i, word_i)}{Count(tag_i)}$$
+
+---
+
+#### Initial State Probabilities ($\pi_i$)
+This represents the probability that the very first tag in a sequence ($t_1$) is a specific tag. You count how many sentences start with $tag_i$ and divide by the total number of sentences ($N$) in your dataset.
+
+$$P(t_1 = tag_i) = \frac{Count(Sentence\ starts\ with\ tag_i)}{N}$$
+
+---
 
 While we use **frequentist counts (MLE) to train**, the **inference is purely Bayesian**. We are constantly **updating** our "belief" about which hidden state we are in as each new word in the sentence is observed.
 
 #### Drawbacks of HMMs
 The power of HMMs is limited by two major simplifying assumptions:
-* Limited History (Markov Assumption): Because it only looks at the one previous tag, it has a very short memory.
-* Feature Independence: It assumes the only thing that matters for a word is the current tag, ignoring the rich interaction between surrounding words and other linguistic features.
+* **Limited History (Markov Assumption):** Because it only looks at the one previous tag, it has a very short memory.
+* **Feature Independence:** It assumes the only thing that matters for a word is the current tag, ignoring the rich interaction between surrounding words and other linguistic features.
 
 ---
 
 # Discriminative Models: MEMMs and CRFs
-This section marks the shift from Generative models (like HMMs), which try to model how words are "born" from tags, to **Discriminative** models, which focus purely on the best way to choose a tag given the words.
+This section marks the shift from **Generative** models (like HMMs), which try to model how words are "born" from tags, to **Discriminative** models, which focus purely on the best way to choose a tag given the words.
 
 Discriminative models don't care about the probability of the words themselves; they only care about the boundary between classes. This allows them to "leverage interdependence," meaning they can look at many features at once—capitalization, word endings, neighboring words—without worrying about how those features relate to each other.
 
@@ -2878,7 +3000,25 @@ The **MEMM** was an attempt to make **HMMs** more powerful by switching the dire
 * **HMM Logic:** $P(\text{Observation} | \text{Tag})$ — "Given the tag 'Person', how likely is the word 'Elon'?"
 * **MEMM Logic:** $P(\text{Tag} | \text{Observation}, \text{Prev\_Tag})$ — "Given the word 'Elon' and the previous tag, how likely is this to be 'Person'?"
 
+![HMM vs MEMM](./files/week_5/screenshots/hmm_memm.png)
+
+The joint probability of a label sequence given an observation sequence:$$P(y_1 \dots y_n | x_1 \dots x_n) = \prod_{i=1}^{n} P(y_i | x_i, y_{i-1})$$The probability of an individual state transition (using the Maximum Entropy formulation):$$P(y_i | x_i, y_{i-1}) = \frac{1}{Z} \exp \left( \sum_{j=1}^{k} \lambda_j f_j(x_i, y_i, y_{i-1}) \right)$$
+
+Breakdown of the Notation
+- $x_i$: The observation at time $i$.$y_i$: The state (label) at time $i$.
+- $y_{i-1}$: The previous state (this is the "Markov" part).
+- $f_j$: A feature function (e.g., "is the word capitalized?").
+- $\lambda_j$: The learned weight for that feature.
+- $Z$: The normalization factor (partition function) ensuring the probabilities sum to 1.
+
+---
+
 MEMMs have a fatal flaw called **Label Bias**. Because a MEMM makes a "hard" decision at every state based only on the current local evidence, it can get "stuck." If a state has very few outgoing transitions, the model is effectively forced into those transitions regardless of what the future words say. It can't "reach back" and change a past decision even if later information proves it was wrong.
+
+> #### Definition: Label Bias
+> **Label Bias** is a systemic flaw in locally normalized sequence models, such as MEMMs, where the model is forced to distribute all of its probability mass among the available outgoing transitions of a state, regardless of the observation.
+> 
+> Because each state transition is normalized individually (probabilities must sum to 1 at every step), states with very few outgoing paths effectively "ignore" the evidence from the input sequence. Once the model enters such a state, it becomes "trapped" in a specific path even if future observations strongly contradict that path. Unlike CRFs (Conditional Random Fields), which use global normalization to look at the entire sequence at once, an MEMM cannot "backtrack" or revise a past decision, leading it to favor paths with fewer transitions over more likely global sequences.
 
 ---
 
@@ -2917,19 +3057,23 @@ For every word, the model looks at its individual characters.
 
 ### Level 2: Word-level Context (Glove + Bi-LSTM)
 The character representation is concatenated with a pre-trained **GloVe** embedding.
-* GloVe provides the "global" semantic meaning (unpacked from billions of co-occurrences). The CNN produces a vector based on spelling. The GloVe lookup produces a vector based on meaning. The model concatenates (glues) them together: $[ \vec{v}_{CNN} ; \vec{v}_{GloVe} ]$.
+* GloVe provides the "global" semantic meaning (unpacked from billions of co-occurrences). 
+* The CNN produces a vector based on spelling. The GloVe lookup produces a vector based on meaning. 
+* The model concatenates (glues) them together: $[ \vec{v}_{CNN} ; \vec{v}_{GloVe} ]$.
 * This combined vector is fed into a Bi-LSTM. The forward and backward hidden states are concatenated to create a **context-aware representation of each word** in the specific sentence.
 
 > GloVe is a pre-trained word-level embedding. It treats the entire word "apple" as a single atomic ID from a massive, pre-existing dictionary (trained on billions of words). GloVe provides the global semantic meaning—the "knowledge" that "apple" is related to "fruit" and "technology." Crucially: GloVe is static. It has no idea how the word is spelled. It just looks up the "address" of that word in its vector space.
 > 
 > If you only used GloVe, an Out-of-Vocabulary (OOV) word (like a misspelled word or a rare name) would result in a useless <UNK> (unknown) token. By adding the CNN, the model can "read" the characters of that unknown word and still get a decent representation based on its structure.
+> 
+> However, the "GloVe slot" in the architecture is modular, assuming the dimensions match; you can swap it for any vector representation that maps a word to a dense numerical space, i.e. Word2Vec (prediction-based, window, fixed voc) or ELMo/BERT (contextualised word embeddings)
 
 ---
 
 ### Level 3: Sequence Decoding (CRF Layer)
 Instead of using a simple Softmax to predict a tag for each word independently, the model uses a CRF as the final layer.
-* The Logic: A Softmax might accidentally predict I-PER immediately after an O tag, which is grammatically impossible in IOB encoding.
-* The Benefit: The CRF layer considers the entire sequence of labels. It ensures the "path" of tags is logically consistent, optimizing for the best global sequence rather than just the best local token.
+* **The Logic:** A Softmax might accidentally predict I-PER immediately after an O tag, which is grammatically impossible in IOB encoding.
+* **The Benefit:** The CRF layer considers the entire sequence of labels. It ensures the "path" of tags is logically consistent, optimizing for the best global sequence rather than just the best local token.
 
 ---
 
@@ -2979,7 +3123,7 @@ Common methods for composing embeddings include additive, multiplicative, and po
 
 ---
 
-# Part 2: Sequence Labelling
+# Part 2: Sequence Labelling
 
 ### 1. Give an example sentence and show how it might be annotated using an IOB encoding for Named Entity Recognition (e.g. PER, ORG, LOC etc)
 
@@ -2990,6 +3134,18 @@ To identify named entities within a span of text, we use IOB encoding to turn sp
 ### 2. What do understand by each of the following; HMM, MEMM, CRF. 
 
 A Hidden Markov Model (HMM) is a generative Bayesian approach that models transition and emission probabilities to find the most likely "hidden" tag sequence that produced the observed words. However, because HMMs are limited by local independence assumptions, Maximum Entropy Markov Models (MEMMs) were introduced to model the probability of a tag based on the current observation and previous state; yet, MEMMs suffer from "Label Bias" where mistakes early in the sequence cannot be corrected. Conditional Random Fields (CRFs) solve this by modeling the entire sequence directly with a single global model, allowing later context to influence earlier predictions and ensuring the most likely global "path" of tags is chosen.
+
+> The transition from a Hidden Markov Model (HMM) to a Maximum Entropy Markov Model (MEMM) represents a shift from generative to discriminative modeling. In an HMM, the model follows a "generative" logic where it assumes hidden tags produce (or "emit") the words we see. This creates a significant bottleneck: because each word is strictly dependent on its single tag, it is mathematically difficult to incorporate additional context, such as the word's suffix, capitalization, or neighboring words, without breaking the model’s core independence assumptions. The MEMM "solves" this by flipping the direction of prediction to model the conditional probability of a tag given an observation.
+> 
+> By conditioning on the observation rather than generating it, the MEMM allows the word to be treated as a set of overlapping features. This enables the model to look at the entire input sequence simultaneously, using rich information like "does this word end in -ed?" or "is the previous word 'the'?" to make a decision. 
+> 
+> Essentially, flipping the arrows transforms the model from a rigid storyteller trying to recreate the data into a flexible classifier that uses every available piece of evidence to pick the most likely label. While this provides much greater predictive power, it introduces Label Bias, as the model now makes these complex decisions locally at each step rather than considering the global sequence as a whole.
+> 
+> In an MEMM, because you are modeling $P(y_i | x_i, y_{i-1})$, the $x_i$ is no longer just a word; it is a feature vector. You can "augment" that vector with any information you can extract from the text. This allows the model to use Domain Knowledge and Morphology in a way the HMM simply cannot.
+> 
+> The "flip" in the MEMM architecture is the gateway to Feature Engineering. By moving the observation to the conditional side of the equation, the model stops treating a word as an atomic unit and starts treating it as a bundle of clues. The model then learns weights ($\lambda_j$) for each of these clues. If the word is "Running," the model doesn't just see "Running"; it sees a signal for "Ends in -ing" and a signal for "Lowercase," and it uses those weighted signals to predict the tag Verb. This is why MEMMs (and later CRFs) are significantly more accurate for tasks like Part-of-Speech tagging and Named Entity Recognition than HMMs.
+>
+> Remember, this is **Sequence Labelling**. The task is specifically to label something. HMM are a generative task, we can adopt it for labelling but it isn't great.
 
 ---
 
@@ -3231,7 +3387,7 @@ Finally, the week culminates in **Neural Machine Translation (NMT)**, the curren
 # Part 1: Machine Translation.
 
 # Why is MT hard?
-Machine Translation is fundamentally difficult because it requires more than a simple word-for-word swap; it involves navigating the complex, often incompatible systems of different languages. This challenge is rooted in **Linguistic Typology**, the study of how languages systematically differ in their "blueprints." These differences manifest as **Lexical Divergences**, where words have multiple meanings (polysemy) or lack direct equivalents, and **Structural Differences**, which include how words are built **(Morphology)** and how sentences are ordered **(Syntax)**. Because one language might express an entire concept in a single word while another requires a complex sentence, a translation system must do more than match definitions—it must reconstruct meaning across entirely different logical frameworks.
+**Machine Translation** is fundamentally difficult because it requires more than a simple word-for-word swap; it involves navigating the complex, often incompatible systems of different languages. This challenge is rooted in **Linguistic Typology**, the study of how languages systematically differ in their "blueprints." These differences manifest as **Lexical Divergences**, where words have multiple meanings (polysemy) or lack direct equivalents, and **Structural Differences**, which include how words are built **(Morphology)** and how sentences are ordered **(Syntax)**. Because one language might express an entire concept in a single word while another requires a complex sentence, a translation system must do more than match definitions—it must reconstruct meaning across entirely different logical frameworks.
 
 ---
 
@@ -3560,9 +3716,13 @@ Common algorithms include:
 # Overcoming the Bottleneck: Attention
 The biggest weakness of early seq2seq models was the **Bottleneck**. Forcing a 50-word sentence into a single fixed-size vector $h$ caused a massive loss of detail. 
 
+![Bottleneck](./files/week_6/screenshots/bottleneck.png)
+
 **Attention** changed the game. Instead of the **Decoder** looking only at the **last hidden state** of the **Encoder**, it is allowed to "look back" at **all the Encoder's hidden states** for every word it generates.
 
 **The Mechanism:** For each output word, the model calculates a weighted sum of the input states. The **"Attention Weights"** ($a_{ij}$) tell the model which specific source words to "attend to" right now. If it's translating the word "cat," the weights will spike on the original French word "chat."
+
+![Attention](./files/week_6/screenshots/attention.png)
 
 ---
 
@@ -3788,7 +3948,7 @@ While fast, surface-level matching is easily "blinded" by the following:
 
 --- 
 
-# The Principle of Compositionality
+# The Principle of Compositionality
 To solve the failures of simple matching, we rely on the **Principle of Compositionality** (attributed to Gottlob Frege). It states that the meaning of a complex expression is determined by:
 1. The meanings of its constituent expressions (the individual words/embeddings).
 2. The rules used to combine them (the syntax/structure).
@@ -3843,6 +4003,8 @@ The intuition here is that the word "head" at time step $t$ is no longer just a 
 # ELMo: Embeddings from Language Models
 ELMo (Peters et al., 2018) marked a major milestone in NLP by formalizing the shift from static to contextualized word embeddings. Unlike Word2Vec, which gives "bank" the **same vector every time**, ELMo produces word representations that are dynamic functions of the entire input sentence.
 
+![elmo base](./files/week_7/screenshots/elmo_base.png)
+
 ---
 
 # The Deep Bi-LSTM Architecture
@@ -3850,6 +4012,8 @@ ELMo is built on a stack of **Bidirectional LSTMs (Bi-LSTMs)**. In this deep mod
 * **Lower Layers:** Tend to capture syntactic information (e.g., part-of-speech tags or grammatical structure).
 * **Higher Layers:** Capture more semantic, context-dependent meaning (e.g., word sense disambiguation).
 As you move up the stack—from the first Bi-LSTM layer to the second or third—the "receptive field" of each word grows. The second layer is contextualized by the immediate neighbors, while higher layers can resolve long-range dependencies across the entire sentence.
+
+![elmo deep](./files/week_7/screenshots/elmo_deep.png)
 
 ---
 
@@ -3887,6 +4051,8 @@ The Encoder is responsible for "**understanding**" the input. It takes the raw s
 ### The Decoder's Role: Generating the Output
 The Decoder is the "**writer**" of the system. It takes the **latent representations** from the encoder and generates the output sequence **one token at a time**. It is **auto-regressive**, meaning it uses the words it has already generated as part of the input for the next word. It has a unique **"Cross-Attention"** mechanism that allows it to look back at the **Encoder's map** to ensure it is staying faithful to the original input.
 
+![encoder decoder](./files/week_7/screenshots/encoder_decoder.png)
+
 ---
 
 # Stacked Networks: Depth and Complexity
@@ -3894,6 +4060,8 @@ In the standard "Vanilla" Transformer (Vaswani et al., 2017), the model is not j
 * **N=6 Layers:** By stacking six identical layers, the model can learn increasingly abstract features. The first layer might focus on simple grammar (syntax), while the sixth layer understands complex relationships and intent (semantics).
 * **Inter-connectivity:** Every decoder in the stack has access to the output of the final encoder. This ensures that no matter how deep the decoding process goes, the model never "loses sight" of the original source text.
 * **Dimensionality:** In the original paper, all layers and sub-layers produce outputs of 512 **dimensions**. This consistent size allows the data to flow through the "stack" without needing to be resized, maintaining a stable representation across the entire network.
+
+![transformer encoder decoder](./files/week_7/screenshots/transformer_encoder_decoder.png)
 
 ---
 
@@ -3913,6 +4081,8 @@ The Encoder consists of a stack of $N=6$ **identical layers**. Each layer acts a
 
 The **"Safety" Mechanism:** To ensure that the signal doesn't degrade as it goes deeper, each sub-layer uses a **Residual Connection** followed by **Layer Normalization**. The formula is effectively: $\text{LayerNorm}(x + \text{Sublayer}(x))$. This helps the model stay stable during training and prevents "vanishing gradients."
 
+![transformer encoder](./files/week_7/screenshots/encoder_diagram.png)
+
 ---
 
 # The Decoder Stack
@@ -3922,6 +4092,8 @@ The Three Sub-layers: Each decoder layer has an extra component compared to the 
 1. **Masked Multi-Head Self-Attention:** This looks at the words the decoder has already written. It is "masked" so that the model cannot "cheat" by looking at future words during training.
 2. **Encoder-Decoder Attention:** This is the bridge. It allows the decoder to "attend" to the final output of the encoder stack, ensuring the translation stays accurate to the source.
 3. **Position-wise Feed-Forward Network:** Similar to the encoder, this refines the final representation for that specific time step.
+
+![transformer decoder](./files/week_7/screenshots/decoder_diagram.png)
 
 ---
 
@@ -4031,7 +4203,7 @@ While the sine/cosine method is "static" (it never changes), modern models often
 # BERT: Bidirectional Encoder Representations from Transformers
 **BERT** (Devlin et al., 2019) is a landmark model that shifted the NLP paradigm from task-specific architectures to a "**Pre-train then Fine-tune**" workflow. By using only the **Encoder** portion of the **Transformer**, BERT focuses entirely on **language "understanding"** rather than generation.
 
---
+---
 
 # The Power of Bidirectionality
 Traditional Language Models (like LSTMs or GPT) are **unidirectional**; they process text from **left-to-right** to predict the next word. While this is great for writing, it limits understanding because a word’s meaning often depends on what comes after it.
@@ -4116,8 +4288,8 @@ The original BERT models were trained on a massive scale that was unprecedented 
 **The Hardware:** Google used their proprietary TPUs (Tensor Processing Units). Training the "Large" version of BERT took 4 days on 64 TPU chips.
 
 **Model Variants:**
-    * **BERT-Base:** 12 layers, 768 hidden units, 12 attention heads (110M parameters).
-    * **BERT-Large:** 24 layers, 1024 hidden units, 16 attention heads (340M parameters).
+* **BERT-Base:** 12 layers, 768 hidden units, 12 attention heads (110M parameters).
+* **BERT-Large:** 24 layers, 1024 hidden units, 16 attention heads (340M parameters).
 
 **Optimization:** Used AdamW with a linear learning rate decay. Interestingly, they used a massive batch size (up to 128,000 words per update) to stabilize the learning of such a complex network.
 
@@ -4224,16 +4396,15 @@ As we discussed with the [CLS] token, we insert a dummy token at the start. Beca
 
 ### Pooling (The Composition approach)
 Alternatively, we can mathematically "compose" the individual word embeddings ourselves. Common methods include: 
-* Mean Pooling: Taking the average of all the word embeddings in the sentence.
-* Max Pooling: Taking the maximum value across each dimension of the word embeddings.
-* Summation: Adding them all together.
+* **Mean Pooling:** Taking the average of all the word embeddings in the sentence.
+* **Max Pooling:** Taking the maximum value across each dimension of the word embeddings.
+* **Summation:** Adding them all together.
 
 These "pooled" vectors are what we actually use as a Sequence Representation when we want to compare the similarity of two different sentences (like in Paraphrase Detection).
 
-Summary:
-Strictly speaking: The Transformer Encoder produces a set of contextualized word embeddings ($Z_1, Z_2, \dots, Z_n$).
+**Summary:** Strictly speaking: The Transformer Encoder produces a set of contextualized word embeddings ($Z_1, Z_2, \dots, Z_n$).
 
-In practice: we create a Sequence Representation by either using a dedicated summary token ([CLS]) or by pooling (averaging/summing) the individual word embeddings together.
+**In practice:** we create a Sequence Representation by either using a dedicated summary token ([CLS]) or by pooling (averaging/summing) the individual word embeddings together.
 
 ---
 
@@ -4431,7 +4602,7 @@ The provided sources introduce **Sentence-BERT** (SBERT), a modification of the 
     * [The Modern Solution: "The Re-Ranking Pipeline"](#the-modern-solution-the-re-ranking-pipeline)
 ---
 
-# 1. For a pair regression task, the standard BERT set-up requires pairs of sentences to be presented as input to the encoder network. Why is this set-up unfeasible if you want to find the most similar sentences in a collection?
+## 1. For a pair regression task, the standard BERT set-up requires pairs of sentences to be presented as input to the encoder network. Why is this set-up unfeasible if you want to find the most similar sentences in a collection?
 Standard BERT uses a cross-encoder setup that requires both sentences to be fed into the network simultaneously, creating massive computational overhead. For example, finding the most similar pair in a collection of 10,000 sentences requires roughly 50 million inference computations, taking approximately 65 hours on a modern GPU.
 
 If you have a collection of $n = 10,000$ sentences and you want to find the "most similar pair," you have to compare every sentence against every other sentence.In combinatorics, the number of ways to choose 2 items from a set of $n$ is calculated using the formula:$$\frac{n \times (n - 1)}{2}$$For 10,000 sentences:$$\frac{10,000 \times 9,999}{2} = 49,995,000$$
@@ -4512,7 +4683,7 @@ SBERT (Sentence-BERT) took the original BERT and "forced" it to create a useful 
 
 ---
 
-# 2. What have other researchers done to overcome this problem with using BERT?
+## 2. What have other researchers done to overcome this problem with using BERT?
 
 Since BERT’s release, researchers have developed three main "generations" of architectures to solve the trade-off between the high accuracy of a **Cross-Encoder** and the high speed of a **Bi-Encoder**.
 
@@ -4533,7 +4704,7 @@ ColBERT (Contextualized Late Interaction over BERT) is currently one of the most
 
 ---
 
-# 3. What is the SBERT strategy?
+## 3. What is the SBERT strategy?
 
 ### "Semantic" Distillation
 A simple re-mapping (like PCA or a linear shift) would move all vectors but keep their relative relationships mostly the same. SBERT, however, uses a **Siamese Network** structure during training. This forces the model to ignore "**syntactic**" similarities (like sentences having the same length or using the same stop words) and focus on "**semantic**" similarities
@@ -4588,7 +4759,7 @@ If you want to compare words using BERT, here is the "Pro Tip": **Don't use just
 
 ---
 
-# 4. What do you understand by the term Siamese network structure?
+## 4. What do you understand by the term Siamese network structure?
 A **Siamese network** (also known as a twin neural network) is a specific architecture where two or more identical sub-networks are used to process different inputs separately, but in tandem. The term "Siamese" comes from the fact that these networks are joined at the "head" (the output) and, most importantly, they share the exact same weights and parameters.
 
 ---
@@ -4646,7 +4817,7 @@ Even though you only use one model at inference, we call it a **Bi-Encoder** (or
 
 ---
 
-# 5. What are the different pooling strategies that the authors experiment with? What works best?
+## 5. What are the different pooling strategies that the authors experiment with? What works best?
 The SBERT authors (Reimers and Gurevych) experimented with three primary pooling strategies to collapse the token-level embeddings into a single sentence vector.
 
 ### MEAN Strategy (Default)
@@ -4670,7 +4841,7 @@ Mean pooling, by contrast, smooths out the noise and captures the collective con
 
 ---
 
-# 6. Outline the 4 evaluation tasks used for semantic textual similarity.
+## 6. Outline the 4 evaluation tasks used for semantic textual similarity.
 
 To measure how well SBERT actually "understands" meaning compared to standard BERT, the authors evaluated it on four distinct types of Semantic Textual Similarity (STS) tasks. These tasks range from simple sentence pairs to complex image captions.
 
@@ -4711,12 +4882,12 @@ In all four tasks, the authors found that SBERT outperformed both vanilla BERT a
 
 ---
 
-# 7. Why would Spearman’s rank correlation coefficient be better than Pearson’s product-moment correlation coefficient when comparing ratings of semantic textual similarity?
+## 7. Why would Spearman’s rank correlation coefficient be better than Pearson’s product-moment correlation coefficient when comparing ratings of semantic textual similarity?
 Spearman’s rank correlation is preferred over Pearson’s for Evaluating Semantic Textual Similarity because human-assigned scores (0–5) are ordinal rather than strictly linear; the perceived "distance" between a 1 and a 2 may not be mathematically identical to the distance between a 4 and a 5. While Pearson’s coefficient is highly sensitive to outliers and requires a straight-line relationship to show success, Spearman’s coefficient only cares about the relative rank order of the pairs. This makes it a more robust and accurate reflection of human logic, as it rewards the model for correctly identifying that Sentence A is "more similar" than Sentence B, even if the model's raw numerical output follows a curved or non-linear distribution.
 
 ---
 
-# 8. What are the different objective functions that the authors experiment with? When is each used?
+## 8. What are the different objective functions that the authors experiment with? When is each used?
 The SBERT authors experimented with three main objective functions, each designed for a different type of training data. Because BERT doesn't naturally produce "comparable" vectors, these functions are the "tools" used to physically reshape the vector space.
 
 ---
@@ -4742,7 +4913,7 @@ This is used when you have a "reference" sentence and want to distinguish betwee
 
 ---
 
-# 9. How is the SentEval evaluation different to the previous evaluation experiments?
+## 9. How is the SentEval evaluation different to the previous evaluation experiments?
 While the STS (Semantic Textual Similarity) tasks we discussed earlier focus on a single, specific metric—how "similar" two sentences are—SentEval is a much broader and more rigorous "stress test" for sentence embeddings. If STS is a specialized 100-meter dash, SentEval is a Decathlon.
 
 ---
@@ -4766,9 +4937,9 @@ This proves that the model hasn't just memorized "similarity" but has actually l
 
 ### Testing "Linguistic Properties" (Probing)
 SentEval includes "Probing Tasks" that specifically check if the embeddings capture basic linguistic "facts." It asks the model:
-* Length Prediction: Does the vector "know" how many words are in the sentence?
-* Word Content: Can we tell if a specific word is present just by looking at the vector?
-* Bigram Shift: Can the model tell if two words in the sentence were swapped (which changes the meaning)?
+* **Length Prediction:** Does the vector "know" how many words are in the sentence?
+* **Word Content:** Can we tell if a specific word is present just by looking at the vector?
+* **Bigram Shift:** Can the model tell if two words in the sentence were swapped (which changes the meaning)?
 
 | Feature | STS Experiments | SentEval Experiments | 
 | :--- | :--- | :--- | 
@@ -4781,7 +4952,7 @@ The authors used SentEval to prove that by fixing the "similarity" problem, they
 
 ---
 
-# 10. What are the main conclusions of the paper? Are you convinced?
+## 10. What are the main conclusions of the paper? Are you convinced?
 
 ### Main Conclusions
 #### The Efficiency Revolution
@@ -4974,7 +5145,7 @@ If we've got a representation for "noisy" and a representation of "chicken", how
 ---
 
 # Principle of compositionality
-The **Principle of Compositionality** (attributed to thinkers like Frege and Boole) asserts that the meaning of a complex expression is a direct function of the meanings of its individual parts and the structural rules used to combine them. In the context of NLP, this allows us to move "Beyond Words" by asking how we can mathematically **combine** distributional word vectors to represent larger units like phrases ("noisy chicken") or entire documents. While humans use syntax and logic for this, models typically use **Composition Methods** — ranging from simple algebraic operations like **Mean Pooling **(averaging vectors) to more complex neural architectures — to ensure that a sentence-level representation remains grounded in the specific meanings of its constituent tokens.
+The **Principle of Compositionality** (attributed to thinkers like Frege and Boole) asserts that the meaning of a complex expression is a direct function of the meanings of its individual parts and the structural rules used to combine them. In the context of NLP, this allows us to move "Beyond Words" by asking how we can mathematically **combine** distributional word vectors to represent larger units like phrases ("noisy chicken") or entire documents. While humans use syntax and logic for this, models typically use **Composition Methods** — ranging from simple algebraic operations like **Mean Pooling** (averaging vectors) to more complex neural architectures — to ensure that a sentence-level representation remains grounded in the specific meanings of its constituent tokens.
 
 ---
 
@@ -4999,6 +5170,7 @@ SBERT (Sentence-BERT) optimizes standard BERT by using a siamese network archite
 **Fine-tuning** is the second stage, where this general linguistic knowledge is transferred to a specific application, such as sentiment analysis, translation, or summarization. This involves taking the pre-trained model and training it further on a smaller, labeled dataset tailored to the final goal. While the model's "brain" is already built, fine-tuning acts as a specialized training program that teaches the model how to use its existing knowledge to solve the specific problem at hand.
 
 A key shift occurs in the role of specific tokens during this transition. In a raw, pre-trained BERT model, the [CLS] token is primarily trained to handle the NSP task, acting as a binary switch to determine if two sentences belong in the same story. However, once the model is fine-tuned for a task like sentiment analysis, the [CLS] token transforms into a **global aggregator**. It "sponges up" a summary of the entire input sequence, providing a single, dense vector that a classifier head (like an MLP) can use to make a final decision, such as whether a review is "Happy" or "Sad."
+
 ---
 
 # Fine-tuning 
@@ -5300,7 +5472,7 @@ Simplest approach is to pass each output of each of the input tokens from BERT t
 A CRF acts as a "sanity check" layer on top of BERT. It learns a transition matrix that understands which tags are likely to follow one another.
 * Why use it? While BERT provides strong contextual features, the CRF ensures the final sequence of tags makes global sense, correcting "impossible" transitions.
 
-#### The Subword Complication:
+#### The Subword Complication:
 BERT uses WordPiece tokenization (e.g., "playing" $\rightarrow$ "play", "##ing").
 * Strategy: Usually, we only label the first subword of a word and provide a "dummy" or "ignored" label to the subsequent subwords during training to avoid biasing the model toward long words.
 
@@ -5414,9 +5586,9 @@ Will talk about these in later weeks
 ---
 
 # GPT-3: Prompting & In-Context Learning
-Brown et al. 2020: Language Models are Few Shot Learners
+> Brown et al. 2020: Language Models are Few Shot Learners
 
-GPT-3 marked a paradigm shift from Fine-tuning (updating weights) to Prompting (using the model as-is).
+GPT-3 marked a paradigm shift from **Fine-tuning** (updating weights) to **Prompting** (using the model as-is).
 
 **Autoregressive Nature:** Unlike BERT (Bi-directional), GPT is Uni-directional (Left-to-Right). It predicts the next token, which makes it a natural "writer."
 
@@ -5431,7 +5603,7 @@ In-context learning does not update the model's weights. The "learning" happens 
 ---
 
 # Text-to-Text Transfer Transformer (T5) 
-Raffel et al. 2020: Exploring the Limits of Transfer Learning with a Unified Text to-Text Transformer
+> Raffel et al. 2020: Exploring the Limits of Transfer Learning with a Unified Text to-Text Transformer
 
 **T5 (Text-to-Text Transfer Transformer)** unified NLP by treating every problem — whether regression, classification, or translation — as a **string-to-string** task.
 
@@ -5466,16 +5638,16 @@ This diagram represents a major departure from the BERT-style fine-tuning we dis
 # Are the Task Prefixes rule-based?
 No, the prompt is the input to the encoder and the prefix, i.e. "summarise", is handled by the weights of the model directly. There is no hard-coded rule or "switch" inside the model that says, "If you see 'summarize', go to the summarization department." 
 
-Instead, the task prefix is treated as just another sequence of tokens. Because T5 was trained on a massive mixture of different tasks simultaneously, it learned through Gradient Descent that when the input starts with certain patterns (like translate English to German:), the output should follow a specific "style" or "logic" (like producing German words).
+Instead, the task prefix is treated as just another sequence of tokens. Because T5 was trained on a massive mixture of different tasks simultaneously, it learned through **Gradient Descent** that when the input starts with certain patterns (like translate English to German:), the output should follow a specific "style" or "logic" (like producing German words).
 
-When you input "summarize: [Text]", the tokenizer breaks "summarize" and ":" into their own token IDs. These IDs are then converted into Vectors (Embeddings). To the model's first layer, the word "summarize" is just a specific point in a 768-dimensional space.
+When you input "summarize: [Text]", the tokenizer breaks "summarize" and ":" into their own token IDs. These IDs are then converted into **Vectors** (Embeddings). To the model's first layer, the word "summarize" is just a specific point in a 768-dimensional space.
 
-Because T5 is a Transformer, it uses Self-Attention. The encoder looks at every token in the sequence. When the model "reads" the main body of your text, the attention mechanism is constantly looking back at those first few tokens (the prefix).
+Because T5 is a **Transformer**, it uses **Self-Attention**. The encoder looks at every token in the sequence. When the model "reads" the main body of your text, the attention mechanism is constantly looking back at those first few tokens (the prefix).
 * The weights in the attention heads have been trained to "attend" heavily to the prefix to decide how to process the rest of the sentence
 * If the prefix is `"cola sentence:"`, the attention weights shift the model’s internal state to focus on syntax and grammar.
 * If the prefix is `"sentiment:"`, the weights focus on emotive adjectives.
 
-The prefix acts as a Conditioning Signal. Think of it like a "mood" for the entire neural network. The prefix doesn't trigger a separate part of the model; rather, it changes how the entire set of weights responds to the input text.
+The prefix acts as a **Conditioning Signal**. Think of it like a "mood" for the entire neural network. The prefix doesn't trigger a separate part of the model; rather, it changes how the entire set of weights responds to the input text.
 
 ---
 
@@ -5504,7 +5676,7 @@ This process is known as **Span-denoising**, which is T5’s version of BERT's M
 # T5 Fine-Tuning
 T5 (Text-to-Text Transfer Transformer) achieves its "unified" nature through a unique approach to fine-tuning. Unlike BERT, which requires swapping out architectural "heads" for different tasks, T5 is fine-tuned by feeding it a variety of supervised tasks simultaneously using the exact same objective: **generating the correct target string**. Because every task — from translation to regression — shares the **same global parameters**, the model can leverage **cross-task transfer**, where learning the structural nuances of one task (like linguistic acceptability) can actually improve its performance on another (like summarization).
 
-To successfully use a fine-tuned T5 model, you must adhere to the Prompt Format it was trained on. This is because the model relies on Task Prefixes to "trigger" the correct internal logic. If you want a summary, you cannot simply provide the text; you must prepend the specific string the model expects (e.g., "summarize: "). These prefixes act as a conditioning signal, shifting the Transformer's attention weights to focus on the specific linguistic features required for that output style.
+To successfully use a fine-tuned T5 model, you must adhere to the **Prompt Format** it was trained on. This is because the model relies on **Task Prefixes** to "trigger" the correct internal logic. If you want a summary, you cannot simply provide the text; you must prepend the specific string the model expects (e.g., "summarize: "). These prefixes act as a conditioning signal, shifting the Transformer's attention weights to focus on the specific linguistic features required for that output style.
 
 ---
 
@@ -5966,7 +6138,7 @@ This week we will be looking at generative large language models. In particular,
 Week 9 represents the transition from understanding language through encoding to generating it through prediction, marking the culmination of your journey from Transformer theory to modern AI assistants. The following summary bridges the technical shift from BERT to GPT and highlights the critical research that defined this "Generative Era."
 
 ### The Paradigm Shift: From Encoding to Generation
-While previous weeks focused on BERT, a bi-directional encoder that "understands" by filling in missing blanks, Week 9 introduces Generative Large Language Models (LLMs) like GPT-3 and Gemini. These models are autoregressive, meaning they predict the next token in a sequence from left to right. This architectural shift from a "cloze" task to a "completion" task transforms the model from a classifier into a conversational agent. You have moved from a model that represents the world (Encoders) to one that actively constructs responses based on that world (Decoders).
+While previous weeks focused on BERT, a bi-directional encoder that "understands" by filling in missing blanks, Week 9 introduces **Generative Large Language Models (LLMs)** like GPT-3 and Gemini. These models are **autoregressive**, meaning they predict the next token in a sequence from left to right. This architectural shift from a "cloze" task to a "completion" task transforms the model from a classifier into a conversational agent. You have moved from a model that represents the world (Encoders) to one that actively constructs responses based on that world (Decoders).
 
 ### Scaling and the "Few-Shot" Breakthrough
 The cornerstone of this week is the **Brown et al. (2020)** paper, "Language Models are Few-Shot Learners." It demonstrates that by simply scaling a model to 175 billion parameters (GPT-3), the model develops "emergent abilities." It proves that we no longer need to fine-tune a model's weights for every task; instead, we can use **In-Context Learning**. By providing a few examples in a prompt (Few-Shot), the model can perform translation, coding, or reasoning without any permanent updates to its brain. This shift marks the birth of **Prompt Engineering**, where the "bottleneck" is no longer the architecture, but our ability to effectively "ask" the model for the right output.
@@ -5974,7 +6146,7 @@ The cornerstone of this week is the **Brown et al. (2020)** paper, "Language Mod
 ### Alignment and Reinforcement Learning (RLHF)
 Raw pre-training makes a model smart, but not necessarily helpful or safe. **The Ouyang et al. (2022)** paper, "Training Language Models to Follow Instructions with Human Feedback," introduced the **InstructGPT** methodology (the basis for ChatGPT). This process uses **Reinforcement Learning** from **Human Feedback (RLHF)** to "align" the model with human intentions. By training a **Reward Model** to act as a "judge" based on human preferences and updating the model's **Policy** (its generation strategy), researchers created models that are more truthful, less toxic, and better at following complex instructions than their raw, pre-trained ancestors.
 
-### Grounding and Reliability: RAG and Summarization
+### Grounding and Reliability: RAG and Summarization
 To combat the inherent "hallucination" problem of LLMs, Week 9 introduces **Retrieval-Augmented Generation (RAG)**. This **Retrieve-Read** framework prevents the model from relying solely on its pre-trained memory by allowing it to "look up" facts in an external database before generating an answer. This is supported by evaluation research like **Zhang et al. (2024)**, which benchmarks LLMs for news summarization. Their findings suggest that **instruction-tuning**, rather than just model size, is the key to high-quality generation, showing that LLM-generated summaries are now frequently judged to be on par with those written by professional human writers.
 
 ---
@@ -6197,6 +6369,11 @@ As the temperature increases toward 1 (or even higher), the model becomes more "
 ### Self-Consistency and Temperature (Wang et al. 2023)
 The interaction between temperature and reliability is best demonstrated by the Self-Consistency technique. By setting a non-zero temperature, we can generate multiple "reasoning paths" for the same question. If the model is asked a complex math problem, it might reach different conclusions across five attempts. However, as Wang et al. (2023) demonstrated, the correct answer usually emerges as the "majority vote" among these paths. Using a bit of "temperature-driven randomness" actually helps filter out the logic errors that might occur in a single, rigid, low-temperature run.
 
+> Instead of having five different models vote on one answer (a traditional ensemble), you take one model and ask it the same question multiple times, then let it vote on its own various "trains of thought." LLMs are "stochastic" (probabilistic); they can find different paths to the same truth. Self-Consistency relies on Chain-of-Thought (CoT). Simply asking for a direct answer 5 times may not lead to much variation, we want the models to exercise their probabilsitic variability to see how they might get to an answer, or even different conclusion.
+> Self-Consistency is basically the model saying: "I'm going to think about this 10 different ways. If 7 of those ways lead to the same destination, that's probably the right house.
+> 
+> If a question asks how to implement Self-Consistency, remember that Temperature cannot be 0. If $Temp = 0$ (Greedy Decoding), the model will give you the exact same reasoning path every single time. You need diversity in the "votes," so you need a higher temperature to let the model explore different logic paths. 
+
 [SELF-CONSISTENCY IMPROVES CHAIN OF THOUGHT REASONING IN LANGUAGE MODELS](https://arxiv.org/pdf/2203.11171)
 
 ---
@@ -6241,6 +6418,15 @@ Explicitly defining the output format (e.g., "Return only JSON") or using negati
 # Week 9: Seminar
 * [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9bceca1d-92c2-498d-80c0-b432012657ac)
 
+1. [Why might someone prefer to use an open-source LLM over a closed source LLM?](#1-why-might-someone-prefer-to-use-an-open-source-llm-over-a-closed-source-llm)
+2. [Outline the technique of Reinforcement Learning from Human Feedback (RLHF) as used in the training of generative large language models. Why is it used?](#2-outline-the-technique-of-reinforcement-learning-from-human-feedback-rlhf-as-used-in-the-training-of-generative-large-language-models-why-is-it-used)
+3. [What is RAG? Why is it used?](#3-what-is-rag-why-is-it-used)
+4. [What is temperature and how does it affect LLMs? Is it better to have a high or low temperature?](#4-what-is-temperature-and-how-does-it-affect-llms-is-it-better-to-have-a-high-or-low-temperature)
+5. [What is the method of self-consistency?](#5-what-is-the-method-of-self-consistency)
+6. [Give examples of ways in which prompts can be optimized through prompt engineering](#6-give-examples-of-ways-in-which-prompts-can-be-optimized-through-prompt-engineering)
+
+---
+
 ### 1. Why might someone prefer to use an open-source LLM over a closed source LLM?
 - lower costs potentially as open-source is priced by token but closed source cost is fixed base on the cost of your hardward
 - customizable, ability to inspect and edit code and weights. could add functions to the model. integrate other models as an ensemble or vote etc. 
@@ -6265,6 +6451,7 @@ Explicitly defining the output format (e.g., "Return only JSON") or using negati
 
 #### 3. Reinforcement Learning via PPO
 **Step:** GPT-3’s "policy" is fine-tuned to maximize the reward using **Proximal Policy Optimization (PPO)**. This is the final "tuning" phase. The model generates responses, the **Reward Model** scores them, and the **PPO** algorithm **updates** the model's weights to make high-scoring responses more likely in the future. (We don't go into detail on how **Proximal Policy Optimization (PPO)** works on this module)
+
 ---
 
 This flow is also reflected in Ouyang et al. (2022) which is the ChatGPT paper. (Training language models to follow instructions
@@ -6308,8 +6495,17 @@ with human feedback). IntructGPT was the original name they gave these models wh
 <br>
 
 # Week 9: Paper
-Large Language Models are Zero-Shot Reasoners (Kojima et al., 2022)
+> Large Language Models are Zero-Shot Reasoners (Kojima et al., 2022)
 
+1. [Explain the terms: zero shot learning, few shot learning and in-context learning?](#1-explain-the-terms-zero-shot-learning-few-shot-learning-and-in-context-learning)
+2. [Why are mathematical reasoning problems potentially challenging for LLMs?](#2-why-are-mathematical-reasoning-problems-potentially-challenging-for-llms)
+3. [Give an example of how a model can be encouraged to think “step-by-step” using a few-shot prompt-ing paradigm](#3-give-an-example-of-how-a-model-can-be-encouraged-to-think-step-by-step-using-a-few-shot-prompt-ing-paradigm)
+4. [Give an example of how a model can be encouraged to think “step-by-step” using a zero-shot prompting paradigm](#4-give-an-example-of-how-a-model-can-be-encouraged-to-think-step-by-step-using-a-zero-shot-prompting-paradigm)
+5. [Outline the two stages of prompting proposed by the authors?](#5-outline-the-two-stages-of-prompting-proposed-by-the-authors)
+6. [What are the four categories of reasoning tasks considered in the experiments? Give an example of each kind of problem?](#6-what-are-the-four-categories-of-reasoning-tasks-considered-in-the-experiments-give-an-example-of-each-kind-of-problem)
+7. [What baselines do the authors compare their zero-shot-CoT approach to? How do the authors ensure determinism of the methods?](#7-what-baselines-do-the-authors-compare-their-zero-shot-cot-approach-to-how-do-the-authors-ensure-determinism-of-the-methods)
+
+---
 
 ### 1. Explain the terms: zero shot learning, few shot learning and in-context learning?
 In-context learning (ICL) is the underlying mechanism that enables a Large Language Model to adapt to a task purely through the information provided in its current input sequence (the prompt). Although termed "learning," it involves no gradient updates or changes to the model’s permanent weights; it is a purely feed-forward inference operation where the model utilizes its attention mechanism to recognize and replicate patterns found within the context window.
