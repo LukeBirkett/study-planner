@@ -286,9 +286,9 @@ The formula cancels out and effectivly flips the fraction so that the simple bit
 
 ### Directed Networks
 
-In a directed network, the logic of "N choose 2" changes because the direction of the connection creates a unique relationship. In an undirected network, we divide by 2 because $A \to B$ and $B \to A$ are the exact same link. In a directed network, they are considered two distinct links. 
-
-For the first node: You have $N$ choices. For the second node: You have $N - 1$ choices (since a node usually doesn't link to itself). Therefore the maximum links for Directed Networks is:
+In a directed network, the logic of "N choose 2" changes because the direction of the connection creates a unique relationship. In an undirected network, we divide by 2 because $A \to B$ and $B \to A$ are the exact same link. In a directed network, they are considered **two distinct links**. 
+- **For the first node:** You have $N$ choices. 
+- **For the second node:** You have $N - 1$ choices (since a node usually doesn't link to itself). Therefore the maximum links for Directed Networks is:
 
 $$L_{max} = N(N - 1)$$
 
@@ -390,7 +390,7 @@ There is a formulatic connection for undirected networks between network size $N
 
 $$\langle k \rangle = \frac{2L}{N} = \frac{dN(N-1)}{N} = d(N-1)$$
 
-This tells us that Density ($d$) is essentially the probability that any two nodes are connected. If you know the density and the number of nodes, you can immediately find the average degree. In large social networks like Facebook, $N$ is so massive that $d$ becomes incredibly small, even if $\langle k \rangle$ is high.
+This tells us that Density ($d$) is essentially the **probability** that any two nodes are connected. If you know the density and the number of nodes, you can immediately find the average degree. In large social networks like Facebook, $N$ is so massive that $d$ becomes incredibly small, even if $\langle k \rangle$ is high.
 
 While the "Average Degree" tells you the typical connectivity, it doesn't tell you if the network has "hubs." For that, we use $\kappa$ (Kappa). The Heterogeneity Parameter ($\kappa$): $$\kappa = \frac{\langle k^2 \rangle}{\langle k \rangle^2}$$
 
@@ -402,19 +402,23 @@ While the "Average Degree" tells you the typical connectivity, it doesn't tell y
 ## Excess Degrees
 The excess degree of a node with degree $k$ is formally defined as $k - 1$. This represents the number of available edges to continue a process—such as the spread of a rumor or a virus—after accounting for the specific edge used to arrive at that node.
 
-The core intuition here is that we aren't simply looking at nodes in isolation; we are looking at them as "stepping stones" in a path. Because we reach a node by following an edge, we are subject to a significant sampling bias.
+The core intuition here is that **we aren't simply looking at nodes in isolation**; we are looking at them as "stepping stones" in a path. Because we reach a node by following an edge, we are subject to a significant sampling bias.
 
-An edge is statistically far more likely to lead to a "hub" with many connections than to a "singleton" with very few. This means the probability of reaching a node is not uniform across the network but is instead proportional to the node's degree $k$.
+> It is really important to understand that whilst the excess degrees of a node is $k-1$, we can only obtain this count by travelling to a node from another. This means in calculating any global excess degree metric, we cannot simply compile every node's degrees and subtract 1. Instead we must start at every node and travel their edges and at each node we land on is how we collect the $k-1$ amounts. In understanding this, you can begin to see how hubs dominate because each time we travel outward from a node, we are far more likely to land on a hub with a large $k-1$ value because these hubs are by defintion connected to more nodes. 
 
-Consequently, when we calculate the expected degree of a neighbor, we cannot simply use the average degree $\langle k \rangle$. Instead, we must use the ratio of the second moment to the first moment of the degree distribution, expressed as $\frac{\langle k^2 \rangle}{\langle k \rangle}$. 
+An edge is statistically **far more likely to lead to a "hub"** with many connections than to a "singleton" with very few. This means the probability of reaching a node is **not uniform** across the network but is instead proportional to the node's degree $k$.
 
-From this, we derive the Mean Excess Degree ($q$) by subtracting the "entry" edge from that expectation: $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$.
+Consequently, when we calculate the expected degree of a neighbor, we cannot simply use the average degree $\langle k \rangle$ 
 
-This mathematical reality is the engine behind the Friendship Paradox, which famously states that "on average, your friends have more friends than you do." While your own degree is a random sample from the standard distribution $P(k)$, your friends’ degrees are samples from the biased distribution of neighbors, which inherently favors high-connectivity hubs.
+Instead, we must use the ratio of the **second moment** to the **first moment** of the degree distribution, expressed as $\frac{\langle k^2 \rangle}{\langle k \rangle}$. 
 
-This distinction is critical for understanding network dynamics like epidemiology. In a spreading process, the virus doesn't "see" the average degree of the population; it "sees" the mean excess degree. If a network is highly heterogeneous—meaning it has a high variance in degrees ($k^2$)—the mean excess degree will be much higher than the average degree.
+From this, we derive the **Mean Excess Degree ($q$)** by subtracting the "entry" edge from that expectation: $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$.
 
-This explains why infections can surge through a population far faster than a simple average of social contacts would suggest. By linking these concepts to the Heterogeneity Parameter ($\kappa$), we can see that as a network becomes more "hub-heavy," its capacity to transport information or disease increases exponentially, regardless of how sparse the overall network might appear.
+This mathematical reality is the engine behind the **Friendship Paradox**, which famously states that "on average, your friends have more friends than you do." While your own degree is a random sample from the standard distribution $P(k)$, your friends’ degrees are samples from the biased distribution of neighbors, which inherently **favors high-connectivity hubs**.
+
+This distinction is critical for understanding network dynamics like epidemiology. In a spreading process, the virus doesn't "see" the average degree of the population; it "sees" the mean excess degree. If a network is **highly heterogeneous** — meaning it has a high variance in degrees ($k^2$) — the mean excess degree will be much higher than the average degree.
+
+This explains why infections can surge through a population far faster than a simple average of social contacts would suggest. By linking these concepts to the **Heterogeneity Parameter** ($\kappa$), we can see that as a network becomes more "hub-heavy," its capacity to transport information or disease increases exponentially, regardless of how sparse the overall network might appear.
 
 ---
 
@@ -422,16 +426,18 @@ This explains why infections can surge through a population far faster than a si
 Excess Degree is a node-based property, but Mean Excess Degree is a network-wide metric.
 * At the individual level, the excess degree is simply a count. If a specific node has a degree $k=10$, and you arrive at it via one edge, it has an excess degree of $9$.
 
-When we talk about the Mean Excess Degree, we are calculating a single value that characterizes the entire network. It represents the "expected" number of new edges you will find when you follow a random edge to a node.
+When we talk about the **Mean Excess Degree**, we are calculating a single value that **characterizes the entire network**. It represents the "expected" number of new edges you will find when you follow a random edge to a node.
 
-It works as a network-wide metric because it uses the Degree Distribution of the whole system. As we saw in the formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$, it relies on the first and second moments of all degrees in the network.
+It works as a network-wide metric because it uses the **Degree Distribution** of the whole system. As we saw in the formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$, it relies on the first and second moments of all degrees in the network.
+
+> It is possible to compute the mean excess degrees manually by traversing each node and collecting its edges excess degrees. However, this is extremely computationally expensive and is considered a computational simulation of the property rather than its "true" mathematical form. The formal definition is based on the statistical properties of the network's degree distribution.
 
 ---
 
 ### Formula vs Recursive/Loop
 The formula shown above using the first and second moments gives us the same result as if we were to brute force through the network, checking every node and following its edges to compute the neighbours degrees minus the travelled edge into a global average. 
 
-The logic behind this is easier to see when you consider what happens in the loops. If a node has degree $k$, you will land on it exactly $k$ times (once for each edge connected to it).Each time you land there, you count $(k-1)$ excess edges.So, that specific node contributes $k \times (k-1)$ to your total sum. Ultimately, this is just another way to sum all of the excess degrees and then divide it by the total number of "arrival" edges to turn it into an average, i.e. the first moment. **Mean Excess Degree is essentially a weighted average.**
+The logic behind this is easier to see when you consider what happens in the loops. If a node has degree $k$, you will land on it exactly $k$ times (once for each edge connected to it). Each time you land there, you count $(k-1)$ excess edges. So, that specific node contributes $k \times (k-1)$ to your total sum. Ultimately, this is just another way to sum all of the excess degrees and then divide it by the total number of "arrival" edges to turn it into an average, i.e. the first moment. **Mean Excess Degree is essentially a weighted average.**
 
 ---
 
@@ -440,14 +446,16 @@ The logic behind this is easier to see when you consider what happens in the loo
 >
 > Let’s look at the math:
 > 
-> 1. The Sum of Excess Degrees: If we sum $k(k-1)$ for every node in the network, we get:
+> 1. **The Sum of Excess Degrees:** If we sum $k(k-1)$ for every node in the network, we get:
 > $$\sum k(k-1) = \sum k^2 - \sum k$$
 >
-> 2. The Average: We divide that sum by the total number of "arrivals" (which is $2L$, or $\sum k$):
+> 2. **The Average:** We divide that sum by the total number of "arrivals" (which is $2L$, or $\sum k$):
 > $$q = \frac{\sum k^2 - \sum k}{\sum k} = \frac{\sum k^2}{\sum k} - 1$$
 >
-> 3. The Shift to Moments: Since the average degree $\langle k \rangle$ is $\frac{\sum k}{N}$, and the second moment $\langle k^2 \rangle$ is $\frac{\sum k^2}{N}$, the $N$ constants cancel out, leaving you with:
+> 3. **The Shift to Moments:** Since the average degree $\langle k \rangle$ is $\frac{\sum k}{N}$, and the second moment $\langle k^2 \rangle$ is $\frac{\sum k^2}{N}$, the $N$ constants cancel out, leaving you with:
 > $$q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$$
+> 
+> This is the "true" form of computing excess degrees because it describes the expected behavior of a network without degree correlations **based solely on its topology**.
 
 ---
 
@@ -457,15 +465,15 @@ If you calculate the mean excess degree by looping through every edge, your comp
 * On Facebook ($L \approx 10^{12}$), a simple loop that visits every edge to check the neighbor's degree would take days or weeks on a standard CPU.
 * By contrast, calculating $\langle k \rangle$ and $\langle k^2 \rangle$ only requires one pass over the nodes ($O(N)$), and since $N$ is usually much smaller than $L$ in dense sub-networks, the formula is significantly faster.
 
-Additionally, there is the issue of memory allocation itself. If you use recursion to "walk" the network, you risk a Stack Overflow. Every time a function calls itself to move to the next neighbor, the computer stores the "return address" in memory. In a "Small World" network where everyone is connected, a recursive search can quickly spiral out of control, consuming all available RAM just to keep track of where the search started.
+Additionally, there is the issue of memory allocation itself. If you use recursion to "walk" the network, you risk a **Stack Overflow**. Every time a function calls itself to move to the next neighbor, the computer stores the "return address" in memory. In a "Small World" network where everyone is connected, a recursive search can quickly spiral out of control, consuming all available RAM just to keep track of where the search started.
 
-Furthermore, navigating undirected networks in a manual calculation becomes prohibatively difficult. In an indurected network, every edge $(i, j)$ is technically two "stubs" or "half-edges." This means as the loop progresses you need to be careful to avoid (not count) already traversed edges. The formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$ handles this "stubs" logic automatically because it is derived from the First and Second Moments of the degree distribution.
+Furthermore, navigating undirected networks in a manual calculation becomes prohibatively difficult. In an indirected network, every edge $(i, j)$ is technically two "stubs" or "half-edges." This means as the loop progresses you need to be careful to avoid (not count) already traversed edges. The formula $q = \frac{\langle k^2 \rangle}{\langle k \rangle} - 1$ handles this "stubs" logic automatically because it is derived from the First and Second Moments of the degree distribution.
 
-In your NetworkX labs, you will see this in action. If you try to calculate metrics using for loops over G.edges(), your code will hang as soon as you load a large dataset (like a protein-interaction map or a web crawl).
+In the NetworkX, if you try to calculate metrics using for loops over `G.edges()`, your code will hang as soon as you load a large dataset (like a protein-interaction map or a web crawl).
 
-Using the Degree Distribution—which is essentially just a list of numbers—allows you to use Vectorized Operations (via NumPy). Instead of moving node-by-node, you tell the computer: "Take this entire array of degrees, square it, and find the average." This happens at the hardware level and is thousands of times faster than a Python loop.
+Using the **Degree Distribution** — which is essentially just a list of numbers — allows you to use **Vectorized Operations** (via NumPy). Instead of moving node-by-node, you tell the computer: "Take this entire array of degrees, square it, and find the average." This happens at the hardware level and is thousands of times faster than a Python loop.
 
-> You’ve hit on a core identity in network science! You are exactly right: $N \times \langle k \rangle$ is essentially the same as $L$ (specifically, it is $2L$). When we say a manual loop is $O(L)$, we are saying the time it takes to run scales linearly with the number of edges. Because the relationship between nodes, average degree, and links is so tight, $O(L)$ and $O(N \langle k \rangle)$ are functionally the same complexity. If doing the calcualtion manaually, it is really important to not visit the same edge twice, hence, in the end you just visit every edge twice, even if in practice you get there by following nodes to their neighbours. 
+> $N \times \langle k \rangle$ is essentially the same as $L$ (specifically, it is $2L$). When we say a manual loop is $O(L)$, we are saying the time it takes to run scales linearly with the number of edges. Because the relationship between nodes, average degree, and links is so tight, $O(L)$ and $O(N \langle k \rangle)$ are functionally the same complexity. If doing the calcualtion manaually, it is really important to not visit the same edge twice, hence, in the end you just visit every edge twice, even if in practice you get there by following nodes to their neighbours. 
 > 
 > The reason we $2L$ is because $\langle k \rangle$ is "ignorant" of the fact that an edge has two ends meaning they are double counting in the summation of the average calcuation. 
 
@@ -475,7 +483,6 @@ Using the Degree Distribution—which is essentially just a list of numbers—al
 
 
 ## Strength
-
 In a weighed undirected network, the strength of a node $s_{i} = \sum_{j} w_{ij}$. This is also known as weighted between. In weighted networks, this is the total "weight" of all connections attached to that specific node. While the degree formula ($\langle k \rangle = \frac{\sum k_i}{N}$) counts the number of links, the strength formula accounts for how important or heavy those links are. 
 
 In an unweighted network, every link weight $w_{ij}$ is simply 1. In that specific case, the strength of a node becomes identical to its degree. 
@@ -501,12 +508,9 @@ There are some rules that we apply to networks for simplification purposes:
 
 ## Network Representations
 
-<br>
-<br>
-
 ### Adjacency Matrix
 
-Adjacency Matrix: $N × N$ matrix where each element $a_{ij} = 1$ if $i$ and $j$ are adjacent, otherwise $0$. The diagonal elements ($a_{ii}$) will always be zero because of the no self-loops rule. 
+**Adjacency Matrix:** $N × N$ matrix where each element $a_{ij} = 1$ if $i$ and $j$ are adjacent, otherwise $0$. The diagonal elements ($a_{ii}$) will always be zero because of the no self-loops rule. 
 
 In an undirected network, this matrix will be symmetric on either side of the diagonal: $a_{ij} = a_{ji}$
 
@@ -529,7 +533,7 @@ $$k_{i} = \sum_{j} a_{ij} = \sum_{j} a_{ji}$$
 
 #### AM, Directed, In/Out Degrees in Cols/Rows
 
-This does not work exactly the same for a directed network because the matrix is not symmetric meaning the rows and columns do not mean the same thing. Here the rows hold a nodes out-degree and the columsn hold the in-degree. 
+This does not work exactly the same for a directed network because the matrix is not symmetric meaning the rows and columns do not mean the same thing. Here the **rows hold a nodes out-degree** and the **columns hold the in-degree**. 
 
 $$k_{i}^{out} = \sum_{j} a_{ij}$$
 
@@ -563,15 +567,15 @@ However, it should be noted that matrices are poor respresenations for networks 
 
 ### Adjacency List
 
-While an adjacency matrix is a grid of 0s and 1s, an adjacency list is a more compact "address book" for a network. Instead of a giant table showing every possible connection (even the ones that don't exist), you only list the connections that actually are there.
+While an adjacency matrix is a grid of 0s and 1s, an adjacency list is a more compact "address book" for a network. Instead of a giant table showing every possible connection (even the ones that don't exist), you only **list the connections that actually are there**.
 
-In an adjacency list, every node $i$ has its own list that contains the names (or indices) of its neighbors. 
+In an adjacency list, every node $i$ has its **own list** that contains the names (or indices) of its neighbors. 
 
-For Undirected Networks: If there is a link between $A$ and $B$, $B$ appears in $A$'s list, and $A$ appears in $B$'s list. This is the exact reason we divide the max links for undirected networks by two because we don't want to count the link from A to B as being different from B to A: ($L_{max} = \frac{N(N-1)}{2}$). 
+*For Undirected Networks:* If there is a link between $A$ and $B$, $B$ appears in $A$'s list, and $A$ appears in $B$'s list. This is the exact reason we divide the max links for undirected networks by two because we don't want to count the link from A to B as being different from B to A: ($L_{max} = \frac{N(N-1)}{2}$). 
 
-For Directed Networks: If $A \to B$, then $B$ appears in $A$'s list (the "out-list"), but $A$ does not appear in $B$'s list unless there is a separate link $B \to A$
+**For Directed Networks:** If $A \to B$, then $B$ appears in $A$'s list (the "out-list"), but $A$ does not appear in $B$'s list unless there is a separate link $B \to A$
 
-In the Facebook example, the network is sparse ($d \approx 10^{-6}$). A matrix for 1 billion users would require $10^{18}$ cells (a quintillion!), mostly filled with zeros. This is impossible for most computers to store. An adjacency list only stores the actual links ($L$). Since the average person only has $10^3$ friends, the computer only has to store $10^9$ lists with about 1,000 entries each. This is much more efficient. 
+In the Facebook example, the network is sparse ($d \approx 10^{-6}$). A matrix for 1 billion users would require $10^{18}$ cells (a quintillion!), mostly filled with zeros. This is impossible for most computers to store. An adjacency list only stores the **actual links** ($L$). Since the average person only has $10^3$ friends, the computer only has to store $10^9$ lists with about 1,000 entries each. This is **much more efficient**. 
 
 ```
 for line in nx.generate_adjlist(G):
@@ -634,7 +638,7 @@ W2 = nx.read_weighted_edgelist("wf.edges")
 
 ### Adjanency Matrices and Matrix Multiplication
 
-The intuition behind multiplying an adjacency matrix by itself is that it reveals connectivity over multiple steps within the netowrk. 
+The intuition behind multiplying an adjacency matrix by itself is that it reveals connectivity over multiple steps within the network. 
 
 While the base adjacency matrix $\mathbf{A}$ tells you who is directly connected (1 step), $\mathbf{A}^2$ tells you about paths that are exactly 2 steps long.
 
@@ -647,7 +651,7 @@ Let take an example where the network is: $X \to Y \to Z \to X$:
 
 **The First Matrix ($\mathbf{A}$) captures the direct link relationships:** $X \to Y$ is 1, $Y \to Z$ is 1, $Z \to X$ is 1. All other values in the matrix are 0 because you can't get anywhere else in exactly one jump. $Y \to X$ is 0 for example. 
 
-With the Squared Matrix ($\mathbf{A}^2$) the 1's have shifted. The first row represents $X$. Originally, it only had a $1$ in the middle column which was its connectioned to $Y$. Now, the $1$ has shifted to the end column. This means there is example 1 path of length 2 from $X$ to $Z$ ($X \to Y \to Z$). You cannot get from $X$ back to $X$ in 2 steps, so the diagonal is 0.
+With the **Squared Matrix** ($\mathbf{A}^2$) the 1's have shifted. The first row represents $X$. Originally, it only had a $1$ in the middle column which was its connectioned to $Y$. Now, the $1$ has shifted to the end column. This means there is example 1 path of length 2 from $X$ to $Z$ ($X \to Y \to Z$). You cannot get from $X$ back to $X$ in 2 steps, so the diagonal is 0.
 
 
 ![a2](./files/week_2/screenshots/a2.png)
@@ -696,7 +700,7 @@ However, with $\mathbf{A}^3$, the diagonal is the "Triangle Detector". If the en
 ## Week 2 - References/Readings
 
 #### [Scott L. Feld (1991) – Why Your Friends Have More Friends Than You Do](./files/week_2/Feld-FriendsFriends-1991.pdf)
-This is the "Friendship Paradox" paper, tt is a sociology paper, not physics or math. Feld explains the sociological implications of the Mean Excess Degree. He demonstrates that because popular people (hubs) belong to more social circles, they are disproportionately represented when you look at anyone’s list of friends.
+This is the "Friendship Paradox" paper, it is a sociology paper, not physics or math. Feld explains the sociological implications of the **Mean Excess Degree**. He demonstrates that because popular people (hubs) belong to more social circles, they are disproportionately represented when you look at anyone’s list of friends.
 
 <br>
 <br>
@@ -714,7 +718,7 @@ Week 3 moves beyond the basic definitions of nodes and edges to explore **topolo
 
 ---
 
-The week begins with the concept of **Assortativity**, or **"Birds of a Feather"**, which examines the mixing patterns of a network. You explored how nodes don't connect at random; instead, they often demonstrate **Homophily** (connecting to those with similar attributes) or **Degree Assortativity** (where high-degree hubs tend to link to other hubs). This creates a "dense core" in social networks, contrasted with the "hub-and-spoke" disassortative structures often found in biological or technological networks.
+The week begins with the concept of **Assortativity**, or **"Birds of a Feather"**, which examines the mixing patterns of a network. We explored how nodes don't connect at random; instead, they often demonstrate **Homophily** (connecting to those with similar attributes) or **Degree Assortativity** (where high-degree hubs tend to link to other hubs). This creates a **dense core** in social networks, contrasted with the "hub-and-spoke" disassortative structures often found in biological or technological networks.
 
 By calculating the **Average Nearest-Neighbor Degree** ($k_{nn}$), we can mathematically determine if a network is assortative ($r > 0$) or disassortative ($r < 0$), providing a high-level view of its social or functional behavior.
 
@@ -786,13 +790,13 @@ To actually find these shortest paths, you explored the **Breadth-First Search (
 
 ## Birds of a Feather
 
-In network science, "Birds of a Feather" usually refers to two distinct but related concepts: **Homophily** (similarity of node attributes) and **Clustering** (structural density). The principle that **"similar things tend to group together"** is a defining feature of real-world networks.
+In network science, **"Birds of a Feather"** usually refers to two distinct but related concepts: **Homophily** (similarity of node attributes) and **Clustering** (structural density). The principle that **"similar things tend to group together"** is a defining feature of real-world networks.
 
 Similar things tend to group together; like minded people, similar poeple etc. We wont go into quantifying this yet, this is covered in a later lecture. 
 
 > **Homophily** is the tendency of nodes to connect to others with similar attributes (e.g., interests, demographics, or "like-mindedness"). 
 
-A common quantitative approach is calculating the probability that a node connects to a node of the same "type" versus a different type. This is computationally cheaper than path-based metrics because it only requires looking at a node’s immediate neighbors (its degree) rather than the entire network map.
+A common quantitative approach is calculating the probability that a node connects to a node of the same "type" versus a different type. This is computationally cheaper than path-based metrics because it only requires looking at a **node’s immediate neighbors** (its degree) rather than the entire network map.
 
 > **Path** based measures look at the distance between nodes. 
 
@@ -821,7 +825,7 @@ The quantantive way to approach clustering is to count the triangles $\binom{N}{
 
 In network science, assortativity (or assortative mixing) is a preference for a network's nodes to attach to others that are similar in some way.
 
-**Assortativity** (or assortative mixing) describes the preference for nodes to attach to others that are similar in some way. This **similarity** can be structural (degree) or attribute-based (homophily).
+**Assortativity** (or assortative mixing) describes the preference for nodes to attach to others that are similar in some way. This similarity can be **structural (degree)** or **attribute-based (homophily)**.
 
 There are two possible mechanisms by which assortativity emerges naturally: 
 * **Selection (Homophily):** similar nodes become connected
@@ -866,7 +870,7 @@ Disassortative networks have hub-and-spoke (or star) structure, e.g.  Web, Inter
 
 
 ### Assortativity in `NetworkX`
-Measuring Assortativity is essentially measuring similarity and there are different ways to do this depending on what you consider "similar" or the "same" to be. There are 3 main optons: Categorical, Numerical and Structural
+Measuring **Assortativity** is essentially measuring similarity and there are different ways to do this depending on what you consider "similar" or the "same" to be. There are 3 main optons: **Categorical**, **Numerical** and **Structural**
 
 ---
 
@@ -885,7 +889,7 @@ assort_n = nx.numeric_assortativity_coefficient(G, quantity)
 ```
 
 #### Structural (Degree)
-This is the "pure" network science metric because it ignores external metadata and looks only at the degrees ($k$) which it treats as an attribute. It calculates the Pearson correlation between the degrees ($k$) of adjacent nodes. In an assortative social network, hubs ($k=1000$) connect to other hubs ($k=800$). In a disassortative tech network, hubs connect to spokes ($k=1$). This is what the previous $k_{nn}$ formulas were exploring. It answers: "Do popular nodes hang out with other popular nodes?". This is used for if a network has a "dense core" (Assortative) or a "star-like" structure (Disassortative).
+This is the "pure" network science metric because it ignores external metadata and **looks only at the degrees** ($k$) which it treats as an attribute. It calculates the **Pearson correlation** between the degrees ($k$) of adjacent nodes. In an assortative social network, hubs ($k=1000$) connect to other hubs ($k=800$). In a disassortative tech network, hubs connect to spokes ($k=1$). This is what the previous $k_{nn}$ formulas were exploring. It answers: "Do popular nodes hang out with other popular nodes?". This is used for if a network has a "dense core" (Assortative) or a "star-like" structure (Disassortative).
 
 ```
 r = nx.degree_assortativity_coefficient(G)
@@ -967,16 +971,16 @@ r, p_value = scipy.stats.pearsonr(k, knn)
 * `nx.average_degree_connectivity(G)`: This single function performs the heavy lifting of your formulas. It calculates $k_{nn}(i)$ for every node and then groups them to find $\langle k_{nn}(k) \rangle$ for every degree $k$.
 * `list(knn_dict.keys())`: These are your $k$ values (the independent variable on your x-axis).
 * `list(knn_dict.values())`: These are your $\langle k_{nn}(k) \rangle$ values (the average neighbor degrees on your y-axis).
-* `scipy.stats.pearsonr(k, knn)`: This calculates the Assortativity Coefficient ($r$). It measures the strength and direction of the linear relationship between a node's degree and its neighbors' average degree.
+* `scipy.stats.pearsonr(k, knn)`: This calculates the **Assortativity Coefficient** ($r$). It measures the strength and direction of the linear relationship between a node's degree and its neighbors' average degree.
 
 ---
 
 <br>
 
 ## Why Paths Matter
-Up to this point, we have focused on Local Topology: how many neighbors a node has (Degree) and whether those neighbors are similar to the node (Assortativity). However, a network's primary function is usually to transport something—information, electricity, viruses, or people.
+Up to this point, we have focused on **Local Topology**: how many neighbors (Degree) a node has and whether those neighbors are similar to the node (Assortativity). However, a network's primary function is usually to transport something — information, electricity, viruses, or people.
 
-To understand how a network performs this function, we must move from Local to Global measures. If Assortativity tells us who is sitting next to whom, Paths tell us how easily a message can travel from one side of the room to the other.
+To understand how a network performs this function, we must move from **Local** to **Global** measures. If **Assortativity** tells us who is sitting next to whom, **Paths** tell us how easily a message can travel from one side of the room to the other.
 
 ---
 
@@ -1016,20 +1020,21 @@ This is the minimum length path between two nodes. There may be more than one, w
 
 ## APL and Diameter
 
-In network science, the longest shortest path is formally known as the Diameter of the network. While it sounds like a contradiction, the term describes the maximum distance you would ever have to travel between any two nodes using the most efficient route available. 
+In network science, the **longest shortest path** is formally known as the **Diameter** of the network. While it sounds like a contradiction, the term describes the maximum distance you would ever have to travel between any two nodes using the most efficient route available. 
 
-Between any two nodes (A and B), there might be many ways to travel. The shortest path is the route with the fewest possible links. You calculate the shortest path for every possible pair of nodes in the entire network. The largest of all those values is your Diameter. Given any 2 nodes, this is the longest path you can take in the network. 
+Between any two nodes (A and B), there might be many ways to travel. The shortest path is the route with the fewest possible links. You calculate the shortest path for every possible pair of nodes in the entire network. The **largest of all those values** is your **Diameter**. 
+
+> Given any 2 nodes, this is the longest path you can take in the network. 
 
 In Network Science, we generally need to constrain our task to look at shortest paths. Without this, we could just make arbitarily long routes that take pointless de-tours. 
 
 $$\ell_{\max} = \max_{i, j} \ell_{ij}$$
 
-The average path length (APL) is the average of the shortest path lengths across all pairs of nodes
+The **average path length (APL)** is the average of the shortest path lengths across all pairs of nodes
 
 ---
 
-**Undirected:**
-For undirected networks, you divide by the total number of possible pairs $\binom{N}{2}$.
+**Undirected:** For undirected networks, you divide by the total number of possible pairs $\binom{N}{2}$.
 
 $$\langle \ell \rangle = \frac{\sum_{i,j} \ell_{ij}}{\binom{N}{2}} = \frac{2 \sum_{i,j} \ell_{ij}}{N(N-1)}$$
 
@@ -1059,7 +1064,7 @@ The biggest issue here is if there is an **undefined path**. `Netx` will highlig
 ### Harmonic mean of path lengths
 In standard arithmetic average formulas, like the ones in your other slides, an "undefined" path (where nodes $i$ and $j$ are not connected) is treated as having a distance of infinity ($\infty$). If you try to sum infinity into an average, the entire result becomes infinity, which doesn't tell you anything useful about the network's structure.
 
-The harmonic mean of path lengths is the key to calculating distances in networks that are disconnected.
+The **harmonic mean of path lengths** is the key to calculating distances in networks that are disconnected.
 
 $$\langle \ell \rangle = \left( \frac{\sum_{i,j} \frac{1}{\ell_{ij}}}{\binom{N}{2}} \right)^{-1}$$
 
@@ -1071,23 +1076,22 @@ $$\langle \ell \rangle = \left( \frac{\sum_{i,j} \frac{1}{\ell_{ij}}}{\binom{N}{
 
 ---
 
-In this formula, you are not summing the distances ($\ell_{ij}$) directly. Instead, you are summing their reciprocals: $\frac{1}{\ell_{ij}}$. 
+In this formula, you are not summing the distances ($\ell_{ij}$) directly. Instead, you are summing their **reciprocals**: $\frac{1}{\ell_{ij}}$. 
 * If a path is defined a distance of 2 becomes $1/2$, a distance of 10 becomes $1/10$, etc. 
 * If a path is undefined the distance is $\infty$. The reciprocal of infinity is zero ($\frac{1}{\infty} = 0$). 
 
-Because undefined paths turn into zeros in this calculation, they simply drop out of the summation without "breaking" the math. 
+Because **undefined paths turn into zeros** in this calculation, they simply drop out of the summation without "breaking" the math. 
 
 The formula effectively counts the pairs that are connected and ignores the ones that aren't. The resulting $\langle \ell \rangle$ gives you a finite, meaningful number that represents the "efficiency" of communication across the reachable parts of the network.
 
 ---
 
 ### Calculating Disconnected Networks
+This formula allows us to do calculation on networks which are not complete, i.e. there isn't a connection between every node. But it also allows for use to calculate when there is an **entire break in a network**, where it may be broken down into **seperate components** but we consider it to be the "same" network. 
 
-This formula allows us to do calculation on networks which are not complete, i.e. there isn't a connection between every node. But it also allows for use to calculate when there is an entire break in a network, where it may be broken down into seperate components but we consider it to be the "same" network. 
+We use this formula when the network is **disconnected** (composed of two or more separate "islands" of nodes). It treats the "infinite" distance between these islands as zero in the summation, allowing us to measure the efficiency of the parts that are reachable.
 
-We use this formula when the network is disconnected (composed of two or more separate "islands" of nodes). It treats the "infinite" distance between these islands as zero in the summation, allowing us to measure the efficiency of the parts that are reachable.
-
-Note, that another route to handling undefined, or disconnected sub-nets, is to just measure the APL and Diameter of the largest component. However, this is a topic for later so we don't look at it here. 
+Note, that another route to handling undefined, or disconnected sub-networks, is to just measure the APL and Diameter of the **largest component**. However, this is a topic for later so we don't look at it here. 
 
 ---
 
@@ -1126,23 +1130,32 @@ nx.shortest_path_length(W, 'a', 'b', 'weight')
 
 
 ## Connectedness and Components
-A network is connected if there is a path between any two nodes. These don't need to be 1 step apart, there just needs to be an availble route through the network. If a network is not connected, it is disconnected but will have mutliple components which are connected. 
+A network is connected if there is a path between **any two node**s. These don't need to be 1 step apart, there just needs to be an availble route through the network. If a network is not connected, it is disconnected but will have mutliple components which are connected. 
 
 A **connected component** is a **connected subnetwork**. The largest one is called **giant component**, it often includes a substantial portion of the network. A **singleton** is the smallest-possible connected component. 
 
+---
+
 ### Strong vs Weakly Connected Components
-
 A directed network can be **strongly** connected or **weakly** connected if there is a path between any two nodes, **respecting or disregarding** the link directions, respectively. 
-* **Strongly Connected:** You must **follow the arrows**. To get from node $A$ to node $B$, there must be a sequence of directed links ($A \to \dots \to B$). To be a strongly connected network, every node must be able to reach every other node while respecting these one-way streets. For two nodes to be strongly connected, you need a path that goes $i \to j$ and a path that comes back $j \to i$. In the simplest possible loop involving three nodes, this forms a directed triangle (a 3-cycle).
-* **Weakly Connected**: You are allowed to **"disregard"** the direction of the arrows. This means you treat the directed links as if they were simple, undirected edges. If you can get from $A$ to $B$ by traveling **"the wrong way"** down a one-way street, the nodes are weakly connected.
 
-If a directed network is not strongly connected, many node pairs will have a shortest path $\ell_{ij} = \infty$ because you simply can't "get there from here" following the arrows. This is why we measure Diameter or APL using the harmonic mean or Largest Connected Component. It's very common for directed networks (like the Web or Twitter) to have many nodes that are weakly connected but cannot reach each other "strongly".
+---
 
-Strongly connected components are often made up of many overlapping directed triangles. In Week 2 we looked at using Linear Algebra/Matrix Mutliplication as a triangle detector by looking at the diagonal in the $A^3$. If a directed network has many triangles (high clustering), it is much more likely to have a large Strongly Connected Component because there are many redundant "return paths". This is particularly relevant to the small worlds concept. 
+#### Strongly Connected: 
+You must **follow the arrows**. To get from node $A$ to node $B$, there must be a sequence of directed links ($A \to \dots \to B$). To be a strongly connected network, every node must be able to reach every other node while respecting these one-way streets. For two nodes to be strongly connected, you need a path that goes $i \to j$ and a path that comes back $j \to i$. In the simplest possible loop involving three nodes, this forms a directed triangle (a 3-cycle).
 
-A weakly connected network is a "feed-forward" loop. You can get to $k$ easily, but once you are at $k$, you are stuck. There is no way back to $i$. This is weakly connected. 
+#### Weakly Connected: 
+You are allowed to **"disregard"** the direction of the arrows. This means you treat the directed links as if they were simple, undirected edges. If you can get from $A$ to $B$ by traveling **"the wrong way"** down a one-way street, the nodes are weakly connected.
 
-A strongly connected network represents a "feedback" loop. No matter where you are, you can reach everyone else. This is strongly connected.
+---
+
+If a **directed network** is not strongly connected, many node pairs will have a shortest path $\ell_{ij} = \infty$ because you simply can't "get there from here" following the arrows. This is why we measure **Diameter** or **APL** using the **harmonic mean** or **Largest Connected Component**. It's very common for directed networks (like the Web or Twitter) to have many nodes that are **weakly connected** but cannot reach each other "strongly".
+
+**Strongly connected components** are often made up of many **overlapping directed triangles**. In Week 2 we looked at using **Linear Algebra/Matrix Mutliplication** as a triangle detector by looking at the diagonal in the $A^3$. If a directed network has many triangles (high clustering), it is much more likely to have a large **Strongly Connected Component** because there are many redundant "return paths". This is particularly relevant to the small worlds concept. 
+
+> A weakly connected network is a **"feed-forward" loop**. You can get to $k$ easily, but once you are at $k$, you are stuck. There is no way back to $i$. This is weakly connected. 
+
+> A strongly connected network represents a **"feedback" loop**. No matter where you are, you can reach everyone else. This is strongly connected.
 
 ---
 
@@ -1154,7 +1167,9 @@ The **in-component** of a strongly connected component $S$ is the set of nodes f
 
 The **out-component** of a strongly connected component $S$ is the set of nodes that can be reached from $S$, but from which one cannot reach $S$
 
-A **Strongly Connected Component (SCC)** covers both of these, i.e. you can get to and from a node. Disconnected nodes have no path to or from the SCC at all.
+A **Strongly Connected Component (SCC)** covers both of these, i.e. you can get to and from a node. 
+
+**Disconnected nodes** have no path to or from the SCC at all.
 
 ---
 
@@ -1176,7 +1191,7 @@ A **Strongly Connected Component (SCC)** covers both of these, i.e. you can get 
 
 
 ## Finding Shortest Paths
-W#hether you are calculating the **Average Path Length** ($\langle \ell \rangle$), the **Diameter** ($\ell_{\max}$), or checking for **Strong/Weak Connectivity**, you need a way to actually find those shortest paths.
+Whether you are calculating the **Average Path Length** ($\langle \ell \rangle$), the **Diameter** ($\ell_{\max}$), or checking for **Strong/Weak Connectivity**, you need a way to actually find those shortest paths.
 
 The main algorithm used to find shortest paths is called **breadth-first search**. It looks like a tree in structure but it is not as it has cycles.
 
@@ -1196,9 +1211,9 @@ BFS is efficient at finding the shortest path because it never has to "re-visit"
 
 It feels like **brute force** because, in a way, it is! You are systematically **checking every neighbor**. However, BFS is considered **"efficient"** compared to a **true random brute force** because it never explores the same path twice and never looks deeper than it needs to. BFS keeps a **list of nodes** it has already visited. This prevents the algorithm from going in circles or re-calculating the same distances over and over.
 
-To find the Average Path Length, you have to run this BFS "ripple" starting from every single node in the network. If there are $N$ nodes, you run BFS $N$ times. That is where the $O(N^2)$ (or more accurately $O(N(N+L))$) comes from.
+To find the **Average Path Length**, you have to run this BFS "ripple" starting from every single node in the network. If there are $N$ nodes, you run BFS $N$ times. That is where the $O(N^2)$ (or more accurately $O(N(N+L))$) comes from.
 
-The Cost of a Single BFS is $O(N+L)$. You start from a node, and traverse every link it has to find the nodes one step away. Then from each new node, you traverse every link it has. There is a lookup table of recorded nodes so if a link heads back to a node, you don't go there, i.e. the next step you are just at new nodes. You repeat the searching steps again. At the final step, you have exhausted all nodes and links. You have visted every node once and traversed every link once, hence, $O(N+L)$. 
+The **Cost of a Single BFS** is $O(N+L)$. You start from a node, and traverse every link it has to find the nodes one step away. Then from each new node, you traverse every link it has. There is a lookup table of recorded nodes so if a link heads back to a node, you don't go there, i.e. the next step you are just at new nodes. You repeat the searching steps again. At the final step, you have exhausted all nodes and links. You have visted every node once and traversed every link once, hence, $O(N+L)$. 
 
 However, a **single BFS** only tells you the distance from one specific node to everyone else. To calculate metrics like the **Average Path Length** ($\langle \ell \rangle$) or the **Diameter** ($\ell_{\max}$), you need the distance between every possible pair of nodes. Therefore, you have to repeat the algo for every node in the network ($N$ times). Resulting in $O(N(N+L))$.
 
@@ -1273,7 +1288,7 @@ The formula $\langle \ell \rangle \sim \log N$ is the formal requirement for a n
 | **Lattice/Grid:** | $\langle \ell \rangle \sim N^{1/d}$  |  This grows much faster than $\log N$ (where $d$ is dimension).  |
 | **Small World:** | $\langle \ell \rangle \sim \log N$ | This grows much slower. |
 
-Many other types of networks are small worlds, too. Air transportation networks, the Internet, the Web, and Wikipedia, all have short paths. Most real-world networks are small worlds. >
+Many other types of networks are small worlds, too. Air transportation networks, the Internet, the Web, and Wikipedia, all have short paths. Most real-world networks are small worlds.
 
 > #### The Significance of Logarithmic Scaling
 > When you say $\langle \ell \rangle \sim \log N$, remember how powerful that is.
@@ -1365,7 +1380,7 @@ $$C = \frac{closed}{triplets}$$
 
 where a triplet consists of three nodes where at least two edges exist (i.e., a wedge or a triangle). A closed triplet is a triplet where all three nodes are connected (i.e., a triangle).
 
-This provides an intuitive measure of transitivity, i.e., how often a friend of a friend is also a direct friend
+This provides an intuitive **measure of transitivity**, i.e., how often a friend of a friend is also a direct friend
 
 ```
 nx.average_clustering(G) # network's average clustering coefficient
