@@ -1400,11 +1400,11 @@ nx.transitivity(G) # network's global clustering coefficient
 
 ---
 
-Week 4 marks a shift from the "Global Shape" of the network to the "Power and Inequality" that exists within its structure. The lecture begins by defining Centrality, moving beyond simple link counting to identify the diverse ways a node can be "important." We explored three primary metrics: **Degree Centrality** (the local heavyweights), **Closeness Centrality** (the optimal **broadcasters** who can reach everyone quickly), and **Betweenness Centrality** (the structural **bottlenecks** that control the flow of traffic). By comparing these, we learned that a node doesn't need a high degree to be powerful; a single "bridge" node with a low degree can hold a massive amount of betweenness if it is the only connection between two large communities.
+Week 4 marks a shift from the "Global Shape" of the network to the "Power and Inequality" that exists within its structure. The lecture begins by defining **Centrality**, moving beyond simple link counting to identify the diverse ways a node can be "important." We explore three primary metrics: **Degree Centrality** (the local heavyweights), **Closeness Centrality** (the optimal **broadcasters** who can reach everyone quickly), and **Betweenness Centrality** (the structural **bottlenecks** that control the flow of traffic). By comparing these, we learned that a node doesn't need a high degree to be powerful; a single "bridge" node with a low degree can hold a massive amount of betweenness if it is the only connection between two large communities.
 
 ---
 
-The core mathematical focus of the week is the **Degree Distribution** and the emergence of the **Heavy Tail**. You transitioned from looking at individual nodes to a statistical view of the entire system, using **Log-Log plots** to identify **Scale-Free** networks. Unlike "Normal" systems (like human height) that have a **characteristic average**, real-world networks follow a **Power Law** ($P(k) \sim k^{-\gamma}$), where **a few massive hubs** coexist with a vast majority of low-degree nodes. This structural diversity is quantified by the **Heterogeneity Parameter** ($\kappa$). When $\kappa$ is high, the network lacks a typical scale, leading to the **"Ultra-Small World"** property—where hubs act as super-highways that shrink the distance between any two points to a **handful of hops**.
+The core mathematical focus of the week is the **Degree Distribution** and the emergence of the **Heavy Tail**. We transitioned from looking at individual nodes to a statistical view of the entire system, using **Log-Log plots** to identify **Scale-Free** networks. Unlike "Normal" systems (like human height) that have a **characteristic average**, real-world networks follow a **Power Law** ($P(k) \sim k^{-\gamma}$), where **a few massive hubs** coexist with a vast majority of low-degree nodes. This structural diversity is quantified by the **Heterogeneity Parameter** ($\kappa$). When $\kappa$ is high, the network lacks a typical scale, leading to the **"Ultra-Small World"** property—where hubs act as super-highways that shrink the distance between any two points to a **handful of hops**.
 
 ---
 
@@ -1539,7 +1539,7 @@ Closeness centrality moves beyond local counts to consider the wider geometry of
 
 #### The Concept: The Optimal Broadcaster
 
-This metric measures the efficiency of information spread. If a node has high closeness centrality, it can "broadcast" information throughout the entire network at the lowest possible cost (fewer hops). Conversely, a node with low closeness is structurally isolated and requires more steps to reach others.
+This metric measures the **efficiency of information spread**. If a node has high closeness centrality, it can "broadcast" information throughout the entire network at the lowest possible cost (fewer hops). Conversely, a node with low closeness is structurally isolated and requires more steps to reach others.
 
 **Closeness** centrality $C_i$ for a node $i$ is the inverse of the sum of the shortest path distances $d_{ij}$ between node $i$ and every other node $j$ in the network.
 
@@ -1578,7 +1578,7 @@ closeness_dict = nx.closeness_centrality(G)
 
 ### Measure 3: Betweenness Centrality
 
-**Betweenness** centrality captures a fundamentally different dimension of importance compared to degree or closeness. Rather than focusing on how many neighbors a node has or how fast it can broadcast, this metric identifies nodes that act as structural bottlenecks or bridges between different parts of the network.
+**Betweenness** centrality captures a fundamentally different dimension of importance compared to degree or closeness. Rather than focusing on how many neighbors a node has or how fast it can broadcast, this metric identifies nodes that act as **structural bottlenecks** or **bridges** between different parts of the network.
 
 A node has **high betweenness** if it frequently **lies on the shortest paths between other pairs of nodes**. These nodes are critical for transport and communication; if a node with high betweenness is removed or attacked, it can effectively **"cut off"** entire sections of the network, causing a total collapse of efficiency.
 
@@ -1602,7 +1602,7 @@ Betweeness is inherently a "middle-man" metric. It is entirely dependent on the 
 
 $h$ and $j$ are just indices that represent two nodes in the network. The summation in the formula means that to compute this, you need to loop through every pair of nodes (that doesn't include $i$,  $h \neq i \neq j$), compute the ratio of shortest paths passing through $i$ and add the value to the summation. Note, if a path doesn't pass through $i$ then the ratio is $0$ which adds nothing to the summations
 
-This is why Betweenness is the most "expensive" metric to compute ($O(N^3)$ or $O(NM)$). While Degree only requires looking at one node's list of neighbors, Betweenness requires knowing the global map.
+This is why Betweeness is the **most expensive metric to compute** ($O(N^3)$ or $O(NM)$). While **Degree** only requires looking at one node's list of neighbors, **Betweenness** requires knowing the **global map**.
 
 ---
 <br>
@@ -1889,9 +1889,9 @@ nx.k_core(G)
 
 - [Lecture Recording ](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=15272f00-9da6-46f1-b4dc-b3fd00b4266c)
 
-Week 5 shifts the focus from observing existing structures to the engineering challenge of Network Models, providing a set of instructions to build synthetic networks that mimic real-world characteristics.
+Week 5 shifts the focus from observing existing structures to the engineering challenge of **Network Models**, providing a set of instructions to build synthetic networks that mimic real-world characteristics.
 
-The week follows a logical progression of "trial and error," beginning with the **Random Network (Erdős-Rényi/Gilbert)** model. While this model successfully predicts the **Small World property** (logarithmic path lengths), it fails significantly in two areas: it produces almost no clustering and lacks the massive hubs found in reality. Mathematically, its peaked Binomial degree distribution means almost every node stays close to the average, making it a poor representation of heterogeneous systems like the Internet or social media.
+The week follows a logical progression of "trial and error," beginning with the **Random Network (Erdős-Rényi/Gilbert)** model. While this model successfully predicts the **Small World property** (logarithmic path lengths), it fails significantly in two areas: it produces almost **no clustering** and lacks the **massive hubs** found in reality. Mathematically, its peaked Binomial degree distribution means almost every node stays close to the average, making it a poor representation of heterogeneous systems like the Internet or social media.
 
 To solve the clustering problem, we explored the **Watts-Strogatz model**, which bridges the gap between a predictable, "cliquey" lattice and a random graph. By starting with a ring lattice and "rewiring" a small fraction of links with probability $p$, the model creates shortcuts that collapse the average path length while preserving the local triangles that provide high clustering. This creates the "Small-World" regime. However, like the random model, Watts-Strogatz is static and still fails to generate **hubs**, as the rewiring process keeps the degree distribution centered around the original lattice degree.
 
@@ -2084,7 +2084,7 @@ Because Gilbert's $G(n, p)$ model is much easier to work with mathematically and
 
 ## Number of Links and Density of a Random Networks
 
-This slide explores how to mathematically define the basic properties of a Random Network, specifically focusing on the expected number of links and the overall link density. The model relies on the logic of a binomial process, where creating a network is compared to tossing a biased coin (Gilbert) for every possible pair of nodes to decide if a link should exist. 
+This slide explores how to mathematically define the basic properties of a **Random Network**, specifically focusing on the expected number of links and the overall link density. The model relies on the logic of a binomial process, where creating a network is compared to tossing a biased coin (Gilbert) for every possible pair of nodes to decide if a link should exist. 
 
 ---
 
@@ -2106,14 +2106,14 @@ $$d = \frac{\langle L \rangle}{N(N-1)/2} = \frac{pN(N-1)/2}{N(N-1)/2} = p$$
 
 ### The Sparsity Constraint
 
-There exists. a critical warning about the application of this model to real-world scenarios. Because most real-world networks are sparse—meaning they have very few links relative to the total number of possible connections—the random network model is only a good representation if the probability $p$ is kept very small.
+There exists a critical warning about the application of this model to real-world scenarios. Because most real-world networks are sparse — meaning they have very few links relative to the total number of possible connections — the random network model is only a good representation if the probability $p$ is kept very small.
 
-$p$ is potentially a parameter to be set when constructing a random network. A $p$ of 0.8 is way to high to relfect any notion of a real network, thus won't tell us anything about the real world.
+$p$ is a parameter to be set when constructing a random network. A $p$ of 0.8 is way too high to relfect any notion of a real network, thus won't tell us anything about the real world.
 
 --- 
 
 ## Average Degree of a Random Network
-Moving into average degree, the lecture transitions from looking at the network as a whole to looking at the connectivity of a single node. 
+Moving into average degree, the lecture transitions from looking at the network as a whole to looking at the connectivity of a **single node**. 
 
 The (expected) average degree, represented as $\langle k \rangle$, is defined by the number of "heads" or successful connections a node makes, given a probability $p$ and a set number of trials $t$. In this specific context, the number of trials $t$ is equal to the number of potential neighbors a node could have, which is $N-1$.
 
@@ -2239,7 +2239,7 @@ The brilliance of this model is revealed when you plot the average path length (
 
 **Persistent Clustering:** Unlike the path length, the clustering coefficient remains high for much larger values of $p$. This is because a few rewired links don't destroy the majority of the local "triangles" (connected neighbors) that define a lattice.
 
-**The Result:** There exists a significant range of $p$ where the network is "small-world"—it has a short path length (like a random graph) but a high clustering coefficient (like a lattice)
+**The Result:** There exists a significant range of $p$ where the network is "small-world" — it has a short path length (like a random graph) but a high clustering coefficient (like a lattice)
 
 ---
 
@@ -2370,7 +2370,7 @@ In Python, you can find the best-fit WS model for your data by iterating through
 ### Watts-Strogatz model: Degree Distribution
 Regardless of the $p$-value chosen, the degree distribution of a WS model is peaked. This means there is a clearly identifiable peak in the distribution from which all of the nodes cluster around. This is because most nodes have the same distribution, there are no **hubs**. 
 
-THE Watts-Strogatz model fails to re-produce the broad degree distributions observed in many real-world networks. 
+The Watts-Strogatz model fails to re-produce the broad degree distributions observed in many real-world networks. 
 
 ![Peaked Distribution](./files/week_5/peaked_dist.png)
 
@@ -2380,13 +2380,14 @@ THE Watts-Strogatz model fails to re-produce the broad degree distributions obse
 
 While the Watts-Strogatz model fixed the clustering problem found in random networks, it still has a major flaw when compared to real-world data: the degree distribution.
 * **Degree Distribution:** Because the model starts with a regular lattice where everyone has degree $k$, even after rewiring, the degrees remain "peaked" around $k$.
-* **Missing Hubs:** The model fails to produce the broad, heavy-tailed distributions seen in real-world networks. In Watts-Strogatz, there are no "hubs"—nodes with a disproportionately high number of links.
+* **Missing Hubs:** The model fails to produce the broad, heavy-tailed distributions seen in real-world networks. In Watts-Strogatz, there are no "hubs" — nodes with a disproportionately high number of links.
 
 ---
 
 ## Configuration Model
 
-The Configuration Model addresses a specific problem: how to build a network that has a pre-defined degree sequence, a specific list of degrees for every node, $(k_1, k_2, ..., k_n)$, while keeping all other connections random. 
+The **Configuration Model** addresses a specific problem: 
+- How to build a network that has a pre-defined degree sequence, a specific list of degrees for every node, $(k_1, k_2, ..., k_n)$, while keeping all other connections random. 
 
 This is essential because many different network structures can share the same degree distribution, and researchers need a way to isolate the effects of the distribution itself.
 
@@ -2413,11 +2414,11 @@ If the property disappears after randomization, then other factors — such as s
 ---
 
 ### What is Static and Variable in a Configuration Model
-When you use the Configuration Model, you are "locking" the Nodes and Degrees, but you are "releasing" the Structure.
+When you use the **Configuration Model**, you are "locking" the **Nodes** and **Degrees**, but you are "releasing" the Structure.
 * **Fixed:** $N$, $L$, $\langle k \rangle$, and the Degree Distribution $P(k)$.
 * **Variable:** Clustering ($C$), Path Length ($L$), Assortativity ($r$), and Community Structure.
 
-The reason we use the Configuration Model is to ask the "Why" question. "Is my network's high clustering ($C=0.4$) just a lucky accident because I have a few big hubs?". You run the Configuration Model. It keeps your hubs but randomizes the links. If the new random version also has $C=0.4$, then the clustering was just a side-effect of the hubs. The hubs are the "important" part. If the new random version has $C=0.01$, then your hubs weren't enough to explain the clustering. There must be some social/biological force (like homophily) pushing those nodes together.
+The reason we use the **Configuration Model** is to ask the "Why" question. "Is my network's high clustering ($C=0.4$) just a lucky accident because I have a few big hubs?". You run the **Configuration Model**. It keeps your hubs but randomizes the links. If the new random version also has $C=0.4$, then the clustering was just a side-effect of the hubs. The hubs are the "important" part. If the new random version has $C=0.01$, then your hubs weren't enough to explain the clustering. There must be some social/biological force (like homophily) pushing those nodes together.
 
 ---
 
@@ -2455,7 +2456,7 @@ Unlike the models discussed previously, ERGMs enable statistical inference. This
 
 ### Simulation via Triangle Bias
 
-The lecture demonstrates the power of ERGMs by showing how adjusting a single parameter—Triangle Bias—affects network structure:
+The lecture demonstrates the power of ERGMs by showing how adjusting a single parameter — **Triangle Bias** — affects network structure:
 * **Low Bias:** Results in a network that looks essentially random.
 * **Moderate Bias:** Leads to the emergence of some clustering and small communities.
 * **High Bias:** Produces a network with strong, dense clustering throughout.
@@ -2465,7 +2466,7 @@ The lecture demonstrates the power of ERGMs by showing how adjusting a single pa
 ---
 
 ### ERGM Python Implementation
-This code is a Markov Chain Monte Carlo (MCMC) simulation for an Exponential Random Graph Model (ERGM). While the Gilbert and Watts-Strogatz models follow a rigid recipe, this code is "negotiating" with the network. It’s trying to find a balance between being random and being "cliquey" (having triangles).
+This code is a **Markov Chain Monte Carlo (MCMC)** simulation for an **Exponential Random Graph Model (ERGM)**. While the Gilbert and Watts-Strogatz models follow a rigid recipe, this code is "negotiating" with the network. It’s trying to find a balance between being random and being "cliquey" (having triangles).
 
 The function starts by creating a standard Erdős-Rényi (Random) network. At this stage, the clustering is very low because links are placed without any regard for "friend-of-a-friend" logic.
 
@@ -2541,11 +2542,11 @@ def generate_ergm_network(n, edge_prob, triangle_bias, steps=5000):
 ---
 
 ### How to Utilise ERGM in Analysis
-In practice, using an **Exponential Random Graph Model (ERGM)** on a real-world network is akin to performing a **"structural autopsy"** to uncover the specific social or biological forces that shaped its evolution. Unlike simpler models that only tell you if a network is a small world, ERGMs allow you to test competing hypotheses—such as whether a network’s structure is driven by random chance, the tendency for friends-of-friends to connect (**Transitivity**), or the tendency for similar people to bond (**Homophily**). By treating the network's features as "statistics," the model seeks to identify the underlying "DNA" that makes your specific system unique.
+In practice, using an **Exponential Random Graph Model (ERGM)** on a real-world network is akin to performing a **"structural autopsy"** to uncover the specific social or biological forces that shaped its evolution. Unlike simpler models that only tell you if a network is a small world, ERGMs allow you to test competing hypotheses — such as whether a network’s structure is driven by random chance, the tendency for friends-of-friends to connect (**Transitivity**), or the tendency for similar people to bond (**Homophily**). By treating the network's features as "statistics," the model seeks to identify the underlying "DNA" that makes your specific system unique.
 
 The analysis begins by feeding your real-world data into an ERGM solver, which performs **Parameter Estimation**. The solver essentially asks: "What 'weights' or 'biases' ($\theta$) would I need to apply to a random graph to make it evolve into a shape that matches this real network?" If the solver returns a high positive weight for **triangles**, you have mathematical proof that clustering is a dominant, non-random force in your system. Conversely, if the weight is near zero, you know the clusters you see are likely just a statistical accident. This allows researchers to move beyond mere observation and actually quantify the "pressure" of different structural drivers.
 
-Once these weights are identified, the next step is a **Goodness of Fit** test, where you use the model to generate thousands of synthetic networks based on those discovered rules. By comparing these "fake" networks to your "real" one, you can see if your model successfully captures the global properties like average path length or diameter. If the synthetic versions match the real one, you have successfully isolated the core mechanics of the network. If they don't, it signals that a "missing variable"—perhaps geography or a specific node attribute—is still unaccounted for, requiring you to refine your "autopsy" further.
+Once these weights are identified, the next step is a **Goodness of Fit** test, where you use the model to generate thousands of synthetic networks based on those discovered rules. By comparing these "fake" networks to your "real" one, you can see if your model successfully captures the global properties like average path length or diameter. If the synthetic versions match the real one, you have successfully isolated the core mechanics of the network. If they don't, it signals that a "missing variable" — perhaps geography or a specific node attribute — is still unaccounted for, requiring you to refine your "autopsy" further.
 
 This methodology has profound applications across various fields. In **corporate sociology**, it can reveal if two departments aren't communicating because of physical distance or a lack of mutual collaborators. In **epidemiology**, it helps determine if a virus is spreading through "super-spreaders" or within tight-knit, isolated communities. Ultimately, ERGMs transform network analysis from a descriptive exercise into a predictive and explanatory tool, allowing you to isolate the specific "engine" that drives the connectivity of your system.
 
@@ -2574,7 +2575,7 @@ This is the ultimate "stress test" for network science. By randomizing a network
 
 Shifts focus from static models to **Network Growth**, recognizing that real-world networks are dynamic systems that expand over time. Rather than having a fixed number of nodes, these networks are constantly adding new members and connections.
 
-Foe example, in 1991 rhe World Wide Web consisted of a single node; today, it contains trillions.Scientific Networks, Citation and collaboration networks grow continuously as new papers are published and new researchers enter the field.
+Foe example, in 1991 rhe World Wide Web consisted of a single node; today, it contains trillions. Scientific Networks, Citation and collaboration networks grow continuously as new papers are published and new researchers enter the field.
 
 ---
 
@@ -2586,7 +2587,7 @@ The general procedure for modeling this growth involves two main steps:
 ---
 
 ### The Limitation of Static Models
-A key takeaway from this transition is that the models discussed earlier — such as the Random (Gilbert) and Watts-Strogatz models—are static. They assume a fixed number of nodes from the start, which fails to capture the "rich-gets-richer" phenomenon observed in expanding systems.
+A key takeaway from this transition is that the models discussed earlier — such as the Random (Gilbert) and Watts-Strogatz models — are static. They assume a fixed number of nodes from the start, which fails to capture the "rich-gets-richer" phenomenon observed in expanding systems.
 
 ---
 
@@ -2604,7 +2605,7 @@ The fundamental idea is that popularity is attractive. In the real world, this i
 ---
 
 ### Polya's Urn
-Polya’s Urn is the "conceptual bridge" between the general idea of Preferential Attachment and the formal Barabási-Albert (BA) model. It uses a classic probability thought experiment to show exactly why a system starts to favor certain nodes over others.
+Polya’s Urn is the "conceptual bridge" between the general idea of **Preferential Attachment** and the formal **Barabási-Albert (BA)** model. It uses a classic probability thought experiment to show exactly why a system starts to favor certain nodes over others.
 
 The **Polya’s Urn** model serves as a classic probability thought experiment used to explain the mathematical "logic" behind the **rich-get-richer** phenomenon. In this model, you start with an urn containing a few white balls ($X$) and black balls ($Y$). The process is simple: you draw a ball at random, see its color, and then put it back into the urn along with an additional ball of that same color. This creates a powerful **positive feedback loop** known as **Path Dependence**. If a white ball is picked early on, the proportion of white balls in the urn increases, making it statistically more likely that white will be picked again in the next round.
 
@@ -2648,7 +2649,7 @@ selected_node = random.choice(nodes, degrees)
 ### Why Growth Alone Isn't Enough
 The lecture poses a critical question: if older nodes have more time to gather links, do we even need preferential attachment? To test this, researchers compared the BA model against a model with growth but random attachment.
 
-The Conclusion: Growth combined with random attachment fails to generate hubs. Preferential attachment is the essential ingredient required to produce the heavy-tailed degree distributions seen in real-world networks.
+**The Conclusion:** Growth combined with random attachment fails to generate hubs. Preferential attachment is the essential ingredient required to produce the heavy-tailed degree distributions seen in real-world networks.
 
 ---
 
@@ -2713,9 +2714,9 @@ The lecture concludes that linear preferential attachment is the only way to go 
 
 # Week 6 - Modularity and Stochstic Block Modelling
 
-This week’s content focuses on **Modularity** and **Stochastic Block Modelling**, shifting the objective from simply building networks to uncovering the hidden structures within them. Building on last week's recap of null models — which are used to statistically benchmark network features by randomizing connections while preserving specific properties — you will explore how to define and identify "communities" or modules. While intuitive, modularity is mathematically defined as groups of nodes with a higher probability of connecting to each other than to the rest of the network. The lecture contrasts descriptive methods like **Modularity Maximization** (e.g., the **Louvain Algorithm**) with inferential approaches like the Stochastic Block Model (SBM), specifically highlighting the pitfalls of overfitting when using score-based detection.
+This week’s content focuses on **Modularity** and **Stochastic Block Modelling**, shifting the objective from simply building networks to uncovering the hidden structures within them. Building on last week's recap of **null models** — which are used to statistically benchmark network features by randomizing connections while preserving specific properties — we explore how to define and identify "communities" or modules. While intuitive, modularity is mathematically defined as groups of nodes with a higher probability of connecting to each other than to the rest of the network. The lecture contrasts descriptive methods like **Modularity Maximization** (e.g., the **Louvain Algorithm**) with inferential approaches like the Stochastic Block Model (SBM), specifically highlighting the pitfalls of overfitting when using score-based detection.
 
-Random models are specific mathematical frameworks, whereas null models are a functional category of models used for statistical testing:
+Random models are specific **mathematical frameworks**, whereas null models are a functional category of models used for **statistical testing**:
 * **Random Models (The "What"):** These are specific sets of instructions used to build a network, such as the Gilbert and Erdős-Rényi models where links are placed independently.
 * **Null Models (The "Why"):** These are flexible tools used to "benchmark" the features of a real-world network. A null model selectively preserves certain architectural properties (like the number of nodes or the degree sequence) while systematically randomizing others.
 
@@ -2770,6 +2771,42 @@ A null model is a match for your real network that preserves some properties (li
 the system
 * we use network null models to test if the property of interest is non-trivial
 
+> Essentially, **Random Models** provide the generative mechanics, while **Null Models** define the scientific purpose.
+> 
+> A **Random Model** (like Erdős-Rényi) is just a blueprint. It only becomes a "Null Model" the moment you use it as a control group to prove that your observed network isn't just a result of basic randomness.
+> 
+> A good null model isn't entirely random; it is **constrained**. For example, the Configuration Model is a "Null Model" because it keeps the real degree sequence (the constraint) but randomizes the wiring. This allows you to isolate whether the degree sequence alone is responsible for the patterns you see.
+> 
+> #### Workflow For Random to Null Models
+> 1. **Use a Random Model** to generate a weighted, directed graph.
+> 2. **Use it as a Null Model** by keeping the weights and degrees the same but shuffling the directions.
+> 3. **Compare:** If your real network has more "Cycles" ($A \rightarrow B \rightarrow C \rightarrow A$) than the Null Model, you’ve discovered a meaningful social or mechanical loop that isn't there by accident.
+>
+> **Note,** whilst some Null Models require a pre-established or generated network to work on, other Null Models have this component build in, such as the The Erdős-Rényi (ER) Model which provides a baseline for what a network looks like if nothing but the density of edges matters, or Random Regular Graphs which are the **built-in** null models for networks where everyone has the same degree. You specify $N$ and $k$, and the model builds the random baseline directly.
+
+### Analytical vs. Computational Null Models
+To distinguish between "built-in" and "requires a network," researchers often use these categories:
+
+#### Analytical Null Models (Built-in)
+These are purely mathematical. You don't always need to build the graph; you can calculate the expected properties (like clustering) using a formula. For example, The ER model allows you to predict that the average clustering coefficient will be $C = p$ without ever running a simulation.
+
+#### Computational (Constraint-based) Null Models
+These require a real network as a starting point. For example, the **Configuration Model** or **Edge-Swapping** (Maslov-Sneppen). You take your real network, "freeze" the degrees or weights, and then shuffle everything else.
+
+---
+
+The reason we often use the more complex, "shuffled" null models (like the Configuration Model) instead of a simple "built-in" one (like ER) is that the ER model is too random.
+
+If your real network has a Power-Law degree distribution (like the Bitcoin OTC network), comparing it to an ER model is a "straw man" argument. The ER model will always be different because it doesn't have hubs.
+
+By using a null model that requires your network (like the Configuration Model), you are being a tougher critic. You are saying: "Okay, my network has hubs. But even given those hubs, is the clustering still unexpectedly high?"
+
+#### Summary
+* **Random Network Models (Built-in):** Great for theoretical baselines ($N, p$).
+* **Shuffled Null Models (Network-dependent):** Better for proving that a specific pattern (like "Better Triangles" or Assortativity) isn't just caused by the degree distribution.
+
+> The Configuration Model is almost always applied to a real-world network because its primary job is to serve as a "de-correlated" twin of that specific network. If you applied it to an already random network (like an Erdős-Rényi graph), you wouldn't learn much because the network was already random to begin with.
+
 ---
 
 ## Conceptual Summary
@@ -2783,12 +2820,12 @@ the system
 
 ## Defining Modularity
 
-Modularity is the intuitive idea that a network can be divided into groups (modules, clusters, or communities).
+**Modularity** is the intuitive idea that a network can be **divided into groups** (modules, clusters, or communities).
 
-Working Definition: A modular structure exists if nodes are more likely to connect to others within their own group than to nodes outside of it.
+**Working Definition:** A modular structure exists if nodes are more likely to connect to others within their own group than to nodes outside of it.
 
-Driving Principles: 
-* **Homophily:** "Like attracts like"—similar nodes tend to connect.
+#### Driving Principles: 
+* **Homophily:** "Like attracts like" — similar nodes tend to connect.
 * **Hebbian Theory:** "Neurons that fire together, wire together".
 
 **Visualizing Structure:** The Adjacency Matrix is the best way to see this; if you sort the nodes by their module, the matrix will show dense blocks along the diagonal
@@ -2801,7 +2838,16 @@ We can split community detection into two primary methodologies, each representi
 * **Optimization-Based Algorithms:** These methods treat community detection as a mathematical puzzle where the goal is to maximize a specific "score" (usually the Modularity Index $Q$).
 * **Statistical (Bayesian) Inference:** This approach views the network as being generated by an underlying "hidden" process (like the Stochastic Block Model) and uses statistical tools to work backward to find the most likely structure.
 
-Before selecting an algorithm, you must decide how nodes are allowed to exist within groups. Hard Clustering is when every node is assigned to exactly one module. This is the most common approach in introductory network science. Soft (Overlapping) Clustering: Nodes are permitted to belong to multiple modules simultaneously, reflecting real-world scenarios like a person belonging to both a "Work" and "Friend" community. 
+### Types of Clustering
+
+Before selecting an algorithm, you must decide how nodes are allowed to exist within groups. 
+
+---
+| Clustering Type | Definition | 
+| :--- | :--- | 
+| Hard Clustering | This is when every node is assigned to exactly one module. This is the most common approach in introductory network science. | 
+| Soft (Overlapping) Clustering | Nodes are permitted to belong to multiple modules simultaneously, reflecting real-world scenarios like a person belonging to both a "Work" and "Friend" community. |
+---
 
 Once a partition is proposed, we use specific definitions to assess how "good" those communities actually are:
 
@@ -2814,8 +2860,7 @@ $$k_i^{in}(G_r) > k_i^{out}(G_r)$$
 ---
 
 ### Modern Probability-Based Definitions
-
-The lecture also introduces more nuanced definitions from 2004 that rely on edge probability rather than raw counts:
+The lecture also introduces more nuanced definitions from 2004 that rely on **edge probability** rather than raw counts:
 
 **Strong Community (Modern):** Each vertex in the subgraph has a higher probability of being linked to other members of the subgraph than to any other vertex in the entire graph.
 
@@ -2824,9 +2869,9 @@ The lecture also introduces more nuanced definitions from 2004 that rely on edge
 ---
 
 ## Modularity Index
-In this section, we move from the conceptual definition of communities to the mathematical tool used to evaluate them: the Modularity Index ($Q$). If we have found a partition (a way to divide the nodes), $Q$ tells us if that partition is actually "good" by comparing the observed connections to what we would expect by random chance
+In this section, we move from the conceptual definition of communities to the mathematical tool used to evaluate them: **the Modularity Index ($Q$)**. If we have found a partition (a way to divide the nodes), $Q$ tells us if that partition is actually "good" by comparing the observed connections to what we would **expect by random chance**.
 
-The Modularity Index measures the fraction of edges that fall within defined communities minus the expected fraction if edges were distributed at random.
+The **Modularity Index** measures the fraction of edges that fall within defined communities minus the expected fraction if edges were distributed at random.
 * **Actual Connections:** We look at the adjacency matrix $A_{ij}$ to see if nodes $i$ and $j$ are actually linked.
 * **Expected Connections ($P_{ij}$):** We use a null model (specifically the Configuration Model) to calculate the probability that two nodes would be connected based solely on their degrees ($k_i, k_j$) and the total number of edges ($L$).
 * **The Difference:** The goal is to see if the density of internal edges is significantly higher than this random baseline
@@ -2838,8 +2883,8 @@ $$Q = \frac{1}{2L} \sum_{i,j} \left( A_{ij} - \frac{k_i k_j}{2L} \right) \delta_
 
 ### Breakdown of the symbols:
 
-* **$A_{ij}$:** The adjacency matrix (1 if nodes $i$ and $j$ are connected, 0 otherwise).
-* **$\frac{k_i k_j}{2L}$:** The expected number of edges between node $i$ and $j$ in the configuration model null model.
+* **$A_{ij}$:** The adjacency matrix of the real network (1 if nodes $i$ and $j$ are connected, 0 otherwise).
+* **$\frac{k_i k_j}{2L}$:** The expected number of edges between node $i$ and $j$ in the configuration model (null model).
 * **$\delta_{b_i, b_j}$ (Kronecker Delta):** This acts as a mathematical "switch." It equals 1 if nodes $i$ and $j$ are in the same community ($b_i = b_j$) and 0 if they are in different communities. This ensures we only sum the differences for nodes within the same module.
 * $\frac{1}{2L}$: Normalizes the result so that $Q$ typically falls between -1 and 1.
 
@@ -2849,7 +2894,8 @@ $$Q = \frac{1}{2L} \sum_{i,j} \left( A_{ij} - \frac{k_i k_j}{2L} \right) \delta_
 
 The Modularity Index provides a numerical value that describes the "community strength" of your partition:
 * $Q \approx 0$: The number of edges within communities is no different than what you would expect from a random graph.
-* $Q > 0$: There are more edges within communities than expected by chance
+* $Q > 0$: There are more edges inside the groups than the Configuration Model predicted. This means the nodes are "choosing" to stay within their group more than random chance would dictate. This is a **Good Partition**.
+* If $Q < 0$: The nodes are actually avoiding their own group and connecting to outsiders more than expected. This is a Disassortative/Anti-community structure.
 * **Rule of Thumb:** In practice, a value of $Q > 0.3$ is generally considered a strong indicator of a modular structure
 
 ---
@@ -2876,22 +2922,24 @@ modularity(g,communities)
 
 ## Modularity Maximization
 
-Modularity Maximization is an optimization-based approach to community detection. The goal is to find the specific partition $b$ of a network that results in the highest possible Modularity Index ($Q$). Conceptually, this is similar to k-means clustering used in traditional data science, where the algorithm iteratively tries to group items to optimize a central score.
+Modularity Maximization is an **optimization-based** approach to community detection. The goal is to find the specific partition $b$ of a network that results in the highest possible **Modularity Index** ($Q$). Conceptually, this is **similar to k-means clustering** used in traditional data science, where the algorithm iteratively tries to group items to optimize a central score.
 
-Finding the absolute best partition is computationally "expensive" because the number of ways to partition a network grows exponentially with its size. This is governed by the Bell Number; for a network of only 20 nodes, there are over 51 trillion possible partitions to check. Because of this complexity, researchers use heuristic algorithms like the Louvain Algorithm to find high-quality solutions quickly.
+Finding the absolute best partition is computationally "expensive" because the number of ways to partition a network grows exponentially with its size. This is governed by the **Bell Number**; for a network of only 20 nodes, there are over 51 trillion possible partitions to check. Because of this complexity, researchers use heuristic algorithms like the **Louvain Algorithm** to find high-quality solutions quickly.
 
 For instance, `a(20) = 51724158235372`
+
+> Note, this number is so high because it ranges from 20 nodes in 1 partition to 1 node per 20 partitions.
 
 ---
 
 ## The Louvain Algorithm
 
-The Louvain algorithm is one of the most popular methods for community detection because it is extremely fast and scales well to very large networks. It operates in two distinct, repeating phases:
+The **Louvain algorithm** is one of the most popular methods for community detection because it is **extremely fast** and **scales well** to very large networks. It operates in two distinct, repeating phases:
 
 ---
 
 ### Phase 1: Local Optimization
-* **Initial State:** Every node in the network is assigned to its own unique community. Start with N communities and assign nodes. 
+* **Initial State:** Every node in the network is assigned to its own unique community. Start with `N` communities and assign nodes. 
 * **Node Swapping:** The algorithm "sweeps" through the nodes one by one. For each node $i$, the algorithm considers moving it into the community of one of its neighbors.
 * **Greedy Choice:** A move is only made if it results in an increase in the total Modularity Index ($Q$).
 * **Iteration:** This process continues until no further swaps can improve the modularity score.
@@ -2906,15 +2954,17 @@ The Louvain algorithm is one of the most popular methods for community detection
 ---
 
 ### The Overfitting Pitfall
-A critical warning raised in the lecture is that Modularity Maximization (and the Louvain algorithm specifically) has a tendency to overfit. Because it is designed to always find the "best" partition, it can identify clusters even in purely random networks where no real communities exist. This means a high $Q$ value doesn't always guarantee that the communities represent real-world functional groups; it might just be the algorithm finding patterns in random noise.
+A critical warning raised in the lecture is that Modularity Maximization (and the Louvain algorithm specifically) has a tendency to **overfit**. Because it is designed to always find the "best" partition, it can identify clusters even in **purely random networks** where no real communities exist. This means a high $Q$ value doesn't always guarantee that the communities represent real-world functional groups; it might just be the algorithm finding **patterns in random noise**.
 
 ---
 
 ### `graph-tool` Warning
 
 > Using Modularity Maximisation is almost always a terrible idea. 
-> Modularity Maximisaiton is a substantially inferior to the inference based ones since it does not contain any statistical regularization. 
+> Modularity Maximisation is a substantially inferior to the inference based ones since it does not contain any statistical regularization. 
+>
 > This causes it to massively overfit empircal data
+>
 > This algo should only be used for comparison purposes
 
 ---
@@ -2922,20 +2972,21 @@ A critical warning raised in the lecture is that Modularity Maximization (and th
 <br>
 
 ## Stochastic Block Model and Bayesian Inference
-
 To address the overfitting issues of modularity maximization, the lecture introduces the **Stochastic Block Model (SBM)**. Instead of searching for a partition that maximizes a score, we treat the network as a generative process and use statistical tools to infer the hidden community structure.
 
-The SBM is built on the concept of homophily—the idea that "like attracts like" in a social system. In this framework, modular networks are viewed as physical representations of a latent similarity space.
+The SBM is built on the concept of **homophily** — the idea that "like attracts like" in a social system. In this framework, modular networks are viewed as **physical representations of a latent similarity space**.
 
 Given a partition of $N$ nodes into $B$ blocks ($b = \{b_1, b_2, \dots, b_B\}$), we want to construct a model that can generate networks with a specific probability $P(A|b)$. There are two primary ways to mathematically define this:
 
-**Using Edge Counts (i):** We use a $B \times B$ matrix $\{e_{rs}\}$ that represents the expected number of edges between block $r$ and block $s$.
+### Using Edge Counts (i): 
+We use a $B \times B$ matrix $\{e_{rs}\}$ that represents the expected number of edges between block $r$ and block $s$.
 * **Formula:** $e_{rs} = \sum_{i,j} A_{ij} \delta_{b_i,r} \delta_{b_j,s}$
 * **Note:** By convention, if $r=s$, $e_{rs}$ is twice the number of internal edges
 
-**Using Connection Probabilities (ii):** We use a $B \times B$ matrix $\{p_{rs}\}$ that represents the density of connections between blocks.
-* Between blocks ($r \neq s$): $p_{rs} = \frac{e_{rs}}{n_r \times n_s}$
-* Within blocks ($r = s$): $p_{rs} = \frac{1}{2} \frac{e_{rs}}{\binom{n_r}{2}}$
+### Using Connection Probabilities (ii):
+We use a $B \times B$ matrix $\{p_{rs}\}$ that represents the density of connections between blocks.
+* **Between blocks ($r \neq s$):** $p_{rs} = \frac{e_{rs}}{n_r \times n_s}$
+* **Within blocks ($r = s$):** $p_{rs} = \frac{1}{2} \frac{e_{rs}}{\binom{n_r}{2}}$
 
 ---
 
@@ -2988,7 +3039,7 @@ plt.show()
 ---
 
 ### Inferring Communities with SBM (using graph-tool)
-As noted in the lecture, graph-tool is the preferred library for inference-based community detection. It uses Bayesian Inference and MCMC sweeps to find the most probable partition without overfitting.
+As noted in the lecture, `graph-tool` is the preferred library for inference-based community detection. It uses **Bayesian Inference** and **MCMC** sweeps to find the most probable partition without overfitting.
 
 ```
 import graph_tool.all as gt
@@ -3015,9 +3066,9 @@ blocks = state.get_blocks()
 print(f"Node 0 belongs to block: {blocks[0]}")
 ```
 
-Likelihood vs. Scoring: Unlike the Louvain algorithm which maximizes a modularity score ($Q$), the graph-tool approach finds partitions that make the observed graph most probable under the SBM generative model.
+**Likelihood vs. Scoring:** Unlike the Louvain algorithm which maximizes a modularity score ($Q$), the `graph-tool` approach finds partitions that make the observed graph most probable under the SBM generative model.
 
-Handling Overfitting: The Bayesian approach in graph-tool includes statistical regularization, which is why it is "universally preferred" over modularity maximization for serious analysis.
+**Handling Overfitting:** The Bayesian approach in `graph-tool` includes statistical regularization, which is why it is "universally preferred" over modularity maximization for serious analysis.
 
 ---
 
@@ -3134,7 +3185,7 @@ The lecture follows a logical progression of complexity in how "states" move acr
 <br>
 
 ## This Weeks Flow of Topics:
-1. **Fixed Stage (Simple Spreading):** Threshold and Cascade models where nodes are just "Active" or "Inactive."
+1. **Fixed Stage (Simple Spreading):** **Threshold** and **Cascade models** where nodes are just "Active" or "Inactive."
 2. **Biological Realism:** SIS/SIR models that introduce recovery, immunity, and $R_0$.
 3. **Psychological Realism:** Opinion Dynamics where states aren't just 0 or 1, but complex, spectrum-based beliefs.
 4. **The Grand Synthesis (Coevolution):** This is the final "boss" of the week, where the stage is no longer fixed—the dynamics on the network start changing the network itself (Selection vs. Influence).
@@ -3151,12 +3202,16 @@ In network science, we distinguish between these processes based on whether the 
 ---
 
 ### Dynamics ON the Network (Fixed Stage):
-The topology acts as a constraint. The focus is on the flow of features, features, or states between neighbors. **Examples:** The spread of a computer virus through a server network or a rumor traveling through a fixed social circle.
+The topology acts as a constraint. The focus is on the flow of features, features, or states between neighbors. 
+
+**Examples:** The spread of a computer virus through a server network or a rumor traveling through a fixed social circle.
 
 ---
 
 ### Dynamics OF the Network (Evolving Stage):
-The network itself is in flux. Nodes and links are being added, removed, or rewired. Examples: **Preferential Attachment** (growth), social networks adding new "friends," or targeted attacks removing hubs.
+The network itself is in flux. Nodes and links are being added, removed, or rewired. 
+
+**Examples:** **Preferential Attachment** (growth), social networks adding new "friends," or targeted attacks removing hubs.
 
 ---
 <br>
