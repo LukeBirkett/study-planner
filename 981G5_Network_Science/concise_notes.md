@@ -1,2 +1,0 @@
-# Network Science Concise Notes
-
