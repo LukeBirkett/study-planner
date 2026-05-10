@@ -3210,26 +3210,26 @@ It is difficult because propaganda is often highly contextual and subtle. Unlike
 ---
 
 ### 3. Give examples of 3 different propaganda techniques being used in text. Explain why this is propaganda.
-1. Name Calling / Labeling: Labeling an opponent with a derogatory term (e.g., "The radical socialist candidate"). It simplifies a complex person into a negative label.
-2. Appeal to Fear: Warning that a disaster will occur if a certain action isn't taken (e.g., "If we don't pass this law, our streets will be filled with crime"). It bypasses logic by triggering a survival instinct.
-3. Slogans: Using brief, striking phrases that act as emotional triggers (e.g., "Make America Great Again" or "Forward"). They discourage critical thought by providing a pre-packaged conclusion.
+1. **Name Calling/Labeling:** Labeling an opponent with a derogatory term (e.g., "The radical socialist candidate"). It simplifies a complex person into a negative label.
+2. **Appeal to Fear:** Warning that a disaster will occur if a certain action isn't taken (e.g., "If we don't pass this law, our streets will be filled with crime"). It bypasses logic by triggering a survival instinct.
+3. **Slogans:** Using brief, striking phrases that act as emotional triggers (e.g., "Make America Great Again" or "Forward"). They discourage critical thought by providing a pre-packaged conclusion.
 
 ---
 
 ### 4. What textual features might be useful to help a system detect propaganda?
 To detect these, a system might look for:
-* Lexical Features: Loaded words, superlatives, and intensifiers.
-* Sentiment/Emotion: High levels of negative or polarizing sentiment.
-* Punctuation/Style: Excessive use of exclamation marks or "scare quotes."
-* Structural Cues: Use of rhetorical questions or repetition.
-* Word Embeddings: Capturing the "flavor" or context in which certain political terms appear.
+* **Lexical Features:** Loaded words, superlatives, and intensifiers.
+* **Sentiment/Emotion:** High levels of negative or polarizing sentiment.
+* **Punctuation/Style:** Excessive use of exclamation marks or "scare quotes."
+* **Structural Cues:** Use of rhetorical questions or repetition.
+* **Word Embeddings:** Capturing the "flavor" or context in which certain political terms appear.
 
 ---
 
 ### 5. Describe the pipeline proposed by the paper for propaganda identification. Can you think of any alternatives? What advantages / disadvantages are there of each?
 The paper proposes a sequential pipeline: first identify the spans (SI), then classify those spans (TC).
-* Alternative: A Joint Model that performs both tasks simultaneously (e.g., a Bi-LSTM that outputs IOB tags with the technique name integrated, like B-Slogan).
-* Pros/Cons: The sequential approach is simpler to train but suffers from "error propagation" (if the span is wrong, the classification will be too). The joint approach is more complex but allows the model to use the "technique type" to help find the boundaries.
+* **Alternative:** A Joint Model that performs both tasks simultaneously (e.g., a Bi-LSTM that outputs IOB tags with the technique name integrated, like B-Slogan).
+* **Pros/Cons:** The sequential approach is simpler to train but suffers from "error propagation" (if the span is wrong, the classification will be too). The joint approach is more complex but allows the model to use the "technique type" to help find the boundaries.
 
 
 ---
@@ -3251,12 +3251,12 @@ In the TC task, each propaganda span is assigned exactly one label. Because it i
 ---
 
 ### 9. Outline one method which could be used to carry out span identification.
-A common method is Sequence Labelling using BIO encoding. Every word in an article is passed through a Bi-LSTM or CRF layer to be tagged as B-Prop (Beginning of propaganda), I-Prop (Inside), or O (Outside). This transforms the span-finding problem into a token-level classification task.
+A common method is **Sequence Labelling** using BIO encoding. Every word in an article is passed through a Bi-LSTM or CRF layer to be tagged as B-Prop (Beginning of propaganda), I-Prop (Inside), or O (Outside). This transforms the span-finding problem into a token-level classification task.
 
 ---
 
 ### 10. Outline one method which could be used to carry out techniques classification.
-Once a span is identified, it can be treated as a Sequence Classification task. The words in the span are converted into a single vector (via additive composition of embeddings or the hidden state of an RNN), which is then passed to a Softmax classifier to choose one of the 14 techniques.
+Once a span is identified, it can be treated as a **Sequence Classification** task. The words in the span are converted into a single vector (via additive composition of embeddings or the hidden state of an RNN), which is then passed to a Softmax classifier to choose one of the 14 techniques.
 
 
 ---
