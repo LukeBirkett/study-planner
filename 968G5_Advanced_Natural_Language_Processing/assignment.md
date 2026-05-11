@@ -163,3 +163,15 @@ For each requirement, the following scale will be used when deciding the number 
 
 # Ideas
 - tf-idf but on bigrams rather than unigrams. context definetly matters when it comes to propaganda but surely a huge amount of weight goes into the bizzare choice of words and well the combinations of these bizzare words with other, potentially normal words. Therefore a BoW approach much actually suffice. However, in a basic BoW approach, it is far too easy for a model to become fixed on these "target" words results in a model which is too "trigger happy". but using bi-grams we some contextual context but importantly we are amplifing the linguistic irregularities of propaganda. "make america great again" appears to somewhat make sense as a sentence (not really) but scoping down into the even just bi-grams things become increasily abstract. i.e. "america great", it is difficult to form cohertent sentences where that makes sense. it is lacking punctuation, connective words. etc. 
+
+---
+
+The first task is a classification task with multiple classes. 
+
+The key approach to tackling this task is to apply architecture that takes the input sequences and applies something in order to take the character based works into something rich that a classifer can use to predict from.
+
+At a high level I think it would be interesting to take two approaches. One which is a Bag-of-Words approach and another which uses contextual embeddings. 
+
+Bag-of-Words may seem quite a basic approach to take but I have a hypothesis that the use of language in propaganda is so abstract that merely the particular words, and combination of words, themselves can enable an adequate approach to classifcation. 
+
+The other method is slightly contingent on what I wish to get out of the model. I would like to use this as a chance to work more advanced modern methods specifcally transformers.
