@@ -11,25 +11,58 @@ Format Submit a single zip file containing 1 pdf and an appendix of your code (w
     - [1.2 Tasks](#12-tasks)
         - [Task 1: Build and evaluate at least 2 different approaches to classifying the propaganda technique](#task-1-build-and-evaluate-at-least-2-different-approaches-to-classifying-the-propaganda-technique)
         - [Task 2: Build and evaluate either 2 different approaches or at least 2 variations on a single approach to detecting propaganda within a sentence.](#task-2-build-and-evaluate-either-2-different-approaches-or-at-least-2-variations-on-a-single-approach-to-detecting-propaganda-within-a-sentence)
-    - [1.3 Resources and Academic Integrity]()
-    - [1.4 Report Format and Structure]()
-2. [2 Marking Criteria and Requirements]()
-    - [Table 1: Breakdon of Marks]()
-    - [Table 2: Marking Scale]()
+    - [1.3 Resources and Academic Integrity](#13-resources-and-academic-integrity)
+    - [1.4 Report Format and Structure](#14-report-format-and-structure)
+2. [2. Marking Criteria and Requirements](#2-marking-criteria-and-requirements)
+    - [Table 1: Breakdon of Marks](#table-1-breakdon-of-marks)
+    - [Table 2: Marking Scale](#table-2-marking-scale)
+3. [3. Planning](#3-planning)
+    - [Hypothesis](#hypothesis)
+    - [Task 1: Classifcation Ideas](#task-1-classifcation-ideas)
+        - [BoW Baseline](#bow-baseline)
+        - [Approach 1: Bag-of-Embeddings](#approach-1-bag-of-embeddings)
+        - [Approach 2: BERT-based Transformer](#approach-2-bert-based-transformer)
+        - [Possible Lineage](#possible-lineage)
+        - [Task 1 Evaluation](#task-1-evaluation)
+    - [Task 2: Sequence Labeling Ideas](#task-2-sequence-labeling-ideas)
+        - [Task 2 Evaluation](#task-2-evaluation)
+    - [Data Augmentation Options](#data-augmentation-options)
+    - [Potential Ideas](#potential-ideas)
+        - [Custom Soft Bounary Snipper Evaluation Method](#custom-soft-bounary-snipper-evaluation-method)
+        - [POS Tag Only Model](#pos-tag-only-model)
+        - [Perplexity as proof of hypothesis](#perplexity-as-proof-of-hypothesis)
+        - [Task 1 Feature Comparison Analyis](#task-1-build-and-evaluate-at-least-2-different-approaches-to-classifying-the-propaganda-technique)
+4. [4. Structure](#4-structure)
+    - [1. Introduction]()
+    - [2. Related Work]()
+        - [2.1 Dataset Exploration and EDA]()
+    - [3. Methodology: Task 1 (Classification)]()
+        - [Baselines: ]()
+        - [Approach 1: Bag-of-Embeddings]()
+        - [Approach 2: Transformer Architecture]()
+        - [Hyper-parameters]()
+    - [4. Methodology: Task 2 (Span Identification)]()
+        - [Variation 1: The Pipeline (Binary BIO + Classifier):]()
+        - [Variation 2: Integrated Multi-class BIO-CRF:]()
+        - [Theoretical Justification: ]()
+    - [5. Results and Evaluation]()
+    - [6. Analysis and Discussion]()
+    - [7. Conclusion and Further Work]()
+    - [Strategic Tips for High Marks:]()
 
-## 1. Practical assignment (3000 words): Propaganda Detection
+# 1. Assignment: Propaganda Detection
 
-### 1.1 Data Setup
+## 1.1 Data Setup
 
 You are provided with a zipfile `propaganda_dataset`. This includes 2 files with identical format: one for training and one for testing. Each file is in tab-separated-value (tsv) format with 2 columns as illustrated below.
 
 | label | sentence |
 | :--- | :--- |
-| flag_waving | I want to get <BOS>our soldiers <EOS> out. |
-| not propaganda | Our older measure of <BOS>American Worker Displacement <EOS> understated the problem. |
+| `flag_waving` | I want to get `<BOS>`our soldiers`<EOS>` out. |
+| `not_propaganda` | Our older measure of `<BOS>`American Worker Displacement`<EOS>` understated the problem. |
 ---
 
-#### 1.1.1 Label Column
+### 1.1.1 Label Column
 
 The first column contains a `label` from a set of 9 possibilities which are:
 1. `flag_waving`
@@ -46,7 +79,9 @@ The first 8 labels are all propaganda techniques and are a subset of those ident
 
 The final label `not_propaganda` indicates that no propaganda has been identified in the text. 
 
-#### 1.1.2 Sequence Column
+---
+
+### 1.1.2 Sequence Column
 
 The second column contains a `sentence` or chunk of text where the propaganda technique has been identified (or no propaganda has been identified in the case of `not_propaganda`).
 
@@ -56,15 +91,17 @@ In the first example above, the `snippet` or span of text “our soldiers” has
 
 ---
 
-### 1.2 Tasks
+## 1.2 Tasks
 
-#### Task 1: Build and evaluate at least 2 different approaches to classifying the propaganda technique 
+### Task 1: Build and evaluate at least 2 different approaches to classifying the propaganda technique 
 ... which has been used in a `snippet` or span of text which is known to be propaganda. 
 
 As input, your system might take a snippet of propaganda `AND` its sentential context. The output should be the propaganda technique used.
 
+---
 
-#### Task 2: Build and evaluate either 2 different approaches or at least 2 variations on a single approach to detecting propaganda within a sentence. 
+
+### Task 2: Build and evaluate either 2 different approaches or at least 2 variations on a single approach to detecting propaganda within a sentence. 
 Your system should identify both the span and the propaganda technique used.
 
 ---
@@ -85,12 +122,12 @@ For example, two different bag-of-words classifiers do not count as 2 different 
 
 ---
 
-### 1.3 Resources and Academic Integrity
+## 1.3 Resources and Academic Integrity
 You have been provided with the training and test data for this task with the assignment. You may (and are expected to) use any of the code that you have developed throughout the labs. This includes code provided to you in the exercises or solutions. You may use any other resources to which you have access. You may also download other resources from the Internet and make use of any Python libraries with which you are familiar. All code that you use (libraries, lab solutions and open source code) should be properly accredited within your code base and within your report e.g., “my function for X is adapted from code available at Y”
 
 Generative and other AI tools may be used in an assistive capacity in this assignment. This includes assistance with coding and with proof-reading. Please include a statement on the title page of your assignment stating whether or not AI has been used in any way, and if so, which tool(s) has been used and in what way.
 
-### 1.4 Report Format and Structure
+## 1.4 Report Format and Structure
 Your report should be in the style of an academic paper
 
 It should include an introduction to the problem and the methods you have implemented.
@@ -117,7 +154,7 @@ Your report (including figures and bibliography but not including code appendix)
 
 Your code in the appendix should be clearly commented.
 
-## 2. Marking Criteria and Requirements
+# 2. Marking Criteria and Requirements
 This coursework will be marked out of 100. Marks will not be awarded simply for how well your system does or for programming wizardry. Marks will be awarded for clearly evaluating possible solutions to the tasks set out above.
 
 Table 1 shows the number of marks available for each requirement.
@@ -152,65 +189,111 @@ For each requirement, the following scale will be used when deciding the number 
 | 0%-29% | Nothing relevant submitted. |
 ---
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+# 3. Planning
+The sections below represent a high-level plan of the content do be executed in the assignment. In their current form them are essentially a rambling of thoughts and concepts. However, they do hold the key idea from which the assignment will be driven from and scope for acheived good marks. 
 
-# Hypothesis 
-I have a hypothesis that for propaganda a bag-of-words approach may be highly affective. This is because the choice of words in propaganda is often quite abstract, often times in subtle ways but in a way that is identifiable in language. For example, unusual word pairings, loss of strictly correct grammar. I think you can get most of the way there as part of a bag-of-words, or at least something closely related to bag-of-words, i.e. word2vec, or a bi-gram adjsuted BoW.
+## Hypothesis 
+In approaching this assignment I want to outline some hypothesis early on. I see this as a strong approach as it provides me with some level of substrate to justify my design decisions on and some naravite to compare against in the evaluation and analysis sections. 
+
+Firstly, I have a hypothesis that propagandist methods are highly reliant on the usage of particular words. These words are quite abstract and therefore are dispropotionaly over represented in proganga snippets. Therefore, I hypothesise that simple Bag-of-Word approachs may be highly affective for classifing propaganda labels, at least for some or most labels. 
+
+Furthermore, as an extension of this hypothesis, I believe that the structure of language is another key identifiable feature in propaganda. Propaganists will use sentenes that appear to be linguistically and grammatically correct from a quick glance but when analysed are slightly off-kilter. For example, "Build the Wall and make Mexico Pay for It" is missing the grammar and structure that you would expected from a political and formal statement, it is almost written in in-formal shorthand. However, extending from the first hypothesis, I expect that the patterns are so abstract that the naunce can be identified simply by the unusual word pairings which are created by the loss of strictly correct grammar. Therefore, I hypthosesis that you can get most of the way there as using bag-of-words approaches, or at least something closely related to bag-of-words, i.e. word2vec (bag-of-embeddings), or a bi-gram adjsuted BoW.
 
 Many propaganda techniques—like Loaded Language or Name Calling—rely heavily on specific lexical triggers ("traitor," "radical," "freedom-fighter") where word order matters less than the sheer presence of the "emotionally charged" word.
 
 
-# Task 1 Notes
+## Task 1: Classifcation Ideas
+Task 1 is a Mutli-Label Classification Task and we need to build and evaluate two different appraoches. In input pertains to an identified snippet of propaganda as well as some surrounding context, i.e. a sentence where a portion of it is direct considered some type of propaganda. 
 
-BoW could be used as a classical baseline. This treats the snippet and its context as an unordered collection of words, ignoring syntax but focusing on the presence of "trigger" words. Represent the text as a sparse vector of word counts or TF-IDF scores. Could create BoW for the snippet and the context seperately. Pass these vectors into a Naive Bayes or Logistic Regression classifier. **Hypothesis:** Propaganda often uses specific "loaded language" or emotional labels (e.g., "radical", "traitor") that a simple word-count model can easily pick up.
-- An idea could be to extend the td-idf architecture rather than unigrams, or do both as a baseline as it could be a good way to demonstate that the words a lot are not enough and disprove the hypthesis early.
-- context definetly matters when it comes to propaganda but surely a huge amount of weight goes into the bizzare choice of words and well the combinations of these bizzare words with other, potentially normal words.
-- Therefore a BoW approach much actually suffice. However, in a basic BoW approach, it is far too easy for a model to become fixed on these "target" words results in a model which is too "trigger happy".
-- but using bi-grams we some contextual context but importantly we are amplifing the linguistic irregularities of propaganda. "make america great again" appears to somewhat make sense as a sentence (not really) but scoping down into the even just bi-grams things become increasily abstract. i.e. "america great", it is difficult to form cohertent sentences where that makes sense. it is lacking punctuation, connective words. etc.
-- Bag-of-Words may seem quite a basic approach to take but I have a hypothesis that the use of language in propaganda is so abstract that merely the particular words, and combination of words, themselves can enable an adequate approach to classifcation. 
+### BoW Baseline
+Carrying on from the hypothises, it seems like a good approach would be to use a pure BoW approach as a "classical" baseline. Using it as a baseline would mean that technically it isn't one of the 2 methods built and evaluated but instead gives us a measure of how well we can identify propaganda is we essentially "do nothing". 
 
-> Perplexity evaluates Language Models (NLG), not Classifiers (NLU).
-> 
-> However, You can use Perplexity as a diagnostic tool to prove your theory that propaganda has "loss of strictly correct grammar" or "unusual word pairings."
-> 
-> 1. Take a pre-trained language model (like GPT-2 or BERT’s masked likelihood).
-> 2. Calculate the perplexity of the Propaganda Spans vs. the Non-Propaganda text.
-> 3. The Goal: If your hypothesis is correct, the "Standard English" model should have significantly higher perplexity on the propaganda snippets than on the normal sentences.
-> 
-> "To empirically test my hypothesis that propaganda is characterized by linguistic irregularities, I conducted a perplexity analysis using a pre-trained GPT-2 model. I found that the average perplexity for propaganda spans was 42% higher than for non-propaganda text. This higher 'surprise' factor suggests that the language used in these techniques deviates from standard syntactic norms, justifying my use of complex architectures like DeBERTa to capture these non-linear patterns."
+A BoW appraoch treats the snippet (and its context if we chose to use both) as an unordered collection of words, ignoring syntax but focusing on the presence of "trigger" words and their combinations of such. 
 
+There are two main approaches to representing the sparse vector, either frequency counts or TF-IDF scores. Given that we are using it as a baseline, it might make sense to use a frequency approach, otherwise it may seem like we are trying to sneak in a 3 model to build and evalaute.
 
+The baseline model could be run twice, one with just the snippet and the other with the snippet + winder sentinal context. 
 
-BoW creates words as atomic units, could instead move to Static Embedding Pooling (GloVe/Word2Vec). This uses pre-trained dense vectors to capture semantic similarity. For every word in the propaganda snippet, look up its GloVe or Word2Vec embedding. Combine these into a single "sequence vector" using Additive Composition (summing or averaging the vectors to find the centroid). Feed the resulting fixed-length vector into a standard Multi-Layer Perceptron (MLP) or SVM. Note, this is will a "bag-of" approach as it ignores word order. It is an advancement on true BoW as it understands that words are similar based on their embeddings, where as BoW does not. 
+We then pass these vectors into MLP head classifier to determine the label. We need to establish a "vocab" plus a way to handle unknown tokens so that we can create a fixed length vector to be plugged into the MLP. 
 
-A transformer based model is the gold standard for sequence classifcation utilizing deep contextualized embeddings and that do account for word order. BERT uses self-attention to allow every word to "pay attention" to every other word, resolving the meaning of the snippet based on the context. Trasformers make use of transfer learning and pre-trained model. A decision will need to be made on whether to freeze or fine-tune the base models weights. Again, a classifcation head will be added to do the predicition. 
+An alterntive idea could be to extend the frequency/td-idf to bi-grams to give us a baseline of the second hypthesis as bi-grams will give us a handle of sentence structure meaning the abstract pairing can be better analysed. 
 
-An important decision is needed to be made within a BERT model on how to compile the sequence level representation. By definition BERT models create a CLS summary token but depending on how the input processed, this could be of the entire sentence. Not just the snippet. One method might be to extract the hidden states for only the tokens located between the <BOS> and <EOS> markers and pass their average (or max) to the classification head. This could force the model to focus on the snipper words, but through the self-attention mechensim these tokens are aware of the wider context. 
+It should be noted that whilst our hypothesis are focused on words, pairings and language structure, we recognise that context definitely matters when it comes to propagana, its just we think that a huge amount of weight can go into the bizzare choice of words and their combinations, hence, BoW may give a strong baseline for classifcation. 
+
+**Baseline 1:** BoW (Freq or Tf-Idf)
+**Baseline 2:** BOW Bi-Gram
+
+---
+
+### Approach 1: Bag-of-Embeddings
+BoW treats words as atomic units but we can advance this to a Static Embedding Pooling approach (GloVe/Word2Vec). 
+
+Comparing Unigram-BoW, Bi-gram BoW, and Word2Vec (Bag-of-Embeddings) we can systematically peel back the layers of what makes a propaganda classifier work.
+
+The standard approach for Word2Vec is to pick up a pre-trained model such as Google News Word2Vec. This is because it takes billions of words to train a model where as our corpus is too small to generate anything meaningful from scratch. You treat the model as a static dictionary. You look up the vector for each word in your propaganda dataset. It has seen almost every word in the English language. It "knows" that "liberty" and "freedom" are similar because it read them in thousands of newspapers. It represents "Standard English." If propaganda uses a word in a very specific, non-standard way (e.g., a "dog whistle" or a specific political slang), a pre-trained model might miss that nuance because its vector was averaged out over billions of neutral sentences. There is an approach to fine-tuning W2V that could be exploreed. In Python (using the `Gensim` library), this involves loading the model, calling `build_vocab` with `update=True`, and then running the train method on your new data.
+
+Word2Vec uses pre-trained dense vectors to capture **semantic similarity**. For every word in the propaganda snippet Word2Vec embedding. Combine these into a single "sequence vector" using **Additive Composition** (summing or averaging the vectors to find the centroid). 
+
+Feed the resulting fixed-length vector into a standard Multi-Layer Perceptron (MLP). It makes sense to stick with an MLP for consistency between baselines and approaches. 
+
+Note, this is will a **"bag-of"** approach as it still ignores word order. It is trained by looking at a surround window but that doesn't mean it learns the synactic rules. It is an advancement on BoW as it understands that words are similar based on their embeddings, where as BoW does not. 
+
+An embedding approach will lower the potential for overfitting compared to BoW which a sprase vector whereby high dimension values are prone to overfitting. Word2Vec creates a dense vector (usually 300) which forces the model to generalize across a smaller, more meaningful feature set, which acts as a form of implicit regularization.
+
+The Word2Vec should improve the models Recall. This is because a BoW is hypersensitive to key words. If it sees a unseen word or synonym it cannot identify that as the same sentiment. Higher recall means it caputure for of the progaganda that exists. However, it may produce lower Precision if there are examples where a specific word in a specific context is the propaganda itself, meaning a synonymn is incorrect. 
+
+**Comparison 1 (Bi-gram vs. Unigram):** If Bi-grams perform better, you have proven that propaganda isn't just about words, it's about phrasing and structure.
+
+**Comparison 2 (Bi-gram vs. Word2Vec):** This is the most interesting. Bi-grams have order but no semantic flexibility. Word2Vec has semantic flexibility but no order. If **Bi-grams win:** Structure is more important than synonyms for this task. **If Word2Vec wins:** Vocabulary breadth is the dominant signal.
+
+"In my Word2Vec baseline, I treat the snippet as a Bag-of-Embeddings. While Word2Vec vectors capture semantic similarity via the distributional hypothesis (the 'window' method used during pre-training), they remain static. This means the model cannot distinguish between different senses of a word or recognize how a specific 'abstract pairing' in a propaganda snippet changes the meaning of its constituent words. This limitation justifies the transition to Contextualized Embeddings (BERT/DeBERTa), which use self-attention to generate token representations that are aware of the unique, often irregular, structure of the input sentence."
+
+| Approach | Primary "Knowledge" | Hypothesis being tested | 
+| Unigram-BoW | Pure Vocabulary | "Propaganda is just about specific bad words." | 
+| Bi-gram BoW | Local Phrasing | Local Phrasing | 
+| Word2Vec | Semantic Concepts | "Propaganda is about the meaning of the words, regardless of the exact synonym used." | 
+
+Word2Vec is a sophisticated extension of the Pure Vocabulary route (BoW). If we see that it beats the uni-gram approach then we know that there is some value in these contexual vectors providing knowledge on similarity. However, if it fails to beat the Bi-gram BoW we know that structure is the more pressing matter. 
+
+Word2Vec is a justified design route due to the **Distributional Hypothesis:** "You shall know a word by the company it keeps." Unigram-BoW is a surface-level application of the hypothesis. W2V is the "latent" application of the same hypothesis. It uses the same vocabulary but compresses that "company" into a dense vector space.
+
+We are moving from Explicit Vocabulary (BoW) to Latent Semantic Vocabulary (Word2Vec). Both are still fundamentally "bags" because they don't care about the specific order of words in your current sentence, only the general meaning of the words themselves.
+
+Additoinally, You can justify Word2Vec as a way to fix the primary weakness of the "Pure Vocabulary" approach: **Lexical Sparsity**. By using a "Bag-of-Embeddings," you are testing the hypothesis that **Semantic Concepts** are the true signal for propaganda, not specific strings of characters. Word2Vec is "vocabulary-plus"—it’s the same "no-structure" approach but with a built-in thesaurus derived from millions of other documents.
+
+|  | Pure Vocabulary (Unordered) | Structured Phrasing (Ordered) |
+| :--- | :--- | :--- |
+| Discrete/Sparse | Baseline 1: Unigram-BoW | Baseline 2: Bi-gram BoW |
+| Dense/Distributed | Extension: Word2Vec (Bag-of-Embeddings) | High-Tech: Transformers (Contextualized) |
+
+"If Word2Vec outperforms Unigram-BoW, it proves that propaganda relies on Semantic Clusters (e.g., any word relating to 'patriotism') rather than fixed 'trigger words.' However, if Bi-gram BoW outperforms Word2Vec, it suggests that the local structure (the 'abstract pairings') is actually more important than semantic flexibility."
+
+**Word2Vec's "Knowledge":** It has Global knowledge of word meanings from its massive pre-training, but Zero knowledge of the current sentence's structure.
+
+**Bi-gram's "Knowledge":** It has Zero global knowledge (it doesn't know "freedom" = "liberty"), but it has Local knowledge of the current sentence's syntax.
+
+The BoW and Word2Vec approaches should have the same classficaiton head so we can isolate the impact of the variables, not the arcitecture. 
+
+By keeping the classification head identical — for example, a Multi-Layer Perceptron (MLP) with one hidden layer — we ensure that the only variable being tested is the Input Representation.
+
+Word2Vec embeddings are designed to be used with neural layers. An MLP can learn non-linear relationships between the 300 dimensions of a Word2Vec vector.
+
+**How to align them:** Use a standard Linear -> ReLU -> Dropout -> Linear -> Softmax head. The only thing that changes is the input dimension of the first linear layer (e.g., 5000 for BoW vs. 300 for Word2Vec).
+
+---
+
+### Approach 2: BERT-based Transformer
+A transformer based model is the gold standard for sequence classifcation utilizing deep contextualized embeddings and that do account for word order. BERT uses **self-attention** to allow every word to "pay attention" to every other word, resolving the meaning of the snippet based on the context. Trasformers make use of **transfer learning** and pre-trained model. A decision will need to be made on whether to **freeze or fine-tune** the base models weights. Again, a classifcation head will be added to do the predicition this should be a MLP for consistency. 
+
+An important decision is needed to be made within a BERT model on how to compile the **sequence level representation**. By definition BERT models create a `CLS` summary token but depending on how the input processed, this could be of the entire sentence. Not just the snippet. One method might be to extract the hidden states for only the tokens located between the <BOS> and <EOS> markers and pass their average (or max) to the classification head. This could force the model to focus on the snippet words, but through the self-attention mechanism these tokens are aware of the wider context. Could just experienment with both. 
 
 Also, BERT alternatives often drop "Next Sentence Prediction" (NSP) and focus on better masking, RoBERTa or DeBERTa would be more "modern" choices than the original BERT. DeBERTa in particular uses a "disentangled attention" mechanism that might be very good at picking up those "unusual word pairings". A decision needs to be made on the exact model. 
 
 > DeBERTa (Decoding-enhanced BERT with disentangled attention). It is a more advanced version of BERT that separates the "content" of a word from its "relative position."
 
-There can be a disuccision of BERT-style (Encoder) vs GPT-style (Decoder) when discussing "Transformers". GPT models are autoregressive, they see text from left-to-right. BERT models are are bidirectional. Every token can "attend" to every other token in the sequence simultaneously. Propaganda often relies on contextual framing. A word might seem innocent until you reach the end of the sentence and see the "target" it is attacking, hence, giving BERT the architectural advantage.
+There can be a disuccision of BERT-style (Encoder) vs GPT-style (Decoder) when discussing "Transformers" in justifying this particular design choise. GPT models are autoregressive, they see text from left-to-right. BERT models are are bidirectional. Every token can "attend" to every other token in the sequence simultaneously. Propaganda often relies on contextual framing. A word might seem innocent until you reach the end of the sentence and see the "target" it is attacking, hence, giving BERT the architectural advantage.
 
 The field distinguishes between Natural Language Understanding (NLU) and Natural Language Generation (NLG). Encoders (BERT/RoBERTa/DeBERTa) are designed for NLU. Their entire objective during training is to create the richest possible mathematical representation of a static piece of text. Decoders (GPT/Llama) are designed for NLG. Their objective is to predict the next token. To make a GPT model classify, you have to "force" it (either through prompting or adding a classification head to the last token).
-
-There exists a clear bridge to the BoW Hypothesis through Transformer Interpretability (XAI). Use SHAP (SHapley Additive exPlanations) or LIME to generate "heatmaps" of which words the Transformer is "looking at" when it makes a prediction. You can then compare these heatmaps to your BoW results. If the Transformer's "important words" are the same as your BoW's "high-weight words," you’ve proven that propaganda is largely lexical. If the Transformer is looking at the connections between words (the attention heads), you’ve discovered where BoW fails. "Query, Key combinations for attention" Visualizing these attention scores is a direct application of that theory.
-
-It is much easier to extract Attention Maps from BERT. You can literally print a grid showing how much the word "America" (in your example) is attending to the word "Great." This allows you to scientifically prove or disprove your hypothesis that propaganda is "abstract" or "irregular." Because GPT models are usually significantly larger and use "causal masking," interpreting the internal "logic" of a classification decision is far more mathematically opaque.
-
-In the context of Transformers, "Heatmaps" generally refer to two distinct things: **Feature Attribution** (which words are important?) and **Attention Maps** (which words are talking to each other?). 
-
-**Feature Maps (1D):** This visualizes a "score" for every single word in your propaganda snippet. A high score means that word was a major factor in the model choosing a specific label. **Tool:** Captum (specifically the IntegratedGradients or LayerIntegratedGradients method). Run the same snippet through your BoW (TF-IDF) model and your Transformer. Extract the top-weighted words from your BoW model (e.g., coefficients in Logistic Regression) and overlay them with the heatmap from the Transformer. If both models highlight the exact same "trigger" words (e.g., "radical", "freedom", "betrayal"), you have scientific evidence that your BoW hypothesis was correct: the model is primarily relying on lexical cues (specific words) rather than complex sentence structure.
-
-**Attention Maps (2D Heatmap):** This is a grid that shows how much "attention" the model paid to the relationship between every pair of words. **Tool:** BertViz.Input a propaganda sentence where the grammar is "lossy" or the pairings are abstract (e.g., "America Great" vs "Make America Great Again"). Look for "strong lines" (high attention) between words that shouldn't normally be connected in standard English grammar. This is where you can outperform your BoW/Bi-gram model. While a Bi-gram BoW can only see words right next to each other, a Transformer can see an "unusual pairing" even if the words are at opposite ends of the sentence. If your heatmap shows a massive attention spike between two abstract concepts, you've identified a "propaganda feature" that BoW would be blind to.
-
-TODO: ARE HEATMAPS A CUMULATIVE TOOL, I.E. WHOLE CORPUS, OR JUST PER UNIT BASIS?
 
 There are several evaluation metrics to take into account but possibly an important one is Macro-Average F1. Propaganda datasets are typically very unbalanced, macro-averaging ensures your model is penalized if it ignores rare but important categories like "Causal Simplification" in favor of the more common "Loaded Language".
 
@@ -219,7 +302,7 @@ There are several evaluation metrics to take into account but possibly an import
 - **Modern Baseline (Word2Vec/GloVe):** Move from words to "concepts" (Distributional Semantics).
 - **High-Tech (Transformer + Interpretability):** Use the big model to see if the "contextual nuance" actually adds anything over the BoW approach.
 
-## Task 1 Evaluation
+### Task 1 Evaluation
 In such multi-class problems, "Accuracy" can be a trap due to class imbalance.
 
 **Macro-Average F1 (Primary Metric):** This is the most "Masters-level" metric for this task. Because propaganda techniques like "Loaded Language" are far more common than "Causal Simplification," a model could achieve high accuracy by simply ignoring the rare classes. Macro-averaging treats every class as equally important, forcing your model to be a "specialist" in all 9 categories.
@@ -229,49 +312,44 @@ In such multi-class problems, "Accuracy" can be a trap due to class imbalance.
 **Micro-Average F1 vs. Accuracy:** Your notes highlight that for single-label multi-class tasks, Micro-F1 is mathematically identical to Accuracy. In your report, you can demonstrate technical depth by explaining why Micro-F1 provides a "false sense of security" by letting dominant classes hide failures in the "long tail" of rare propaganda techniques.
 
 
+## Task 2: Sequence Labeling Ideas
+Span identification is a **Sequence Labeling** task (where you assign a label to every single token, e.g., using BIO tagging: Beginning, Inside, Outside).
 
+This is where the LSTM — and specifically the CRF (Conditional Random Field) layer—shines. We can implement the Ma and Hovy architecture (CNN + Bi-LSTM + CRF) as a "global sequence labeling task" rather than just a series of independent word classifications. 
 
-
-# Task 2
-Span identification is a Sequence Labeling task (where you assign a label to every single token, e.g., using BIO tagging: Beginning, Inside, Outside). This is where the LSTM — and specifically the CRF (Conditional Random Field) layer—shines.
-
-Implement the Ma and Hovy architecture (CNN + Bi-LSTM + CRF) as a "global sequence labeling task" rather than just a series of independent word classifications. 
-
-Label Bias Problem occurs because a standard Transformer or a simple RNN makes "local" decisions for each word. However, a CRF looks at the entire sequence of tags. It "knows," for example, that an "Inside-Propaganda" tag cannot mathematically follow a "Not-Propaganda" tag.
+**Label Bias Problem** occurs because a standard Transformer or a simple RNN makes "local" decisions for each word, i.e. "I need to label this token right now, what is it". However, a CRF looks at the entire sequence of tags. It "knows," for example, that an "Inside-Propaganda" tag cannot mathematically follow a "Not-Propaganda" tag.
 
 "For Task 1, I leveraged the Self-Attention mechanism of a Transformer to validate my hypothesis regarding lexical triggers and abstract pairings. For Task 2, I transitioned to a Recurrent architecture (Bi-LSTM) coupled with a Probabilistic Graphical Model (CRF) to handle the structural dependencies inherent in span identification."
 
-You can argue that identifying where propaganda starts and ends is a matter of local syntax and morphology (perfect for Bi-LSTMs and character-level CNNs), whereas identifying what kind of propaganda it is requires global semantics (perfect for Transformers).
+We can argue that identifying where propaganda starts and ends is a matter of local syntax and morphology (perfect for Bi-LSTMs and character-level CNNs), whereas identifying what kind of propaganda it is requires global semantics (perfect for Transformers).
 
 Instead of predicting if a word is propaganda in isolation, a CRF looks at the entire sequence of labels. It calculates the probability of the entire tag sequence at once. Propaganda spans are continuous. A CRF "knows" that a "Propaganda-Inside" tag cannot follow a "Not-Propaganda" tag without a "Propaganda-Beginning" tag first. 
 
-The "Ma and Hovy" Architecture (CNN-BiLSTM-CRF): This is a "gold standard" architecture for sequence labeling it tackles our "grammatical irregularity" hypothesis at three different levels:
+The "Ma and Hovy" Architecture (CNN-BiLSTM-CRF) is the "gold standard" architecture for sequence labeling and it tackles our "grammatical irregularity" hypothesis at three different levels:
 - **Level 1: Character-level CNN:** This handles "morphological irregularities." If a propaganda snippet uses weird prefixes, suffixes, or misspelled "shouty" words, the CNN picks up on the character patterns that word-level models miss.
 - **Level 2: Bi-LSTM:** This captures the "flow." It sees how a word's meaning is influenced by the words before and after it, identifying the "abstract pairings" you mentioned.
 - **Level 3: CRF Layer:** As mentioned above, this ensures the output is a valid, coherent span rather than a "stuttering" prediction of random tags.
 
-our hypothesis about "loss of strictly correct grammar" is a major selling point for using the Character-level CNN component of the Ma and Hovy architecture.
+Our hypothesis about "loss of strictly correct grammar" is a major selling point for using the Character-level CNN component of the Ma and Hovy architecture.
 
 "While a standard Word-BoW would struggle with the grammatical irregularities and OOV (Out-of-Vocabulary) tokens prevalent in propaganda, the CNN-BiLSTM-CRF architecture (as per Ma and Hovy) allows for sub-word awareness. This ensures that even if a propaganda technique manifests as a grammatically broken slogan, the character-level features can still trigger a span detection."
 
-- Input Representation: Convert your sentences into BIO Tagging format (B-Prop, I-Prop, O).
-- The Model: Use a Bi-LSTM to encode the sequence and a CRF to decode the tags.
-- The Twist: Add Character Embeddings (Week 5 notes) to the input to handle the "linguistic irregularities" you're interested in.
+- **Input Representation:** Convert your sentences into BIO Tagging format (B-Prop, I-Prop, O).
+- **The Model:** Use a Bi-LSTM to encode the sequence and a CRF to decode the tags.
+- **The Twist:** Add Character Embeddings to the input to handle the "linguistic irregularities" you're interested in.
 
 **Feature Enrichment: POS and NER Tagging:** Propaganda spans often align with syntactic boundaries (like Noun Phrases). Adding POS tags to your Bi-LSTM-CRF helps the model learn that a span is likely to end after a noun or a punctuation mark, providing the "structural discipline" your notes mention.
 
-**TODO: I wonder if we could alter the model to run only POS tags. The hypothesis being that the language used by propagandists is so abstract that it can be identified by the combination and ordering POS tags**
+The obvious starting point of Task 2 would be to create a **bolt-on pipeline** where Model A finds the span and Model B classifies it, of which Model B could be the best performing model from Task 1
 
-The obvious starting point of Task 2 would be to create a bolt-on pipeline where Model A finds the span and Model B classifies it, of which Model B could be the best performing model from Task 1
-
-However, this could be extended to an integrated approach where the model both identifies the span but also type too.
+However, this could be extended to an **integrated approach** where the model both identifies the span but also type too.
 
 **The Integrated Choice: Multi-class Sequence Labeling (BIO-Class):** Expand the tag set to include the prop type. This is a very different paradigm because the model must learn the "boundaries" and the "type" simultaneously. You transform the task into an 18-class problem (9 techniques $\times$ {Beginning, Inside} + 1 "Outside" tag).
 - `B-LoadedLanguage`, `I-LoadedLanguage`
 - `B-FlagWaving`, `I-FlagWaving`
 - `O` (Not propaganda)
 
-You can use the Ma and Hovy (CNN-BiLSTM-CRF) architecture from your notes. The CRF (Conditional Random Field) layer is crucial here because it ensures structural consistency—it prevents the model from, for example, transitioning from B-Doubt to I-Exaggeration within the same span. It treats the technique not as a category of a sentence, but as a property of the sequence.
+The CRF becomes even more important here because it ensures tag level consistency. It prevents a snippet from flowing between propaganda states. The CRF will identify based on the whole sequence what the correct tag is, even if at some tokens in isolation the model predicts a change in tag.
 
 "I moved to a Joint Sequence Labeling architecture (Multi-class BIO-CRF). I argue that this is superior to a 'bolt-on' pipeline because the model learns that certain linguistic structures (like 'abstract pairings') are not only indicators of where propaganda is but what kind it is, allowing for a mutually reinforcing learning signal."
 
@@ -281,7 +359,7 @@ In NLP research, this is often framed as the Pipeline vs. Joint Learning debate.
 
 **Variation 2: The Integrated Approach (Multi-class BIO)** In this variation, you expand your tagset to include the technique within the tag itself (e.g., B-Loaded, I-Loaded, B-Doubt, I-Doubt, O). **Pros:** Joint Signal. This is where your "unusual word pairings" hypothesis gets a boost. The model might realize that the word "radical" is likely to be the B (Beginning) of a Loaded_Language span. The specific "texture" of the technique helps the model find the boundaries. **Cons:** Data Sparsity. Instead of training on thousands of B tags, the model now only has a few hundred for rarer classes like Causal_Simplification.
 
-Ma and Hovy Architecture (Week 5): You can use the CNN-BiLSTM-CRF architecture for both variations.
+Based on the Ma and Hovy Architecture we use the CNN-BiLSTM-CRF architecture for both variations.
 - In Variation 1, the CRF layer only manages 3 tags (B, I, O).
 - In Variation 2, the CRF manages 17 tags ($8 \times 2 + 1$).
 
@@ -294,23 +372,21 @@ The hypothesis about "linguistic irregularities" and "loss of grammar" is actual
 In your report, you should explicitly compare the F1-score of these two. If Variation 1 has better Detection (finding the span) but Variation 2 has better Joint Accuracy (finding the span + the right label), you have a brilliant "Empirical Perspective" to write about. You can conclude by discussing whether "seeing the technique" actually helps the model "find the words."
 
 > I am really interested by this variation 2 approach. By expanding the tags to capture each propaganda tags we are labelling each token from quite a wide range of options. This provides are huge amount of signal to generate. For each token we can generate a probability for each possible tag. From which the model(s) can determine the correct sequence. I think this will be particularly good for propaganda snippet wheres the boundaries are more "soft" and the true signal are in the middle of the snippet as the model can generate lower probabilties for possible tags but then high probabilities for the middle tags. Is it the CRF that goes back a connects these probablities to find the best and correct span? I seem to recall other things like beam search and viterbi algorithm from the lectures that seem conceptually similar but i think it is CRF which is the correct method here
-- while the neural network (Bi-LSTM or Transformer) gives you the "raw signal" for each word, it is the CRF—and specifically the Viterbi Algorithm—that turns those individual guesses into a mathematically coherent span.
-- Your notes mention the "Label Bias Problem" in MEMMs and identify the CRF as the solution.
-- A standard Softmax layer makes a local decision for every word. If a word looks 51% like B-Loaded_Language and 49% like O (Outside), it picks B-Loaded. It doesn't care if the previous word was also a B-Loaded (which is grammatically impossible—you can't have two "Beginnings" in a row without an "Inside").
+- while the neural network (Bi-LSTM or Transformer) gives the "raw signal" for each word, it is the CRF — and specifically the Viterbi Algorithm — that turns those individual guesses into a mathematically coherent span.
+- My lecture notes mention the "Label Bias Problem" in MEMMs and identify the CRF as the solution.
+- A standard Softmax layer makes a local decision for every word. If a word looks 51% like `B-Loaded_Language` and 49% like `O` (Outside), it picks `B-Loaded`. It doesn't care if the previous word was also a `B-Loaded` (which is grammatically impossible—you can't have two "Beginnings" in a row without an "Inside").
 - The CRF layer adds a Transition Matrix. This matrix learns that: B-Loaded $\rightarrow$ I-Loaded is very likely. O $\rightarrow$ I-Loaded is impossible ($P=0$). B-Loaded $\rightarrow$ B-NameCalling is impossible.
 
 **Viterbi vs. Beam Search: How we find the path:**
 - **Viterbi Algorithm:** This is the "exact" algorithm used by the CRF to find the global maximum probability path. It works like a trellis. It calculates every possible path through the sentence and finds the one that has the highest combined score (Emission Score from the LSTM + Transition Score from the CRF). **For your Task 2, Viterbi is the correct algorithm**.
 - **Beam Search:** This is a "heuristic" (best-guess) version. It's usually used in Generative models (like T5) or Machine Translation. Because the number of possible sentences a model could generate is infinite, Viterbi is too slow, so Beam Search just keeps the "Top K" best paths at each step.
 
-**Solving your "Soft Boundaries" problem:** Your hypothesis about the "true signal in the middle" is exactly why a CRF is superior for propaganda detection: 
+**Solving your "Soft Boundaries" problem:** The hypothesis about the "true signal in the middle" is exactly why a CRF is superior for propaganda detection: 
 - **The Middle Peak:** Suppose you have a phrase: "vicious radical extremists".
-- **The Signals:** Your Bi-LSTM might be very confident that "radical" is I-Loaded_Language (High probability), but it's unsure about "vicious" (Soft boundary).
-- **The CRF Logic:** The CRF "sees" the high-confidence I- tag in the middle. Because the "rule-book" (Transition Matrix) says an I- tag must be preceded by a B- tag, the CRF will "pull up" the probability of "vicious" being a B-Loaded_Language tag to complete the sequence.
+- **The Signals:** A Bi-LSTM might be very confident that "radical" is `I-Loaded_Language` (High probability), but it's unsure about "vicious" (Soft boundary).
+- **The CRF Logic:** The CRF "sees" the high-confidence `I-tag` in the middle. Because the "rule-book" (Transition Matrix) says an `I-tag` must be preceded by a `B-tag`, the CRF will "pull up" the probability of "vicious" being a `B-Loaded_Language` tag to complete the sequence.
 
-4. Implementation in your Ma and Hovy Variation: In your report, you can describe this as "Global Sequence Optimization": 
-
-"In Variation 2, I implemented a CRF layer on top of the Bi-LSTM to address the Label Bias Problem identified in my notes. While the Bi-LSTM provides local emission features for each token, the CRF utilizes the Viterbi algorithm to find the globally optimal tag sequence. This is particularly beneficial for propaganda snippets with ambiguous boundaries; the CRF allows a high-confidence signal from the core of a manipulative phrase to 'inform' the labeling of the surrounding tokens, ensuring structural integrity across the 17-class tagset."
+"In Variation 2, I implemented a CRF layer on top of the Bi-LSTM to address the **Label Bias** Problem identified in my notes. While the Bi-LSTM provides local emission features for each token, the CRF utilizes the Viterbi algorithm to find the globally optimal tag sequence. This is particularly beneficial for propaganda snippets with ambiguous boundaries; the CRF allows a high-confidence signal from the core of a manipulative phrase to 'inform' the labeling of the surrounding tokens, ensuring structural integrity across the 17-class tagset."
 
 - The Model: Bi-LSTM + CRF (The architecture).
 - **The Objective:** Maximize the probability of the entire sequence (Global Normalization).
@@ -397,9 +473,7 @@ To get a top grade, you shouldn't just provide one number; you should provide a 
 - Span-level (Correct): You group the tokens into full "entities" (spans). If the ground truth has one span of 5 words, and your model predicts 4 of those words, that is one partial match, not four correct tokens.
 
 
-
-# Data Augmentation
-
+## Data Augmentation Options
 - Vary/Randomize Span End/Start to create soft boundries
 - Create not_propaganda examples which has a partial snipped of prop
 - Generative methods to create alternative constructions of prop snippets:
@@ -423,129 +497,247 @@ This demonstrates Transfer Learning and Domain Adaptation. You can argue in your
 
 
 
-# Randomer Idea
-
-An evaluation that treats the start and end of the spans are "softer". Perhaps they have less weight. Might need to be dynamic based on length of snippet. However, it is probably the case that some, or even many, propaganda examples are heavily weighted towards the start for end. Maybe this will be uncovered by the attention heatmaps and I can add this point as a pointer for "future" research
-
-Comparing models trained on words vs pos tags. I have a hypothesis/theory that propaganda can be decomposed down into abstract usage of language. Words are a clear signal of this but they are not the true underlying signal. For example, "fight fight fight" invokes emotions and is clearly propaganda. But it is the chaining of 3 verbs that is the true signal. In fact, focusing on the words themselves likely leads to overfitting but it believes that fight and its repetation are the propaganda itself but "conquer conquer conquer" is also the same technqiue. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-# Ideas
+## Potential Ideas
+In this section I have a collect ideas that I may or may not integrate into the report itself. Often in places they are supplementary peices so will depend on how much time I have.
 
 ---
 
- 
-
-
-Apply BLEU to wordpeice and justify it being an inbetween of chrF and BLEU. Subword BLEU, shouldn't already empiracally be thing. it achieves many of the same goals as chrF—such as handling out-of-vocabulary words and capturing morphological similarities—but there are key differences in granularity and mathematics that make them behave differently. 
-
-chrF is still more account as it can caputre spelling variation and mistakes as well as very granular morphological details that may, or may not, be consdiered by the chose wordpeice tokenizer. 
-- Because chrF operates on every character sequence, it is significantly more robust to typos or transliteration differences (e.g., "center" vs. "centre")
-
-Because chrF includes Recall, it rewards the model for including all the necessary characters/information from the reference, whereas BLEU is more focused on making sure what is there is correct.
-- Im not sure Recall is actually nessecary for propaganda. It may make the model overfit. we want to capture the intent not the words. 
-
-I am undecided whether spelling variation is required for progaganda. on the one hand, these are often formal statement thus will use formal "correct" language. on the other hand, propagandists tend to make up their own language rules but think these apply more to the structure rather than the words themselves.
+### Custom Soft Bounary Snipper Evaluation Method
+An evaluation method that treats the start and end of the spans as "softer" as even humans only agree 60% of the time on exact spans. Perhaps they have less weight on the edges but the middle tokens provide more weight. Might need to be dynamic based on length of snippet as 3 word long snippet are probably all propaganda terms. However, it is likely the case that some, or even many, propaganda examples are heavily weighted towards the start for end. Maybe this will be uncovered by the attention heatmaps and I can add this point as a pointer for "future" research
 
 ---
 
-Limitations of crF or BLEU positives
-
-- it applies the same weight to every character, where as we know some chars, or parts of words, are more inportant. 
-- chrF, a model might get a high score by getting the suffixes and prefixes of several words right while failing to produce the correct root meaning of the sentence.
-- Interpretability for Humans: Humans naturally think in terms of words. When a researcher sees a BLEU score, they can intuitively understand it as "the model got roughly $X\%$ of the words right"
--  An F-score based on character $n$-grams is a more abstract mathematical value that is harder to visualize in terms of real-world fluency.
-- Standardization and Comparison: Since BLEU has been the "industry standard" since 2002, almost every paper published in the last two decades uses it.
-- For languages like English, which have very little morphology (few suffixes/prefixes), the gap between BLEU and chrF is much smaller. In these cases, the simplicity of BLEU is often sufficient.
-- Sensitivity to Word Order: Because BLEU uses 4-grams, it is very strict about word order. In some applications, getting the exact word order right is more important than capturing morphological roots, making BLEU a stricter (and therefore safer) judge. **This might be important for Propaganda**
-- BLEU applies for weight (by proxy) to content words. if a content word is missed not only does the unigram break but so does all of the n-grams. chrF can word around the content words and retain the structure. No partial credit
-
-chrF++ is an enhanced version of the chrF metric. While the original chrF only considers character $n$-grams, chrF++ adds word $n$-grams to the calculation to get the "best of both worlds."It was introduced specifically because researchers found that while character-level matching is great for morphology, adding a small amount of word-level information significantly improves the metric's correlation with human judgment.
-
-If you only look at characters, you might miss "macro" structures. By adding word $n$-grams:Word Order: It becomes slightly more sensitive to word-level reordering that might not be captured clearly by character substrings.Semantic Anchor: It ensures that the model is actually getting the specific tokens correct, not just producing sequences of characters that look like words
+### POS Tag Only Model
+Comparing models trained on words vs pos tags. I have a hypothesis/theory that propaganda can be decomposed down into abstract usage of language. Words are a clear signal of this but they are not the true underlying signal. For example, "fight fight fight" invokes emotions and is clearly propaganda. But it is the chaining of 3 verbs that is the true signal. In fact, focusing on the words themselves likely leads to overfitting but it believes that fight and its repetation are the propaganda itself but "conquer conquer conquer" is also the same technqiue. Therefore, we take a classifcation model, or even the sequence labeller, and apply the models on just the pos tags (no words), what sort of result do we get?
 
 ---
 
-WordPeice BLEU vs chrF++
+### Perplexity as proof of hypothesis
+At the start we introduced some hypotheses based on word use and structure. It appears that we may be able to Perplexity to justify these. Perplexity evaluates Language Models (NLG), not Classifiers (NLU). But we could use Perplexity as a diagnostic tool to unveil the theory that propaganda has "loss of strictly correct grammar" or "unusual word pairings."
 
-BLEU; hard boundaries, relies on external tokenizer
+1. Take a pre-trained language model (like GPT-2 or BERT’s masked likelihood).
+2. Calculate the perplexity of the Propaganda Spans vs. the Non-Propaganda text. Or even words, bi-grams, tri-grams or sub-snippets. 
+3. The Goal: If the hypothesis is correct, the "Standard English" model should have significantly higher perplexity on the propaganda snippets than on the normal sentences.
 
-chrF; soft boundaries
-
-Wordpiece BLEU is primarily Precision-oriented. It asks: "Of the tokens the model produced, how many are in the reference?" It uses a "Brevity Penalty" to stop the model from just outputting one correct word.
-
-chrF++ is an F-score, which balances Precision and Recall. It explicitly asks: "Did the model produce all the characters/words found in the reference?" This makes it much more sensitive to "missing" information than BLEU is.
-
-Because chrF++ adds word $n$-grams back into the character-based score, it actually acts like a weighted ensemble:The character part acts as a "morphological safety net" (catching stems and suffixes).The word part acts as a "semantic anchor" (ensuring the overall word-level fluency is there).
+"To empirically test my hypothesis that propaganda is characterized by linguistic irregularities, I conducted a perplexity analysis using a pre-trained GPT-2 model. I found that the average perplexity for propaganda spans was 42% higher than for non-propaganda text. This higher 'surprise' factor suggests that the language used in these techniques deviates from standard syntactic norms, justifying my use of complex architectures like DeBERTa to capture these non-linear patterns."
 
 ---
 
-Difference in interpretation:
+### Task 1 Feature Comparison Analyis
+I am not sure where this piece of work should go, also it may be an extra if I have time rather than a staple of the project. However, between MLP classification heads and transforers attention there exists a way to compare the methods with respect to the hypthothesis. We can use feature attribution and attention maps to identify which words were important. If both methods are light up the same words we know that hypothesis 1 is true to some extent but we may be able to use the attention map from task 2 to demonstrate that it is not enough. 
 
-If you see a high chrF++ score but a low BLEU score, it usually indicates that your model is "directionally" correct but lacks polish:
+Since the BoW and Word2Vec models use an MLP Classification Head, we can use **Feature Attribution** to see which words "pushed" the model toward a specific label.
 
-Interpretation: The model has captured the correct stems and semantic roots (high character recall), but it is failing on specific word-choice or exact phrasing (low word-precision).
+With an MLP, you can use Integrated Gradients (`Captum` library). This will tell is which word vectors in the "bag" contributed most to the final Softmax probability.
 
-Task Application: This is common in Low-Resource Translation. It means the model has learned the "gist" of the language but hasn't mastered the specific grammar or idiomatic tokens yet.
+I think for this sort of analysis we need to scope down to the individual sentence though I am not 100% sure about this. it may be the case that we can aggregate over the whole corpus. 
 
-Conversely, if you have a high BLEU but lower-than-expected chrF++:
+`e.g., "The betrayal of our sovereignty is complete"`
 
-Interpretation: The model is "playing it safe." It is producing short, exact phrases it is sure about (high precision), but it might be missing a lot of the required detail or content from the reference (low recall).
+The Baseline View (1D Importance):
+- **BoW/Word2Vec Output:** Likely see high "heat" on the nouns: betrayal and sovereignty.
+- **The Interpretation:** The model says: "I see two 'bad' words, so this is propaganda." It doesn't care that they are linked; it just sees the counts.
+
+The Transformer View (2D Attention): 
+- **Transformer Output:** Using an attention map (like BertViz), you can see not just that betrayal is important, but that the Attention Head for `loaded_language` is firing specifically on the relationship between betrayal and sovereignty.
+- **The Interpretation:** The model says: "The fact that 'betrayal' is applied to 'sovereignty' is what makes this flag-waving or loaded language."
+
+To get the best grade, use LIME or SHAP as the "bridge." These tools can be applied to any model (BoW, W2V, or Transformer).
+1. Explain the BoW: "LIME shows that for the sentence X, the BoW model relies 90% on the single token 'traitor'."
+2. Explain the Transformer: "LIME shows the Transformer also values 'traitor', but the Attention Map reveals that the model is actually attending to the lack of a modifier, confirming the 'abstract/lossy grammar' hypothesis."
+
+"While the BoW and Word2Vec baselines successfully identified the 'trigger' tokens (confirming the lexical hypothesis), they were unable to capture the relational context. The Transformer's attention maps demonstrated that the classification was not merely triggered by the word 'American', but by its syntactic proximity to 'displacement' in a non-standard grammatical construct. This confirms that propaganda identification requires the modeling of intra-sequence relationships that 'bag' methods inherently discard."
+
+**For the "Heatmaps":** Captum (for Integrated Gradients on all models).
+
+**For the "Connections":** BertViz (to see the lines connecting words in the Transformer).
+
+**For the "Global Importance":** ELI5 (excellent for showing which words a BoW model likes).
+
+For the assignment, using these interpretability tools on the MLP-based Word2Vec and BoW models allows us to prove that even without "Attention," your simpler models are picking up on the same linguistic triggers as the Transformer.
+
+**Feature Attribution: Integrated Gradients (The Gold Standard):** Integrated Gradients solves this by calculating the "integral of the gradients" along the path from a blank input (baseline) to your actual sentence. It assigns a "contribution score" to each input feature (the Word2Vec dimensions or BoW counts). You can aggregate these scores back to the word level. You get a heatmap that says: "Word X contributed 40% to the model's decision that this was 'Loaded Language'."
+
+"To maintain experimental consistency, I utilized a 2-layer MLP as the classification head for all non-transformer baselines. This allowed me to directly compare the utility of Sparse Discrete features (BoW) against Dense Distributed features (Word2Vec) without the architectural bias of different learning algorithms.
+
+There exists a clear bridge to the BoW Hypothesis through Transformer Interpretability (XAI). Use SHAP (SHapley Additive exPlanations) or LIME to generate "heatmaps" of which words the Transformer is "looking at" when it makes a prediction. You can then compare these heatmaps to your BoW results. If the Transformer's "important words" are the same as your BoW's "high-weight words," you’ve proven that propaganda is largely lexical. If the Transformer is looking at the connections between words (the attention heads), you’ve discovered where BoW fails. "Query, Key combinations for attention" Visualizing these attention scores is a direct application of that theory.
+
+It is much easier to extract Attention Maps from BERT. You can literally print a grid showing how much the word "America" (in your example) is attending to the word "Great." This allows you to scientifically prove or disprove your hypothesis that propaganda is "abstract" or "irregular." Because GPT models are usually significantly larger and use "causal masking," interpreting the internal "logic" of a classification decision is far more mathematically opaque.
+
+In the context of Transformers, "Heatmaps" generally refer to two distinct things: **Feature Attribution** (which words are important?) and **Attention Maps** (which words are talking to each other?). 
+
+**Feature Maps (1D):** This visualizes a "score" for every single word in your propaganda snippet. A high score means that word was a major factor in the model choosing a specific label. **Tool:** Captum (specifically the IntegratedGradients or LayerIntegratedGradients method). Run the same snippet through your BoW (TF-IDF) model and your Transformer. Extract the top-weighted words from your BoW model (e.g., coefficients in Logistic Regression) and overlay them with the heatmap from the Transformer. If both models highlight the exact same "trigger" words (e.g., "radical", "freedom", "betrayal"), you have scientific evidence that your BoW hypothesis was correct: the model is primarily relying on lexical cues (specific words) rather than complex sentence structure.
+
+**Attention Maps (2D Heatmap):** This is a grid that shows how much "attention" the model paid to the relationship between every pair of words. **Tool:** BertViz.Input a propaganda sentence where the grammar is "lossy" or the pairings are abstract (e.g., "America Great" vs "Make America Great Again"). Look for "strong lines" (high attention) between words that shouldn't normally be connected in standard English grammar. This is where you can outperform your BoW/Bi-gram model. While a Bi-gram BoW can only see words right next to each other, a Transformer can see an "unusual pairing" even if the words are at opposite ends of the sentence. If your heatmap shows a massive attention spike between two abstract concepts, you've identified a "propaganda feature" that BoW would be blind to.
+
+TODO: ARE HEATMAPS A CUMULATIVE TOOL, I.E. WHOLE CORPUS, OR JUST PER UNIT BASIS?
+
+Model-Agnostic Explanations: LIME & SHAP
+These are "wrapper" methods that don't care how the model works internally. They treat the MLP as a black box but poke it repeatedly to see how it reacts.
+
+LIME (Local Interpretable Model-agnostic Explanations): It takes your propaganda sentence, creates slight variations of it (by removing words), and sees how the MLP’s prediction changes. If removing "betrayal" causes the flag_waving probability to drop from 90% to 10%, LIME identifies "betrayal" as the critical feature.
+
+SHAP (SHapley Additive exPlanations): Based on game theory, it fairly distributes the "credit" for a prediction among all the words in the sentence. It is mathematically very robust and great for academic papers.
+
+Baseline (BoW + MLP): Use LIME to show that the model is "Trigger Happy"—it only looks at the word "soldiers."
+
+Transformer: Use Attention Maps and LIME to show that the model looks at "soldiers" in relation to the verb "get out."
+
+The Conclusion: "While the MLP is often viewed as a black box, feature attribution via LIME reveals that it relies primarily on isolated lexical cues. In contrast, the Transformer’s attention mechanism validates my hypothesis that propaganda is encoded in the syntactic relationship between words, a nuance the MLP-based baselines consistently overlooked."
+
+Captum (Library): The best library for Integrated Gradients in PyTorch.
+
+LIME / SHAP (Libraries): Very easy to use with scikit-learn or Keras models.
+
+ELI5 (Explain Like I'm Five): A library specifically designed to show text importance heatmaps for black-box classifiers.
 
 ---
 
-2. Analysis & Testing Evaluation (Precision/Recall/BLEU)
+# 4. Structure
 
-Evaluation in the form of Precision, Recall, F-score, or chrF is generally performed on a held-out Test Set. You are correct that this is for Analysis. This is evaluation for the human researcher. It translates the model's raw probabilities into meaningful performance scores. Unlike loss, which looks at the "soft" probabilities, these metrics look at the "hard" decisions (the final predicted tags or words).
+1. [Introduction](#1-introduction)
+2. [Related Work](#2-related-work)
+    - [2.1. Dataset Exploration and EDA](#21-dataset-exploration-and-eda)
+3. [Methodology: Task 1 (Classification)](#3-methodology-task-1-classification)
+    - [Baselines](#baselines)
+    - [Approach 1: Bag-of-Embeddings](#approach-1-bag-of-embeddings-1)
+    - [Approach 2: Transformer Architecture](#approach-2-transformer-architecture)
+    - [Hyper-parameters ](#hyper-parameters)
+4. [Methodology: Task 2 (Span Identification)](#4-methodology-task-2-span-identification)
+    - [Variation 1: The Pipeline (Binary BIO + Classifier)](#variation-1-the-pipeline-binary-bio--classifier)
+    - [Variation 2: Integrated Multi-class BIO-CRF](#variation-2-integrated-multi-class-bio-crf)
+    - [Theoretical Justification](#theoretical-justification)
+5. [Results and Evaluation](#5-results-and-evaluation)
+    - [5.1 Evaluation Framework and Metrics](#51-evaluation-framework-and-metrics)
+    - [5.2 Task 1 Results: The Lexical vs. Semantic Battle](#52-task-1-results-the-lexical-vs-semantic-battle)
+    - [5.3 Task 2 Results: Pipeline vs. Integrated Architectures](#53-task-2-results-pipeline-vs-integrated-architectures)
+6. [Analysis and Discussion](#6-analysis-and-discussion)
+    - [6.1 Decoding the "Black Box" (XAI Comparison)](#61-decoding-the-black-box-xai-comparison)
+    - [6.2 Perplexity as Linguistic Proof](#62-perplexity-as-linguistic-proof)
+    - [6.3 Error Analysis (Failure Modes)](#63-error-analysis-failure-modes)
+7. [Conclusion and Further Work](#7-conclusion-and-further-work)
+* [Strategic Tips for High Marks:](#strategic-tips-for-high-marks)
+
+## 1. Introduction
+**Problem Outline:** Define the task of propaganda detection and explain why it is both socially important and technically challenging (e.g., the subtlety of "Loaded Language" vs. the structural "off-kilter" nature of political slogans).
+
+**Hypotheses:** Formally state your two core hypotheses:
+- **1. Lexical Trigger Hypothesis:** Propaganda is disproportionately over-represented by abstract "trigger" words.
+- **2. Structural Irregularity Hypothesis:** Propaganda utilizes "abstract pairings" and a loss of strictly correct grammar that can be identified through sequence modeling.
 
 ---
 
-3. The "Bridge" Metrics: Perplexity
-As seen in your lab, Perplexity acts as a bridge between these two worlds.
+## 2. Related Work
+Briefly mention the Propaganda Techniques Corpus (Da San Martino et al., 2020) which serves as the foundation for your dataset.
 
-It is mathematically derived directly from the Log Probability (Loss) of a corpus.
+Discuss the evolution from Bag-of-Words to Contextualized Embeddings (BERT/DeBERTa) and the use of CRFs for sequence labeling.
 
-However, it is used as a final Evaluation Metric to compare different models (e.g., Unigram vs. Bigram) because it is more interpretable for humans than raw negative log-likelihood.
+## 2.1 Dataset Exploration and EDA
+Reasons to do EDA:
+1. Validating the hypothesis. Assumed that propaganda is over-represented by abstract "trigger" words. An EDA showing Term Frequency (TF) or N-gram distributions can provide the first piece of empirical evidence for this.
+2. **Syntactic Integrity:** For Task 2, analyzing sentence lengths and span lengths justifies the use of a CRF to handle structural dependencies.
+
+
+- Classes
+- Frequencies
+- Class imbalances. Documenting this justifies your choice of Macro-Average F1 later in the report. As well as for reference in the evaluation or analysis sections.
+- N-gram analysis to confirm 'abstract' pairings in propaganda snippets
+- **Sequence Lengths:** Histograms of the total sentence length vs. the propaganda snippet length.
+- **Vocabulary Richness:** Top 20 most frequent words in propaganda snippets vs. non-propaganda text.
+- **Stopword and POS Analysis:** Visualizing if propaganda techniques rely on certain parts of speech (e.g., a high density of adjectives in loaded_language)
 
 ---
 
-Theme of interpretability:
-- Attention Map
-- Key Words
-- BLEU over chrF
+## 3. Methodology: Task 1 (Classification)
+
+### Baselines: 
+Describe the Unigram-BoW (Pure Vocabulary) and Bi-gram BoW (Local Phrasing) setups. As well, as true non-intelligent baseline of either random guessing or single answer guesss (probably both).
+
+### Approach 1: Bag-of-Embeddings
+Detail your use of Word2Vec with Mean Pooling and an MLP classification head. Justify why you kept the MLP head constant to isolate the embedding variable.
+
+### Approach 2: Transformer Architecture
+Describe your choice of DeBERTa/RoBERTa and how you extract snippet-specific representations (e.g., pooling hidden states between `<BOS>` and `<EOS>`).
+
+### Hyper-parameters 
+Document settings for both models (e.g., vocabulary size, embedding dimensions, dropout rates, and fine-tuning epochs).
+
+---
+
+## 4. Methodology: Task 2 (Span Identification)
+
+### Variation 1: The Pipeline (Binary BIO + Classifier):
+Describe the "bolt-on" approach where you first detect if text is propaganda before classifying what type it is.
+
+### Variation 2: Integrated Multi-class BIO-CRF:
+Detail your "Joint Model" approach using the Ma and Hovy (CNN-BiLSTM-CRF) architecture.
+
+### Theoretical Justification: 
+Explain the role of the Viterbi algorithm and Global Normalization in resolving "soft boundaries" and "internal signals" in propaganda spans.
+
+---
+
+## 5. Results and Evaluation
+
+### 5.1 Evaluation Framework and Metrics
+Justify and explain the your metrics here to demonstrate "Systematic Knowledge".
+- **Task 1 (Classification):** Use **Macro-Average F1** as the primary metric. Justify this by referencing the class imbalance found in your EDA; accuracy would be misleading if the model overfits to the frequent loaded_language class. Include all of the the other metrics too for more granular analysis; i.e. accuracy, recall, precision. 
+- **Task 2 (Detection & Classification):** Use the Partial Match F1-score (as per Da San Martino et al., 2020). It would be good to implement something custom here. Perhaps around blurring the boundaries and identifying a way to work out if the span starts near the boundary. 
+- **Joint Score Logic:** Explain that for Task 2, a span is only considered a "match" if the label is also correct. This acts as an "on-off switch," rewarding boundary precision only when the rhetorical technique is accurately identified.
+
+### 5.2 Task 1 Results: The Lexical vs. Semantic Battle
+Present a table comparing your Unigram-BoW, Bi-gram BoW, and Word2Vec baselines against your Transformer (DeBERTa/RoBERTa).
+- **Lexical Sieve:** Analyze if the Unigram-BoW performs surprisingly well on "Loaded Language," supporting your hypothesis that some propaganda is purely word-driven.
+- **The Bi-gram Boost:** Compare Bi-gram BoW vs. Word2Vec. If Bi-grams win, argue that "Local Phrasing" (structure) is more important than "Semantic Similarity" (Word2Vec).
+
+### 5.3 Task 2 Results: Pipeline vs. Integrated Architectures
+This is where we evaluate your two variations: the Binary Pipeline vs. the Integrated BIO-Class (Joint) Model.
+
+**Variation 1 (Pipeline):** Report the "Span Detection" F1 separately from the "Joint" F1. This shows if your model is a good "spotter" but a bad "labeler".
+
+**Variation 2 (Integrated):** Showcase how the CRF layer and Global Normalization improved boundary precision.
+
+**The "Knit" Effect:** Discuss if Variation 2 handled "soft boundaries" better by using the technique label to "pull" the span boundaries into place.
+
+---
+
+**Evaluation against Hypotheses:** Discuss whether the performance of Bi-gram BoW vs. Word2Vec supports your theory on "local phrasing" vs. "semantic concepts".
+
+**Human Benchmark:** Mentioning the $\gamma$ agreement (0.6) for humans provides a professional context for your model's performance.
+
+**Theoretical Alignment:** Try to link result back to the "Label Bias Problem," "Global Normalization," or the "Distributional Hypothesis" found in your notes.
+
+---
+
+## 6. Analysis and Discussion
+
+### 6.1 Decoding the "Black Box" (XAI Comparison)
+Use the interpretability tools you planned (Captum/LIME) to provide a "Feature Comparison". Use Integrated Gradients (Captum) and Attention Maps (BertViz) to compare what the BoW model "sees" versus the Transformer.
+- **1D vs. 2D Importance:** Show a visualization where BoW highlights a single word (e.g., "radical") but the Transformer’s Attention Map highlights the relationship between that word and its target.
+- **Validating Abstract Pairings:** Use this to prove the hypothesis that the "off-kilter" grammar of propaganda is what the Transformer is actually picking up on.
+
+### 6.2 Perplexity as Linguistic Proof
+Present the Perplexity results here.
+- Compare the perplexity of propaganda snippets vs. standard text using a pre-trained model like GPT-2.
+- **The Evidence:** Use high perplexity scores as empirical proof that propaganda deviates from "Standard English" norms, justifying your use of the more complex CNN-BiLSTM-CRF or Transformer architectures.
+
+### 6.3 Error Analysis (Failure Modes)
+Identify specific techniques (e.g., "Causal Simplification") where models failed and discuss the causes (e.g., data sparsity vs. lack of syntactic context).
+- **Confusion Matrix Analysis:** Discuss why "Doubt" might be frequently confused with "Loaded Language".
+- **Boundary Errors:** Analyze if the model failed on very short snippets (1-2 words) vs. long, complex spans.
+
+---
+
+## 7. Conclusion and Further Work
+Summarize which hypothesis held the most weight across the experiments.
+
+**Further Work:** Suggest more complex data augmentations (e.g., Back-Translation) or the exploration of POS-only models to further decouple words from syntactic patterns.
+
+## Strategic Tips for High Marks:
+**Academic Style:** Ensure all major technical points (like the "Label Bias Problem" or the "Distributional Hypothesis") are backed up with references from your module notes or external literature.
+
+**The "Joint Signal" Argument:** Your plan for Variation 2 in Task 2 is a strong point of "creative thought." Devote space in the analysis to explaining how the model uses the "breadcrumbs" of specific technique tags to knit together ambiguous boundaries.
+
+**Code Appendix:** Ensure your .ipynb or .py files are clearly commented and mirror the methods described in the report.
+
+---
