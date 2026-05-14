@@ -497,6 +497,15 @@ This demonstrates Transfer Learning and Domain Adaptation. You can argue in your
 
 
 
+
+
+
+
+
+
+
+
+
 ## Potential Ideas
 In this section I have a collect ideas that I may or may not integrate into the report itself. Often in places they are supplementary peices so will depend on how much time I have.
 
@@ -593,6 +602,10 @@ ELI5 (Explain Like I'm Five): A library specifically designed to show text impor
 
 ---
 
+When training your model, keep in mind that the repetition label is often a "global" feature (repetition across texts) that is difficult to detect in a "local" context (a single sentence). If your assignment involves local sequence tagging, you might find that your model struggles with these instances unless you provide broader context or treat them as recurring "slogans." The other techniques like Loaded Language and Name Calling are much more localized and should be easier for a standard NLP model to identify.
+
+---
+
 # 4. Structure
 
 1. [Introduction](#1-introduction)
@@ -633,10 +646,42 @@ Briefly mention the Propaganda Techniques Corpus (Da San Martino et al., 2020) w
 Discuss the evolution from Bag-of-Words to Contextualized Embeddings (BERT/DeBERTa) and the use of CRFs for sequence labeling.
 
 ## 2.1 Dataset Exploration and EDA
+
+### 2.1.1 Dataset Introduction
+
+
+
+### 2.1.2 Data Augmentation
+- part-of-speech (PoS)
+- named entity (NE) 
+
+> this result in a 3 dimensional token vector
+
+> Team LTIatCMU(SI:4) (Khosla et al., 2020) used a multi-granular BERT BiLSTM model with additional syntactic and semantic features at the word, sentence and document level, including PoS, named entities, sentiment, and subjectivity. It was trained jointly for token and sentence propaganda classification, with class balancing. They further fine-tuned BERT on persuasive language using 10,000 articles from propaganda websites, which turned out to be important.
+
+#### Silver Data
+It would be a good idea to supplement the data by creating "silver" data. The paper is back from 2021 so they didn't have access to the strength of generative models that we do now. Therefore, an "easy" option might just be to take this route. The issue pertains to checking that the create statements are relevant and suitable which could quite an involved task itself. 
+
+> Team ApplicaAI(SI:2) (Jurkiewicz et al., 2020) based its success on self-supervision using the RoBERTa model. They used a RoBERTa-CRF architecture trained on the provided data and used it to iteratively produce silver data by predicting on 500k sentences and retraining the model with both gold and silver data. The final classifier was an ensemble of models trained on the original corpus, re-weighting, and a model trained also on silver data. 
+> 
+> Team UPB(SI:5) (Paraschiv and Cercel, 2020) decided not to stick to the pre-trained models from BERT–base alone and used masked language modeling to domain-adapt it using 9M articles containing fake, suspicious, and hyperpartisan news articles. 
+>
+> Team DoNotDistribute(SI:22) (Kranzlein et al., 2020) also opted for generating silver data, but with a different strategy. They report a 5% performance boost when adding 3k new silver training instances. To produce them, they used a library to create near-paraphrases of the propaganda snippets by randomly substituting certain PoS words. 
+> 
+> Team SkoltechNLP(SI:25) (Dementieva et al., 2020) performed data augmentation based on distributional semantics. 
+>
+> Finally, team WMD(SI:33) (Daval-Frerot and Yannick, 2020) applied multiple strategies to augment the data such as back translation, synonym replacement and TF.IDF replacement (replace unimportant words, based on TF.IDF score, by other unimportant words).
+
+#### Additioanal Data
+
+
+> Team LTIatCMU(SI:4) (Khosla et al., 2020) ... They further fine-tuned BERT on ≥persuasive language using 10,000 articles from propaganda websites, which turned out to be important.
+
+
+### 2.1.3 EDA
 Reasons to do EDA:
 1. Validating the hypothesis. Assumed that propaganda is over-represented by abstract "trigger" words. An EDA showing Term Frequency (TF) or N-gram distributions can provide the first piece of empirical evidence for this.
 2. **Syntactic Integrity:** For Task 2, analyzing sentence lengths and span lengths justifies the use of a CRF to handle structural dependencies.
-
 
 - Classes
 - Frequencies
@@ -665,6 +710,14 @@ Document settings for both models (e.g., vocabulary size, embedding dimensions, 
 ---
 
 ## 4. Methodology: Task 2 (Span Identification)
+
+IMPORTANT: IT IS LIKELY THAT THE CORRECT THING TO DO FOR THIS ASSESMENT IS ADAPT THE MA AND HOVY ARCHITECTURE FROM CNN-BiLSTM-CRF to BERT-CRF with wordpiece instead of CNN. this would get more marks as otherwise it is a direct copy from the model we studied in class. 
+
+need to check what else it requires changing, i think there is stuff around input size
+
+need to justify it as well, what are the improovements in using a transformer, is it just efficency or there other gains?
+
+https://gemini.google.com/share/92f61ae4e9e4 
 
 ### Variation 1: The Pipeline (Binary BIO + Classifier):
 Describe the "bolt-on" approach where you first detect if text is propaganda before classifying what type it is.
