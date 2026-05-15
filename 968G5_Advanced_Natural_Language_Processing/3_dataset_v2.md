@@ -1,106 +1,80 @@
 # 3. Data Characterization and Representation Strategy
+The follow section(s) are dedicated to introducing, explaining and exploring the underlying training data set. 
+
+3.1 introduces the corpus and its features
+3.2 explains any data enrichment executed
+3.3 conduct eda
+3.4 explains any data augmentation 
+3.5 decribes the includsion of any external data not related to the training corpus
+
+---
 
 ## 3.1 Corpus Overview
-*The primary dataset utilized in this study is a subset of the Propaganda Techniques Corpus (PTC) provided by Da San Martino et al. (2020). The training set consists of approximately 2,500 labeled instances across 9 categories. Each instance provides a sentence containing a propaganda snippet delimited by <BOS> and <EOS> markers.* 
+The dataset supplied for this report appears to be a subset or inspired by the Propaganda Techniques Corpus (PTC) created by Da San Martino et al. (2020) for the SemEval-2020 Task 11. Our dataset contains 2414 rows and uses a 8 labels which are taken directly from the Da San Martino et al. (2020) paper as well as an additional `not_propaganda` label, making 9 in total. In additional to the labels, each instance holds a sequence containing a propaganda snippet delimited by <BOS> and <EOS> markers. This structure means that we have access to both the "propaganda" marked language as well as its sentinal context. 
 
-*This structure allows for the decoupling of local snippet features from the wider sentential context—a requirement for the comparative analysis of Tasks 1 and 2.*
+1. flag waving
+2. appeal to fear prejudice
+3. causal simplification
+4. doubt
+5. exaggeration,minimisation
+6. loaded language
+7. name calling,labeling
+8. repetition
+9. not propaganda
 
-> reword, the counts and labels aren't correct. 
-> 
-> Provide examples
-> 
-> Labels and definitions direct from Da San 2020
->
-> No reason for the second part to the writen as it is but would be good to clear explain that their are two parts to the data snippet and context
+> provide examples of instances (raw)
 
-## 3.2 Exploratory Data Analysis (EDA)
-To motivate the architectural choices in Section 4, a comprehensive EDA was performed.
+The data was cleaning, focusing on digital artifacts that do not represent any intended context from the write/speaker themselves. However, all grammar, spelling variations and punctuation was left in as the context of this tasks this demonstates meaning and intent. 
 
-TODO: need a checklist of all things to look at during EDA. 
-- Read in Dataset
-- 2414 rows
-- Allegedly matches standard PTC-SemEval20 training set (need to check this)
+The original source of data from da san martin was collected from a "sample of news articles from the period starting in mid-2017 and ending in early 2019." therefore due to the formal nature of the news outlets we can rely on the understanding that the typography used is intentional. 
 
-### Label Freqs
-- Class Freqs show that the given dataset is quite balanced. 
-- 9 labels including not_propaganda
-- not_propaganda               1191
-- exaggeration,minimisation     164
-- causal_oversimplification     158
-- name_calling,labeling         157
-- loaded_language               154
-- appeal_to_fear_prejudice      151
-- flag_waving                   148
-- repetition                    147
-- doubt                         144
-- *while a standard imbalance exists between propagandistic and non-propagandistic text (ratio of ~1:8), the eight specific propaganda techniques are remarkably balanced, with each containing approximately 150 instances*
-- *This allows for a more controlled comparison of the Lexical Trigger Hypothesis (H1) across categories, as no single technique benefits from a disproportionately larger training signal.*
-- Additionally, with respect to trigger words, an equal weighting among classes gives us adequate substrate the analysis if there are few words per label and if there any mutual prop words accross categories. 
-- This creates a "pure" environment to test H1 (Lexical Trigger). Since no class has a frequency advantage, the model must rely on the specific words or structures to distinguish between them. (Should be the same for H1)
+the cleaned sequence itself was tokenized using the nltk package and the index bounds of the propaganda tags extracted and stored as a tuple allow for the sequence and snippet to be accessed ad-hoc. 
 
-
-**Evaluation Considerations:**
-- Macro-averaging calculates the F1-score for each class independently and then takes the unweighted mean of those scores. Every class is treated as equally important, regardless of how many samples it has.
-- For a single-label multi-class task, Micro-F1 is mathematically identical to Accuracy. It provides a "false sense of security" because a model can achieve a high score by simply being very good at identifying the common not_propaganda label while failing on the rarer techniques.
-- Macro-F1 vs. Micro-F1 (Accuracy): In this specific scenario, Macro-F1 and Micro-F1 will be very similar, if not identical.
-- Micro F1 is always mathematically identical to Accuracy in any multi-class classification task where each instance is assigned to exactly one label.
-- Every mistake the model makes is counted twice in the "Micro" calculation: once as a False Positive (the model guessed Class A but it wasn't) and once as a False Negative (the model failed to guess Class B when it should have). Because total $FP = total FN$, the formula for Micro Precision and Micro Recall becomes identical to the formula for Accuracy.Since Precision and Recall are the same, their harmonic mean (F1) is also the same value.
-- Loss of "Imbalance Bias": In an imbalanced dataset, Accuracy/Micro F1 is often "misleading" because it hides poor performance on small classes. In your balanced Task 1, this bias is gone. Accuracy becomes a more "honest" metric for overall system performance.
-- Even with a balanced dataset, you should still report Macro F1. Why? Because it demonstrates that you are evaluating the model's ability to treat each rhetorical technique as a distinct "specialty." It proves you aren't just looking for an easy overall score but are interrogating the model's performance on a per-technique basis.
-- of a model was perfect on 4 labels but 0% on the other 4 both micro and macro would come out at 50%.
-- macro has lost the advantages it has in an imbalanced setting like da san and e-val
-- macro should still be the eval chose because we know these dataset by nature are imbalanced. if we want to run this model in the future with new data it will likely be imbalanced
-- Imbalanced Data: Micro = High (Misleading), Macro = Low (Honest). (They diverge).
-- Macro-Average F1 is the only reliable way to perform a fair "apples-to-apples" comparison between a balanced model and an imbalanced one.
-- Macro F1 doesn't care how many samples were in the training set for a specific class; it only cares about the effectiveness of the model on that class during testing.
-
-**Data Augmentation Evaluations**: 
-- In the brief, I have set out a desire to produce silver data. one of the motivations was to balance the classes but clear this is not an issue anymore. 
-- However, it now means that the augmentation needs to be capable of producing reliable data for each class
-- Although, maybe this isn't strictly true and the results will just show it performs poorly on the silver data for certain task which would be a good thing to highlight and provides scope for future study
-- This links well to the evaluation points and macro f1. this is the only metric that will allow us to comapre between models if the silver data comesout imbalanced for wahtever reason. 
-
-**Loss Function Consdieration**:
-The labels are balances but the non label is highly skewed. For training task 2, the model might be inclined to lazy guess not propaganda (?)
-- I am not sure that this is an issue.
-- In fact this is something that needs to be dicussed before training
-- It is correct to **test** against the non_prop label? I don't think it makes sense.
-- It makes sense to train against it but in terms of a metric we don't care it is gets the non-prop spans correct
-
---- 
-
-### Sequence Length Analysis
-
-#### Summary Stats for Snippet Length
-- Huge disparity in mean lengths for different categories.
-    - repetition (2.84), loaded language (3.57) 
-    - causal_oversimplification (21.58), doubt (20.57)
-    - it will be interested to see the eval matrix between these categories with similar mean lengths
-    - short mean averages, and snippets in general, play into the hypothesis 1, i.e. the power is likely to be in the words themsevles.
-- All categories (apart from `causal_oversimplification`) contain 1 length snippets but its counts they are comparatively a percentage. 
-- Although in Repetition they make up 47% almost half of the sample.
-- Interestingly, the `not_propaganda` label makes up 21% of itself sample which puts it 3rd on the list of 1 length snippets. 
-
-#### Summary Stats for Context Length
-
-
-
-
-
-
-
-
-
+---
 
 ## 3.3 Feature Enrichment & Representation
-Given the limited size of the training corpus, a multi-granular approach to data representation was adopted.
+Prior to executing even basic EDA the time was taken to enrich the dataset through the means of POS and Named Enity tagging. 
 
-### Enrichment:
-Every token was augmented with Part-of-Speech (PoS) and Named Entity (NE) tags. This creates a three-dimensional feature vector, allowing the sequence labeler (Task 2) to recognize that propaganda spans frequently align with specific syntactic boundaries, such as noun phrases or emotive predicates.
+This was important to do at this stage as we have already outline two key hypothesis which are heavily dependent on the structure and meaning of language itself. EDA probably won't enable to confirm our hypos but it would give us the chance to revist them if results needed. Furthmore, it would be of benefit to the flow of the paper for EDA to be conducted on these tags too. 
 
-> "Token-Level Sentiment and Subjectivity: To further refine the model's awareness of emotional valence, I implemented token-level sentiment tagging using the SentiWordNet lexicon. Unlike sentence-level sentiment, which can dilute the signal of a short manipulative span, token-level tagging assigns a three-dimensional vector (Positivity, Negativity, Objectivity) to every word. This allows the classifier to identify 'lexical heat'—the specific emotional triggers hypothesized in H1—and provides the BIO-CRF model with a non-lexical signal to help resolve 'soft boundaries' in techniques like Loaded Language and Appeal to Fear."
-> 
-> Caution: Watch out for "Objectivity." In propaganda, many words are technically "Objective" (like "immigrants" or "elite") but become "Subjective" through their context. This is why combining Contextualized Embeddings (BERT) with Static Sentiment Lexicons is so effective: one provides the "rule-book" meaning, and the other provides the "in-sentence" meaning.
+Outside of EDA, the dataset was entriched with these tags do give the tasks, particularly task 2 span idenrification, a better chanced of acheiving the desired goals. Propaganda spans frequently align with specific syntatic boundaries such as noun phrases. Or as suggested in H2, potentially pertain to their own unique synatic boundaries which will make them identifying these unique passages of text easier. Additioanlly, a method described later known as CRF relies on just tags to enforce its "rules". 
+
+**POS:** tagged using nltk `averaged_perceptron_tagger` and applied to each sequence in full; snippet + context
+
+**Named Entity:** tagged using spacy, "en_core_web_sm"
+
+A short check was executed to ensure that the lengths of that tagged sequences align to the length of the full sequence to ensure there are not mistakes that the 3 can later being joined together as a 3-tesnor.
+
+> Team LTIatCMU(SI:4) (Khosla et al., 2020) used a multi-granular BERT BiLSTM model with additional syntactic and semantic features at the word, sentence and document level, including PoS, named entities, sentiment, and subjectivity. It was trained jointly for token and sentence propaganda classification, with class balancing. They further fine-tuned BERT on persuasive language using 10,000 articles from propaganda websites, which turned out to be important.
+
+> aare there any more pos or ner references from da san?
+
+---
+
+## 3.3 Exploratory Data Analysis (EDA)
+To motivate the architectural choices in Section 4, a comprehensive EDA was performed.
+
+### EDA Checklist
+
+#### Phase 1: Distribution & Sequence EDA
+1. [ ] **Class Imbalance Check:** Visualize the count of each label and the total data instances. 
+2. [ ] **The "Snippet-to-Sentence" Ratio:** What percentage of the full_sequence is actually the snippet
+3. [ ] **Sequence Length Density:** Plot the distribution of all_tokens lengths vs. snippet lengths.
+4. [ ] **Summary Statistics for Snippet Length:** Mean, min, max, etc
+5. [ ] **Summary Statistics for Context Length:** Mean, min, max, etc
+6. [ ] **Distribution of Context Left vs Right:** Do any of the classes exhibit a skew for context on onside? this also tell us if any classes as a bias for the snipper position, i.e. at the end after rhetoric buildup where the context will be very important.
+#### Phase 2: Lexical & Morphological EDA (H1 Testing)
+7. [ ] **POS Tag Distribution (Heatmap):** Compare the frequency of POS tags (JJ, NNP, VB, etc.) within the snippets for each label.
+8. [ ] **Proper Noun Analysis (NER):** Identify which entities (PERSON, ORG, GPE) appear most often within snippets.
+9. [ ] **Unique N-Gram Analysis:** What are the top 2-word or 3-word phrases that only appear in specific propaganda classes? This probably wont be possible given the lack of data in each class but failure to produce good bi-grams or tri-grams means that such techniques will not be justifable later in the modelling phases, so important to highlight this now. 
+#### Phase 3: Structural & Positional EDA (H2 Testing)
+10. [ ] **Relative Position Analysis:** Calculate start_idx / len(all_tokens). Plot this for each label.
+#### Phase 4: Correlation & Complexity
+11. [ ] **Label Confusion (Theoretical):** Identify which labels share the most common words/POS tags.
+12. [ ] **Vocabulary Growth (Heaps' Law):** How many new words are introduced as you see more examples of a specific label?
+
+---
+
 
 
 ## 3.4 Data Augmentation & Domain Adaptation
@@ -111,6 +85,16 @@ To increase the training volume, 3,000 "silver" instances were generated via Bac
 > 
 > On Training Set Size (2.5k): You are correct; 2,500 rows is very small for a Transformer. This makes your "External Data" and "Augmentation" sections the most important parts of your report for justifying why your model didn't just overfit to specific keywords.
 
+> Team ApplicaAI(SI:2) (Jurkiewicz et al., 2020) based its success on self-supervision using the RoBERTa model. They used a RoBERTa-CRF architecture trained on the provided data and used it to iteratively produce silver data by predicting on 500k sentences and retraining the model with both gold and silver data. The final classifier was an ensemble of models trained on the original corpus, re-weighting, and a model trained also on silver data. 
+> 
+> Team UPB(SI:5) (Paraschiv and Cercel, 2020) decided not to stick to the pre-trained models from BERT–base alone and used masked language modeling to domain-adapt it using 9M articles containing fake, suspicious, and hyperpartisan news articles. 
+>
+> Team DoNotDistribute(SI:22) (Kranzlein et al., 2020) also opted for generating silver data, but with a different strategy. They report a 5% performance boost when adding 3k new silver training instances. To produce them, they used a library to create near-paraphrases of the propaganda snippets by randomly substituting certain PoS words. 
+> 
+> Team SkoltechNLP(SI:25) (Dementieva et al., 2020) performed data augmentation based on distributional semantics. 
+>
+> Finally, team WMD(SI:33) (Daval-Frerot and Yannick, 2020) applied multiple strategies to augment the data such as back translation, synonym replacement and TF.IDF replacement (replace unimportant words, based on TF.IDF score, by other unimportant words).
+
 
 
 ### Domain Adaptation:
@@ -119,9 +103,3 @@ To address the small 2.5k row constraint, a DeBERTa model was subjected to inter
 > On Pre-training vs. Fine-tuning: If you take a base BERT model and train it on a general news corpus before your specific task, that is called Domain Adaptation or Intermediate Fine-Tuning. The final pass on your 2.5k rows is Task-Specific Fine-tuning.
 > 
 > Need to work out the exact external dataset
-
-### Snippet Boundary Jitter (Robustness to Soft Boundaries): 
-Randomly shift the <BOS> and <EOS> markers by one or two tokens in either direction.Principle: Human agreement on spans is often low ($\gamma=0.6$); jittering teaches the model to be robust to "fuzzy" boundaries rather than overfitting to exact character offsets.
-> might not do this. seems important is justafible but there is the issue of short snippets and snippets with no boundary
-
----
