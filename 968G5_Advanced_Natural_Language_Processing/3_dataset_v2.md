@@ -32,7 +32,7 @@ the cleaned sequence itself was tokenized using the nltk package and the index b
 
 ---
 
-## 3.3 Feature Enrichment & Representation
+## 3.2 Feature Enrichment & Representation
 Prior to executing even basic EDA the time was taken to enrich the dataset through the means of POS and Named Enity tagging. 
 
 This was important to do at this stage as we have already outline two key hypothesis which are heavily dependent on the structure and meaning of language itself. EDA probably won't enable to confirm our hypos but it would give us the chance to revist them if results needed. Furthmore, it would be of benefit to the flow of the paper for EDA to be conducted on these tags too. 
@@ -75,29 +75,104 @@ To motivate the architectural choices in Section 4, a comprehensive EDA was perf
 
 ---
 
+## 3.4 Data Augmentation (Silver Data)
+Excluding the the not_propaganda labels, there are only 1223 labels spread across 8 categories with approx 160 labels in each. 
+
+For NLP standards this is not a huge amount of data meaning that any models are prones to overfitting to the limited signals. 
+
+This is particularly true if we are to consider H1 which hypos it is the words that are most important for unveiling propaganda. if certain words are over represented in this subset then any most will almost be foreced to overfit on the test set. 
+
+Therefore we take the route of data augmentation, specifically though the route of generating a 1-to-1 silver dataset, increase the training set by another 1223. This additional data will be refered to as the silver set
+
+from the da san eval:
+- Team ApplicaAI(SI:2) (Jurkiewicz et al., 2020) They used a RoBERTa-CRF architecture trained on the provided data and used it to iteratively produce silver data by predicting on 500k sentences and retraining the model with both gold and silver data.
+- Team UPB(SI:5) (Paraschiv and Cercel, 2020) used masked language modeling to domain-adapt it using 9M articles containing fake, suspicious, and hyperpartisan news articles
+- Team DoNotDistribute(SI:22) (Kranzlein et al., 2020) also opted for generating silver data, but with a different strategy. They report a 5% performance boost when adding 3k new silver training instances. To produce them, they used a library to create near-paraphrases of the propaganda snippets by randomly substituting certain PoS words. 
+- Team SkoltechNLP(SI:25) (Dementieva et al., 2020) performed data augmentation based on distributional semantics.
+ 
+However, this paper was released in Dec 2020. Meaning it either completely pre-dated or intersected with the LLM revolution
+
+*The timeline of the SemEval-2020 competition completely predated or actively collided with the release of the foundational GPT-3 paper, "Language Models are Few-Shot Learners" (Brown et al., 2020).*
+
+*The training data for Task 11 was released in late 2019, and the actual evaluation/competition period concluded in March 2020 (Spala et al., 2020). Participants wrote and submitted their system description papers around April and May 2020.*
+
+*The GPT-3 Release (May 28, 2020): The landmark GPT-3 paper was first uploaded to arXiv on May 28, 2020 (Brown et al., 2020).*
+
+*In early 2020, the undisputed kings of NLP benchmarks were encoder-only masked language models like BERT and RoBERTa, or encoder-decoder architectures like T5.*
+
+*In early 2020, the undisputed kings of NLP benchmarks were encoder-only masked language models like BERT and RoBERTa, or encoder-decoder architectures like T5.* 
+
+Therefore, we take a route not demonstated in the original sa san paper 
+
+Zero-shot, need reference, also compare to few-shot which needs a refernce too
+
+Zero-shot more approprate as propganda has less strict rules passing in a example might force the model to think that this particular few short examples are what it needs to do
+
+Chain of thought, mutlistep process to alternate the data
+
+the goal is change the snippet, the propaganda itself. however, this is usually part of a wider context (not always)
+
+therefore it is not as simple as changing the snippet blindly..
+
+> move onto explaining the approach in full
+
+- We start with the full dataset and remove the not_prop field. this is because task 1 only focuses prop labelled and for task 2, not_prop is alrady the majority category, plus we do not have enough info about how the not_prop in our particular dataset is collect. it could be bias and hence gneerative based on it would be bias also. 
+- model chosen was `Meta-Llama-3-8B`
+- it is open-course 
+- fast and cheap but bigger models better
+- was not localled run due to hardware constraints but it could have been
+- local model of `dolphin-llama3` was chosen which is a community based model with less constaints
+- many standard models struggle with this task because they are programmed to not participate in prop etc
+- that said, the hostteled version of Meta-Llama-3-8B togerher ai is less restricted
+- tempurature was set to 0.7 to encourage variabliltiy in generative
+- chain of thought helper function to retain prompt context in the context window
+- prompts are not kept in the window to reduce risk of prompt confusion in the CoT
+- prompt 1: given the snippet and asked to reword 
+- job as linguistics expert to reword given text
+- told that text is labelled it X but cannot be given label description because it breaks models terms, i.e. engaging in hateful or prop
+- "Generate 3 alternatives to the snippet that serve the same purpose as guided by the label definition."
+- Use a range of lexical semantics: synonyms for intensity, hypernyms for generalization, or paraphrasing.
+- temp 0.7 to help with this and collect a range of ideas. 
+- told to explain suitablitiy of each suggestion
+
+- prompt 2: given the left and right context that surrounds the snippet
+- asked to review 3 generative options to see if they still make sense given the immediate surrounds
+- if they don't to suggest something new
+- p2 used to be two seperate prompts by conbined to reduce run time
+
+- prompt 3: based on the reason in the previous 2 context windows, select the best snippet
+- told to ensure it is:   
+    - 1. Rhetorically powerful ({label})
+    - 2. Grammatically perfect within the context.
+    - 3. Distinct from the original.
+- told to output the snippet in a mask between tags: <final_output> INSERT SNIPPET HERE </final_output>
+- STOP: Do not write anything else after the closing tag.
+
+- post proseccing in python is applied to try and extract the generate snipper
+- regex looking between the tags <final_output> </final_output>
+- a few catches
+- if the output snipper is exactly the same as the input snippet then cot is re-run, upto 3 times (2 retry + orig)
+- sometimes the model failed on the mask and hallicunates the left/right context within the tags
+- regex used to strip this out
+    - also strip out over lap of 15 letters or more
+- if failure to produce tags or anyting in the tags then run again
+- some instances (count) of 1st failure but never more than 1
+
+- output snippet is put into the same format at the gold set: left cont <bos> snippet <eos> right context
+- this way anything that happens to the gold can be applied to the silver
+
+- batch processed in 100s with back up
+- logged to check failures
+- jioned to gold dataset at the end by matching index
+- saved as extrnal file
 
 
-## 3.4 Data Augmentation & Domain Adaptation
+# TODO: needs to enrich silver and then run base similarty EDA. 
+# TODO: probably just basic pos and EDA composition 
 
-### Augmentation (Silver Data):*
-To increase the training volume, 3,000 "silver" instances were generated via Back-Translation and GPT-4 paraphrasing of under-represented classes.
-> not sure that I plan to use back-translation
-> 
-> On Training Set Size (2.5k): You are correct; 2,500 rows is very small for a Transformer. This makes your "External Data" and "Augmentation" sections the most important parts of your report for justifying why your model didn't just overfit to specific keywords.
+---
 
-> Team ApplicaAI(SI:2) (Jurkiewicz et al., 2020) based its success on self-supervision using the RoBERTa model. They used a RoBERTa-CRF architecture trained on the provided data and used it to iteratively produce silver data by predicting on 500k sentences and retraining the model with both gold and silver data. The final classifier was an ensemble of models trained on the original corpus, re-weighting, and a model trained also on silver data. 
-> 
-> Team UPB(SI:5) (Paraschiv and Cercel, 2020) decided not to stick to the pre-trained models from BERT–base alone and used masked language modeling to domain-adapt it using 9M articles containing fake, suspicious, and hyperpartisan news articles. 
->
-> Team DoNotDistribute(SI:22) (Kranzlein et al., 2020) also opted for generating silver data, but with a different strategy. They report a 5% performance boost when adding 3k new silver training instances. To produce them, they used a library to create near-paraphrases of the propaganda snippets by randomly substituting certain PoS words. 
-> 
-> Team SkoltechNLP(SI:25) (Dementieva et al., 2020) performed data augmentation based on distributional semantics. 
->
-> Finally, team WMD(SI:33) (Daval-Frerot and Yannick, 2020) applied multiple strategies to augment the data such as back translation, synonym replacement and TF.IDF replacement (replace unimportant words, based on TF.IDF score, by other unimportant words).
-
-
-
-### Domain Adaptation:
+## 3.5 Domain Adaptation
 To address the small 2.5k row constraint, a DeBERTa model was subjected to intermediate fine-tuning on a 10,000-article news corpus from 2017–2019, ensuring the model's base weights are adapted to the specific linguistic era of the Da San Martino dataset.
 
 > On Pre-training vs. Fine-tuning: If you take a base BERT model and train it on a general news corpus before your specific task, that is called Domain Adaptation or Intermediate Fine-Tuning. The final pass on your 2.5k rows is Task-Specific Fine-tuning.
