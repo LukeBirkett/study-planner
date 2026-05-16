@@ -12,6 +12,7 @@ w3env/
 w4/
 ml_labs/
 *env/
+.env
 
 # --- New Wildcard Rule for Future Environments ---
 # Ignores any directory named 'venv_' followed by any characters, anywhere in the repo.
