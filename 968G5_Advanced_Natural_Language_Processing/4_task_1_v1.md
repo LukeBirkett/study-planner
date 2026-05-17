@@ -22,19 +22,8 @@
 > pure classical classifcation baseline
 
 > snippet and then snippet + context
-
-### Baseline 2: Bi-gram BoW (Local Phrasing)
-*To introduce a primitive handle on sentence structure, I extend the BoW model to include bi-grams. This allows the model to capture "abstract pairings" (e.g., specific adjective-noun combinations) that a unigram model would overlook, providing an initial test for the Structural Irregularity Hypothesis (H2).*
-
-> partially a development on unigram but also demonstrates the low possible approach to aknowledging structure. it idea is that if this performs well, and well compared to transformer, then we might be able to say partially disprove H2, or rack lower than H1, by saying it does matter but not to the extreme naunced extent previous assumed. Furthermore, in the analysis, we can compared labels on a granular level, if bi-grams do well in some places but not other it could just be due to the sparsity found in language. 
-
----
-
-*Both baselines utilize a fixed vocabulary derived from the training set with a designated [UNK] token for out-of-vocabulary terms. The resulting sparse vectors are passed into a standardized Multi-Layer Perceptron (MLP) classification head.*
-
-> Should there be a variety of baselines? do we include the silver data? probably yes as an additional. 
-> 
-> Could stagger the baselines as snippet vs snippet and context as well. this might highlist some issues with the approach and sparsity early on. 
+ 
+> Could stagger the baseline as snippet vs snippet and context as well. this might highlist some issues with the approach and sparsity early on. 
 
 ---
 

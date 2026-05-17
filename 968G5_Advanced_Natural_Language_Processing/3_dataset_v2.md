@@ -164,11 +164,7 @@ therefore it is not as simple as changing the snippet blindly..
 - batch processed in 100s with back up
 - logged to check failures
 - jioned to gold dataset at the end by matching index
-- saved as extrnal file
-
-
-# TODO: needs to enrich silver and then run base similarty EDA. 
-# TODO: probably just basic pos and EDA composition 
+- saved as extrnal filex
 
 ---
 
