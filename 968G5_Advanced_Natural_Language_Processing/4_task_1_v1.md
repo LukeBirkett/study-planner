@@ -1,5 +1,5 @@
 # 4. Methodology: Task 1 (Classification)
-*Task 1 is a multi-class classification problem requiring the identification of one of nine propaganda techniques (including not_propaganda) within a given snippet and its sentential context. To evaluate the relative importance of lexical choice versus linguistic structure, I implement a tiered lineage of models: starting with frequency-based baselines, progressing to semantic concept modeling (Word2Vec), and concluding with contextualized attention mechanisms (Transformers).*
+*Task 1 is a multi-class classification problem requiring the identification of one of 8 propaganda techniques (excluding not_propaganda from the 9) within a given snippet and its sentential context. To evaluate the relative importance of lexical choice versus linguistic structure, I implement a tiered lineage of models: starting with frequency-based baselines, progressing to semantic concept modeling (Word2Vec), and concluding with contextualized attention mechanisms (Transformers).*
 
 > reword and check labels
 > 
@@ -24,6 +24,8 @@
 > snippet and then snippet + context
  
 > Could stagger the baseline as snippet vs snippet and context as well. this might highlist some issues with the approach and sparsity early on. 
+
+*“To evaluate the true necessity of surrounding sentence structure, the Bag-of-Words and Word2Vec models are implemented across a staggered text constraint: (1) Snippet-Isolated, where the model evaluates only text inside the target boundaries, and (2) Unified Sequence, where the full sentence string is evaluated. This ablation experiment establishes an explicit empirical baseline for measuring whether contextual framing is structurally mandatory for classification or whether local lexical choices provide sufficient signal.”*
 
 ---
 
@@ -77,6 +79,8 @@
 
 "In my Word2Vec baseline, I treat the snippet as a Bag-of-Embeddings. While Word2Vec vectors capture semantic similarity via the distributional hypothesis (the 'window' method used during pre-training), they remain static. This means the model cannot distinguish between different senses of a word or recognize how a specific 'abstract pairing' in a propaganda snippet changes the meaning of its constituent words. This limitation justifies the transition to Contextualized Embeddings (BERT/DeBERTa), which use self-attention to generate token representations that are aware of the unique, often irregular, structure of the input sentence."
 
+*“While frameworks like Gensim support online vocabulary updates (update=True), a decision was made to freeze the pre-trained Google News Word2Vec weights and treat the model strictly as a static semantic dictionary. Fine-tuning dense embeddings on small specialized datasets with highly asymmetric term frequencies introduces Catastrophic Interference, warping the semantic spatial coordinates of pre-existing vectors and compromising their distributional integrity. Freezing the embeddings preserves a rigid, uncorrupted control variable for testing the Semantic Concept Hypothesis (H1).”*
+
 ---
 
 ## 4.3 Approach 2: Transformer Architecture (DeBERTa)
@@ -118,6 +122,8 @@ The final approach utilizes a Transformer-based model to resolve the meaning of 
 - **High-Tech (Transformer + Interpretability):** Use the big model to see if the "contextual nuance" actually adds anything over the BoW approach.
 
 > There needs to be something mentions about how transformers don't by definition understand order and therefore we need to add the position tokens. Here there will likely be a caveat with respect to the exact bert model chose
+
+*“Standard encoder-based classifiers utilize the [CLS] token as a global, unweighted summary of the entire sentence string. For a localized task like span identification, global pooling dilutes the signal of the manipulative device by averaging it across neutral background text. Critically, because Transformer architectures employ all-to-all Self-Attention, the hidden states of the tokens inside the <BOS>/<EOS> boundaries have already attended to and encoded the contextual frame of the surrounding outer sentence. Therefore, Snippet-Specific Pooling extracts a highly concentrated representation of the propaganda device that remains fully context-aware, while completely bypassing the architectural smoothing weaknesses of a standard [CLS] token.”*
 
 ## 4.4 Hyper-parameter Configuration
 To ensure reproducibility and fair comparison, the following hyper-parameters were established. Settings for the MLP heads were standardized, while the DeBERTa model underwent a grid search for optimal fine-tuning rates.
