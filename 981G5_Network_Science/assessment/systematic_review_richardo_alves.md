@@ -222,3 +222,35 @@ team’s tactical configuration and the demands of their specific role
 
 [Zhou, W., Yu, G., You, S., and Wang, Z. (2023). **An improved passing network for evaluating football team performance**. Appl. Sci. 13:845. doi: 10.3390/app13020845](https://www.mdpi.com/2076-3417/13/2/845) 
 - I modern paper demonstating an approach to forming networks and using them to produce metrics and properties
+
+---
+
+#### Where are the Null Models?
+
+##### Dicipline Problem
+- isn't because it’s a solved problem, but rather due to a combination of disciplinary divides, structural constraints, and mathematical edge cases.
+- published in sports science, performance analysis, and sports psychology journals, rather than pure physics or network science journals
+- In sports science, Social Network Analysis (SNA) is largely used as an advanced descriptive tool
+- Researchers use metrics like betweenness centrality, degree centrality, or density as sophisticated box-score statistics to see if they correlate with performance outcomes
+- They are looking for practical coaching indicators, not testing structural hypotheses against an ensemble of randomized networks to prove topological anomalies.
+
+##### Small Problem
+- Traditional network science null models (like the Configuration Model or Erdős-Rényi graphs) rely on asymptotic behavior where the number of nodes $N \to \infty$.
+- features only 11 nodes on the pitch at any given time
+- When $N = 11$, degree-preserving randomization is incredibly constrained
+- If you try to wire an 11-node directed, weighted graph while keeping each player's in-degree and out-degree exactly intact, the number of unique valid isomorphic variations is remarkably small.
+
+##### The Spatial "Straw Man"
+- Football networks are spatially embedded and topologically constrained. A left-back passes to a left-winger or a central defender because of pitch geometry and tactical positioning.
+- If you run a classic, unconstrained null model that shuffles links globally, you create a baseline where a goalkeeper is just as likely to pass to a striker as to a center-back.
+- Comparing a real match to a completely unconstrained random model creates a "straw man" argument: it is trivial to reject the null hypothesis, but it yields zero actionable tactical insight for a coach.
+
+idea to isolate wide players acting as hubs over a season-long dataset is an excellent way to bridge the gap between pure network theory and applied sports science. It allows you to prove whether a winger's high centrality in a specific game is a genuine tactical Masterclass or simply a statistical artifact of how the opposing team pressed them.
+
+move beyond a completely random network and build a context-aware null model.
+
+Instead of randomizing links globally, shuffle pass frequencies only between matches that used the identical formation (e.g., a 4-3-3). This preserves the intrinsic topology of the system while testing if the specific individual's hub properties stand out against the formation's baseline.
+
+Use the players' average $X,Y$ coordinates during the match to build a distance-decay function. Simulate a random walk where the ball moves purely based on proximity. If a wide player's real centrality is significantly higher than this spatial random walk, you have statistical proof of a deliberate tactical bottleneck.
+
+This methodology elevates your project from a simple descriptive exercise into true statistical inference, demonstrating a deep comprehension of how network theory handles physical constraints.
