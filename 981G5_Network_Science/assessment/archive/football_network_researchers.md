@@ -22,27 +22,6 @@ Grund is frequently cited for early, influential work on how the structure of pa
 - **Duarte & Araújo:** Pioneers in applying Ecological Dynamics and complex systems theory to sports, focusing on how players self-organize based on spatial-temporal constraints.
 - **Peña & Touchette:** Noted for their early work (circa 2012) analyzing the passing networks of elite national teams, such as Spain and Germany, to visualize tactical dominance (Lopez Pena & Touchette, 2012).
 
-## Richardo Alves
-Ricardo Jorge da Conceição Alves is a highly relevant contemporary researcher for exactly what you are looking for. While some of the researchers mentioned earlier (like Buldú or Grund) established the field's foundations over a decade ago, Alves is currently producing the "state-of-the-union" work for the modern era of football network science.
-
-If Buldú is the "architect" of football network science, Ricardo Alves is its modern "clinician." He is a primary figure to follow if you want to see how the "true basics" of network science are being refined and used in the high-pressure environment of professional European football today.
-
-Alves recently led a major systematic review titled ["Social network analysis in football: a systematic review of performance and tactical applications" (published in Frontiers in Psychology, 2025)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2025.1659603/full)
-
-Unlike purely academic researchers, Alves is a Performance Analyst at SL Benfica, one of Portugal’s top clubs. This gives his work a distinct "applied" flavor that focuses on how network metrics actually help coaches make decisions.
-- **Research Focus:** He frequently explores how tactical systems (e.g., 1-4-3-3 vs. 1-3-4-3) and match outcomes (winning vs. losing) directly change the network metrics of a professional team.
-- **Key Findings:** His work on the Portuguese First Division has shown that "winning" isn't just about more passes; it's about specific network structures, such as higher clustering coefficients (cohesion) in winning efforts versus higher density (over-reliance) in losing ones.
-    - [Exploring team dynamics through network analysis: A season review of an elite Portuguese soccer team](https://www.researchgate.net/publication/390646433_Exploring_team_dynamics_through_network_analysis_A_season_review_of_an_elite_Portuguese_soccer_team)
-
-#### Key Papers:
-**Exploring team dynamics (2025):** A season-long review of an elite Portuguese team using network analysis.  
-
-**Positional Influence in Football Passing Networks (2025):** Analyzes how a player's position on the pitch dictates their "prestige" or centrality within the team's network.  
-
-**Analysis of the Portuguese National Team (2022):** A study of offensive interactions during the 2016 European Championship, which used network analysis to visualize how the team adapted its interaction style between the group stage and the knockout rounds.
-
-Would you like to know more about the specific network metrics—like "Degree Prestige"—that he uses in his analysis of professional teams?
-
 ---
 
 ## Papers
@@ -63,6 +42,15 @@ Cited by:
 
 Tarragó, J. R., Massafret-Marimón, M., Seirul·lo, F., & Cos, F. (2019). Entrenamiento en deportes de equipo: el entrenamiento estructurado en el FCB. Apunts Educación Física y Deportes. https://doi.org/10.5672/apunts.2014-0983.es.(2019/3).137.08
 Cited by: 45
+
+---
+
+[Dey, P., Ganguly, M., Sengupta, P., Roy, S. (2017). **Small World Network Formation and Characterization of Sports Network.** In: Satapathy, S., Bhateja, V., Udgata, S., Pattnaik, P. (eds) Proceedings of the 5th International Conference on Frontiers in Intelligent Computing: Theory and Applications . Advances in Intelligent Systems and Computing, vol 515. Springer, Singapore. https://doi.org/10.1007/978-981-10-3153-3_61](https://link.springer.com/chapter/10.1007/978-981-10-3153-3_61?fromPaywallRec=true)
+
+clustering coefficient, measures how well-connected
+a player is with their immediate neighbors, often reflected by
+the ability of players in creating triangles (Peña and Touchette,
+2012; Ramos et al., 2017; Ribeiro et al., 2017; Buldú et al., 2018).
 
 ---
 

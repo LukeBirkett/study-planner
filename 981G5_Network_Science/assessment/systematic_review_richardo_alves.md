@@ -1,40 +1,22 @@
-# Richardo Alves
-- contemporary researcher. compare to Buldú who is foundational. 
-- tactic systems and match outcomes (states) impacting the network metrics
-
-| Title | Author | Year | Link |
-| :--- | :--- | :--- | :--- |
-| Social network analysis in football: a systematic review of performance and tactical applications | Richardo Alves | 2025 | [Link](https://scholar.google.co.uk/citations?view_op=view_citation&hl=en&user=M2lgL5AAAAAJ&sortby=pubdate&citation_for_view=M2lgL5AAAAAJ:iyewoVqAXLQC) |
-| Positional Influence in Football Passing Networks: An Analysis of the Tactical Systems and Match Outcomes | Richardo Alves | 2025 | [link](https://scholar.google.co.uk/citations?view_op=view_citation&hl=en&user=M2lgL5AAAAAJ&sortby=pubdate&citation_for_view=M2lgL5AAAAAJ:R-LXmdHK_14C) |
-| Exploring team dynamics through network analysis: A season review of an elite Portuguese soccer team | Richardo Alves | 2025 | [link](https://scholar.google.co.uk/citations?view_op=view_citation&hl=en&user=M2lgL5AAAAAJ&sortby=pubdate&citation_for_view=M2lgL5AAAAAJ:dAp6zn-oMfAC) |
-| Network analysis of offensive dynamics in a Portuguese first division football team: insights from the 2020-2021 season | Richardo Alves | 2025 | [link](https://scholar.google.co.uk/citations?view_op=view_citation&hl=en&user=M2lgL5AAAAAJ&sortby=pubdate&citation_for_view=M2lgL5AAAAAJ:pQTOvowfQioC) |  
-
----
-
-<br>
-<br>
-<br>
-
-## Social network analysis in football: a systematic review of performance and tactical applications (2025)
+# Social network analysis in football: a systematic review of performance and tactical applications (2025)
 Reivew of current landscape of Network Science in Football. Reviews 55 Studies to evaluation how network science is used to measure performance, tactical behaviour and player interactions. Highlights evolations from static graphs to dynamic models utilizing tracking data. 
-
-**Findings:**
-- Cohesive network structures are strongly correlated with successful performance.
-- Central defenders and midfielders are consistently identified as the key tactical hubs
-- Mens football and offensive phases are underepresented
-- Defensive networks, youth, and women's football underrepresented
-
-**Base Network Science Applications:**
-- what constitutes a "Node" (players, or sometimes pitch zones) and an "Edge/Tie" (passes)
-- discusses looking at networks at the individual level (micro), small group formations (meso), and whole-team structures (macro).
-- discusses moving away from static match-long adjacency matrices toward dynamic time-window analysis and how structures evolve minute-by-minute or phase-by-phase
 
 [Supplementary Material](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2025.1659603/full)
 
 ---
 
+##### Contents:
+1. [Football Network Basics/Topics](#football-network-basicstopics)
+2. [Purpose for applying Networks to Football](#purpose-for-applying-networks-to-football)
+3. [Domain (Football) Considerations](#domain-football-considerations)
+4. [Other Data/Methods Applied to Football](#other-datamethods-applied-to-football)
+5. [Other Sports](#other-sports)
+6. [Network/Graph Theory](#networkgraph-theory)
+7. [Other](#other)
 
-#### Football Network Basics/Topics
+---
+
+## Football Network Basics/Topics
 - "In football, nodes represent players, while links depict their interactions, primarily through ball passes (Ramos et al., 2017)"
     - Would be good to find some references for other popular interactions used other then passes. 
 - "three distinct levels: micro (individual player metrics), meso (small groups of players), and macro (the entire team’s network)" (Buldú et al., 2018)
@@ -240,98 +222,3 @@ team’s tactical configuration and the demands of their specific role
 
 [Zhou, W., Yu, G., You, S., and Wang, Z. (2023). **An improved passing network for evaluating football team performance**. Appl. Sci. 13:845. doi: 10.3390/app13020845](https://www.mdpi.com/2076-3417/13/2/845) 
 - I modern paper demonstating an approach to forming networks and using them to produce metrics and properties
-
----
-
-#### Where are the Null Models?
-
-##### Dicipline Problem
-- isn't because it’s a solved problem, but rather due to a combination of disciplinary divides, structural constraints, and mathematical edge cases.
-- published in sports science, performance analysis, and sports psychology journals, rather than pure physics or network science journals
-- In sports science, Social Network Analysis (SNA) is largely used as an advanced descriptive tool
-- Researchers use metrics like betweenness centrality, degree centrality, or density as sophisticated box-score statistics to see if they correlate with performance outcomes
-- They are looking for practical coaching indicators, not testing structural hypotheses against an ensemble of randomized networks to prove topological anomalies.
-
-##### Small Problem
-- Traditional network science null models (like the Configuration Model or Erdős-Rényi graphs) rely on asymptotic behavior where the number of nodes $N \to \infty$.
-- features only 11 nodes on the pitch at any given time
-- When $N = 11$, degree-preserving randomization is incredibly constrained
-- If you try to wire an 11-node directed, weighted graph while keeping each player's in-degree and out-degree exactly intact, the number of unique valid isomorphic variations is remarkably small.
-
-##### The Spatial "Straw Man"
-- Football networks are spatially embedded and topologically constrained. A left-back passes to a left-winger or a central defender because of pitch geometry and tactical positioning.
-- If you run a classic, unconstrained null model that shuffles links globally, you create a baseline where a goalkeeper is just as likely to pass to a striker as to a center-back.
-- Comparing a real match to a completely unconstrained random model creates a "straw man" argument: it is trivial to reject the null hypothesis, but it yields zero actionable tactical insight for a coach.
-
-idea to isolate wide players acting as hubs over a season-long dataset is an excellent way to bridge the gap between pure network theory and applied sports science. It allows you to prove whether a winger's high centrality in a specific game is a genuine tactical Masterclass or simply a statistical artifact of how the opposing team pressed them.
-
-move beyond a completely random network and build a context-aware null model.
-
-Instead of randomizing links globally, shuffle pass frequencies only between matches that used the identical formation (e.g., a 4-3-3). This preserves the intrinsic topology of the system while testing if the specific individual's hub properties stand out against the formation's baseline.
-
-Use the players' average $X,Y$ coordinates during the match to build a distance-decay function. Simulate a random walk where the ball moves purely based on proximity. If a wide player's real centrality is significantly higher than this spatial random walk, you have statistical proof of a deliberate tactical bottleneck.
-
-This methodology elevates your project from a simple descriptive exercise into true statistical inference, demonstrating a deep comprehension of how network theory handles physical constraints.
-
-
-<br>
-<br>
-<br>
-
-#### Positional Influence in Football Passing Networks: An Analysis of the Tactical Systems and Match Outcomes (2025)
-micro-level (individual player) metric. analyzes how different starting formations (1-4-1-4-1, 1-4-3-3, 1-3-4-3) and match outcomes (win, loss, draw) influence a player's prominence in the passing network based on their position on the pitch.
-
-**Key Findings:**
-- Central defenders consistently exhibit the highest structural importance across almost all formations.
-- Strikers and wingers display greater "offensive positioning influence" specifically in 1-4-3-3 and 1-3-4-3 systems.
-- In matches that the team won, wingers exhibited significantly higher "Degree Prestige" (they were targeted more often by teammates) compared to matches that were lost.
-
-**Base Network Science Applications:**
-- Directed graphs through player-to-player interactions
-- Degree centrality (out-degree) used measure how many passes a player makes (representing their role as a distributor).
-- Degree prestiage (in-degree) used to measure how many passes a player receives (representing their role as a target/focal point).
-- Proximity Prestige (in-closeness centrality) A measure of how easily a node can be reached by all other nodes in the network. In football, high proximity prestige for a striker means the rest of the team can transition the ball to them efficiently.
-
----
-
-<br>
-<br>
-<br>
-
-#### Exploring team dynamics through network analysis: A season review of an elite Portuguese soccer team (2025)
-macro-level metrics of an entire team across a 34-match season. aims to see how the holistic shape of the team’s passing network changes based on tactical systems and whether they win or lose
-
-**Key Findings:**
-- Network density was significantly higher in lost matches. Domain interpetation might be that seem was stick to safe, repetitive passing patterns. 
-- Matches won were characterized by higher clustering coefficients, indicating effective localized triangles and a more interconnected team effort.
-- Tactical systems altered network density (how many passes happened), but not clustering (the localized cohesion remained stable regardless of the formation).
-
-**Base Network Science Concepts Applied:**
-- Adjacency Matrices for constructing mathematical tables to quantify player interconnections prior to visualizing the graph.
-- Network Density via the ratio of actual connections (passes between specific players) to the total possible connections. (e.g., Did everyone pass to everyone, or did the team only use half their potential connections?).
-- Clustering Coefficient (Transitivity): A textbook concept measuring the tendency of nodes to cluster together. In football, if Player A passes to Player B, and Player B passes to Player C, how likely is it that Player C passes back to Player A? High clustering represents strong "triangles" on the pitch, a staple of possession-based football (like Pep Guardiola's Tiki-Taka).
-
----
-
-<br>
-<br>
-<br>
-
-#### Network analysis of offensive dynamics in a Portuguese first division football team: insights from the 2020-2021 season (2025)
-
-phase-analysis. applying network science exclusively to sequences of play that resulted in a shot on goal. Instead of looking at every pass in the match, it filters the network to only observe successful offensive build-ups.
-
-**Key Findings:**
-- By isolating offensive chains, the study identified 914 crucial intra-team interactions leading to shots over the season.
-- A specific central midfielder and a forward emerged as the absolute key nodes in these specialized sub-networks.
-- The overall structure (density and clustering) of these offensive networks remained stable; there were no significant statistical drops in team cohesion between the first and second halves of the season.
-
-**Base Network Science Concepts Applied:**
-- Network Filtering/Sub-graphs: extract a specific sub-network (shot-creating actions) from a massive, noisy global network (all match passes) to find signal-in-the-noise.
-- Hub Identification: Using metrics to find the "critical nodes."
-- Network Stationarity: Assessing whether the statistical properties of a network remain stable over time (comparing the first half of a season to the second).
-
----
-
-
-
