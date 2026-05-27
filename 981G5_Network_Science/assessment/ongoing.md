@@ -1,0 +1,1 @@
+I am putting the initial notes/thoughts into the drafting file which is split down into sections. After this I will convert the drafting notes into the structure which homogenized some of the categories into higher level themes. 
