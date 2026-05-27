@@ -4,8 +4,6 @@ Football (passing) netowrks are small but dense. The interest is in the dynamics
 
 Approaches in sport move beyond descriptions and focus on comparisions. Teams approaches and tactics are reflected in their networks, whether that be because they are high structures or perhaps highly chaotic, direct team. 
 
-Null models are highly effective in football - e.g. Erdős–Rényi or Configuration Model - because the networks themselve shave the benefit of being highly interpretable by looking. The number of nodes is generally fixed and the edges are limited in their variation. Therefore, providing analysis on why a randomly generated model differs to the team you are analysing is a good start. Discussion why a particular teams network properties, like high clustering, is a statistically significant and not just a result of random chance, it easy conducted high generating Null Models. 
-
 A slightly more complex network network but naturally sports networks have interesting Temporal Dynamics. The network will evolve and change during different phases of the match. It is important to look at properties with respect to succesful. E.g. during such periods, how did given centrality measures change. 
 
 ---
