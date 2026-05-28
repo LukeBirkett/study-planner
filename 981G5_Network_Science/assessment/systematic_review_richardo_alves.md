@@ -1,6 +1,8 @@
 # Social network analysis in football: a systematic review of performance and tactical applications (2025)
 Reivew of current landscape of Network Science in Football. Reviews 55 Studies to evaluation how network science is used to measure performance, tactical behaviour and player interactions. Highlights evolations from static graphs to dynamic models utilizing tracking data. 
 
+[Paper](https://scholar.google.co.uk/citations?view_op=view_citation&hl=en&user=M2lgL5AAAAAJ&sortby=pubdate&citation_for_view=M2lgL5AAAAAJ:iyewoVqAXLQC) 
+
 [Supplementary Material](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2025.1659603/full)
 
 ---

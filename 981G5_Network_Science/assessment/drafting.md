@@ -72,6 +72,37 @@ Networks allow for a temporal persepctive where we can assess temporical dynamic
 
 > there needs to be a clear and defined reasons for why network science should be applied to football. there are plenty of motivation references and mostly split into prediction and tactical. 
 
+To build an actual Network Science project for football, you have to treat it as a spatially embedded network (Buldú et al., 2018)
+
+**Network Science vs SNA:** The mathematical properties and algorithms (degree centrality, clustering coefficients, community detection) are identical, but the history, philosophy, and scope are completely different. Social Network Analysis (SNA) is the parent disapline. Network Science is the modern, expanded evolution of that discipline.
+
+SNA; 
+- Emerged in the 1930s–1970s out of sociology, anthropology, and psychology.
+- Strictly human or organizational. Focuses on friendships, corporate boards, advice networks, or political alliances.
+- Historically small to medium (dozens or hundreds of nodes). Data was collected via tedious surveys or interviews.
+- Theory-driven & Bottom-up: Starts with a sociological theory (e.g., "Do people with weak ties get better jobs?") and uses the network to test it.
+
+Network Science;
+- Exploded in the late 1990s out of statistical physics, computer science, and math.
+- Any complex system. Includes brains (neural networks), power grids, protein interactions, and the internet.
+- Massive / Big Data (thousands to billions of nodes). Data is scraped computationally.
+- Data-driven & Top-down: Looks at a massive web of data, extracts the math, and looks for universal laws (e.g., scale-free networks).
+
+In Network Science: A hub with massive degree centrality in a power grid is a structural vulnerability—if it fails, the grid blacks out.
+
+In SNA: A hub with massive degree centrality in an office is an influential person—if they leave, organizational memory is lost.
+
+If a paper uses the term SNA, the authors are signaling that they care deeply about the social context and human behavior. They aren't just treating people as abstract nodes; they are tying the network structure back to human agency, power dynamics, or social capital.
+
+When researchers approach football solely through a Social Network Analysis (SNA) lens, they treat the team like an office workflow or a group of friends. They calculate classic metrics like degree centrality or density to find the "influential" player (Alves, 2025). But they miss a massive structural reality: football is a spatially constrained, dynamic physics problem disguised as a social network.
+
+To build an actual Network Science project for football, you have to treat it as a spatially embedded network (Buldú et al., 2018). In these systems, nodes have physical coordinates $(x,y)$, and the probability of an edge existing is heavily influenced by the Euclidean distance between those coordinates.
+
+
+**The Temporal/Dynamic Network (Evolution):** Build networks for each match (or segment) and extract the relevant properties. Track how the metrics develop over time. The way the networks change and therefore the metric change can be analysed and explained from a football/tactical perspective. A common approach is windowing where you compute the average of something, say a team's Clustering Coefficient to see if tactical discipline spikes or dips during a losing streak.
+
+**The "Ensemble" Network:** You could ensemble all matches from a teams seasons into one super network. This essentially creates a probability map of how a team functions - and you could frame this as a managers tactical outputs. From this you could ask "what is the teams backbone?". The supernetwork itself will be an uniterpretable hairball as all players will likely have made a pass to eachother in some way, including all swud players. You use Disparity Filter (Salience Network) to strip away the statistically insignificant edges and reveal the "Multiscale Backbone"—the core passing lanes that persist regardless of the opponent.
+
 ---
 
 ## Problem with Current Approach to Data and Football
@@ -137,6 +168,18 @@ PassMap Framework:
 - **Degree assortativity** is a natural progression topic from these points. If high degree players are **disassorative** they mostly pass to players so themselves are less connected. This is indicative of the hub-and-spoke network where a highly influential player can connection directly different areas of the pitch. It is also in interest point to consider which are the low degree players in this scenario. 
 - Typically, over the course of a full match, the network (passing) will be a fully conntected graph, i.e. **one giant components**, as throughout the match there will likely be at least 1 pass/interaction between players. However, analysis on the **largest connect component** can be unvieled using a **thresholding** approach, or **temporal** phases where a 10 minute phase might see play concentrating in certain areas or amongst particular nodes. Refering back to the notion of comparing teams, it would be interesting to see how different thresholds affect each team. Resilient, balances teams may retain their largest compents even as the threshold raises but a fragile team will soon begin to fragment - then these fragments because they represent intra-team cliques. Where do the connection remain even as things are getting difficult and falling apart. 
 
+**Micro, Meso and Macro Focuses:** Alve's "Systematic Review" determines there to be 3 levels of metric in apply networks to football: Micro, Meso and Macro. 
+
+SNA analyses typically focus on three distinct levels: micro (individual player metrics), meso (small groups of players), and macro (the entire team’s network) (Buldú et al., 2018)
+
+> Could bring this in during exploring the properties as subheadings. 
+> 
+> Or could attempt to introduce it during the final analysis phases, maybe scoping down to produce an experiement for each level. 
+> 
+> It might be a nessecity for the null model validation, if so it would have be to be introduced in the "how" level
+> 
+> Or even just both, it will likely manifested itself as connective tissue for structure and writting rather than a section to explain. 
+
 ---
 
 ## State the Goal of This Report
@@ -169,6 +212,43 @@ calculate the clustering coefficient, highly structured team that you are lookin
 ## Explain Why Null Models are Needed vs Simple League Averages
 Explain why simply comparing to league averages as a baseline is not good enough. i.e. barca have more clustering that over teams. they also have more passes. need to normalize against contraints to draw a conclusion like this
 
+In the (contemporary, alves) research, there is no null model applications. TODO: need to validate this though prompt research. 
+
+However, most, if not all, papers use emprical baseslines. For example researches may say team X (barca, monaco, benefica) demostate better Y propertie that the league average. 
+
+This only tells you have something is different but it cannot tell you why it is unusual. 
+
+Generating null models goes beyond the raw data because it allows you to separate systemic constraints (geometry, rules, and mathematics) from deliberate human strategy.
+
+By comparing to the league, we are simplying comparing against things that may be just be different. Barcelona have more passess than most team so will have more clustering than the rest of the league. But what happen if we normalize for the number of passes and then the topologyical structure of the team. Are we able to see teams that perform with higher clustering depsite seemingly being the same? this allows us to look intro talent and/or tactics. 
+
+In analysis we might identify a left-winger for a particular team/game who has a massive betweenness centrality score compared to the league average for all players. **The Empirical League Baseline tells you:** "This winger is a significantly bigger hub than 95% of players in the league."
+
+However, if this team uses a 4-3-3 formation where as the majority, if not all, uses 4-4-2 then it is the underlying position contraints that may be producing this different. 
+
+We need a position permited null model so that we can "Freeze" an exact match's structural profile. By generating new networks based on this we are essentially swapping in new players into the nodes position. If every (or most) player automically yeilds as similar property then we know it is the formation/structure rather a unique player performance. Alternative, by isolating these factors, we struggle to re-produce the property, then it is the player. 
+
+A good way to decompose this thinking is to consider computing each players (nodes) centrality. On average, centrial midfields will dominate this category. If we were to take a midfielder and compare it to the league avergae, each one will come out in very high percentiles. However, central midfields have a 360 passing range, where as left-wingers and more like a 180 and they are constrained by the 2d plane of the pitch. We are trying to compare two things which are spatially and topolgically different. 
+
+The suggest high be filer down to comparing players by position, and whilst this would be more valid, the issue persists that different players have differing topological constraints around which will determine their properties. Simple league based baselines do not allow us to isolate the variabiltiy produced by talent and performance vs structure. 
+
+We need to a Spatially-Constrained Null Model to say things like: "Based on pure geometry, a player standing in this exact wide coordinate should only receive 4% of the team's passes," and your raw data shows they received 22%, your null model has exposed a massive tactical anomaly that a league average would completely smooth over and hide." 
+
+"While empirical league baselines identify relative variance between subjects (e.g., how Barcelona differs from Getafe), they fail to isolate the underlying mechanism causing that variance. Conversely, a mathematically defined null model provides an ab initio baseline that controls for spatial, geometric, and rule-based constraints. This allows us to separate statistical artifacts born of pitch geometry or formation structure from genuine, intentional tactical anomalies."
+
+Raw data filtering cannot: handle multi-dimensional confounding, create counterfactuals for unique contexts, and isolate structure from volume.
+
+Furthermore, empircal data suffers from the curse of dimensionality. Lets say we want to analysis an individual match to some empirical baseline which reflects similar circumstances, i.e. by filtering to similar factors. Note, in this hypothetical we are not comparing to the league average as we recognise that it contains different underlying properties, i.e. formations, systems etc. As we filter down on the appropriate conditions we are removing data and resulting may end up with a dataset of only 3/4 matches. 
+
+A generative null model solves this by learning and abstracting the rules of the system rathern than performing a hard filtering matching on given scenarios. 
+
+It learns the underlying mathematical relationship between physical distance, player involvement, and pass probability across the whole season. It can then instantly generate a custom, statistically sound baseline for any combination of variables, even if that specific combination of possession, formation, and spacing has never happened before.
+
+The biggest benefit of using Null Models is due to volumne. Working directly with network properties on empirical data we will find that all metrics like Betweeness Centrality are non-linear. They don't just measure how many times a player received the ball (In-Degree) because it entirely dependant on other players making the pass. If a team makes 900 passes per match, all centrality metric will be scaled up and behave different to a match will 300 passes. Comparing the two mere tells you that the matches were different, not anything about the centrality property itself. If you use a Null Model, you condition the simulation on the exact degree sequence or edge-count (or whatevr appraoch) of that specific match.
+
+The null model allows you to say: "Even when we artificially scale the network to have exactly 412 passes (the exact volume of this match), the arrangement of the edges (the topology) still heavily favors the winger in a way that randomness cannot explain." It isolates structure from volume.
+
+
 ---
 
 ## Explain Why Traditional Null Models not Suitable
@@ -177,6 +257,12 @@ Explain why trad/random null models are not suitable for application to football
 The reason we build null models is to answer whether the However, there is also a "Dynamics and Probe" aspect. This is becuase the real challenge here is building an effective null model. A standard degree-preserviing configuation model won't work because the nuance of individual players and there positions means the reconstruction needs to to cater to these as constraints.
 
 > probably a good idea to run these null models to demonstate why they don't work. the output should be complete unintelliglbe, i.e. congfig re-weighting results in freq striker to goalkeeper passes as if they were next to each toher
+
+In these systems, nodes have physical coordinates $(x,y)$, and the probability of an edge existing is heavily influenced by the Euclidean distance between those coordinates.When you factor in pitch coordinates, you realize that a team's passing network is governed by two competing forces:
+1. Tactical Intent: The intentional strategy of the coach (e.g., building up through the wings).
+2. Spatial Constraints: The physical reality that shorter passes are easier to complete than longer ones.
+
+Without a null model, you cannot separate tactical intent from spatial constraint. For example, if the two central defenders pass to each other 30 times a match, is that a brilliant tactical "tiki-tika" strategy, or is it just the baseline result of two people standing 15 meters apart with no pressure?
 
 ### Erdős–Rényi (Random) Null Model: 
 Take an **Erdős–Rényi (Random) Null Model** and treat it as the zero intelligence baseline. Construct networks with the same number of nodes and edges using a fixed prob. the totals stay the same the connections are randomized. 
