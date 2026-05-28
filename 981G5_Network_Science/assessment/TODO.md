@@ -1,6 +1,8 @@
-1. I am putting the initial notes/thoughts into the drafting file which is split down into sections. 
-2. Convert the drafting notes into the structure which homogenized some of the categories into higher level themes. 
-3. Integrate/Organize the Alex Systematic Review notes into the draft document. Most of the notes here are direct references or quotes. 
+
+- Review the content in 1_draft. Possible delete or make content a bit more concise. Need to have solid grasp of each section before integrating alves into it. 
+
+
+- Integrate/Organize the Alex Systematic Review notes into the draft document. Most of the notes here are direct references or quotes. 
 
 ===
 
