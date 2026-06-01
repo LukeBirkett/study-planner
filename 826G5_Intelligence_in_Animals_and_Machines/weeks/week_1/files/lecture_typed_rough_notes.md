@@ -26,6 +26,10 @@ This is seen as a **top-down** approach to intelligence where we start with huma
 
 This module focuses on a **bottom-up** approach. This is where we observe basic, rudimentary beahvours which peice together to create complex outputs 
 
+
+
+
+
 [Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010)](https://github.com/LukeBirkett/study-planner/blob/main/826G5_Intelligence_in_Animals_and_Machines/weeks/week_1/readings/shettleworth_2010_killjoy_explanations.pdf)
 
 Note, the terms "bottom-up" and "top-down" are used many times through various branches of liturature with varying definitions. The defintition we are working from are governed by the above article
@@ -41,6 +45,14 @@ Adpative behaviour leads to an increase of fitness and survival
 Intelligence is what organisms do
 
 One issue to think about is whether there is exists an intelligent vs unintelligence way to produce an output. This concept is explores in the article [Slime Mold Cognition (Reid, 2023)](https://readinglists.sussex.ac.uk/leganto/nui/citation/24520950510002461?institute=44SUS_INST&auth=SAML)
+
+
+
+
+
+
+
+
 
 ## Where Does Behaviour Come From?
 

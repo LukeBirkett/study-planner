@@ -5,3 +5,8 @@
 
 # Module Outline
 This module will develop understanding of what it means for an animal or a machine to behave intelligently, and how brain and behavioural systems are adapted to enable an animal to cope effectively within its environment. We consider diverse aspects of intelligence including navigation and motor control, tool-use, language, memory and social skills. We ask how these are related to one another and how they are matched to the particular needs of animals and machines.
+
+---
+
+# Week 1
+- 
