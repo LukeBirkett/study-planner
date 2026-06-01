@@ -12,30 +12,30 @@ The surge of data analytics in sports and the introduction of graph theory as a 
 
 ---
 
-The past 10/15 years in football have seen a surge in data based analysis. At the forefront of this data revolution has been a metric called xG which applies a percentage, a measure of quality to each shot. It's promenance is such that it has made it to the half-time and full-time anaylsis of every telivsed football match. This metric is computed using probablistic machine learning methods and takes "event data" as its inputs, including things like shot locations, defender location, ball height. Ultimately, it is a metric that allows us to measure quality of a shot, evaluate a players performance and by aggregating over the course of a match, or season, evaluate the quality of output of a team. 
+Football as seen a data revolution in the past 10 years. At the forefront of this movement has been a metric called xG which attempts to apply a measure of quality to each shot taken. Today, this metric can be seen during the half-time analysis of every televised football match. 
 
-However, football is a game of mutli-faceted interactions taking places amongst ~24 players in a spatially constrained domain. Therefore, it makes logical sense that a truely valuble method of analysis should evaluate to such a standard. 
+This metric is computed using probabilistic machine leanring methods meaning the measure of quality interpretted as a percentage. The input training data is know as "events data". This paradigm of data is essentially a transcribe of what we see occuring during a match into data form. Commonly used fields include things like shot location, defender location, ball height. 
+
+The metric itself is based on a single shot but it can be aggegated over a given time period be used a metric of player or team performance. The most common time period is an entire match, though smaller increments such as an 10 minutes period or larger increments such as an entire season each have their own interpretations and use cases. The goal of football is to win the match which you do by scoring goals which result from "shots", therefore, the assumption made, is that the aggregation of the quality of shots taken provides an insight to the performance of a team or player. 
+
+However, football is a game of mutli-faceted interactions taking places amongst ~24 players within in a spatially constrained domain. Logically, it sense that any truly comprehensive method of analysis should evaluate based on these inputs, not isolated events. 
 
 This is where networks come in
 - What is a network
 - What is network science
 - What is SNA and why do so many football research papers refer to it instead of network science
 
-Ultimately, the motivation to applying network science stems from the ability to provide a holistic view of a team, match or phases. The interactions, whatever, they may be represent the interconnect nature of a game of football. A pass from one player to another isn't just a mere frequency count, it encapusales a spatially and tactically motivated actions which is actions by the two players involved but facilitated by the wider system of 11 teammates and coutnerfactuals by the opposing system of 11 teammates. Accross an entire game, or sub-period, the cumulative PassMap represents a football print of the execution of the tactical intend of each team. 
+The motivation to apply Network Science to football, or any team sport, stems from the ability to establish a holistic view of a match. 
 
-Teams approaches and tactics are reflected in their networks, whether that be because they are high structures or perhaps highly chaotic, direct team. 
+A matches interactions capture the interconnected nature of the onfield actions. A pass from one player to another isn't just a event to count and add to a tally, it encapsulates a spatially and tactically moviated action which directly exectured by the 2 players involves but facilitated by the wider system of all 11 teammates, and/or enabled by the counterfactual of the 11 opposing teammates. 
 
-Networks allow for a temporal persepctive where we can assess temporical dynamics OF and ON the network. The network will evolve and change during different phases of the match. Oftten in response to the phase state, whether that be considered as the score itself, momentum, other teams tactics or literal time of the match. 
+Additionally, the usage of Networks allows use to capture not only the spatial aspect of a match but also the temporal. The interactions from a entire game can be represented in a network, or sub-periods of a match can be converted into network. Eitherway, we can see more than just a snapshot, instead we see the cumulative efforts of a team resulting from the managers tactical intent. 
+
+Teams approaches and tactics reflect the composition of the resulting networks. A highly structured, organsied team may be result in a more homogenous, predictable network. A choatic and direct team may result in a fragmented network with key hubs with high betweenness centrality which force the ball up the fields. 
+
+Becuase Networks allow for a temporal persepctive, we can assess temporical dynamics OF and ON the network. The network will evolve and change during different phases of the match, often in response to the matches phase state, such as the score or prevailing momentum. 
 
 > there needs to be a clear and defined reasons for why network science should be applied to football. there are plenty of motivation references and mostly split into prediction and tactical. 
-
-To build an actual Network Science project for football, you have to treat it as a spatially embedded network (Buldú et al., 2018)
-
-To build an actual Network Science project for football, you have to treat it as a spatially embedded network (Buldú et al., 2018). In these systems, nodes have physical coordinates $(x,y)$, and the probability of an edge existing is heavily influenced by the Euclidean distance between those coordinates.
-
-**The Temporal/Dynamic Network (Evolution):** Build networks for each match (or segment) and extract the relevant properties. Track how the metrics develop over time. The way the networks change and therefore the metric change can be analysed and explained from a football/tactical perspective. A common approach is windowing where you compute the average of something, say a team's Clustering Coefficient to see if tactical discipline spikes or dips during a losing streak.
-
-**The "Ensemble" Network:** You could ensemble all matches from a teams seasons into one super network. This essentially creates a probability map of how a team functions - and you could frame this as a managers tactical outputs. From this you could ask "what is the teams backbone?". The supernetwork itself will be an uniterpretable hairball as all players will likely have made a pass to eachother in some way, including all swud players. You use Disparity Filter (Salience Network) to strip away the statistically insignificant edges and reveal the "Multiscale Backbone"—the core passing lanes that persist regardless of the opponent.
 
 ---
 
