@@ -1,7 +1,6 @@
-Just finished lecture 1 notes
+ Finalising reading notes for week 2
 
-Need to compile reading list and provide summaries
+ Go back clean up titles/references for week 0 reading
 
-Put together content
 
-Move onto seminar content
+ Move onto lab. there should already be a lot of content for this

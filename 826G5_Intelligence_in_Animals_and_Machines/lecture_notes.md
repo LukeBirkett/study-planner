@@ -7,9 +7,38 @@
         - [Understanding intelligence](#understanding-intelligence)
         - [Cognition, evolution, and behavior](#cognition-evolution-and-behavior)
 ---
-
-- [Week 1 - What is intelligence and does it need a brain?]()
-- [Week_2 - Unexpected Cleverness]()
+- [Week 1 - What is intelligence and does it need a brain?](#week-1---what-is-intelligence-and-does-it-need-a-brain)
+    - [Part 1: What is Intelligence?](#part-1-what-is-intelligence)
+        - [1. The Challenge of Defining Intelligence](#1-the-challenge-of-defining-intelligence)
+        - [2. The "Top-Down" Approach to Intelligence](#2-the-top-down-approach-to-intelligence)
+        - [3. The "Bottom-Up" Approach (Module Core Focus)](#3-the-bottom-up-approach-module-core-focus)
+        - [4. Intelligence as Adaptive Behavior](#4-intelligence-as-adaptive-behavior)
+    - [Part 2 - Where does behaviour come from?](#part-2---where-does-behaviour-come-from)
+        - [1. The Triad of Emergence](#1-the-triad-of-emergence)
+        - [2. Situatedness (The Role of the Environment)](#2-situatedness-the-role-of-the-environment)
+        - [3. Embodiment (The Role of the Body)](#3-embodiment-the-role-of-the-body)
+        - [4. Historical Context: Cybernetics vs. GOFAI](#4-historical-context-cybernetics-vs-gofai)
+    - [Week 1 Lecture References/Readings](#week-1-lecture-referencesreadings)
+        - [Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010)](#clever-animals-and-killjoy-explanations-in-comparative-psychology-shettleworth-2010)
+        - [New approaches to robotics (Brooks, 1991)](#new-approaches-to-robotics-brooks-1991)
+        - [Vehicles: Experiments in synthetic psychology (Braitenberg, 1986)](#vehicles-experiments-in-synthetic-psychology-braitenberg-1986)
+        - [The foundations of plant intelligence (Trewavas, 2017)](#the-foundations-of-plant-intelligence-trewavas-2017)
+        - [Thoughts from the forest floor: a review of cognition in the slime mould Physarum polycephalum (Reid, 2023)](#thoughts-from-the-forest-floor-a-review-of-cognition-in-the-slime-mould-physarum-polycephalum-reid-2023)
+---
+- [Week_2 - Unexpected Cleverness](#week_2---unexpected-cleverness)
+    - [Part 1: KillJoy Prelude](#part-1-killjoy-prelude)
+        - [1. The Bee vs. Rabbit Paradox (Species-Specific Predispositions)](#1-the-bee-vs-rabbit-paradox-species-specific-predispositions)
+        - [2. The "Romantic" Era: Animal Minds After Darwin](#2-the-romantic-era-animal-minds-after-darwin)
+        - [3. The Skeptical Turn: Moving Towards "Killjoy" Science](#3-the-skeptical-turn-moving-towards-killjoy-science)
+    - [Part 2: Killjoy Framework and Applicaiton](#part-2-killjoy-framework-and-applicaiton)
+        - [4. Morgan's Canon & The Killjoy Framework](#4-morgans-canon--the-killjoy-framework)
+        - [5. Applying the Killjoy Framework](#5-applying-the-killjoy-framework)
+    - [Part 3: Case Study](#part-3-case-study)
+        - [6. Portia the Jumping Spider](#6-portia-the-jumping-spider)
+    - [Part 4: Engineering Application of Killjoy](#part-4-engineering-application-of-killjoy)
+        - [7. Flipping the Logic: Engineering "Killjoy" Machines](#7-flipping-the-logic-engineering-killjoy-machines)
+    - [Week 2 References/Readings](#week-2-referencesreadings)
+---
 - [Week 3 - Collective Intelligence]()
 - [Week 4 - Moving Through the World]()
 - [Week 5 - Navigation]()
@@ -160,7 +189,7 @@ This inclusive definition reveals that intelligent outputs can emerge from highl
 
 **Slime Mold (Single-Celled Cognition):** Slime molds explore their environment with tendrils to find food. In experiments, they can solve mazes and even replicate the highly optimized Tokyo suburban transport network just by naturally retracting from empty space and reinforcing pathways to nutrients. It achieves complex problem-solving without a brain.
 
-> [**Key Reading:** Slime Mold Cognition (Reid, 2023)](./weeks/week_1/readings/weekly/slime_mould.pdf)
+> **Key Reading:** [Slime Mold Cognition (Reid, 2023)](./weeks/week_1/readings/weekly/slime_mould.pdf)
 
 #### Why focus on Animals and Machines then?
 While plants and single-celled organisms exhibit intelligent, adaptive behavior, this module focuses on animals because they utilize a central nervous system (sensory networks connecting to a central processor to produce motor behavior). This specific biological architecture maps directly onto how we engineer artificial neural networks and build robots, allowing for a direct cross-disciplinary comparison.
@@ -224,12 +253,176 @@ Picking up objects is computationally heavy for a robot (it requires 3D modeling
 
 **Shakey the Robot (GOFAI - 1970s):** "Good Old-Fashioned AI." Shakey attempted to solve navigation through pure brain power. It would take a picture, stop, build a 3D model of the world, plan a path, move slightly, and repeat. It was incredibly slow and computationally expensive because it ignored embodiment and situatedness, trying to process the entire world internally.
 
---- 
+---
 
-#### 5. Final Module Takeaways (Week 1)
-- Defining intelligence is hard, especially when benchmarking animals against humans.
-- Top-down (anthropocentric) definitions widen the evolutionary gap and lead to semantic arguments.
-- The biological, bottom-up definition is inclusive: intelligence is adaptive behavior.
-- To understand or engineer intelligent behavior, we must examine the continuous interaction between the Brain, the Body, and the Environment.
+## Week 1 Lecture References/Readings
+
+### [Clever animals and killjoy explanations in comparative psychology (Shettleworth, 2010)](./weeks/week_1/readings/shettleworth_2010_killjoy_explanations.pdf)
+
+In this paper, Shettleworth critiques the anthropocentric bias in comparative psychology, where explaining complex animal behaviors through elementary biological mechanisms is frequently rejected as a "killjoy" approach. She observes a paradox in cognitive science: while comparative psychologists strive to prove animals possess "higher" human-like thought (e.g., insight or theory of mind), human psychologists are increasingly discovering that human behavior is heavily governed by the exact same simple, unconscious, and irrational processes observed in animals. Shettleworth advocates for a "bottom-up" paradigm that deconstructs complex abilities into basic, phylogenetically widespread building blocks—such as associative learning and responses to environmental cues. By recognizing that biological complexity often arises from simplicity, researchers can build a truly comparative psychology that accurately maps the shared cognitive mechanisms across human and non-human species.
+
+> Shettleworth, S.J., 2010. Clever animals and killjoy explanations in comparative psychology. Trends in cognitive sciences, 14(11), pp.477-481.
 
 ---
+
+### [New approaches to robotics (Brooks, 1991)](./weeks/week_1/readings/brooks_new_approaches_robotics.pdf)
+
+In this foundational paper, Brooks critiques traditional "Good Old-Fashioned AI" (GOFAI) and its centralized "sense-model-plan-act" architecture, which requires heavy computation to build internal symbolic representations and struggles outside of highly controlled environments. Instead, Brooks champions a "bottom-up," behavior-based approach rooted in two core concepts: situatedness (interacting directly with the immediate environment rather than abstract models) and embodiment (leveraging physical form and real-world dynamics to simplify computation). Using his "subsumption architecture," Brooks demonstrates that robust, real-time intelligence—such as a six-legged robot navigating rough terrain—can emerge from layering simple, independent behaviors that directly connect sensors to actuators, completely bypassing the need for a central world model or complex "top-down" reasoning.
+
+> Brooks, R.A., 1991. New approaches to robotics. Science, 253(5025), pp.1227-1232.
+
+---
+
+### [Vehicles: Experiments in synthetic psychology (Braitenberg, 1986)](./weeks/week_1/readings/braitenberg_1_28.pdf)
+
+Braitenberg utilizes a series of increasingly sophisticated robotic thought experiments to demonstrate his "law of uphill analysis and downhill invention," proving that human observers systematically overestimate the cognitive complexity of an agent based purely on its behavioral output. By utilizing a strict bottom-up framework, he shows how complex, lifelike psychological traits can emerge from incredibly rudimentary sensorimotor loops coupled with real-world physics. Vehicles 1 through 3 demonstrate that basic monotonic wiring—varying from crossed or uncrossed, and excitatory or inhibitory paths—naturally produces behaviors interpreted as life, cowardice, aggression, love, and values. By advancing to nonmonotonic functions and discrete threshold devices (Vehicles 4 & 5), the agents display erratic orbits and sudden, abrupt actions that observers falsely attribute to "instinct," "intellectual calculation," and "free will". Finally, Vehicle 6 illustrates that when random mutation and environmental selection act upon these physical substrates, highly adaptive and computationally dense architectures emerge completely detached from centralized, conscious design. This text serves as a direct justification for the module’s emphasis on embodiment and situatedness, warning researchers against the top-down anthropomorphic trap.
+
+> Braitenberg, V., 1986. Vehicles: Experiments in synthetic psychology. MIT press.
+
+---
+
+### [The foundations of plant intelligence (Trewavas, 2017)](./weeks/week_1/readings/trewavas_plant_intelligence.pdf)
+
+Trewavas challenges anthropocentric definitions of cognition by framing intelligence as a decentralized, system-level capacity for problem-solving that is inextricably linked to evolutionary fitness.
+
+By demonstrating that single cells and plants lack a brain but effectively "profit from experience," he shifts the focus of comparative cognition from specific anatomical organs to universal network architectures.
+
+Both the nematode nervous system and cellular protein networks converge on a "rich club" core-and-periphery design, which serves as the computational framework for distributed information processing.
+
+In plants, this is epitomized by the root cap, which dynamically integrates conflicting sensory signals (such as overriding gravity vectors to follow humidity gradients), and the cambium, which continuously assesses branch productivity to optimize resource distribution. Operating on a distinct growth-based timescale, plants navigate complex ecological spaces using volatile organic chemicals (VOCs) as an emergent language for self/non-self recognition, alongside epigenetic priming mechanisms that act as a somatic memory to handle environmental stress.
+
+
+> Trewavas, A., 2017. The foundations of plant intelligence. Interface focus, 7(3).
+
+---
+
+### [Thoughts from the forest floor: a review of cognition in the slime mould Physarum polycephalum (Reid, 2023)](./weeks/week_1/readings/weekly/slime_mould.pdf)
+
+Reid synthesizes decades of research on the aneural protist Physarum polycephalum to validate the basal cognition framework, proving that fundamental cognitive toolkits—sensing, navigation, memory, decision-making, and learning—evolved long before the historical emergence of nervous systems. Operating as a giant, self-organizing flow network, Physarum processes environmental data through physically coupled actin-myosin oscillators. This mechanical substrate allows the cell to calculate optimal transport networks, solve multi-attribute compensatory problems, and exhibit animal-like behavioral paradigms, including magnitude-sensitive reaction times (Weber's Law) and a reliance on the Matching Law when solving exploration-exploitation (multi-armed bandit) dilemmas. Furthermore, Physarum serves as a key example of extended cognition and cognitive niche construction by depositing extracellular slime trails that function as an externalized spatial memory to dramatically optimize foraging efficiency. While it exhibits robust non-associative learning (habituating to individual chemical repellents via intracellular chemical retention), the lack of definitive evidence for associative conditioning highlights a critical interdisciplinary debate: whether true associative processing requires a dedicated neural architecture or if its absence is merely a reflection of limited ecological pressure.
+
+It bridges de Waal’s bottom-up view, Pfeifer & Scheier’s interactionist embodiment paradigm, and Shettleworth's warnings against anthropocentric biases, unifying them all under a single, highly operational biological model system.
+
+
+> Reid, C.R., 2023. Thoughts from the forest floor: a review of cognition in the slime mould Physarum polycephalum. Animal cognition, 26(6), pp.1783-1797.
+
+---
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Week_2 - Unexpected Cleverness
+This week's lecture has two main strands. The first is a fun historical tour of how people have viewed animal intelligence in the past. From this you will see a repeating pattern of over and under estimation of the intelligence of animals. We will then look at some specific case studies of behaviour that would be seem 'intelligent' and can be described as inteligent when we use anthropomorphic terms - but we will take a "Killjoy" approach to understand how those behaviours might come about.
+
+#### Learning Outcomes
+- Explain why Darwin and his acolytes wanted to explain behaviour in anthropomorphic terms.
+- Describe Morgan’s Canon and how it laid the groundwork for killjoy explanations of behaviour?
+- Explain how apparent smartness in invertebrates can be explained by their embodiment, situatedness and ecological niche.
+
+---
+
+## Part 1: KillJoy Prelude
+
+### 1. The Bee vs. Rabbit Paradox (Species-Specific Predispositions)
+When tested on simple associative learning tasks in the lab, bees learn much faster than rabbits. Rather than indicating greater generalized intelligence, this is perfectly explained by their ecological niches (**situatedness**) and physical adaptations (**embodiment**).
+
+**The Rabbit's Niche:** Rabbits live in environments where food (grass) is abundant. Their cognitive resources are dedicated to avoiding predators and navigating social hierarchies, not associating arbitrary cues with food.
+
+**The Bee's Niche:** Bees must fly long distances to find patchily distributed nectar. They are evolutionary "learning machines" built specifically to associate floral colors and shapes with food profitability.
+
+**Embodiment:** Bees possess innate attractions to certain colors (like UV blue/yellow) and have hardwired sensorimotor programs used to automatically "center" symmetrical patterns in their vision. This projects the flower onto the exact same part of their visual system every time, drastically speeding up associative learning.
+
+**Social Speed-Accuracy Trade-off:** Because bees are social task specialists, individual foragers can afford to learn very quickly (a risky strategy). If one bee makes a learning error and dies, the colony still survives.
+
+*Takeaway:* The impressive cognitive performance of bees in these tasks is completely explained by **species-specific predispositions combined with associative learning**.
+
+---
+
+### 2. The "Romantic" Era: Animal Minds After Darwin
+Historically, there has been a severe tension between romantic (anthropomorphic) and skeptical (killjoy) descriptions of animal behavior.
+
+**Darwin's Influence:** In The Descent of Man (1871), Charles Darwin argued that the difference in mind between humans and higher animals is "one of degree and not of kind". To promote the idea of evolutionary continuity, it became acceptable to use heavily anthropomorphic language to describe animal behavior.
+
+**George Romanes and Anecdotalism (1888):** Romanes collected field anecdotes to try and verify animal intelligence. For example, he observed ants pulling a trapped nestmate from the mud and described it as "sympathetic help" and "fellow-feeling," attributing complex human emotion to what is actually a pheromone-driven instinct.
+
+**The "Nature Fakers":** Writers like Apsley Cherry-Garrard and William Joseph Long published highly exaggerated, fanciful accounts of animal behavior (e.g., birds building mud casts for broken legs), prioritizing romantic storytelling over rigorous science.
+
+---
+
+### 3. The Skeptical Turn: Moving Towards "Killjoy" Science
+To combat the unscientific nature of anecdotalism, comparative psychology shifted toward rigorous observation and skepticism, leading to the "killjoy" approach.
+
+**Clever Hans (1907):** A horse that appeared to have advanced numeracy, tapping out answers to math problems. Investigator Oskar Pfungst revealed that Hans could not do math; instead, the horse was using associative learning of social cues. Hans read the unconscious bodily tension and relaxation of the human audience to know exactly when to stop tapping.
+
+**Tony the Dog:** Tony appeared to use insightful/spontaneous problem solving to open a gate latch with his head. However, observation revealed he had accidentally bumped the latch while looking through the fence; his eventual mastery of the gate was purely the result of blind trial-and-error learning.
+
+---
+
+## Part 2: Killjoy Framework and Applicaiton
+
+### 4. Morgan's Canon & The Killjoy Framework
+C. Lloyd Morgan (Tony the dog's owner) formalized this skeptical approach in 1903 with Morgan's Canon:
+
+> "In no case may we interpret an action as the outcome of the exercise of a higher mental faculty, if it can be interpreted as the exercise of one which stands lower in the psychological scale."
+
+This acts as Ockham’s Razor for comparative psychology. It requires us to account for seemingly clever behavior using the simplest possible mechanisms.
+
+#### The Killjoy Breakdown:
+A true killjoy explanation accounts for behavior using:  
+1. **Simple (Associative) Learning:** Habituation, sensitization, classical/operant conditioning, and trial-and-error learning.
+2. Species-Specific Predispositions:
+    - Morphological adaptations (**embodiment**).  
+    - Behavioral adaptations.  
+    - Adaptation to a narrow ecological niche enabling them to cope with predictable situations (**situatedness**).  
+
+---
+
+### 5. Applying the Killjoy Framework
+**Human Language Learning:** While learning language seems incredibly complex, a killjoy account breaks it down into simple components. Humans have innate visual and auditory biases to separate objects and phonemes. Combined with a highly social ecological niche (surrounded by speaking adults), human infants use simple associative learning to link objects to specific sounds.
+
+**Case Study: String-Pulling Bees:** In a famous experiment, bees learned to pull a string to bring a covered food disc toward them. The authors of the study claimed this was "novel tool use" and an example of "culture"
+- **Killjoy account:** Walking toward a blue disc (a flower proxy) is an innate foraging behavior. The string acting as a treadmill is merely a function of the experimental setup, rather than a novel situation the bee truly understands. The apparent "tool use" is actually a mix of trial-and-error learning and social attraction (going where other bees go, which is a species-specific predisposition), rather than a purposeful, physics-based understanding of the string.
+
+---
+
+## Part 3: Case Study
+
+### 6. Portia the Jumping Spider
+Portia is an invertebrate with a microscopic brain (~100,000 neurons) that hunts other spiders. Anthropomorphic documentaries describe her as a "genius" capable of "3D mapping," "planning," and "strategy".
+
+#### The Killjoy / Triadic Account of Portia:
+- **The Task:** Detouring to a prey item across complex branches where she temporarily loses sight of the target.
+- **Embodiment (Telescope Eyes):** Portia has huge principal eyes giving her extreme spatial acuity (comparable to a falcon) but a tiny field of view. She cannot see the whole scene at once. Instead, she rotates her retinas behind the lenses, scanning the environment in tiny slices.
+- **Vicarious Trial-and-Error:** Instead of running a complex 3D mental simulation of the maze (which her brain cannot handle), she uses her body. Her slow, meticulous visual scanning along continuous lines acts as a physical substitute for locomotion.
+- **Situatedness:** This visual strategy only works in her specific ecological niche—an environment made of continuous, traceable lines (twigs and branches). In dense, featureless foliage, the algorithm fails.
+- **Web Strumming:** Portia can flexibly "strum" a victim's web to mimic wind (sneaking) or a trapped fly (luring). Possessing the sensory apparatus to read and produce web vibrations is an innate, standard part of the spider toolkit. She uses trial-and-error learning to figure out which innate frequency works best to manipulate specific prey
+
+---
+
+## Part 4: Engineering Application of Killjoy
+
+## 7. Flipping the Logic: Engineering "Killjoy" Machines
+Engineers can use the "killjoy" philosophy to build machines: what is the simplest, cheapest, lowest-computation algorithm that can succeed in a specific environment?
+
+**The Basic/Killjoy Machine (e.g., iRobot Roomba):** Uses a tiny, simple algorithm: spiral outward, follow walls, and move randomly. It does not know what a room is or map out the space.
+- **Its Niche:** Open-plan flats and hard floors. In this niche, the simple algorithm works perfectly without heavy computation.
+
+**The Sophisticated/Anthropomorphic Machine (e.g., Ascender/Lydsto):** Uses heavy computation, dynamic visual mapping, and complex path-planning algorithms.
+- **Its Niche:** Complex multi-room houses, corridors, and stairs. 
+
+*Takeaway:* A machine (or animal) does not need an advanced, complex brain if its basic "killjoy" algorithm perfectly matches its ecological niche.
+
+---
+
+## Week 2 References/Readings
+
+### Arthropod intelligence? The case for Portia (Cross et al, 2020)
+
+
+
+> Cross, F. R., Carvell, G. E., Jackson, R. R., & Grace, R. C. (2020). Arthropod intelligence? The case for Portia. Frontiers in Psychology, 11, 2573
+
+

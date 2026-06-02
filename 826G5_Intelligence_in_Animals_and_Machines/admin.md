@@ -9,4 +9,5 @@ This module will develop understanding of what it means for an animal or a machi
 ---
 
 # Week 1
-- 
+- [Lecture 1](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d0401628-f318-4746-8e0a-b3680094a55d)
+- [Lecture 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0ad2cebc-2325-49b6-93aa-b36f00967950)
