@@ -2,10 +2,10 @@
 
 - [Week 0 - Preliminary](#week-0---preliminary)
     - [Essential Reading](#essential-reading)
-        - [Towards a bottom-up perspective on animal and human cognition](#towards-a-bottom-up-perspective-on-animal-and-human-cognition)
-        - [Animal cognition](#animal-cognition)
-        - [Understanding intelligence](#understanding-intelligence)
-        - [Cognition, evolution, and behavior](#cognition-evolution-and-behavior)
+        - [Towards a bottom-up perspective on animal and human cognition (De Waal and Ferrari, 2010)](#towards-a-bottom-up-perspective-on-animal-and-human-cognition-de-waal-and-ferrari-2010)
+        - [Animal cognition (Gould, 2004)](#animal-cognition-gould-2004)
+        - [Understanding intelligence (Pfeifer and Scheier, 2001)](#understanding-intelligence-pfeifer-and-scheier-2001)
+        - [Cognition, evolution, and behavior (Shettleworth, 2009)](#cognition-evolution-and-behavior-shettleworth-2009)
 ---
 - [Week 1 - What is intelligence and does it need a brain?](#week-1---what-is-intelligence-and-does-it-need-a-brain)
     - [Part 1: What is Intelligence?](#part-1-what-is-intelligence)
@@ -38,8 +38,12 @@
     - [Part 4: Engineering Application of Killjoy](#part-4-engineering-application-of-killjoy)
         - [7. Flipping the Logic: Engineering "Killjoy" Machines](#7-flipping-the-logic-engineering-killjoy-machines)
     - [Week 2 References/Readings](#week-2-referencesreadings)
+        - [Arthropod intelligence? The case for Portia (Cross et al, 2020)](#arthropod-intelligence-the-case-for-portia-cross-et-al-2020)
 ---
 - [Week 3 - Collective Intelligence]()
+
+
+---
 - [Week 4 - Moving Through the World]()
 - [Week 5 - Navigation]()
 - [Week 6 - Motor Control (Lab 4)]()
@@ -65,7 +69,7 @@ By the end of this module a successful student should be able to:
 
 ## Essential Reading
 
-### Towards a bottom-up perspective on animal and human cognition
+### Towards a bottom-up perspective on animal and human cognition (De Waal and Ferrari, 2010)
 [link](./weeks/week_0/files/towards_bottom_up.pdf)
 
 *This is an essential article which explains the key logic of the approach to intelligence that we take in this module.*
@@ -80,7 +84,7 @@ Instead, they champion a bottom-up perspective rooted in evolutionary biology an
 
 ---
  
-### Animal cognition
+### Animal cognition (Gould, 2004)
 [link](./weeks/week_0/files/animal_cognition.pdf)
 
 *This is essential reading on the history of the study of animal behaviour. It is very short and easy to read.*
@@ -93,7 +97,7 @@ Gould’s hierarchy mirrors the historical development of AI. Innate behaviors a
 
 ---
  
-### Understanding intelligence
+### Understanding intelligence (Pfeifer and Scheier, 2001)
 [link](./weeks/week_0/files/understand_intelligence_ch1.pdf)
 
 *Chapter 1 is essential reading. Because this is an old book some of the other chapters are dated and not necessary, but Chapter 1 is still a great introduction to the problem of studying intelligence. It is written from the perspective of AI practitioners and roboticists.*
@@ -108,7 +112,7 @@ Chapter 1 introduces the core principle of embodiment—the idea that having a p
 
 ---
 
-### Cognition, evolution, and behavior
+### Cognition, evolution, and behavior (Shettleworth, 2009)
 [link](./weeks/week_0/files/cognition_evo_ch1.pdf)
 
 *Chapter 1 is essential reading, it gives a very good introduction to the issues in studying animal intelligence.  The rest of the book is optional, but will give some excellent material for some of our topics. This book is ideal for students interested in behavioural ecology and/or psychology.*
@@ -421,8 +425,127 @@ Engineers can use the "killjoy" philosophy to build machines: what is the simple
 
 ### Arthropod intelligence? The case for Portia (Cross et al, 2020)
 
+This review challenges Macphail’s "null hypothesis"—which posits no differences in intelligence among non-human vertebrates—by arguing that excluding invertebrates simply due to their minute brain size is an arbitrary and limiting constraint. Using the jumping spider Portia as a model, the authors advocate for viewing intelligence (flexible problem-solving) and cognition (reliance on internal representation) as continuums across all taxa.
 
+**Dennett’s Evolutionary Framework:** To categorize different levels of intelligence, the authors utilize Daniel Dennett's framework and classify Portia as a "Popperian Creature". Unlike "Darwinian Creatures" (which rely strictly on hard-wired evolutionary instincts) or "Skinnerian Creatures" (which rely purely on trial-and-error learning within their own lifetime), Popperian Creatures can "think before acting" by formulating plans using internal representations.
+
+**Pre-Planned Detours:** Experimental evidence shows Portia can spontaneously select and execute complex, indirect paths to reach prey. The spider makes strategic detouring decisions from a vantage point before moving, even when the prey is removed from sight during the journey. This demonstrates an innate, yet highly flexible, capacity to plan ahead without requiring prior trial-and-error training.
+
+**Expectancy Violation & Working Memory:** Using modified "looking time" experiments tailored to spiders, researchers proved Portia loads specific representations of its target into its working memory. If the prey's species, color, or exact quantity (e.g., 1 vs. 2 prey items) is secretly altered while Portia is completing a blind detour, the spider hesitates or aborts the attack, clearly demonstrating an expectancy violation.
+
+**Solving Novel Confinement Problems:** Portia excels at "aggressive mimicry," deploying a trial-and-error strategy to pluck the webs of victim spiders to lure them. The authors present evidence that this domain-specific predatory proficiency translates into domain-general intelligence. When placed in a completely novel environment (an island surrounded by water), Portia successfully utilizes trial-and-error to figure out the specific escape mechanism, proving its problem-solving flexibility extends beyond its natural ecological niche.
 
 > Cross, F. R., Carvell, G. E., Jackson, R. R., & Grace, R. C. (2020). Arthropod intelligence? The case for Portia. Frontiers in Psychology, 11, 2573
 
+---
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Week 3 - Collective Intelligence
+
+In Lecture 3, we will look at Collective Intelligence, looking at specific case-studies of social insect systems and the principles by which collective decision making can be implemented. We don't talk about social insects by chance. Because individual foragers from a single social insect colony are all working towards the same goal, evolution has been able to select for optimal co-operation.
+
+Unfortunately most animals are selfish and competitive, even when in social groups. So it is no surprise that we don't see optimal decision making in human groups, even though there is sometimes the statistical evidence to suggest that it would be possible.
+
+We will also look at some examples of swarm robotics. One of the important things here is to evaluate the properties of biological swarm systems and why they are desirable to engineers, although we can see that we are a long way from real world applications.
+
+#### Learning Outcomes
+- Define and give examples of systems that are stigmergic and/or self-organising
+- Understand my collective intelligence sometimes fails, especially in human groups.
+- Evaluate the properties of biological swarm systems and why they are desirable to engineers
+
+---
+
+- What is self-organising behaviour?
+- What is stigmergy?
+- What are the adaptive properties of intelligent collective decision making systems?
+- What are the details of specific case-studies that show  how individual local rules lead to collective  intelligence?
+- Why are self-organising principles desirable for  engineers?
+- How are these implemented in swarm robotics?
+
+---
+
+## 1. Defining Self-Organisation and Collective Behaviour
+**Self-Organisation:** A process where global, system-level patterns emerge purely from numerous local interactions between lower-level components.
+
+**Local vs. Global Information:** Individual agents operate exclusively using local information (what they can immediately sense) and execute local rules. They have no reference to, or awareness of, the overarching global pattern they are helping to create.
+
+**Historical Misconceptions:** In the past, observers struggled to explain how complex flocking could occur without a central leader. For example, in 1931, ornithologist Edmund Selous wrongly concluded that birds must be using telepathy or "thought transference" to coordinate.
+
+**The Golden Rule:** In true collective intelligence, the output of the group is greater and more robust than the sum of its individual parts
+
+---
+
+## 2. Flocking and Swarming: The Boids Model
+**The Boids Model (1986):** Computer scientist Craig Reynolds proved that realistic flocking could be simulated using three simple, metric-based **local rules**:
+1. **Separation:** Avoid getting too close to nearby neighbors to prevent collisions.  
+2. **Alignment:** Move in the same average direction as nearby neighbors.  
+3. **Cohesion:** Move towards the average position of neighbors if you are too far away.  
+
+**Topological vs. Metric Rules:** Later 3D tracking of real starling murmurations (Ballerini et al., 2008) showed Reynolds' metric distances were slightly wrong. Instead, birds use a **topological rule**: they constantly pay attention to their nearest 6 neighbors, regardless of absolute physical distance.
+
+**Why this works better:** During a turn, a murmuration "squishes" together and expands, which completely breaks metric distance radiuses. Paying attention to a fixed number (the nearest 6) provides an elegant, robust solution that eliminates the visual processing overload of a shifting metric environment.
+
+**Robustness:** Topological rules are superior because they are more robust to varying flock densities. If the flock squishes together to turn or is attacked by a predator, a topological flock is much less likely to fragment than a metric one.
+
+---
+
+## 3. Stigmergy and Outsourced Intelligence
+**Stigmergy:** Coined by Pierre-Paul Grassé, this is the coordination of agents or actions through physical traces left in the environment. This reduces the cognitive load on individual agents (e.g., humans using a written to-do list to offload memory).
+
+**Termite Mound Building:** Termites initially drop mud pellets at random on elevated ground. These small heaps stimulate other termites to drop more pellets there (a positive feedback loop), eventually forming columns. If columns are close enough, termites start building diagonally to connect them into walls.
+
+**Ant Pheromone Trails:** Ants leave pheromones when finding food. As more ants follow the randomly discovered shortest path, the pheromone strengthens faster, creating a positive feedback loop that draws the entire colony to the optimal route. The collective makes a highly intelligent decision, even though no individual ant consciously compared the routes.
+
+**Ant Colony Optimisation (ACO):** These decentralized biological processes have directly inspired real-world engineering routing algorithms (e.g., telecommunications), where local nodes use data-packet speeds (virtual pheromones) to optimize network traffic without needing top-down, centralized server control.
+
+---
+
+## 4. Collective Decision-Making: Honeybee Swarms
+**The Challenge:** When bees swarm, they are highly exposed. Scouts must find a new, permanent nest site that is fast, accurate, and has unified agreement. Social insects are perfect for this because they share 100% evolutionary alignment (no selfish competition).
+
+> Social insects have zero internal competition because they are all sisters maximizing their mother’s fitness. This total lack of selfishness is the absolute prerequisite for the positive feedback loops and decay mechanics to achieve true optimality—unlike human groups.
+
+**Information Sharing (Waggle Dance):** Scouts return and dance to indicate a nest location. The angle indicates direction, the duration indicates distance, and the number of circuits reflects the scout's assessment of site quality.
+
+**Parallel Evaluation & Decay:** Multiple options are evaluated simultaneously. Scouts do not compare sites individually; they visit one site and make their own independent assessment. Crucially, scouts naturally decrease (decay) their dancing over time. If no other bees agree the site is good, the option is successfully abandoned.
+
+**The Quorum:** If a site is good, a positive feedback loop of new scouts occurs. A scout ultimately decides the process is complete when they personally observe a "quorum" (a threshold number) of other bees physically at the nest site. This quorum balances speed and accuracy and mathematically prevents a single error-prone scout from leading the swarm astray.
+
+--- 
+
+## 5. The Adaptive Benefits of Collective Behaviour
+Engineers and biologists prize self-organizing collective systems because they inherently possess powerful adaptive properties:
+- **Self-Organising:** No leader or central organizer is required.  
+- **Scalable:** The system scales effortlessly with variable numbers of individuals.  
+- **Flexible:** The collective dynamically adapts to environmental obstacles via local rules.  
+- **Fault Tolerant:** There is no single point of failure; if one agent breaks, the collective behavior continues.
+
+---
+
+## 6. Collective Intelligence in Humans
+**Collective Movement:** Human crowd movement can be modeled with very simple local rules (e.g., choosing the most direct path while maintaining a distance from obstacles that ensures a minimum time-to-collision). Furthermore, a tiny, informed minority can seamlessly drive the behavior of a massive, uninformed group without the group realizing it
+
+**Wisdom of the Crowds:** Aggregating independent group guesses (like guessing the number of marbles in a jar) is often highly accurate because individual random over- and under-estimates cancel each other out.
+
+**Limitations of Human Crowds:**
+- Crowds fail spectacularly on tasks requiring complex mathematics or non-linear logic (e.g., calculating coin-flip probabilities).
+- "Crowd IQ" plateaus quickly (around 30 people). A group of 100 average people will only achieve an aggregated IQ of around 120. Therefore, on highly difficult tasks, it is always better to seek out a single expert (IQ > 135) than to rely on the crowd.
+
+**Medical Diagnostics:** Pooling independent judgments from doctors drastically improves skin/breast cancer detection accuracy over the best individual doctor. However, this collective intelligence vanishes if the doctors are allowed to meet and discuss the diagnosis socially.
+
+---
+
+## 7. Swarm Robotics (Machine Collective Behaviour)
+**Engineering Goals:** Applying biological local rules to robotics promises massive fault tolerance, scalability, flexibility, and lower costs than building single complex robots.
+
+**Kilobots (2014):** A thousand-robot swarm utilizing cheap, vibrating robots. By relying on "gradient" values passed locally from stationary seed robots, the swarm can programmatically assemble into complex 2D shapes purely through edge-following and noisy local communication.
+
+**Robot Termites (2014):** Robots independently building 3D structures. They share identical, pre-compiled "traffic rules" and use strict short-range sensing to attach bricks based on geometric requirements.
+
+**Current Outlook:** While swarm robotics has successfully proven biological concepts through the modeling-observation loop, there are currently no major real-world commercial applications due to lingering high costs and physical/hardware limitations.

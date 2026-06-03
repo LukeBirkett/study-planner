@@ -18,6 +18,7 @@ It is crucial to have the `drafting` or structure based draft completed as this 
 Reading list; will become more populated after 2. alves disemination and 3. prompt research
 - Bludu
 
+Cheng, Y.-S., Chang, A. Y.-C., & Doya, K. (2025). Information-theoretical analysis of team dynamics in football matches. Entropy, 27(3), 224. https://doi.org/10.3390/e27030224
 
 Citations of Alves Review:
 https://scholar.google.co.uk/scholar?cites=1476073454934063653&as_sdt=2005&sciodt=0,5&hl=en
