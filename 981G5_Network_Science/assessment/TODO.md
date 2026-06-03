@@ -1,5 +1,5 @@
-
 Integrate/Organize the Alves Systematic Review notes into the draft document. Most of the notes here are direct references or quotes. 
+- Continue breaking down notes into `1_draft`. For lit review, tranforming references into sentences is working well.
 
 ===
 
@@ -17,3 +17,7 @@ It is crucial to have the `drafting` or structure based draft completed as this 
 
 Reading list; will become more populated after 2. alves disemination and 3. prompt research
 - Bludu
+
+
+Citations of Alves Review:
+https://scholar.google.co.uk/scholar?cites=1476073454934063653&as_sdt=2005&sciodt=0,5&hl=en
