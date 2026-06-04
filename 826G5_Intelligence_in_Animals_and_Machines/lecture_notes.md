@@ -470,7 +470,9 @@ We will also look at some examples of swarm robotics. One of the important thing
 
 ---
 
-## 1. Defining Self-Organisation and Collective Behaviour
+## Part 1: Collective Behaviour
+
+### 1. Defining Self-Organisation and Collective Behaviour
 **Self-Organisation:** A process where global, system-level patterns emerge purely from numerous local interactions between lower-level components.
 
 **Local vs. Global Information:** Individual agents operate exclusively using local information (what they can immediately sense) and execute local rules. They have no reference to, or awareness of, the overarching global pattern they are helping to create.
@@ -481,7 +483,7 @@ We will also look at some examples of swarm robotics. One of the important thing
 
 ---
 
-## 2. Flocking and Swarming: The Boids Model
+### 2. Flocking and Swarming: The Boids Model
 **The Boids Model (1986):** Computer scientist Craig Reynolds proved that realistic flocking could be simulated using three simple, metric-based **local rules**:
 1. **Separation:** Avoid getting too close to nearby neighbors to prevent collisions.  
 2. **Alignment:** Move in the same average direction as nearby neighbors.  
@@ -495,7 +497,7 @@ We will also look at some examples of swarm robotics. One of the important thing
 
 ---
 
-## 3. Stigmergy and Outsourced Intelligence
+### 3. Stigmergy and Outsourced Intelligence
 **Stigmergy:** Coined by Pierre-Paul Grassé, this is the coordination of agents or actions through physical traces left in the environment. This reduces the cognitive load on individual agents (e.g., humans using a written to-do list to offload memory).
 
 **Termite Mound Building:** Termites initially drop mud pellets at random on elevated ground. These small heaps stimulate other termites to drop more pellets there (a positive feedback loop), eventually forming columns. If columns are close enough, termites start building diagonally to connect them into walls.
@@ -506,7 +508,7 @@ We will also look at some examples of swarm robotics. One of the important thing
 
 ---
 
-## 4. Collective Decision-Making: Honeybee Swarms
+### 4. Collective Decision-Making: Honeybee Swarms
 **The Challenge:** When bees swarm, they are highly exposed. Scouts must find a new, permanent nest site that is fast, accurate, and has unified agreement. Social insects are perfect for this because they share 100% evolutionary alignment (no selfish competition).
 
 > Social insects have zero internal competition because they are all sisters maximizing their mother’s fitness. This total lack of selfishness is the absolute prerequisite for the positive feedback loops and decay mechanics to achieve true optimality—unlike human groups.
@@ -519,7 +521,7 @@ We will also look at some examples of swarm robotics. One of the important thing
 
 --- 
 
-## 5. The Adaptive Benefits of Collective Behaviour
+### 5. The Adaptive Benefits of Collective Behaviour
 Engineers and biologists prize self-organizing collective systems because they inherently possess powerful adaptive properties:
 - **Self-Organising:** No leader or central organizer is required.  
 - **Scalable:** The system scales effortlessly with variable numbers of individuals.  
@@ -528,7 +530,7 @@ Engineers and biologists prize self-organizing collective systems because they i
 
 ---
 
-## 6. Collective Intelligence in Humans
+### 6. Collective Intelligence in Humans
 **Collective Movement:** Human crowd movement can be modeled with very simple local rules (e.g., choosing the most direct path while maintaining a distance from obstacles that ensures a minimum time-to-collision). Furthermore, a tiny, informed minority can seamlessly drive the behavior of a massive, uninformed group without the group realizing it
 
 **Wisdom of the Crowds:** Aggregating independent group guesses (like guessing the number of marbles in a jar) is often highly accurate because individual random over- and under-estimates cancel each other out.
@@ -541,7 +543,9 @@ Engineers and biologists prize self-organizing collective systems because they i
 
 ---
 
-## 7. Swarm Robotics (Machine Collective Behaviour)
+## Part 2: Collective Behavior in Machines
+
+### 7. Swarm Robotics
 **Engineering Goals:** Applying biological local rules to robotics promises massive fault tolerance, scalability, flexibility, and lower costs than building single complex robots.
 
 **Kilobots (2014):** A thousand-robot swarm utilizing cheap, vibrating robots. By relying on "gradient" values passed locally from stationary seed robots, the swarm can programmatically assemble into complex 2D shapes purely through edge-following and noisy local communication.
@@ -549,5 +553,33 @@ Engineers and biologists prize self-organizing collective systems because they i
 **Robot Termites (2014):** Robots independently building 3D structures. They share identical, pre-compiled "traffic rules" and use strict short-range sensing to attach bricks based on geometric requirements.
 
 **Current Outlook:** While swarm robotics has successfully proven biological concepts through the modeling-observation loop, there are currently no major real-world commercial applications due to lingering high costs and physical/hardware limitations.
+
+---
+
+## Week 3 References/Readings
+
+### [Swarm intelligence in animals and humans (Krause et al., 2010)](./weeks/week_3/files/week_3_lecture_collective_behaviour.pdf)
+
+This paper unifies comparative psychology and behavioral ecology by establishing a strict definition of Swarm Intelligence (SI): the aggregation and processing of independently acquired information through social interaction to solve a cognitive problem beyond individual capacities.
+- Swarm intelligence (SI), a term coined by Gerardo Beni
+- "two or more individuals independently, or at least partially independently, acquire information and these different packages of information are combined and processed through social interaction, which provides a solution to a cognitive problem in a way that cannot be implemented by isolated individuals."
+
+The authors break down direct biological interactions, explaining optimal group navigation via the "many wrongs principle" (where averaging independent directional vectors minimizes individual cognitive error) and collective choice via quorum decision-making (balancing speed and accuracy based on threshold numbers).
+
+Crucially, the paper maps out the strict boundaries of the "wisdom of the crowd" paradigm, drawing a sharp distinction between problems of imprecision and problems of systematic bias. While large groups excel at filtering out individual imprecision (e.g., guessing items in a jar), they fail and consolidate errors when faced with complex data structures or systemic mental traps (e.g., combinatorics), where individual expert reasoning remains mathematically superior.
+
+Ultimately, the text highlights that while animal SI acts as an evolutionary enabler for highly interdependent individuals, human electronic platforms (like prediction markets) allow human experts to weaponize collective processing as a targeted analytical tool.
+
+Crucially, the authors note a common misconception: a group possessing functional or identity diversity is not inherently an example of SI. True swarm intelligence only occurs when the interaction and processing between those diverse individuals generates entirely new cognitive solutions.
+
+
+> Krause, J., Ruxton, G. D., & Krause, S. (2010). Swarm intelligence in animals and humans. Trends in ecology & evolution, 25(1), 28-34.
+
+--
+
+### Swarm Robotics:  Past, Present, and Future
+This paper evaluates the progression of swarm robotics from its early biological roots in exploring stigmergy to its status as a mature engineering discipline. The authors explicitly contextualize the micro-macro problem, emphasizing the severe difficulty of compiling individual agent rules to achieve complex, guaranteed macro-level performances. To bridge the simulation-reality gap, where real-world multi-agent interactions quickly degrade controllers evolved in simulators like ARGOS, the field must prioritize standardized benchmark environments and high-fidelity modeling of short-range perception. Critically, the authors highlight that properties like fault tolerance and scalability are not automatically granted by grouping robots; they require prescriptive design. To transition swarms out of the lab and into unstructured, real-world applications (such as space missions with limited CPU capabilities, precision agriculture, or micro-scale targeted medicine), future research must transcend rigid biological metaphors. This includes embracing swarm heterogeneity, building self-organizing ad-hoc control hierarchies, leveraging deep reinforcement learning for visual information fusion, and securing communication networks against malicious agents via blockchain architectures.
+
+> Dorigo, M., Theraulaz, G., & Trianni, V. (2021). Swarm Robotics:  Past, Present, and Future. Proceedings of the IEEE, 109(7), 1152-1165.
 
 ---
