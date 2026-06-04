@@ -257,3 +257,19 @@ The empirical pass-length curve and the simulated pass-length curve should close
 - **Statistical Power:** We want to compare things to the null to infer statistal signficance. The null models would just be random noise, hence, any pattern founds in the empirical would flag up as statistically signficant. Where as with want a model which "selective rejects the null". The null tells us that a given finding would only occur in 1% of randomly generated models. But a seasons worth of data might show a particular player/team is acheiving it 50% of the time. 
 
 --- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+# References 
+
+Guardiola’s teams, for instance, have demonstrated higher density values, which have been associated with prolonged ball possession and intricate passing sequences (Immler et al., 2021) -> Alves

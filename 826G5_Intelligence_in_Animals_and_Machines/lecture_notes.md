@@ -549,3 +549,5 @@ Engineers and biologists prize self-organizing collective systems because they i
 **Robot Termites (2014):** Robots independently building 3D structures. They share identical, pre-compiled "traffic rules" and use strict short-range sensing to attach bricks based on geometric requirements.
 
 **Current Outlook:** While swarm robotics has successfully proven biological concepts through the modeling-observation loop, there are currently no major real-world commercial applications due to lingering high costs and physical/hardware limitations.
+
+---

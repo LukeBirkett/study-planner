@@ -60,7 +60,7 @@ To build an actual Network Science project for football, you have to treat it as
 
 ===
 
-# Structure/Floe
+# Structure/Flow
 *There seem to be some clear themes arise to give structure to the lit review.*
 
 ## Alves Systematic Review
@@ -68,6 +68,8 @@ To build an actual Network Science project for football, you have to treat it as
 The gold standard source for this liturature review pertains to systematic review written by Richardo Alves in 2025 titled: *Social network analysis in football: a systematic review of performance and tactical applications*. This review covers the key foundational papers that helped sculpt the Football Network landscape today as well as a comprehensive review of the various methods and approaches that have been deployed with the goal of unvieling the underlying performance and tactical approaches of teams, managers and players in footall. 
 
 > If time, it would be cool to knit this review and the papers into a reference/author network. 
+
+---
 
 ## How Networks are Applied to Football
 *Basic, theory, translations, paradigm (micro etc): not findings!* 
@@ -80,13 +82,28 @@ That being said, we could use any interaction here and we are not restrict to po
 
 Alves highlights 3 distinct levels to the research approaches taken in the liturature: micro (individual player metrics), meso (small groups of players), and macro (the entire team’s network)" (Buldú et al., 2018). 
 
-**Micro-level** focused research refer to metrics that can be tethered to an individual player (node) and makes up 45.8% of the research themes from the 55 papers reviewed by Alves (2025). This includes things like **centrality measures** whereby a nodes **degree centrality** represents the number of passes, or specified interaction, made by a player (Ramos et al., 2017; Buldú et al., 2018). **Closeness centrality** allows us to identify key players who can distribute the ball to all players on the pitch (Ramos et al., 2017; Ribeiro et al., 2017; Buldú et al., 2018). **Clustering coefficents** also inform us as to how well-connected a player with with other teammates and in football term this metric can be translated into infer how skilled a player in create passing triangles on the pitch (Peña and Touchette, 2012; Ramos et al., 2017; Ribeiro et al., 2017; Buldú et al., 2018).
+**Micro-level** focused research refer to metrics that can be tethered to an individual player (node) and makes up 45.8% of the research themes from the 55 papers reviewed by Alves (2025). From this perspective, **centrality measures** are commonly deployed to identify players who operate as the systems tactical hubs. **Degree Centrality** simply captures the frequency of players involves in a given interaction setting, i.e. passing (Ramos et al., 2017; Buldú et al., 2018). Generally highlighting central defenders and midfielders key contributors (Peixoto et al., 2017). **Closeness centrality** allows us to identify key players who can distribute the ball to all, or the widest range, players on the pitch (Ramos et al., 2017; Ribeiro et al., 2017; Buldú et al., 2018). **Clustering coefficents** also inform us as to how well-connected a player with with other teammates and in football term this metric can be translated into infer how skilled a player in create passing triangles on the pitch (Peña and Touchette, 2012; Ramos et al., 2017; Ribeiro et al., 2017; Buldú et al., 2018).
 
-The **Meso-level** of the paradigm is slightly less defined, "intergating both micro and macro analytical perspectives" (Alves, 2025) and because of this only makes up 4.66% of research. Largely, it can be summarised as player (node) level metrics that require significant information from over players and the rest of the team, if which the building blocks of relevant metrics and research themes are **average neighbor degree** which forms a picture of **interaction strength** between players. This leads to things such as **(dis)assortivity coefficents** which can validate the source of a high centality metric by infering weather such players are just passing amongst a centrally located spine of high degree players, or distributing the ball wider, lower degree players such as wingers (**disassortative**) (Clemente et al., 2016). 
+The **Meso-level** of the paradigm is slightly less defined, "intergating both micro and macro analytical perspectives" (Alves, 2025) and because of this only makes up 4.66% of research. Largely, it can be summarised as player (node) level metrics that require significant information from over players and the rest of the team, if which the building blocks of relevant metrics and research themes are **average neighbor degree** which forms a picture of **interaction strength** between players. This leads to things such as **(dis)assortivity coefficents** which can validate the source of a high centality metric by infering weather such players are just passing amongst a centrally located spine of high degree players, or distributing the ball wider, lower degree players such as wingers (**disassortative**) (Clemente et al., 2016).
 
-Finally, Avles defines Macro-level as metrics and properties that provide "an overarching perspective of the team’s collective interactions" (Alves, 2025)
+> Assortativity measures degree correlation. It assumes a certain degree distribution already exists (whether heterogeneous or homogeneous) and asks: Do nodes prefer to connect to other nodes that have a similar degree to themselves?
 
-Macro 49.6)
+Finally, Avles defines Macro-level as metrics and properties that provide "an overarching perspective of the team’s collective interactions" (Alves, 2025). The review comprises of 49.6% of this type of research. 
+
+Marco metric include things such as: 
+- Total edges (interactions)
+- Network density which proxies as overall team cohension depending on the interaction used
+- Network diameter which tells the maxium amount of time/length it takes a team to traverse the field
+- Cliques which is the frequency of specifc interaction patterns and in football is often refer to as passing triangles. Triangles are important shapes in football as they provide the angle and route to work around a single player. 
+- Network heterogeneity. Heterogeneity is about who exists in the network,the diversity of the nodes' degrees. It can help to unviel whether a team contains key, conenctive hubs which knit the team together, or whether a team contains equally conenctive nodes through out [MUST BE A REFERCE FOR AJAX OR CITY HERE]. 
+- (Oliveira and Gama, 2012; Clemente et al., 2016; Ribeiro et al., 2017; Ievoli et al., 2021b) [i removed some points so need to check if these are still relevant]
+
+Alves (2025) concluded from their review that the most frequent network properties focused on were network density, betweenness centrality, clustering coefficient, and closeness centrality.
+
+#### Temporal Appraoches 
+> Traditional network analyses often take a static approach, aggregating data across an entire match. However, football is inherently dynamic, and the use of sliding time windows (e.g., 2- or 5-m intervals) allows researchers and practitioners to examine the evolution of passing structures and detect real-time shifts in team strategy (Cao, 2023)
+
+---
 
 ## Findings and Motivations
 *there are many finding and understanding. These underpin the motivation to applying networks to football*
@@ -95,16 +112,60 @@ Several studies demonstate that network structures denominated by igh density, c
 
 There is a key theme in the liturature is deploying centrality metrics to identify key tactical players which can then be used to inform coaches tactical approaches for match or for transfer targets (Alves, 2025)
 
+A team with an elevated clustering coefficent has a greater number of triangular connections indicating greater robustness stemming from superior ball circulation across multiple zones (Herrera-Diestra et al., 2020). 
+
+Díaz Díaz et al. (2024) was able to use network propeties to make obersivations about players within particular teams and systems. They found that central defenders and midfielders in the Argentinian national team obtained high centrality measures, specifically, Degree Centrality and Closeness Centrality. However, they found for the standout, highly influential players, such as Leo Messi, the key metrics that they prevail in are things like Page Rank, Eigenvector Centrality, Hubs and Authority. This suggests that mearly being a hub with a high centrality does not make you a highly talented player, instead it could just be due to a players postion and the system they play in. 
+
+Several pieces of research have observed that winning teams are characterized by higher clustering coefficients which suggests greater local interconnectivity (triangles) suggesting tactical approachs which place emphasis on short passing to nearby players is an optimal strategy (Aquino et al., 2019; Medina et al., 2021)
+
+Similarly, obersvations have been made that high finishing, top ranking teams display "higher levels of network density, average degree, weighted degree, and clustering coefficients" (Alves, 2015, Pan et al., 2024; Clemente, 2018; Castellano and Echeazarra, 2019; McLaren and Spink, 2020)
+
+Abstract from the result, or finishing position, itself it has been repeatedly concluced that metrics such as density and clustering coefficient translate into a tool to assess teams cohesion and (local) connections with teammates (Clemente and Martins, 2017a; McLean et al., 2018b; Immler et al., 2021; Mclean and Salmon, 2019). With authors commonly making the extended link to success (Clemente and Martins, 2017a; Immler et al., 2021)
 
 
 
 
+
+
+---
+
+## PassMap Paradigm
+
+*There is a lot of focus on the interacations used to model the netowrks, specically in the notion of passing and the PassMap frame, including the spatial component.*
+
+Whilst there are a plethora of interactions to choose from when modelling the game of football, the absolute most popular is passing. 
+
+Most of the methods described above as done so from the perspective of the "player-passing network". [Who to Who]
+
+This paradigm was popularized by the seminal paper(s) but Bludu (TODO: compile relevant refs). Extensions to the paradigm include: pitch-passing networks and pitch-player passing networks (Buldú et al., 2018). [Where to Where]
+
+In the pitch-passing networks the pitch itself is split into pre-defined zones and these zones become the networks nodes. Passes that take place from one zone to another are mapped in the network. This means there is no notion of players, just zones (nodes) and passes (edges). [Who-Where to Who-Where]
+
+The pitch-player passing network is an extension of this,
+- This one is quite complicated and probably isn't what I will use
+- drawing a pitch with 198 nodes and thousands of crossing lines creates an unreadable "hairball," scientists rely on three specific visual formats:
+- Visual A: Multilayer Network Graphs (The "3D Layer" View)
+- Visual B: The Grid Heat Matrix (Adjacency Plot)
+
+> Passes along the match give rise to three main types of passing networks: (i) player passing networks, where nodes are the players of a team (Passos et al., 2011; Grund, 2012), (ii) pitch passing networks, where nodes are specific regions of the field connected through passes made by players occupying them (Cintia et al., 2015) or (iii) pitch-player passing networks, where nodes are a combination of a player and its position at the moment of the pass (Cotta et al., 2013; Narizuka et al., 2014).
+> 
+> This is Bludu 2018
+
+COME BACK TO THIS SECTION AFTER READING BLUDU, WILL BE EASIER TO WRITE
+
+In comparison to player-based passing networks, pitch-passing networks offer a more system-level perspective on offensive behavior, revealing how collective ball movement unfolds across the field (Alves, 2025)
 
 
 ===
 
-Then there are many finding and understanding. These underpin the motivation to applying networks to football
+In network science nodes themselves often lack an explicity spatial property, instead being represented contingent on a given network property, or determined by the hubs that they connect to - if they are a hub then arbitariy central in the graph. 
 
-Finally, there is a lot of focus on the interacations used to model the netowrks, specically in the notion of passing and the PassMap frame, including the spatial component. 
+This is a huge issue for applications in sport whereby the coordinates are a key property of the node. 
 
-===
+To address this, researchers have developed...
+
+
+
+
+
+---

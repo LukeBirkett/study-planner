@@ -18,7 +18,39 @@ It is crucial to have the `drafting` or structure based draft completed as this 
 Reading list; will become more populated after 2. alves disemination and 3. prompt research
 - Bludu
 
-Cheng, Y.-S., Chang, A. Y.-C., & Doya, K. (2025). Information-theoretical analysis of team dynamics in football matches. Entropy, 27(3), 224. https://doi.org/10.3390/e27030224
 
-Citations of Alves Review:
-https://scholar.google.co.uk/scholar?cites=1476073454934063653&as_sdt=2005&sciodt=0,5&hl=en
+===
+
+PassMap, Spatial
+
+> Javier Buldú popularized the terminology in his 2018 framework paper ("Using Network Science to Analyse Football Passing Networks")
+
+> Narizuka et al. (2014). They built a network combining 11 players with 18 pitch zones, resulting in an abstract \(198 \times 198\) node adjacency matrix.
+
+> José L. Herrera-Diestra, Buldú, et al. (2020) — "Pitch networks reveal organizational and spatial patterns of football teams".
+
+> studies have introduced pitch-passing networks, which incorporate spatial dimensions by dividing the field into multiple zones (nodes) and quantifying the volume of passes between them (links) (Buldú et al., 2019; Herrera-Diestra et al., 2020; Gong et al., 2023; Novillo et al., 2024)
+
+===
+
+**Bottom Up, Limitations:**
+
+> Cheng, Y.-S., Chang, A. Y.-C., & Doya, K. (2025). Information-theoretical analysis of team dynamics in football matches. Entropy, 27(3), 224. https://doi.org/10.3390/e27030224
+
+===
+
+**Network Metrics:**
+
+Recent methodological advances have introduced additional network metrics such as, proximity prestige, betweenness centrality, entropy, variability, and robustness 
+
+> (Herrera-Diestra et al., 2020; Martínez et al., 2020; Martins et al., 2020, 2021; Sarmento et al., 2020; Ichinose et al., 2021; Alves et al., 2022; Gama et al., 2020; Gonçalves et al., 2021; Medina et al., 2021).
+
+===
+
+**More Network Metrics**
+
+Additional metrics such as betweenness centrality, clustering coefficient, closeness centrality, eigenvector centrality, and proximity prestige offer more nuanced insights into player influence and strategic positioning 
+
+> (Arriaza-Ardiles et al., 2018; Buldú et al., 2019; Korte et al., 2019; Wiig et al., 2019; Martins et al., 2021; Assunção et al., 2022; Nath and Chowdhury, 2024)
+
+===
