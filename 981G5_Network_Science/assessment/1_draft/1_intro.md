@@ -20,6 +20,8 @@ The metric itself is based on a single shot but it can be aggegated over a given
 
 However, football is a game of mutli-faceted interactions taking places amongst ~24 players within in a spatially constrained domain. Logically, it sense that any truly comprehensive method of analysis should evaluate based on these inputs, not isolated events. 
 
+> Collective ball sports, such as football and basketball, can be regarded as multiparticle systems of tactically interacting players confined to the field (Yamamoto, 2025; Polyas Urn)
+
 This is where networks come in
 - What is a network
 - What is network science

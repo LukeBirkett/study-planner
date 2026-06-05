@@ -67,6 +67,8 @@ To build an actual Network Science project for football, you have to treat it as
 
 The gold standard source for this liturature review pertains to systematic review written by Richardo Alves in 2025 titled: *Social network analysis in football: a systematic review of performance and tactical applications*. This review covers the key foundational papers that helped sculpt the Football Network landscape today as well as a comprehensive review of the various methods and approaches that have been deployed with the goal of unvieling the underlying performance and tactical approaches of teams, managers and players in footall. 
 
+> "this systematic review aimed to synthesize current research using network analysis as a tool to evaluate team performance and tactical behavior."
+
 > If time, it would be cool to knit this review and the papers into a reference/author network. 
 
 ---
@@ -77,6 +79,8 @@ The gold standard source for this liturature review pertains to systematic revie
 To apply Network Science to football, we represent nodes as players and edges as some sort of interaction that links 2 players (Ramos et al., 2017).
 
 Primarily the link used is passes as this is a clearly definable, bi-lateral iteration that contains an out-node (the passer) and an in-node (the receiver) (Bludu 2018). Additionally, the purpose of a football match is to win games which occurs through scoring (more) goals of which the prelude is generally passes. Therefore, modelling this interaction should give us an understanding of the infield performance and tactical approaches taken. 
+
+> Somewhere there should be a notational preliminaries section denoting the methematical signed for the chose network.
 
 That being said, we could use any interaction here and we are not restrict to possesion based or attacking routed interactions. Alves mentions that defenensive based interactions are an under explored area of research. Additionally, there are many examples in the liturate of multlilayered networks, often including passing by default, whereby the subsequent layers contain altnerative interactions to provide a more rounded scope of the onfield acitons. 
 
@@ -98,6 +102,8 @@ Marco metric include things such as:
 - Network heterogeneity. Heterogeneity is about who exists in the network,the diversity of the nodes' degrees. It can help to unviel whether a team contains key, conenctive hubs which knit the team together, or whether a team contains equally conenctive nodes through out [MUST BE A REFERCE FOR AJAX OR CITY HERE]. 
 - (Oliveira and Gama, 2012; Clemente et al., 2016; Ribeiro et al., 2017; Ievoli et al., 2021b) [i removed some points so need to check if these are still relevant]
 
+> "At the team level, network metrics provide an overarching view of how players are connected, offering valuable insights into the team’s tactical structure and playing style." (Alves, 2025)
+
 Alves (2025) concluded from their review that the most frequent network properties focused on were network density, betweenness centrality, clustering coefficient, and closeness centrality.
 
 #### Temporal Appraoches 
@@ -108,7 +114,13 @@ Alves (2025) concluded from their review that the most frequent network properti
 ## Findings and Motivations
 *there are many finding and understanding. These underpin the motivation to applying networks to football*
 
+*more accurately a "why" apply network science to football*
+
+"SNA offers a powerful framework to decode the complexity of football performance, evolving from static graphs to dynamic, rolesensitive, and context-rich models." (Alves, 2025)
+
 Several studies demonstate that network structures denominated by igh density, clustering coefficients are correlated with sucessful team performance (Alves, 2025). 
+
+"Centrality metrics, for example, offer valuable insights into how individual players contribute to collective team performance, aiding in tactical evaluations and player-specific feedback." (Alves, 2025)
 
 There is a key theme in the liturature is deploying centrality metrics to identify key tactical players which can then be used to inform coaches tactical approaches for match or for transfer targets (Alves, 2025)
 
@@ -120,10 +132,39 @@ Several pieces of research have observed that winning teams are characterized by
 
 Similarly, obersvations have been made that high finishing, top ranking teams display "higher levels of network density, average degree, weighted degree, and clustering coefficients" (Alves, 2015, Pan et al., 2024; Clemente, 2018; Castellano and Echeazarra, 2019; McLaren and Spink, 2020)
 
-Abstract from the result, or finishing position, itself it has been repeatedly concluced that metrics such as density and clustering coefficient translate into a tool to assess teams cohesion and (local) connections with teammates (Clemente and Martins, 2017a; McLean et al., 2018b; Immler et al., 2021; Mclean and Salmon, 2019). With authors commonly making the extended link to success (Clemente and Martins, 2017a; Immler et al., 2021)
+Abstract from the result, or finishing position, itself it has been repeatedly concluced that metrics such as density and clustering coefficient translate into a tool to assess teams cohesion and (local) connections with teammates (Clemente and Martins, 2017a; McLean et al., 2018b; Immler et al., 2021; Mclean and Salmon, 2019). With authors commonly making the extended link to success (Clemente and Martins, 2017a; Immler et al., 2021).
+
+Arriaza-Ardiles et al. (2018) highlight that whilst total counts of metrics such as passes provide the information to analyse a team. Metrics like clustering and centrality complement to the team information and contain more naunce regarding tacticts, and specifccally offensive, of the team. 
+
+Bludu (2019) consistently found that network metrics were higher for the FC Barcelona team **compared** to rest of teams (in the league). However, they also highlight that the number of passess alone has a huge impact (benefit) on network properties. 
 
 
+Herrera-Diestra et al. (2020) in their study of organization of pitch networks found that FC Barcelona were characterized by hgher number of triangles (clustering) in their networks **compared** to league rivals. Additionally, they established that Barcelona's networks were more robust as a result. 
 
+Studies on the influences of position have concluded that central players, particularly defensive midfields and central defenders, obtain a higher degree centrality due to contributing more to the ball possesion of the team (Clemente et al., 2020)
+
+Nath & Chowdhury (2024) found weighted edge (cumulative counts) closeness centrality measures "the proximity between players, revealing insights into coordination and network efficiency".
+
+"practitioners can better interpret their teams “tactical patterns and understand individual players” contributions during matches" (Ribeiro et al., 2017). (Alves, 2025)
+
+Ignoring the network propeties themselves, the resulting visualisation of the network containing a given set of interactions provides a direct visual overview of a team's stategy as evidenced by a games outputs. We can easily and quickly seen play patterns, "hot-spots" and underlying weaknesss such as dis or less connected nodes (Peña and Touchette, 2012)
+
+
+High clustering coefficents have been correlated with sucsessful, competition winning teams such as Spain in the 2010 World Cup (Cotta et al., 2013). The logical pertaining that a high coefficent demonstates effective utilization of central areas, particularly though key central midfield roles.  
+
+Network density has been shown to contain prodictive qualities for goalscoring and match outcomes, thus aiding coaches and analysts in identifiying effective tacticals and/or influential players (Grund, 2012; Pina et al., 2017)
+
+Alves (2025) consistently found throughout their review that the liturature associates cohesive network structures with enhanced team performance. 
+
+Multiple studies conclude that highly interconnected passing networks (is this clustering or density?) in footballs terms translate into representations of ball retention, transition plays during possesion and more offensive actions (Clemente and Martins, 2017a; Pina et al., 2017; Kawasaki et al., 2019) -> (Alves, 2025)
+
+"Similarly, top-ranked teams displayed higher levels of network density, average degree, weighted degree, and clustering coefficients (Pan et al., 2024; Clemente, 2018; Castellano and Echeazarra, 2019; McLaren and Spink, 2020), reinforcing the link between structural connectivity and performance outcomes" -> (Alves, 2025)
+
+That being said, the relationship between network properties and SUCESS is not universally agreed. Mclean et al. (2018a) determined that during competitions (UEFA EURO 2016 tournament), therefore charactersized by low volume of games, there was no "significant differences in passing network characteristics" between the successful and unsuccessful teams. This finding held true between group and knockout stage matches. This suggests that performance outcomes by be influenced by additional contextual and/or tactical factors not capture by passing networks alone. 
+
+Individual networks are generally respresentations of singles games but can be aggregated into wider themes, i.e. season length, or period, or split into even smaller representations, i.e periods of games. Importantly, it is the more granular individual components that allows for the application for temporal analyses. Pan et al. (2024) conducted longitudal analyses of World Cup tournaments demonstating the themes in variations of play style affect network density. The 2018 tournament was evidenced by a prevelance of direct style of play which relfected in lower density metrics stemming from fewer connections between players in the attacking and possenal phases. Constrast this to 2022 which showed a tactical shift towards possension based aprroachs, particular among the top-tier teams, which resulted in higher density metrics (Pan et al., 2024). This can be interpretted as evidence that stylistic preferences, wherther they been influenced by competition context, domain of research (age, gender), or restrictions in a teams availbility (injuries), can and will have an impact on the network structure from which connections can be identifed with infield outcomes. In turn this should inform training design and match preparation (Armatas et al., 2022; Oliveira and Clemente, 2018)
+
+Modern studies have revealed that when utilising a pitch-passing network paradigm for analyis, a trend whereby teams that finished at the top of the league tend to adopt more possession-oriented styles compared to lower-ranked teams (Gong et al., 2023).
 
 
 
@@ -151,9 +192,17 @@ The pitch-player passing network is an extension of this,
 > 
 > This is Bludu 2018
 
+> In comparison to player-based passing networks, pitch-passing networks offer a more system-level perspective on offensive behavior, revealing how collective ball movement unfolds across the field. When combined with time window analysis, this dynamic approach allows coaches and performance analysts to monitor and respond to in-game tactical changes more effectively (Cao, 2023).
+
+
+
 COME BACK TO THIS SECTION AFTER READING BLUDU, WILL BE EASIER TO WRITE
 
 In comparison to player-based passing networks, pitch-passing networks offer a more system-level perspective on offensive behavior, revealing how collective ball movement unfolds across the field (Alves, 2025)
+
+
+
+Kawasaki et al., 2019 present an alternative approach to PassMaps whereby the node is player agnostic. Pass locations (passer and a receiver) are clustered into "Nodes" which represent key, or less important, passing locations. These clustered locations are then knitted into a network whereby the edges represent passes between different clusters. Properties like number of passes, total links, degree centrality, scaled connectivity and clustering coefficient are then computed. 
 
 
 ===
@@ -164,8 +213,4 @@ This is a huge issue for applications in sport whereby the coordinates are a key
 
 To address this, researchers have developed...
 
-
-
-
-
----
+===
