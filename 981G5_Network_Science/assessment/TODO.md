@@ -96,13 +96,17 @@ achieve greater success. [30,35]
 -  Pina TJ, Paulo A and Arau´jo D. Network characteristics of successful performance in association football: a study on the UEFA Champions League. Front Psychol 2017; 8: 1173. https://doi.org/10.3389/fpsyg.2017.01173
 - Ribeiro J, Silva P, Duarte R, et al. Team sports performance analysed through the lens of social network theory: implications for research and practice. Sports Med 2017; 47(9): 1689–1696. https://doi.org/10.1007/ s40279-017-0695-1
 
-Within SNA, two complementary families of metrics
-are distinguished.2,3,15 
-- Centrality measures (Degree, Betweenness, Eigenvector, Closeness, and Stress) quantify structural role and involvement level, answering "who participates most" and "who connects whom." 1,4
-These reflect the volume and positional importance of
-contributions to the passing network.
+Within SNA, two complementary families of metrics are distinguished
+- Centrality measures (Degree, Betweenness, Eigenvector, Closeness, and Stress) quantify structural role and involvement level, answering "who participates most" and "who connects whom." [4]
+    - [4] Clemente FM, Couceiro MS, Martins FML, et al. Using network metrics in soccer: a macro-analysis. J Hum Kinet
+- These reflect the volume and positional importance of contributions to the passing network.
 
+- Entropy-based measures (Node Transition Entropy and Network Transition Entropy) capture variability and unpredictability in passing choices, answering "how diversely the ball is distributed" and "how difficult it is to anticipate the next pass."
+- A player may have high degree centrality by repeatedly passing to the same teammate (low entropy, predictable), while another with moderate degree but high entropy distributes passes more evenly (unpredictable, harder to defend).
 
+(Micro) Degree, Closeness, Betweenness, and Eigenvector centralities were prioritised as indicators of influence and mediation of information flow, consistent with previous football network studies.
+
+While some degree of conceptual overlap may exist among these metrics,2,3,14,15 their combined presentation offers a multi-dimensional profile of individual involvement in the passing network.
 
 
 
@@ -113,6 +117,9 @@ contributions to the passing network.
 
 
 ----
+
+**How this paper links to mine:**
+
 - without a null model baseline, they cannot prove that their advanced tactical interpretations are actually true.
 - they show that in Match 2, the team’s Entropy Rate (unpredictability) and Spectral Gap (ball circulation speed) increased.
 - they make a tactical inference: Portugal played a more fluid, adaptive, and unpredictable style in the final compared to the semi-final.
@@ -131,7 +138,9 @@ contributions to the passing network.
 
 
 Given this research finding, I also need ot read thier systematic review:
-> Gama, J., Dias, G., Pereira, M., Mendes, R., Mendes, R.S., Sarmento, H. and Vaz, V., 2026. Network analysis to understand variability and patterns of individual and collective behaviour in professional football: a systematic review. International Journal of Performance Analysis in Sport, pp.1-62.
+> [2] Gama, J., Dias, G., Pereira, M., Mendes, R., Mendes, R.S., Sarmento, H. and Vaz, V., 2026. Network analysis to understand variability and patterns of individual and collective behaviour in professional football: a systematic review. International Journal of Performance Analysis in Sport, pp.1-62.
+
+Note, G Dias is also in Alve review
 
 ---
 
