@@ -18,63 +18,20 @@ Reivew of current landscape of Network Science in Football. Reviews 55 Studies t
 
 ---
 
-##### Domain (Football) Considerations
-- Like any other approach, SNA metrics requires careful contextualization with established situational variables known to influence football performance such as, match status, quality of opponent, time windows, match location and tactical systems (Mclean et al., 2018a; Praça et al., 2019; Aquino et al., 2020; Pan et al., 2024; Mclean et al., 2019)
-- winning contexts tend to increase the prominence of midfielders, wingers and forwards within the network structure, reflecting with greater involvement in maintaining possession and creating offensive opportunities (Praça et al., 2019)
-
-> i wonder if this is important from the perspective of create null model baselines, or it a full aggregation is the correct baseline. 
-
-- "tactical systems also play a crucial interpretative role in the analysis of network metrics. Aquino et al. (2019) reported that the 1-4-2-3-1 tactical system was associated with higher macro- and micro-level network metrics when compared to the 1-4-4-2 and 1-4-3-3 tactical systems, suggesting greater cohesion and structural connectivity"
-
-- "emerging evidence suggests that tactical systems can significantly shape both teamlevel and positional network structures. For example, teams operating in a 1-4-2-3-1 formation have been found to exhibit higher values in both micro and macro-level network metrics when compared to those using 1-4-4-2 or 1-4-3-3 systems, indicating greater cohesion and structural connectivity (Aquino et al., 2019).
-
--  contemporary studies increasingly employ machine learning, multilayer networks, and real-time data collection technologies (e.g., GPS and multi-camera systems) (Korte et al., 2019; Ievoli et al., 2021a; Pan et al., 2024; Ievoli et al., 2021b; Zhang et al., 2018). 
-
-- Furthermore, several studies reported tactical shifts in response to match status. Praça et al. (2019) found that teams tended to adopt a more direct playing style when leading, while those trailing often favored a possession-based approach (reflected in changes at the microstructural level). These adaptations highlight the dynamic nature of team strategies and their **influence on network properties** (Vivés et al., 2018; McLean et al., 2017; Yamamoto and Narizuka, 2018; Zhao and Zhang, 2020).
-
-- A player’s prominence in the network is ultimately a function of the
-team’s tactical configuration and the demands of their specific role
-(Clemente et al., 2019; Alves et al., 2022).
-
-
-
-
-
-##### Other Data/Methods Applied to Football
-- "advancements in technology and the continuous evolution of tactical knowledge by coaches, analysts, and researchers have significantly increased the variety and sophistication of methods and metrics used to evaluate team performance (Sarmento et al., 2022)"
-- These developments have facilitated the integration of numerous performance indicators and holistic scientific methodologies, essential for objectively analyzing both individual and collective behaviors in modern football (Ribeiro et al., 2017; Sarmento et al., 2022; Mehta et al., 2024)
-- researchers have cautioned against over interpreting network metrics in isolation. Aquino et al. (2019) emphasized that performance success can emerge from a variety of tactical models, and thus variability in both macro- and microlevel network measures is not uncommon
-- "The integration of event data (e.g., passes, shots) with positional data (e.g., player coordinates) presents an opportunity to generate more sophisticated and actionable insights, both at the individual and collective levels."
-
-##### Other Sports
-- "in basketball it was identified that unpredictability and connectedness across players was associated with better performance (Fewell et al., 2012)"
-- "In water-polo, through team analysis it was possible to understand attacking strategies and performance outcomes (Passos et al., 2011)"
-- "Even in motorsport drivers and professional golfers was possible to analyze the relationship between status and its influence on performance (Bothner et al., 2012)" 
-
-##### Network/Graph Theory
-- Originally rooted in sociology and anthropology, SNA is an interdisciplinary approach that emerged in the 1930s (Wäsche et al.,2017)
-- grounded in Graph Theory, a mathematical discipline used to examine relationships within groups of actors or organizations (“nodes”) interconnected through ties or links (Rice and YoshiokaMaxwell, 2015)
-- SNA has since been successfully applied across diverse fields including business, epidemiology, and organizational studies to understand complex interaction systems (Wäsche et al., 2017)
-- 
-
-
-##### Other
-- "there remains an overrepresentation of elite men’s football and offensive phases, with limited focus on defensive networks, youth categories, and women’s football"
-- "Future research should adopt longitudinal designs, multi-layer network approaches, and closer collaboration with practitioners to enhance the operational utility of network insights in coaching and performance analysis."
-- "While tactical formations are a central aspect of football strategy, relatively few studies have explicitly examined their influence on network metrics."
-- "Future research should aim to integrate more detailed tactical descriptors, such as pressing strategies, width utilization, or defensive compactness, into network analyses. Doing so would strengthen the connection between empirical findings and applied coaching practice, offering deeper, context-sensitive insights for optimizing performance."
-- "Incorporating a broader range of samples, including different age groups and female athletes, could reveal important variations in network behaviors and offer a more inclusive understanding of tactical patterns across different footballing contexts."
-- "Second, only a small number of studies analyzed data from an entire season for a single team. As previously noted by CaicedoParada et al. (2020), analyzing full-season data is essential to identify longitudinal fluctuations in network structures and tactical dynamics."
-- "many studies rely on limited sample sizes, often based on single-match analyses, which restrict the ability to detect broader tactical trends or structural consistencies."
-- Another critical gap in the literature is the predominant focus on offensive network patterns. 
-- 
-
-
----
-
 ##### References
 [Ribeiro, J., Silva, P., Duarte, R., Davids, K., and Garganta, J. (2017). **Team sports performance analysed through the lens of social network theory: implications for research and practice.**](https://link.springer.com/article/10.1007/s40279-017-0695-1)
 - Refernced alot in the intro
+- "Previous research has demonstrated that cohesive network structures and well-chosen centrality metrics can illuminate performance outcomes. For example, teams with higher connectivity and balanced interaction patterns often achieve greater success. [30,35]" -> Gama
+
+----
+
+> Clemente FM, Couceiro MS, Martins FML, et al. Using network metrics in soccer: a macro-analysis. J Hum Kinet
+- Author is a co-author elsewhere in the list
+- Game references this author/paper as centrality measures to answer who participates most" and "who connects whom."
+- These reflect the volume and positional importance of contributions to the passing network.
+
+---
+
 
 
 [Ramos, J. J., Lopes, R. J., Marques, P., Araújo, D., and Araujo, D. (2017). **Hypernetworks reveal compound variables that capture cooperative and competitive interactions in a soccer match**. Front. Psychol. 8:1379. doi: 10.3389/fpsyg.2017.01379](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.01379/full)

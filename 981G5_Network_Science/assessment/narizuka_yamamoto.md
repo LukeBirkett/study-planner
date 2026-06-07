@@ -201,7 +201,15 @@ A stochastic model describing the emergence of new passes based on a mathematica
 
 
 
+---
 
+(FROM GAMA)
+
+### Prior Markov-chain modelling of Passes
+"prior research has successfully established the Markov-chain model as a valid approximation for the **growth of passing networks over time** [16] and to model state transitions between field zones [17]"
+- [16] Yamamoto, K. and Narizuka, T., 2018. Examination of Markov-chain approximation in football games based on time evolution of ball-passing networks. Physical Review E, 98(5), p.052314.
+
+> CONVERSE WITH GEMINI TO UNDERSTAND IF [16] IS DYNMAICS OF A NETOWRK AND THEREFORE A NULL MODEL
 
 
 ---
