@@ -167,14 +167,132 @@ This combination of metrics allows a multi-layered understanding of collective c
 ---
 
 ## Markov Section
-This is the end of the network section (not results)
+This is the end of the network section where network properties are explained (**not results**)
 
 Labelled "Markov-spectral modelling of passing networks" 
 
 This section augments the SNA layer with a Markov- spectral model of ball circulation.
 
+Passing interactions are represented as a finite-state, time-homogeneous Markov chain on the active player set, providing compact indices of passing variability, diffusion speed, navigability, and structural robustness.
+
+> Just to re-iterate, this is NOT relevant for the network project
+
+By analysing the **transition probabilities of passes as a stochastic process**, we introduce a temporal dimension to the network analysis, enabling quantification of aspects like speed of ball circulation and distribution of possession that static metrics alone cannot capture.
+
+> "transition probabilities of passes as a stochastic process" the author is using this as a tool of for modelling the **dynamics on the network** but similar and maybe even identical methods can be used to build the network and generate the network itself (**dynamics of the network**)
+
+For each match, a directed weighted adjacency matrix A was constructed, where each entry represents the number of passes from one player to another.
+
+> This is literally just a PassMap but highlights that such as network can be represented as an 'adjacency matrix'
+
+For each match, a directed weighted adjacency matrix A was constructed, where each entry represents the number of passes from one player to another. From this adjacency matrix, a row-stochastic transition matrix P was derived on the active subgraph (players with at least one outgoing pass), where each entry represents the probability that a player passes to a specific teammate. When the empirical transition matrix was not irreducible, a teleportation correction (a = 0.15) was applied to ensure irreducibility of the Markov chain.
+- converting the raw passing "count" matrix into a probability transition matrix ($P$)
+- they are modifying the properites of the matrix itself using its own rows
+- i.e. they are using linear algebra 
+- turn raw counts into probabilities by performing an operation called row-normalization to create a row-stochastic matrix
+- every row in the matrix will sum up to exactly $1.0$ (or 100%)
+- to get the Transition Matrix ($P$), linear algebra takes each row and divides every entry in that row by the row's total sum
+- Mathematically, this is expressed as multiplying the inverse of a diagonal degree matrix ($D^{-1}$) by the adjacency matrix ($A$):
+- $$P = D^{-1}A$$
+- What if the Matrix is "Irreducible"?
+    - In a real football match, passing networks often have "dead ends."
+    - Imagine if Player 1 and Player 2 only pass to each other, and once Player 3 gets the ball, they only pass to Player 2. The ball gets trapped in a cycle between 1 and 2, and it can never get back to Player 3.
+    - Mathematically, this means the matrix is reducible (or not ergodic).
+    - If you run a **random walk** simulation on this, the math breaks down because the ball gets permanently stuck in a subset of the network. It means you cannot calculate a single, stable steady-state distribution for the whole team.
+    - To fix this mathematical dead-end, they borrow the exact logic Google uses for its PageRank algorithm. They apply a teleportation correction.
+    - The Solution: The "Teleportation Correction" ($\alpha = 0.15$)
+    - They alter the probabilities so that $85\%$ of the time ($1 - \alpha$), the ball moves normally based on the real match data. But $15\%$ of the time ($\alpha = 0.15$), the ball has a tiny chance to "teleport" randomly to any player on the pitch, breaking it out of any mathematical traps.
+    - $$P_{corrected} = (1 - \alpha)P + \alpha \frac{1}{N}J$$
+    - By blending a tiny bit of uniform randomness ($J$) into the real transition matrix ($P$), they guarantee that every player can theoretically reach every other player. The matrix is now irreducible, meaning the Markov chain is completely stable, allowing them to calculate all those advanced spectral and flow metrics safely.
+    - This value follows the standard parameter used in PageRank-based Markov processes, ensuring ergodicity while minimally perturbing the observed transition structure. [37–39]
 
 
+> The "Teleportation Correction" could be a really interesting way to test a somewhat naive way to modelling footballs stocasticness. Adapting Gama et al. (2026) as a Tactical Decay" Parameter $P_{Null} = (1 - \alpha)P_{Season} + \alpha P_{Random}$, a=0 perfectly copies baseline, a=1 network is complletely random
+
+> It unclear yet is this can be used inconjuction with the The Spatial "Gravity" Null Model, or as an alterntive. 
+
+> In building a null model, rhe goal is to preserve certain properties of the real system (constraints) while randomizing others (tactical intent). A spatial model defines where players are likely to pass based on pitch geography, while the teleportation dictates how much tactical history vs. pure randomness influences that choice.
+
+> $$P_{Null} = (1 - \alpha)P_{Season} + \alpha P_{Spatial}$$
+
+> They can be used together
+
+- $P_{Season}$: Your team's actual passing probability matrix calculated across the entire season. This preserves their core structural tendencies, positions, and player roles.
+- $P_{Spatial}$: A matrix where the probability of a pass between two players is calculated strictly by the physical distance between their average season coordinates, using the gravity model ($P(i \rightarrow j) \propto 1/d_{ij}^\gamma$). This acts as the "physics engine" of your randomness.
+- $\alpha$ (Alpha): Your tunable parameter that acts as a slider between Historical Strategy ($\alpha = 0$) and Pure Physical Constraint ($\alpha = 1$).
+
+The latter needs to be tuned which could be an interest experiement for the report
+
+> "In sports analytics, an effective null model must balance topological constraints with stochastic freedom. Because football is inherently a game of high stochasticity, a valid generative framework must prevent overfitting to historical passing configurations. By implementing a tunable parameter $\alpha$, similar to the teleportation correction found in Markov-spectral literature, we can systematically inject controlled noise into season-wide baseline matrices, thereby simulating a 'tactically uncoordinated' but structurally viable version of the team's possession flow."
+
+IMPORTANT: this whole process brings up something in the null process that I hadn't considered. I had only thought about reproducing a method to generate an underlying pass map of individual pass. Perhaps this is unrealistic because passes happen in chains, not as isolate event. Thus trying to re-model an entire game might need be done in chains. This may be more feasible given the amount of data I have. 
+
+This consdiers to topics of First-Order Markov Networks to Higher-Order Networks (HONs).
+
+It is not nessecary to model on high orders, however, it is important to address this in any implementation. and even experiementing with pushing more orders in an option. 
+
+a standard PassMap is a static, weighted adjacency matrix and therefore individual generates passes are fine. a standard PassMap is a First-Order representation. It only cares about the direct connection between Player A and Player B. It completely washes away memory.
+
+metrics like Degree Centrality, Clustering Coefficients, or PageRank on a standard PassMap, the math itself treats the network as a collection of aggregated, isolated events.
+
+Therefore, a null model that shuffles or generates isolated passes (like the Directed Weighted Configuration Model or your Spatial Gravity Model) is a perfectly valid baseline.
+
+If you only generate isolated passes, your null model assumes that football has no memory. In probability theory, this is a strict first-order Markov assumption: where the ball goes next depends only on who currently has it, not on who passed it to them.
+
+**Aproach options:**
+- generate isolated passes using Spatial-Markovian model. In limitation critique this. explain sufficent due to static and metric but acknowledge that it fails to capture higher-order sequential dependencies (temporal non-stationarity).
+- move from isolated to chains. but instead of generating chains, re-wire. keep the chains but shuffle the players based on spatial probabilities. generate synthetic data that preserves the "flow and length" of real football possession without having to model complex team tactics
+- The Higher-Order Network (HON) Model (Advanced). Probably too advanced. 
+
+The author then goes onto explain some of the metrics (indices) produced from this matrix but I have not taken notes of them. 
+
+---
+
+## Integrated analytical framework: Metric summary and conceptual distinctions
+
+"Table 1 summarises the tactical interpretations of all SNA and Markov-spectral metrics used in this study along with their status (primary vs exploratory) in relation to the research hypotheses"
+
+All SNA metrics are considered primary, forming the established framework for analysing football passing networks
+
+Markov-spectral metrics are exploratory, representing the novel contribution of this study.
+
+In the SNA layer, Node Transition Entropy characterises the variability of an individual player’s pass distribution within the uPATO framework, whereas in the Markov-spectral layer the entropy rate quantifies possession-weighted uncertainty of the stochastic process on the active player network.
+
+Accordingly, the former is a player-level distributional descriptor, while the latter is a process-level flow descriptor
+
+
+
+| Metric | Type | Definitions |
+| :--- | :--- | :--- |
+| Degree centrality | Micro | Volume of direct involvement: Quantifies how frequently a player acts as a passer, indicating workload in possession circulation and immediate availability as an outlet; high values suggest greater involvement in ball circulation. |
+| Closeness centrality | Micro | Distribution speed: Assesses how quickly a player can reach (or be reached by) teammates; lower values suggest the ability to receive and distribute under time pressure; higher values may indicate peripheral positioning. |
+| Stress centrality | Micro | Transitional load: Identifies players who bear the highest volume of passing traffic between sectors, indicating responsibility in maintaining possession during phase transitions; high values indicate a key role in connecting team sectors. |
+| Betweenness centrality | Micro | Connective mediation: Identifies players who bridge different team sectors (defence-midfield-attack), enabling transitions and bypassing opposition pressure; high values indicate an essential role in team connectivity. |
+| Degree prestige | Mirco | Solicited player: Identifies players who are most sought out by teammates during the game, as measured by the number of passes received; high values indicate they are trusted targets in possession. |
+| Eigenvector centrality | Mirco | Eigenvector centrality |
+| PageRank centrality | Micro | Tactical reference: Identifies players who receive passes due to their perceived importance; high values suggest teammates actively seek them out as reliable options. |
+| Clustering coefficient | Mirco | Local combination play: Identifies players who favour quick passing exchanges in tight spaces; high values indicate participation in short, repetitive passing patterns. |
+|  Node transition entropy | Mirco | Individual passing variability: Measures how evenly a player distributes passes among teammates. Distinction from centrality: A player may have high degree centrality (many passes) but low entropy (always passing to the same teammate—
+predictable), or moderate degree but high entropy (unpredictable distribution). Captures diversity of passing choices, not volume; high values indicate unpredictable passing distribution; low values suggest predictable patterns. (think this is their own conrtribution) |
+| - | - | - |
+| Total links | Marco | Collective involvement: Total number of connected player pairs; reflects overall team participation in possession and interaction diversity; higher values indicate greater collective involvement. |
+| Network density | Marco |  Interaction fluidity: Proportion of possible connections realised; higher density suggests quick passing options and supported play; lower density may indicate spacing or structured attacking patterns. |
+| Average distance | Macro |  Structural proximity: Average path length between players; shorter distances indicate tight positioning and quick exchange potential; longer distances may suggest spacing or width. |
+|  Network diameter | Macro |  Maximum reorganisation length: Longest shortest path between any two players; indicates how quickly the team can reorganise possession across extremes of the formation; smaller values suggest faster reorganisation capacity. |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
+|  |  |  |
 
 
 
