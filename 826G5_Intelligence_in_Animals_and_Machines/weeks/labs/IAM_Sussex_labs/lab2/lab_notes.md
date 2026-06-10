@@ -242,14 +242,14 @@ It is the history of both left and right means at each point in time. It is the 
 
 To start the we see a complete mismatch in terms of the bee's centeredness. The bee's control logic is very simple, eleminate the different between the two moving averages. We see this happen almost straight away but to an imperfect degree, that is to say the looks pretty similar but not exact. This is where the `margin` comes in, if the differece is not within the margin the bee continues correcting. This results in a feedback loop whereby the bee is continually correcting resulting in an Overshoot Effect. Remember, the bee's signal is an Moving Average, meaning that the very first point that the bee meets the centre will be lost to group voting-esqe nature of the average. It will overshoot the centre and start to correct in the opposite direction to compensate. This can be validated in Bee Heading plot that shows the first change in movement after the inital flow of sustain corrections is in the opposite direction, not vertically up the y-axis which would be the case if the bee had centered. You can also see it very slighly in this Moving Average plot as `t=7` where the very slight peaks which from blue (left) to orange (right). Depending on the parameters, the bee will switch between its corrections before it settles into the `margin` and starts to oscillate gently in each direction to keep itself centered. 
 
-![Original Controller Correlator Moving Average Plot](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_6_Controller_Correlator_Moving_Average.png)
+![Original Controller Correlator Moving Average Plot](../../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_6_Controller_Correlator_Moving_Average.png)
 
 ### Sensor output
 
 The "curves" in these grapgs are perfectly stepped jumps with only horizontal and vertical lines. The front and back sensor lines are almost perfectly matched given the resolution of the graph. This stepped structure is given because the signal output is either 0 or 1 (white or black). 
 
-![Original Right Sensor Outputs](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_5_Right_Sensor_Outputs.png)
-![Original Left Sensor Ouputs](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_4_Left_Sensor_Outputs.png)
+![Original Right Sensor Outputs](../../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_5_Right_Sensor_Outputs.png)
+![Original Left Sensor Ouputs](../../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_4_Left_Sensor_Outputs.png)
 
 ### Correlator Outputs
 
@@ -269,13 +269,13 @@ This plot whilst oscilates between positive and negative because of the environm
 
 Ignoring the switching of the spikes in this plot, the magnitude of the spikes start off large start before decaying over time as the bee centers itself. 
 
-![Original Instantaneous Correlators Output](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_3_Correlators_Output.png)
+![Original Instantaneous Correlators Output](../../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_3_Correlators_Output.png)
 
 ### Bee Heading (Radians)
 
 This plot shoes the bee's steering deicsions at each time point in radians based on the output of EMD controller differentials. It is the bee's instantaneous direction of travel (its heading angle) measured in radians. The middle red dashed line is given by $\mathbf{\pi / 2}$ radians. It shows the direction perfectly up the y-axis. In this system, the bee only have 3 directions, left, right or centre. This is why the graph is stepped like so. Once the bee has centered it can enter a phase called active centering where it coodinates a pattern of alternating direction switches to keep it in the `margin`. The fact that it makes any direction change, other than centre/straight, means that it is momentary falling out of the `margin`. If the solution has N=10 runs then the graph shows only the final bees simulation results.
 
-![Original Bee Heading](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_2_Bee_Heading.png)
+![Original Bee Heading](../../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_2_Bee_Heading.png)
 
 ### Bee Trajectories
 
@@ -285,7 +285,7 @@ In these plots, the y-axis is distance travelled, not time as it is in all the o
 
 In the simulations, "data" is captured upto a certain distance, i.e. when they get to a certain mark in corridor. In this plot they all reach the same distance even if they took different or less optimal paths. A plot with more diagonals will have a longer path and therefore taken longer to get to the same distance. Conversely, a straighter path will be quicker and have a shorter route. Controller sets the bee's linear speed (vel) to a constant value (50) throughout the entire simulation $\mathbf{\text{Time} = \frac{\text{Total Distance Traveled}}{\text{Constant Velocity}}}$. A wobbly bee, that travels a longer total path, must take more time to complete the corridor than a straight-flying bee, even though they both reach the same final $y$-coordinate.
 
-![Original Bee Trajectories](../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_1_Bee_Trajectories.png)
+![Original Bee Trajectories](../../../labs/IAM_Sussex_labs/lab2/original_corridor_run/Figure_1_Bee_Trajectories.png)
 
 
 ## 1. Experiment with the window size for the moving average.

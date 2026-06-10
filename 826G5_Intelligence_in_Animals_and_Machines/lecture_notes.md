@@ -40,11 +40,29 @@
     - [Week 2 References/Readings](#week-2-referencesreadings)
         - [Arthropod intelligence? The case for Portia (Cross et al, 2020)](#arthropod-intelligence-the-case-for-portia-cross-et-al-2020)
 ---
-- [Week 3 - Collective Intelligence]()
-
-
+- [Week 3 - Collective Intelligence](#week-3---collective-intelligence)
+    - [Part 1: Collective Behaviour](#part-1-collective-behaviour)
+        - [1. Defining Self-Organisation and Collective Behaviour](#1-defining-self-organisation-and-collective-behaviour)
+        - [2. Flocking and Swarming: The Boids Model](#2-flocking-and-swarming-the-boids-model)
+        - [3. Stigmergy and Outsourced Intelligence](#3-stigmergy-and-outsourced-intelligence)
+        - [4. Collective Decision-Making: Honeybee Swarms](#4-collective-decision-making-honeybee-swarms)
+        - [5. The Adaptive Benefits of Collective Behaviour](#5-the-adaptive-benefits-of-collective-behaviour)
+        - [6. Collective Intelligence in Humans](#6-collective-intelligence-in-humans)
+    - [Part 2: Collective Behavior in Machines](#part-2-collective-behavior-in-machines)
+        - [7. Swarm Robotics](#7-swarm-robotics)
+    - [Week 3 References/Readings](#week-3-referencesreadings)
+        - [Swarm intelligence in animals and humans (Krause et al., 2010)](#swarm-intelligence-in-animals-and-humans-krause-et-al-2010)
+        - [Swarm Robotics:  Past, Present, and Future](#swarm-robotics--past-present-and-future)
 ---
-- [Week 4 - Moving Through the World]()
+- [Week 4 - Moving Through the World](#week-4---moving-through-the-world)
+    - [1. J.J. Gibson and Direct Perception](#1-jj-gibson-and-direct-perception)
+    - [2. The Fly as a "Gibsonian" Animal](#2-the-fly-as-a-gibsonian-animal)
+    - [3. Insect-Inspired Biorobotics: Successes and Failures](#3-insect-inspired-biorobotics-successes-and-failures)
+        - [Case Study I: Franceschini's Neurorobotics (Success)](#case-study-i-franceschinis-neurorobotics-success)
+        - [Case Study II: The LGMD Car Collision Model (Failure/Lesson)](#case-study-ii-the-lgmd-car-collision-model-failurelesson)
+    - [4. Task-Dependent Direct Perception in Humans](#4-task-dependent-direct-perception-in-humans)
+    - [Week 4 References/Readings](#week-4-referencesreadings)
+---
 - [Week 5 - Navigation]()
 - [Week 6 - Motor Control (Lab 4)]()
 - [Week 7 - Tool Used]()
@@ -497,7 +515,8 @@ We will also look at some examples of swarm robotics. One of the important thing
 
 ---
 
-### 3. Stigmergy and Outsourced Intelligence
+### 3. Stigmergy and Outsourced Intelligence
+
 **Stigmergy:** Coined by Pierre-Paul Grassé, this is the coordination of agents or actions through physical traces left in the environment. This reduces the cognitive load on individual agents (e.g., humans using a written to-do list to offload memory).
 
 **Termite Mound Building:** Termites initially drop mud pellets at random on elevated ground. These small heaps stimulate other termites to drop more pellets there (a positive feedback loop), eventually forming columns. If columns are close enough, termites start building diagonally to connect them into walls.
@@ -583,3 +602,163 @@ This paper evaluates the progression of swarm robotics from its early biological
 > Dorigo, M., Theraulaz, G., & Trianni, V. (2021). Swarm Robotics:  Past, Present, and Future. Proceedings of the IEEE, 109(7), 1152-1165.
 
 ---
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Week 4 - Moving Through the World
+
+Lecture 4 is about the mechanisms by which agents control "movements through the world", but the real message is about the sensory systems of an agent being at the service of behaviour. We start with a Psychologist called Gibson who wanted to think about how natural behaviours depend on easily acquired information. By focusing on the information that can be "Directly" available for the control of behaviour, one thinks about the ecologically relevant information that evolution would pick up on, rather than evolution building general purpose perceptual systems where the job is to build an internal model of the world so that behaviour can be planned internally, that would be known as Indirect Perception. 
+
+#### Learning outcomes
+- Describe how both the fly and the human can be thought of in a Gibsonian way. 
+- Discuss the successes and failures of biorobotics projects inspired by insect sensori-motor circuits. 
+
+---
+
+**Core Theme:** Sensory systems exist at the service of behavior. Rather than building complex, internal general-purpose models of the world (Indirect Perception), agents exploit ecologically relevant information that is readily available in the environment to drive immediate action (Direct Perception).
+
+By the end students will understand that:
+1. Direct perception is a way of thinking about what information is ”in the world” and can be extracted without lots of neural processing.
+2. Looking at the neural circuits in the fly, we can see how animals can be tuned to Directly Perceive task relevant information.
+3. Trying to “build-in” direct perception in robots is difficult because robots have to be tuned to their sensory ecology
+4. Eye movements in humans are task dependent and show how humans acquire information in a just-in-time and task dependent way.
+
+---
+
+## 1. J.J. Gibson and Direct Perception
+
+The psychologist J.J. Gibson developed ecological psychology during WWII after observing that abstract intelligence/vision tests failed to predict who would be a good pilot. He realized pilots didn't use abstract physics; they relied on first-person visual feedback that directly informed them how to fly.
+
+> “Perception of the world and of the self go together and occur only over time” (Gibson, 1978)
+
+There are two concepts that are really important to remember and think about here:
+- **Embodiment:** "Robots and animals have bodies and experience the world directly" (Brooks, 1991)
+- **Situatedness:** "The agent or animal is in the world: they do not deal ith abstract descriptions but with the here and now of the world directly influencing the behaviour of the system" (Brooks, 1991). Situatedness is not just the environment itself; it is the relationship and immediate interaction between the agent and its environment. 
+    - A situated system has no abstract map of the world. It is embedded in the environment and its behaviour is dynamically driven by the immediate sensory inputs. Unlike aa traditional, **non-situated** AI system, like a chess programme, which operated on an abstract description of the world. 
+
+Embodiment and Situatedness are tightly coupled to solve problems without needing heavy computing power.
+
+**Optic Flow:** The pattern of visual motion across the retina caused by movement. Things far away (like mountains) barely move, while things close (like trees) whizz past. Gibson realised the optic flow is the consequence of an agents movement agsinst the structure of the world.
+
+**The Pole of Expansion:** Within an optic flow field, the single point that does not appear to move (the center of expansion) is exactly where the agent is heading. If a pilot’s desired runway does not align with the pole of expansion, the visual field itself directly tells the pilot to correct their steering.
+
+**Invariants:** Things regarding direct perception that don't change. Properties of sensory input that are universally true regardless of the environment. (e.g., The pole of expansion always equals heading, whether you are in a forest or in space).
+
+**Affordances:** Information in the environment that directly invites or "affords" an action. The world/environment allows actions. The ability to turn handle bars to align facing the direction with pole of expansion. 
+
+**Resonance & Matched Filters:** The idea that nervous systems are evolutionarily wired to resonate with specific invariants. An organism doesn't need to consciously "think" about avoiding an object; its brain has dedicated neural hardware (matched filters) that fires automatically when it detects specific visual patterns. The example covered in the lecture of fly's systems are automatically tuned to extract optic flow information. 
+
+**Time to Collision (Tau - $\tau$):** An invariant mathematical property where the expansion rate of an object's contours on the retina directly correlates with the time until impact. A diving gannet or a footballer heading a ball does not need to calculate the absolute speed or distance of the ball; they just directly perceive the expansion rate to know exactly when to brace for impact.
+
+---
+
+## 2. The Fly as a "Gibsonian" Animal
+
+The fly is the ultimate model of direct perception. Its visual system is a masterclass in **outsourcing computation to local hardware**.
+
+**The Compound Eye:** Each facet (ommatidium) acts as a single pixel.
+
+**Local Motion Detection (EMDs):** At the second level of the brain (the Medulla), Elementary Motion Detectors calculate motion by comparing signals from adjacent pixels. If a signal hits Pixel A, gets physically delayed, and matches the real-time signal hitting Pixel B, the neuron fires. This detects local movement direction.
+
+**Global Motion (Wide-Field Neurons):** In the deep brain (Lobula Plate), massive, physically huge neurons aggregate these local signals. These are matched filters.
+- **VS Cells:** Tuned exclusively to detect specific rotational flow fields (e.g., pitch or roll).
+- **H Cells:** Tuned exclusively to detect translational (forward/backward) flow fields.
+
+**Situatedness in Neural Wiring:** In the real world, things lower down (the ground) are closer and move faster than things higher up (the sky). Accordingly, the fly's H cells (looking for forward movement) are physically wired to pay more attention to the lower visual field, while VS cells (looking for rotation) pay more attention to the upper visual field to avoid noise from the passing ground.
+
+**Embodiment & Saccadic Flight:** Rotational movement severely contaminates optic flow. Because a fly's head is lighter than its thorax, it flies in straight lines, makes an incredibly fast, sudden turn with its head (a saccade), and lets its body catch up. This keeps its visual sensors perfectly straight for as long as possible, ensuring clean translational optic flow data. (This saccadic gaze strategy is universal across humans, crabs, and birds).
+
+The flies embodiment is its nervous system which is physically wired to pay more attention to the lower visual field for forward translation. Its head is physically light, allowing it to turn independently of its body.
+
+It's situatedness is the "here-and-now interaction". The fly actively exploits its physical body within that environment by executing straight flights combined with rapid head turns (saccades). Because it is situated (acting directly in the moment), it uses this specific movement style to actively keep its translational optic flow data clean and unswamped by rotation.
+
+---
+
+## 3. Insect-Inspired Biorobotics: Successes and Failures
+
+Engineers attempt to "build-in" direct perception to robots. These case studies highlight the importance of designing for a specific sensory ecology.
+
+### Case Study I: Franceschini's Neurorobotics (Success)
+
+**Design (1990s):** A mobile robot built with a panoramic ring of analog EMDs designed to avoid collisions while moving at a fast, fixed speed (50cm/s).
+
+**Embodiment/Hardware over Software:** Instead of using a computer to calculate complex time delays for objects passing at different angles, the engineers changed the physical spacing of the sensors. Sensors at the front were placed closer together than sensors at the side. The physical body did the math, proving Braitenberg's idea of "downhill invention".
+
+### Case Study II: The LGMD Car Collision Model (Failure/Lesson)
+
+Design: An AI model for cars based on the Locust’s Lobula Giant Movement Detector (LGMD), a neuron that fires right before a collision.
+
+**The Problem:** The algorithm produced false positives, hitting the brakes for cars that were just passing by. To fix this, they had to ramp up the sensitivity so high that the model became erratic.
+
+**The Ecological Lesson:** When scientists checked the real locust, they found the LGMD is not a general collision detector. Locusts don't care about bumping into other locusts (it doesn't hurt). The LGMD is an evolutionary matched filter specifically tuned for bird beak avoidance. A bird attacks with a sudden, late, massive expansion profile. A car expands smoothly. The robot failed because a car's sensory ecology is entirely different from a locust's predator-avoidance ecology.
+
+---
+
+## 4. Task-Dependent Direct Perception in Humans
+
+Human vision is not a camera recording a 3D movie; it is an active, "just-in-time" tool that extracts only the exact information needed for the immediate physical task.
+
+**The Eye-Mind Hypothesis:** There is no lag between what the eye fixates on and what the brain processes. Eye movements (saccades) give a direct window into cognitive processing.
+
+**Yarbus’s Eye Tracking:** When looking at a painting, human gaze paths change completely depending on the specific question asked (e.g., "Estimate their ages" vs. "What were they doing before?").
+
+**Sandwich Making & Walking:** In complex tasks, human eyes are always one step ahead of the hands/feet.
+- **Sandwich:** Look at bread $\rightarrow$ hand moves to bread $\rightarrow$ eyes immediately jump to the butter.
+- **Walking:** When crossing stepping stones, you look at where your right foot will go while your left foot is still in the air. The brain uses the visual data to set the exact physical thrust required for the pivot, then instantly discards the visual memory.
+
+As humans, we do not pre-compute and store a massive 3d map of our terrain. Instead we are acting "just-in-time" with respect to vision. We look at the next stone whilst our opposite foot is plants and collect the minimum require info for the next step, after which we immediately discard the data. The situatedness is letting the immediate here-and-now of the world drive the motor control directly.
+
+**"What you see is what you need" (Change Blindness):** In a VR block-sorting experiment, subjects were asked to move blocks onto a conveyor belt. While the blocks were actively being carried in the subject's hand, the researchers secretly changed the block's size or color.
+- **Result:** Subjects suffered from massive change blindness, only noticing the glitch 2% of the time, even when the task explicitly required sorting by size.
+- **Takeaway:** The human brain acquires information just-in-time to initiate an action, and then immediately throws it away to save memory. We do not maintain a constant, updated internal model of the world.
+
+---
+
+## Summary Points:
+
+**Embodiment** is the fact that you have a physical body, meaning you experience the world directly through physical sensors and actuators rather than through virtual simulations.
+
+**Situatedness** is the fact that you are dynamically embedded in a real world, meaning your behavior is dictated by direct, real-time responses to the immediate context around you, completely bypassing the need for a complex, abstract internal blueprint of the environment.
+
+---
+
+## Week 4 References/Readings
+
+### Vision and Action (Hayhoe, 2017)
+
+Hayhoe (2017) provides the exact cognitive and neural backing for Week 4’s assertion that sensory systems are at the service of behavior. By framing vision within statistical decision theory, she demonstrates that the human brain completely bypasses David Marr's un-situated approach of building a massive, persistent 3D model of the background world. Instead, humans act as highly purposive, situated agents. We deploy gaze to sample the environment "just-in-time" to drop local uncertainty for immediate task modules, smoothly blending these sparse visual inputs with learned spatial priors via Bayesian optimization to minimize internal memory loads and computational overhead.
+
+> Mary M. Hayhoe (2017)“Vision and Action” Annual Review of Vision Science
+
+---
+
+### Vision, perception, navigation and ‘cognition’ in honeybees and applications to aerial robotics (Srinivasan, 2021)
+
+Srinivasan (2021): Vision, Perception, Navigation and 'Cognition' in Honeybees and Applications to Aerial Robotics Srinivasan synthesizes decades of visual neuroethology to demonstrate how flying insects bypass the computational requirements of 3D environmental mapping by directly weaponizing optic flow invariants. Honeybees execute robust, autonomous behaviors using localized sensorimotor control loops—including centering heuristics (equalizing bilateral lateral velocities), distance odometry (integrating global image motion), and smooth landing strategies (maintaining a constant rate of retinal image expansion). While honeybees exhibit true minimal cognition (such as cross-modal generalization of relational concepts like "sameness" and "difference"), their behavioral efficiency is deeply anchored in embodied visual filters. For engineers, this bio-inspired paradigm resolves a major bottleneck in autonomous UAV design: by trading complex, power-hungry spatial computing hardware for simple, direct optic flow processing loops, aerial robots can navigate unstructured environments, regulate flight speeds, and prevent collisions using minimal computational overhead.
+
+
+> Mandyam V. Srinivasan (2021) “Vision, perception, navigation and ‘cognition’ in honeybees and applications to aerial robotics” Biochemical and Biophysical Research Communications
+
+---
+
+### The role of behavioural ecology in the design of bio-inspired technology (Stafford et al, 2007)
+
+While many researchers focus solely on the neural circuitry of insects to build robots, Stafford et al. argue that engineers often fail because they ignore the behavioural ecology—the evolutionary context—that shaped those circuits in the first place.
+
+Stafford et al. (2007) move the conversation beyond the "black box" of neurobiology. They establish that bio-inspired technology is essentially an exercise in ecological translation.
+
+1. **Hardware is context-dependent:** Neurons are optimized for the specific challenges of an animal’s lifestyle.
+2. **Mismatch of Ecology:** When we move an algorithm from a biological organism to a robot, we are changing the environment, which breaks the algorithm's evolved assumptions.
+3. **Ecological Literacy:** Success in biorobotics requires more than just copying the wiring; it requires understanding the selective pressures that "tuned" the wiring in the first place.
+
+This paper warns against the "simplistic copying" of insect behavior. It demands that you consider whether the situatedness of the robot (its environment, speed, and sensor range) aligns with the evolutionary niche of the animal the robot is mimicking.
+
+> Stafford et al (2007) “The role of behavioural ecology in the design of bio-inspired technology” Animal Behaviour
+
+---
+
