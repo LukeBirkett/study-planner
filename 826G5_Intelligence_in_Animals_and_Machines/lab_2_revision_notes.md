@@ -160,6 +160,47 @@ The `margin` creates a "dead zone" in the controller. It defines a "good enough"
 
 ---
 
+# Lab 2: References and Readings
+
+### Honeybee navigation en route to the goal: visual flight control and odometry (Srinivasan, 1996)
+
+This foundational study demonstrates how flying insects replace complex spatial mapping or stereoscopic depth perception with three elegant, low-level optic flow heuristics to control flight trajectories. First, bees execute an equidistant centering response by dynamically balancing the lateral angular velocity of visual images across both eyes, a closed-loop rule that allows them to negotiate narrow corridors without calculating physical distance metrics. Second, they automatically regulate forward flight velocity by keeping the global average of this optic flow constant, instinctively slowing down as their surroundings narrow to prevent collisions. Finally, the authors prove that the honeybee's visual odometer estimates distance by mathematically integrating the total visual motion experienced during flight. Because this odometer tracks absolute image motion across the retina rather than time or metabolic energy, it remains entirely robust against energetic fluctuations caused by headwind loads, providing a direct, low-compute strategy that serves as a core blueprint for autonomous biorobotic platforms.
+
+> [1] Srinivasan, Mandyam V., et al. "Honeybee navigation en route to the goal: visual flight control and odometry." Journal of Experimental Biology 199.1 (1996): 237-244. 
+
+---
+
+### Freely flying honeybees use image motion to estimate object distance (Kirchner & Srinivasan, 1989)
+
+This pioneering study provides the initial empirical confirmation that flying insects bypass the physical impossibility of stereoscopic depth perception—caused by close-set compound eyes—by using retinal image speed as a direct proxy for object distance. By training bees to fly through a flight tunnel with walls that could mechanically move parallel to the insects, the researchers systematically decoupled physical distance from perceived visual motion. When a wall moved in the direction of flight (reducing localized optic flow), the bees actively drifted toward it; conversely, accelerating the wall in the opposite direction (inflating optic flow) forced them to steer away. This behavior explicitly demonstrates a local, distance-agnostic centering heuristic: bees do not compute an internal metric map of space, but instead achieve stable navigation by executing a reactive sensorimotor control loop that seeks to equalize the apparent angular velocities striking each retina.
+
+> [2] Kirchner, W. H., & Srinivasan, M. V. (1989). Freely flying honeybees use image motion to estimate object distance. Die Naturwissenschaften, 76(6), 281–282
+
+---
+
+### A model of visual detection of angular speed for bees (Riabinina & Philippides, 2009)
+
+*Lab 2 simulation code derived paper*
+
+This computational paper addresses a fundamental flaw in using standard Elementary Motion Detectors (EMDs) to model honeybee navigation. While behavioral studies show that bees extract pure angular speed from optic flow regardless of environmental patterns, basic EMD outputs are heavily distorted by spatial frequency and visual contrast. To solve this, the authors propose a dual-channel angular speed detector. By passing sensory inputs through parallel channels with different filter properties and taking the ratio of their outputs, the model effectively factors out contrast and spatial dependencies, leaving a robust estimation of true angular speed. By embodying this ratio model in a simulated agent, the authors successfully replicate the classic biological centering response and odometry behaviors. This paper serves as the direct theoretical foundation for building robust, bio-inspired robotic flight controllers using customized High-Pass and Low-Pass filters.
 
 
+> [3] Riabinina, O., & Philippides, A. O. (2009). A model of visual detection of angular speed for bees. Journal of theoretical biology, 257(1), 61-72.
 
+---
+
+### Elementary motion detectors (Frye, 2015)
+
+**The Necessity of Correlation:** A single photoreceptor only detects fluctuations in illumination over time; it cannot determine the direction of a moving object. Directional motion can only be detected by comparing the activity of at least two spatially separated receptors.
+
+**The "Delay and Correlate" Architecture:** The fundamental Hassenstein-Reichardt (HR) Elementary Motion Detector (EMD) consists of two input channels, a time delay, and a nonlinear multiplier. If a visual stimulus activates Sensor 1, that signal is delayed. By the time the stimulus physically reaches Sensor 2, the delayed Sensor 1 signal and the live Sensor 2 signal converge simultaneously on the multiplier, creating a strong, directionally selective motion spike.
+
+**Historical Origin (The Tethered Beetle):** This model was not born in a computer simulation. In the 1950s, Hassenstein and Reichardt glued a beetle to a wire, handed it a lightweight ball to clasp (making it feel like it was walking), and rotated a striped drum around it. By observing how the beetle rolled the ball in response to the moving stripes, they derived the exact mathematical predictions of the EMD model.
+
+**The "Stripe Rate" Dichotomy (The EMD's Flaw):** A profound limitation of the basic EMD is that it encodes the temporal frequency (the rate at which stripes pass the sensor) rather than true velocity. Because of this, the pure EMD model cannot distinguish between thin stripes moving slowly and thick stripes moving quickly. (Note: This is why the Riabinina ratio model was required to extract true angular speed).
+
+**Biological Complexity (Opponency and ON/OFF channels):** To make the basic EMD robust enough for the real world, biological circuits add layers of complexity. This includes "opponency" (subtracting the output of a left-looking EMD from a right-looking EMD to get a clear directional signal) and splitting the visual data into separate neural pathways for light increments (ON channels) and light decrements (OFF channels).
+
+This primer outlines the history, architecture, and biological limitations of the Hassenstein-Reichardt Elementary Motion Detector (EMD). Originally derived in the 1950s by observing the walking reflexes of tethered beetles inside rotating striped drums, the core "delay and correlate" model solves the ambiguity of single-photoreceptor vision by multiplying a delayed signal from a leading sensor with a live signal from a trailing sensor. While elegant, the classical EMD suffers from a profound limitation: it encodes the temporal frequency (stripe rate) rather than true image velocity, meaning it cannot distinguish between thin patterns moving slowly and thick patterns moving quickly. To operate in natural environments, insects like Drosophila supplement this basic computation with complex neural elaborations, including separate ON/OFF luminance pathways, specific temporal delay filters, and opponent-direction subtraction to generate robust, ecologically viable motion vision.
+
+> [4] Frye, M. (2015). Elementary motion detectors. Current Biology, 25(6), R215-R217.

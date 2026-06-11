@@ -77,7 +77,45 @@ The bee experiement had a a control loop that minimized the difference in latera
 **Ball Speed:**
 There is something to determine or understand about ball velocity. In the bee experiement optic flow is inversely proportional to distance ($\text{Flow} \propto \frac{\text{Velocity}}{\text{Distance}}$). In the field there is no tunnel but the passing players act as temporary walls. This would have an impact on the information being passed to the brain but I am not sure that it impacts quality. It might if we are trying to model between successful and unsuccessful passes but I don't think we will be doing that. 
 - There probably needs to be some sort of adapation to normalize for speed. In the given circumstance, the category or quality of a pass doesn't depend on the speed of the pass but the speed will impact the signal. 
-- A slow(er) pass would result in a player being in a window for longer hence imply that the player is closer and therefore look like a better pass, or even skew the signal making a standard pass look like a line breaking one. 
+- A slow(er) pass would result in a player being in a window for longer hence imply that the player is closer and therefore look like a better pass, or even skew the signal making a standard pass look like a line breaking one.
+
+> Finally, the authors prove that the honeybee's visual odometer estimates distance by mathematically integrating the total visual motion experienced during flight. Because this odometer tracks absolute image motion across the retina rather than time or metabolic energy, it remains entirely robust against energetic fluctuations caused by headwind loads, providing a direct, low-compute strategy that serves as a core blueprint for autonomous biorobotic platforms.
+
+This might be relevant, does this imply agnostic to speed? No it does not need, bee's are high sensitive to speed. Instead it this is an explanation as to how bees regulate speed without a high-level brain speedometer, using only  its visual odometer. 
+
+The honeybee's odometer estimates distance by integrating optic flow over the duration of its flight. Optic flow is measured as an angular velocity (how many degrees of visual angle a pattern sweeps across the eye per second).
+
+$$\text{Perceived Distance} = \int (\text{Optic Flow}) \, dt$$
+
+Because Optic Flow is mathematically defined as $\frac{\text{Velocity}}{\text{Distance to Walls}}$ ($\mathbf{R} \propto \frac{\mathbf{V}}{\mathbf{d}}$), the bee's odometer is directly dependent on its forward speed. If a bee flies down the exact same corridor twice—once at a fast speed and once at a slow speed—the odometer will calculate the exact same distance.
+- At Fast Speed: The angular velocity (optic flow) is very high, but the time ($dt$) spent flying is short.
+- At Slow Speed: The angular velocity is low, but the time ($dt$) spent flying is long.
+
+When the brain integrates these two factors over time, the speed cancels out mathematically. This is why the odometer is robust against headwinds: a headwind slows the bee's ground speed down, lengthening its travel time, but the integrated image motion matching the ground covered remains constant.
+
+Because the bee measures visual speed rather than physical ground speed, it is completely dependent on the layout of the environment.
+- If a bee flies at $1\text{ m/s}$ down a narrow tunnel, the walls are close ($d$ is small), so the optic flow is intense. The odometer accumulates distance rapidl
+- If a bee flies at that same $1\text{ m/s}$ high up in the open air, the ground is far away ($d$ is massive), so the optic flow is nearly zero. The odometer registers almost no distance traveled.
+
+The bee is far from agnostic to speed because it uses its perception of image motion to actively control its flight throttle. As Srinivasan et al. (1996) proved, honeybees try to maintain a constant, preferred rate of optic flow across their eyes.
+
+If a bee is flying along and the corridor suddenly narrows, the closing walls cause the perceived visual speed to jump. The bee reacts immediately to this change by slowing down its physical forward velocity to bring the optic flow back to its preferred baseline.
+
+The bee does not know its speed in miles per hour or meters per second. It is completely blind to absolute mechanical speed, but it is entirely governed by perceived visual speed. It continuously adapts its flight velocity to balance its sensory feedback loops, letting the physical structures of the environment directly drive its behavior.
+
+> The honeybee's visual odometer is completely agnostic to absolute physical distance. The bee has absolutely no concept of "meters," "centimeters," or "inches" because it cannot calculate depth or absolute range. Instead, the odometer tracks an abstract currency: the cumulative sum of angular visual motion (optic flow) that has swept across its eyes.
+> 
+> Because the odometer integrates optic flow ($\text{Flow} \propto \frac{\text{Velocity}}{\text{Distance}}$), the bee calculates distance entirely based on how close objects happen to be. 
+> 
+> 1. The Optical Illusion of Narrowing
+> 
+> If a bee flies a physical distance of 10 meters down a wide canyon, the walls are far away, so the image motion ticks over very slowly. The odometer might conclude: "We have traveled 2 visual units."
+> 
+> If that same bee flies a physical distance of 10 meters down a narrow pipe, the walls are right next to its eyes, so the visual texture streams past furiously. The odometer will accumulate a massive signal and conclude: "We have traveled 20 visual units!"
+> 
+> The bee's odometer is so agnostic to distance that you can completely trick its sense of space simply by narrowing the corridor walls. In real-world experiments, bees trained to find a food dish 10 meters down a wide tunnel will stop way too early if you force them to fly through a narrow tunnel, because their odometer registers the required "visual units" much faster.
+>
+> In summary, the bee is highly sensitive to visual speed (optic flow), but it is entirely agnostic to physical metrics like speed and distance. It simply rides the immediate waves of visual flux, allowing the direct geometry of the here-and-now environment to dictate its steering and navigation.
 
 ---
 
@@ -91,5 +129,18 @@ THe goal of this experiement is to find low-cost, bottom-up approaches to findin
 > Note, could be pretrained as a skeleton and weights randomized from thi starting point
 
 The agents start running and producing votes upto a given number, if after this number there is not an answer, agents keep going until a threshold has been passed and quorum acheived. Simply identificable through pass should be easily identificable but more ambiguous ones will require more agents. 
+
+---
+
+**Single Photoreceptor:**
+The key underlying research around EMD's improves the signal of a single photoreceptor which can only detects fluctuations in illumination over time; it cannot determine the direction of a moving object.
+
+I am not sure if for a football perspective an EMD even improves on this. In the experiement this could be used as the baseline. 
+
+A hypthosis could be that the differenital that the bee would otherwise use to navigate/realign provides a stronger signal than just simple illumination of timesteps. 
+
+This might not be true though because for a single photo receoptor, a closer entity, stays in view for longer anyway
+
+I guess a failed experiement is still a viable paper and allows me to demonstate underdstading of the concepts as well as explain why porting over the algo failed, even with adaptations. 
 
 ---
