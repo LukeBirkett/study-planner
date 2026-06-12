@@ -59,15 +59,23 @@ Instead of a simple `Input -> Delay -> Multiply`, the HR model routes the signal
 - **Sensor 1 (Leading/Front):** `Input` $\rightarrow$ `High-Pass Filter (HPF)` $\rightarrow$ `Low-Pass Filter (LPF)` $\rightarrow$ `Multiplier`
 - **Sensor 2 (Trailing/Rear):** `Input` $\rightarrow$ `High-Pass Filter (HPF)` $\rightarrow$ `Multiplier`
 
+---
+
+**What does the multiplier do?**
+
+The final stage of the EMD is to multiply the high-passed sensory input from the second sensor and the high-passed and then low-passed input from the first sensor. If the two signals are either both positive or both negative, then the output from the EMD will be positive. The output from the EMD will be negative (as occasionally in Figure 10) only when the signs of the two signals differ.
+
 <br>
 
 ---
 ### 3. Open-Loop Dynamics: Sensitivity & Parameter Sweeps
 ---
 
-In this task, the goal is to discover the operational limits of the HR detector by running parameter sweeps (testing a grid of variables) on a single eye/wall, without the bee actively steering.
+In this task, the goal is to discover the operational limits of the HR detector by running **parameter sweeps** (testing a grid of variables) on a single eye/wall, without the bee actively steering.
 
 This is known as **sensitivity analysis**. If a system is very sensitive to a parameter changing or a particular range of parameters then this may highlight an issue. 
+
+One of the advantages of in silico experiments is that it is relatively easy to run a simulation many times, and from many different sets of initial conditions. This is advantageous because, when simulating a complex system, or a system with potentially complex (or even chaotic) dynamics, the way the system behaves may depend strongly on its initial conditions. In that case, the best way to get a good impression of the characteristic behaviour of the system (if it has one) is to simulate it a number of times, from an ensemble of initial conditions, and compare the results. 
 
 > **The general approach is:**
 > 1. Start with a range of parameter values, e.g. [1, 5, 7, 10] or (0 to 100)
@@ -204,3 +212,5 @@ This computational paper addresses a fundamental flaw in using standard Elementa
 This primer outlines the history, architecture, and biological limitations of the Hassenstein-Reichardt Elementary Motion Detector (EMD). Originally derived in the 1950s by observing the walking reflexes of tethered beetles inside rotating striped drums, the core "delay and correlate" model solves the ambiguity of single-photoreceptor vision by multiplying a delayed signal from a leading sensor with a live signal from a trailing sensor. While elegant, the classical EMD suffers from a profound limitation: it encodes the temporal frequency (stripe rate) rather than true image velocity, meaning it cannot distinguish between thin patterns moving slowly and thick patterns moving quickly. To operate in natural environments, insects like Drosophila supplement this basic computation with complex neural elaborations, including separate ON/OFF luminance pathways, specific temporal delay filters, and opponent-direction subtraction to generate robust, ecologically viable motion vision.
 
 > [4] Frye, M. (2015). Elementary motion detectors. Current Biology, 25(6), R215-R217.
+
+--- 

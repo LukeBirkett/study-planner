@@ -132,6 +132,25 @@ The agents start running and producing votes upto a given number, if after this 
 
 ---
 
+
+**Data Transformation Diversity:**
+
+As an extension of hive/swarm behaviour, the intitial transformation of the data from nodes on a 2d plane to a 1d trajory parser could also be integrated as a form of diversity. 
+
+The extracted data would have slight variations is capture
+
+This could include setting a param to determine the window width
+
+Maybe something about how wide an entities view channel is. wide would include more context and thinnner less therefore potentially producing slightly different answers and being more suited to particular situations. 
+
+If we want to link include a colour receptor then this could be subject random defect; i.e. only see black and white, inability to see certain colours. 
+
+There could also be changes that are more analagous to machine learning principles:
+
+Dropout, some agents miss some frames. Which could be coded as some sort of fps parameter, or miss out every x frames (windows)
+
+---
+
 **Single Photoreceptor:**
 The key underlying research around EMD's improves the signal of a single photoreceptor which can only detects fluctuations in illumination over time; it cannot determine the direction of a moving object.
 
