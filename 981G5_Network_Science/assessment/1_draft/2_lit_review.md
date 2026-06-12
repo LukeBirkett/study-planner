@@ -60,6 +60,8 @@ To build an actual Network Science project for football, you have to treat it as
 
 ===
 
+Below is a hybrid between a dismination of the notes from Alves (2025) and a drafting of the lit review
+
 # Structure/Flow
 *There seem to be some clear themes arise to give structure to the lit review.*
 

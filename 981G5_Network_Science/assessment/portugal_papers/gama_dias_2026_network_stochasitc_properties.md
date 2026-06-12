@@ -1,10 +1,52 @@
-**Related to mentions Null Models as further research:**
+# Linking network structures and stochastic flow properties: An exploratory Markov-spectral case study in professional football (Gama et al., 2026)
+
+> Gama, J., Dias, G., Couceiro, M.S., Mendes, R., Mendes, R.S. and Vaz, V., 2026. Linking network structures and stochastic flow properties: An exploratory Markov-spectral case study in professional football. Proceedings of the Institution of Mechanical Engineers, Part P: Journal of Sports Engineering and Technology, p.17543371261448957.
+
+---
+
+**This paper mentions Null Models as further research:**
 
 > "Future studies should also employ **null models and random network** comparisons to establish baselines for spectral gap, entropy rate, and other indices, enabling more robust interpretation of observed values"
 
 > Expanding the analyses to underrepresented domains, such as women’s football or youth competitions, would also test the framework’s applicability across varying match contexts and address identified gaps in network analysis research.
 
 ---
+
+**How this paper links to my ideas:**
+
+- without a null model baseline, they cannot prove that their advanced tactical interpretations are actually true.
+- they show that in Match 2, the team’s Entropy Rate (unpredictability) and Spectral Gap (ball circulation speed) increased.
+- they make a tactical inference: Portugal played a more fluid, adaptive, and unpredictable style in the final compared to the semi-final.
+- because they lack a baseline, their interpretation isn't scientifically robust
+- observed changes might just be normal stochastic fluctuations (i.e., the natural noise of a football bouncing around a pitch) rather than a deliberate tactical adaptation
+- Because passing networks inherently possess an underlying structure (e.g., midfielders naturally pass more than strikers), the metrics will always shift slightly from game to game by pure chance.
+- "We need a randomized baseline so we can calculate a Z-score. If the real game's Entropy Rate is significantly higher than 1,000 randomized versions of that same game, only then do we have a robust interpretation that the unpredictability was a deliberate tactical blueprint, not just a random fluke".
+- You want to use network properties to infer a team's tactical style—whether they are a possession-heavy team, a direct counter-attacking unit, or a highly centralized system built around a single playmaker.
+- authors are doing the exact same thing, just using "stochastic flow" metrics instead of classical static metrics
+- The Mathematical Baseline (Null Model) Prove: 
+    - (Spectral Gap) Does the speed of ball diffusion exceed a random re-shuffling of passes? 
+    - (Mean First-Passage Time (MFPT)) Is the number of passes required to reach the striker shorter/longer than a volume-based random baseline?
+- Gama et al. (2026) are trying to decode tactical functionality and efficiency—they are just using advanced tools to do it.
+- frame myt resaerch as the direct answer to their call for future research
+- state that whether you use classical metrics (like Clustering and Centrality) or their Markovian flow metrics (like Entropy and Spectral Gaps) , no network property can be safely mapped to a tactical approach without a null model baseline to filter out the random noise of the game.
+
+The purpose of their paper was to demonstate things like this but the null applications remain the same and just as useful as the purpose of a validating baseline
+> By putting the standard results right next to the Markov-spectral results, they could make claims like: Look, if you only use standard network density, Match 1 and Match 2 look completely identical (~0.115). But look at our new metric, the Spectral Gap—it shows that the ball actually circulated much faster in Match 2 (0.530 vs 0.454).
+
+NOTE: the structure and composition of this paper is also particularly relevant. They scope down into and give a definition/translation of each network metric into football teams. They also comprehensively use these metrics to analyse the data and have a whole Network Results section. Their paper goes onto to supplement these finding with their entrophy approaches. They mention at the end that actually null models are needed to validate the findings. My approaches would employ near enough the same research, however, instead of the entropy supplementary route, my work would flow into creating a null model. 
+
+---
+
+Given this research finding, I also need ot read thier systematic review:
+> [2] Gama, J., Dias, G., Pereira, M., Mendes, R., Mendes, R.S., Sarmento, H. and Vaz, V., 2026. Network analysis to understand variability and patterns of individual and collective behaviour in professional football: a systematic review. International Journal of Performance Analysis in Sport, pp.1-62.
+
+Note, G Dias is also in the Alves review
+
+> Gama, J., Dias, G., Couceiro, M.S., Mendes, R., Mendes, R.S. and Vaz, V., 2026. Linking network structures and stochastic flow properties: An exploratory Markov-spectral case study in professional football. Proceedings of the Institution of Mechanical Engineers, Part P: Journal of Sports Engineering and Technology, p.17543371261448957.
+
+---
+
+## Paper Notes
 
 ### Abstract
 
@@ -264,75 +306,126 @@ Accordingly, the former is a player-level distributional descriptor, while the l
 
 | Metric | Type | Definitions |
 | :--- | :--- | :--- |
-| Degree centrality | Micro | Volume of direct involvement: Quantifies how frequently a player acts as a passer, indicating workload in possession circulation and immediate availability as an outlet; high values suggest greater involvement in ball circulation. |
-| Closeness centrality | Micro | Distribution speed: Assesses how quickly a player can reach (or be reached by) teammates; lower values suggest the ability to receive and distribute under time pressure; higher values may indicate peripheral positioning. |
-| Stress centrality | Micro | Transitional load: Identifies players who bear the highest volume of passing traffic between sectors, indicating responsibility in maintaining possession during phase transitions; high values indicate a key role in connecting team sectors. |
-| Betweenness centrality | Micro | Connective mediation: Identifies players who bridge different team sectors (defence-midfield-attack), enabling transitions and bypassing opposition pressure; high values indicate an essential role in team connectivity. |
-| Degree prestige | Mirco | Solicited player: Identifies players who are most sought out by teammates during the game, as measured by the number of passes received; high values indicate they are trusted targets in possession. |
-| Eigenvector centrality | Mirco | Eigenvector centrality |
-| PageRank centrality | Micro | Tactical reference: Identifies players who receive passes due to their perceived importance; high values suggest teammates actively seek them out as reliable options. |
-| Clustering coefficient | Mirco | Local combination play: Identifies players who favour quick passing exchanges in tight spaces; high values indicate participation in short, repetitive passing patterns. |
-|  Node transition entropy | Mirco | Individual passing variability: Measures how evenly a player distributes passes among teammates. Distinction from centrality: A player may have high degree centrality (many passes) but low entropy (always passing to the same teammate—
-predictable), or moderate degree but high entropy (unpredictable distribution). Captures diversity of passing choices, not volume; high values indicate unpredictable passing distribution; low values suggest predictable patterns. (think this is their own conrtribution) |
-| - | - | - |
-| Total links | Marco | Collective involvement: Total number of connected player pairs; reflects overall team participation in possession and interaction diversity; higher values indicate greater collective involvement. |
-| Network density | Marco |  Interaction fluidity: Proportion of possible connections realised; higher density suggests quick passing options and supported play; lower density may indicate spacing or structured attacking patterns. |
-| Average distance | Macro |  Structural proximity: Average path length between players; shorter distances indicate tight positioning and quick exchange potential; longer distances may suggest spacing or width. |
-|  Network diameter | Macro |  Maximum reorganisation length: Longest shortest path between any two players; indicates how quickly the team can reorganise possession across extremes of the formation; smaller values suggest faster reorganisation capacity. |
+| **Degree centrality** | Micro | **Volume of direct involvement:** Quantifies how frequently a player acts as a passer, indicating workload in possession circulation and immediate availability as an outlet; high values suggest greater involvement in ball circulation. |
+| **Closeness centrality** | Micro | **Distribution speed:** Assesses how quickly a player can reach (or be reached by) teammates; lower values suggest the ability to receive and distribute under time pressure; higher values may indicate peripheral positioning. |
+| **Stress centrality** | Micro | **Transitional load:** Identifies players who bear the highest volume of passing traffic between sectors, indicating responsibility in maintaining possession during phase transitions; high values indicate a key role in connecting team sectors. |
+| **Betweenness centrality** | Micro | **Connective mediation:** Identifies players who bridge different team sectors (defence-midfield-attack), enabling transitions and bypassing opposition pressure; high values indicate an essential role in team connectivity. |
+| **Degree prestige** | Mirco | **Solicited player:** Identifies players who are most sought out by teammates during the game, as measured by the number of passes received; high values indicate they are trusted targets in possession. |
+| **Eigenvector centrality** | Mirco | Eigenvector centrality |
+| **PageRank centrality** | Micro | **Tactical reference:** Identifies players who receive passes due to their perceived importance; high values suggest teammates actively seek them out as reliable options. |
+| **Clustering coefficient** | Mirco | **Local combination play:** Identifies players who favour quick passing exchanges in tight spaces; high values indicate participation in short, repetitive passing patterns. |
+|  **Node transition entropy** | Mirco | **Individual passing variability:** Measures how evenly a player distributes passes among teammates. Distinction from centrality: A player may have high degree centrality (many passes) but low entropy (always passing to the same teammate— predictable), or moderate degree but high entropy (unpredictable distribution). Captures diversity of passing choices, not volume; high values indicate unpredictable passing distribution; low values suggest predictable patterns. (think this is their own conrtribution) |
 |  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-
-
-
-
-
-
-
-
-----
-
-### (IMPORTANT) How this paper links to mine:
-
-- without a null model baseline, they cannot prove that their advanced tactical interpretations are actually true.
-- they show that in Match 2, the team’s Entropy Rate (unpredictability) and Spectral Gap (ball circulation speed) increased.
-- they make a tactical inference: Portugal played a more fluid, adaptive, and unpredictable style in the final compared to the semi-final.
-- because they lack a baseline, their interpretation isn't scientifically robust
-- observed changes might just be normal stochastic fluctuations (i.e., the natural noise of a football bouncing around a pitch) rather than a deliberate tactical adaptation
-- Because passing networks inherently possess an underlying structure (e.g., midfielders naturally pass more than strikers), the metrics will always shift slightly from game to game by pure chance.
-- "We need a randomized baseline so we can calculate a Z-score. If the real game's Entropy Rate is significantly higher than 1,000 randomized versions of that same game, only then do we have a robust interpretation that the unpredictability was a deliberate tactical blueprint, not just a random fluke".
-- You want to use network properties to infer a team's tactical style—whether they are a possession-heavy team, a direct counter-attacking unit, or a highly centralized system built around a single playmaker.
-- authors are doing the exact same thing, just using "stochastic flow" metrics instead of classical static metrics
-- The Mathematical Baseline (Null Model) Prove: 
-    - (Spectral Gap) Does the speed of ball diffusion exceed a random re-shuffling of passes? 
-    - (Mean First-Passage Time (MFPT)) Is the number of passes required to reach the striker shorter/longer than a volume-based random baseline?
-- Gama et al. (2026) are trying to decode tactical functionality and efficiency—they are just using advanced tools to do it.
-- frame myt resaerch as the direct answer to their call for future research
-- state that whether you use classical metrics (like Clustering and Centrality) or their Markovian flow metrics (like Entropy and Spectral Gaps) , no network property can be safely mapped to a tactical approach without a null model baseline to filter out the random noise of the game.
-
-The purpose of their paper was to demonstate things like this but the null applications remain the same and just as useful as the purpose of a validating baseline
-> By putting the standard results right next to the Markov-spectral results, they could make claims like: Look, if you only use standard network density, Match 1 and Match 2 look completely identical (~0.115). But look at our new metric, the Spectral Gap—it shows that the ball actually circulated much faster in Match 2 (0.530 vs 0.454).
-
-NOTE: the structure and composition of this paper is also particularly relevant. They scope down into and give a definition/translation of each network metric into football teams. They also comprehensively use these metrics to analyse the data and have a whole Network Results section. Their paper goes onto to supplement these finding with their entrophy approaches. They mention at the end that actually null models are needed to validate the findings. My approaches would employ near enough the same research, however, instead of the entropy supplementary route, my work would flow into creating a null model. 
+| **Total links** | Macro | **Collective involvement:** Total number of connected player pairs; reflects overall team participation in possession and interaction diversity; higher values indicate greater collective involvement. |
+| **Network density** | Macro |  **Interaction fluidity:** Proportion of possible connections realised; higher density suggests quick passing options and supported play; lower density may indicate spacing or structured attacking patterns. |
+| **Average distance** | Macro |  **Structural proximity:** Average path length between players; shorter distances indicate tight positioning and quick exchange potential; longer distances may suggest spacing or width. |
+| **Network diameter** | Macro |  Maximum reorganisation length: Longest shortest path between any two players; indicates how quickly the team can reorganise possession across extremes of the formation; smaller values suggest faster reorganisation capacity. |
+| **Network heterogeneity** | Macro | **Interaction concentration:** Measures whether play is concentrated among a few players (high heterogeneity) or distributed more evenly (low heterogeneity). Distinction from centralisation: Heterogeneity reflects variance in involvement; centralisation reflects how much this variance is organised around specific individuals; high values indicate concentration around a few players; low values suggest balanced distribution |
+| **Transitivity** | Macro | **Triangulation tendency:** Measures the proportion of triplet connections that form closed triangles; reflects capacity for quick passing combinations and small-group play; high values indicate strong smallgroup interaction capacity. |
+| **Reciprocity** | Macro |  **Bidirectional exchange:** Shows balance in two-way passing between player pairs; high reciprocity suggests mutual trust and balanced distribution; low reciprocity indicates directed, progression-oriented play |
+| **Global centralisation** | Macro | **Hub dependence:** Indicates whether the team relies on one or a few key players to conduct play; higher values suggest vulnerability if central players are marked out. |
+| **Assortativity coefficient** | Macro | **Role-based connectivity:** Identifies whether players tend to connect with similar (positive) or different (negative) roles; negative values suggest functional integration across positional lines; positive values indicate within-role clustering |
+| **Network transition entropy** | Macro | **Team-level passing unpredictability:** Global measure of how evenly passes are distributed across all possible connections. Distinction from density: Density measures how many connections exist; entropy measures how evenly those connections are used. A dense network can be predictable (low entropy) if passes concentrate on a few links; high values indicate greater unpredictability for the opposition |
 
 ---
 
-Given this research finding, I also need ot read thier systematic review:
-> [2] Gama, J., Dias, G., Pereira, M., Mendes, R., Mendes, R.S., Sarmento, H. and Vaz, V., 2026. Network analysis to understand variability and patterns of individual and collective behaviour in professional football: a systematic review. International Journal of Performance Analysis in Sport, pp.1-62.
+> Distinguishing centrality from entropy: Centrality metrics (Degree, Betweenness, and Eigenvector) quantify how much a player participates (volume of involvement). Entropy-based metrics (Node Transition Entropy and Entropy Rate) quantify how variably they participate (diversity of passing choices). A player can have high centrality but low entropy (predictable hub) or moderate centrality but high entropy (unpredictable distributor). Both dimensions matter for tactical profiling
 
-Note, G Dias is also in Alve review
+Tactical interpretations for SNA metrics are based on Refs. [1–6,24,25,30,34,35]
 
-> Gama, J., Dias, G., Couceiro, M.S., Mendes, R., Mendes, R.S. and Vaz, V., 2026. Linking network structures and stochastic flow properties: An exploratory Markov-spectral case study in professional football. Proceedings of the Institution of Mechanical Engineers, Part P: Journal of Sports Engineering and Technology, p.17543371261448957.
+---
 
-===
+## Results for Networks
+
+The following sections present the results in detail, including: (i) match networks and tactical organisation, (ii) descriptive SNA comprising micro-level analysis of individual player performance and macro-level network metrics capturing collective team behaviour
+
+### Networks and tactical organisation
+Demonstates a PassMap the Portuguese National Football Team inthe semi-final and final of the 2025 Nations League
+
+The nodes includes all players that featured, even subs. 
+
+Nodes in this PassMap seem to be position by role rather than an average of interaciton positions. 
+
+The author go onto describe the game based on the PassMap, i.e. "In Match 1, the team prioritised midfield control and rapid transitions both down the wings and through the centre, employing a 1-4-2-1-3 formation:"
+
+There includes a paragraph of interaciton breakdowns by player: "Player 3 (central defender) recorded the highest number of interactions, with 90 passes (50 made and 40 received)" 
+
+### Descriptive social network analysis results
+
+#### Micro Analysis
+
+Figure 3 presents the micro-level analysis of individual player performance using centrality metrics, identifying players with the highest involvement in ball build-up, circulation, and possession maintenance. 
+
+These figures were entirely bar graphs whereby each entry on the x-axis was a player. 
+
+"In both matches, the data suggested that Player 3 (central defender), Player 23 (central midfielder), and Player 25 (left back) figured as central players within the passing network.
+
+> NOTE, I had not really consdiered scoping into a single game as I was thinking on a aggregate season basis. However, this could be a really good way to example how networks can be applied to football. But also it creates an easy transition into the null model and analysis sections. I could find a game that appears to have a standout property for a given player and/or a property that appears to be unusual for a player given their position, i.e. a hub on the winger. To understand if these things are unique we need a null model baseline. 
+
+> Although I am not actually conviced it is the best approach for the Null Model demonstrations itself. The null model will likely be built from a generative process with uses the underlying seasons wide distributions. Additionally, there will be a talking point as to why simple league baselines are not enough, i.e. they do not normalize for conditions and properties, for example pass, if they try to filter the empirical baseline then we fall foe to data sparsity. 
+
+> That being said, a good transistion might be to start single matchs (2), try to use empirical baselines and then introduce null models. this allows me to demonstrate that I understand why we need null models. 
+
+Degree, Closeness, Betweenness, and Eigenvector Centralities consistently positioned Player 3 (central defender) at the core of interactions. 
+- Here, Betweeness is a particularly interesting property because it contains much less spikes then degree, Closeness or Eigenvector which are all pretty populated. There are just a handful of players that exhibit these spikes. Moreever, they tend to be consistent with their contibution in Betweeness over both matches. 
+
+Eccentricity, Degree Prestige, Proximity Prestige, PageRank, Power, and Centroid Centralities further reinforced the prominence of these three players as structural hubs
+
+Stress and Subgraph Centralities further indicated that these players participated in alternative pathways and local network structures.
+
+**Clustering Coefficient** values suggested interactions on the wide areas, with wingers and full-backs providing lateral support
+
+#### Macro Analysis
+
+Figure 4 illustrates collective team performance, as captured by metrics such as Total Links, Network Density, Average Distance, Network Diameter, Network Heterogeneity, Global Centralisation, Global Prestige, Transitivity, Reciprocity, Assortativity Coefficient, and Network Transition Entropy.
+
+Again these were all Bar Graphs but instead of players present team based metrics for each match and also a combined bar for Match 1 + Match 2
+
+The analysis of collective performance revealed consistent patterns of interaction among players, alongside some variations between matches.
+
+The total number of connections (Total Links) increased from 373 in Match 1 to 414 in Match 2, yielding 787 interactions overall.
+
+Network Density remained relatively stable (0.111 in Match 1; 0.109 in Match 2; total= 0.115).
+
+Network Diameter increased from 22.167 to 23.750 (total= 25.333).
+
+Network Heterogeneity rose from 0.598 to 0.725 (total= 0.737).
+
+Transitivity decreased from 6.303 to 5.094 (total= 5.783). Reciprocity increased slightly from 0.649 to 0.662 (total= 0.727). Global Centralisation increased from 0.145 to 0.231 (total= 0.200). Global Prestige remained relatively stable (0.134–0.145; total= 0.140).
+
+The Assortativity Coefficient was negative in both matches (20.046 and 20.136; total=20.132). Moreover, Network Transition Entropy increased from 3.894 to 3.989 (total= 4.157).
+
+> Instead of examining the network metrics between two matches, could deepdive into 1 (or more), explain the properties and how they translate into football, and then compare them to an aggreate of the whole league/seasons, including sumamry stats, i.e. min, max, average. 
+
+---
+
+## Markov-spectral results
+A direct comparison between the insights from traditional SNA and those from the Markov-spectral layer illustrates their complementary value.
+
+While SNA successfully identified the stable structural hubs (players 3, 3, and 25) and described macro-level cohesion (e.g. stable network density), the Markov-spectral indices quantified aspects of ball circulation that were not captured by structural metrics alone.
+
+Together, these observations suggest that the Markovspectral framework captures stochastic flow properties of possession that complement the structural insights provided by SNA.
+
+---
+
+## Discussion
+
+This study employed a multi-method approach, integrating SNA with Markov-spectral techniques, to characterise the structural and stochastic flow properties of
+the Portuguese National Team’s passing networks during the 2025 Nations League finals
+
+The SNA results underscore the role of a central defender (player 3) as the main network hub, exhibiting high Degree, Betweenness, Eigenvector, and Stress Centrality, consistent with previous studies indicating that defenders can function as critical ‘‘hubs’’ during build-up phases in possession-oriented teams. [1,2] 
+
+This observation aligns with findings that football passing networks often exhibit scale-free properties with emergent key players acting as hubs. [50]
+- Yamamoto Y and Yokoyama K. Common and unique network dynamics in football games. PLoS ONE 2011; 6(12): e29638.
+
+
+
+
+
+
+
+
+
+
+
+---

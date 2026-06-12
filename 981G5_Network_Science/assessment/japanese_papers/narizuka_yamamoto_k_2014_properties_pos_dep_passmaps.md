@@ -1,12 +1,10 @@
-
-
-### Narizuka, T., Yamamoto, K. and Yamazaki, Y., 2014. Statistical properties of position-dependent ball-passing networks in football games. Physica A: Statistical Mechanics and its Applications, 412, pp.157-168.
+# Narizuka, T., Yamamoto, K. and Yamazaki, Y., 2014. Statistical properties of position-dependent ball-passing networks in football games. Physica A: Statistical Mechanics and its Applications, 412, pp.157-168.
 
 We propose a method for creation of a position-dependent ball passing networks.
 
 We find that the networks have the small-world property, and their degree distributions are fitted well by a truncated gamma distribution function.
 
- order to reproduce these properties of networks, a model based on a Markov chain is proposed.
+In order to reproduce these properties of networks, a model based on a Markov chain is proposed.
 
 ---
 
@@ -17,9 +15,9 @@ A football game can be considered as a dynamical system in which game players in
 - [16] A. L. Barab´asi, R. Albert, Emergence of scaling in random networks, Science 286 (1999) 509–512.
 
  the studies of the ball-passing networks [17, 18], each node and edge of the network represent an individual player and passing of the ball, respectively. One main conclusion in their studies is that ball-passing networks of football games have the **scale-free property**, namely the **degree distributions** follow the **power law**. However, in their network analysis, the total number of nodes were only 11, which was the number of players on a ground in one team. Clearly, it is too few to judge the power-law behavior of the degree distributions.
-- [17] Y. Yamamoto, Scale-free Property of the Passing Behavior, International Journal of Sport and
-Health Science 7 (2010) 86–95.
-- [18] Y. Yamamoto, K. Yokoyama, Common and unique network dynamics in football games, PloS ONE 6 (2011) e29638.
+**- [17] Y. Yamamoto, Scale-free Property of the Passing Behavior, International Journal of Sport and
+Health Science 7 (2010) 86–95.**
+**- [18] Y. Yamamoto, K. Yokoyama, Common and unique network dynamics in football games, PloS ONE 6 (2011) e29638.**
 
  this paper we propose another method for creating a ball-passing network and report statistical properties of the network.
 
@@ -167,70 +165,4 @@ The ballpossession probability distribution reproduces the truncated gamma distr
 Also, it is found
 that the network created by our model is similar to those from the real data.
 
-
-===
-
-# NEED TO READ 
-- [17] Y. Yamamoto, Scale-free Property of the Passing Behavior, International Journal of Sport and
-Health Science 7 (2010) 86–95.
-- [18] Y. Yamamoto, K. Yokoyama, Common and unique network dynamics in football games, PloS ONE 6 (2011) e29638.
-- [25] M. Barth´elemy, Spatial networks, Physics Reports 499 (2011) 1–101.
-
-
 ---
-
-### Yamamoto, K. and Narizuka, T., 2021. Preferential model for the evolution of pass networks in ball sports. Physical Review E, 103(3), p.032302.
-
-A stochastic model describing the emergence of new passes based on a mathematically simplified form of preferential selection was proposed
-
-
-
-
-
-
-
-
----
-
-### Narizuka, T., Yamamoto, K. and Yamazaki, Y., 2015. Degree distribution of position-dependent ball-passing networks in football games. journal of the physical society of japan, 84(8), p.084003.
-
-
-
-
-
-
-
-
----
-
-(FROM GAMA)
-
-### Prior Markov-chain modelling of Passes
-"prior research has successfully established the Markov-chain model as a valid approximation for the **growth of passing networks over time** [16] and to model state transitions between field zones [17]"
-- [16] Yamamoto, K. and Narizuka, T., 2018. Examination of Markov-chain approximation in football games based on time evolution of ball-passing networks. Physical Review E, 98(5), p.052314.
-
-> CONVERSE WITH GEMINI TO UNDERSTAND IF [16] IS DYNMAICS OF A NETOWRK AND THEREFORE A NULL MODEL
-
-
----
-
-### Yamamoto, K., 2025. Pólya urn model for analysis of football passes. Physical Review E, 112(6), p.L062303.
-
-===
-
-"Polya’s Urn is the "conceptual bridge" between the general idea of **Preferential Attachment** and the formal **Barabási-Albert (BA)** model." (My lecture notes)
-
-This study analyzes pass networks in football (soccer) using a stochastic model known as the Pólya urn.
-By focusing on preferential selection, it theoretically demonstrates that the time evolution of networks can be
-characterized by a single parameter. Building on this result, a data analysis method is proposed and applied to a
-large-scale public dataset of professional football matches. The statistical properties of the preferential-selection
-parameter are examined, demonstrating its correlation with pass accuracy and with mean pass difficulty. This
-method is applicable to various evolving networks.
-
-
-
-The time evolution of pass networks often reflects preferential selection, where players are more likely to attempt passes to teammates with whom they have previously completed multiple successful passes. These passes do not create new edges but rather increase the multiplicity of existing ones.
-
----
-
-
