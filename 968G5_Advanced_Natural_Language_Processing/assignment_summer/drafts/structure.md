@@ -49,18 +49,38 @@ Discuss the evolution/lineage from Bag-of-Words to Contextualized Embeddings (BE
 
 ## 2.1 Dataset Exploration and EDA
 
+#### EDA
+
+EDA is not a prequesite labelling in the brief, however, it makes sense to it. It should be kept brief:
+- num of instances
+- num of labels and freqs (balance)
+
+**Ideally broken down into class:**
+- summary stats for sentences: lengh, min, max, av
+- summary stats for snippet: lengh, min, max, av
+- sentence to snipet ratio
+- skew of snippets, i.e. summary stats for left vs right context. start and end position stats. 
+
+Initally I had some ideas about EDA on the vocab and pos tags but I think this type of information could be quickly conducted after creating the training vocab, if at all. 
+
+An idea that I thought was interesting was to compare the composition of vocab and/or tags between tags. This would be much easier to do with a vocab as you could populate the vectors and apply cosine similarity. 
+
+Reasons to do EDA:
+1. Validating the hypothesis. Assumed that propaganda is over-represented by abstract "trigger" words. An EDA showing Term Frequency (TF) or N-gram distributions can provide the first piece of empirical evidence for this.
+2. **Syntactic Integrity:** For Task 2, analyzing sentence lengths and span lengths justifies the use of a CRF to handle structural dependencies.
 
 ---
 
+#### Tagging
 
-
-### 2.1.2 Data Augmentation
 - part-of-speech (PoS)
 - named entity (NE) 
 
 > this result in a 3 dimensional token vector
 
 > Team LTIatCMU(SI:4) (Khosla et al., 2020) used a multi-granular BERT BiLSTM model with additional syntactic and semantic features at the word, sentence and document level, including PoS, named entities, sentiment, and subjectivity. It was trained jointly for token and sentence propaganda classification, with class balancing. They further fine-tuned BERT on persuasive language using 10,000 articles from propaganda websites, which turned out to be important.
+
+---
 
 #### Silver Data
 It would be a good idea to supplement the data by creating "silver" data. The paper is back from 2021 so they didn't have access to the strength of generative models that we do now. Therefore, an "easy" option might just be to take this route. The issue pertains to checking that the create statements are relevant and suitable which could quite an involved task itself. 
@@ -75,37 +95,26 @@ It would be a good idea to supplement the data by creating "silver" data. The pa
 >
 > Finally, team WMD(SI:33) (Daval-Frerot and Yannick, 2020) applied multiple strategies to augment the data such as back translation, synonym replacement and TF.IDF replacement (replace unimportant words, based on TF.IDF score, by other unimportant words).
 
-#### Additioanal Data
+---
 
+#### Additional Data
 
 > Team LTIatCMU(SI:4) (Khosla et al., 2020) ... They further fine-tuned BERT on ≥persuasive language using 10,000 articles from propaganda websites, which turned out to be important.
-
-
-### 2.1.3 EDA
-Reasons to do EDA:
-1. Validating the hypothesis. Assumed that propaganda is over-represented by abstract "trigger" words. An EDA showing Term Frequency (TF) or N-gram distributions can provide the first piece of empirical evidence for this.
-2. **Syntactic Integrity:** For Task 2, analyzing sentence lengths and span lengths justifies the use of a CRF to handle structural dependencies.
-
-- Classes
-- Frequencies
-- Class imbalances. Documenting this justifies your choice of Macro-Average F1 later in the report. As well as for reference in the evaluation or analysis sections.
-- N-gram analysis to confirm 'abstract' pairings in propaganda snippets
-- **Sequence Lengths:** Histograms of the total sentence length vs. the propaganda snippet length.
-- **Vocabulary Richness:** Top 20 most frequent words in propaganda snippets vs. non-propaganda text.
-- **Stopword and POS Analysis:** Visualizing if propaganda techniques rely on certain parts of speech (e.g., a high density of adjectives in loaded_language)
 
 ---
 
 ## 3. Methodology: Task 1 (Classification)
 
 ### Baselines: 
-Describe the Unigram-BoW (Pure Vocabulary) and Bi-gram BoW (Local Phrasing) setups. As well, as true non-intelligent baseline of either random guessing or single answer guesss (probably both).
+- Non-intelligent baseline: random/unform guessing
+- Intelligent baseline: Unigram-BOW w/ Standardized MLP Head
 
 ### Approach 1: Bag-of-Embeddings
-Detail your use of Word2Vec with Mean Pooling and an MLP classification head. Justify why you kept the MLP head constant to isolate the embedding variable.
+Word2Vec with Mean Pooling and an MLP classification head. Justify MLP head constant to isolate the embedding variable.
 
 ### Approach 2: Transformer Architecture
-Describe your choice of DeBERTa/RoBERTa and how you extract snippet-specific representations (e.g., pooling hidden states between `<BOS>` and `<EOS>`).
+- DERTa (light). Justify why based on charactistics
+- Amend vocab and feed correct data
 
 ### Hyper-parameters 
 Document settings for both models (e.g., vocabulary size, embedding dimensions, dropout rates, and fine-tuning epochs).
@@ -115,10 +124,12 @@ Document settings for both models (e.g., vocabulary size, embedding dimensions, 
 ## 4. Methodology: Task 2 (Span Identification)
 
 ### Variation 1: The Pipeline (Binary BIO + Classifier):
-Describe the "bolt-on" approach where you first detect if text is propaganda before classifying what type it is.
+This is a BIO tagger with incorporates the best classifier architecture from Task 1. 
+
+The BIO is a new model that identifes the snippet in a given sentence
 
 ### Variation 2: Integrated Multi-class BIO-CRF:
-Detail your "Joint Model" approach using the Ma and Hovy (BERT-CRF) architecture.
+"Joint Model" approach using the Ma and Hovy (BERT-CRF) architecture.
 
 ### Theoretical Justification: 
 Explain the role of the Viterbi algorithm and Global Normalization in resolving "soft boundaries" and "internal signals" in propaganda spans.
@@ -128,7 +139,7 @@ Explain the role of the Viterbi algorithm and Global Normalization in resolving 
 ## 5. Results and Evaluation
 
 ### 5.1 Evaluation Framework and Metrics
-Justify and explain the your metrics here to demonstrate "Systematic Knowledge".
+Justify and explain the metrics here to demonstrate "Systematic Knowledge".
 - **Task 1 (Classification):** Use **Macro-Average F1** as the primary metric. Justify this by referencing the class imbalance found in your EDA; accuracy would be misleading if the model overfits to the frequent loaded_language class. Include all of the the other metrics too for more granular analysis; i.e. accuracy, recall, precision. 
 - **Task 2 (Detection & Classification):** Use the Partial Match F1-score (as per Da San Martino et al., 2020). It would be good to implement something custom here. Perhaps around blurring the boundaries and identifying a way to work out if the span starts near the boundary. 
 - **Joint Score Logic:** Explain that for Task 2, a span is only considered a "match" if the label is also correct. This acts as an "on-off switch," rewarding boundary precision only when the rhetorical technique is accurately identified.
