@@ -15,6 +15,10 @@ PassMap, Spatial
 
 [Buldú, J. M., Busquets, J., Martínez, J. H., Herrera-Diestra, J. L., Echegoyen, I., Galeano, J., et al. (2018). **Using network science to analyse football passing networks: dynamics, space, time, and the multilayer nature of the game.** Front. Psychol. 9:1900. doi: 10.3389/fpsyg.2018.01900](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2018.01900/full)
 - Seminal/Foundational
+- This integrated perspective, which models passing as a stochastic process directly on the player network, aligns with, and substantially extends, recent approaches using Markovian models to unravel patterns in football
+passing sequences. (Gama)
+
+
 
 [Buldú, J. M., Busquets, J., Echegoyen, I., and Seirul.lo, F. (2019). **Defining a historic football team: using network science to analyze Guardiola’s F.C. Barcelona.** Sci. Rep. 9:13602. doi: 10.1038/s41598-019-49969-2]()
 - appears to be the bulda paper than introduced, or popularised, the pitch-passing networks spaital paradigm

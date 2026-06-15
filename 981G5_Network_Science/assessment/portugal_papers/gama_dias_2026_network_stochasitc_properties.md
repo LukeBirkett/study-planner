@@ -410,22 +410,200 @@ Together, these observations suggest that the Markovspectral framework captures 
 
 ## Discussion
 
-This study employed a multi-method approach, integrating SNA with Markov-spectral techniques, to characterise the structural and stochastic flow properties of
-the Portuguese National Team’s passing networks during the 2025 Nations League finals
+This study employed a multi-method approach, integrating SNA with Markov-spectral techniques, to characterise the structural and stochastic flow properties of the Portuguese National Team’s passing networks during the 2025 Nations League finals
 
 The SNA results underscore the role of a central defender (player 3) as the main network hub, exhibiting high Degree, Betweenness, Eigenvector, and Stress Centrality, consistent with previous studies indicating that defenders can function as critical ‘‘hubs’’ during build-up phases in possession-oriented teams. [1,2] 
 
 This observation aligns with findings that football passing networks often exhibit scale-free properties with emergent key players acting as hubs. [50]
 - Yamamoto Y and Yokoyama K. Common and unique network dynamics in football games. PLoS ONE 2011; 6(12): e29638.
 
+The presence of multiple key players (player 3, player 23, and player 25) reflects the concept of system redundancy, [2,52] a hallmark of adaptive complex systems where functionality may be maintained even if a key player’s influence is reduced. 
+
+Such redundancy could potentially enhance the team’s robustness, as alternative playmakers might assume control if one hub is neutralised.
+
+Collectively, these structural findings are consistent with our first hypothesis (H1), indicating that SNA can identify stable structural hubs. 
+
+---
+
+At the macro level, collective performance metrics indicate a balance between structural stability and observed variations.
+
+Network Density remained relatively stable (;0.115) across matches, consistent with cohesion despite tactical variations.
+
+However, increases in Network Heterogeneity and Global Centralisation from Match 1 to Match 2 indicate a growing concentration of interactions around key players, which may reflect enhanced offensive orchestration while potentially signalling vulnerability if central nodes are neutralised, an insight relevant for opposition scouting and tactical preparation.
+
+Additionally, the negative Assortativity Coefficient is consistent with players tending to connect with teammates of differing characteristics, which may promote functional diversity and integration within the network, analogous to the interaction of specialised modules in complex adaptive systems. [1,4,52]
+
+Formation adjustments from 4-2-1-3 to 4-1-2-3 shifted playmaking responsibility, as evidenced by the increased involvement of Player 23 in Match 2, illustrating the **context-dependent nature of centrality** and the adaptive redistribution of influence across the team. [7,8,53]
+- > Good references for the importants of context-dependant null models vs baselines
+
+While prior research has successfully established the Markov-chain model as a valid approximation for the growth of passing networks over time, [16] the present findings suggest that this framework’s potential extends far beyond descriptive network evolution.
+
+> No, strictly speaking, neither of these are "Null Model papers." They are empirical modeling papers. However, your intuition is completely correct: they have built the exact mathematical architecture required to create a dynamic null model.
+> 
+> Both Gama et al. and Yamamoto & Narizuka use Markov chains to model the actual behavior of the football teams. They take real match data to calculate the transition probabilities (e.g., the likelihood of the ball going from Player A to Player B). They proved that if you run a Markov chain using these empirical probabilities, it accurately approximates how the team's passing network grows over time.
+> 
+> A true null model requires purposefully destroying specific empirical correlations to create a "baseline of randomness." To make a null model, you do not want to replicate the team's actual play; you want to see what the network would look like if the players were passing based purely on chance (or constrained only by basic rules, like spatial distance or degree sequence), stripping away tactical intent.
+> 
+> understanding the "growth mechanism" is a strategy for constructing a null model. You are effectively noticing that a Markov chain is the perfect engine for a dynamic null model. Gama et al. are saying they lack a baseline for their spectral gaps and entropy rates. But, as you noticed, because Yamamoto & Narizuka proved Markov chains simulate network growth well, you could easily adapt their method to build exactly what Gama et al. are asking for.
+> 1. Take the Markov chain engine validated by Yamamoto & Narizuka.
+> 2. Instead of feeding it the actual passing probabilities of the team, feed it a null transition matrix (e.g., every player has an equal 1/10 chance of passing to any outfield teammate, or probabilities are weighted strictly by the physical distance between players rather than tactical preference).
+> 3. Run the model to grow a "null network."
+> 4. Compare the spectral gap of the empirical network against this null network.
+> 
+> These papers are generative modeling papers. They model what is actually happening, whereas a null model paper models what would happen by chance. However, your critique is entirely valid: by establishing the Markov chain as the correct method for simulating network growth, they have handed the field the exact blueprint needed to generate robust, dynamic null models.
+
+Complementing these structural insights, the Markov-spectral layer frames passing as a stochastic diffusion process on the active player set, yielding interpretable quantities that complement classical SNA.
+
+This integrated perspective, which models passing as a stochastic process directly on the player network, aligns with, and substantially extends, recent approaches using Markovian models to unravel patterns in football passing sequences. [11]
+
+---
+
+> *Yamamoto & Narizuka (Descriptive): Their primary research goal was to answer a fundamental mathematical question: Is a Markov chain a valid way to represent a football passing network? They examined the time evolution of the networks to prove that the Markovian approximation closely matches real-world network growth. In scientific terms, this is a "descriptive" or "validating" study. They described the mechanism and proved the math fits the reality.* Their output is focused on the topology and growth of the network. They look at how nodes (players) and edges (passes) accumulate over time and whether the Markov model accurately predicts that accumulation.
+> 
+> *Gama et al. (Analytical): Gama and colleagues take Yamamoto’s conclusion as a starting point. Since Yamamoto proved the Markov model works, Gama et al. ask: What can the mathematical properties of this Markov model tell us about how a team actually plays? They dive into "spectral properties" (like the spectral gap) and "information theory" (like entropy rate) to analyze tactical flexibility, ball circulation speed, and unpredictability.* Their output is focused on the stochastic flow. They use the transition matrix (the probabilities of passes between specific players) to calculate abstract metrics. For example, they use the spectral gap (derived from the eigenvalues of the matrix) to measure how quickly a team can diffuse the ball across the pitch, and entropy to measure how unpredictable their passing sequences are to an opponent.
+
+> This is exactly why Gama et al. (2026) noted that a null model is a limitation of their own paper. Gama et al. took the validated engine from Yamamoto & Narizuka and used it to calculate complex metrics (like entropy and spectral gaps). But Gama et al. realized: "We have these numbers, but we don't know what a 'normal' or 'random' number looks like." To fix that, future researchers will need to take that exact same Markov engine, apply the Null Model workflow (shuffling the data), and create the random baseline.
+
+---
+
+A critical contribution of this study is the demonstration of Markov-spectral metrics revealing what static SNA cannot.
+
+While SNA successfully identified stable structural hubs and described macro-level cohesion, these metrics are inherently static, describing the aggregate pattern of who connected to whom, but not how possession flowed through time.
+
+The Markovspectral layer addresses distinct functional questions that SNA alone cannot answer. 
+
+First, flow dynamics: the Spectral Gap quantifies the speed of possession diffusion through the network, a property invisible to static SNA. 
+
+Second, navigability and build-up patience: Kemeny’s Constant and MFPT reveal how efficiently possession reaches teammates and attacking targets, complementing centrality measures that only identify who is involved
+
+Fourth, robustness and resilience: Algebraic Connectivity and von Neumann Entropy quantify structural cohesion and topological complexity, properties related to the team’s ability to maintain organisation under pressure. These dimensions are conceptually orthogonal to structural metrics and together provide a multi-layered functional profile of team behaviour that static analysis alone cannot achieve, capturing the stochastic flow properties of possession.
+
+Analysis of the Stationary Distribution (p) confirmed that the left-back (player 25) and central midfielder (player 23) served as primary possession hubs, **corroborating SNA findings** and underscoring their crucial playmaking roles within the team’s tactical framework.
+- SNA also found this player to be a hub
+- In network science, when two completely different mathematical methods yield the same practical result, scientists say the findings are corroborated.
+- Degree Centrality (how many total passes a player gave or received) or Betweenness Centrality (how often a player acts as a bridge between other players)
+- Gama et al.’s new method didn't just count the final totals. They built a Markov transition matrix and calculated the Stationary Distribution ($\pi$).
+- **In a Markov chain, if you let the ball circulate through the team's probabilistic passing network infinitely over time, the stationary distribution tells you the exact percentage of time the ball will spend with each player in the long run.**
+- The math showed that if the ball kept moving indefinitely according to the team's passing habits, it would naturally pool and spend the most time at the feet of players 25 and 23.
+
+The integration of p with MFPT provides a functional perspective on player contributions, quantifying both their centrality and the expected number of interactions required to advance the ball to key nodes. Specifically, the analysis revealed that reaching the centre-forward (player 7) required an average of 15.6 passes in Match 1, increasing to [22,2] passes in Match 2. This approach extends the evaluation of offensive progression beyond conventional metrics, [4–6,52] offering a perspective of possession efficiency and observed differences between matches.
+
+Thus, this integrated analysis illustrates that elite football passing networks can be comprehensively characterised through the combination of structural (SNA) and stochastic flow perspectives (Markov-spectral).
+
+The framework successfully captured both invariant hub structures and match-specific flow properties, offering a multi-layered profile of team behaviour. These findings support the utility of combining these methodological approaches for performance analysis in context, providing practitioners with insights into both organisational stability and functional dynamics.
+
+---
+
+## Limitations
+
+the study focusses on a single team across only two matches of a specific tournament, which inherently limits the generalisability of the findings and prevents the detection of consistent patterns that might emerge over a larger sequence of matches.
+- > I seem to recall Penn (the statsbomb recreate paper) saying a sample of 2 of often enough (for their domain) and referenced another paper that used 2
+
+As an exploratory proof-of-concept, the sample size is appropriate for demonstrating feasibility, but statistical power is insufficient for inferential testing [41]
+- Shannon CE. A mathematical theory of communication. Bell Syst Tech J 1948; 27(3): 379–423. https://doi.org/ 10.1002/j.1538-7305.1948.tb01338.x
+
+Critically, with only two matches analysed, it is not possible to determine whether the observed variations between matches reflect genuine tactical adaptations by the team in response to different opponents and match contexts, or whether they represent normal stochastic fluctuations inherent to passing sequences in football
+
+The observed differences in Entropy Rate, Spectral Gap, and other indices, while descriptively interesting, cannot be statistically distinguished from random match-to-match variability. This fundamental ambiguity underscores the exploratory nature of this study and highlights the necessity of replicating this analysis across a larger number of matches to establish whether such variations are systematic and meaningful, or merely incidental.
+
+It is possible that certain network configurations may appear similar across different tactical contexts, underscoring the need for comparative validation.
 
 
+Second, the analysis is based on aggregated passing networks over entire matches, which may obscure temporal fluctuations and higher-order sequences that influence tactical decisions. 
+
+Moreover, the Markov layer should be interpreted as a parsimonious firstorder approximation of possession flow rather than as an empirically validated generative model of passing sequences
 
 
+Third, the current model does not explicitly incorporate spatial coordinates or player movement trajectories, which could further elucidate how positional dynamics interact with passing structure.
 
+Incorporating spatiotemporal data, such as mapping passes to specific field zones, would enable analysis of how network measures relate to formation and space management on the field. 
 
+Moreover, like much of the existing literature, our focus was on offensive passing networks; future research should extend this framework to defensive interactions and transition plays, constructing analogous defensive networks to achieve a more comprehensive evaluation of team performance.
 
+---
 
+## Future research
+
+Longitudinal studies tracking network and spectral evolution across an entire tournament or season would allow for a better understanding of how observed variations unfold over time and under varying competitive pressures.
+
+Integrating spatiotemporal data would also enable the examination of the interaction between network structure and positional play, enhancing the link between structural metrics and functional outcomes.
+
+Such comparative work is essential to establish whether the observed patterns are generalisable or context-dependent, and to build normative references for key metrics across styles and levels of play.
+
+Future studies should also employ null models and random network comparisons to establish baselines for spectral gap, entropy rate, and other indices, enabling more robust interpretation of observed values. [45,46]
+- 45. Fiedler M. Algebraic connectivity of graphs. Czech Math J 1973; 23(2): 298–305.
+- 46. Chung FRK. Spectral graph theory. American Mathematical Society, 1997.
+
+Expanding the analyses to underrepresented domains, such as women’s football or youth competitions, would also test the framework’s applicability across varying match contexts and address identified gaps in network analysis research.
+
+This framework will help establish whether the observed between-match variations reflect consistent tactical adaptations or fall within expected stochastic fluctuations.
+
+## Practical implications
+
+The methodological approach moves
+beyond descriptive analytics, providing stochastic flow
+indicators that may inform training design, tactical preparation, and post-match analysis
+
+ Coaching staff could
+employ Entropy Rate and Spectral Gap to monitor
+passing unpredictability and diffusion speed, delivering
+objective measures of aspects related to tactical flexibility and ball circulation efficiency
+
+## Conclusion
+
+Across both matches, SNA identified a consistent core of highly connected players, namely a central defender, a central midfielder, and a left-back, who accumulated the highest levels of interaction and occupied central positions within the passing network.
+
+At the team level, Network Density remained relatively stable between matches, while Network Heterogeneity and Global Centralisation increased in the final, indicating a greater concentration of interactions around key players.
+
+Collectively, this study provides a methodological proof-of-concept for the integrated SNA and Markovspectral framework, demonstrating how combining structural and stochastic flow metrics can reveal observed differences, such as increased fluidity, patience, and unpredictability, that are not apparent from either perspective alone.
+
+The approach moves beyond describing network topology to quantifying functional flow, thereby offering a multi-layered toolkit for performance analysis.
 
 
 ---
+
+### Relevant to Nulls 
+*based on limitations and further study*
+
+---
+
+#### 1. Distinguishing Tactical Adaptations from Random Fluctuation
+
+The foremost argument the authors make for a null model is the current inability to distinguish deliberate team behavior from mathematical noise.
+
+The authors note that the observed differences in their stochastic flow metrics (like Entropy Rate and Spectral Gap), while descriptively interesting, "cannot be statistically distinguished from random match-to-match variability".
+
+A random baseline is explicitly needed to determine whether variations "reflect genuine tactical adaptations... or whether they represent normal stochastic fluctuations inherent to passing sequences in football". A null model would establish the boundaries of that normal fluctuation.
+
+---
+
+#### 2. Implementing Resampling-Based Uncertainty Baselines
+
+Because the data relies on small, empirical sample sizes, standard inferential statistics fail, necessitating generative or randomized shuffling techniques. The authors suggest that future larger-scale research must implement "resampling-based uncertainty quantification". They specifically name bootstrap confidence intervals and permutation tests as the path forward. In network science, executing a permutation test on an adjacency matrix is a fundamental mechanism used to generate a null model distribution.
+
+---
+
+#### 3. Critical Evaluation of "Inherent" Network Structure (Discriminative Power)
+
+A subtle but crucial point made by the authors is that football passing data naturally possesses a baseline structure just by being a game played on a field, meaning metrics might look identical by chance. The authors point out that "passing networks inherently possess structure". Therefore, random network comparisons are required to validate the framework's discriminative power—testing if metrics can genuinely distinguish between possession-based play, counter-attacking styles, or match outcomes, rather than just spitting out numbers native to any network layout.
+
+---
+
+#### 4. Testing Higher-Order Markovian Dependencies
+
+To build an accurate null model, you have to know how many "steps" of memory to include. The authors admit their current flow layout is limited. The authors state that their current Markov layer is a "parsimonious first-order approximation". They suggest future work must test higher-order dependence and temporal non-stationarity using event-level ordered data. If a researcher wants to build a robust null model, they need to know whether a player's randomized passing probability should be calculated based solely on who has the ball (1st order), or who passed it to them previously (2nd order)
+
+---
+
+#### 5. Parameter Sensitivity and Teleportation Correction
+
+When running stochastic models to generate network baselines, changing the mathematical rules slightly can alter the entire output. The authors highlight the need for "systematic sensitivity analyses of key parameters". Specifically, they note that the teleportation correction (the $\alpha = 0.15$ adjustment used to make the Markov chain ergodic) needs rigorous testing. To construct an unbiased null model, a researcher must ensure the artificial "teleportation" of the ball isn't accidentally skewing the random baseline's spectral properties.
+
+---
+
+future studies must "employ null models and random network comparisons to establish baselines for spectral gap, entropy rate, and other indices, enabling more robust interpretation of observed values". Without shuffling the empirical passing data to create these random networks, the mathematical values generated by stochastic flow modeling remain without a true benchmark.
+
+---
+
+
+

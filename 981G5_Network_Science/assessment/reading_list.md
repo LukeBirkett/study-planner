@@ -26,6 +26,12 @@
 ---
 13. [Spatial networks (Barthelemy, 2011)](#13-spatial-networks-barthelemy-2011)
 ---
+14. [Social network analysis: mathematical models for understanding professional football in game critical moments—an exploratory study (Assunção et al., 2022)](#14-social-network-analysis-mathematical-models-for-understanding-professional-football-in-game-critical-momentsan-exploratory-study-assunção-et-al-2022)
+---
+15. 
+
+
+---
 
 ## 1. **Team sports performance analysed through the lens of social network theory: implications for research and practice (Ribeiro et al., 2017)**
 - Referenced alot in the Avles (2025) intro
@@ -42,6 +48,7 @@
 - Also has the papers: 
     - > Clemente FM, Martins FML, Kalamaras D, et al. General network analysis of national soccer teams in FIFA World Cup 2014. Int J Perform Anal Sport 2015
     - > Clemente FM, Martins FML, Wong P, et al. Midfielder as the prominent participant in the building attack: a network analysis of national teams in FIFA World Cup 2014
+    - > Clemente FM, Sarmento H and Aquino R. Player position relationships with centrality in the passing network of World Cup soccer teams: win/loss match comparisons. Chaos Solitons Fractals 2020; 133: 109625. https:// doi.org/10.1016/j.chaos.2020.109625
 
 > Clemente FM, Couceiro MS, Martins FML, et al. Using network metrics in soccer: a macro-analysis. J Hum Kinet
 
@@ -165,3 +172,22 @@ Referenced in Narizuka et al. (2014)
 > Barthélemy, M., 2011. Spatial networks. Physics reports, 499(1-3), pp.1-101.
 
 ---
+
+## 14. Social network analysis: mathematical models for understanding professional football in game critical moments—an exploratory study (Assunção et al., 2022)
+
+
+> Assunção, D., Pedrosa, I., Mendes, R., Martins, F., Francisco, J., Gomes, R. and Dias, G., 2022. Social network analysis: mathematical models for understanding professional football in game critical moments—an exploratory study. Applied Sciences, 12(13), p.6433.
+
+---
+
+## 15. Influence of different playing styles among the top three teams on action zones in the World Cup in 2018 using a Markov state transition matrix (Liu et al., 2018)
+
+This approach aligns with and extends recent research applying Markov models to football, such as the work of Liu et al., [17] who used state transition matrices between field zones to identify general and threatening attacking patterns in the 2018 World Cup.
+
+**While their study effectively captured the spatial dynamics of team attacks (the ‘‘where’’),** our Markovspectral analysis of the player network elucidates the underlying relational and structural dynamics (the
+‘‘how’’ and ‘‘through whom’’), offering a complementary and multi-layered understanding of tactical functionality.
+(Gama et al., 2026)
+
+> MUST READ AS PERTAINS TO SPATIAL COMPONENT
+
+> Liu T, Zhou C, Shuai X, et al. Influence of different playing styles among the top three teams on action zones in the World Cup in 2018 using a Markov state transition matrix. Front Psychol 2022; 13: 1038733. https://doi.org/ 10.3389/fpsyg.2022.1038733
