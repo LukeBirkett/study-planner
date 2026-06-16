@@ -565,29 +565,6 @@ The approach moves beyond describing network topology to quantifying functional 
 ### Relevant to Nulls 
 *based on limitations and further study*
 
----
-
-#### 1. Distinguishing Tactical Adaptations from Random Fluctuation
-
-The foremost argument the authors make for a null model is the current inability to distinguish deliberate team behavior from mathematical noise.
-
-The authors note that the observed differences in their stochastic flow metrics (like Entropy Rate and Spectral Gap), while descriptively interesting, "cannot be statistically distinguished from random match-to-match variability".
-
-A random baseline is explicitly needed to determine whether variations "reflect genuine tactical adaptations... or whether they represent normal stochastic fluctuations inherent to passing sequences in football". A null model would establish the boundaries of that normal fluctuation.
-
----
-
-#### 2. Implementing Resampling-Based Uncertainty Baselines
-
-Because the data relies on small, empirical sample sizes, standard inferential statistics fail, necessitating generative or randomized shuffling techniques. The authors suggest that future larger-scale research must implement "resampling-based uncertainty quantification". They specifically name bootstrap confidence intervals and permutation tests as the path forward. In network science, executing a permutation test on an adjacency matrix is a fundamental mechanism used to generate a null model distribution.
-
----
-
-#### 3. Critical Evaluation of "Inherent" Network Structure (Discriminative Power)
-
-A subtle but crucial point made by the authors is that football passing data naturally possesses a baseline structure just by being a game played on a field, meaning metrics might look identical by chance. The authors point out that "passing networks inherently possess structure". Therefore, random network comparisons are required to validate the framework's discriminative power—testing if metrics can genuinely distinguish between possession-based play, counter-attacking styles, or match outcomes, rather than just spitting out numbers native to any network layout.
-
----
 
 #### 4. Testing Higher-Order Markovian Dependencies
 
