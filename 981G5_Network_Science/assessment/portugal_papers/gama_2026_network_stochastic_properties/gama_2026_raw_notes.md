@@ -190,6 +190,14 @@ For each match, a directed weighted adjacency matrix A was constructed, where ea
 - to get the Transition Matrix ($P$), linear algebra takes each row and divides every entry in that row by the row's total sum
 - Mathematically, this is expressed as multiplying the inverse of a diagonal degree matrix ($D^{-1}$) by the adjacency matrix ($A$):
 - $$P = D^{-1}A$$
+
+
+
+
+
+
+#### A detour chain of throught about teleportation
+
 - What if the Matrix is "Irreducible"?
     - In a real football match, passing networks often have "dead ends."
     - Imagine if Player 1 and Player 2 only pass to each other, and once Player 3 gets the ball, they only pass to Player 2. The ball gets trapped in a cycle between 1 and 2, and it can never get back to Player 3.
@@ -241,6 +249,12 @@ If you only generate isolated passes, your null model assumes that football has 
 - The Higher-Order Network (HON) Model (Advanced). Probably too advanced. 
 
 The author then goes onto explain some of the metrics (indices) produced from this matrix but I have not taken notes of them. 
+
+---
+
+
+
+
 
 ---
 
@@ -351,6 +365,11 @@ The Assortativity Coefficient was negative in both matches (20.046 and 20.136; t
 
 > Instead of examining the network metrics between two matches, could deepdive into 1 (or more), explain the properties and how they translate into football, and then compare them to an aggreate of the whole league/seasons, including sumamry stats, i.e. min, max, average. 
 
+
+
+
+
+
 ---
 
 ## Markov-spectral results
@@ -359,6 +378,11 @@ A direct comparison between the insights from traditional SNA and those from the
 While SNA successfully identified the stable structural hubs (players 3, 3, and 25) and described macro-level cohesion (e.g. stable network density), the Markov-spectral indices quantified aspects of ball circulation that were not captured by structural metrics alone.
 
 Together, these observations suggest that the Markovspectral framework captures stochastic flow properties of possession that complement the structural insights provided by SNA.
+
+
+
+
+
 
 ---
 
