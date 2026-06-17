@@ -28,15 +28,18 @@
 ---
 14. [Social network analysis: mathematical models for understanding professional football in game critical moments—an exploratory study (Assunção et al., 2022)](#14-social-network-analysis-mathematical-models-for-understanding-professional-football-in-game-critical-momentsan-exploratory-study-assunção-et-al-2022)
 ---
-15. 
+15. [Influence of different playing styles among the top three teams on action zones in the World Cup in 2018 using a Markov state transition matrix (Liu et al., 2018)](#15-influence-of-different-playing-styles-among-the-top-three-teams-on-action-zones-in-the-world-cup-in-2018-using-a-markov-state-transition-matrix-liu-et-al-2018)
 
 
 ---
 
 ## 1. **Team sports performance analysed through the lens of social network theory: implications for research and practice (Ribeiro et al., 2017)**
-- Referenced alot in the Avles (2025) intro
-- Also comes up alot in Narizuka and Yamamoto (2014)
-- "Previous research has demonstrated that cohesive network structures and well-chosen centrality metrics can illuminate performance outcomes. For example, teams with higher connectivity and balanced interaction patterns often achieve greater success" (Gama and Dias, 2026)
+
+Referenced alot in the Avles (2025) intro
+
+Also comes up alot in Narizuka and Yamamoto (2014)
+
+Previous research has demonstrated that cohesive network structures and well-chosen centrality metrics can illuminate performance outcomes. For example, teams with higher connectivity and balanced interaction patterns often achieve greater success. [30,35*] (Gama et al. 2026)
 
 > Ribeiro, J., Silva, P., Duarte, R., Davids, K., and Garganta, J. (2017). Team sports performance analysed through the lens of social network theory: implications for research and practice.
 
@@ -109,6 +112,8 @@ In their 2024 paper "A multilayer network framework for soccer analysis," Álvar
 - "We found a negative relation between density and successfulness of offensive plays."
 - "reduced density was associated with a higher number of offensive plays, albeit mostly unsuccessful.'
 - "high density was associated with a lower number of successful offensive plays (SOPs), but also with overall fewer offensive plays and “ball possession losses” before the attacking team entered the finishing zone" 
+
+Previous research has demonstrated that cohesive network structures and well-chosen centrality metrics can illuminate performance outcomes. For example, teams with higher connectivity and balanced interaction patterns often achieve greater success. [30,35] (Gama et al., 2026)
 
 > Pina, T. J., Paulo, A., and Araújo, D. (2017). Network characteristics of successful performance in association football. a study on the UEFA champions league
 
@@ -187,6 +192,8 @@ This approach aligns with and extends recent research applying Markov models to 
 **While their study effectively captured the spatial dynamics of team attacks (the ‘‘where’’),** our Markovspectral analysis of the player network elucidates the underlying relational and structural dynamics (the
 ‘‘how’’ and ‘‘through whom’’), offering a complementary and multi-layered understanding of tactical functionality.
 (Gama et al., 2026)
+
+"prior research has successfully established the Markov-chain model as a valid approximation for the **growth of passing networks over time** [16] and to model state transitions between field zones [17]"
 
 > MUST READ AS PERTAINS TO SPATIAL COMPONENT
 

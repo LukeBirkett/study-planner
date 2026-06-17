@@ -24,3 +24,16 @@ passing sequences. (Gama)
 - appears to be the bulda paper than introduced, or popularised, the pitch-passing networks spaital paradigm
 
 ---
+
+
+
+
+
+
+For each match, a directed weighted adjacency matrix A was constructed, where each entry represents the number of passes from one player to another.
+
+> This is literally just a PassMap but highlights that such as network can be represented as an 'adjacency matrix'
+
+(Gama et al., 2026)
+
+---

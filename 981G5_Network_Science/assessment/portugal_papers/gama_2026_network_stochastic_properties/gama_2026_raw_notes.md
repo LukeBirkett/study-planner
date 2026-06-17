@@ -4,48 +4,6 @@
 
 ---
 
-**This paper mentions Null Models as further research:**
-
-> "Future studies should also employ **null models and random network** comparisons to establish baselines for spectral gap, entropy rate, and other indices, enabling more robust interpretation of observed values"
-
-> Expanding the analyses to underrepresented domains, such as women’s football or youth competitions, would also test the framework’s applicability across varying match contexts and address identified gaps in network analysis research.
-
----
-
-**How this paper links to my ideas:**
-
-- without a null model baseline, they cannot prove that their advanced tactical interpretations are actually true.
-- they show that in Match 2, the team’s Entropy Rate (unpredictability) and Spectral Gap (ball circulation speed) increased.
-- they make a tactical inference: Portugal played a more fluid, adaptive, and unpredictable style in the final compared to the semi-final.
-- because they lack a baseline, their interpretation isn't scientifically robust
-- observed changes might just be normal stochastic fluctuations (i.e., the natural noise of a football bouncing around a pitch) rather than a deliberate tactical adaptation
-- Because passing networks inherently possess an underlying structure (e.g., midfielders naturally pass more than strikers), the metrics will always shift slightly from game to game by pure chance.
-- "We need a randomized baseline so we can calculate a Z-score. If the real game's Entropy Rate is significantly higher than 1,000 randomized versions of that same game, only then do we have a robust interpretation that the unpredictability was a deliberate tactical blueprint, not just a random fluke".
-- You want to use network properties to infer a team's tactical style—whether they are a possession-heavy team, a direct counter-attacking unit, or a highly centralized system built around a single playmaker.
-- authors are doing the exact same thing, just using "stochastic flow" metrics instead of classical static metrics
-- The Mathematical Baseline (Null Model) Prove: 
-    - (Spectral Gap) Does the speed of ball diffusion exceed a random re-shuffling of passes? 
-    - (Mean First-Passage Time (MFPT)) Is the number of passes required to reach the striker shorter/longer than a volume-based random baseline?
-- Gama et al. (2026) are trying to decode tactical functionality and efficiency—they are just using advanced tools to do it.
-- frame myt resaerch as the direct answer to their call for future research
-- state that whether you use classical metrics (like Clustering and Centrality) or their Markovian flow metrics (like Entropy and Spectral Gaps) , no network property can be safely mapped to a tactical approach without a null model baseline to filter out the random noise of the game.
-
-The purpose of their paper was to demonstate things like this but the null applications remain the same and just as useful as the purpose of a validating baseline
-> By putting the standard results right next to the Markov-spectral results, they could make claims like: Look, if you only use standard network density, Match 1 and Match 2 look completely identical (~0.115). But look at our new metric, the Spectral Gap—it shows that the ball actually circulated much faster in Match 2 (0.530 vs 0.454).
-
-NOTE: the structure and composition of this paper is also particularly relevant. They scope down into and give a definition/translation of each network metric into football teams. They also comprehensively use these metrics to analyse the data and have a whole Network Results section. Their paper goes onto to supplement these finding with their entrophy approaches. They mention at the end that actually null models are needed to validate the findings. My approaches would employ near enough the same research, however, instead of the entropy supplementary route, my work would flow into creating a null model. 
-
----
-
-Given this research finding, I also need ot read thier systematic review:
-> [2] Gama, J., Dias, G., Pereira, M., Mendes, R., Mendes, R.S., Sarmento, H. and Vaz, V., 2026. Network analysis to understand variability and patterns of individual and collective behaviour in professional football: a systematic review. International Journal of Performance Analysis in Sport, pp.1-62.
-
-Note, G Dias is also in the Alves review
-
-> Gama, J., Dias, G., Couceiro, M.S., Mendes, R., Mendes, R.S. and Vaz, V., 2026. Linking network structures and stochastic flow properties: An exploratory Markov-spectral case study in professional football. Proceedings of the Institution of Mechanical Engineers, Part P: Journal of Sports Engineering and Technology, p.17543371261448957.
-
----
-
 ## Paper Notes
 
 ### Abstract
@@ -90,10 +48,6 @@ a recent systematic review of football performance analysis highlighted the need
 ### Prior Markov-chain modelling of Passes
 "prior research has successfully established the Markov-chain model as a valid approximation for the **growth of passing networks over time** [16] and to model state transitions between field zones [17]"
 - [16] Yamamoto, K. and Narizuka, T., 2018. Examination of Markov-chain approximation in football games based on time evolution of ball-passing networks. Physical Review E, 98(5), p.052314.
-
-> CONVERSE WITH GEMINI TO UNDERSTAND IF [16] IS DYNMAICS OF A NETOWRK AND THEREFORE A NULL MODEL
-
-
 - Liu T, Zhou C, Shuai X, et al. Influence of different playing styles among the top three teams on action zones in the World Cup in 2018 using a Markov state transition matrix. Front Psychol 2022; 13: 1038733. https://doi.org/ 10.3389/fpsyg.2022.1038733
 
 Markovian processes naturally accommodate such probabilistic, time-evolving phenomena by modelling sequences of play as state transitions on a network [18]
@@ -561,26 +515,3 @@ The approach moves beyond describing network topology to quantifying functional 
 
 
 ---
-
-### Relevant to Nulls 
-*based on limitations and further study*
-
-
-#### 4. Testing Higher-Order Markovian Dependencies
-
-To build an accurate null model, you have to know how many "steps" of memory to include. The authors admit their current flow layout is limited. The authors state that their current Markov layer is a "parsimonious first-order approximation". They suggest future work must test higher-order dependence and temporal non-stationarity using event-level ordered data. If a researcher wants to build a robust null model, they need to know whether a player's randomized passing probability should be calculated based solely on who has the ball (1st order), or who passed it to them previously (2nd order)
-
----
-
-#### 5. Parameter Sensitivity and Teleportation Correction
-
-When running stochastic models to generate network baselines, changing the mathematical rules slightly can alter the entire output. The authors highlight the need for "systematic sensitivity analyses of key parameters". Specifically, they note that the teleportation correction (the $\alpha = 0.15$ adjustment used to make the Markov chain ergodic) needs rigorous testing. To construct an unbiased null model, a researcher must ensure the artificial "teleportation" of the ball isn't accidentally skewing the random baseline's spectral properties.
-
----
-
-future studies must "employ null models and random network comparisons to establish baselines for spectral gap, entropy rate, and other indices, enabling more robust interpretation of observed values". Without shuffling the empirical passing data to create these random networks, the mathematical values generated by stochastic flow modeling remain without a true benchmark.
-
----
-
-
-
