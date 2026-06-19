@@ -50,6 +50,24 @@
         - [6. Collective Intelligence in Humans](#6-collective-intelligence-in-humans)
     - [Part 2: Collective Behavior in Machines](#part-2-collective-behavior-in-machines)
         - [7. Swarm Robotics](#7-swarm-robotics)
+    - [Week 3 Seminar](#week-3---seminar)
+        - [Key Seminar Papers](#key-papers-for-the-seminar)
+            - [Numerical cognition in honeybees enables addition and subtraction (Howard, 2019)](#numerical-cognition-in-honeybees-enables-addition-and-subtraction-howard-2019)
+            - [Non-numerical strategies used by bees to solve numerical cognition tasks (Maboudi et al., 2021)](#non-numerical-strategies-used-by-bees-to-solve-numerical-cognition-tasks-maboudi-et-al-2021)
+        - [Seminar Content](#seminar-content)
+        - [Discussion Topic 1: The Difficulty of Stimulus Design](#discussion-topic-1-the-difficulty-of-stimulus-design)
+        - [Discussion Topic 2: "Kill-joy" Explanations in Classic Studies](#discussion-topic-2-kill-joy-explanations-in-classic-studies)
+        - [Discussion Topic 3: Methodological & Statistical Controls (Howard et al., 2019)](#discussion-topic-3-methodological--statistical-controls-howard-et-al-2019)
+        - [Discussion Topic 4: Defining "Math" in Animals](#discussion-topic-4-defining-math-in-animals)
+            - [Debate Point 1: Distinguishing "Arithmetic" from "Numerosity Discrimination"](#debate-point-1-distinguishing-arithmetic-from-numerosity-discrimination)
+            - [Debate Point 2: The Requirement of Language and Symbols](#debate-point-2-the-requirement-of-language-and-symbols)
+            - [Debate Point 3: The Role of Working Memory](#debate-point-3-the-role-of-working-memory)
+            - [Debate Point 4: What does it mean for a bee to do math?](#debate-point-4-what-does-it-mean-for-a-bee-to-do-math)
+            - [How to prove a bee is doing math?](#how-to-prove-a-bee-is-doing-math)
+        - [Discussion Topic 5: Evaluating Biorobotic Models (MaBouDi et al., 2021)](#discussion-topic-5-evaluating-biorobotic-models-maboudi-et-al-2021)
+            - [Debate Line 1: Can the neural network model do arithmetic?](#debate-line-1-can-the-neural-network-model-do-arithmetic)
+            - [Debate Line 2: "Are you convinced?"](#debate-line-2-are-you-convinced)
+            - [Debate Line 3: What are the bees actually doing?](#debate-line-3-what-are-the-bees-actually-doing)
     - [Week 3 References/Readings](#week-3-referencesreadings)
         - [Swarm intelligence in animals and humans (Krause et al., 2010)](#swarm-intelligence-in-animals-and-humans-krause-et-al-2010)
         - [Swarm Robotics:  Past, Present, and Future](#swarm-robotics--past-present-and-future)
@@ -63,7 +81,10 @@
     - [4. Task-Dependent Direct Perception in Humans](#4-task-dependent-direct-perception-in-humans)
     - [Week 4 References/Readings](#week-4-referencesreadings)
 ---
-- [Week 5 - Navigation]()
+- [Week 5 - Navigation](#week-5---navigation)
+
+
+---
 - [Week 6 - Motor Control (Lab 4)]()
 - [Week 7 - Tool Used]()
 - [Week 8 - Social Intelligence]()
@@ -575,6 +596,180 @@ Engineers and biologists prize self-organizing collective systems because they i
 
 ---
 
+<br>
+<br>
+<br>
+
+## Week 3 - Seminar
+
+This week we're going to cover 2 papers, so please read both. They're a really nice pair, and are related to your your Week 2 Unexpected Cleverness lecture.
+
+The first one describes a study purporting to show that bees can do arithmetic and can therefore represent numbers: 
+
+> Howard et al (2019). Numerical cognition in honeybees enables addition and subtraction
+
+The second paper argues that numerical cognition is not needed for the bees to perform that task, and supported that argument by building a neural network model that does not have numerical cognition yet can still "do the sums": 
+
+> Maboudi et al (2021). Non-numerical strategies used by bees to solve numerical cognition tasks
+
+<br>
+
+---
+### Key Papers for the Seminar
+
+#### Numerical cognition in honeybees enables addition and subtraction (Howard, 2019)
+
+This study challenges the assumption that exact, symbolic arithmetic requires the large brain architectures of primates or humans. Using an appetitive-aversive Y-maze paradigm, researchers successfully trained free-flying honeybees to use colors as symbolic operators, where blue required the bee to "add one" element to a sample and yellow required it to "subtract one". Because the element being added or subtracted was never visually present, the bees had to successfully hold the sample quantity in their short-term working memory while applying the learned, long-term operational rule. When tested with a completely novel sample number that they had never encountered during training, the bees successfully interpolated the rules to choose the correct arithmetic outcome. This proves that insects with miniature brains are capable of true numerical cognition, suggesting that advanced mathematical processing is biologically accessible without the prerequisites of human language or culture, likely evolving as a cognitive byproduct of complex foraging demands.
+
+---
+
+#### Non-numerical strategies used by bees to solve numerical cognition tasks (Maboudi et al., 2021)
+This paper acts as a critical counter-argument to the previous reading (Howard et al., 2019), demonstrating the intense scrutiny required when evaluating "intelligent" behavior in biorobotics and neuroethology.
+
+This study provides a critical reassessment of numerical cognition in insects, demonstrating that what appears to be advanced arithmetic behavior is often driven by simpler, non-numerical heuristics. The authors note that in standard 2D visual tasks, the number of elements inevitably covaries with continuous physical cues like edge length, convex hull, and spatial frequency. Through behavioral experiments, they proved that when numerosity and continuous cues are set in opposition, honeybees actively abandon the number of items and base their decisions entirely on the continuous visual variables. To prove the biological plausibility of this alternative strategy, the researchers built a simple nine-neuron network model tuned exclusively to spatial frequency, with absolutely no capacity for numerical processing. Strikingly, this non-numerical model successfully reproduced complex behaviors previously hailed as proof of insect counting—including the ability to order "zero" at the bottom of a numerical continuum. Ultimately, the paper suggests that a computationally cheap "sense of magnitude" is far more primitive than a true "sense of number," serving as a stark reminder for biorobotics that complex behavior does not necessitate complex, high-level cognitive processing.
+
+The authors urge future studies to assess all continuous cues in unrewarded tests, use cross-modal cues (like combining sound and vision), and analyze micro-behaviors (like flight paths and sequential scanning) to reveal the true algorithms animals use.
+
+---
+
+### Seminar Content
+
+The seminar opens by distinguishing between **Magnitude Estimation** (a mid-level perceptual process determining "how much" of something there is, like size or density) and true **Numerical Cognition/Numerosity** (an approximate sense of exact number that allows for symbolic representation and mathematics). The subsequent discussions challenge how we can reliably test this distinction in animals.
+
+---
+
+### Discussion Topic 1: The Difficulty of Stimulus Design
+
+**The Prompt:** Why will symbolic stimuli (like the printed numbers '1' and '7') often be a poor choice of stimulus for testing an animal, like a dog?
+
+**The Context:** The slides highlight the inherent difficulty of testing numerosity without using human symbols. When researchers use arrays of dots or squares instead, they run into massive confounding variables: changing the number of items inherently changes the cumulative area, the overall bounded area, or the density of the items.
+
+**Additional Reference Included:** Leibovich and Henik (2013) – cited regarding the visual confounds of studying numerosity.
+
+---
+
+### Discussion Topic 2: "Kill-joy" Explanations in Classic Studies
+
+**The Prompts:** Can you think of a confound or a kill-joy explanation for the parrot doing math? Or not? What is going on in the monkey subtraction task?
+
+**The Context:** The seminar looks at claims of advanced animal math. It references a study where an African Gray parrot supposedly quantified items and performed addition using vocal English labels. It also examines a study where rhesus monkeys consistently chose an occluded box containing one plum over a box containing zero plums, which the authors claimed was evidence of subtraction and representing "zero". The discussion pushes students to find the simpler, non-mathematical heuristic (like "Yummy!" food motivation) that might explain these behaviors.
+
+**Additional References Included:**
+    - Pepperberg (1994) – African Gray parrot addition study.
+    - Oscar Pfungst (1907) – A deliberate reference to the scientist who debunked "Clever Hans" (the horse that supposedly did math by reading human body language)
+    - Sulkowski & Hauser (2001) – Rhesus monkey subtraction study.
+
+---
+
+### Discussion Topic 3: Methodological & Statistical Controls (Howard et al., 2019)
+
+**The Prompt:** When testing the bees, what does having the incorrect answer in the "Same direction" vs. the "Opposite direction" control for?
+
+**The Context:** Reviewing the Howard et al. (2019) bee arithmetic paper, the seminar looks at the testing phase. If the math problem is $3+1$, presenting an incorrect option of $5$ (same direction) versus an incorrect option of $2$ (opposite direction) tests different cognitive failures. The discussion revolves around understanding experimental design. 
+
+**Additional Content Included:** The slides introduce Linear Mixed Models (LMMs). They visually explain regression lines (Predictor vs. Outcome) and explain that LMMs allow researchers to combine lots of regression lines so that the model accounts for the group mean accuracy plus the individual mean accuracy of each specific bee.
+
+---
+
+### Discussion Topic 4: Defining "Math" in Animals
+
+**The Prompts:**
+- To conclude a non-human animal can add & subtract, what processes would you want to have demonstrated?   
+- What would it mean for a bee to be able to do maths?   
+- Do you need numeric representations, language or working memory to do this task?   
+- How do you distinguish between numerosity discrimination & arithmetic?   
+
+**The Context:** Guided by quotes from Howard et al., the seminar asks the class to define the philosophical and cognitive boundaries of mathematics. If an animal can solve the maze without language or complex working memory, is it doing math, or is it doing something else?
+
+#### Debate Point 1: Distinguishing "Arithmetic" from "Numerosity Discrimination"
+
+**The Core Debate:** Is the animal actually performing a mathematical operation, or just picking the "bigger" or "smaller" visual pattern?
+
+**The "Pro-Arithmetic" Argument (Howard):** Numerosity discrimination is simply looking at two static piles and knowing which has more. Arithmetic requires an operator. Howard et al. argue that the bees are doing arithmetic because they are using a symbol (color) to tell them whether to actively change the value of an initial sample in their minds, demonstrating a mental manipulation of quantity.
+
+**The "Killjoy" Counter-Argument (MaBouDi):** You can bypass arithmetic entirely by relying on continuous variables. If blue means "add" and yellow means "subtract", the bee might simply be learning the associative rule: "If blue, choose the image with more spatial frequency/edge length than the last one I saw; if yellow, choose the one with less". This is magnitude matching, not arithmetic.
+
+---
+
+#### Debate Point 2: The Requirement of Language and Symbols
+
+**The Core Debate:** Can true mathematics exist without human language or culturally invented symbols (like Arabic numerals)?
+
+**The "No Language Needed" Argument (Howard):** Howard et al. explicitly argue that human language and culture are not prerequisites for exact calculation. They demonstrate that bees can learn to use colors as abstract, symbolic representations of "+" and "-". If an animal can link an abstract visual trait to a functional operation, it is performing symbolic math.
+
+**The Counter-Argument (Philosophical):** Without language, an animal is restricted to the limits of subitizing (the innate ability to instantly recognize small numbers from 1 to 4). If a bee cannot name a number, it cannot process large exact numbers (e.g., $15 + 1 = 16$). Therefore, what the bee is doing is a hardwired, low-level biological estimation, which lacks the infinite scalability that defines true "math."
+
+---
+
+#### Debate Point 3: The Role of Working Memory
+
+**The Core Debate:** What specific mental processes must we see to conclude an animal is adding or subtracting?
+
+**The "Working Memory" Requirement (Howard):** To prove an animal is adding, the elements to be added cannot be physically present. Howard et al. argue this was demonstrated because the bee had to hold the sample number in its short-term working memory, recall the long-term rule (blue = add 1), and compute the answer mentally while flying down the maze.
+
+**The "Embodied/Situated" Counter-Argument:** Tying back to the core themes of the module, we know insects use "just-in-time" extraction and try to avoid heavy memory loads. An alternative explanation is that the bee is acting purely reactively. It might not be holding a "number" in its working memory at all, but rather storing a temporary sensory trace (like the intensity of the spatial frequency) and then reacting to whichever choice in the decision chamber best matches that shifted intensity.
+
+---
+
+#### Debate Point 4: What does it mean for a bee to do math?
+
+**The Core Debate:** Does the concept of "math" even make sense in the ecological reality of a honeybee?
+
+**The Ecological Advantage (Howard):** Doing math makes evolutionary sense. A bee constantly makes complex economic decisions: "Is the nectar payoff of this flower worth the energy cost of flying to it?". Howard et al. argue that the cognitive plasticity required to link visual cues to reward quantification is essentially a natural, ecological form of math.
+
+**The Evolutionary Economy (MaBouDi / Stafford):** Evolution is notoriously lazy and cheap. Building a "math module" in the brain is computationally expensive. As MaBouDi proved with their 9-neuron model, an insect can solve these problems using a generalized, primitive "sense of magnitude" rather than a true sense of number. For a bee, doing "math" might just mean taking the path of least computational resistance to get to the most sugar.
+
+---
+
+#### How to prove a bee is doing math?
+
+The cross-modal experimental design mentioned in MaBouDi et al suggests if a bee could be trained to hear 3 buzzes and then reliably select a visual image of 4 squares (when primed with blue), that would eliminate continuous visual cues (like spatial frequency) and strongly suggest a true, abstract understanding of arithmetic.
+
+---
+
+### Discussion Topic 5: Evaluating Biorobotic Models (MaBouDi et al., 2021)
+
+**The Prompts:** What do you think? Are you convinced? Can the neural network model do arithmetic?   
+
+**The Context:** The seminar introduces the MaBouDi et al. (2021) paper as an alternative, "kill-joy" explanation. It outlines how a simple neural network, encoding strictly for spatial frequency and completely blind to numerosity, can perfectly replicate the bee's performance on the addition/subtraction tasks (including using "zero"). The final discussion asks the class to synthesize both papers and decide if the neural network is "doing math" or just matching patterns, and by extension, what the bees are actually doing.
+
+> *To tackle Discussion Topic 5 at a master's level, you need to engage directly with the synthetic power of biorobotic modeling. The core of this debate hinges on a profound computational question: If a simple, non-numerical mechanism can perfectly mimic an seemingly "advanced" cognitive behavior, what does that tell us about the nature of intelligence, the brain of the bee, and the validity of our AI models?*
+
+---
+
+#### Debate Line 1: Can the neural network model do arithmetic? 
+This prompt forces a clash between two major philosophies of mind and computer science when evaluating MaBouDi et al.'s 9-neuron model.
+
+**The Functionalist/Behavioral Argument ("Yes, practically"):** If an agent takes an input (a visual sample primed with a color symbol) and consistently produces the mathematically correct output (interpolating to $3+1=4$ or recognizing that $0$ is less than $1$), it is functionally computing arithmetic. Under a strict behavioral definition of intelligence (Week 1's theme: "intelligence is adaptive behavior"), how the internal weights solve the mapping is secondary to the fact that the correct relationship is successfully derived.
+
+**The Structuralist/Cognitive Argument ("No, it's an illusion"):** True arithmetic requires an internal representation of number quantity (discrete sets) and an explicit algorithmic operation (manipulating those sets). MaBouDi's model possesses no concept of "threeness" or "fourness"; it contains only Gaussian tuning curves optimized for continuous spatial frequencies. Calling this "arithmetic" is a category error—it is simply non-linear statistical pattern regression that co-opted a mathematical shortcut.
+
+---
+
+#### Debate Line 2: "Are you convinced?"
+
+This section shifts the debate to the experimenter's trap and Morgan's Canon (the principle that we should not interpret an action as the outcome of a higher cognitive faculty if it can be fairly interpreted as the outcome of a lower one).
+
+**Why MaBouDi’s Model is Highly Convincing:** The model does not just pass basic tests; it reproduces the exact high-level transfer behaviors that Howard et al. used to "prove" advanced math—including sorting zero at the bottom of a continuum and generalizing to completely novel shapes. Because continuous visual variables (edge length, convex hull, spatial frequency) naturally covary with number count, the model exploits an environmental invariant.
+
+**The Counter-Critique (Defending Howard et al.):** Howard et al. made intentional efforts to control for absolute surface area ($10\pm0.3\text{ cm}^2$ across all shapes). For the "kill-joy" explanation to completely hold, the bee's visual processing pathways must be proved to actively prioritize spatial frequency over edge features or pattern discrimination.
+
+---
+
+#### Debate Line 3: What are the bees actually doing?
+
+This connects directly to the core themes of the entire module regarding evolutionary economy and ecological reality.
+
+**The "Lazy Evolution" Perspective:** Evolution does not build complex calculators when a simple sensorimotor shortcut is available. If a bee's miniature brain can solve a sorting or foraging puzzle by simply letting its visual lobe filters do the heavy lifting (matching Gabor-like frequency filters to reward valences), it will use that "cheap" magnitude pathway every time. The bee is a situated agent exploiting the physical features of the visual stimuli, completely bypassing the need for abstract internal working memory stacks.
+
+**The Dual-Mechanism Compromise:** It is possible that insects possess a primitive, approximate "sense of magnitude" used for rapid, low-compute choices, but retain the cognitive plasticity to switch to discrete counting sequences (such as using an accumulator system or scanning items sequentially) when continuous cues are completely stripped away.
+
+---
+
+<br>
+<br>
+<br>
+
 ## Week 3 References/Readings
 
 ### [Swarm intelligence in animals and humans (Krause et al., 2010)](./weeks/week_3/files/week_3_lecture_collective_behaviour.pdf)
@@ -759,6 +954,479 @@ Stafford et al. (2007) move the conversation beyond the "black box" of neurobiol
 This paper warns against the "simplistic copying" of insect behavior. It demands that you consider whether the situatedness of the robot (its environment, speed, and sensor range) aligns with the evolutionary niche of the animal the robot is mimicking.
 
 > Stafford et al (2007) “The role of behavioural ecology in the design of bio-inspired technology” Animal Behaviour
+
+---
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Week 5 - Navigation
+
+In the navigation lecture, we will look at the strategies that are common to different animals and how those strategies might be combined. The core strategies are Path Integration (PI) and view based guidance. We will then consider what behaviours would be the hallmark of an internalised Cognitive Map, we will see limitations in the navigational abilities of insects and by looking at the neural substrate of navigational abilities in mammals, we can see where in the brain complex spatial abilities might reside.
+
+#### Learning outcomes
+- Understand the basic navigation toolkit that is phylogenetically widespread and shared by most animals. 
+- Think about how some animals might combine navigational information to make more complex spatial representations.
+- Describe different robot navigation algorithms that do or don't rely on building maps.
+ 
+---
+
+## Week 5 Lecture Notes
+
+**Defining Spatial Cognition:** Navigation is the study of how large- and small-brained animals process information to move through space and understand their locations.
+
+**Lecture Structure:** The lecture is broken down into four parts: (1) universal components of the navigational toolkit, (2) navigation in insects, (3) how big brains combine information to build cognitive maps, and (4) how roboticists translate these ideas into navigational algorithms.
+
+---
+
+### Part 1: The Universal Navigational Toolkit
+
+There are phylogenetically widespread building blocks of navigation shared across almost all animal species.
+
+#### 1. Walking in a Straight Line
+Walking in a straight line is crucial for basic survival, such as keeping a consistent heading during migration or quickly escaping a location.  
+
+**Dung Beetles (Dacke et al., 2013):** Nocturnal dung beetles must roll their dung balls away from the main pile in a straight line as quickly as possible to stop other beetles from stealing them. If external cues (like the moon or the Milky Way's starry sky) are visible, they produce highly straight paths. If the starry sky is occluded, their paths become highly tortuous and looping.
+
+**Humans (Souman et al., 2009):** Humans also require external cues to walk straight. In woodland experiments, subjects walked relatively straight on sunny days but walked in loops on cloudy days. Blindfolded subjects on a flat beach produced highly tortuous paths, later incorrectly justifying their wandering by claiming the wind kept changing direction (failing to realize they themselves were turning).  
+
+---
+
+#### 2. Basic Sense of Direction & Learning
+Most animals universally possess a "sense of direction" and the ability to learn basic visual cues to return to a starting location.  
+
+While animals can memorize what a nest looks like, this visual matching can fail in repetitive, artificial environments; for instance, von Frisch (1974) noted birds building multiple nests along an identical-looking bicycle shed.  
+
+---
+
+<br>
+<br>
+
+### Part 2: Insect Navigation (Embodiment & Situatedness)
+Insects (e.g., Cataglyphis bicolor, Apis mellifera, Melophorus bagoti) are "navigation experts," making them ideal models for studying phylogenetically widespread building blocks of spatial cognition.  
+
+---
+
+#### 1. Path Integration (PI)
+
+PI (Wehner & Wehner, 1992) allows an animal to encode its coordinates relative to its nest, enabling a direct return path without prior knowledge of the terrain. It requires a constant sense of direction and an estimate of distance/speed.
+
+**Sense of Direction (The Sun Compass):** Santschi (1923) demonstrated that ants use the sun for direction by using a mirror to reflect the sun from the opposite side, causing the ant to instantly turn around. Dyer and Dickinson (1996) showed that bees possess innate knowledge of how the sun moves; bees kept indoors all morning still accurately adjust their afternoon waggle dances to account for the sun's morning movements.
+
+**Estimating Distance (Walking vs. Flying):**
+- **Ants (Stride Counters - Wittlinger et al., 2006):** A walking insect can monitor leg movements to measure distance. Ants with shortened legs ("stumps") underestimated their home distance, while ants with artificially lengthened legs ("stilts") overestimated it.
+- **Bees (Optic Flow):** Uncertain winds mean flying insects cannot rely on motor output, so they rely on optic flow. Srinivasan et al. (2000) showed bees artificially over-estimate distance when flown down narrow, visually dense tunnels. Tautz et al. (2004) showed bees underestimate distance when flown over featureless water.
+
+**Errors in PI:** Path Integration accumulates errors in both distance and direction. Wolf and Wehner demonstrated that an ant's search density broadens significantly as the length of the PI vector increases (e.g., 5m vs 10m vs 20m).
+
+---
+
+#### 2. From PI to Habitual Routes
+
+To mitigate PI errors, individual foragers transition to learning idiosyncratic, stable routes (Wehner, Meier and Zollikofer).
+
+**Mature Routes (Kohler and Wehner):** Experienced foragers demonstrate world knowledge through habitual routes that are independent of PI and not reliant on a rigid learned sequence of motor behaviors.
+
+**A Universal Strategy:** We are all creatures of habit. Habitual routing is seen across taxa: Pigeons (Biro et al., 2004), Rats (Calhoun, 1963), Monkeys (Di Fiore and Suarez, 2007), Humans (Dee, 2005), and Ants (Mangan and Webb, 2012).
+
+Animals prioritize route consistency over mathematical efficiency. Pigeons, monkeys, rats, and even humans traversing a campus will follow idiosyncratic, habitual paths rather than taking a direct, straight line ("as the crow flies"), prioritizing familiar landmarks to reduce navigational errors.
+
+---
+
+#### 3. Navigation by Image Matching
+
+**The Ant's View (Graham and Cheng, 2009):** Ants possess panoramic but highly low-resolution vision (roughly 1000 pixels). They can navigate successfully using crude visual representations, such as simply tracking the height of dark objects above the horizon.
+
+**Snapshot Homing (Zeil, 2003):** Because visual images change smoothly as an animal translates or rotates through space, the animal simply moves to make its current view match its stored memory, following the "image difference gradient".  
+
+**Visual Compass (Wystrach et al., 2014):** Animals use views to recall actions, not places. An ant stops, visually scans by turning on the spot, and moves forward when the view matches its memory.  
+
+**Familiarity-Based Route Navigation (Baddeley et al., 2012):** In this model, an agent inputs views to a single-layer Artificial Neural Network (ANN). Using an "Infomax" learning rule, the weights are updated to increase the familiarity of the view, completely discarding the actual image memory. To navigate, the agent visually scans the world and moves in the "most familiar" direction.  
+
+---
+
+#### 4. The Limits of Insect Navigation (Insects Insulate, Not Integrate)
+
+**Wehner et al. (2006):** Ants were trained with spatially separate outbound and inbound routes. When inbound ants were displaced to a familiar point on their outbound route, they were completely lost.
+
+Insects do not integrate their memories; they insulate them based on motivational context.  
+
+Insect navigational memories are highly context-dependent.  If a foraging ant on her way home is picked up and placed at a highly familiar location on her outward journey, she will be completely lost. The outward and inward routes are stored as separate memories and require a motivation shift to be accessed; they are not integrated into a unified map.  
+
+---
+
+<br>
+<br>
+
+### Part 3: Big Brain Navigation (Cognitive Maps)
+Behavior and neurophysiology suggest that vertebrates combine learned visual information with idiothetically generated information.  
+
+---
+
+#### 1. Combining Modalities (Etienne et al., 2004)
+- Hamsters were familiarized with a visually rich arena.  
+- When the arena was secretly rotated 135 degrees in the dark, hamsters used PI to return to the nest.  
+- However, if given a short visual fix (lights turned on briefly), the hamsters were able to successfully reset their PI coordinates to match the visual landmarks, proving vertebrates combine visual and idiothetic information.
+
+---
+
+#### 2. The Neural Substrate (The Hippocampus)
+John O'Keefe, May-Britt Moser, and Edvard Moser won the 2014 Nobel Prize for discovering the brain's navigation system.  
+
+**Place Cells:** Firing is tied to visual landmarks and is specific to a location (independently of orientation), but they also maintain their firing in the dark using PI.  
+
+**Head Direction Cells:** Encode direction independently of location.  
+
+**Grid Cells:** Provide a hexagonal array of firing fields, with cells in different layers having different scales but the same orientation.  
+
+**Situatedness (Geva-Sagiv et al., 2015):** A rat’s spatial cells operate largely in 2D. Because bats fly, their place cells represent 3D volumes (Azimuth × pitch × roll), showcasing how embodiment dictates neural structure.  
+
+---
+
+#### 3. Critique of the "Map" Metaphor
+The 'cognitive map' metaphor is top-down, anthropomorphic, and fails to address behavioral output.  
+
+**Impossible Mazes (Schnapp & Warren, 2007; Glennerster, 2016):** Human subjects are not impaired when navigating in impossible VR mazes (containing "wormholes") that geometrically cannot be mapped. 
+
+In VR experiments containing non-Euclidean "wormholes" that magically transport subjects across a map, humans navigate the glitch flawlessly without noticing the physical impossibility, suggesting human navigation relies more on route heuristics than true geometric maps.
+
+Furthermore, humans who successfully navigate a route are often poor at producing a drawn map of it, and these maps do not improve across years of experience.  
+
+---
+
+<br>
+<br>
+
+### Part 4: Robotic Navigation
+
+How cutting-edge robot navigation algorithms combine sensory inputs.  
+
+#### 1. SLAM (Simultaneous Localisation and Mapping)
+
+**The Concept:** The robot senses the positions of features in the world, moves, senses them again, and updates its position estimate based on how features should have moved.  
+
+**Bayesian Integration:** Estimates take account of sensory uncertainty; the algorithm combines probabilities (e.g., visual vs. auditory data) using Gaussian distributions to find the most likely true position.  
+
+**Loop Closure:** As the robot moves, its positional uncertainty grows. When it recognizes a previously seen feature (loop closure), it resets its uncertainty and updates the entire map
+
+---
+
+#### 2. SLAM Variants & Hardware
+
+**Monocular to LIDAR:** SLAM has evolved from single-camera systems (like Andrew Davison's monocular SLAM) to stereo vision, RGB-D, and now real-time 3D LIDAR scanning.
+
+**Odometric SLAM:** Given a pre-built map, robots (like the Omron cleaning robot) focus on tracking their position very accurately using improved Inertial Measurement Units (IMUs) and fast visual sampling, completely bypassing the need to constantly build new maps.
+
+**Summary:** SLAM provides a mathematical framework to integrate remote sensing and idiothetic info, but it is computationally expensive and does not explain how animals navigate. Insects prove that learning routes via procedural heuristics is much more computationally efficient.
+
+---
+
+## Week 5 References and Readings
+
+### Insect Navigation. (Graham, 2010)
+
+This comprehensive review outlines the phylogenetically widespread, bottom-up mechanisms insects use to navigate without centralized cognitive maps. Graham details how insects rely on Path Integration (PI) for basic dead reckoning, using an internal sun compass paired with embodiment-specific odometers—such as proprioceptive step-counting in walking ants and optic flow integration in flying bees. Because PI accumulates mathematical errors over distance, insects supplement it with view-based navigation, storing 2D retinotopic "snapshots" of goal locations during stereotyped learning flights. Ultimately, insects transition from PI to highly idiosyncratic, habitual routes consisting of procedural instructions and local vectors tied to specific visual landmarks. Crucially, the author highlights that insect spatial memories are strictly insulated by motivational context (e.g., inbound vs. outbound journeys) rather than integrated into a unified geometric framework, strongly challenging the notion that insects possess true cognitive maps.
+
+> Graham (2010) Insect Navigation. Elsevier Encyclopedia of  Animal Behaviour.
+
+---
+
+### Spatial cognition in bats and rats: from sensory acquisition to multiscale maps and navigation (Geva-Sagiv et al., 2015)
+
+This review paper bridges the conceptual gap between ecological studies of large-scale animal navigation and neuroscientific studies of small-scale laboratory spatial mapping. Focusing on bats and rats, the authors explore how "active sensing" mechanisms—such as the dynamic tuning of bat echolocation pulses or rat whisking rates—dictate the resolution of sensory input, which directly determines the spatial resolution of hippocampal place fields. The authors detail the allocentric neural building blocks of mammalian navigation, including place cells, grid cells, border cells, and head-direction cells. Crucially, they highlight the "mega-map" problem: standard laboratory-sized place fields cannot mathematically tile a wild animal's multi-kilometer home range. To solve this, they propose that the mammalian brain utilizes multiscale spatial representations, combining anatomical gradients (place fields scaling up 10-fold along the dorsoventral hippocampal axis) and theoretical "combinatorial grid codes" to efficiently represent vast natural environments. Finally, the paper demonstrates how situatedness shapes neural architecture, noting that 3D-flying bats possess volumetric 3D place cells and toroidal head-direction cells, unlike 2D-walking rats.
+
+
+> Geva-Sagiv et al. (2015) Spatial cognition in bats and rats:  from sensory acquisition to multiscale maps and  navigation, Nature Rev. Neurosc
+
+---
+
+### Do animals have cognitive maps? (Bennet, 1996) 
+
+This critical review argues that the concept of the "cognitive map" has lost its scientific utility due to contradictory definitions and a widespread failure to apply rigorous behavioral testing. While some researchers loosely define a cognitive map as any spatial representation (e.g., Gallistel), the classic and most rigorous definition (sensu Tolman, O'Keefe, and Nadel) requires an animal to demonstrate novel short-cutting between two familiar points. Bennett argues that to conclusively prove the existence of a cognitive map, researchers must first eliminate three simpler explanations for this short-cutting behavior: previous traversal of the route, path integration (dead reckoning), and the simple visual recognition of familiar landmarks from a new angle (basic route-following). Upon reviewing major spatial memory studies across insects (e.g., Gould's honeybees), birds, rodents, and primates, Bennett concludes that no experiment has successfully eliminated these "killjoy" alternatives. Consequently, he asserts there is no conclusive behavioral evidence that any animal possesses a true cognitive map, warning against the continued use of this anthropomorphic and confusing metaphor in comparative psychology.
+
+> Bennet (1996) Do animals have cognitive maps? JEB
+
+---
+
+## Week 6 Seminar
+
+We will be discussing a simple computational model describing how house hunting ants select new nest sites. The modelling paper will form the basis of your modelling report assignment (should you choose to do that), so do make sure you read it before the seminar so you get the most out of the session. We will also be working with the model in the next lab class
+
+> Robinson, E.J., Franks, N.R., Ellis, S., Okuda, S. and Marshall, J.A., 2011. A simple threshold rule is sufficient to explain sophisticated collective decision-making. PloS one, 6(5), p.e19981.
+
+There are also some other papers which may help you understand the above. They are not essential reading, but if you do complete the modelling assignment then I strongly recommend you read both while you are working on your coursework
+- The supplementary methods for the above paper: Robinson et al (2011) - Supplementary methods
+- An empirical paper that motivated the modelling paper. This introduces the behaviour that the modelling paper modelled: Robinson et al (2009). Do ants make direct comparisons?
+
+> Robinson, E.J., Smith, F.D., Sullivan, K.M. and Franks, N.R., 2009. Do ants make direct comparisons?. Proceedings of the Royal Society B: Biological Sciences, 276(1667), p.2635.
+
+***Note, could this be an interesting paper? Reina, A., Marshall, J.A., Trianni, V. and Bose, T., 2017. Model of the best-of-N nest-site selection process in honeybees. Physical Review E, 95(5), p.052411.***
+
+---
+
+<br>
+
+### A simple threshold rule is sufficient to explain sophisticated collective decision-making (Robinson et al., 2011)
+
+This study investigates the mechanisms behind collective decision-making in house-hunting rock ants (Temnothorax albipennis), challenging the assumption that individual scouts use complex cognitive strategies like "best-of-n" direct comparisons or quality-dependent recruitment latencies. Through Markov-chain simulations, analytical modeling, and empirical RFID tracking of individual ants, the authors demonstrate that a highly parsimonious, memoryless "threshold rule" is sufficient to account for optimal colony-level choices. Under this rule, a scout simply evaluates a nest against her own fixed internal quality threshold; if it passes, she accepts it and recruits, and if it fails, she rejects it and continues searching without remembering the rejected site. The researchers proved that apparent "comparison" and "hesitancy" behaviors observed in previous studies are merely emergent macro-level byproducts of this simple binary rule. Ultimately, the study concludes that by outsourcing the comparison process to the collective (using quorum sensing to aggregate absolute, non-comparative individual evaluations), the colony escapes the cognitive costs and irrational distractor effects associated with individual comparative evaluation, achieving a highly rational group consensus from simple, partly-informed agents.
+
+---
+
+**Week 2 (Morgan's Canon & Killjoy Explanations):** This paper is the ultimate application of the "killjoy" framework. Observers previously anthropomorphized the ants, assuming they were making cognitive comparisons. Robinson et al. apply Morgan's Canon to prove that a lower-level faculty (a binary threshold rule) perfectly explains the higher-level phenomenon.
+
+**Week 3 (Collective Intelligence & Emergence):** This paper demonstrates how complex global outputs (the whole colony picking the optimal nest) emerge purely from simple, local interactions (individuals applying binary threshold rules). It highlights that group-level complexity does not require individual-level complexity.
+
+**Week 5 (Seminar Focus):** This model serves as the foundational text for the modeling assignment. It translates biological observation into a programmable algorithm (Markov states), proving that "memoryless" systems can generate optimal spatial decision-making.
+
+
+---
+
+### The Markov-Chain Modeling Approach
+In Robinson et al. (2011), the researchers abstract the cognitively complex behavior of house-hunting ants into a Markov process to evaluate the minimum computational rules required for collective decision-making.
+
+A Markov-Chain is a memoryless system. The probability of a future state (or step) depends only the agents current state and immediate context, not on its cumuliative past history. 
+
+This mathematical framework perfectly fits a "killjoy" explanation, as it allows the researchers to test if ants can make optimal colony-level choices without remembering or comparing previously visited nests.
+
+---
+
+In this model, each scouting ant is an independant instantiation of a Markov process moving through distinct behavioral states. The authors model 5 primary states (though code/analytically simplications are made):
+
+1. **Assessing Home Site:** This is the starting state for all simulated ants. Because the old nest is destroyed and uninhabitable, its quality is set to negative infinity ($-\infty$), meaning an ant can never accept it and must immediately transition out to find a new site. 
+2. **Assessing Poor Site:** The ant has randomly discovered a low-quality nest and is actively evaluating it.  
+3. **Assessing Good Site:** The ant has randomly discovered a high-quality nest and is actively evaluating it.  
+4. **Committed to Poor Site:** This is an absorbing state. If the poor nest happens to pass the ant's threshold (due to assessment error or a naturally low threshold), she permanently locks into this state, halts her search, and begins recruiting nestmates.  
+5. **Committed to Good Site:** This is also an absorbing state. The ant has accepted the good nest, locked into this state, and begins active recruitment.  
+
+---
+
+An ant's progression through the Markov chain is governed by strict probability matrices based on the layout of the arena and the ant's simple threshold rule:
+
+**The Search Phase:** If an ant is in an "Assessing" state (state 2 or 3) and the nest fails to exceed her internal threshold ($b_i + \epsilon \le a$), she transitions back to a random search to find the next nest.
+
+**The Probability of Rediscovery ($r$):** When an ant rejects a nest and continues searching, she does not intentionally avoid it (as she has no memory). There is a fixed probability ($r$) that a randomly searching scout will accidentally rediscover and re-enter the exact same nest she just left.  
+
+**The Jump to Commitment:** The transition from an "Assessing" state to a "Committed" state is entirely binary. If the nest quality ($b$), plus an individual assessment error ($\epsilon$), exceeds the ant's internal threshold ($a$), she enters the corresponding absorbing state. 
+
+---
+
+Mathematically, the simplified transitions between these states are represented in a state transition matrix ($Q$)
+
+$$Q = \begin{pmatrix} 
+(1-p)r & (1-p)(1-r) & 0 & 0 \\ 
+(1-g)(1-r) & (1-g)r & 0 & 0 \\ 
+p & 0 & 1 & 0 \\ 
+0 & g & 0 & 1 
+\end{pmatrix}$$
+
+- $p$ = The average per-visit probability that an ant accepts the poor site.  
+- $g$ = The average per-visit probability that an ant accepts the good site.  
+- $r$ = The probability that a randomly searching scout rediscovers the site it has just departed.  
+
+---
+
+By calculating the fundamental matrix of $Q$, the researchers could analytically derive the expected number of steps (and time) required for the system to hit an absorbing "committed" state. This mathematically proved that quality-dependent hesitancy (recruitment latency) naturally emerges as a geometric side-effect of the transition steps when a single nest is available, but disappears when multiple nests compete for the memoryless ants.
+
+---
+
+The column-stochastic matrix is structured based on a simplified four-state Markov chain where the states are ordered as follows: (1) Assessing Poor Site, (2) Assessing Good Site, (3) Committed to Poor Site, and (4) Committed to Good Site.
+- Each column represents the current state
+- each row represents the next state
+
+---
+
+**The Individual Parameters:**
+The matrix relies on three core variables, which are colony-wide averages derived from individual threshold and error distributions:  
+- `$p$:` The probability that an ant accepts the poor nest on any given visit.  
+- `$g$:` The probability that an ant accepts the good nest on any given visit.  
+- `$r$:` The spatial probability that an ant, after rejecting a nest and wandering back into the arena, accidentally rediscovers the exact same nest she just left.
+- `$(1-r)$:` The inverse probability that the searching ant wanders off and discovers the alternative nest instead.
+
+---
+
+**Column 1: Current State = Assessing Poor Site:**
+- **Row 1: Next State = Assessing Poor Site $\rightarrow (1-p)r$** (Rejects poor, rediscovering it).  
+- **Row 2: Next State = Assessing Good Site $\rightarrow (1-p)(1-r)$** (Rejects poor, switching to good).  
+- **Row 3: Next State = Committed to Poor $\rightarrow p$ **(Accepts poor, transitions to commitment).  
+- **Row 4: Next State = Committed to Good $\rightarrow 0$** (Cannot instantly commit to a good nest from here). 
+
+---
+
+**Column 2: Current State = Assessing Good Site:**
+- **Row 1: Next State = Assessing Poor Site $\rightarrow (1-g)(1-r)$** (Rejects good, switching to poor).
+- **Row 2: Next State = Assessing Good Site $\rightarrow (1-g)r$** (Rejects good, rediscovering it).  
+- **Row 3: Next State = Committed to Poor $\rightarrow 0$** (Cannot instantly commit to a poor nest from here).  
+- **Row 4: Next State = Committed to Good $\rightarrow g$** (Accepts good, transitions to commitment).  
+
+---
+
+**Column 3: Current State = Committed to Poor Site:**
+- **Row 3: Next State = Committed to Poor Site $\rightarrow 1$** (It is an absorbing state; the ant stays permanently committed). All other rows in this column are $0$. 
+
+---
+
+**Column 4: Current State = Committed to Good Site:**
+- **Row 4: Next State = Committed to Good Site $\rightarrow 1$** (Also an absorbing state; the ant stays permanently committed). All other rows in this column are $0$.
+
+---
+
+<br>
+<br>
+<br>
+
+**Matrix Partitioning & Sub-Matrices:**
+To analyze long-run behavior and decision speeds, the column-stochastic transition matrix $Q$ is partitioned into transient and absorbing blocks:
+
+$$Q = \begin{pmatrix} 
+T & \mathbf{0} \\ 
+R & I 
+\end{pmatrix}$$
+
+---
+
+$T$ (Transient Sub-matrix): A $2 \times 2$ matrix tracking the probabilities of a searching ant moving between active evaluation states (Assessing Poor vs. Assessing Good).
+
+$$T = \begin{pmatrix} 
+(1-p)r & (1-g)(1-r) \\ 
+(1-p)(1-r) & (1-g)r 
+\end{pmatrix}$$
+
+---
+
+$R$ (Absorbing Transition Sub-matrix): A $2 \times 2$ matrix tracking the probabilities of an actively assessing ant accepting its current site and transitioning into permanent commitment.
+
+$$R = \begin{pmatrix} 
+p & 0 \\ 
+0 & g 
+\end{pmatrix}$$
+
+---
+
+**$I$ (Identity Matrix):** Represents the absorbing commitment states; once an ant commits, the probability of remaining committed is 1.
+
+---
+
+**$\mathbf{0}$ (Zero Matrix):** Indicates it is impossible for a committed ant to revert to searching or assessing.
+
+---
+
+#### **Core Linear Algebra Applications:**
+
+##### **Matrix Inversion: The Fundamental Matrix ($N$):**
+
+**Function:** Calculated by subtracting the transient matrix $T$ from an identity matrix ($I$) and inverting the result:
+
+**Interpretation:** Every entry in $N$ specifies the exact expected number of visits an ant will make to a transient evaluation state before ultimately getting absorbed into commitment.
+
+$$N = (I - T)^{-1}$$
+
+---
+
+##### **Vector Summation: Calculating Expected Decision Time:**
+
+**Function:** Summing the column entries of the Fundamental Matrix $N$ reveals the overall expected latency before an individual accepts a nest.
+
+**Derivation of Equation (2):** Algebraically expanding this matrix inversion and column summation directly yields the paper's core latency formula:
+
+$$\text{E}(\text{time to accept any site}) = \frac{4(1-r) + 2r(p+g) - p - g}{2((2-r)pg + (1-r)(p+g))}$$
+
+---
+
+##### **Matrix Multiplication: Absorption Probabilities ($B$):**
+
+**Function:** Multiplying the transition sub-matrix $R$ by the Fundamental Matrix $N$.
+
+**Interpretation:** Matrix B outputs the definitive mathematical probability that a colony's scouts will split and commit to the good nest versus the poor nest based on initial discovery conditions. This proves that group-level consensus can emerge automatically from an absolute, memoryless threshold rule.
+
+$$B = R \times N$$
+
+---
+
+<br>
+<br>
+
+### Seminar Slides/Session
+
+#### Part 1: Standalone Content (Background & Context)
+
+**The "Wisdom of the Crowds":** The session introduces the concept that a collective can make better decisions than an individual. This is historically demonstrated by Francis Galton’s 1907 experiment, where a crowd at a fair guessed the weight of an ox; while individuals were wrong, the aggregated average guess (1207 lbs) was remarkably close to the true weight (1198 lbs).
+
+**Human vs. Animal Collectives:** Studying collective decision-making in humans is difficult due to confounding variables like language, shifting biases, and varying abilities to express confidence. Therefore, studying species without language (like ants) provides a cleaner model.
+
+**Rock Ant Ecology (Temnothorax albipennis):** These ants live in rocky cliff cavities and have highly variable "work ethics" among the workers (some idle, some specialists).
+
+**The Migration Cycle:** When a nest is destroyed, the colony follows a strict sequence: Scouts are sent out $\rightarrow$ Quality is assessed $\rightarrow$ Workers are recruited via "tandem runs" $\rightarrow$ Once a "quorum" (threshold number of ants) is reached at the new nest, the behavior switches from slow tandem running to rapidly carrying the remaining members.
+
+**Tandem Runs:** A distinct recruitment method where a leader ant guides a naive follower. It relies on physical contact; if the follower breaks contact with the leader's hind legs/gaster, the leader stops and waits.
+
+---
+
+#### Part 2: Extracts from the Papers
+
+The seminar relies on three distinct papers by Robinson and colleagues to build the argument that individual ants do not perform complex comparisons.
+
+---
+
+**1. Robinson et al. (2009): Do ants make direct comparisons? (Empirical)**
+- **Methodology:** 9 colonies were forced to emigrate in a 120cm arena containing one poor nest (light) and one good nest (dark/red filter). Individual ants were tracked using microscopic RFID tags.
+- **Findings:** The study tracked "uninformed switching". Ants that found the near (poor) nest first often switched to searching and found the other nest. Ants that found the far (good) nest first almost exclusively stayed there. Crucially, the data showed that ants visiting both nests before recruiting did not statistically favor the good nest, heavily implying they do not make direct comparisons.
+
+---
+
+**2. Robinson et al. (2014): How collective comparisons emerge... (Empirical)**
+- **Methodology:** Researchers used an automated solenoid door system connected to the RFID tags to physically manipulate information access. In the experimental condition, if an ant visited the good nest, the doors barred it from visiting the poor nest, forcing a "no-comparisons" environment.
+- **Findings:** At the colony level, decision speed and accuracy were remarkably similar whether comparisons were allowed or artificially prevented. At the individual level, when ants were prevented from comparing, they ended up visiting the poor nest slightly more often, but the overall group choice remained robust.
+
+---
+
+**3. Robinson et al. (2011): A Simple Threshold Rule... (Modelling)**
+- **Methodology:** The slides walk through the Markov-chain model we discussed previously. It outlines the parameters (threshold $a$, quality $b$, error $\epsilon$, and rediscovery probability $r$) and steps through the generation of the State Transition Matrix ($Q$). The goal of the paper is to test the threshold rule. 
+- **Findings:** The slides present side-by-side bar charts showing that the Monte Carlo simulation perfectly reproduced the empirical stay/switch behavior from the 2009 paper. Furthermore, the simulation proved that recruitment latency (hesitation) exists when a single poor nest is presented, but naturally disappears (becomes Non-Significant) when multiple competing nests are presented together.
+
+---
+
+#### Part 3: Seminar Discussion Points & Questions
+
+---
+
+**On the 2009 Behavioral Expectations:**
+
+> **What behaviours or patterns would you expect to see if ants make direct comparisons?**
+> 
+> We would expect to see mutliple visits from most ants demonstating a direct comparative strategy, excersiing working memory to store and compare nests. 
+> 
+> From the Ants that visited the good quality nest as their sample, we would expect a heavy indiviudal bias towards the good nest, including signficant preferentially return to and lead tandem runs to the high-quality nest, regardless of the chronological order in which the nests were discovered.
+> 
+> And possibly we would see the lack of single arrival decisions, i.e. arrive at the good nest and not explore anymore as the ants are seeking something to compare it to. Although this assumes the mechanism doesn't apply to long to term memory where they can compare new nests to a historical average.
+
+
+
+
+
+
+
+
+
+- What behaviours would you expect if they make sequential comparisons?
+- What behaviours would you expect if recruitment latency determines nest selection?
+- Why is switching informative?
+
+---
+
+**On the 2014 Automated Door Experiment:**
+- Any differences between real-world house-hunting and the experiment?
+- What results would you expect to see if ants do need to compare vs if they do not need to compare?
+- What did the authors show, and what does this mean with respect to collective decision-making?
+- What cognitive abilities are needed for "Direct comparison" versus "Evaluation against a threshold"?
+
+---
+
+**On the 2011 Markov Model:**
+- How well does the model reproduce ant behaviour?
+- What cognitive abilities does it assume ants have?
 
 ---
 
