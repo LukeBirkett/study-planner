@@ -82,10 +82,39 @@
     - [Week 4 References/Readings](#week-4-referencesreadings)
 ---
 - [Week 5 - Navigation](#week-5---navigation)
-
-
+    - [Week 5 Lecture Notes](#week-5-lecture-notes)
+    - [Part 1: The Universal Navigational Toolkit](#part-1-the-universal-navigational-toolkit)
+        - [1. Walking in a Straight Line](#1-walking-in-a-straight-line)
+        - [2. Basic Sense of Direction & Learning](#2-basic-sense-of-direction--learning)
+    - [Part 2: Insect Navigation (Embodiment & Situatedness)](#part-2-insect-navigation-embodiment--situatedness)
+        - [1. Path Integration (PI)](#1-path-integration-pi)
+        - [2. From PI to Habitual Routes](#2-from-pi-to-habitual-routes)
+        - [3. Navigation by Image Matching](#3-navigation-by-image-matching)
+        - [4. The Limits of Insect Navigation (Insects Insulate, Not Integrate)](#4-the-limits-of-insect-navigation-insects-insulate-not-integrate)
+    - [Part 3: Big Brain Navigation (Cognitive Maps)](#part-3-big-brain-navigation-cognitive-maps)
+        - [1. Combining Modalities (Etienne et al., 2004)](#1-combining-modalities-etienne-et-al-2004)
+        - [2. The Neural Substrate (The Hippocampus)](#2-the-neural-substrate-the-hippocampus)
+        - [3. Critique of the "Map" Metaphor](#3-critique-of-the-map-metaphor)
+    - [Part 4: Robotic Navigation](#part-4-robotic-navigation)
+        - [1. SLAM (Simultaneous Localisation and Mapping)](#1-slam-simultaneous-localisation-and-mapping)
+        - [2. SLAM Variants & Hardware](#2-slam-variants--hardware)
+    - [Week 5 References and Readings](#week-5-lecture-notes)
+        - [Insect Navigation. (Graham, 2010)](#insect-navigation-graham-2010)
+        - [Spatial cognition in bats and rats: from sensory acquisition to multiscale maps and navigation (Geva-Sagiv et al., 2015)](#spatial-cognition-in-bats-and-rats-from-sensory-acquisition-to-multiscale-maps-and-navigation-geva-sagiv-et-al-2015)
+        - [Do animals have cognitive maps? (Bennet, 1996)](#do-animals-have-cognitive-maps-bennet-1996)
+    - [Week 5 Seminar](#week-5-seminar)
+        - [A simple threshold rule is sufficient to explain sophisticated collective decision-making (Robinson et al., 2011)](#a-simple-threshold-rule-is-sufficient-to-explain-sophisticated-collective-decision-making-robinson-et-al-2011)
+            - [The Markov-Chain Modeling Approach](#the-markov-chain-modeling-approach)
+            - [Core Linear Algebra Applications:](#core-linear-algebra-applications)
+                - [Matrix Inversion: The Fundamental Matrix ($N$)](#matrix-inversion-the-fundamental-matrix-)
+                - [Vector Summation: Calculating Expected Decision Time](#vector-summation-calculating-expected-decision-time)
+                - [Matrix Multiplication: Absorption Probabilities ($B$)](#matrix-multiplication-absorption-probabilities-)
+        - [Seminar Slides/Session](#seminar-slidessession)
+            - [Part 1: Standalone Content (Background & Context)](#part-1-standalone-content-background--context)
+            - [Part 2: Extracts from the Papers](#part-2-extracts-from-the-papers)
+            - [Part 3: Seminar Discussion Points & Questions](#part-3-seminar-discussion-points--questions)
 ---
-- [Week 6 - Motor Control (Lab 4)]()
+- [Week 6 - Motor Control]()
 - [Week 7 - Tool Used]()
 - [Week 8 - Social Intelligence]()
 - [Week 9 - Seminar Only (Foundational Models)]()
@@ -1151,7 +1180,10 @@ This critical review argues that the concept of the "cognitive map" has lost its
 
 ---
 
-## Week 6 Seminar
+<br>
+<br>
+
+## Week 5 Seminar
 
 We will be discussing a simple computational model describing how house hunting ants select new nest sites. The modelling paper will form the basis of your modelling report assignment (should you choose to do that), so do make sure you read it before the seminar so you get the most out of the session. We will also be working with the model in the next lab class
 
@@ -1402,31 +1434,112 @@ The seminar relies on three distinct papers by Robinson and colleagues to build 
 > 
 > And possibly we would see the lack of single arrival decisions, i.e. arrive at the good nest and not explore anymore as the ants are seeking something to compare it to. Although this assumes the mechanism doesn't apply to long to term memory where they can compare new nests to a historical average.
 
+<br>
+<br>
 
+> **What behaviours would you expect if they make sequential comparisons?**
+> 
+> Under a sequential comparison framework governed by a simple threshold rule, an individual ant is completely "memoryless". She evaluates her current nest against an absolute internal threshold without any cross-reference to previously visited sites.
+> 
+> If the case, we should see the production of a high baseline sample of anys leaving the poornest and continuing a random search. 
+> 
+> We should also see a trend whereby anys who land on the good nest randomly first instantly commit with zero switching behavior (This one important because comparison based systems would not do this)
 
+<br>
+<br>
 
+> **What behaviours would you expect if recruitment latency determines nest selection?**
+> 
+> The recruitment latency hypothesis states that ants accept any nest they find but vary their "hesitation time" before recruiting based on nest quality.
+> 
+> If this mechanism drove nest selection, tracking individual RFID tags would reveal a clear, statistically significant difference in individual "entry-to-recruitment" durations when the nests are presented together. Scouts at the poor nest should exhibit a prolonged latency period before launching a tandem run compared to the rapid initiation shown by scouts at the good nest.
+> 
+> Note for Context: Robinson et al.'s 2011 Markov model beautifully demonstrated that while individual latency differences are real when options are presented separately, they statistically disappear when choices are presented together. This proves that "latency" is not an internal clock mechanism, but rather a structural byproduct of ants repeatedly rejecting and exiting a poor nest
 
+<br>
+<br>
 
+> **Why is switching informative?**
+> 
+> Switching—where an ant makes an independent visit to one nest and subsequently transitions to the other—is the most informative behavioral metric because its direction and outcome break the mathematical stalemate between competing cognitive theories.
+> 
+> Determining if ants behaviour can be categorized switching from "Near to Far" or "Far to Near", we can isolate and infer whether it is possible for a threshold to be the applied mechanism. An extreme asymmetry (high switching from poor nests, near-zero switching from good nests) directly supports an absolute threshold rule over a relative comparison rule.
+> 
+> **It Isolates "Informed" vs. "Uninformed" Actions:** If ants who switch and accumulate dual-site experience show a random ($p \approx 0.99$) distribution in where they lead their subsequent tandem runs, it provides airtight evidence that the colony-level preference for the superior nest is entirely an emergent property. It proves that collective choice can be successfully executed by individuals completely devoid of comparative cognitive architecture.
 
-
-
-- What behaviours would you expect if they make sequential comparisons?
-- What behaviours would you expect if recruitment latency determines nest selection?
-- Why is switching informative?
 
 ---
 
 **On the 2014 Automated Door Experiment:**
-- Any differences between real-world house-hunting and the experiment?
-- What results would you expect to see if ants do need to compare vs if they do not need to compare?
-- What did the authors show, and what does this mean with respect to collective decision-making?
-- What cognitive abilities are needed for "Direct comparison" versus "Evaluation against a threshold"?
+> **Any differences between real-world house-hunting and the experiment?**
+> 
+> The setup of the experiement itself imposed artifical environmental and physical contraints that are abstract to the natural, real-world expereiences of colony relocation. 
+> 
+> The experiment presents a strict choice between two isolated options. In the wild, nest choices are multi-alternative, highly complex, and embedded in a wider sensory landscape.
+> 
+> The experiement utilises a solenoid door system to track the RFID tags. However, in nature, space is continuous allowing an ant to wander freely between "options" without physical constraints. 
+> 
+> To isolate individiaul behaviour, ants are seperated and conduct their search and behaviour in isolation. RL intractations between ants provide the potential for exchange in chemical or behavioural information which we already know they are capable of in some capacity due to pheremonal trails (paper) and leading behaviour (paper). 
+
+<br>
+<br>
+
+> **What results would you expect to see if ants do need to compare vs if they do not need to compare?**
+> 
+> **If individual comparisons are necessary:** Artificially barring ants from visiting both nests (the "no-comparisons" treatment) should completely break down the colony's ability to reach a correct consensus. We would expect to see a severe drop in decision accuracy (frequent colony splitting or choosing the poor nest) and a massive spike in decision time, as the individual-level constraint would directly stall the colony-level selection process.
+> 
+> **If individual comparisons are not necessary:** The colony should succeed regardless of individual restrictions. If collective choice is an emergent byproduct of decentralized, independent actions, then preventing individuals from cross-visiting both sites should leave the colony's global decision speed and accuracy entirely unimpaired.
+
+<br>
+<br>
+
+> **What did the authors show, and what does this mean with respect to collective decision-making?**
+> 
+> What they showed: The authors proved that the colony-level decision was virtually identical across both setups. Global decision speed remained exactly the same (a median of 38 minutes for both conditions), and decision accuracy was uncompromised. At the individual level, when ants were barred from comparing, they visited the poor nest more frequently and persevered longer, yet the global outcome remained robust.
+> 
+> **What this means for collective decision-making:** It provides elegant empirical proof that **collective comparison can emerge without individual comparison**. Group-level cognitive complexity does not require individual-level cognitive complexity. Instead, a highly accurate "best-of-n" choice can be executed by a distributed system composed of partly informed, memoryless agents
+
+<br>
+<br>
+
+> **What cognitive abilities are needed for "Direct comparison" versus "Evaluation against a threshold"?**
+> 
+> 
+> | Cognitive Attribute | Direct Comparison ("Best-of-n") | Evaluation Against a Threshold |
+> | :--- | :--- | :--- |
+> | Memory Load | High. Requires a working memory buffer to encode, store, and recall the specific sensory attributes of Nest A while physically evaluating Nest B. | Minimal/None. Entirely memoryless; requires no storage of previously visited alternatives. |
+> | Computational Complexity | High. Requires a comparative, relative evaluation algorithm to weight values against each other, calculate a difference vector, and adjust behavioral output accordingly | Low. Executes a simple, absolute binary check ($b_i + \epsilon > a$) against a pre-set internal metric. |
+> | Risk of Irrationality | High. Susceptible to relative framing errors, transitivity failures, and irrational "distractor effects" when a third, irrelevant option is introduced. | Immune. Absolute evaluation means the appraisal of one option is entirely independent of what other alternatives exist in the environment |
+> 
 
 ---
 
 **On the 2011 Markov Model:**
-- How well does the model reproduce ant behaviour?
-- What cognitive abilities does it assume ants have?
+
+> **How well does the model reproduce ant behaviour?**
+> 
+> The simple threshold model reproduces both individual- and colony-level empirical ant behavior exceptionally well, providing a highly accurate, parsimonious match to several real-world datasets:
+> 
+> Stay vs. Switch Asymmetry: When parameterized to a layout featuring a nearby poor nest and a distant good nest, the Monte Carlo simulations perfectly match the empirical data. It correctly reproduces the pattern where ants finding the good nest first "stay" (commit), while ants finding the poor nest first routinely "switch" to find the alternative.
+> 
+> Resolving the Latency Paradox: The model successfully resolves a long-standing paradox in the literature regarding recruitment latency (hesitation time). It perfectly replicates quality-dependent recruitment latency when a single nest is presented separately, but also correctly predicts that this difference completely disappears when nests are presented together.
+> 
+> Predicting Multi-Alternative Choices: When used to predict the outcome of the new "Three-New-Nests" experiment, the model accurately predicts the precise number of ants that split between returning to a good nest versus discovering a third equidistant option, matching real-world behavior within 95% confidence intervals.
+> 
+
+
+
+> **What cognitive abilities does it assume ants have?**
+> 
+> In alignment with Morgan’s Canon, the model actively strips away high-level cognitive assumptions, demonstrating that sophisticated global choices can be executed with a remarkably primitive psychological toolkit:
+> 
+> Absolute (Non-Comparative) Evaluation: The model assumes ants are completely memoryless regarding alternative options. Individual ants are assumed to lack a working memory buffer; they do not remember previously visited nests, they cannot hold multiple site qualities in their minds simultaneously, and they are incapable of calculating relative differences between alternatives.
+> 
+> A Simple Binary Rule: The only cognitive mechanism required by an individual agent is an absolute binary threshold check. The ant simply reads the objective quality of its current nest ($b_i$), factoring in a standard degree of sensory assessment noise ($\epsilon$), and checks if it exceeds a fixed internal threshold ($a$). If $b_i + \epsilon > a$, the ant enters a state of permanent commitment; otherwise, it exits and continues a entirely random spatial search. 
+> 
+> Post-Commitment Implementation Memory: Crucially, the paper clarifies that while the decision process itself is memoryless, real ants must transition to using spatial memory after the choice is made. Once an ant triggers its threshold and commits, it uses localized visual navigation and memory to reliably lead tandem runs back and forth to implement the colony's choice.
+> 
 
 ---
 
+# Week 6 - Motor Control
