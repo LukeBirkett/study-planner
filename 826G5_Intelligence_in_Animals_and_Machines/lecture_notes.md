@@ -1543,3 +1543,121 @@ The seminar relies on three distinct papers by Robinson and colleagues to build 
 ---
 
 # Week 6 - Motor Control
+
+The topic for the Week 6 lecture is Motor Control. The major learning points are that Motor Control is very difficult, but there are design principles that can simplify the process. The basic difficulty is because of inverse kinematics - namely that there are an infinite number of ways that a limb can be moved to a target position. However, life can be made simple by utilising embodiment, synergies, reflexes, compliance and feedback. Across all of these, examples from nature and robotics work well together in making the point about adaptive control principles.
+
+#### Learning outcomes
+- Understand just how difficult it is to control a body
+- Describe some of the adaptove principles of biological systems that simplify the motor control problem
+- Describe how these adaptive principles are also useful when designing robots
+
+---
+
+## Week 6 Lecture Notes
+
+### 1. The Core Problem: Inverse Kinematics
+
+Controlling a physical body is mathematically overwhelming because of the inherent difference between calculating where a limb is versus how to get it there - forward and inverse mechanics.
+
+**Forward Kinematics (Easy Math):** Calculating where a limb will end up if specific joint angles are provided is a relatively simple geometric equation. This asks: "If I fix the joint angles at these specific values, what are the resulting (x,y,z) coordinates and orientation of the hand?". Because the physical structure is fixed, there is only one mathematical answer.
+
+**Inverse Kinematics (Horrible Math)::** Calculating which specific joint angles are required to reach a target destination in 3D space is mathematically formidable. Biological systems are redundant, meaning there is an infinite number of joint and muscle configurations that can achieve the exact same spatial end-point.
+
+**Dynamic Optimality:** This asks: "If my arm is hanging loose, and I want to move it to this (x,y,z) position... how do I get there?". Because biological systems are redundant, there are an infinite number of paths, velocities, and possible solutions to reach that single point as well as conflicting optimization considerations based on shifting, real-time priorities like speed, balance, safety, or energy efficiency.
+
+---
+
+### 2. The Cartesian Puppeteer: Five Difficulties of Motor Control
+
+The brain must act as a "Cartesian puppeteer," managing an incredibly complex puppet while constantly fighting against physical and biological limitations.
+
+**Degrees of Freedom (Redundancy):** The physical body is a vastly underdetermined system. To simply move a hand to a 3D coordinate (3 Degrees of Freedom), the brain must select a combination from 7 joints, which are controlled by 26 muscles, which are innervated by 2,600 motor neurons. This redundancy exists at multiple levels (Motor Unit $\rightarrow$ Alpha-Gamma Link $\rightarrow$ Muscle $\rightarrow$ Joint).
+
+**Delays:** Biological wiring is incredibly slow. Axons can take 1-20ms to conduct a signal (depending on length and myelination), presynaptic signals take 1-2ms, short spinal reflexes take ~14ms, and visual system feedback can take 200-300ms. The brain must execute fluid movements while accounting for varying, chunky temporal delays across different sensory inputs and motor outputs.
+
+**Noise:** Neural and muscular processes rely on stochastic (probabilistic) biophysics rather than deterministic rules. From photons hitting the retina to neurotransmitters opening ion channels, the motor system must operate reliably despite constant statistical variability and signal degradation.
+
+**Non-linearity:** Physical outputs do not scale proportionally with neural inputs. The effect of a muscle activation depends non-linearly on the limb's current pose, its orientation to gravity, and the load it is carrying.
+
+**Non-stationarity:** The biological machine does not stay fixed. We grow, get older, get injured, and get tired. Furthermore, the system must instantly adapt its structure when we pick up tools (e.g., the motor map changes dynamically when wielding a tennis racket vs. a squash racket vs. a frisbee).
+
+---
+
+### 3. Alternative Paradigms: The Octopus
+
+The octopus provides a convergent evolutionary example of intelligent manipulation, demonstrating how a completely different physical morphology changes the motor control problem.
+
+**Decentralized Computation:** Out of an octopus's 50 million total neurons, 40 million are distributed directly across its eight arms, allowing for localized processing.
+
+**Morphological Advantages:** The buoyant aquatic environment largely eliminates the computation required for gravity and balance, while its soft body naturally conforms to objects (compliance).
+
+**Unique Challenges:** Having zero rigid joints introduces infinite degrees of freedom, and a stretching body constantly alters the topological map of the sensory system, making it incredibly difficult to interpret spatial and tactile data.
+
+**Synergistic Simplification:** To solve these infinite degrees of freedom during reaching tasks, an octopus will use colliding neural waves to temporarily stiffen its arm into a rigid "elbow," restricting its movement to a mathematically manageable 3-degree joint.
+
+---
+
+### 4. Biological and Robotic Solutions (The "Killjoy" Answers)
+
+Biological systems and effective robots do not attempt to computationally solve inverse kinematics in real-time. They simplify the problem using embodied design.
+
+**Passive Dynamic Walkers (Morphological Computation):** Patented as early as 1888 by G.T. Fallis, these "toys" prove that a natural, stable walking gait can emerge purely from the physics of the limbs and gravity—with absolutely "no brain" or motors required.
+
+Motor Invariants and Synergies: In 1922, Bernstein proposed that the Central Nervous System "functionally freezes degrees of freedom" by tying joints together into synergies.
+- For example, Bernstein’s blacksmith studies showed that the wrist, elbow, and shoulder lock into predictable, coupled relationships during repetitive tasks.
+- **The Car Analogy:** Steering 4 wheels independently is incredibly difficult; tying the front two together and fixing the back two makes it easy. These can be released later for flexibility (like switching to 4-wheel drive).
+- **Fingers:** Ingram & Wolpert (2011) showed that the movement of the little finger strictly predicts the movements of the index, middle, and ring fingers (a heavily tied synergy), while the thumb moves independently.
+
+**Dynamics (Adaptive Instability):** Natural walking is simply a state of controlled falling, where the center of mass continuously oscillates ahead of the body's base. Early robots like the MIT Hopper proved that dynamic stability is often easier to achieve through constant, rhythmic motion than through static balancing.
+
+**Compliance and Reflexes:** Advanced robots like Boston Dynamics' "BigDog" use flexible, springy body parts (compliance) to mechanically absorb variation and small errors in the terrain. This buys the system time to use fast, pre-programmed reflexes to catch larger slips via feedback loops, bypassing the need for perfect predictive placement.
+
+---
+
+### 5. The Reality of Modern Robotics
+
+The lecture emphasizes a highly skeptical view of modern, viral robotic demonstrations.
+
+**Environmental Simplification:** The most successful autonomous robots operate in factories because the environment has been entirely flattened, standardized, and cleared of unpredictable elements like humans.
+
+**The Teleoperation Illusion:** Many viral videos of cutting-edge humanoid robots (like the Tesla Bot) performing delicate, seemingly autonomous tasks are actually driven by human teleoperators remotely controlling the robot via joysticks. This effectively outsources the devastatingly complex Cartesian puppeteer problem back to a biological brain.
+
+--- 
+
+### 6. Summary Core Themes
+Controlling movement is incredibly difficult due to noise, massive redundancy, and non-linear delays. However, embodiment solves this through:
+1. Clever physical design of the body.
+2. Synergies that freeze excess degrees of freedom.
+3. Dynamic, springy mechanics (compliance) that allow the brain to be inexact, buying time to correct errors locally through fast feedback.
+
+---
+
+## Week 6 References/Reading
+
+### Computational Mechanisms of Sensorimotor Control (Franklin and Wolpert, 2011)
+
+The human sensorimotor system faces six major computational challenges: redundancy, signal-dependent noise, temporal delays, environmental uncertainty, nonstationarity (physical changes over time), and non-linear muscle dynamics. To overcome these, the brain employs five distinct computational mechanisms. First, Bayesian decision theory optimally integrates noisy sensory feedback with prior expectations to resolve uncertainty. Second, Optimal Feedback Control (OFC) solves redundancy by establishing task-specific feedback laws that only correct goal-threatening errors, safely ignoring harmless variability to save energy. Third, forward models use efference copies to predict the physical outcomes of motor commands, bypassing neural delays. Fourth, impedance control selectively co-contracts muscles to stiffen joints, providing immediate stability against unpredictable environments where neural feedback is too slow. Finally, sensorimotor learning uses error signals to continually update the brain's internal models, allowing it to adapt to non-linear and non-stationary bodily changes over time.
+
+> David W. Franklin; Daniel M. Wolpert (2011) Computational Mechanisms of Sensorimotor Control. Neuron
+
+---
+
+### Using robots to emulate and investigate agile locomotion (Ijspeert, 2014)
+
+The review framework by A. J. Ijspeert (2014) defines biorobotics as a bidirectional methodology: it takes inspiration from biological principles to build agile machines, while simultaneously utilizing these physical robots as scientific tools to unravel complex neurological and biomechanical questions in living animals. Locomotion is framed not as a centralized, top-down computational calculation, but as the emergent byproduct of decentralized neuromechanical interactions between the body morphology, the sensory-motor reflexes, and the surrounding environment. By constructing physical models—such as self-propelled robotic fins and flexible, multi-segmented sprawling automatons—researchers can safely alter morphological parameters, measure baseline internal forces, and isolate repeatable kinematic variables that are inaccessible in live animal tracking. Empirical findings highlighted in the paper, such as sunfish-inspired pectoral foil experiments, prove that complex fluid properties like leading-edge suction and thrust enhancement can be achieved through passive mechanical compliance and the physical exploitation of vortex wakes rather than neural calculation. Ultimately, the paper demonstrates that offloading the mathematical burden of inverse kinematics to morphological computation and decentralized circuits (like spinal central pattern generators) is essential for achieving both biological and robotic agility, paving the way for adaptive human neuroprosthetics and robust search-and-rescue automatons.
+
+> A. J. Ijspeert (2014) Biorobotics: Using robots to emulate and investigate agile locomotion. Science
+
+---
+
+### An Embodied View of Octopus Neurobiology (Hochner, 2012)
+
+The review by Binyamin Hochner (2012) applies the robotic framework of "intelligent embodiment" to octopus neurobiology, arguing that the animal's behavioral complexity emerges from the dynamic interplay of its central controller, flexible morphology, sensory apparatus, and environment. Possessing a completely boneless body and eight muscular hydrostatic arms, the octopus faces a dual challenge: managing an infinite number of motor degrees of freedom and centrally representing massive tactile and proprioceptive inputs without fixed joint landmarks. Evolution solved this by decentralizing the nervous system: two-thirds of the octopus's 500 million neurons are located directly within the peripheral arm nerve cords. Consequently, the central brain lacks a somatotopic map of the body, functioning instead to select global behavioral programs that are executed locally by peripheral networks. Reaching movements compress infinite spatial complexities into just three degrees of freedom using a feed-forward, propagating bend. Furthermore, fetching behaviors demonstrate striking "morphological computation," wherein a temporary, human-like elbow joint is calculated directly in the tissue through the intersection of two colliding waves of muscle activation. Finally, comparative vertical lobe analyses between octopuses and cuttlefish demonstrate that biological self-organization prioritizes global computational constraints over uniform cellular traits. This confirms that the octopus achieves sophisticated, adaptive control by offloading analytical kinematics to physical body dynamics and localized neurological circuits.
+
+Within the bounds of Hochner’s (2012) paper, the arms do not possess a separate, conscious "mind" to generate spontaneous thoughts, but they are highly independent and do not rely on constant guidance from the central brain to execute complex, adaptive movements.
+
+Instead of a cognitive process of "thinking" through a problem, the octopus utilizes morphological computation—where the physical geometry and local neural interactions of the arms solve math problems automatically. A prime example is the fetching behavior, where the arm forms a temporary, human-like elbow joint. The joint is computed at the tissue level where a forward-moving neural signal from the central brain mechanically collides with a backward-moving signal generated on-the-spot by the arm grasping a target. The arm doesn't "think" about where to bend; the elbow forms naturally at the point of physical and neural impact.
+
+> Binyamin Hochner (2012) An Embodied View of Octopus Neurobiology. Current Biology.
+
+---

@@ -176,7 +176,7 @@ When an ant is not at `site 1` or `site 2` the ant will be at `site 0`, I am not
 If the `quality` does not exceed the `threshold` then the graphic and programme will record `NOT SELECTED` and/if it does exceed then it will record `SELECTED`
 
 <p align="center">
-  <img src="screenshots/single_ant_route.png" alt="Ant Route Image" width="50%" />
+  <img src="screenshots/single_ant_route.png" alt="Ant Route Image" width="100%" />
 </p>
 
 ### N Ants Summary Graphic
