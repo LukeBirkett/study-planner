@@ -27,13 +27,8 @@ passing sequences. (Gama)
 
 
 
+Gong, B., Zhou, C., Gómez, M.-Á., Buldú, J. M., Gomez, M.-A., and Buldu, J. M. (2023). Identifiability of Chinese football teams: A complex networks approach. Chaos Soliton. Fract. 16
 
 
-
-For each match, a directed weighted adjacency matrix A was constructed, where each entry represents the number of passes from one player to another.
-
-> This is literally just a PassMap but highlights that such as network can be represented as an 'adjacency matrix'
-
-(Gama et al., 2026)
 
 ---

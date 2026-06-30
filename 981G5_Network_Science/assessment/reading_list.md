@@ -29,7 +29,8 @@
 14. [Social network analysis: mathematical models for understanding professional football in game critical moments—an exploratory study (Assunção et al., 2022)](#14-social-network-analysis-mathematical-models-for-understanding-professional-football-in-game-critical-momentsan-exploratory-study-assunção-et-al-2022)
 ---
 15. [Influence of different playing styles among the top three teams on action zones in the World Cup in 2018 using a Markov state transition matrix (Liu et al., 2018)](#15-influence-of-different-playing-styles-among-the-top-three-teams-on-action-zones-in-the-world-cup-in-2018-using-a-markov-state-transition-matrix-liu-et-al-2018)
-
+---
+16. [Using passing network measures to determine the performance difference between foreign and domestic outfielder players in Chinese Football Super League (Yu et al., 2020)](#16-using-passing-network-measures-to-determine-the-performance-difference-between-foreign-and-domestic-outfielder-players-in-chinese-football-super-league-yu-et-al-2020)
 
 ---
 
@@ -198,3 +199,12 @@ This approach aligns with and extends recent research applying Markov models to 
 > MUST READ AS PERTAINS TO SPATIAL COMPONENT
 
 > Liu T, Zhou C, Shuai X, et al. Influence of different playing styles among the top three teams on action zones in the World Cup in 2018 using a Markov state transition matrix. Front Psychol 2022; 13: 1038733. https://doi.org/ 10.3389/fpsyg.2022.1038733
+
+---
+
+## 16. Using passing network measures to determine the performance difference between foreign and domestic outfielder players in Chinese Football Super League (Yu et al., 2020)
+
+
+> Yu, Q., Gai, Y., Gong, B., Gomez, M.A. and Cui, Y., 2020. Using passing network measures to determine the performance difference between foreign and domestic outfielder players in Chinese Football Super League. International Journal of Sports Science & Coaching, 15(3), pp.398-404.
+
+---

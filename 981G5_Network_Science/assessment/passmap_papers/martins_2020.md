@@ -1,0 +1,3 @@
+Expanding on the general passing network concepts outlined by Buldú et al. (2018), this parallel study explicitly solved the "disorder and complexity" problem by treating the weighted directed passing networks as Markov chains. By defining Relative Transition Out-Entropy, they successfully measured the exact probability matrices and unpredictability of a player's choices, bypassing standard null models.
+
+---

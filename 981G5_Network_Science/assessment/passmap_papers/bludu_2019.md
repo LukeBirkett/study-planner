@@ -1,0 +1,3 @@
+To resolve the flaw that standard null models do not account for physical player positioning on the field, Buldú's group shifted the unit of measurement. In subsequent papers, they introduced pitch-passing networks where nodes represent designated spatial regions of the pitch rather than individual players. By grounding the network in Euclidean space, they effectively embedded physical constraints into the network design itself. This allowed them to measure a team's actual "identifiability" and style of play against random variations without needing a decoupled spatial null model.
+
+---
