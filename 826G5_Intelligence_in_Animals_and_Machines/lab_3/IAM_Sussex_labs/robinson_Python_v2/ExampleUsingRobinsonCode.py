@@ -35,7 +35,7 @@ qual_stddev = np.array([1, 1, 1])
 n = 27
 
 # these govern the ant's threshold
-threshold_mean = 5
+threshold_mean = 10
 threshold_stddev = 1
 
 current_time, discovers, visits, accepts, Ants, rnd_seed, preqtimes, preqdiscovers, preqvisits, preqaccepts = \

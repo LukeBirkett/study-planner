@@ -497,3 +497,148 @@ I should query with the lecturers what the correct route to take for this projec
 
 ---
 
+In the Lab/Experiemnet, a param sweeep dictated that the model was fragile with respect to the core assumpt of the model, thresholding. 
+
+A low threshold breaks any illusion of collective intelligence and turns ants into a randomized, geography based agents. 
+
+A high threshold results in temporal delays and neural conduction limits break the biological feasibility of the simulation entirely.
+
+The experiement provides a "killjoy" proposal to direct comparison through reducing memory constraints but instead imposed hugely taxing cabilities which mutliply the cognative load: the ability to global evaluate nests to a extreme degree of accuracy. The ability to globally evaluate requires a mechanism which matches standards ot experienced or expected nest quality which is in turn analagious to long-term memory. Conversely, accuracy of such analysis is highly anthro and implies some level of economics style rationality and recognision of a nest "market" to pick from and optmiize against. 
+
+This can be solutionzed by precluding any notion of nest (home) and replacing it with safety which is acklowedged via senses and embodiement triggering behaviours through chemical reactions. 
+
+Additionally, such an approach can be tuned to avoid dependancy on geopgraphy through a cascading or delpandating function of sense. An ant is born with a baseline of sense (could vary randomly) which pre-determined "safe". However, exhaustion, hunger or stress (danger) could chemical trigger a "turning-off" of senses. This would allow less safe locations to be turned off in the situation where a truly safe location does not exist, or is very far away. 
+
+This parameter could be tuned to match biological constraints in terms of distance and time of switch from a good lcoation to a worse one. 
+
+This could result in an overlap in behaviour. There would be some ants which are lossing senses and picking a less safe nest. and others than are taking the max journey to obtain a safe location. There should be a point where this "switches"
+
+---
+
+> The Modification: Set qual_stddev = np.array([1, 4, 1]). This means the home hub and the optimal Nest 2 are assessed reliably (low noise = $1$), but the mediocre Nest 1 is highly ambiguous or deceptive (high noise = $4$).
+
+This was a proposed area of experiementing in the lab, and by construct the papers themselves. It takes an incredibly anthro approach in suggesting nests are ambiguous. It is largely analagious to house hunting and wheying up the pro and cons of homes. 
+
+It is a detraction from the cogniative capabilities which run more like decentalized autonamons with rigidly fixed embodiement and functions. 
+
+This is central premise to my project. Ants are not house hunt, nor are they passing naunced judgement on a potential home. 
+
+They are walking and sensing, of which the latter by definition is deterministic. Something is light or it is dark for example. Though the senses presence, i.e. if an ant can do this, may be subject to variance. 
+
+The experiement and the variation of perception does not exist with the paradigm presented and therefore nor does `qual_stddev`. 
+
+Something (not strictly a "nest") is senses, or it is not. 
+
+---
+
+In their 2011 paper, "A Simple Threshold Rule Is Sufficient to Explain Sophisticated Collective Decision-Making," Elva Robinson and her co-authors address recruitment latency—specifically, why ants take longer to recruit nestmates to a poor-quality nest than to a high-quality nest.
+
+Before this paper, standard literature argued that this latency was caused by individual scouts experiencing "quality-dependent hesitancy". The assumption was that an individual ant cognitively evaluates a bad nest, feels "hesitant," and purposefully delays her decision to recruit.
+
+Robinson et al. reject this complex cognitive explanation. They use analytical and simulation modeling to show that the exact same macro-level latency naturally emerges from a basic, binary threshold rule.
+
+Through their modeling, the authors recreate individual ant behaviors to see if a collective "choice" can emerge without individual ants actually comparing options or deliberately hesitating.
+
+The core breakthrough of Robinson’s model is explaining how individual rejection translates into collective delay (apparent latency) at the macro level.
+
+1. Nests Presented Separately (Sequential Discovery).
+- When a colony is forced to look at only a poor nest, empirical data shows a massive recruitment latency (it takes a long time for transport to start)
+- Individual ants wander into the poor nest, reject it based on their threshold, and leave. However, because there are no other options available, ants keep randomly re-discovering the same poor nest.
+- Eventually, by pure mathematical probability, a few ants will accept it or a crowd will accidentally form inside.
+- The "latency" isn't an ant sitting inside thinking about its options; it is the cumulative time it takes for individual ants to repeatedly reject, leave, and randomly stumble back into the same poor nest until recruitment finally triggers.
+
+> My appraoch still covers this. 
+> It agress with Robinson that ants are stopping to conduct a short of viewing time
+> Robinson says this is simply due to rejecting and the time taken for variability in thresholds to take over. 
+> Mine differs as the paradigm suggests there is no concept of nest and therefore no "delay"
+> It does converge with Robison in two routes
+> 1. ants with less senses as analagous to low theshold ants
+> 2. the cascase lowering of senses is the "same" as an ant repeatedly visiting an nest and evenutally accepting due to assessment errors
+> the difference is that my proposal is tether to biological/chemical reactions and introduces a time scale ot acceptance, i.e. sense reducing over time. 
+
+2. Nests Presented Together (Simultaneous Choice)
+- When a good nest and a poor nest are placed in the arena at the same time, empirical data shows a fascinating shift: the apparent recruitment latency to the poor nest vanishes.
+- The Robinson Model Explanation: If ants were truly "hesitating" because they knew the nest was bad, the latency should remain. But in the model, because a good nest is now an option, the ants that reject the poor nest leave and quickly find the good nest. They instantly accept the good nest and trigger rapid recruitment.
+- Because the good nest absorbs the workforce so quickly, it completely overwrites the slow, stumbling feedback loop of the poor nest.
+
+
+Robinson et al. use this model to prove a major principle in collective intelligence: sophisticated group-level outcomes do not require sophisticated individual behavior.
+
+Through their mathematical simulations, they demonstrate that "quality-dependent latency" and "apparent comparison" are optical illusions. The ants are merely autonomous agents running a strict accept/reject threshold loop. The environment's layout and the math of random walks handle the rest.
+
+---
+
+The searching walks were truly random with respect to the nests. The ants had absolutely no idea that nests were present in the environment beforehand, and they did not disproportionately target or visit those areas.
+
+In the mathematical simulation designed by Robinson et al. (2011), the agents are explicitly programmed with no distant radar or remote sensing.
+
+Discovering a nest is treated as a stochastic (probabilistic) intersection event—the agent only "knows" a nest exists when it physically steps onto the grid coordinates of that nest.
+
+
+If an ant enters a poor nest and rejects it, it is programmed to immediately "forget" it. It resumes a random walk with zero directional bias, meaning it is just as likely to walk away from the nest as it is to accidentally turn around and walk right back into it.
+
+> i think this supports my lack of "nest" searching idea. I don't think we can suggest ants are searching for a nest but don't know what. a nest is until they get into a nest. 
+
+This modeling choice accurately reflects real ant biology. Real Temnothorax ants cannot look across a large, bright open arena and see or smell a tiny, dark rock crevice 45 centimeters away. They have to physically stumble upon the tiny entrance hole. Therefore, until an individual scout's antennae physically pass over a nest entrance, that area of the arena holds no more attraction to the ant than an empty patch of plastic.
+
+> it could be modelled that an ants random walk it deterministic that is it senses a hole, it goes down.
+
+---
+
+In the 2011 paper, Robinson and her co-authors are arguing that individual ants actually use an real-world, binary threshold mechanism (a "rule of thumb"), rather than just using it as a convenient modeling tool to decompose an otherwise complex behavior.
+
+They are making a definitive biological and evolutionary claim based on parsimony (Occam's razor).
+
+The Complex Mind Hypothesis vs The Simple Mechanism Hypothesis
+
+Robinson’s stance is that scientists should always assume the simplest possible biological mechanism until proven otherwise.
+
+To solidify this as an actual biological claim rather than just a modeling shortcut, Robinson et al. conducted a live experiment with radio-tagged ants. They explicitly looked for behavioral signs of complex evaluation (like a sampling period or a preferential return to a better nest after visiting a worse one).
+
+They found no evidence of such behaviors. Instead, the real ants behaved exactly like threshold automatons
+
+> Robinson essentially use a decomposition approach whereby they model using sampling and disribution. There methods aren't actually modelled or explained, just simulated. 
+
+> Therefore, deploying my ideas as a built out experienent, not just a simplifed markov model, could be justified as building on the experiement. 
+
+> The goal will be to build the same, similar or relatable results by modelling an even more simple mechanism
+
+> Idea this mechansim will be backed up by papers, i.e. the senses empirical evidence suggests that ants have, but at the very least it will be backed up by terms from the module, i.e. embodiement, situatedness, external breadcrumbs.
+
+---
+
+Task 3 Core Detail Enhancement: In your final paragraph, change "or either other ants will end up at Nest 2 to produce a quorum" to a cautionary reminder: "Note that in this specific model iteration (Robinson et al., 2011), ants are simulated entirely independently and do not explicitly interact to form a quorum.".pdf] This strengthens your "killjoy" theme by highlighting that the model claims to find collective wisdom without even using a collective interaction step.
+
+Reminder that there is not quorm mention or method. Just counts of the selected ants and the idea that the larger count will therefore rearch a quorum
+
+It could be an idea to model a quorum. Paricularly stemming from the notion of lags, i.e. nests far away. 
+
+As the idea about the build up knowledge during settled periods is related to the ability to reach quorum
+
+---
+
+The sensing mechanism removes the notion of threshold and quality replacing it with an idea of "completeness"
+
+An area (not nest/home), is considered complete, i.e. Safe, if all N components are sensed. Sensing together triggers a chemical reaction to invoke a biological behaivour of tandem running with the goal of transporting memberber of the Colony to this safe location. 
+
+A completely senses location is essentially the same as a good quality nest above the threshold. 
+
+An incomplete location is analogous to a low(er) quality nest. 
+
+Variation in thresholds are analagous to variation in senses. Ants may hold less senses. Either through biological mutations, injuries or age. The result of a population of ants with different levels of senses. An Ant will LESS senses is analgous to an ant with a lower theshold. There is a higher chance of all senses being trigger if there are less sense. 
+
+> I wonder how I can balance this in terms of regaining senses. If they go down, they must come back up, and this would result in the location no longer being deems as safe. I think that this could be justify as a mechansim to pertain to a temporary home. The fact is, if no truely suitable locations exist then a population dies out, therefore, this reduction in senses is a temporary solution which allows the ants to be "safe" whilst other ants explore the long term options. Note, that a quorum could be made to a temporary solution whilst the enertia could be building on a long-term solution. Here, the Colony could be modelled as a pheremonon trail, meaing the long term ants return to where they think the Colony is but follow the chemical trail to the new location. 
+
+Futhermore, there is this notion of in-experiement dynamic sensing. As time goes by, an Ants senses change, specifically, they reduce or "turn-off". This occurs as time passes and is justified as the ant becoming tired, hunry, thirsty, weaker or stressed. Reducing the number of senses again results in a higher chance of all senses being triggers. This mechanism is analagous to the assessment error, or accuracy, of Robinsons ant evaluation capabilities. 
+
+Note, that one really important distiction between the two experiements are the following:
+- First, the loss of recognising a "nest". This is anthro imposition. Ants recognise their Colony (ants) and log the location of this (undefined).
+- Secondly, and stemming from this, this model removes the notion of "deciding". As the mechanism is based on senses, the behaviour and potential triggers behaviours are therefore perpetual. A change which losses
+
+This perpetual and nest-free environment and behaviours allows for a continuous process where a colonoy of Ants, or specifically the Scouting ants, are building up "knowledge" from which it is really important to have a diversity of Ants (senses).
+
+Ants who are initalized with full senses are rare but behaviourly are the most picky. They are perpetually searching for a safe location even when the rest of the nest is settled. These ants find these safe location (eventually) and are continually tandem running. Though they struggle to recuit any ants, aside from other picky ants. There result is a decentralized breadcrumb mechanism. The picky perpetual ants behaviour as long-term, learned memory. When something bad happens, these ants have already started to build up momentum on the new, safe location, therefore, transporting the Colony quicker. Here, the less picky ants will no longer sense they and Colony are safe and will be recuited (quicker).
+
+The idea of being safe is analagous to a decision but the difference is that it is not fixed. It can change particularly in term of the expiriment trigger which was destroying on a nest. 
+
+---

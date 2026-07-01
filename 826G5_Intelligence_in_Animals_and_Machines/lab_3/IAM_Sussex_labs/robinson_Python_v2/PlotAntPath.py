@@ -8,7 +8,7 @@ def PlotAntPath(Ant, perceivedQuality=None):
 
     plt.figure(1).clear()
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, num=1)
+    fig, (ax1, ax2) = plt.subplots(2, 1, num=1, clear=True)
 
     plt.ion()
     plt.show()
