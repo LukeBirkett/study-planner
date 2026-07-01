@@ -1,19 +1,29 @@
 # 1 Introduction
 Propaganda involves managing collective attitudes by manipulating significant symbols (Lasswell, 1927), using rhetorical devices to bypass rational analysis rather than relying on outright falsehoods (Jowett & O'Donnell, 2018). Given the velocity and volume of modern digital information, automated detection mechanisms are increasingly vital for maintaining the integrity of online discourse. This report explores automatically identifying propaganda through two core challenges: classifying known propagandistic snippets (Task 1) and jointly identifying manipulative spans and techniques within raw text (Task 2).
 
-## 1.1 Problem Outline and Academic Context
-Automating this detection is difficult due to the subjective boundary between legitimate persuasion and manipulative rhetoric (Da San Martino et al., 2019). Historically, detection operated at the macro-level, classifying entire documents (Rashkin et al., 2017). However, this lacks the interpretability required for modern moderation; propaganda rarely manifests as uniform sentiment, instead relying on localized, fine-grained rhetorical shifts.
+---
 
-Addressing this, Da San Martino et al. (2020) introduced SemEval-2020 Task 11 and the Propaganda Techniques Corpus (PTC), requiring models to identify exact manipulative span boundaries and map them to categories. A significant hurdle in this fine-grained detection is propaganda's structural irregularity. Examples frequently sacrifice grammatical completeness for rhetorical impact, relying heavily on non-compositional Multi-Word Expressions (MWEs) (Sag et al., 2002) and domain-specific words or expressions, introducing substantial Out-of-Vocabulary (OOV) challenges for traditional Natural Language Processing (NLP).
+## 1.1 Problem Outline and Academic Context
+Automating this detection is difficult due to the subjective boundary between legitimate persuasion and manipulative rhetoric (Da San Martino et al., 2019). Historically, detection operated at the macro-level, classifying entire documents (Rashkin et al., 2017). However, this is largely inappropriate for contemporary moderation as propagandists techniques rarely prevail broad-stroke in clearly defined segments of text or speech and instead rely on localized, fine-grained rhetorical moments which shift the underlying intent of the author. 
+
+Addressing this, Da San Martino et al. (2020) introduced SemEval-2020 Task 11 and the Propaganda Techniques Corpus (PTC), requiring models to identify exact manipulative span boundaries with text segments and map them to known propaganda categories. 
+
+A significant hurdle in this fine-grained detection is propaganda's structural irregularity. Examples frequently sacrifice grammatical completeness for rhetorical impact, relying heavily on non-compositional Multi-Word Expressions (MWEs) (Sag et al., 2002) and domain-specific words or expressions, introducing substantial Out-of-Vocabulary (OOV) challenges for traditional Natural Language Processing (NLP).
+
+---
 
 ## 1.2 Hypotheses and Methodology
 To investigate the linguistic signal that defines propaganda, this report evaluates two primary hypotheses using a tiered experimental lineage:
 
-**H1: The Lexical Trigger Hypothesis:** Propaganda is primarily defined by specific, emotionally charged "trigger" words. If true, simple Bag-of-Words (BoW) or static embedding models will achieve competitive accuracy.
+| Hypothesis | Title | Definition | 
+| :--- | :--- | :--- | 
+| **H1** | Lexical Trigger Hypothesis | Propaganda is primarily defined by specific, emotionally charged "trigger" words. If true, simple Bag-of-Words (BoW) or static embedding models will achieve competitive accuracy. | 
+| **H2** | Structural Irregularity Hypothesis | Propaganda relies on syntactic departures and non-compositionality, requiring nuanced, contextualized understanding of sentence structure. Therefore static approachs will not perform well and context aware methods will be required for good performance | 
+---
 
-**H2: The Structural Irregularity Hypothesis:** Propaganda relies on syntactic departures and non-compositionality, requiring nuanced, contextualized understanding of sentence structure.
+For Task 1, I compare a static Word2Vec approach against a dynamic DeBERTa Transformer, benchmarked against a random-guessing lower bound and a baseline "intelligent" Unigram BoW baseline. For Task 2, I contrast a binary BIO-tagging pipeline (with the best performing classifer from Task 1 bolted on) against an integrated Multi-class BIO-CRF model. This systematically determines if joint training on structure and context improves span boundary precision over identifying individual lexical triggers for span start and end points.
 
-For Task 1, I compare a static Word2Vec approach against a dynamic DeBERTa Transformer, benchmarked against a random-guessing lower bound and an intelligent Unigram BoW baseline. For Task 2, I contrast a binary BIO-tagging pipeline (with the best performing classifer from Task 1 bolted on) against an integrated Multi-class BIO-CRF model. This systematically determines if joint training on structural context improves span boundary precision over identifying individual lexical triggers.
+---
 
 # 2 Related Work
 ## 2.1 Evolution of NLP Computational Methods
@@ -22,6 +32,8 @@ Computational linguistics has shifted from rigid symbolic taxonomies like WordNe
 To overcome the sparsity of count-based matrices, static word embeddings like Word2Vec (Mikolov et al., 2013) introduced dense semantic representations. However, static word embeddings struggle with the Principle of Compositionality, failing to capture word order (Tai et al., 2015) and polysemy (Peters et al., 2018). Consequently, architectures evolved to capture sequential dependencies using Recurrent Neural Networks (Elman, 1990) and LSTMs (Hochreiter & Schmidhuber, 1997). For sequence labeling, Ma and Hovy (2016) integrated character-level CNNs to mitigate OOV constraints with Bidirectional LSTMs (Graves & Schmidhuber, 2005). Crucially, they utilized a Conditional Random Field (Lafferty et al., 2001) layer to decode output tags globally, mitigating the Label Bias Problem inherent in locally-normalized models (McCallum et al., 2000) and preserving syntactic sequence integrity.
 
 More recently, Transformers (Vaswani et al., 2017) and pre-trained models like BERT (Devlin et al., 2019) and DeBERTa (He et al., 2020) replaced recurrence with Global Self-Attention. These models dynamically resolve word meaning based on complete sentential context—highly effective for identifying the non-compositional phrases central to manipulative rhetoric. Finally, contemporary NLP is increasingly defined by autoregressive Large Language Models (LLMs) like GPT-3 (Brown et al., 2020), representing a shift away from task-specific fine-tuning toward In-Context Learning (Raffel et al., 2020).
+
+> Reword into own words
 
 ---
 

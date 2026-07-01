@@ -3,9 +3,15 @@ The follow section(s) are dedicated to introducing, explaining and exploring the
 ---
 
 ## 3.1 Corpus Overview
-The dataset supplied for this report appears to be a subset or inspired by the Propaganda Techniques Corpus (PTC) created by Da San Martino et al. (2020) for the SemEval-2020 Task 11. In these original papers, the data was collected from a  "sample of news articles from the period starting in mid-2017 and ending in early 2019."
+The dataset supplied for this report is a "subset" of the Propaganda Techniques Corpus (PTC) created by Da San Martino et al. (2020) for the SemEval-2020 Task 11. In these original papers, the data was collected from a "sample of news articles from the period starting in mid-2017 and ending in early 2019."
 
-It contains 2414 rows and 2 columns: `text` and `label`. The `text` field contains the passage of text which is formatted as a string. Within each string there are <BOS> and <EOS> markers which contain the snippet of text which may or may not be evidence of propaganda. The `label` field contains the category for which the snippet has been determined to be. There are 8 labels which are taken directly from the Da San Martino et al. (2020) paper as well as an additional `not_propaganda` label, making 9 in total. The text outside the tags is not itself considered to be a tagged as the snippets given label and is instead just the sentinal context pertaining to the snippet and/or the wider source of the text. 
+Our corpus contains 2414 rows and 2 columns: `text` and `label`. 
+
+The `text` field contains the passage of text which is formatted as a string. Within each string there are <BOS> and <EOS> markers which contain the snippet of text which may or may not be evidence of propaganda. 
+
+The `label` field contains the category for which the snippet has been determined to be. There are 8 labels which are taken directly from the Da San Martino et al. (2020) paper as well as an additional `not_propaganda` label, making 9 in total. 
+
+The text outside the tags is not itself considered to be a tagged as the snippets given label and is instead just the sentinal context pertaining to the snippet and/or the wider source of the text. 
 
 The table below contains the 9 labels from the dataset, their definition according to Da San Martino et al. (2020) and example taken directly from the training data. 
 
@@ -21,17 +27,11 @@ The table below contains the 9 labels from the dataset, their definition accordi
 | `repetition` |  |  |
 | `not_propaganda` |  |  |
 
-Light data cleaning was carried out which focused on removing digital artifacts that do not represent any intended context from the write/speaker themselves. However, all grammar, spelling variations and punctuation were left as this demonstates meaning and intent. 
+Light data cleaning was carried out which focused on removing digital artifacts that do not represent any intended context from the write/speaker themselves. 
 
-> Need to mention that the text was generally tokensized and any other preprocessing steps
+However, all grammar, spelling variations and punctuation were left as this demonstates meaning and intent. Additionally, as the source is news outlets we can assume a higher level of rigour with respect to grammar and punctuation, or lack there of where appropriate. 
 
-> SHOULD THERE BE AN EDA SECTION HERE? 
-> - (Or possible after tagging) 
-> OR POSSIBLY SPREAD THROUGH OUT MEANING NO EXPLICITY EDA SECTION
-> i.e. here include information on the rows, lengths of seqs, snippets and context
-> in the tag sections provide information, i.e. breakdown of enities and pos in snippets
-> maybe some table based data where signifcant parts are references in the text
-> I think this is the correct approach as tables don't add the word count
+> Tokenization used, other preprocessing steps, possibly EDA seciton. 
 
 ## 3.X Defining the Vocabulary
 - Most techqiues reply explicitly on a pre-definied vocabuluary
@@ -41,19 +41,23 @@ Light data cleaning was carried out which focused on removing digital artifacts 
 - Instances with 1 become unk token
 - However, these are first tagged so they become unk is a tuple that still contains their pos and named entity where possible
 
+> Statistical breakdown of the vocab; word count, POS/Tags breakdown, tokenizer influence, unk count, UNK+ tag breakdown.
 
 ---
 
 ## 3.X Feature Enrichment
 In various places throughout the task, the text was enriched by tagging the tokens, specifically with their part-of-speech (POS) and Named Entity. For each entry in the sequence a tuple holds the original token, POS and Named entity tag. 
 
-POS tagging involves assigning each token its grammatical class. We tagged the sequences using <include_tagger> which comprised of <include_number_of_tags>. It was decided as a particuarly important feature to include with respect to H2 and providing additional signal to identify linguistic irregularities that are so prevelant in propaganda. I expected that Task 2 will benefit signicantly from this feature as it may highlight the difference in composition between the propaganda snippet and the context, thus, improving the accuracy of the boundary predictions. 
+POS tagging involves assigning each token its grammatical class. We tagged the sequences using `nltk.averaged_perceptron_tagger` which comprised of <include_number_of_tags>. Aside from traditional benefits such as word disambiusation, POS tags will be useful in identifying linguistic irregularities which are so prevelant in propaganda, particularly in the composition or sequence of tags used.
+
+
+<refine the rest of this section bow>
+
+
 
 Named enitity involves, where possible, assigning token's their representative nouns. We tagged the sequences using <include_tagger> which comprised of <include_number_of_tags>. This feature should support both H1 and H2. Propagandists often target People, Places and Known Entities to weight on the emotional cues of their audience. However, our dataset is small which means a lot of noun references will only only come up once. This will lead to either weak signal whereby the model cannot effectively identify this exact reference as a propaganda cue or conversely lead to sevre overfitting where the model believes due a single training point that this word must always be propaganda. This feature should support both H1 and H2 in different ways. For H1 it should help to highlight sparse enities as direct noun references and for H2 it should provide signal that enhances the significance of word pairing surrounding a noun reference. 
 
 Sentinment not included as whilst some propaganda techniques explicity weigh on emotional cues <include_examples> many other techniques, and even these same technqiues, invoken a more nuaunced approach to their manipulation. For more subtle propaganda instances, sentiment features may work to infact muddy the signal in pointing the models towards and given interpretation of the words and missing the underlying message.
-- > `emotional cues` or some explcitiy address propgandas sleight of hand
-- > i think there will be a reference that mentions approached previous attempted to use or build on Sentinment approaches before decided it was not complex enough for propaganda. 
 
 Our decision to include feature tagging as a component follows successful entries in Da San Martino et al. (2020) SemEval-2020 Task 11 such as Team LTIatCMU(SI:4) (Khosla et al., 2020) who enhanced their BERT BiLSTM model with additional syntactic and semantic features. 
 
