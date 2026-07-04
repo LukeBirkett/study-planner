@@ -33,40 +33,22 @@ However, all grammar, spelling variations and punctuation were left as this demo
 
 > Tokenization used, other preprocessing steps, possibly EDA seciton. 
 
-## 3.X Defining the Vocabulary
-- Most techqiues reply explicitly on a pre-definied vocabuluary
-- Language itself it sparse, hapax lego
-- The dataset is small enhancing this 
-- Need to redistribute weight across features
-- Instances with 1 become unk token
-- However, these are first tagged so they become unk is a tuple that still contains their pos and named entity where possible
-
-> Statistical breakdown of the vocab; word count, POS/Tags breakdown, tokenizer influence, unk count, UNK+ tag breakdown.
-
 ---
 
 ## 3.X Feature Enrichment
 In various places throughout the task, the text was enriched by tagging the tokens, specifically with their part-of-speech (POS) and Named Entity. For each entry in the sequence a tuple holds the original token, POS and Named entity tag. 
 
-POS tagging involves assigning each token its grammatical class. We tagged the sequences using `nltk.averaged_perceptron_tagger` which comprised of <include_number_of_tags>. Aside from traditional benefits such as word disambiusation, POS tags will be useful in identifying linguistic irregularities which are so prevelant in propaganda, particularly in the composition or sequence of tags used.
+POS tagging involves assigning each token its grammatical class. Sequences were tagged using `nltk.averaged_perceptron_tagger` which comprised of <include_number_of_tags>. Aside from traditional benefits such as word disambiusation, POS tags will be useful in identifying linguistic irregularities which are so prevelant in propaganda, particularly in the composition or sequence of tags used.
 
+Named entity tagging involves assigning qualifying tokens their representative nouns. Sequences were tagged using ` spacy.en_core_web_sm` which comprised of <include_number_of_tags>. Propagandists often target People, Places and Known Entities to weight on the emotional cues of their audience. A the dataset is small, most references will likely only come up once or a few times. Resulting, any the exact word will either be lost to the `UNK` token or provide extremely weak or misleading signal to the model. For example, should a training corpus only include references to a Noun in a single propaganda category only then a frequency-based model may be prone to overfitting, performing poorly in the test set where this particular word occurs. 
 
-<refine the rest of this section bow>
-
-
-
-Named enitity involves, where possible, assigning token's their representative nouns. We tagged the sequences using <include_tagger> which comprised of <include_number_of_tags>. This feature should support both H1 and H2. Propagandists often target People, Places and Known Entities to weight on the emotional cues of their audience. However, our dataset is small which means a lot of noun references will only only come up once. This will lead to either weak signal whereby the model cannot effectively identify this exact reference as a propaganda cue or conversely lead to sevre overfitting where the model believes due a single training point that this word must always be propaganda. This feature should support both H1 and H2 in different ways. For H1 it should help to highlight sparse enities as direct noun references and for H2 it should provide signal that enhances the significance of word pairing surrounding a noun reference. 
-
-Sentinment not included as whilst some propaganda techniques explicity weigh on emotional cues <include_examples> many other techniques, and even these same technqiues, invoken a more nuaunced approach to their manipulation. For more subtle propaganda instances, sentiment features may work to infact muddy the signal in pointing the models towards and given interpretation of the words and missing the underlying message.
+The decision was made not to include Sentinment Tagging as whilst some techniques are explicity in their sentiment, others invoken a more nuaunced approach to their manipulation, including constrating examples found in the same categories. For more subtle propaganda instances, sentiment features may work to infact muddy the signal in pointing the models towards and given interpretation of the words and missing the underlying message.
 
 Our decision to include feature tagging as a component follows successful entries in Da San Martino et al. (2020) SemEval-2020 Task 11 such as Team LTIatCMU(SI:4) (Khosla et al., 2020) who enhanced their BERT BiLSTM model with additional syntactic and semantic features. 
 
-> **POS:** tagged using nltk `averaged_perceptron_tagger` and applied to each sequence in full; snippet + context
-> **Named Entity:** tagged using spacy, "en_core_web_sm"
-
 ---
 
-## 3.4 Data Augmentation (Silver Data)
+## 3.X Data Augmentation (Silver Data)
 Excluding the the `not_propaganda` labels, there are only 1223 instances spread across 8 categories with approx 160 labels in each. This is not a hugely signficant amount of training data and opens up the risk of overfitting to the training and poorly generalising to unseen data. Futhermore, if certain words are over represented in the given training set then we potenitally introduce a structrual flaw that contradicts H1 irrespective of methodology. To combat these risk, the data is augmented and suplemented through the introduction of silver data which has been generated using the original (gold) training data on a one-to-one basis introduce an additional 1223 training instances, bringing the total to 2446. 
 
 This approach follows several methodologies submitted in the Da San Martino et al. (2020) SemEval-2020 Task 11 such as Team UPB(SI:5) (Paraschiv and Cercel, 2020) who used a masked language modeling method to produce synthetic data and Team DoNotDistribute(SI:22) (Kranzlein et al., 2020) who generated an additional 3k new silver training instances resulting in a 5% performance boost. 
@@ -81,9 +63,9 @@ The exact methodology used involved taking each training instance and using a mu
 
 #### Full Approach (Appendix or Diseminate into Tables)
 
-Start with full training set and remove the `not_propaganda` instances as these are already the majority field and we do not have enough information about how these instances were collects and false snippets decided. The exact model used was the open source `Meta-Llama-3-8B`. It should be noted that many open-source and private LLMs struggle with this task as they have safeguards to not participate in propaganda and offensive language/slurs. However, the hostel version from <model_provider> has less restrictions and the generation was programmed to re-prompt if the model refused to output the correct content. 
+> come back to this once recoded
 
-> COME BACK TO THIS ONCE PROCESS IS RE-CODED
+Start with full training set and remove the `not_propaganda` instances as these are already the majority field and we do not have enough information about how these instances were collects and false snippets decided. The exact model used was the open source `Meta-Llama-3-8B`. It should be noted that many open-source and private LLMs struggle with this task as they have safeguards to not participate in propaganda and offensive language/slurs. However, the hostel version from <model_provider> has less restrictions and the generation was programmed to re-prompt if the model refused to output the correct content. 
 
 - tempurature was set to 0.7 to encourage variabliltiy in generative
 - chain of thought helper function to retain prompt context in the context window
@@ -127,9 +109,26 @@ Start with full training set and remove the `not_propaganda` instances as these 
 - jioned to gold dataset at the end by matching index
 - saved as extrnal filex
 
+
 ---
 
-## 3.5 Domain Adaptation
+## ## 3.X Domain Adaptation
 To address the small 2.5k row constraint, a DeBERTa model <need_exact_model> was  fine-tuned on a 10,000-article news corpus from 2017–2019, ensuring the model's base weights are adapted to the specific linguistic era of the Da San Martino dataset.
 
-> COME BACK TO THIS ONCE RE-CODED
+> come back to this once recoded.
+
+---
+
+## 3.X Defining the Vocabulary
+- Most techqiues reply explicitly on a pre-definied vocabuluary
+- Language itself it sparse, hapax lego
+- The dataset is small enhancing this 
+- Need to redistribute weight across features
+- Instances with 1 become unk token
+- However, these are first tagged so they become unk is a tuple that still contains their pos and named entity where possible
+
+> Provide a statistical breakdown of the vocab; word count, POS/Tags breakdown, tokenizer influence, unk count, UNK+ tag breakdown.
+
+---
+
+

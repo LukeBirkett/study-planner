@@ -15,14 +15,6 @@ For the classification tasks, I compare a Word2Vec (Bag-of-Embeddings) approach 
 # 4. Methodology: Task 1 (Classification)
 *Task 1 is a multi-class classification problem requiring the identification of one of 8 propaganda techniques (excluding not_propaganda from the 9) within a given snippet and its sentential context. To evaluate the relative importance of lexical choice versus linguistic structure, I implement a tiered lineage of models: starting with frequency-based baselines, progressing to semantic concept modeling (Word2Vec), and concluding with contextualized attention mechanisms (Transformers).*
 
-> reword and check labels
-> 
-> make clear that the two different models travel down opposing philsophyical nlp routes
->
-> Word2Vec is vocab and simiarity focused hence pertains to basline 1
->
-> Transformers is linguistic structure based hence pertains to baseline 2
-
 ---
 
 ## 4.1 Baselines: Pure Vocabulary and Local Phrasing
@@ -30,14 +22,6 @@ For the classification tasks, I compare a Word2Vec (Bag-of-Embeddings) approach 
 
 ### Baseline 1: Unigram-BoW (Pure Vocabulary)
 *This approach treats the snippet and its context as an unordered collection of words. By using Frequency Counts to represent sparse vectors, this model tests the Lexical Trigger Hypothesis (H1)—that propaganda can be identified simply by the presence of specific emotionally charged words regardless of their arrangement.*
-
-> tests H1 in its strictest form possible. there are otherways to test or prove H1 but this would be most extreme
-
-> pure classical classifcation baseline
-
-> snippet and then snippet + context
- 
-> Could stagger the baseline as snippet vs snippet and context as well. this might highlist some issues with the approach and sparsity early on. 
 
 *“To evaluate the true necessity of surrounding sentence structure, the Bag-of-Words and Word2Vec models are implemented across a staggered text constraint: (1) Snippet-Isolated, where the model evaluates only text inside the target boundaries, and (2) Unified Sequence, where the full sentence string is evaluated. This ablation experiment establishes an explicit empirical baseline for measuring whether contextual framing is structurally mandatory for classification or whether local lexical choices provide sufficient signal.”*
 
@@ -93,11 +77,6 @@ For the classification tasks, I compare a Word2Vec (Bag-of-Embeddings) approach 
 >
 > 
 > Word2Vec is a sophisticated extension of the Pure Vocabulary route (BoW). If we see that it beats the uni-gram approach then we know that there is some value in these contexual vectors providing knowledge on similarity.
-
-
-"In my Word2Vec baseline, I treat the snippet as a Bag-of-Embeddings. While Word2Vec vectors capture semantic similarity via the distributional hypothesis (the 'window' method used during pre-training), they remain static. This means the model cannot distinguish between different senses of a word or recognize how a specific 'abstract pairing' in a propaganda snippet changes the meaning of its constituent words. This limitation justifies the transition to Contextualized Embeddings (BERT/DeBERTa), which use self-attention to generate token representations that are aware of the unique, often irregular, structure of the input sentence."
-
-*“While frameworks like Gensim support online vocabulary updates (update=True), a decision was made to freeze the pre-trained Google News Word2Vec weights and treat the model strictly as a static semantic dictionary. Fine-tuning dense embeddings on small specialized datasets with highly asymmetric term frequencies introduces Catastrophic Interference, warping the semantic spatial coordinates of pre-existing vectors and compromising their distributional integrity. Freezing the embeddings preserves a rigid, uncorrupted control variable for testing the Semantic Concept Hypothesis (H1).”*
 
 ---
 
