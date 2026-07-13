@@ -157,230 +157,81 @@ This section outlines the architectural frameworks deployed across both experime
 
 ## 4.1 Task 1: Propaganda Technique Classification
 
-Task 1 is as a single-label, multi-class classification problem targeting the eight positive propaganda techniques. The task is to differentate propaganda techniques among known instances of propaganda so we remove the dominant, `not_propaganda` class, resulting in balance 8 class environment. This task serves as the empirical foundation to test the explanatory power of the Lexical Trigger Hypothesis ($H1$) against the Structural Irregularity Hypothesis ($H2$).
+Task 1 is as a single-label, multi-class classification problem targeting the eight positive propaganda techniques. This task serves as the empirical foundation to test the explanatory power of the Lexical Trigger Hypothesis ($H1$) against the Structural Irregularity Hypothesis ($H2$).
 
 ---
 
-4.1.1 Baselines & Context Ablation
+### 4.1.1 Baselines & Context Experimentation (Word Count: 93)
 
-Unintelligent (Random) and Intelligent (Unigram BoW).
-
-The Snippet vs. Sentinel Context ablation setup.
-
-The token-tagging strategy for handling sparse proper nouns in the baseline.
-
-4.1.2 Static Word Embeddings (Word2Vec)
-
-The rationale (distributional semantics, local window optimization).
-
-The constraints (context-blindness, OOV vulnerability).
-
-Brief implementation details (Google News pre-trained, 300-d).
-
-4.1.3 Context-Aware Transformers (DeBERTa)
-
-The shift to bidirectional self-attention.
-
-Why DeBERTa (disentangled attention for syntactic anomalies).
-
-The sequence strategy (Snippet-Specific Mean Pooling vs. CLS).
-
-Transfer learning and freezing the base encoder.
-
-4.1.4 Standardized Downstream Classification Head
-
-The unified MLP design (mean-pooling, ReLU, Dropout, Softmax, Cross-Entropy).
-
-Justification for keeping it mathematically constant to isolate the embedding quality.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 4.1. Task 1: Propaganda Technique Classification
-
-Task 1 is a single-label, multi-class classification problem targeting the eight distinct propaganda techniques. This task excludes the `not_propaganda` class which subsequently also eliminates any significant class-imbalance. 
-
-To systematically evaluate the Lexical Trigger Hypothesis ($H1$) against the Structural Irregularity Hypothesis ($H2$), I implement a tiered lineage of models, starting with frequency-based baselines, progressing to semantic concept modeling (Word2Vec), and concluding with contextualized attention mechanisms (Transformers).
+To calibrate performance, two baselines establish empirical boundaries. An unintelligent random-guessing baseline ($P = 0.125$) defines the task's mathematical floor. An intelligent unigram Bag-of-Words (BoW) baseline represents text as sparse frequency vectors to benchmark the Lexical Trigger Hypothesis ($H_1$). If isolated keywords suffice, this unordered representation will achieve competitive accuracy, rendering deep architectures redundant. To evaluate contextual framing, all qualifying approaches compare a snippet-isolated setup against the complete sentence. Snippet isolation concentrates local rhetorical signal but increases overfitting risks, whereas incorporating neutral sentinel context acts as a regularizer to probe global syntactic dependencies.
 
 ---
 
-### 4.1.1 Baselines
+### 4.1.2 Static Word Embeddings (Word2Vec) (Word Count: 202)
+To bypass Zipf's Law sparsity, Word2Vec (Mikolov et al., 2013) projects semantic similarity into geometric proximity via the Distributional Hypothesis (Harris, 1954; Firth, 1957). Since propaganda manifests as localized rhetorical injections rather than global topics, local window optimization is preferable to global co-occurrence models (Baroni et al., 2014). This optimization behaves as implicit matrix factorization (Levy & Goldberg, 2014), sharing statistical strength across synonyms to regularize representations over our limited corpus.
 
-To calibrate model performance and establish reference boundaries, two distinct baselines are constructed.
+Sequence-level composition relies on mean pooling. With vector addition being commutative, this Bag-of-Embeddings approach discards word order and syntax. Although context-aware during pre-training, these are static embeddings remain context-blind at inference. This is a "vocabulary-plus" paradigm that is structurally incapable of capturing the non-compositional dynamics underlying the Structural Irregularity Hypothesis ($H_2$), serving strictly as an enhanced test of the Lexical Trigger Hypothesis ($H_1$).
 
----
-
-#### 4.1.1.1 Unintelligent Baseline (Uniform Random Guessing)
-This unintelligent baseline assigns a uniform probability ($P = 0.125$) to each of the eight categories. It establishes the mathematical floor for the task. Any trained framework that fails to substantially outperform this boundary indicates a failure to extract transferable signal from the corpus, pointing to severe model degradation, non-sensical architecture, or catastrophic overfitting.
+We deploy pre-trained, 300-dimensional Google News embeddings, applying case normalization and punctuation removal to maximize vocabulary alignment. Without subword tokenization, the model is highly vulnerable to Out-of-Vocabulary (OOV) errors as unseen tokens are discarded entirely, sacrificing the abstract POS/NER footprints preserved by the baseline. Empirically, Word2Vec should yield higher Recall than the baseline by resolving synonymous triggers, but its context-blindness risks false-positive clustering on neutral text, compromising Precision.
 
 ---
 
-#### 4.1.1.2 Intelligent Baseline (Unigram Bag-of-Words)
-This baseline uses raw frequency counts to represent text segments as high-dimensional, sparse vectors, entirely discarding syntactic arrangement. The unigram model serves as the primary empirical benchmark for evaluating the Lexical Trigger Hypothesis ($H1$). If propaganda techniques can be identified strictly via the isolated presence of emotionally charged keywords, this unordered representation will achieve competitive accuracy, rendering the complexity of the chosen task methodologies redundant. 
+### 4.1.3 Context-Aware Transformers (DeBERTa) (Word Count: 173)
+To test the Structural Irregularity Hypothesis ($H_2$), we deploy the bidirectional, encoder-only DeBERTa architecture introduced in Section 3.5. Unlike recurrent models limited by context decay, global self-attention (Vaswani et al., 2017) maintains uncompressed, parallel token connections to capture the dual-contextual cues vital for detecting subtle rhetorical framing.
+
+Rather than redefining DeBERTa's mechanics, we exploit its disentangled attention mechanism (Section 3.5) to isolate syntactic anomalies. Propaganda typically weaponizes ordinary vocabulary within non-standard grammatical frames, thus, DeBERTa's decoupled content and position representations allow the model to identify structural manipulation independently of raw lexical features.
+
+Leveraging our domain-adapted encoder (Section 3.6), we freeze its base parameters during task training. This preserves DeBERTa's pre-trained linguistic worldview while mitigating catastrophic forgetting (French, 1999) on our small target dataset, leaving only the downstream classification head (Section 4.1.4) to optimize.
+
+Finally, we reject the default [CLS] token, which prioritizes global semantic summaries. Instead, we implement snippet-specific mean pooling over the span's hidden feature states, isolating the concentrated rhetorical trigger while preserving the bidirectional sentence-level context.
 
 ---
 
-#### 4.1.1.3 Snippet vs Sentinel Context
-To explicitly test the necessity of contextual framing, both the Bag-of-Words baseline and the neural frameworks are subjected to an ablation experiment across a staggered text constraint:
+### 4.1.4 Standardized Downstream Classification Head
 
-1. **Snippet-Isolated:** The input sequence is truncated strictly to the tokens residing within the <BOS> and <EOS> boundaries.
-2. **Unified Sequence:** The model evaluates the complete sentence string, capturing the full sentential context surrounding the manipulative fragment.
+To isolate representation quality from architectural bias, all Task 1 frameworks share an identical Multi-Layer Perceptron (MLP) head. Element-wise mean pooling standardizes variable-length token sequences into a uniform semantic centroid $\mathbf{x} \in \mathbb{R}^{d_{\text{in}}}$, matching each architecture’s native dimensionality: unigram ($d_{\text{in}} = \vert{}V\vert{}$), Word2Vec ($d_{\text{in}} = 300$), and DeBERTa ($d_{\text{in}} = 768$).
 
-Comparing these two dimensions measures whether local lexical choices provide sufficient signal for technique identification, or whether wide contextual framing is structurally mandatory.
+Grounded in the Universal Approximation Theorem (Hornik et al., 1989), a single hidden layer acts as a constrained probe, preventing overfitting on our restricted dataset while resolving complex boundaries. It applies a ReLU activation for non-linearity, dropout regularization against parameter co-adaptation, and a linear projection to target logits:
 
-Furthermore, this structure will be retained accross all of the classification tasks approaches and thus the intra-approach differences in performance may provide insight as to successes and failrures. 
+$$\mathbf{h} = \text{ReLU}(\mathbf{W}_1 \mathbf{x} + \mathbf{b}_1)$$
 
-> I need to make it clear that the training data is tagged with the propaganda label but also the span boundaries which contain the propaganda itself. The text within the spans is extremely high quality, domain text. During TRAINING, the is the option to either train of the entire sequence, i.e. context + propaganda, or just the propaganda. Just propaganda gives the richest signal for training but risks overfitting, particulary on a small dataset like ours. The context could be considered additional signal, or a dampening effect on the signal as the model is focusing on the words and phrases that strictly are not propaganda. However, this dampening effect could also be considered a form of regularization stopping a model from become too focused on the high signal terms and retiain its general langauge skills.
+$$\mathbf{z} = \text{Dropout}(\mathbf{h}, p)$$
 
---- 
+$$\mathbf{s} = \mathbf{W}_2 \mathbf{z} + \mathbf{b}_2$$
 
-#### 4.1.1.4 Tagging Tokens
-To prevent the frequency-based unigram baseline from overfitting to highly specific proper nouns, it leverages the tuple-structured token representations defined in Section 3.2. Rare and Out-of-Vocabulary (OOV) tokens occurring below a set frequency threshold are collapsed into generalized abstraction tokens `<UNK>` augmented with their Part-of-Speech (POS) and Named Entity Recognition (NER) tags (e.g., UNK_PROPN_PERSON).
+Here, $\mathbf{W}_1$ and $\mathbf{b}_1$ project the centroid into a $d_{\text{hidden}}$-dimensional space, $p$ is the dropout rate, and $\mathbf{W}_2 \in \mathbb{R}^{8 \times d_{\text{hidden}}}$ maps the regularized features to the eight class logits. A terminal Softmax normalizes these into a valid probability distribution:
 
-While the exact textual string does not prevail in these sparse contexts, this token-substitution strategy ensures the model retains abstract grammatical and semantic footprints. For example, if a snippet uses a rare, person-specific slur paired with a derogatory adjective, the exact tokens collapse, but the underlying structure—an adjective targeting a recognized individual (UNK_ADJ modifying UNK_PROPN_PERSON)—carries through. Though this structural footprint is heavily diluted within an unordered frequency matrix, it provides a counterfactual for the neural models; because unigrams are inherently devoid of sequential or self-attentive ordering rules, they establish the absolute limit of what can be inferred via lexical frequency alone.
+$$\sigma(\mathbf{s})_i = \frac{e^{s_i}}{\sum_{j=1}^{8} e^{s_j}}$$
 
----
-
-### 4.1.2 Standardized Classification Head
-
-To isolate the performance of the word representations themselves, all neural models in Task 1 share a standardized downstream Classification Head consisting of a Multi-Layer Perceptron (MLP) coupled with a final Softmax activation layer.
-
-To transform individual token vectors into a unified sequence representation prior to classification, the tokens are aggregated via a mean-pooling layer to standardize the dimensional input into the head.
-
-This pooled representation is passed to a fully connected linear layer. To introduce the non-linear decision boundaries necessary for capturing complex rhetorical patterns, a Rectified Linear Unit (ReLU) activation function ($g(z) = \max(0, z)$) is applied.
-
-To mitigate the risk of co-adaptation and overfitting within the dense layers, a Dropout regularization layer is introduced, which randomly masks a parameterized percentage of activations during training forward-passes.
-
-Finally, a Softmax layer normalizes the raw output logits into a valid probability distribution over the eight target categories:
-
-$$\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{8} e^{z_j}}$$
-
-The network parameters are optimized iteratively via backpropagation using Cross-Entropy Loss to calculate the prediction error relative to the gold labels.
-
-By keeping this classification head mathematically and architecturally constant across BoW Baseline, Word2Vec and DeBERTa implementations, the experimental framework isolates the embedding variable.
-
-Any observed empirical variances can therefore be strictly attributed to the semantic density and contextual flexibility of the upstream embeddings rather than architectural bias.
-
-> Since propaganda snippets vary in length (some are 2 words, some are 15), the classification head requires a uniform input shape. This lines computes an element-wise mathematical average (mean) across the sequence dimension of snippet_states. This creates a single, highly dense 768-dimensional Semantic Centroid that perfectly summarizes the entire propaganda span.
+Optimized via Cross-Entropy Loss against the gold labels, keeping this downstream topology mathematically constant guarantees that empirical variances stem strictly from the upstream embeddings' semantic and contextual capacities.
 
 ---
 
-### 4.1.3. Classification Approach 1: Static Word Embeddings (Word2Vec)
-
-> Word2Vec needs to be striped of cases and gammar as it is vocab based
-
-> Shoud we be checking for spelling mistakes? Maybe this needs to happen in the vocab section.
-
-Zipf's Law describes how word usage in natural language is inherently uneven, resulting in a long tail of rare words. This poses a major challenge for frequency-based approaches, as the resulting vectors or matrices are highly sparse, leaving the vector space mostly empty (filled with zeros). To mitigate this severe data sparsity, we need architectures which transition to mapping language into dense, continuous vector spaces whereby conceptual similarity corresponds to geometric proximity. 
-
-This aligns with the framework of Distributional Semantics which is built upon the Distributional Hypothesis (Harris, 1954; Firth, 1957) suggesting that meaning is derived from linguistic context.
-
-Traditional approaches within this framework relied on mathematical tools such as SVD to extract semantics from global document co-occurrence analysis. However, propaganda primarily manifests as localized rhetorical shifts rather than document-wide macro-sentiments, therefore, vectors designed to predict local context are vastly preferable (Baroni et al., 2014).
-
-Word2Vec (Mikolov et al., 2013) implements a local window-based optimization which is distinctly well-suited for extracting relevant manipulative signals. It utilizes gradient descent to adjust randomly initalized dense token vectors based on their surrounding linguistic neighbors. 
-
-Through backpropagation, words sharing similar statistical environments are nudged into close geometric proximity, forming dense semantic clusters. This process, which functions mathematically as implicit matrix factorization (Levy & Goldberg, 2014), acts as a powerful regularizer. It allows the model to share statistical strength across synonyms, enhancing generalization capabilities which is critical given the limited size of the training corpus.
-
-To evaluate entire sequences, the individual token vectors are aggregated into a single sequence representation via additive composition, specifically mean pooling. However, because vector addition is commutative, this Bag-of-Embeddings approach inherently erases all word order, syntax, and structural modifications. Furthermore, while Word2Vec utilizes context during pre-training, the resulting static embeddings remain entirely context-blind at inference. Consequently, this architecture operates as an advanced "vocabulary-plus" paradigm. It is structurally incapable of evaluating the non-compositional dynamics required by the Structural Irregularity Hypothesis (H2) and serves strictly as an enhanced test for the Lexical Trigger Hypothesis (H1).
-
-A notable operational limitation of this framework is its vulnerability to Out-of-Vocabulary (OOV) terms. Because Word2Vec relies on a fixed vocabulary and lacks the subword tokenization mechanisms utilized by contemporary models (e.g., BPE or WordPiece), unseen tokens are completely omitted from the compositional sequence. This represents a localized loss of signal compared to the intelligent baseline's robust POS/NER augmented abstraction. 
-
-Empirically, the semantic generalization capabilities of this continuous space are expected to yield a higher Recall than the unigram baseline by successfully matching unseen synonymous triggers. Conversely, the inability to isolate syntactic structure risks causing false-positive clustering among topically related but non-propagandistic terms, which threatens to degrade overall Precision.
-
----
-
-#### 4.1.3.1 Implementation
-This is a vocabulary based model with <NUM_of_WORDs_IN_MODEL> whereby each word is represented by a 300-dimensional dense vector <?>. 
-
-I utilize pre-trained Google News Word2Vec embeddings to leverage general-world knowledge of semantic similarity. 
-
-> Return to this once coded.
-
-----
-
-### 4.1.4. Classification Approach 2: Context-Aware Transformers (DeBERTa)
 
 
-##### Architectural Philosophy
-The aim of this second approach is to rigorously test the Structural Irregularity Hypothesis (H2). We are transitioning away from the static, context-blind embeddings seen in our BoW Baseline and Word2Vec into deep context-aware embeddings produced by Transformer architectures.
 
-To build context-aware embeddings, we could have opted for sequential recurrent models (RNN, LSTM) that compress context into a moving hidden state. However, the issue here is that words that come early in a sequence tend find their signal and input gets washed out over time. This is because the gating mechanisms used by sequential models are information bottlenecks whereby the parameters are constantly being compressed, overwritten and changed. 
 
-Transformer models solve which with their attention mechansims, speicfically Global Self-Attention (Vaswani et al., 2017). This parallel, all-to-all sequence mapping allows every token to maintain a direct, uncompressed mathematical connection to every other token in the text. 
 
-This is might be very important for propagana detection because seemly innocuous segements of text can be transformed into propagana due to the inclusion of a single word but this trigger can take place anywhere in the text itself.
 
-Under this approach, no two word vectors will be exactly the same. Instead they will be contextualised vectors that represent not just the meaning of the word but the specific sequence that it has been used in. This is the complete opposite to Word2Vec which utilised a static vector for every word in the vocab. 
 
-Furthermore, for classification tasks requiring deep language understanding, an Encoder-only framework is utilized over a generative, autoregressive Decoder. Decoders are constrained by a causal mask, processing text strictly left-to-right. Where as Encoder models feature unmasked bidirectionality, allowing the model to simultaneously contextualize a word based on both its preceding and subsequent environment, which is vital for detecting subtle rhetorical framing.
 
-##### DeBERTa Paradigm: Disentangled Attention for Structural Anomaly
 
-This approach utilizes the DeBERTa Framework (He et al., 2020).  
 
-Standard BERT architectures compute attention by summing a word's content embedding with its absolute positional embedding into a single vector, conflating semantic meaning with sequence location.
 
-DeBERTa separates these dimensions using Disentangled Attention, calculating attention weights across distinct Content-to-Content and Content-to-Position matrices.
 
-This architectural nuance may be exceptionally promising for propaganda detection. Whislt some propagandistic examples invoke a exotic or even imaginary/custom vocabulary, most instances weaponize high-frequency, ordinary words by deploying them in manipulative, non-standard structural positions.
 
-DeBERTa’s decoupled spatial awareness ensures the model can isolate and identify these malicious syntactic anomalies independently of the raw lexical content.
 
-> I am not just it has been explicity justified why we are using DeBERTa over BERT or even RoBERTa. Seen a simple sign off explaining this decision
 
-##### Transfer Learning, Domain Adaptation, and Head Freezing
 
-Building upon the intermediate Domain Adaptation performed in Section 3.4, this approach leverages transfer learning to initialize the model with a baseline understanding of journalistic stylistic norms (Howard & Ruder, 2018).
 
-Given the heavily restricted size of the target training corpus, fine-tuning the entire DeBERTa architecture risks Catastrophic Forgetting (McCloskey & Cohen, 1989; French, 1999).
 
-Exposing millions of highly calibrated base parameters to a small, noisy dataset often causes the model to rapidly overwrite its universal linguistic representations.
 
-To prevent this, the fine-tuned DeBERTa base model is completely frozen during this tasks training.
 
-Only the standardized Multi-Layer Perceptron (MLP) classification head is optimized, preserving the model’s macro-linguistic competency while tuning the terminal layer to act as an expert task-specific interpreter.
 
-This also allows use to be be consistent across the baseline and both tasks as in all examples we are producing embeddings and then passing them into the same MLP model to be trained. We are isolating the quality of the input embeddings and therefore testing the approaches against the hypothesis. 
 
-##### Sequence Representation Strategy: Snippet-Specific Pooling vs. [CLS]
 
-To generate the final sequence representation for the MLP head, we are rejecting the conventional [CLS] token strategy utilized in standard BERT pipelines.
 
-The [CLS] token is primarily optimized during pre-training via the Next Sentence Prediction (NSP) objective, biasing it toward capturing global, document-level topic summaries.
 
-Utilizing this global vector for fine-grained fragment classification risks severe semantic dilution, effectively drowning a localized, three-word propaganda trigger in the statistical noise of forty words of neutral background text.
-
-> somewhere it would be good to explain the distribution of propaganda snippets length to reference how much of an issue this is
-
-Instead, this approach implements Snippet-Specific Mean Pooling.
-
-> token pooling
-
-By extracting and averaging the final hidden states strictly for the tokens bounded by the <BOS> and <EOS> markers, the model targets the exact localized "rhetorical punch."
-
-Crucially, because these extracted vectors have already passed through the bidirectional self-attention layers, they remain fully contextualized by the broader sentential environment, achieving high-precision focus without sacrificing global awareness.
-
-> we should just be able to extract the snippets as they are context aware meaning there should be less risk of overfitting. However, we may as well test them both for discusion purposes. 
-
----
-
-#### 4.1.3.1 Implementation
-
-Exact model
-
-Training convenstions and hyperparameters
-
-Document settings for both models (e.g., vocabulary size, embedding dimensions, dropout rates, and fine-tuning epochs).
 
 ---
 
@@ -435,6 +286,28 @@ For instance, it provides the precise empirical substrate needed to differentiat
 > NOTE, there is a really interesting result that impacts task 2. In the second tasks we need to identify the span and label. If the models are better at identify the label with the entire sentence then this has impacts for the approaches taking in task 2. If we can label the sequence better using the raw segement, then this information can be used to guide the sequence tagging for the span. 
 
 ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 4.2 Task 2: Joint Detection and Classification task
 
