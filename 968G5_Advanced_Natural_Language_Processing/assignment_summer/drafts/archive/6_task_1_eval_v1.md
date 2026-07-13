@@ -1,7 +1,5 @@
 # 6. Results and Evaluation
-To rigorously test the Lexical Trigger (H1) and Structural Irregularity (H2) hypotheses, the evaluation framework moves beyond generic accuracy metrics. It is designed to penalize models that overfit to majority classes and to strictly evaluate the structural boundary logic of the sequence labelers.
-
-> Again we haven't confirm that there are majority classes yet, though there probably is. 
+To rigorously test the Lexical Trigger (H1) and Structural Irregularity (H2) hypotheses, the evaluation framework moves beyond generic accuracy metrics. It is designed to penalize models that overfit to majority classes and to strictly evaluate the structural boundary logic of the sequence labelers. 
 
 ## 6.1 Evaluation Framework and Metrics
 

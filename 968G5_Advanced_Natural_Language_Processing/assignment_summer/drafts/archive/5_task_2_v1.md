@@ -1,5 +1,7 @@
 # 5. Methodology: Task 2 (Span Identification)
-*The methodology for Task 2 focuses on Sequence Labeling—assigning a tag to every token in a sentence to identify both the boundaries (the span) and the specific technique used. To explore this, I implement two variations based on the seminal Ma and Hovy (2016) architecture, evolving from a traditional recurrent approach to a modern transformer-based encoder.*
+*The methodology for Task 2 focuses on Sequence Labeling—assigning a tag to every token in a sentence to identify both the boundaries (the span) and the specific technique used. 
+
+To explore this, I implement two variations based on the seminal Ma and Hovy (2016) architecture, evolving from a traditional recurrent approach to a modern transformer-based encoder.*
 
 *Task 2 expands the problem space from classification to Sequence Labeling, requiring the joint identification of both the exact token boundaries (the span) and the propaganda technique used. To execute this, I adapted the foundational Ma and Hovy architecture into a modern BERT-CRF model. By replacing the traditional Bi-LSTM with a Transformer encoder, the model leverages Self-Attention for sequence encoding, while relying on a Conditional Random Field (CRF) to enforce structural logic over the predicted BIO (Beginning, Inside, Outside) tags.*
 
@@ -18,16 +20,6 @@ This architecture is uniquely suited to our "soft boundary" problem. The Bi-LSTM
 To modernize this approach, I propose a second variation that replaces the Bi-LSTM with a Transformer encoder (BERT/DeBERTa) and simplifies the input pipeline by removing the character-level CNN.
 
 Encoder Replacement: The Bi-LSTM is replaced by a pre-trained Transformer. Instead of recurrently passing hidden states, the model utilizes Self-Attention to allow every token to attend to every other token simultaneously, capturing long-range dependencies that a Bi-LSTM might "forget" in longer sentences.
-> need to use the terms used in the lecture. i think it was something to do with vanishing or forgetting
-> 
-> mention that there are efficency gains also 
-
-**Subword Synchronization:** Transformers use WordPiece or BPE tokenization, which often breaks a single word into multiple subword units. To maintain the word-level labeling required for BIO tagging, I only assign the propaganda label to the first subword of each original word, masking the subsequent subword units during the calculation of the loss.
-> CNN would be overkill for this task as the text comes from News Sources meaning there is unlikely to be spellking mistkes
-> 
-> Spelling and word variations may still exist in terms of propagandists making up words (examples?), however, wordpeirce probably actually workds better for this because these made up words use componetns of existing and wordpiece will allow us to extract the underlying meaning
-> 
-> That being said, I was not away of this masking appraoch. Whilst it makes sense I am concered about loosing the endings of words in evaluation. It seems like in propaganda this might be important to uncovered linguistic irregularities. 
 
 ## 5.3 The Design Change Justifcation
 > ma and hovy pre-dates transformers (2017)
@@ -55,7 +47,9 @@ The first variation treats the task as a decoupled, two-step process.
 
 **Step 2 (Classification):** Once the span is extracted, it is passed to the best-performing classification head from Task 1 (e.g., the DeBERTa model) to assign the specific technique label.
 
-**Justification:** This approach benefits from high data density. Because all 8 propaganda techniques are collapsed into a single B or I class, the span detector has ample examples to learn general "off-kilter" linguistic patterns. However, it is fundamentally vulnerable to Error Propagation; if the binary detector misses the soft boundaries of a span, the classifier never receives the correct text to evaluate.
+**Justification:** This approach benefits from high data density. Because all 8 propaganda techniques are collapsed into a single B or I class, the span detector has ample examples to learn general "off-kilter" linguistic patterns. 
+
+However, it is fundamentally vulnerable to Error Propagation; if the binary detector misses the soft boundaries of a span, the classifier never receives the correct text to evaluate.
 
 ## 5.2 Variation 2: Integrated Multi-class BIO-CRF (Joint Model)
 The second variation tests the hypothesis that knowing what the propaganda is helps the model determine where it is. This is achieved by expanding the tagset to an 18-class space (9 techniques $\times$ {B, I} + 1 'O' tag) (e.g., B-Loaded_Language, I-Loaded_Language).

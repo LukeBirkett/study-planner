@@ -80,6 +80,9 @@ For the classification tasks, I compare a Word2Vec (Bag-of-Embeddings) approach 
 
 ---
 
+
+
+
 ## 4.3 Approach 2: Transformer Architecture (DeBERTa)
 The final approach utilizes a Transformer-based model to resolve the meaning of snippets through Self-Attention. While BERT serves as a bidirectional foundation, I opted for DeBERTa (Decoding-enhanced BERT with disentangled attention) due to its superior ability to separate word content from relative position, which I hypothesize is vital for identifying non-standard rhetorical constructs.
 
@@ -217,23 +220,5 @@ True Fine-Tuning (Unfrozen Base)
 Because everything is unfrozen, your model is executing Co-Adaptation. The classification head is learning how to categorize propaganda genres (e.g., Name_Calling vs. Slogans), while the underlying transformer layers are actively adjusting their self-attention matrices.
 
 The base model is dynamically learning to shift its attention focus, deciding which specific context words are most indicative of rhetorical manipulation.
-
-
-
----
-
-
-## 4.4 Hyper-parameter Configuration
-To ensure reproducibility and fair comparison, the following hyper-parameters were established. Settings for the MLP heads were standardized, while the DeBERTa model underwent a grid search for optimal fine-tuning rates.
-
-| Parameter | BoW Baselines | Word2Vec (Approach 1) | DeBERTa (Approach 2) |
-| :--- | :--- | :--- | :--- |
-| Input Dim | Vocab Size (~5k) | 300 (Dense) | 768 (Hidden State) |
-| Hidden Layers | 1 (128 units) | 1 (128 units) | Standard Transformer Head |
-| Dropout | 0.2 | 0.2 | 0.1 |
-| Learning Rate | 1e-3 (Adam) | 1e-3 (Adam) | 2e-5 (AdamW) |
-| Epochs | 20 | 20 | 4 (Fine-tuned) |
-
-Because the MLP is fixed througout for constistency, it seems to outlined here. and why. 
 
 ---
