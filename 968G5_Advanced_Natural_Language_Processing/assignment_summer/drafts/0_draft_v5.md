@@ -111,7 +111,7 @@ This intermediate pass directly addresses the mathematical constraints of our re
 ---
 
 ## 3.7 Data Augmentation: Silver Data (Word Count: 202)
-With just NUM instances across eight propaganda labels, dataset scarcity risks severe overfitting on this nuanced NLP task. Over-indexing on sample terms introduces a structural bias that could jeopardize H1 regardless of architecture. To counter this, a one-to-one generative data augmentation strategy adds `NUM` instances to amplify vocabulary signals.
+With just `NUM` instances across eight propaganda labels, dataset scarcity risks severe overfitting on this nuanced NLP task. Over-indexing on sample terms introduces a structural bias that could jeopardize H1 regardless of architecture. To counter this, a one-to-one generative data augmentation strategy adds `NUM` instances to amplify vocabulary signals.
 
 This aligns with SemEval-2020 Task 11, where Team UPB deployed masked language modeling (Paraschiv and Cercel, 2020) and Team DoNotDistribute gained a 5% boost via 3,000 silver instances (Kranzlein et al., 2020). Preceding causal architectures like GPT-3 (Brown et al., 2020), legacy competition frameworks were confined to encoder-based token-substitution heuristics (e.g. T5, BERT, WordNet).
 
@@ -143,15 +143,6 @@ The pipeline deployed `Meta-Llama-3-8B` at a $0.7$ temperature to balance cohere
 
 # 4. Task Methodologies
 This section outlines the architectural frameworks deployed across both experimental tasks. Task 1 (Classification) contrasts a static Word2Vec framework against a context-aware DeBERTa Transformer to evaluate static versus dynamic sequence representations. Task 2 (Joint Detection and Classification) compares a decoupled, two-stage binary pipeline against an integrated, multi-class BIO-CRF model.
-
-
-> 4.1 Task 1: Propaganda Technique Classification (Baselines, Word2Vec, DeBERTa, heads)
-> 4.2 Task 2: Joint Detection and Classification (BIO parsing, Decoupled vs Integrated)
-> 4.3 Experimental Setup and Evaluation Framework
-> 4.3.1 Classification Metrics (Macro vs Micro $F_1$ justification)
-> 4.3.2 Sequence Labeling Metrics (Strict CoNLL vs SemEval Proportional Overlap justification)
-"Your system should identify both the span and the propaganda technique used"
-> 4.3.3 The Topological Positional Baseline (Your language-blind control group)
 
 ---
 
@@ -187,7 +178,7 @@ Finally, we reject the default [CLS] token, which prioritizes global semantic su
 
 ---
 
-### 4.1.4 Standardized Downstream Classification Head
+### 4.1.4 Standardized Downstream Classification Head (Word Count: 191)
 
 To isolate representation quality from architectural bias, all Task 1 frameworks share an identical Multi-Layer Perceptron (MLP) head. Element-wise mean pooling standardizes variable-length token sequences into a uniform semantic centroid $\mathbf{x} \in \mathbb{R}^{d_{\text{in}}}$, matching each architecture’s native dimensionality: unigram ($d_{\text{in}} = \vert{}V\vert{}$), Word2Vec ($d_{\text{in}} = 300$), and DeBERTa ($d_{\text{in}} = 768$).
 
@@ -215,6 +206,192 @@ Optimized via Cross-Entropy Loss against the gold labels, keeping this downstrea
 
 
 
+## 4.2 Task 2: Joint Detection and Classification
+Task 2 expands the experimental framework from sequence classification to a joint sequence labeling and token-level classification paradigm. Utilizing the standard BIO (Beginning, Inside, Outside) encoding format, tokens representing neutral sentinel contexts are tagged as `O`, while the start and continuation of propagandistic spans are labeled `B-` and `I-` respectively. Each word is represented as a dense, multi-feature tuple capturing its raw linguistic token, Part-of-Speech (POS) tag, Named Entity Recognition (NER) boundary, and target BIO state.
+
+---
+
+### 4.2.1 Architectural Ancestry: The Ma & Hovy Baseline
+To ground our sequence labeling methodology, we adapt the foundational end-to-end framework introduced by Ma and Hovy (2016). As illustrated in Figure 4.1, this classical architecture partitions sequence processing across three hierarchically stacked layers:
+1. **Character-Level CNN:** Extracts sub-word morphological regularities (e.g., capitalization, prefixes, suffixes) to build robustness against out-of-vocabulary terms.
+2. **Bidirectional LSTM:** Processes word-token sequences forward and backward to capture global sentential context and long-range dependencies.
+3. **Conditional Random Field (CRF) Decoder:** Models joint tag probabilities across the entire sequence rather than making isolated token decisions, enforcing logical state transitions (e.g., preventing illegal O to I- transitions).
+
+---
+
+### 4.2.2 Modernized Transformer-CRF Paradigm
+To optimize boundary precision and structural resolution, we modernize the Ma and Hovy (2016) pipeline by substituting the sequential and convolutional layers with a deep Transformer encoder (DeBERTa) while maintaining the global decoding properties of the terminal CRF layer. This structural shift provides distinct advantages for propaganda detection.
+
+First, SentencePiece tokenization (Section 3) bypasses the character-level CNN by decomposing out-of-vocabulary terms into subword units, mitigating data sparsity. Second, global self-attention eliminates LSTM-induced context decay, giving tokens a parallel, uncompressed line of sight across the sequence to capture long-range rhetorical patterns. Third, using the domain-adapted DeBERTa backbone (Section 3) leverages a pre-trained linguistic worldview, preventing the overfitting risks of training recurrent architectures from scratch on restricted data. Finally, DeBERTa's disentangled attention decouples token content from relative spatial position. This spatial decoupling directly tests the Structural Irregularity Hypothesis ($H_2$) by allowing the architecture to isolate ordinary vocabulary weaponized purely through anomalous syntactic placement.
+
+---
+
+### 4.2.3 Variation 1: The Decoupled Binary Pipeline
+To isolate span detection from classification, Variation 1 collapses the eight target classes into a simplified three-tag set: `B-Propaganda`, `I-Propaganda`, and `O`.
+
+By mapping all neutral text and non-propagandistic sentences to `O`, this formulation maximizes training-data density to establish highly generalized boundary-detection heuristics. 
+
+> What? the density is about `B-Propaganda`, `I-Propaganda`,
+
+If a sequence yields entirely `O` tags, it is directly cataloged as non-propagandistic. Otherwise, the extracted span is routed to the optimal Task 1 classifier for technique assignment.
+
+Predicated on a derivative of the Lexical Trigger Hypothesis ($H_1$), this pipeline assumes that propaganda detection is a lexical-first task, wherein general rhetorical manipulation manifests through distinct, category-agnostic word choices
+
+> Why?
+
+While optimizing boundary-detection data density, this decoupling introduces a high risk of cascading error propagation. Because the downstream Task 1 classifier lacks a native non-propagandistic output dimension, any false-positive boundary extraction by the binary first stage mathematically forces an incorrect technique classification.
+
+---
+
+## 4.2.4 Variation 2: The Integrated Multi-Class BIO-CRF Model
+Variation 2 integrates span extraction and technique classification into a single forward pass across a high-resolution 17-class space (eight techniques mapped to `B-` and `I-` prefixes, plus a global `O` tag).
+
+Grounded in the Structural Irregularity Hypothesis ($H_2$), this model expands token representations by compounding DeBERTa embeddings with the POS and NER features defined in Section 3.2, aligning rhetorical patterns with real-world syntactic boundaries.
+
+To resolve the label bias problem inherent in independent, local Softmax choices, a terminal CRF layer performs global sequence optimization. It utilizes emission scores $E$ from the encoder alongside a learned transition matrix $T$ to evaluate the joint probability of the output tag sequence $Y$ given input sequence $X$:
+
+$$P(Y\vert{}X) = \frac{\exp\left(\sum_{i=1}^{n} T_{y_{i-1}, y_i} + \sum_{i=1}^{n} E_{i, y_i}\right)}{Z(X)}$$
+
+Where $Z(X)$ is the normalizing partition function and $n$ is the sequence length. During inference, the model leverages a "breadcrumb effect" via backward-flowing Viterbi trellis optimization:
+
+$$V_t(j) = \max_{i} \left[ V_{t-1}(i) + T_{i, j} \right] + E_{t, j}$$
+
+Under this paradigm, highly confident technique-specific classifications deeper within a span mathematically pull up ambiguous boundary tokens into their correct preceding $B$-states. This sequence-level dependency directly tests whether syntactic structure and global transition dynamics are necessary to resolve highly ambiguous span edges.
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> 4.3 Experimental Setup and Evaluation Framework
+> 4.3.1 Classification Metrics (Macro vs Micro $F_1$ justification)
+> 4.3.2 Sequence Labeling Metrics (Strict CoNLL vs SemEval Proportional Overlap justification)
+"Your system should identify both the span and the propaganda technique used"
+> 4.3.3 The Topological Positional Baseline (Your language-blind control group)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 4.2 Task 2: Joint Detection and Classification task (Word Count: 158)
+Task 2 transitions the experimental scope from sequence classification to joint span detection and token-level classification. We frame this objective as a sequence labeling task utilizing the standard BIO (Beginning, Inside, Outside) encoding schema. Neutral sentinel tokens or non-propagandistic sentences are labeled `O`, the initial token of a propaganda span is tagged `B-`, and any subsequent internal tokens are marked `I-`. To capture structural context, each word is processed into a multi-feature representation tuple:
+
+$$\mathbf{x}_i = (\text{Token}_i, \text{POS}_i, \text{NER}_i, \text{BIO}_i)$$
+
+We modernize the classical CNN-BiLSTM-CRF baseline (Ma & Hovy, 2016; Section 4.2.1) into a Transformer-CRF paradigm (Section 4.2.2) to evaluate two competing variations. Variation 1 (Section 4.2.3) deploys a decoupled, two-stage binary pipeline that isolates general span boundaries before running our Task 1 classifier to test the lexical-first assumptions of $H_1$. Conversely, Variation 2 (Section 4.2.4) utilizes an integrated 17-class BIO-CRF model to evaluate $H_2$, predicting spans and specific propaganda techniques simultaneously in a single forward pass.
+
+---
+
+### 4.2.1 Architectural Ancestry: The Ma and Hovy Baseline (Word Count: 81)
+To ground our sequence labeling, we adapt the foundational CNN-BiLSTM-CRF pipeline (Ma & Hovy, 2016). This classic architecture partitions language analysis across three stacked layers: a character-level CNN to extract morphological features for orthographic anomaly detection ($H_2$), a Bidirectional LSTM to capture bidirectional sequential context, and a terminal Conditional Random Field (CRF) to evaluate joint sequence probabilities. By enforcing global sequence-transition constraints, the CRF mitigates the "soft boundary" dilemma of ambiguous propaganda span edges. This classical framework serves as our ancestral baseline.
+
+---
+
+### 4.2.2 Modernized Transformer-CRF Paradigm (Word Count: 163)
+To optimize boundary precision and structural resolution, we modernize the Ma and Hovy (2016) pipeline by substituting its convolutional and sequential layers with a deep DeBERTa encoder while retaining the global sequence-decoding properties of the terminal CRF. This transition replaces sequential recurrent bottlenecks with a parallelized, transfer-learning framework highly calibrated to our restricted corpus. Specifically, SentencePiece tokenization natively decomposes out-of-vocabulary terms into frequent subwords, bypassing the need for a separate character-level CNN. Concurrently, global self-attention eliminates LSTM-induced context decay, ensuring every token maintains an uncompressed, parallel line of sight across the entire sequence to capture long-range rhetorical patterns. Furthermore, utilizing our pre-trained, domain-adapted encoder (Section 3.6) provides a robust linguistic initialization that prevents the severe overfitting risks of training recurrent networks from scratch. Finally, DeBERTa’s disentangled attention decouples token content from relative spatial coordinates. This spatial decoupling directly validates the Structural Irregularity Hypothesis ($H_2$), allowing the architecture to isolate manipulative anomalies where ordinary, high-frequency vocabulary is weaponized purely through non-standard syntactic placement.
+
+---
+
+### 4.2.3 Variation 1: The Decoupled Binary Pipeline (Word Count: 85)
+V1 collapses all labels into a three-tag set (`B-Propaganda`, `I-Propaganda`, `O`), maximizing data density for optimizating category-agnostic boundary detection. During inference, sequences labeled entirely `O` are categorized as `not_propaganda`, while detected spans route to Task 1's optimal model for classification.
+
+However, this approach means the model learns to generalize as a propaganda generalist, potentially overlooking linguistic cues that denote precise span deliniations, resulting in less accurate "soft boundary" detection. Also, since the downstream classifier lacks a native `not_propaganda` state, this architecture risk cascading error propagation as any false-positive boundary detection forces an incorrect technique classification.
+
+---
+
+### 4.2.4 Variation 2: The Integrated Multi-Class BIO-CRF Model (Word Count: 88)
+To bypass cascading errors, V2 evaluates boundaries and techniques simultaneously across a high-resolution 17-class space. While preserving technique-specific signals mitigates "soft boundary" errors, it re-introduces data sparsity and overfitting vulnerabilties. Under this multi-class paradigm, ambiguous boundary tokens are resolved during inference via the CRF's backward-flowing Viterbi trellis "breadcrumb effect":
+
+$$V_t(j) = \max_{i} \left[ V_{t-1}(i) + \mathbf{T}_{i, j} \right] + \mathbf{E}_{t, j}$$
+
+Highly confident technique predictions deeper within a span propagate backward through transition parameters $\mathbf{T}$, "pulling up" preceding boundary tokens into correct `B-` states. Correlating these rhetorical techniques with real-world syntactic boundaries directly tests the Structural Irregularity Hypothesis ($H_2$).
+
+> Include table of labels
+
+---
+
+### 4.2.7 Unintelligent Topological Baseline (Word Count: 142)
+To guarantee our models capture genuine linguistic signals rather than exploiting positional dataset artifacts, we implement a language-blind topological baseline. Stripped of all semantic and vocabulary data, this framework utilizes a highly regularized Multi-Layer Perceptron (MLP) trained strictly on a seven-dimensional structural profile:
+
+$$\mathbf{x}_{\text{topo}} = \left[ L_{\text{tokens}}, L_{\text{chars}}, \mu_{\text{len}}, \sigma^2_{\text{len}}, \text{CapRatio}, \text{PuncDensity}, \text{DigitRatio} \right]$$
+
+> Table of features. > segment length (tokens count) > token variance (irregular word lenths, rythm, ) > punc density (text inside quotation marks for oversimplification or appeal to fear, or parenthetical statements) > segment length (characters) > caps ratio (noun desnity backdoor) > ratio (av word length) (think slogans for loaded language or flag-waving). 
+> feature, sign, justification/proxy
+
+These features capture the physical layout, rhythm, and orthographic geography of the text without exposing word meanings. This isolates whether the dataset contains hidden length or layout biases.
+
+To serve as a joint benchmark, the MLP's terminal Sigmoid layer outputs a joint vector:
+
+$$\hat{\mathbf{y}} = [P(\text{prop}), R_{\text{start}}, R_{\text{end}}]$$
+
+If $P(\text{prop}) < 0.5$, the sequence is designated not_propaganda. Otherwise, the boundary ratios map to token indices, and the extracted span routes to our static Task 1 classifier. Holding this downstream head constant isolates the span-learning variable, proving whether propaganda detection requires genuine semantic comprehension ($H_1, H_2$) or can be cracked via dataset geometry.
+
+---
+
+
+
+
 
 
 
@@ -235,7 +412,7 @@ Optimized via Cross-Entropy Loss against the gold labels, keeping this downstrea
 
 ---
 
-### 4.1.5. Evaluation Approach and Metrics Justification
+### 4.1.5. Task 1: Evaluation Approach and Metrics Justification
 
 To rigorously benchmark the performance of the classification models and provide a clear, empirical foundation for testing the core hypotheses, this report establishes a multi-tiered validation matrix.
 
@@ -245,7 +422,7 @@ In this isolated subset, the remaining eight categories exhibit a mostly balance
 
 However, because historical literature on fine-grained propaganda detection typically features severely skewed class distributions (Da San Martino et al., 2020), it is vital to design an evaluation methodology that remains robust across both balanced and imbalanced contexts.
 
-##### Primary Optimization Metric: Macro-Averaged $F_1$-Score
+##### Task 1: Primary Optimization Metric: Macro-Averaged $F_1$-Score
 
 The primary evaluation objective for Task 1 is the Macro-Averaged $F_1$-score.
 
@@ -259,7 +436,7 @@ This metric acts as a crucial architectural safeguard. If a model performs excel
 
 Consequently, it remains the gold standard for scientific research and model comparison.
 
-##### Secondary Metric: Micro-Averaged $F_1$-Score and Accuracy Alignment
+##### Task 1: Secondary Metric: Micro-Averaged $F_1$-Score and Accuracy Alignment
 
 To evaluate global system robustness, the Micro-Averaged $F_1$-score is tracked concurrently.
 
@@ -273,7 +450,7 @@ However, tracking both remains structurally important to highlight a model's err
 
 Because the harmonic mean heavily penalizes extreme imbalances between Precision and Recall, Macro-$F_1$ and Accuracy can slightly split even under perfect class balance if a model yields asymmetrical error rates across specific categories.
 
-##### Granular Per-Class Diagnostics
+##### Task 1: Granular Per-Class Diagnostics
 
 To prevent the evaluation from collapsing into a single condensed metric, the evaluation suite extracts a separate Precision, Recall, and $F_1$-score for each of the eight propaganda techniques individually.
 
@@ -288,147 +465,9 @@ For instance, it provides the precise empirical substrate needed to differentiat
 ---
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 4.2 Task 2: Joint Detection and Classification task
-
-**Brief:** *Build and evaluate either 2 different approaches or at least 2 variations on a single approach to detecting propaganda within a sentence. Your system should identify both the span and the propaganda technique used.*
-
-> IMPORTANT: IT HASNT BEEN OUTLINED IN THE T2 DRAFT YET BUT IN T1 WE EXPERIEMENT WITH CONTEXT + SNIPPET VS SNIPPET ONLY. WE HAVE THE CHANCE TO DO THIS AGAIN IN THIS TASK IN SLIGHTLY DIFFERENT WAY.
-
-> T1 THE DECISION WAS ABOUT WHETHER TO TRAIN ON WHICH TYPE.
-
-> HOWEVER T2 WE CAN RUN THE CLASSIFER (VAR 1) ON THE FULL SEGMEMENT VS SNIPPET.
-
-> THIS IS IMPORTANT BECAUSE IT BUILDS IN A POTENTIAL SAFEGUARD AGAINST ERROR PROPAGATION. 
-
-> PICK UP TWO MODELS FROM T1. BEST PERFORMING SNIPPET, BEST PERFORMING FULL. CAN EXPLORE THE INSTANCES WHERE THE TWO DISAGREE. DOES THE FULL DISAGREE WHEN THERE IS AN ERROR WITH THE SPAN
-
-> MAYBE THIS IS AN EXTENSION FOR THE RESULTS RATHER THAN EVAL ONLY
-
-
-Task 2 expands the report scope from single-label sequence classification (Task 1) to a joint sequence labeling and classification paradigm.
-
-Fundementally, the task is a token-level Sequence Labeling task which will utilize the BIO (Beginning, Inside, Outside) encoding format. 
-
-This means the corpus text undergoes some data preprocessing. Tokens which represent the sentinal tokens or `not_propaganda` snippets are tagged with `O`. The first token within a propaganda snippet is tagged with `B-` and any following tokens within the snippet are tagged with `I-`.
-
-Standard BIO frameworks do not model an end tag hence the the last token in the snippet would be identified by a transition from `I-` to `O` (or `B-`to `O` for 1 word snipets)
-
-To clarify, in this task, each token is represented as a tuple which holds the following:
-- Token
-- POS Tag
-- NER Tag
-- BIO Tag
-
-To initalize the methodology of approaches for this task, I start with and adapt the foundational Ma and Hovy (2016) CNN-Bi-LSTM-CRF architecture into a modernized Transformer-CRF framework.
-
-From which I derive two competing variations.
-
-The first is a two-stage architecture that isolates span boundaries using a minimal, data-dense three-tag binary set before passing the extracted fragments to the optimal classifier from Task 1. 
-
-Semantically, this approach navigates a deriviative of our original H1. The model will be trained to identify language that is uniquely propagandist but without any notion of the techique exhibited. Hence, it is predicated on the idea that it is the words themselves that hold the true signal to identify propaganda. 
-
-The second variation is an integrated mutli-class BIO-CRF model that maps text segments across an expanded token-tagging space which sees the baseline BIO tags combined with propagand techniques. Hencefourth, integrating the classifcation and span detection into a single forward pass.
-
-This approach interogates H2 as it relies heavily on the combination of tokens and tags to detmine a final prediciton. This will be explained in more detail in [LATER SECTION]
-
 ---
 
-### 4.2.1 Architectural Ancestry: The Ma and Hovy Baseline
-
-This methodology adapts the architectural lineage of the foundational CNN-BiLSTM-CRF framework introduced by Ma and Hovy (2016). This classical sequence labeling blueprint achieves its end-to-end efficacy by partitioning language analysis across three specialized, hierarchically stacked processing layers:
-
-**Character-Level Convolutional Neural Network (CNN):** Operates as a localized feature extractor that scans the constituent characters of words to isolate sub-word morphological regularities. This layer detects capitalization patterns, prefixes, and suffixes, providing a vital signal for identifying the irregular linguistic and orthographic formatting hypothesized in $H2$
-
-**Bidirectional LSTM (Bi-LSTM):** Processes the sequence of word tokens sequentially from both forward and backward directions. By maintaining dual hidden states, this recurrent network captures sentence-level contextual flow and maps long-range dependencies across the sequence.
-
-**Conditional Random Field (CRF) Decoder:** Functions as the terminal sequence predictor. Instead of calculating isolated token judgments, the CRF layer implements global normalization to evaluate the joint probability of the entire output tag sequence. It utilizes a learned Transition Matrix to enforce structural logic over the predicted labels, systematically preventing illegal sequence breaks (such as a continuation tag I- following an outside tag O)
-
-This classic configuration is uniquely suited to handling the "soft boundary" dilemma inherent in propaganda span identification. The deep recurrent layer identifies high-confidence semantic cues within the core of a manipulative fragment, while the CRF layer utilizes its transition parameters to "knit" those signals back to the highly ambiguous beginning (B-) and trailing edges of the targeted text frame.
-
----
-
-### 4.2.2 Modernized Transformer-CRF Paradigm
-
-To optimize boundary precision and structural resolution, I modernize the Ma and Hovy (2016) pipeline by substituting the sequential and convolutional layers with a deep Transformer encoder (DeBERTa) while keeping the global decoding properties of the terminal CRF layer intact. This structural shift is justified by four concise engineering advantages directly calibrated to the constraints of the propaganda corpus:
-
-1. SentencePiece tokenization completely bypasses the need for a separate character-level CNN. By decomposing rare, out-of-vocabulary (OOV) terms into frequent, universally known subword chunks, the model resolves vocabulary-level data sparsity and eliminates the need for manual feature-extraction networks.
-2. LSTMs compress text sequentially, introducing an information bottleneck vulnerable to sequential context decay and recency bias. Conversely, global self-attention calculates a parallel, all-to-all sequence matrix, giving every token a direct, uncompressed line of sight to every other token. This is critical for capturing the abstract, long-range word pairings that denote manipulative rhetorical intent.
-3. Training deep recurrent models from scratch on our limited dataset is infeasible due to catastrophic overfitting risks. Utilizing a massive Transformer backbone tapers this constraint by introducing a pre-trained linguistic worldview, which is structurally adapted to our target era via the intermediate Domain Adaptation news corpus (Section 3.5)
-4. While LSTMs fuse word semantics and sequence location together, DeBERTa utilizes Disentangled Attention to evaluate content and relative position independently. This decoupled spatial awareness is highly effective for validating the Structural Irregularity Hypothesis ($H2$), allowing the architecture to isolate manipulative phrases where ordinary vocabulary is weaponized purely through anomalous syntactic placement.
-
----
-
-### 4.2.3 Variation 1: The Decoupled Binary Pipeline
-
-This approach optimizes boundary detection data density by collapsing all eight propaganda categories into a single three-tag binary set containing `B-Propaganda`, `I-Propaganda`, and `O`.
-
-During data preprocessing, the single token immediately succeeding the <BOS> marker is designated as B-Propaganda, while subsequent internal tokens are labeled I-Propaganda.
-
-All sentential context outside these markers is mapped to O, and for not_propaganda sentences, every token is systematically labeled O.
-
-During testing, text blocks returning entirely O tags bypass the secondary classifier and are cataloged directly as not_propaganda.
-
-Collapsing labels maximizes the available training volume and isolates generic manipulative deviations from standard text, yet it blends distinct rhetorical signatures into a propaganda generalist. This lack of granular resolution introduces the risk of soft boundaries with blurred start and end coordinates. Furthermore, it creates a vulnerability to cascading error propagation where if the binary detector extracts a false-positive neutral text span, the downstream Task 1 classifier, which lacks a native `not_propaganda` output neuron is mathematically forced to assign an incorrect propaganda technique.
-
---- 
-
-### 4.2.4 Variation 2: The Integrated Multi-Class BIO-CRF Model
-
-The second variation evaluates span boundaries and technique classifications simultaneously across a high-resolution 17-class space comprised of eight positive techniques mapped to beginning and inside transitions plus a single global O tag.
-
-To neutralize the label bias problem inherent in locally normalized independent Softmax token choices, a terminal Conditional Random Field (CRF) layer performs global sequence optimization.
-
-This architecture combines localized token probabilities from the DeBERTa encoder (Emission Scores, $E$) with a learned structural rule-book (Transition Matrix, $T$) to score the conditional probability of the entire joint label sequence path:
-
-$$P(Y|X) = \frac{\exp\left(\sum_{t=1}^{T} T_{y_{t-1}, y_t} + \sum_{t=1}^{T} E_{t, y_t}\right)}{Z(X)}$$
-
-While expanding the tagset introduces data sparsity, it preserves technique-specific footprints to counter soft boundary bugs. Ambiguous boundary tokens trigger the breadcrumb effect; when the encoder identifies a high-confidence semantic core deeper in the span, the Viterbi algorithm executes a backward-flowing dynamic programming trellis optimization:
-
-$$V_t(j) = \max_{i} \left[ V_{t-1}(i) + T_{i, j} \right] + E_{t, j}$$
-
-The structural parameters of certain core tokens mathematically pull up the joint probabilities of preceding boundary words, forcing them into their correct technique-specific B- states.
-
-This technique-specific resolution is further enhanced by compounding token vectors with the Part-of-Speech and Named Entity Recognition tags defined in Section 3.2. This allows the integrated model to correlate distinct propaganda techniques with real-world syntactic boundaries, such as matching a span of loaded_language to a noun phrase closure. Ultimately, the breadcrumb effect optimizes precision at span starts, while the combination of syntactic tags and transition matrix parameters stabilizes span endpoints.
-
----
-
-### 4.2.5 Implementation
-
-Code, packages, hyperpara, NN settings, epochs, loss equation. 
-
-
-> Initialize your single, frozen DeBERTa base model.
-> 
-> For Task 1: Attach your MLP Classification Head, train only those head weights, and save them.
-> 
-> For Task 2 (Variation 1): Attach a 3-dimensional Linear Projection layer + a Binary CRF layer, and train only those new decoder weights. To run step two of the decoupled pipeline, you simply load your saved Task 1 classification head and pass the extracted span through it.
-> 
-> For Task 2 (Variation 2): Attach a 17-dimensional Linear Projection layer + a Multi-class CRF layer, and train only that decoder network.
-
----
-
-### 4.2.6 Evaluation
+### 4.2.6 Task 2 Evaluation
 
 For the classification component repeat Task 1 approach
 
@@ -481,84 +520,15 @@ Comparing the Strict Span Metric against the Proportional Overlap Metric across 
 
 
 
----
-
-# 4.2.7 SPAN BASELINES
-
-prove that your Transformer-CRF engine is genuinely learning complex sentence structures rather than exploiting background noise.
-
-I want to do take a generative or probability distribution approach. I want to essentially generate a guess as to where the snippet will be.
-
-We can take the training data and build two probability distributions start point and end point. 
-
-For each training sample we draw from the distribution and obtain a start and end point
-
-There will be to be some rule based checks to ensure the snippet doesnt exceed the segmenet bounds
-
-There needs to be some sort of determinant to change the distribution based on the input segmeent length, i.e. long segmenets draw from a longer distribution. I am not to sure how to do this yet
-
-In fact, an alternative way to build this could simply to be to construct a NN to predict the snap start and end. 
-
-The input is topological the characteristics, i.e. length, and the output is the start and end 
-
-However, it is important that this baseline has no recognition of the words or language used. It should essentially decompose to relying on the probability distribution of the training data. possibly with some regulaization and noise to avoid overfitting
-
-In data science, this is known as a Topological Positional Prior Baseline or a Language-Blind Statistical Prior.
-
-By designing a baseline that is completely blind to words, grammar, and semantics, you create a perfect control group for your dataset. If this baseline scores a decent $F_1$, it means the dataset contains a hidden positional or structural shortcut (e.g., human annotators or the dataset builders naturally tended to select segments where propaganda always lands right in the middle, or propaganda spans always scale perfectly with paragraph length). Proving or disproving this bias will give you massive points in your report's Discussion section.
 
 
-Possible to do via probabilty distribtion or NN model
 
-NN will be more deterministic (depending on hyperparams), alt will be probablistic
 
-building a tiny, language-blind Multi-Layer Perceptron (MLP) is very clean.
 
-[Input Vector: Sequence Length]
-               │
-               ▼
-   [Dense Layer + ReLU + Dropout]  <── Noise/Regularization to prevent memorization
-               │
-               ▼
-     [Dense Output Layer]
-               │
-               ▼
-       [Sigmoid Activation]
-               │
-               ▼
-[Output Vector: (Start Ratio, End Ratio)]
-
-A single continuous scalar (or a small tensor holding [total_tokens, total_characters, average_word_length]). Crucially, no text embeddings or vocabulary matrices are attached.
-
-Hidden Layers: One or two small linear layers (e.g., 32 hidden units) using a ReLU activation.
-
-The Regularization/Noise Layer: Inject a high Dropout rate (e.g., p=0.4) and apply severe L2 weight decay in your optimizer. This forces the neural network to learn the smooth, generalized global trend of the dataset rather than memorizing exact specific sentence lengths.
-
-Output Layer: Two neurons passed through a Sigmoid activation function, ensuring the outputs are continuous ratios between $0.0$ and $1.0$: $\hat{y} = [R_{\text{predicted\_start}}, R_{\text{predicted\_end}}]$.
-
-You train this network using standard Mean Squared Error (MSE) loss against the true normalized start and end ratios of your training set.
-
-When a test sample is passed through the MLP, it outputs two numbers between 0 and 1. You convert them back to hard integers using the test sentence length ($L_{\text{test}}$):
-
-1. $\text{Start Token} = \text{round}(R_{\text{predicted\_start}} \times L_{\text{test}})$
-2. $\text{End Token} = \text{round}(R_{\text{predicted\_end}} \times L_{\text{test}})$
-3. The Logical Check Gate: Because the model has no built-in awareness that an end point must succeed a start point, your python script runs a final structural check:
-
-" Unintelligent Topological Baseline."
-
-"To ensure that downstream neural networks are capturing genuine linguistic and contextual signals rather than exploiting positional dataset artifacts, this report implements a language-blind Topological Baseline. By training a severely regularized MLP strictly on sequence lengths to output normalized span coordinate boundaries, this framework establishes the statistical baseline performance attainable purely through data-distribution geography."This approach is highly rigorous, avoids the trap of using a word dictionary lookup, and directly isolates whether the task truly requires context awareness ($H2$) or if it can be partially cracked by simple dataset geometry.
 
 ---
 
-
-
-
-
-
-
-
-
-
+# Remaining Report Structure
 5.1. Task 1: Technique Classification Performance
 - Presentation of the macro-$F_1$, micro-$F_1$, and accuracy scores.
 - Comparative matrix: Random Guessing vs. BoW Baseline vs. Word2Vec vs. Frozen DeBERTa.
@@ -584,25 +554,19 @@ When a test sample is passed through the MLP, it outputs two numbers between 0 a
 - 7.1. Compute and Architectural Constraints: Discuss the necessity of completely freezing the DeBERTa encoder due to dataset size, and how full-parameter fine-tuning might have altered the semantic workspace if compute/data were infinite.
 - 7.2. Generative Refusal Biases in Silver Data: Dive deeper into your practical discovery from Section 3.6. Because Llama-3 has strict alignment guardrails, its structural refusals or modifications to "harmful" propaganda prompts may have introduced an artificial distribution bias into your silver data.
 - 7.3. Subjectivity of the Ground Truth: Address the low inter-annotator agreement ($\gamma_s$) of the base corpus and how fuzzy human definitions bound the absolute mathematical ceiling of any neural network attempting the task. I wonder if we have access to the soft bounds created by the humans if we could create a better evaluation metric using this. 
+- Error propagandattion
+- topological approach in t2 baseline is very interested. 0 language understand but instread working on the abstractions of language
+
 
 8. Future Work
 - 8.1. Parameter-Efficient Fine-Tuning (PEFT): Propose using LoRA (Low-Rank Adaptation) instead of freezing the encoder entirely, allowing the model to adapt its internal attention maps to propaganda without triggering catastrophic forgetting.
 - 8.2. Hybrid Top-Down Ensembles: Suggest a pipeline that utilizes the Task 1 Full-Context classifier as a global sentinel to dynamically weight or gate the token-level CRF transition paths in Task 2.
 - Probably something around more silver data if its performance was any good
+- reverse pipeline. classify, then span detect. dependant on full segement results
+- dual pipeline, ensemble
 
 9. Conclusion
 - A concise, high-impact summary restating the core research objectives, the definitive victories of context-aware architectures over static representations, and the final verdict on your underlying linguistic hypotheses.
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 
