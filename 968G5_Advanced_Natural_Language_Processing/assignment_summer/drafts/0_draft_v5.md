@@ -194,8 +194,8 @@ Highly confident technique predictions deeper within a span propagate backward t
 
 ---
 
-### 4.2.5 Unintelligent Topological Baseline (Word Count: 90)
-To guarantee our models capture genuine linguistic signals rather than exploiting positional artifacts, a language-blind topological baseline is constructed. Stripped of all semantic and vocabulary data, this framework utilizes a Multi-Layer Perceptron trained on a structural features. These features capture the physical layout and rhythm of the text without exposing word meanings.
+### 4.2.5 Unintelligent Topological Baseline (Word Count: 89)
+To guarantee our models capture genuine linguistic signals rather than exploiting positional artifacts, a language-blind topological baseline is constructed. Stripped of all semantic and vocabulary data, this framework utilizes a Multi-Layer Perceptron trained on structural features. These features capture the physical layout and rhythm of the text without exposing word meanings.
 
 $$\mathbf{x}_{\text{topo}} = \left[ L_{\text{tokens}}, L_{\text{chars}}, \mu_{\text{len}}, \sigma^2_{\text{len}}, \text{CapRatio}, \text{PuncDensity}, \text{DigitRatio} \right]$$
 
@@ -208,8 +208,8 @@ $$\hat{\mathbf{y}} = [P(\text{prop}), R_{\text{start}}, R_{\text{end}}]$$
 
 ---
 
-## 4.3 Task 1 Evaluation Methodology (Word Count: 77)
-Although our corpus is balanced, propaganda datasets are typically highly imbalanced (Da San Martino et al., 2020). To provide a robust evaluation framework we use Macro-Averaged $F_1$-score which weights all classes equally, preventing models from masking poor minority-class performance behind majority-class bias. Concurrently, Micro-$F_1$ is tracked, which converges with global Accuracy, to detect asymmetrical Precision-Recall balances. Finally, per-class Precision, Recall, and $F_1$-scores are tracked to provide the granular diagnostics needed to analyse approach failures. 
+## 4.3 Task 1 Evaluation Methodology (Word Count: 123)
+Although our training corpus is balanced, real world propaganda datasets are typically highly imbalanced (Da San Martino et al., 2020). Consequently, we design an evaluation framework tailored to imbalanced test distributions. Standard accuracy is an insufficient terminal evaluation metric because it is vulnerable to masking poor minority performance behind dominant classes. In a single-label multi-class setting, Micro-averaged-$F_1$ score mathematically decomposes into global accuracy, being blind to systematic class imbalances. Macro-averaged-$F_1$ score calculates the harmonic mean of precision and recall for each class independently before averaging them. This weights categories equally ensuring that poor performance on minority classes cannot be masked. Finally, per-class precision, recall, and $F_1$ scores are logged to provide the granular diagnostic inference needed to analyze specific pipeline failures.
 
 #### Table X: Task 1 Evaluation and Analysis Metrics
 
@@ -225,10 +225,9 @@ Although our corpus is balanced, propaganda datasets are typically highly imbala
 ---
 
 ## 4.4 Task 2: Evaluation Methodology (Word Count: 115)
-Fundementally, the output objective of T2 is a classification task, identical to T1, hence, the evaluation metrics are carried over. The span detection element is integrated into the framework as a qualification router. Span predictions aligning with target bounds pass to the classification evaluator while misaligned spans automatically count as mis-classifications. 
+Fundamentally, the output objective of T2 is a classification task, identical to T1, hence, the evaluation framework is carried over. The span detection element is integrated into the framework as a qualification router. Span predictions aligning with target bounds pass to the classification evaluator while misaligned spans automatically count as mis-classifications.
 
 Given expert human annotators only align with each other 60% of the time (Da San Martino, 2020), an exact-matching mechanism ignores the linguistic subjectivity of propaganda. Sem-Eval-11 used partial intersection matching but this risks overlooking systematically skewed predictions. Our framework enforces cascading length window-based thresholds to maintain consistency between start and end prediction evaluation. This addresses "soft-boundary" predictions whilst allowing longer snippets proportional tolerance.
-
 
 | Span Length (Tokens) | Boundary Tolerance| Verification Rule |
 | :--- | :--- | :--- |
