@@ -100,6 +100,16 @@ With only `NUM` instances risking severe overfitting, we deploy a one-to-one gen
 
 ---
 
+
+
+
+
+
+
+
+
+
+
 # 4. Task Methodologies (Word Count: 49)
 This section outlines the architectural frameworks deployed across both experimental tasks. Task 1 (Classification) contrasts a static Word2Vec framework against a context-aware DeBERTa Transformer to evaluate static versus dynamic sequence representations. Task 2 (Joint Detection and Classification) compares a decoupled, two-stage binary pipeline against an integrated, multi-class BIO-CRF model.
 
@@ -305,6 +315,19 @@ Given expert human annotators only align with each other 60% of the time (Da San
 
 9. Conclusion
 - A concise, high-impact summary restating the core research objectives, the definitive victories of context-aware architectures over static representations, and the final verdict on your underlying linguistic hypotheses.
+
+
+
+
+
+Things to write about:
+- BoW baseline struggles with compositional phrases that are informative but lack density: non-hispanic. This pertains to language structure. English is not normally like this, unlike chinese, but then it happens it is usually important (need to find the langauge type names to explain this). BoW unks, Word2vec may handle. 
+
+- Penn Treebank POS Tagset from perceptron tagger mapped to universal to maximise data density and vector density for BoW baseline. 
+
+- collapses complex Penn Treebank tags (like VBD, VBG, VBZ) into the single VERB category.
+
+- universal has a 'X' tag for unknown tokens. Instead of mapping to <UNK> these tokens are mapped to something unique, i.e. -999UNIQ, to provide a vector slot for non-compositional words. 
 
 ---
 
