@@ -476,95 +476,89 @@ Structually, the report itself should follow the structure used for Task 1.
 ---
 
 # 5. Task 2: Joint Propaganda Span Detection and Classification
-Task 2 expands the experimental scope from classifying isolated, pre-delimited snippets to jointly identifying propagandistic text boundaries and classifying the specific techniques deployed within unannotated, full-sentence contexts. We frame this objective as a sequence labeling problem utilizing the standard Beginning, Inside, Outside (BIO) encoding schema. Neutral background tokens and non-propagandistic sentences are tagged O, the initial token of a manipulative span is tagged B-, and subsequent interior tokens are tagged I-.
+Task 2 expands the experimental scope from classifying isolated, pre-delimited snippets to jointly identifying manipulative text boundaries and classifying the specific techniques deployed within raw, full-sentence contexts. We frame this objective as a sequence labeling problem utilizing the standard Beginning, Inside, Outside (BIO) encoding schema. Neutral background tokens and non-propagandistic context are tagged O, the initial subword/token of a propaganda span is tagged B-, and subsequent interior tokens within the span are tagged I-.
 
-## 5.1 Topological Control Baseline
-To establish a rigorous mathematical floor and guarantee that sequence labeling models capture genuine linguistic manipulation rather than exploiting surface-level formatting or positional artifacts, we construct a language-blind topological baseline. Stripped entirely of vocabulary features and semantic representations, this baseline processes sequences into a low-dimensional structural metric tensor $\mathbf{x}_{\text{topo}}$
+## 5.1 Stochastic Random-Guessing Baseline
+To establish an absolute mathematical lower bound and guarantee that sequence models learn authentic rhetorical patterns rather than picking up on sequence length heuristics, we implement an unintelligent, probabilistic random-guessing baseline.
 
-$$\mathbf{x}_{\text{topo}} = \left[ L_{\text{tokens}}, L_{\text{chars}}, \mu_{\text{len}}, \sigma^2_{\text{len}}, \text{CapRatio}, \text{PuncDensity}, \text{DigitRatio} \right]$$
+For a target sequence comprising $N$ tokens $T = (t_1, t_2, \dots, t_N)$, the baseline operates via a three-step stochastic sampling procedure:
 
-A lightweight Multi-Layer Perceptron (MLP) trained on $\mathbf{x}_{\text{topo}}$ outputs a predicted relative span boundary $(\hat{R}_{\text{start}}, \hat{R}_{\text{end}})$ alongside a global propaganda existence probability $P(\text{prop})$: 
+1. Existence Selection: A Bernoulli trial determines whether the sentence contains propaganda with uniform probability $P(\text{prop}) = 0.5$. Sequences assigned $P(\text{prop}) < 0.5$ are output as entirely neutral (O across all $N$ tokens, mapping to not_propaganda).
 
-$$\hat{\mathbf{y}} = \left[ P(\text{prop}), \hat{R}_{\text{start}}, \hat{R}_{\text{end}} \right]$$
+2. Span Boundary Selection: If propaganda existence is flagged, start and end token indices $(i, j)$ are drawn uniformly at random such that:
 
-Sequences with $P(\text{prop}) < 0.5$ are predicted as `not_propaganda` ($O$ across all tokens). This non-semantic control provides the empirical substrate required to verify whether downstream neural architectures learn authentic rhetorical devices or merely fit structural text rhythm.
+$$i \sim \text{Uniform}(1, N), \quad j \sim \text{Uniform}(i, N)$$
 
-Table 5: Topological Surface Feature Definitions and Proxies
+yielding a predicted boundary span $\hat{S} = [t_i, \dots, t_j]$.
 
-##### Table 5: Topological Surface Feature Definitions and Proxies
-| Topological Feature | Mathematical Definition | Target Rhetorical / Structural Proxy |
-| :--- | :---: | :--- |
-| **Token Length ($L_{\text{tokens}}$)** | Total token count per sequence | Sentence complexity and structural context volume[cite: 4]. |
-| **Character Length ($L_{\text{chars}}$)** | Total character count | Sentence length normalization benchmark[cite: 4]. |
-| **Mean Word Length ($\mu_{\text{len}}$)** | $\frac{L_{\text{chars}}}{L_{\text{tokens}}}$ | Proxy for vocabulary sophistication and slogan usage[cite: 4]. |
-| **Length Variance ($\sigma^2_{\text{len}}$)** | Token length variance | Structural rhythm and stylistic prose irregularity[cite: 4]. |
-| **Capitalization Ratio ($\text{CapRatio}$)** | $\frac{\text{Count}(\text{Uppercase})}{\text{Count}(\text{Alphabetic})}$ | Entity density and *Name Calling / Labeling* emphasis[cite: 4]. |
-| **Punctuation Density ($\text{PuncDensity}$)** | $\frac{\text{Count}(\text{Punctuation})}{L_{\text{tokens}}}$ | Quotation usage in *Causal Oversimplification* or *Doubt*[cite: 4]. |
-| **Digit Ratio ($\text{DigitRatio}$)** | $\frac{\text{Count}(\text{Digits})}{L_{\text{tokens}}}$ | Numerical claims in *Exaggeration / Minimisation*[cite: 4]. |
+3. Technique Categorization: A technique label $k$ is drawn uniformly from the 8 positive propaganda categories:
 
-Topological FeatureMathematical DefinitionTarget Rhetorical / Structural ProxyToken Length ($L_{\text{tokens}}$)Total token count per sequenceSentence complexity and structural context volume.  Character Length ($L_{\text{chars}}$)Total character countSentence length normalization benchmark.  Mean Word Length ($\mu_{\text{len}}$)$\frac{L_{\text{chars}}}{L_{\text{tokens}}}$Proxy for vocabulary sophistication and slogan usage.  Length Variance ($\sigma^2_{\text{len}}$)Token length varianceStructural rhythm and stylistic prose irregularity.  Capitalization Ratio ($\text{CapRatio}$)$\frac{\text{Count}(\text{Uppercase})}{\text{Count}(\text{Alphabetic})}$Entity density and Name Calling / Labeling emphasis.  Punctuation Density ($\text{PuncDensity}$)$\frac{\text{Count}(\text{Punctuation})}{L_{\text{tokens}}}$Quotation usage in Causal Oversimplification or Doubt.  Digit Ratio ($\text{DigitRatio}$)$\frac{\text{Count}(\text{Digits})}{L_{\text{tokens}}}$Numerical claims in Exaggeration / Minimisation.  
+$$k \sim \text{Uniform}(1, 8)$$
+
+To maintain strict reproducibility across dataset splits, the random state is pegged globally to $\text{SEED} = 142$. Evaluating this baseline through our evaluation metric defines the floor against which downstream neural architectures are benchmarked.
+
 
 ## 5.2 Methodological Framework: Modernized Encoder-CRF Tagger
-The foundational architecture for Task 2 adapts the classic sequence labeling pipeline of Ma and Hovy (2016). While traditional implementations stack character-level CNNs, Bi-directional LSTMs, and Linear-Chain Conditional Random Fields (CRFs), we modernize this pipeline by substituting recurrent and convolutional feature extractors with a contextualized DeBERTa Transformer encoder while retaining the linear-chain CRF layer.
+The foundational architecture for Task 2 modernizes the classic sequence labeling pipeline of Ma and Hovy (2016). While traditional implementations stack character-level CNNs, Bi-directional LSTMs, and Linear-Chain Conditional Random Fields (CRFs), our implementation substitutes recurrent and convolutional feature extractors with a contextualized DeBERTa-v3-base Transformer encoder while retaining the linear-chain CRF layer.
 
-This transition directly addresses the limitations observed in Task 1. First, SentencePiece subword tokenization eliminates the need for character-level CNNs by decomposing out-of-vocabulary terms into sub-units. Second, global self-attention replaces sequential LSTM recurrence, resolving information bottlenecks and preserving long-range context across full news articles. Third, DeBERTa's disentangled attention mechanism models word content and relative position on separate vectors, isolating the syntactic departures characteristic of manipulative rhetoric.
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          Input Sentence Tokens                          │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    DeBERTa-v3-base Subword Encoder                      │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                 ┌───────────────────┴───────────────────┐
+                 ▼                                       ▼
+┌─────────────────────────────────┐     ┌─────────────────────────────────┐
+│  Variation 1: Two-Stage Tagger  │     │ Variation 2: Joint End-to-End   │
+├─────────────────────────────────┤     ├─────────────────────────────────┤
+│ Stage 1: 3-Class DeBERTa-CRF    │     │ Single DeBERTa-CRF Tagger       │
+│          [B-Prop, I-Prop, O]    │     │ 17-Class BIO Space              │
+│                                 │     │ [B-loaded, I-loaded, ..., O]    │
+│ Stage 2: Extracted Span Mean-   │     │                                 │
+│          Pooled 768D MLP Head   │     │ Viterbi Trellis Backward        │
+│          (Predicts 1 of 8 Class)│     │ Decoding                        │
+└─────────────────────────────────┘     └─────────────────────────────────┘
 
-Crucially, static auxiliary features (POS and NER tags) are omitted from Task 2. While explicit feature engineering provided vital statistical density for Task 1's non-contextual Bag-of-Words and Word2Vec models, DeBERTa dynamically infers syntactic roles and entity structures through deep self-attention layers. Omitting manual tag concatenation avoids subword alignment bottlenecks and marks a clear methodological transition from explicit, rule-based feature engineering (Task 1) to implicit, self-supervised contextual representation learning (Task 2).
+This transition directly resolves representation bottlenecks observed in static feature models:
+- **Subword Processing:** DeBERTa’s SentencePiece tokenization eliminates out-of-vocabulary (OOV) terms by decomposing rare words into subword units. Subword tags are aligned back to word-level boundaries by assigning the BIO tag to the first subword token and masking non-initial subword transitions during loss computation.
+- **Global Self-Attention:** Dynamic self-attention replaces sequential LSTM recurrence, resolving long-range context compression and capturing dependencies across complete sentences.
+- **Disentangled Attention:** DeBERTa models token content and relative spatial position on separate vectors, allowing the network to isolate non-compositional syntactic departures characteristic of manipulative rhetoric.
 
-To enforce sequence-level validity and resolve the label bias problem inherent in local softmax predictions (McCallum et al., 2000), a CRF layer decodes the final sequence globally (Lafferty et al., 2001). Given a sequence of DeBERTa contextual representations $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \dots, \mathbf{h}_N)$ and a candidate label sequence $\mathbf{y} = (y_1, y_2, \dots, y_N)$, the CRF defines a global path score $s(\mathbf{H}, \mathbf{y})$:
+In contrast to Task 1, explicit static auxiliary features (POS and NER tags) are omitted. DeBERTa implicitly models syntactic dependencies and named entities within its self-attention heads. Omitting manual feature concatenation prevents subword alignment bottlenecks and marks a transition to implicit, contextual representation learning.
+
+To resolve the label bias problem inherent in standard local softmax classification (McCallum et al., 2000), a Linear-Chain CRF layer globally decodes sequences (Lafferty et al., 2001). Given sequence contextual hidden states $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \dots, \mathbf{h}_N)$ from DeBERTa and a candidate tag path $\mathbf{y} = (y_1, y_2, \dots, y_N)$, the CRF calculates a path score $s(\mathbf{H}, \mathbf{y})$:
 
 $$s(\mathbf{H}, \mathbf{y}) = \sum_{i=1}^{N} \mathbf{A}_{y_{i-1}, y_i} + \sum_{i=1}^{N} \mathbf{P}_{i, y_i}$$
 
-where $\mathbf{A}$ represents the transition matrix of label-to-label emission probabilities, and $\mathbf{P}_{i, y_i}$ denotes the score emitted by DeBERTa for tag $y_i$ at position $i$. Global sequence probabilities are normalized over all possible tag paths $\mathbf{Y}$, ensuring that invalid transition structures (e.g., an I- tag immediately following an O tag) are mathematically suppressed
+where $\mathbf{A}_{y_{i-1}, y_i}$ represents the learnable transition probability from tag $y_{i-1}$ to tag $y_i$, and $\mathbf{P}_{i, y_i}$ denotes the emission logit produced by DeBERTa for tag $y_i$ at position $i$. Optimizing the Negative Log-Likelihood ($\mathcal{L}_{\text{CRF}} = -\log P(\mathbf{y} \mid \mathbf{H})$) suppresses syntactically invalid sequence transitions (e.g., an I- tag directly following an O tag).
 
 ## 5.3 Task 2 Experimental Variations
 
 To evaluate how tagset granularity impacts boundary detection and technique classification, Task 2 compares two variations on the DeBERTa-CRF architecture.
 
-```
-┌──────────────────────────────────────────┐
-                     │          Input Sentence Tokens           │
-                     └────────────────────┬─────────────────────┘
-                                          │
-                                          ▼
-                     ┌──────────────────────────────────────────┐
-                     │     DeBERTa Contextual Encoder           │
-                     └────────────────────┬─────────────────────┘
-                                          │
-                   ┌──────────────────────┴──────────────────────┐
-                   ▼                                             ▼
-┌──────────────────────────────────────┐     ┌───────────────────────────────────┐
-│ Variation 1: Two-Stage Pipeline      │     │ Variation 2: Joint End-to-End     │
-├──────────────────────────────────────┤     ├───────────────────────────────────┤
-│ Stage 1: 3-Class DeBERTa-CRF         │     │ Single DeBERTa-CRF Model          │
-│          [B-Prop, I-Prop, O]         │     │ 17-Class BIO Tagset               │
-│                                      │     │ [B-loaded, I-loaded, ..., O]      │
-│ Stage 2: Mean-Pooled Span MLP Head   │     │                                   │
-│          (Predicts 1 of 8 Techniques)│     │ Viterbi Backward Trellis Decoding │
-└──────────────────────────────────────┘     └───────────────────────────────────┘
-```
-
-### 5.3.1 Variation 1: Two-Stage Pipeline (Binary Sequence Tagger + Span MLP)
-Variation 1 decouples span boundary identification from technique classification into a sequential pipeline.
-
-Stage 1 (Span Boundary Detection): The sequence is processed by a 3-class DeBERTa-CRF tagger operating over a condensed tagset: B-Propaganda, I-Propaganda, and O. Collapsing all 8 techniques into a single positive class maximizes statistical training density, optimizing the network purely for boundary localization. Sequences tagged entirely as O are routed directly as not_propaganda.
-
-Stage 2 (Technique Classification Head): For sequences containing a predicted span ($\hat{S} = \{t_{\text{start}}, \dots, t_{\text{end}}\}$), the corresponding DeBERTa token hidden states $\mathbf{h}_i \in \mathbb{R}^{768}$ within the predicted span are extracted. Arithmetic mean-pooling compresses these contextual states into a unified span embedding $\mathbf{v}_{\text{span}} \in \mathbb{R}^{768}$:
+### 5.3.1 Variation 1: Two-Stage Pipeline (3-Class Sequence Tagger + Span MLP Classifier)
+Variation 1 decouples span boundary localization from technique classification into a sequential two-stage pipeline.
+- **Stage 1 (Boundary Tagger):** A 3-class DeBERTa-CRF model predicts over a condensed BIO space: B-Propaganda, I-Propaganda, and O. Aggregating all 8 propaganda techniques into a single generic positive tag maximizes target label density, allowing the CRF transition matrix to optimize purely for span boundary localization. Sequences tagged entirely as O bypass Stage 2 and are marked as not_propaganda.
+- **Stage 2 (Technique Classification Head):** For sentences containing a predicted span $\hat{S} = [t_{\text{start}}, \dots, t_{\text{end}}]$, the corresponding DeBERTa token hidden states $\mathbf{h}_i \in \mathbb{R}^{768}$ within the boundary are extracted. Arithmetic mean-pooling compresses these states into a single span representation $\mathbf{v}_{\text{span}} \in \mathbb{R}^{768}$:
 
 $$\mathbf{v}_{\text{span}} = \frac{1}{\vert{}\hat{S}\vert{}} \sum_{i \in \hat{S}} \mathbf{h}_i$$
 
-$\mathbf{v}_{\text{span}}$ is fed into an MLP classification head (Linear -> ReLU -> LayerNorm -> Dropout -> Linear) to output probabilities across the 8 target propaganda categories.
+This pooled vector $\mathbf{v}_{\text{span}}$ passes to an MLP classification head consisting of a linear projection to 256 dimensions, ReLU activation, Layer Normalization, Dropout ($p=0.3$), and a final linear layer outputting logits over the 8 propaganda classes.
 
-To isolate pipeline architecture as the sole independent variable, Stage 2 utilizes the exact same pre-trained DeBERTa representations as Variation 2. To prevent noisy Stage 1 predictions from degrading Stage 2 training, Stage 2 is optimized using gold-standard training spans (teacher forcing). At test time, Stage 1 and Stage 2 operate sequentially. This architecture isolates boundary detection but remains vulnerable to cascading error propagation: any false positive span identified in Stage 1 forces Stage 2 to assign an incorrect propaganda technique.
+During training, Stage 2 is optimized using gold-standard target spans (teacher forcing). At inference, Stage 1 and Stage 2 execute sequentially. While isolating boundary detection simplifies sequence transitions, this pipeline architecture remains vulnerable to cascading error propagation: any false-positive span flagged by Stage 1 forces Stage 2 to assign an incorrect propaganda technique.
 
 ### 5.3.2 Variation 2: Joint End-to-End Sequence Tagging (17-Class Space)
-Variation 2 bypasses pipeline cascading errors by executing span detection and technique classification simultaneously in a single pass. The model operates across a high-resolution 17-class BIO tagset consisting of 8 B- tags, 8 I- tags, and 1 O tag.
+Variation 2 eliminates cascading pipeline errors by executing span detection and technique classification simultaneously in a single pass. The model operates across a 17-class BIO tagset comprising 8 B- tags, 8 I- tags, and 1 O tag.
 
-Under this joint paradigm, boundary disambiguation relies on the CRF's backward-flowing Viterbi trellis. During dynamic programming decoding, the highest-scoring tag path is computed recursively:
+Under this joint paradigm, boundary disambiguation relies on the CRF's backward-flowing Viterbi trellis. During decoding, optimal sequence paths are computed recursively:
 
 $$V_t(j) = \max_{i} \left[ V_{t-1}(i) + \mathbf{A}_{i, j} \right] + \mathbf{P}_{t, j}$$
 
-This structure produces a "breadcrumb effect": high model confidence on technique-specific tokens deep within a span (e.g., I-flag_waving) propagates backward through transition parameters $\mathbf{A}$, pulling ambiguous initial boundary tokens into the corresponding B-flag_waving state. While this eliminates pipeline cascading errors, expanding the output space to 17 classes re-introduces data sparsity and increases susceptibility to overfitting
+This structure produces a "breadcrumb effect": high model confidence on technique-specific interior tokens deep within a span (e.g., I-flag_waving) propagates backward through transition parameters $\mathbf{A}$, pulling ambiguous initial boundary tokens into the corresponding B-flag_waving state. Although this eliminates pipeline error cascades, expanding the output space to 17 sparse classes increases susceptibility to overfitting.
 
 Table 6: Complete 17-Class BIO Tagset Mapping (Variation 2)
 
@@ -582,9 +576,9 @@ Table 6: Complete 17-Class BIO Tagset Mapping (Variation 2)
 
 ## 5.4 Evaluation Framework: Cascading Window Qualification Router
 
-Evaluating Task 2 requires assessing both span boundary precision and technique classification accuracy. Because human annotators exhibit subjective boundary disagreement ($\gamma = 0.60$ in Da San Martino et al., 2020), strict exact-matching penalizes minor offset variations. Conversely, simple partial token intersection risks validating severely skewed predictions. 
+Evaluating Task 2 requires assessing both span boundary precision and technique classification accuracy. Because human annotators exhibit subjective boundary disagreement ($\gamma = 0.60$ in Da San Martino et al., 2020), strict exact-matching penalizes minor offset variations. Conversely, simple partial token intersection risks validating severely skewed predictions.
 
-To resolve this, we implement a Cascading Length Window-Based Qualification Router. Boundary tolerance scales dynamically based on gold span token length ($L_{\text{gold}}$). A predicted span $\hat{S} = [\hat{t}_{\text{start}}, \hat{t}_{\text{end}}]$ qualifies for classification evaluation if and only if both start and end offsets fall within the allowable token window $\delta(L_{\text{gold}})$ of the gold span $S_{\text{gold}} = [t_{\text{start}}, t_{\text{end}}]$:
+To resolve this, we implement a Cascading Length Window-Based Qualification Router. Boundary tolerance scales dynamically based on gold span token length ($L_{\text{gold}}$). A predicted span $\hat{S} = [\hat{t}_{\text{start}}, \hat{t}_{\text{end}}]$ qualifies for technique classification evaluation if and only if both start and end offsets fall within the allowable token window $\delta(L_{\text{gold}})$ of the gold span $S_{\text{gold}} = [t_{\text{start}}, t_{\text{end}}]$:
 
 $$\vert{}\hat{t}_{\text{start}} - t_{\text{start}}\vert{} \le \delta(L_{\text{gold}}) \quad \text{and} \quad \vert{}\hat{t}_{\text{end}} - t_{\text{end}}\vert{} \le \delta(L_{\text{gold}})$$
 
@@ -610,34 +604,267 @@ Once boundary qualification is determined, instances are routed to compute the t
 - Automatically generates a False Negative ($\text{FN}$) for $c_{\text{gold}}$
 - If a hallucinated span was predicted over neutral text, running the extracted representation through the model generates a False Positive ($\text{FP}$) for $c_{\text{pred}}$.
 
-During inference, every error instance is logged into a diagnostic JSON structure tracking whether failures stem from Boundary Localization Failures (right words, wrong offsets) or Technique Misclassification Failures (qualified boundary, wrong class). This granular logging provides the diagnostic evidence needed for the experimental analysis.
+During evaluation, prediction errors are recorded into a structured JSON log (task2_diagnostic_error_log.json). This logs whether misclassifications stem from Boundary Localization Failures (correct technique, offset outside $\delta$) or Technique Misclassification Failures (qualified boundary, wrong technique class), providing the diagnostic visibility needed for qualitative error analysis.
 
 ---
 
 ### Execution Plan for Code & Experiments
 
-#### Step 1: Data Preparation & Pre-processing
-- Load propaganda_train.tsv and propaganda_val.tsv.
-- Parse <BOS> and <EOS> tags from tagged_in_context strings to convert characters into token-level BIO labels (B-, I-, O).
-- Construct two dataset variants:
-    1. **3-Class Dataset (Variation 1):** Labels mapped to `B-Prop`, `I-Prop`, `O`.
-    2. **17-Class Dataset (Variation 2):** Labels mapped to `B-{technique}`, `I-{technique}`, `O`.
+#### Step 1: Data Parsing & BIO Conversion:
+- Ingest raw TSV splits (propaganda_train.tsv, propaganda_val.tsv)
+- Extract <BOS> and <EOS> delimiters from input text to map character spans to token-level BIO tag sequences.
+- Generate two dataset target formats:
+    1. 3-Class BIO Dataset (B-Prop, I-Prop, O) for Variation 1.
+    2. 17-Class BIO Dataset (B-{technique}, I-{technique}, O) for Variation 2.
 
-#### Step 2: Topological Baseline Implementation (Task2TopologicalBaseline)
-- Build feature extractor for $\mathbf{x}_{\text{topo}}$ (Token/char lengths, mean/variance of word lengths, cap ratio, punc density, digit ratio).
-- Train PyTorch MLP to output $P(\text{prop})$ logits and boundary ratio outputs $(\hat{R}_{\text{start}}, \hat{R}_{\text{end}})$. 
+#### Step 2: Stochastic Baseline Evaluation:
+- Execute the uniform random span and class generator (SEED = 142).
+- Run predictions through the Cascading Qualification Router to establish baseline benchmark scores.
 
-#### Step 3: DeBERTa-CRF Tagger Implementation
-- Load pre-trained microsoft/deberta-v3-base tokenizer and model backbone via HuggingFace transformers and pytorch-crf
-- Build custom PyTorch Module combining DeBERTa sequence output layer with a Linear-Chain CRF decoding layer.
-- Train Variation 1 Tagger (3-class) and Variation 2 Tagger (17-class) using Negative Log-Likelihood loss from the CRF layer.
+#### Step 3: Encoder-CRF Model Training:
+- Instantiate microsoft/deberta-v3-base backbones paired with linear-chain CRF decoding layers using PyTorch.
+- Variation 1: Train Stage 1 tagger (3-class) using CRF Negative Log-Likelihood. Extract gold training spans, mean-pool subword representations ($\mathbf{v}_{\text{span}} \in \mathbb{R}^{768}$), and train the 8-class Stage 2 MLP head.
+- Variation 2: Train the joint 17-class DeBERTa-CRF tagger end-to-end. Decoded sequences are processed via Viterbi trellis extraction during validation and inference.
 
-#### Step 4: Variation 1 Stage 2 Classification Head (DebertaSpanClassifier)
-Extract gold propaganda spans from training text, mean-pool their DeBERTa subword embeddings, and train a 768D $\rightarrow$ 8-class PyTorch MLP head. 
+#### Step 4: Qualification Evaluation & Diagnostic Export:
+- Evaluate model outputs against gold test annotations via the Cascading Qualification Router.
+- Calculate class-level Precision, Recall, Macro-$F_1$, and export error distributions to task2_diagnostic_error_log.json.
 
-#### Step 5: Cascading Window Qualification Evaluator & Logger
-Implement Python evaluator function applying the token-length tolerance logic ($\delta \in [0, 10]$).
+---
 
-Route predicted spans, evaluate TPs/FPs/FNs, compute terminal Macro-$F_1$, and save a structured JSON error log (task2_diagnostic_error_log.json) capturing boundary vs. technique failures. 
+Important things to talk about: 
+- Hyperparam Optimization and selections
+- Distinction between span loss and eval matric
+- Subword to bio position mapping using huggingface indexes and offsets
+- FN and FP double count for where model get span wrong. # the model predicts a span with didnt qualify as a  # predicted something pred["technique"] on a "neutral" span # TODO: this may be a limitation if the boundary settings are not correct # misclassification: correct token boundaries, wrong label. # boundary failure: span localization missed entirely
+- subword token length seqs do not exceed derberta max length
+- 
+
+5.1 Context Window Preservation Analysis
+A critical bottleneck in Transformer-based sequence labeling is catastrophic truncation. If input texts exceed the architecture's maximum context window, trailing text containing active propaganda spans is permanently severed, corrupting token-to-label alignment.Rather than imposing an arbitrary, aggressive hard-cap (e.g., 256 tokens) that risks dropping samples, an empirical subword distribution analysis was conducted using the DeBERTa-v3-xsmall tokenizer. Across all 2,560 instances, sequence lengths exhibited a mean of $32.95$ subwords and an extreme 99th percentile of $101.8$ subwords. Crucially, the absolute maximum length observed was $168$ tokens. Because $100\%$ of the dataset fell well below DeBERTa's standard capacity of $512$ tokens, preserving the full context window (max_length=512) guaranteed zero information loss and total span preservation during training and evaluation.
+
+
+```
+    def forward(self, input_ids, attention_mask, tags=None):
+        outputs = self.deberta(input_ids=input_ids, attention_mask=attention_mask)
+        sequence_output = outputs.last_hidden_state     # 384 dims for each token: (batch_size, sequence_length, hidden_size)
+        emissions = self.hidden2tag(sequence_output)    
+        #   transformer reps into BIO confidence scores
+        #   MM across each token: 384-dim token 1 and mutli by linear weights
+        #   (batch_size, sequence_length, 17)
+        #   outputs 17 raw, unnormalized floating-point numbers (emissions)
+        #   deberta strength token belongs to 17 bio classes
+
+        if tags is not None:
+            # Training: uses the provided 'tags' to compute the Negative Log-Likelihood Loss
+            loss = -self.crf(emissions, tags, mask=attention_mask.byte(), reduction='mean')
+            return loss
+        else:
+            # Inference: Viterbi decoding to predict tags
+            return self.crf.decode(emissions, mask=attention_mask.byte())
+```
+
+
+##### Baseline Results. 
+- Really low, almost non-existent, most completely wrong
+- This is to be extreme as the task is really hard and this random guess is so low
+- Only qualify with span is in range + classificaiton is correct. 
+- Span range allows toleranace but otherwise a fairly strict eval. No partial credit
+- The extreme low result prove that the task is non-trivial
+- Provides a baseline which means all learning is genuinely linguistic, there is not scope for luck
+
+---
+
+##### Tagger Analysis
+"To isolate whether model failures stemmed from boundary localization or semantic classification, we performed a diagnostic audit on all prediction attempts:Localization Success Rate: Of all $N$ predicted spans, $X\%$ successfully qualified within the cascading tolerance window ($\pm \delta$).Conditional Technique Accuracy: Among the boundary-qualified spans, the model achieved a classification accuracy of $Y\%$ across the 8 propaganda techniques.Error Distribution: Of the total system penalties, $A\%$ were caused by boundary localization failures, $B\%$ by technique misclassifications on valid spans, and $C\%$ by hallucinated spans on neutral text."*
+
+---
+
+#### DEBERTA Hyper Params
+
+Frozen:
+- It acts as a static feature extractor. 
+- It converts tokens to vectors, but its internal 384-dimensional representations never adapt to the propaganda dataset.
+- Very fast, low GPU memory usage, but usually yields lower performance on domain-specific tasks.
+
+Unfrozen:
+- In practice for sequence tagging tasks, unfreezing DeBERTa (fine-tuning) is standard.
+- To prevent breaking DeBERTa's pretrained knowledge while training the newly initialized hidden2tag and crf layers, it is common to use differential learning rates:
+- Unfrozen DeBERTa (Full End-to-End Fine-Tuning)
+- It adapts its internal attention weights specifically to recognize linguistic nuances of propaganda (e.g., emotional charge, logical fallacies).
+
+Could talk about the unfronzen as DOMAIN ADPATION
+
+Could be scope for the experiement here.
+
+---
+
+#### Eval TNs
+
+Evaluation & The True Negative (TN) ExclusionIn sequence tagging tasks like propaganda span detection, neutral background tokens (O / not_propaganda) overwhelmingly outnumber active propaganda spans. Including True Negatives in primary evaluation metrics leads to severe class-imbalance distortion; for example, standard accuracy rewarding a dummy model that predicts zero spans with an artificially inflated score:
+
+$$\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}$$
+
+To measure performance strictly on target spans without rewarding trivial background predictions, models are evaluated using the $F_1$ score derived solely from Precision and Recall:
+
+$$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}, \quad \text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+
+$$F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$
+
+Because True Negatives ($\text{TN}$) are omitted from these equations, evaluation pipelines explicitly ignore joint neutral instances (continue) to prevent flooding the metrics engine with non-target tags.
+
+---
+
+#### DeERTA Learning Rate
+
+DeBERTa has already been trained on billions of tokens. Large learning rates (like 1e-3 or 1e-2 used in standard MLPs) cause catastrophic forgetting, destroying DeBERTa's pre-trained language representations and causing training loss to diverge.
+
+When fine-tuning Transformer backbones, standard empirical learning rates fall strictly within the $[1\text{e-}5, 5\text{e-}5]$ range.
+
+As discussed previously, because model.parameters() is used here, $2 \times 10^{-5}$ is applied uniformly across both DeBERTa and the top layers (hidden2tag and crf). A common optimization refinement is using differential learning rates ($2 \times 10^{-5}$ for DeBERTa, $1 \times 10^{-3}$ for the CRF)
+
+---
+
+#### Why Batching is Crucial for DeBERTa + CRF
+Running instance-by-instance (batch_size = 1) introduces three major problems:Extreme Noisy Gradients: A single sentence might contain unusual phrasing or an edge case. Updating weights on one sentence at a time causes wild gradient swings, making convergence noisy and unstable.GPU Underutilization (Massive Slowdown): Modern GPUs (or even CPUs) derive their speed from parallel matrix multiplication. Processing 1 sentence at a time leaves 95%+ of your hardware compute power idle.Loss Dynamics: A batch averages the loss across multiple sentences, providing a smooth, reliable gradient direction ($\nabla \mathcal{L}$) towards local minima.
+
+---
+
+#### Sequence Tagger Optimization & Loss Formulation
+In joint sequence tagging, the model evaluates span boundaries and propaganda techniques simultaneously by mapping every token to a unified tag within a $17$-class BIO scheme (e.g., B-loaded_language, I-loaded_language, O). Given a sequence of $T$ subwords, DeBERTa and the linear head produce an emissions matrix $\mathbf{E} \in \mathbb{R}^{T \times 17}$, where $\mathbf{E}_{t, y_t}$ represents the unnormalized emission score for tag $y_t$ at position $t$. The CRF layer adds a learned transition matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$, where $\mathbf{A}_{y_t, y_{t+1}}$ scores the likelihood of transitioning from tag $y_t$ to $y_{t+1}$. The global score $S(\mathbf{x}, \mathbf{y})$ for a target tag sequence $\mathbf{y}$ is the sum of emissions and transitions across the sentence:
+
+$$S(\mathbf{x}, \mathbf{y}) = \sum_{t=1}^{T} \mathbf{E}_{t, y_t} + \sum_{t=1}^{T-1} \mathbf{A}_{y_t, y_{t+1}}$$
+
+To convert this score into a probability distribution over all possible sequence paths $\mathbf{y}' \in \mathcal{Y}$, the CRF uses the Softmax function. Training optimizes the parameters by minimizing the Negative Log-Likelihood ($\mathcal{L}_{\text{CRF}}$):
+
+$$\mathcal{L}_{\text{CRF}} = -\log P(\mathbf{y} \mid \mathbf{x}) = \log \left( \sum_{\mathbf{y}' \in \mathcal{Y}} \exp(S(\mathbf{x}, \mathbf{y}')) \right) - S(\mathbf{x}, \mathbf{y})$$
+
+Here, the dynamic programming Forward Algorithm efficiently computes the partition function $\sum_{\mathbf{y}' \in \mathcal{Y}} \exp(S(\mathbf{x}, \mathbf{y}'))$. Minimizing $\mathcal{L}_{\text{CRF}}$ simultaneously maximizes the score of the correct span-technique sequence while penalizing invalid transitions and misclassified techniques across alternative paths. Because the loss sums token-level log-likelihoods per sentence and accumulates across the unscaled training corpus, initial loss values appear large but drop sharply as transition constraints are learned.
+
+---
+
+#### Task 2 Regularization & Optimization Stabilization
+
+To prevent overfitting and maintain generalization during end-to-end fine-tuning, Task 2 incorporates regularization across the optimization, architectural, and structural levels. At the optimization level, gradient clipping ($\text{max\_norm}=1.0$) constrains backpropagation updates to prevent gradient explosion and parameter instability. To safeguard pre-trained linguistic knowledge, differential learning rates apply a conservative $2 \times 10^{-5}$ update rate to the DeBERTa backbone—preventing catastrophic forgetting—while allowing top classification layers to adapt rapidly. Structurally, the Linear-Chain CRF acts as a sequence-level regularizer by learning a $17 \times 17$ transition matrix that penalizes illegal tag sequences (such as transitioning directly from O to I-loaded_language), thereby constraining the output search space to valid span structures. Finally, built-in attention dropout within the DeBERTa backbone randomly deactivates neural connections during training passes to prevent subword feature co-adaptation.
+
+---
+
+#### Constrained CRF Transition Matrix Initialization
+
+To enforce BIO sequence grammar directly within the Linear-Chain CRF, we pre-initialized its trainable transition matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$ with hard structural constraints. Specifically, transitions originating from neutral text (O) directly into continuation tags (I-technique), as well as mid-span transitions between distinct technique types, were manually set to a large negative score ($-10\,000.0$) prior to model fine-tuning. In both training and Viterbi decoding, this penalty scales candidate sequence path scores such that illegal transitions receive a probability of virtually zero ($e^{-10000} \approx 0$). Consequently, the model is mathematically forced to initiate every predicted propaganda span strictly through a B- tag, eliminating orphaned I- sequences and ensuring output predictions conform to valid span boundaries
+
+---
+
+#### Why Epochs Aren't Typically Included in Hyperparameter Search Grids
+
+In machine learning workflows, the number of epochs is rarely included in hyperparameter search grids because it simply measures time spent in optimization rather than controlling how the model learns. Treating epochs as a fixed variable in a search grid is largely redundant because Early Stopping dynamically tracks validation metrics (such as Validation Loss or Macro-$F_1$) to automatically halt training and save the optimal model checkpoint at the exact moment performance peaks. Furthermore, required epoch counts are strongly dependent downstream variables dictated by core hyperparameters like learning rate and batch size—meaning a fixed epoch limit suited for one trial might heavily underfit or overfit another. Relying on Early Stopping across trials instead of grid-searching epoch counts avoids wasting compute cycles on degraded iterations and allows the training process to halt as soon as convergence is reached.
+
+---
+
+#### Constraining Inter-Technique Transitions in Multi-Class BIO Tagging
+
+While pre-initializing the CRF transition matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$ to penalize $\text{O} \to \text{I-technique}$ transitions prevents orphaned continuation tags, homogeneous single-span datasets require an additional structural constraint to prevent mid-sequence technique drift. Without explicit restrictions, strong token-level emission logits from the DeBERTa backbone can overpower weak initial transition penalties, causing the Viterbi decoder to prematurely jump between distinct technique tags mid-span (e.g., $\text{I-doubt} \to \text{I-flag\_waving}$). To guarantee absolute sequence consistency, we enforce a strict technique-continuity rule directly within the CRF transition matrix by assigning a $-10\,000.0$ penalty to any inter-technique transition where $\text{technique}_A \neq \text{technique}_B$. While DeBERTa continues to output unconstrained contextual score distributions across all tags, this modification strictly restricts the CRF's decoding search space, ensuring that every predicted span maintains a single, unbroken technique label from its initial $\text{B-}$ tag through to its $\text{O}$ termination.
+
+---
+
+#### Task 2 Structure
+
+This half of the project is much more complex and involved modelling. Could take up huge amounts of the word count if trying to analysis seperately. 
+
+Structure the project as: Baseline to set the scene, Var2 (Integrated) as the main approach. Explain most of the details and justifications based on this impleentation
+
+Var1, seperated, is framed as an extension as Var2. Whilst less grandular in the label portion is is an ensemble appraoch so more complicated. 
+
+Compute Eval and Analysus on Var2 and repeat on Var1 to compare differences. 
+
+---
+
+#### Hyperparameter Sweep Considerations for Variation 2
+
+To optimize the 17-class joint DeBERTa-CRF tagger while respecting strict compute constraints, we structured a minimal fidelity-based search space evaluated over 5 epochs. Given that transformer fine-tuning for sequence labeling exhibits high sensitivity to optimization dynamics, the sweep tests three distinct configurations—Conservative, Moderate, and Aggressive—varying the backbone learning rate ($1\times10^{-5}$ to $5\times10^{-5}$), linear projection and CRF head learning rates ($5\times10^{-4}$ to $2\times10^{-3}$), and simulated batch sizes via gradient accumulation ($16$ to $32$). Restricting the sweep horizon to 5 epochs provides sufficient iterations for both DeBERTa’s contextual representations and the constrained $17\times17$ CRF transition matrix to stabilize, allowing us to accurately determine the top-performing learning rate profile based on Validation Macro-$F_1$ before scaling the optimal configuration to a full 10-epoch training run. 
+
+- Run 1 (Conservative): 1e-5 ($0.00001$)
+- Run 2 (Moderate): 2e-5 ($0.00002$)
+- Run 3 (Aggressive): 5e-5 ($0.00005$)
+
+Notice how your sweep pairs the backbone LR with significantly higher head LRs ($5\text{e-}4\text{--}2\text{e-}3$)
+This $1:50$ ratio between the backbone and head learning rates is optimal because:
+- The Heads start from scratch: The linear projection layer and CRF transition matrix are initialized with random noise/penalties, so they need large gradient steps to quickly learn tag rules.
+- The Backbone is pre-trained: DeBERTa only needs minor, delicate adjustments to align its features with the CRF emissions.
+
+
+---
+
+#### Training Loss Function
+
+To train the joint DeBERTa-CRF architecture, the loss function evaluates sequence-level probabilities rather than independent, token-level classifications. During the forward pass, DeBERTa extracts contextual token embeddings that a linear projection layer converts into raw emission scores $\mathbf{E} \in \mathbb{R}^{T \times 17}$ for each token across all 17 BIO tags. The Linear-Chain CRF then computes the unnormalized joint score for the gold-standard tag path $\mathbf{y}$ by summing these token emissions with the transition scores from its constrained parameter matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$. To minimize total error, the model computes the Negative Log-Likelihood (NLL) of the correct tag sequence: 
+
+$$\mathcal{L}_{\text{CRF}} = -\log P(\mathbf{y} \mid \mathbf{X}) = -\left( \text{Score}(\mathbf{X}, \mathbf{y}) - \log \sum_{\mathbf{y}' \in \mathbf{Y}} \exp(\text{Score}(\mathbf{X}, \mathbf{y}')) \right)$$
+
+where the partition function (the denominator sum over all valid sequences $\mathbf{Y}$) is efficiently calculated using the Forward Algorithm. During backpropagation, this NLL loss penalizes both weak token emissions from DeBERTa and invalid sequential transitions, dynamically driving gradient updates back through both the CRF transition matrix and the transformer backbone simultaneously. 
+
+we are calculating the Negative Log-Likelihood (NLL) of the correct (gold) tag path compared to all possible paths.
+
+The Score of any specific tag path $\mathbf{y}$ across a sentence is simply a single number calculated by summing two things together:
+
+$$\text{Score}(\text{Sentence}, \text{Path}) = \sum \text{Token Emissions} + \sum \text{CRF Transition Scores}$$
+
+Token Emissions (from DeBERTa + Linear Head): How strongly DeBERTa feels a specific token (e.g., token #4) belongs to a specific tag
+
+Transition Scores (from CRF Matrix): How likely it is to move from one tag to another (e.g., moving from B-doubt to I-doubt has a high score; moving from O to I-doubt has a score of $-10\,000.0$)
+
+In log-space math, subtracting two log-values is the exact same thing as dividing two raw probabilities:
+
+$$\log \left( \frac{A}{B} \right) = \log(A) - \log(B)$$
+
+So when the loss equation writes:
+
+$$\mathcal{L}_{\text{CRF}} = - \Big( \underbrace{\text{Score}(\mathbf{X}, \mathbf{y}_{\text{gold}})}_{\text{Numerator: Gold Path Score}} - \underbrace{\log \sum_{\mathbf{y}'} \exp(\text{Score}(\mathbf{X}, \mathbf{y}'))}_{\text{Denominator: Log-Sum of ALL Possible Paths}} \Big)$$
+
+It is literally calculating:
+
+$$\mathcal{L}_{\text{CRF}} = -\log \left( \frac{\text{Probability of the Gold Path}}{\text{Sum of Probabilities of ALL Possible Tag Combinations}} \right)$$
+
+1. Gold Path Score: The model calculates how good the true target path looks using DeBERTa's emissions and the CRF's transitions.  
+2. All Paths Score (Partition Function): The CRF uses the Forward Algorithm to sum up the scores of every conceivable path combination (valid or invalid).  
+3. The Subtraction: By taking $\text{Score}_{\text{gold}} - \text{Score}_{\text{all}}$, the loss calculates the exact probability percentage assigned to the gold path.
+4. Optimization Goal: Backpropagation tries to make the Gold Path Score as high as possible while pushing down the scores of all wrong paths!
+
+---
+
+#### Justification for a Closed-World 8-Class Formulation
+
+In designing the classification head for Variation 1, we deliberately restrict the taxonomy to a closed-world assumption of 8 distinct propaganda techniques, omitting an explicit not_propaganda (background/null) class. This architectural choice is driven by two theoretical and computational safeguards. First, introducing a background class creates severe semantic "weight-muddying." Because background text is inherently diverse, unstructured, and non-uniform, forcing the network to optimize gradients against a catch-all category directly conflicts with the crisp, mutually exclusive boundaries required for the 8 specific propaganda techniques, ultimately degrading feature representation learning. Second, and more importantly, the responsibility of identifying background text is already handled upstream by our 3-class boundary head (O, B-Prop, I-Prop).
+
+By separating the sequence segmentation task (identifying where propaganda occurs via the boundary CRF) from the categorical identification task (identifying what technique it is via the 8-class MLP head), background suppression is mathematically enforced through soft-broadcast composition before ever reaching the CRF. When the boundary head assigns a token to the O (background) state, its high negative boundary scores effectively neutralize any active class outputs from the MLP head. This decoupled design keeps the MLP's decision space clean, specialized, and immune to the class-imbalance and gradient-conflict issues typical of open-world background classification.
+
+---
+
+#### Training the classifer head
+Indirect Supervision via Global Sequence Loss in Dual-Head Architectures
+
+In our Variation 1 dual-head architecture, the 8-class technique MLP head is trained without direct access to isolated token-level technique labels. Instead, it receives supervision indirectly through the unified 17-class sequence-level Negative Log-Likelihood (NLL) loss. During training, when the final Viterbi decoding path deviates from the gold-standard sequence, the global loss generates gradient signals that propagate backward through our broadcast addition step. This indirect feedback instructs the MLP head to adjust its internal weights so that its 8-class technique logits align with the true underlying propaganda categories. Consequently, the classification head learns its specialized tasks cooperatively, guided by the boundary head's localization anchor and optimized via the global sequence-level objective.
+
+---
+
+#### Justification for Hyperparameter Transferability
+Carrying over the identical hyperparameter configuration (Backbone LR: $1\times10^{-5}$, Heads LR: $5\times10^{-4}$, and Batch Size: $16$) from Variation 2 to Variation 1 is methodologically justified by our shared architectural and optimization design. Because both models utilize the same pre-trained DeBERTa-v3-xsmall backbone, they share identical fine-tuning dynamics, requiring a conservative backbone learning rate to preserve pre-trained linguistic representations while allowing larger gradient steps for randomly initialized heads. Furthermore, because Variation 1's dual-head outputs are mathematically compiled into a 17-class BIO tensor that optimizes against the exact same Linear-Chain CRF loss function, the gradient backpropagation mechanics remain constant. Most importantly, holding these parameters fixed establishes a rigorous, controlled experimental framework, ensuring that any performance divergences between the two models stem solely from structural distinctions rather than optimization bias. 
+
+> While a localized hyperparameter search for Variation 1 could theoretically optimize its dual-head capacity, holding the configuration strictly constant isolates the architectural mechanics as the sole independent variable, ensuring that any performance delta reflects true structural differences rather than tuning bias.
+
+---
+
+
+##### Random Baseline Analysis; too complex
+
+- Demonstate that a random guess might be able to guess the technqiue. 
+- even this is a conditional guess. If less than prop, then random guess on 8 techniques 
+- (put together formula for this)
+- Work out if conditional makes it better than random as condition is based on training split
+
+
+- However, demonstate that span element is just too advances for random guessing. 
+- Probably no matches but even if it did match is needs to pass the conditional guess from above
+- Try and put together the formula that dictates span guess + condition technique guess
 
 ---
