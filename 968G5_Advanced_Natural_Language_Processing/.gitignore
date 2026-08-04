@@ -1,2 +1,6 @@
-assignment_summer/code/final_models/
-assignment_summer/code/param_sweep
+# Ignore everything inside final_models, but keep the folder itself
+assignment_summer/code/final_models/*
+!assignment_summer/code/final_models/.gitkeep
+
+assignment_summer/code/param_sweep/*
+!assignment_summer/code/param_sweep/.gitkeep
