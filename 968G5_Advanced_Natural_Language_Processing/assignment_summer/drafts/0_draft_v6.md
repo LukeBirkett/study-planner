@@ -1000,3 +1000,35 @@ In contrast, Variation 2’s 17-class tagset expands the state space to give the
 
 ---
 
+
+#### Task 2 analysis
+
+##### Phase 1: Structural Localization Analysis
+The Phase 1 structural audit evaluates spatial routing success across all 640 validation instances prior to technique assignment. Both neural variants demonstrate exceptional background filtering, correctly ignoring non-propaganda text with minimal false-positive over-triggering ($329\text{ TN}$ for Variation 1; $327\text{ TN}$ for Variation 2). However, the two architectures diverge when locating active propaganda. Variation 1 relies on a simplified 3-class tagset that proves slightly more sensitive for initial span detection, yielding fewer complete omissions ($101\text{ FN}$) than Variation 2 ($114\text{ FN}$). Conversely, Variation 2 exhibits tighter spatial boundary control; by leveraging its 17-class joint BIO tagset, it achieves a higher count of boundary-qualified spans ($102\text{ Boundary TPs}$ vs. $93\text{ Disqualified}$) compared to Variation 1 ($99\text{ Boundary TPs}$ vs. $109\text{ Disqualified}$). It is crucial to note that these Phase 1 "Qualified Spans" represent spatial routing passes rather than terminal task successes, as a spatially qualified span can still be misclassified downstream.
+
+##### Phase 2: 'Near-Miss' Semantic Signal Analysis
+Phase 2 isolates the subset of instances where a model successfully detected a propaganda target but failed the character-level $\delta$-tolerance boundary rule. Evaluating multi-class accuracy across these disqualified windows demonstrates that both models preserve substantial latent semantic signal despite spatial offsets, achieving $31.18\%$ near-miss accuracy for Variation 2 ($93\text{ spans}$) and $30.28\%$ for Variation 1 ($109\text{ spans}$). This diagnostic proves that boundary misalignment is the primary bottleneck rather than technique blindness. Under the evaluation framework, these offset predictions trigger a double penalty—counting as both a False Positive for the misaligned span and a False Negative for the target—which severely suppresses terminal Macro-F1 despite the presence of correct semantic representations within the offset window.  
+
+> Limitations + Future Work: Tolerance, Data Augmentation in training
+
+##### Phase 3: Semantic Ceiling Comparison Analysis
+Phase 3 measures multi-class technique accuracy strictly on the spatially qualified spans from Phase 1, evaluating how effectively each model classifies candidates that successfully met the $\delta$-tolerance window relative to the Stage 2 Oracle benchmark ($0.5178$). On these spatially valid targets, Variation 2 achieves a semantic accuracy of $0.5098$ across its $102\text{ qualified spans}$, recovering $98.5\%$ of the theoretical performance ceiling with a negligible Oracle Gap of $-0.0080$. In contrast, Variation 1 achieves $0.4848$ accuracy across its $99\text{ qualified spans}$, resulting in a wider gap of $-0.0330$. Because Variation 1 pools representations over predicted Stage 1 spans rather than ground-truth boundaries, even allowable boundary offsets introduce surrounding background noise that dilutes the pooled embedding passed to the Stage 2 classifier. 
+
+> This dilution occurs because Stage 2 computes a single representational vector for a candidate phrase by mean-pooling (averaging) the DeBERTa subword embeddings across the predicted token span. When Stage 1 provides a clean, ground-truth span—such as "toxic narrative"—the averaging process operates exclusively on dense, propaganda-rich token representations. However, when Stage 1 predicts a slightly misaligned boundary that includes surrounding context—such as "the toxic narrative was"—the pooling operation is forced to average the core technique tokens alongside neutral background words like "the" and "was". Even if the spatial offset is small enough to pass the $\delta$-tolerance window, incorporating uninformative background vectors shifts the resulting pooled embedding in feature space, diluting its semantic signal and making it substantially harder for the classifier head to output the correct technique label.
+
+This also demonstates a fundemental difference between the two appraochs. Var2 technicially used the whole seqeunce in its "prediction" where as Var2 uses only the snippet, albiet a contextualized one, which is open to dilutaiton, or even restriction, with a inaccuracy predictions, respresneting a vulnerability between the two appraoches. 
+
+By forcing Stage 2 to make a classification decision solely on a isolated, pooled snippet vector, Variation 1 loses the global structural context that Variation 2 retains throughout joint decoding. If that isolated snippet contains even a small amount of boundary noise, Stage 2 has no surrounding sequence context left to help recover the correct label.
+
+Variation 1 (Local Snippet Bottleneck): Even though DeBERTa initially contextualizes the full input sentence, Variation 1's Stage 2 classifier hard-slices the sequence down to just the predicted subword range $[p_{start}, p_{end}]$ and mean-pools those specific vectors. Once sliced, any sequence-level dependencies or structural cues from the rest of the sentence are discarded.
+
+Variation 2 preserves sentence-wide context from end to end. The Linear-Chain CRF operates over the entire token sequence simultaneously. It does not isolate or slice out a candidate snippet; instead, Viterbi decoding computes the single globally optimal path for every token in the sentence at once. A boundary decision at token 3 is mathematically linked to semantic emissions at token 10.
+
+Variation 2 isn't "reading the whole sentence" to make a single local prediction in a multi-class pooling sense; rather, its architecture retains sequence-level information during decoding instead of discarding it.
+
+##### Comparative Synthesis: Variation 2 vs. Variation 1
+Overall, Variation 2 proves to be the superior end-to-end architecture, outperforming Variation 1 in terminal Macro-F1 ($0.2034$ vs. $0.1684$) and achieving vastly superior Macro Precision ($0.2914$ vs. $0.2000$). By predicting boundaries and technique labels jointly, Variation 2 eliminates cascading error propagation, achieves tighter spatial qualification ($102\text{ Spans}$ vs. $99\text{ Spans}$), and preserves unpolluted pooled embeddings that convert spatially qualified spans into end-to-end True Positives far more effectively. Conversely, Variation 1's sole empirical advantage lies in its slightly higher sensitivity for detecting span presence. By reducing the localization task to a coarse 3-class schema, Variation 1 records fewer complete omissions ($101\text{ FN}$ vs. $114\text{ FN}$), making its Stage 1 tagger slightly better at flagging that some propaganda exists, even if its decoupled Stage 2 head ultimately struggles to bound and classify it accurately.
+
+
+
+
