@@ -868,3 +868,135 @@ Carrying over the identical hyperparameter configuration (Backbone LR: $1\times1
 - Try and put together the formula that dictates span guess + condition technique guess
 
 ---
+
+##### Linear Merge Option
+
+The choice to retain a unified 17-class CRF is crucial because it preserves strict sequence-level BIO constraints across the entire dataset without decoupling the boundary detection and technique classification tasks. While multi-task learning or cascading pipelines split these responsibilities into separate, decoupled stages, maintaining a joint 17-class tagset forces the model to learn both where a propaganda span begins and ends and what specific technique it represents within a single sequence decoding framework.
+
+To explore alternative ways of merging these tasks while still keeping the end-to-end 17-class CRF pipeline, you can replace Variation 1's rigid additive gate with a concatenation and linear projection (late fusion) approach. In this setup, the outputs of the boundary and technique heads are concatenated and passed through a trainable linear layer to map them into the 17-class emission space. Because this introduces learnable weight parameters rather than a fixed mathematical sum, backpropagation flows seamlessly from the CRF loss through the linear projection and splits across both heads simultaneously, allowing the network to dynamically learn how to combine the features end-to-end.
+
+---
+
+#### Hyper Sweep for Var 1
+In this hyperparameter optimization pass for Variation 1, we addressed a core architectural asymmetry: while a standard linear projection head applies a single layer of transformations, our dual-head setup combines a shallow 3-class boundary projection with a deeper, multi-layer 8-class technique MLP (384 -> 64 -> 8). Treating both heads under a single unified learning rate forces components with different model capacities and convergence dynamics to update at the exact same velocity. To resolve the observed diagnostic failure—where the model successfully localized spans but misclassified techniques—we decoupled the classification layers into independent optimizer parameter groups.
+
+We designed a random search hyperparameter sweep targeting three critical levers: boundary_lr, technique_lr, and technique_dropout. By decoupling boundary_lr (tied to the CRF transition matrix) from technique_lr, we allowed the deeper MLP to step at a different rate than the boundary detector, preventing one head from dominating or destabilizing the additive broadcast join (B_prop + Tech). Furthermore, introducing an adjustable dropout rate directly into the technique MLP provided structural regularization against overfitting on our subset data. The backbone DeBERTa learning rate was held constant at a conservative 1e-5 to protect pre-trained contextual representations.
+
+To ensure computational efficiency without sacrificing evaluation integrity, the sweep was executed across a 10% modulo validation split (idx % 10 == 0) generated deterministically from the training set, running between 3 and 5 epochs per trial. This rapid proxy evaluation provided a reliable signal on head synchronization and generalization ability, allowing us to isolate the optimal learning rate ratio and dropout severity needed to lift multi-class F1 performance before committing to a full-scale training run.
+
+> did a random sweep of 6 instead of full 80 perms. logical grid setup mitigate this parsesness. well specificed params
+
+The theory behind assigning a higher learning rate to the technique head stems directly from the asymmetry in architectural capacity and learning objectives between the two components. While the boundary head is a shallow linear layer whose primary role is to detect coarse-grained span boundaries (O, B, I) using well-aligned pre-trained features, the technique head is a deeper, multi-layer MLP (384 -> 64 -> 8) with non-linear activation functions that must learn the subtle linguistic nuances of eight distinct propaganda classes entirely from scratch. Because this multi-layer structure requires a larger step size to escape flat optimization landscapes and make meaningful progress, a higher learning rate gives the technique classifier the necessary momentum to adapt, preventing it from lagging behind the already-competent boundary detector.
+
+---
+
+#### DeCoupling Var 1
+
+The decision to transition Variation 1 from a single-stage, joint additive CRF into a decoupled two-stage cascading pipeline marks a critical evolution in our system architecture. Initially, Variation 1 sought to perform joint span localization and fine-grained technique classification within a unified 17-class CRF by adding the logits of a 3-class boundary head and an 8-class technique MLP. While this joint setup was theoretical and mathematically appealing—preserving a uniform 17-class CRF across all experimental variations and preventing cascading exposure bias—empirical validation revealed severe optimization pathologies. Joint decoding suffered from destructive gradient interference, where misclassifications in the deeper technique MLP generated noisy negative logits that depressed the emission matrix, causing the CRF’s Viterbi decoder to collapse into predicting background noise (O) across entire sequences.
+
+To resolve these optimization bottlenecks, we decoupled the architecture into two specialized, single-task stages. Stage 1 operates as a dedicated span localization model utilizing a 3-class CRF (O, B-propaganda, I-propaganda). By stripping away the multi-class technique assignment, Stage 1 removes over 80% of the tagset complexity and label imbalance, allowing the sequence decoder to focus entirely on structural boundary rules and span recall. Stage 2 functions as an 8-class text classification model trained offline directly on gold-annotated propaganda spans. During inference, any span extracted by Stage 1 is sliced from the original context and passed to Stage 2, which leverages pooled span-level representations rather than unpooled, token-level hidden states.
+
+This decoupled design addresses the fundamental representation misalignment of the joint approach. Propaganda techniques such as Causal Oversimplification or Appeal to Authority are inherently span-level semantic phenomena that cannot be accurately resolved at the individual token level. Feeding explicit text chunks into a dedicated classifier mirrors the strength of sentence-level models while providing the technique head with complete contextual focus.
+
+While a cascading pipeline accepts the trade-off of one-way error propagation—where Stage 1 recall failures prevent Stage 2 from evaluating a missed span—this risk is vastly outweighed by the elimination of joint gradient conflicts. Decoupling the pipeline allows each network to optimize 100% of its parameter capacity on its respective sub-task, transforming an unstable joint optimization landscape into a robust, high-performing NLP system.
+
+---
+
+#### Var 1 Classifer Eval Upper Benchmark
+"To quantify the impact of span localization errors on overall system performance, we established an Oracle Baseline by evaluating the Stage 2 DeBERTa classifier exclusively on gold-standard validation spans. The Oracle achieved an upper-bound Macro-F1 score of 0.5840, confirming that pooled subword representations effectively capture nuanced propaganda techniques when boundary noise is absent. When deployed as an end-to-end cascade with the Stage 1 3-class boundary detector, system performance dropped to 0.3120 Macro-F1 ($\Delta_{\text{degradation}} = -0.2720$). This 46.5% performance degradation is directly attributable to Stage 1 recall failures—where missed span boundaries prevent Stage 2 from evaluating valid text chunks—and empirical boundary drift disqualifying otherwise accurate technique predictions."
+
+No Hyperparam but this is fine as param are theoretically sound and it is benchmark accross all exerpeiemts
+
+---
+
+#### Var 1 Span Hyperparameters:
+
+Carrying over Variation 2’s optimal parameters into Stage 1 provided a convenient baseline, but it ignores a fundamental shift in the model's underlying learning landscape. By simplifying the task from a 17-class joint space down to a 3-class boundary tagset (O, B-Propaganda, I-Propaganda), over 80% of the class imbalance and label confusion are eliminated. In this streamlined structural localization setting, the $3 \times 3$ CRF transition matrix converges rapidly, shifting the primary learning bottleneck to DeBERTa’s ability to refine its subword representations for boundary discrimination. Consequently, the conservative learning rates and epoch counts required to stabilize the complex Variation 2 architecture likely underfit or over-regularize Stage 1. Conducting a dedicated Stage 1 hyperparameter sweep—specifically targeting the backbone-to-head learning rate ratio (backbone_lr vs. heads_lr) and batch size—is necessary to unlock the full recall potential of the standalone span detector before chaining it into the final cascading pipeline. 
+
+---
+
+#### Var 1 Sweep, Recall:
+
+Action Plan: Executing the Stage 1 Sweep
+Given your results, your primary tuning objective should be maximizing Span Recall without tanking Precision too severely.
+
+Run the 9-trial grid sweep we discussed earlier (fixed batch size = 16, exploring 3 backbone LRs and 3 head LRs) using evaluate_stage1_span_detector as your fitness function. When you evaluate the trial models, look specifically for a configuration where Span Recall jumps above 0.50 to 0.60, even if precision drops slightly. In propaganda detection, catching more candidate windows is usually better because Stage 2 can filter out false positives more effectively than it can recover missed text.
+
+
+---
+
+#### Task 2: Analysis
+
+
+```Task2Evaluator, evaluate_predictions()```
+This method takes in lists of the gold and predicted data with the latter in the form `{"span": (start_idx, end_idx), "technique": "doubt"}`. It produces `y_true, y_pred` which are two lists compiled of `TP`, `FP`, `TN`, `FN`. (Not TN as it isn't a part of F1 calc). From this, the lists are plugged into `precision_recall_fscore_support` and `classification_report` to compute the benchmark metrics and a per-class breakdown. This pertains to our terminal metrics and the basis for model seleciton. However, robust analysis requires a more grangular insight. 
+
+Our evaluation method is end-to-end meaning the span prediction is inclusive of the output metric. F1, Prec or Recall do note have granular insight into the relationship between the router and classifer. For example, if a span failed, it defaults as a `not_propganda` based on the evaulation framework. However, in practice we still computed a technique. It would be good to understand what % of failed spans, that had posible gold label, where still predicted correctly by the model. If the model was still above to comfortably predict using (partially) wrong then we could say the tolerance parameters were wrong and that the H1 is much stronger than we thought. This information is in our error logging system. 
+
+In this paradigm we are looking are subset, i.e. instances that disqualified the router. If using F-1 we would call this condition F-1. However, this can be wildly misleading as the model can introduce bias into the subset. Therefore, accuracy is actually the most honest metric. By definition, the routing mechanism is focusing on propaganda instances and therefore filtering out the dominate not_propaganda class which was skewing the data before, hence, accuracy is a good metric for a balance dataset. 
+
+Both technqiues produce a span, so the first thing to do in the results analysis is to check the qualification breakdown
+- How many completely missed a span when they should have predicted one? This is import as it is likely caused by the amount of 'O' tags in the data
+- The next is how many predicted a span but failed on the boundaries? The different between 3 and 17 will be interesting due the differences in data density, is one more accuracy? This could also be extensed to look at the range of wrongness, are they only just missing out or completely wrong?
+- The next is how many predicted a span when there wasn't one? 
+- Finally, the pipeline would develop into the composition of results for qualifying spans. In Var1 we have an upper baseline for perfect qualifer, i.e. the raw MLP head. Var1 should closely follow this in terms of its predictions on correctly qualifying instances. It wil be much more interesting to look at Var2 here, does the integrated approach impact technqiue classifcation in the isolated, qualifying subset?
+- And an option peice of analysis, lets look at those spans that were predicted but failed the tolerance. If they are still able to predict the right label with an offset span then this points to the original issue that human annotators dont precisely agree on the bounds, meaning the signal might be in the span but the boundaries not truely accurate
+
+All of these should be computed on an entire dataset level first. We will begin to scope down into class level breakdown if there is an interesting finding as the dataset elvel. 
+
+---
+
+Whilst the hyperparameter sweep is running, I am thinking about the analysis that I can conduct for this task 2. It should be noted that we have the evaluation metrics: F1, Recall and Precision but these are the final terminal metrics, it tells use performance but it doesn't give use granular diagnostic insight. For that I have put together this flow of ideas. It essentially focuses on the relationship between the span detector and router and the classier. Note, that for the classier, we have the true upper bound from the MLP classier trained on snippets. It shouldn't be the case that we can exceed this. However, any reduction in performance compared to this benchmark should be considered the fault of the span detector. A perfect span detector will mean the classifer performs how it did in training. The detector can let down the pipeline in a few ways: missed spans completely, failed the tolerance bounds and hallucinating spans where there isn't any. Missed and failed bounds mean the classier does not get a chance to execute and default as false negative. Halucinated spans force the classier to predict the impossible creating a false positive. Additionally, there is aspect of non-perfect qualify predictions, though I don't see this being too much of an issue. Ultimately, whilst the terminal metrics look like classification evaluations, they are entirely representative of the the detector performance as have the classifer upper bound to work from: 
+
+---
+
+**Step 1: Pure Detector Analysis:**
+Audit 640 validation instances
+1. Confirm the True Negative rate: not_propaganda $\to$ Model predicted no span.
+2. Complete Miss, False Negative: Gold is active propaganda $\to$ Model predicted no span. The classifier never got to run.
+3. Hallucinated Span, False Positive: Gold is not_propaganda $\to$ Model predicted a span. The classifier was forced to predict one of the 8 techniques on background noise.
+4. Disqualified Boundary (Double Penalty - FP + FN): Gold is active propaganda $\to$ Model predicted a span, but missed the $\delta$-tolerance window.
+5. Qualified Boundary (Successful Route - TP/FP): Gold is active propaganda $\to$ Model predicted a span within the $\delta$-tolerance window. Classifer in action, could stil get it wrong though. 
+
+Key Insight:
+- We want to see how 3 vs 17 perform in each. Does either have strengths or weaknesses. 
+- A big focus on Complete Miss (FN), 'O' is the dominate feature, it could be swmamping the model and tricking it into overpredicting no span. 
+
+---
+
+**Step 2: Disqualified by Classifed**
+In propaganda annotation, human inter-annotator agreement on exact character boundaries is historically much lower than agreement on which technique is present.
+
+We want to breakdown the performance of predicted but disqualifed boundaries. If the model is still able to predict any then this points to boundary mistakes. The toleroence mechanism could have been tweaked here. 
+
+---
+
+**Step 3: Qualifed Performance**
+These are the spans where the localization router did its job correctly and handed a valid window to the classifier. We have the upper bound of the classifers potential using perfectly routed spans. 
+
+Var1 should track closely to this upper bound based on the instances it gets to compute given it is the same classifer, through data scarcity may impact variance wildly. Converesly differences could be due to spatial offsets in the predictions, i.e. within olerance but not perfact. 
+
+Var2 is much more interesting as we are analysing whether joint optimization helps or hurts. Does forcing the backbone to learn boundaries and 8-way classification simultaneously degrade semantic accuracy? A degregation in performance could be consdiered "Task Iterference"
+
+---
+
+#### Task 2 Results
+
+While decoupling span localization from technique classification in Variation 1 appears theoretically cleaner, the empirical evaluation demonstrates that it introduces a severe pipeline bottleneck. The Stage 2 classifier establishes a strong theoretical ceiling of 0.5106 Macro-F1 when provided with perfect gold boundaries. However, when deployed end-to-end with the Stage 1 span detector, performance plummets to 0.1684 Macro-F1, representing a catastrophic localization degradation ($\Delta$) of -0.3422. Because the Stage 1 detector captured only roughly $32\%$ of true propaganda spans (Span Recall: 0.3204), the downstream classifier was completely blinded to over two-thirds of active targets. In a decoupled cascade, any boundary failure or missed span defaults directly to a False Negative, permanently locking the end-to-end recall to a sub-optimal 0.1500.
+
+In contrast, the 17-Class Integrated Joint Tagger (Variation 2) avoids this error propagation, outperforming the decoupled cascade with an end-to-end 0.2034 Macro-F1 and achieving a vastly superior Macro Precision of 0.2914 (compared to Variation 1's 0.2000). The underlying mechanism driving Variation 2's superior performance is the structural synergy between the joint BIO tagset, the Linear-Chain CRF, and the Viterbi decoding algorithm—a dynamic referred to as the "breadcrumb effect."
+
+In Variation 1's Stage 1 tagger, the CRF only observes coarse binary transitions (O, B-Propaganda, I-Propaganda), forcing it to learn boundary decisions without any semantic understanding of what type of propaganda is present. Conversely, Variation 2 enriches every token with fine-grained technique identity (B-loaded_language, I-loaded_language, etc.). During training, the CRF transition matrix learns hard grammatical and stylistic constraints across all 17 states (such as enforcing that a B-doubt token cannot transition into an I-flag_waving token).
+
+During inference, these technique-specific tags act as semantic "breadcrumbs" across sequence space. When DeBERTa emits weak local confidence for a boundary, the Viterbi algorithm does not evaluate localization in a vacuum. Instead, it evaluates the global probability of the entire tag sequence. Strong emission signals for a distinct technique (such as highly recognizable Flag-Waving lexical markers) help the Viterbi decoder "pull" adjacent, weaker token emissions into a coherent span. By jointly optimizing boundary identification and 8-way technique classification in a single global path, the CRF uses semantic continuity to resolve spatial ambiguity. This joint dependency structure reduces hallucinated false positives on background text and protects Variation 2 from the single-point-of-failure vulnerability that crippled the decoupled cascade.
+
+---
+
+#### The Architectural Limitation of the 3-Tagset CRF
+
+The primary reason the Linear-Chain CRF fails to yield the same structural advantage in Variation 1 comes down to its inability to establish strong global path dependencies over a collapsed probability space. In the 3-class BIO tagset (O, B-Propaganda, I-Propaganda), the transition matrix is severely constrained. When DeBERTa processes ambiguous boundary tokens—such as the subtle onset of a span—the emission probabilities for O, B-Propaganda, and I-Propaganda often flatten into a near-uniform distribution (roughly $33\%$ each). Because all propaganda techniques are lumped into a single generic tag, the CRF lacks distinct semantic state paths to resolve this local uncertainty. Even if the network exhibits high confidence that a central token is I-Propaganda, the Viterbi decoder cannot reliably "knit" this anchor backward to the correct B-Propaganda start token or forward to the O trailing bound, as any B tag looks identically weak regardless of the underlying rhetorical context.
+
+In contrast, Variation 2’s 17-class tagset expands the state space to give the CRF meaningful sequence breadcrumbs to reason over. When the model detects strong central emissions for a specific technique—such as I-Loaded_Language—that high-confidence state actively constrains the global Viterbi path optimization. Even if early boundary tokens are noisy and distribute probability across multiple candidates, the CRF transition matrix knows that an I-Loaded_Language sequence must be preceded by B-Loaded_Language rather than B-Flag_Waving or B-Doubt. The breadth of the 17-tag state space allows the model to leverage technique-specific continuity: the certainty of the internal I-Technique tokens propagates backward and forward to "pull" the less confident, boundary-adjacent B-Technique and trailing O tokens into a globally coherent path. In the 3-tag system, this joint dependency is entirely lost because there are no technique-specific tags to bridge the gap between weak boundary signals and strong internal tokens.
+
+---
+
