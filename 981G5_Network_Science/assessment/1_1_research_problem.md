@@ -1,0 +1,6 @@
+# 1.1 Research Context & Problem Statement
+
+> Complex systems theory suggests that a football team cannot be understood by analyzing individual players in isolation, but rather through the emergent structure of their collective interactions. Under this framework, team organization is represented through passing networks that are directed (passes have an origin and destination), weighted (edge strength reflects pass volume), spatially embedded (governed by pitch geometry and Euclidean distance), and time-evolving (fluctuating continuously over 90 minutes).  However, despite the inherently spatial nature of the game, traditional network methodologies frequently evaluate these graphs as space-blind adjacency matrices. This creates a severe methodological deficit when trying to establish baseline distributions...
+
+**How to capture football in Network form (Buldu, 2018):**
+"Under this framework, the organization of a team can be considered as the result of the interaction between its players, creating passing networks, which are directed (i.e., links between players go in one direction), weighted (the weight of the links is based on the number of passes between players), spatially embedded (i.e., the Euclidean position of the ball and players is highly relevant) and time evolving (i.e., the network continuously changes its structure)."
