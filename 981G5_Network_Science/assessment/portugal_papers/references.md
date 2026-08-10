@@ -14,7 +14,7 @@
 **Interesting Gama Papers:**
 
 - [x] Linking network structures and stochastic flow properties: An exploratory Markov-spectral case study in professional football (Gama et al., 2026)
-- [ ] Small-world networks in professional football: conceptual model and data (Gama et al., 2015)
+- [ ] Small-world networks in professional football: conceptual model and data (Gama et al., 205)
 
 ---
 

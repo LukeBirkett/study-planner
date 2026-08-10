@@ -5,7 +5,7 @@
 ---
 
 ### Abstract:
-"the organization of football  teams and their performance have been unveiled using metrics coming from Network Science,  where a team is considered as a complex network whose nodes (i.e., players) interact with the aim of overcoming the opponent network."
+"the organization of football teams and their performance have been unveiled using metrics coming from Network Science,  where a team is considered as a complex network whose nodes (i.e., players) interact with the aim of overcoming the opponent network."
 
 "Here, we combine the use of different network metrics to extract the particular signature of the F.C. Barcelona coached by Guardiola, which has been considered one of the best teams along football history."
 
@@ -79,8 +79,7 @@ Figure 1 shows an example of a football passing network, in this case the aver-
 age network of FCB against Real Madrid in the season 2009/2010. Note that links are unidirectional (from player 
 A to player B) and weighted according to the number of passes between players.
 
-In the figure, nodes (i.e., players) 
-are placed in the average position from where their passes were made and the width of the links is proportional to the number of passes made between players
+In the figure, nodes (i.e., players) are placed in the average position from where their passes were made and the width of the links is proportional to the number of passes made between players
 
 The x,y coordinates have been scaled to between 0,100 and are measured in "field units" as not all fields are the same size. 
 
@@ -148,9 +147,7 @@ Clustering coefficient is an indicator of the local robustness of networks [31],
 
 In football, the clustering coefficient mesures the triangulation between three players.
 
-The authors find Clustering is much higher in FCB. 
-
-This reveals that connections between three players are more abundant than at their rivals.
+The authors find Clustering is much higher in FCB. This reveals that connections between three players are more abundant than at their rivals.
 
 #### Average Shortest Path
 The average shortest path d is an indicator about how well connected are players inside a team.

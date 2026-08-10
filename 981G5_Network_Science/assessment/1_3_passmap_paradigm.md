@@ -1,5 +1,8 @@
 # The 3 PassMap Paradigms (Buldú Framework)
 
+"For each match, a directed weighted adjacency matrix A was constructed, where each entry represents the number of passes from one player to another." (Gama et al (2026, Stochasitc))
+
+
 ## Tier 1: Classical Player-Centric Network
 *Introduced by Buldú et al. (2018)*
 
@@ -8,6 +11,15 @@
 **Nodes ($V$):** The 11 starting players on the pitch ($\vert{}V\vert{} = 11$). Each node is a player Identity (e.g., #8 Midfielder)
 
 **Edges ($E$) & Weights ($W$):** A directed, weighted edge $w_{ij}$ represents the total number of completed passes from Player $i$ to Player $j$ during a given timeframe ($A \to B$).
+
+"we are concerned about the analysis of football matches and, specifically, the way players interact with each other by passing the ball, ultimately creating what is known as a football passing network." (Bludu, 2019)
+
+"Passing networks are constructed from the observation of the ball exchange between players, where network nodes (or vertices) are football players and links (or edges) account for the number of passes between any two players of a team." (Bludu, 2019)
+
+"This way, we can construct football passing networks, weighted and unidirectional, which in turn are spatially embedded [30–32]" (Bludu, 2019)
+
+"In the figure, nodes (i.e., players) are placed in the average position from where their passes were made and the width of the links is proportional to the number of passes made between players"
+
 
 ---
 
@@ -80,3 +92,11 @@ The player passing networks with node attributes $(\bar{x}, \bar{y})$ allow Tier
 
 Limitations: 
 - Player passing networks are vulnerable to matrix sparsity. The continuous resolution may entail and impossible task for the generative processes to model adequately, leading to bias and underrepresentation in less frequent passing zones. This would be a issue for micro-level metrics which identify interesting properties for players who operate in wider, fringe locations. The discrete nature of the pitch passing paradigm could maximise data density and therefore the confidence of the underlying generative model. Although it should be noted that we have access to a whole seasons worth of data, potentially even more, so this risk may be mitigated to an extent. 
+
+---
+
+#### Subs
+
+**Gama, 2026:** The networks that the authors constructed included all players that features in the game, including subs. Nodes in their PassMaps seem to be positioned by role rather than an average of interaciton positions, i.e. a left-back is always plotted in the same position. 
+
+--
