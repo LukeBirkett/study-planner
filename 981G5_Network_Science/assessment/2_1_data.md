@@ -1,0 +1,5 @@
+# 2.1 Data Pipeline & Preprocessing
+
+> Datasets, provided by Opta, consists of all passes completed along a football match by each team of the Spanish national league (“La Liga”) for the season 2009/2010. Specifically, consists of a set of 380 matches, 38 per team. For each pass, we have the information about: (i) the player who passes the ball, (ii) the player who receives the ball, (iii) the position (x and y coordinates) of the sender/receiver players and (iv) the time at which the pass was made (see Table 1 for details). Since we are concerned about the game of FCB, we focused on all matches played by this team, and analyze the passing networks of FCB and its rivals (Buldu, 2019)
+
+To ease comparison between networks, each titular player is assigned a node at the beginning of the match. If a player is changed, the new player occupies the node of the previous player. In this way, we assure that all networks have eleven players, focusing on the structure of the network as a whole instead of the performance of isolated players. (Buldu, 2019)

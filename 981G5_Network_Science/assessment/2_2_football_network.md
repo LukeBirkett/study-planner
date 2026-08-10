@@ -1,5 +1,13 @@
 # 2.2 Network Topology in Football (Methodological Showcase):
 
+> Note, somewhere between this section and 1_3 passmap, we sound mention that we are working with "average passing networks", cumuliative representation of an entire match. But mention that as Buldu (2019), these networks can be segmented to any temporal level. Buldu (2019) uses 50 pass-networks to normalize comparisons between opposing teams, and infere network properties leading upto a goal. (Or this could be more appropriate for a lit review)
+
+I will probably scope my examples down to clustering coeffiecent, shortest path and a centrality measure (or two). Of course, degrees will be remain a component in generate
+
+These are the simplest network metrics to port over and a have extreme intuitive football interpretations.
+
+
+
 
 **Topological scales (Buldu, 2018):**
 1. The **microscale**, where the analysis is carried out at the level of nodes .i.e., the players and its role inside the network.

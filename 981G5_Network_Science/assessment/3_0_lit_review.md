@@ -1,4 +1,11 @@
 # Liturature Review
+- Why Networks? System Reviews & 
+    - Beyond status (xG, Passes, Bludu (2019))
+    - System Reviews, What others have proved with Nets
+- Dynamics ON the Network; Stochasistic Flows, Buldu Onwards, (Naz, Gama)
+- Calls for Nulls; Buldu, Naz, Gama, Alves(?)
+
+> This provides a clear end-to-end narrative
 
 ---
 
