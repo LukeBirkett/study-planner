@@ -23,7 +23,10 @@ Formal definition of nodes ($V$) and edges ($E$) across three spatial granularit
 ### 2.1 Data Pipeline & Preprocessing:
 Processing StatsBomb WSL season data ($150,000+$ passes) into directed, weighted adjacency matrices $A_{ij}$ using Python (pandas, NetworkX).
 
-### 2.2 Metric Taxonomy (Volume vs. Variability)
+### 2.2 Metric Taxonomy
+
+> This is the section to demonstate that I have understood network science. It's not good enough to just explain that a high centrality translates into a high passing player. I need to explain what the centality measure its, mentoin stuff about assortitiy and how this creates the function of shorter paths. Then translate into football with help from the liturature. 
+
 Grounding evaluation metrics in domain-specific football language using Gama et al. (2026):
 - **Micro/Mesoscale Workload (Centrality):** Degree, Betweenness (connective mediation), Clustering Coefficient (triangulation).
 - **Micro/Mesoscale Variability (Entropy):** Node Transition Entropy (individual passing unpredictability).

@@ -112,3 +112,8 @@ The Sample-Size Flaw: Previous papers tried to fit a power law on standard $N=11
 By expanding the graph to $N=198$ nodes using pitch zones, Narizuka et al. showed that the degree distribution does not go on infinitely like a power law. At high degrees, the distribution drops off sharply because players have physical limitations—time, pitch boundaries, and human fatigue prevent a player or zone from having 1,000 passes. 
 
 Instead of a power law, they proved the degree distribution is accurately fitted by a Truncated Gamma Distribution ($f(k) \propto k^{\nu-1} e^{-k/\lambda}$):  Power-law behavior at low degrees ($\nu \approx 0.34$): Captures local passing choices.  Exponential cutoff at high degrees ($\lambda$): Captures the physical and spatial limits of football.
+
+---
+
+
+addition, we have also found that a network created from our model has similar structural properties to the real data. Judging from these results, we conclude that our model incorporates essential features of real football games. (Naz, 2014)

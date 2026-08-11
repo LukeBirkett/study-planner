@@ -100,3 +100,5 @@ Limitations:
 **Gama, 2026:** The networks that the authors constructed included all players that features in the game, including subs. Nodes in their PassMaps seem to be positioned by role rather than an average of interaciton positions, i.e. a left-back is always plotted in the same position. 
 
 --
+
+Narizuka et al. (2014) originated the spatial discretization method later popularized by Buldú et al. (2018).

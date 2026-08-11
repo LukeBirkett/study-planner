@@ -21,7 +21,13 @@ Narizuka et al. (2014) offer the ultimate proof: a 1st-order memoryless Markov p
 Pure scale-free networks require preferential attachment ("the rich get richer" mechanisms). Truncated gamma distributions, as Narizuka et al. proved, can be synthesized purely by a 1st-order spatial Markov process with exponential distance decay ($e^{-\beta L_j}$). 
 
 Justifies Why Simple Erdős–Rényi Null Models Fail: Simple random graphs capture short path lengths ($l$), but completely fail to generate the high clustering ($C$) and truncated degree cutoffs seen in football. Your spatial null engine bridges this exact gap. 
+> Really important to use this in the report as it demonstrates good understanding of network properties; small-world, scale-free, preferential attachment, Simple Erdős–Rényi Null, failure to generate high clustering ($C$)
 
+- [15] D. J. Watts, S. H. Strogatz, Collective dynamics of “small-world” networks, Nature 393 (1998) 440–442.
+- [16] A. L. Barab´asi, R. Albert, Emergence of scaling in random networks, Science 286 (1999) 509–512.
+
+
+In the Markovchain model, we define the transition probability Pi→j as the product of the two factors for the distance of passes Qα(rij ) and for the existence probability of the player receiving a pass Rβ,ξ(Lj ).
 
 ---
 

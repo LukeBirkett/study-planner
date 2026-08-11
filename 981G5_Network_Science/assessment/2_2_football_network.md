@@ -210,3 +210,30 @@ Network Transition Entropy quantifies the unpredictability of the team’s overa
 
 "This observation aligns with findings that football passing networks often exhibit scale-free properties with emergent key players acting as hubs. [50]" (Gama, 2026, Stoch)
 - Yamamoto Y and Yokoyama K. Common and unique network dynamics in football games. PLoS ONE 2011; 6(12): e29638.
+
+---
+
+## Naz, 214
+We focus on the following basic properties characterizing the network structure: the **total number M of edges**, the **degree distribution** f(k), the **average degree** ⟨k⟩, **mean path length** ℓ, and **clustering coefficient** C.
+
+Network diagrams obtained from the game (iii). The darker edges represent higher frequency of passing. The yellow circle of each panel represents the hub node which has the maximum degree in the network
+
+We find some nodes which have high degree. Actually, almost 20% of nodes have the degree larger than ⟨k⟩, and a few nodes in them have the especially large value. These nodes seem to be performed as “hub” in each network.
+
+It is found that the sum of the edges of the two teams exists between 625 and 1008.
+
+The mean path length $ℓ$ is about $3.3 ± 0.3$, and is close to $ℓ_rand$ = $4.4 ± 1.7$.
+
+The clustering coefficient $C$ of each network is about ten times greater than that of random network $C_rand$.
+
+Therefore, these ball-passing networks are considered to possess **small-world property**.
+
+**Global properties**, such as **degree distribution** and edge-multiplicity distribution, of the ball-passing network are similar in different teams and games, but **local properties are different**.
+
+In fact, the **degree distribution** of each team follows the same **distribution**, and the edge-multiplicity distribution decreases almost exponentially, while the heat maps of each team are different.
+
+In this paper, we have mainly focused on the global properties of networks which do not depend on the details of the game.
+
+And, the local properties which are related to the strategies of each team are also interesting.
+
+seems to be implying that global properties are what represent football in network but the local properties are the tactical insights. In terms of generating null networks, it is the goal of reproducing the global properties allowing use to use the nulls as a baseline to assess local properties.
