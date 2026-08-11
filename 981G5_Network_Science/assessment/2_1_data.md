@@ -11,7 +11,7 @@ To ease comparison between networks, each titular player is assigned a node at t
 Gama (2026) used a 2 game sample and observed that a a **larger dataset** is needed to run resampling methods (matrix permutation) to establish a baseline and therefore determine if observed variations reflect tactical adaptations or normal match-to-match noise.
 
 
-"Expanding the analyses to underrepresented domains, such as women’s football or youth competitions, would also test the framework’s applicability across varying match contexts and address identified gaps in network analysis research." Gama, 2026, stoch
+"Expanding the analyses to underrepresented domains, such as women’s football or youth competitions, would also test the framework’s applicability across varying match contexts and address identified gaps in network analysis research." (Gama, 2026), stoch
 
 
 A ball-passing network is obtained as the set of the all passes made by one team in a game. To be precise, we use the following rules. (i) Only the passes between players belonging to the same team are considered. (ii) When a player is replaced by a reserved player, the node for the new player is giv en the same number as the old player. (Naz, 2014)
