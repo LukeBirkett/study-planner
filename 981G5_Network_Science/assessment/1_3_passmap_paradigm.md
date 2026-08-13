@@ -94,11 +94,3 @@ Limitations:
 - Player passing networks are vulnerable to matrix sparsity. The continuous resolution may entail and impossible task for the generative processes to model adequately, leading to bias and underrepresentation in less frequent passing zones. This would be a issue for micro-level metrics which identify interesting properties for players who operate in wider, fringe locations. The discrete nature of the pitch passing paradigm could maximise data density and therefore the confidence of the underlying generative model. Although it should be noted that we have access to a whole seasons worth of data, potentially even more, so this risk may be mitigated to an extent. 
 
 ---
-
-#### Subs
-
-**Gama, 2026:** The networks that the authors constructed included all players that features in the game, including subs. Nodes in their PassMaps seem to be positioned by role rather than an average of interaciton positions, i.e. a left-back is always plotted in the same position. 
-
---
-
-Narizuka et al. (2014) originated the spatial discretization method later popularized by Buldú et al. (2018).

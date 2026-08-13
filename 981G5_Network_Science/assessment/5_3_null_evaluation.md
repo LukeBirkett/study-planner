@@ -117,3 +117,5 @@ Instead of a power law, they proved the degree distribution is accurately fitted
 
 
 addition, we have also found that a network created from our model has similar structural properties to the real data. Judging from these results, we conclude that our model incorporates essential features of real football games. (Naz, 2014)
+
+" seems to be implying that global properties are what represent football in network but the local properties are the tactical insights. In terms of generating null networks, it is the goal of reproducing the global properties allowing use to use the nulls as a baseline to assess local properties." Naz

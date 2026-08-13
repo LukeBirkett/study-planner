@@ -45,6 +45,8 @@ Also in the table, create a subset verson based on my key metrics used, i.e. clu
 
 **Meso-Scale (Buldu, 2018):**
 - Analysis of network motifs has shown how the overabundance of certain kinds of passes between groups of three/four players can be related to both the success of a team (Gyarmati et al., 2014) and the identification of leaders in the passing network (López Peña and Sánchez Navarro, 2015)
+
+
 - Concerning the role of communities of players playing tightly connected between them, Clemente et al. (2015), related the high heterogeneity of the number of passes between players to the existence of sub-communities, which would hinder the behavior of the team as a whole. 
 - Gyarmati and Anguera (2015) studied all the recurring pass sequences, relating discovered sequence patterns to teams’ playing style and strategy.
 
@@ -89,6 +91,8 @@ Importance of players in a passing network can be quantified using the betweenne
 "The high number of passes unavoidably leads to passing networks with links that have higher weights and, as we will see, this fact will have consequences on the network parameters." (B, 2019)
 
 ---
+
+
 
 
 ## Clustering Coefficent
@@ -212,6 +216,11 @@ Network Transition Entropy quantifies the unpredictability of the team’s overa
 - Yamamoto Y and Yokoyama K. Common and unique network dynamics in football games. PLoS ONE 2011; 6(12): e29638.
 
 ---
+
+
+
+
+
 
 ## Naz, 214
 We focus on the following basic properties characterizing the network structure: the **total number M of edges**, the **degree distribution** f(k), the **average degree** ⟨k⟩, **mean path length** ℓ, and **clustering coefficient** C.
