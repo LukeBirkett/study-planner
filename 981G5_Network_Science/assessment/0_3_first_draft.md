@@ -485,7 +485,9 @@ As expected in a transitive model, wide forward Caitlin Foord ($275.0$) and cent
 Unlike normalized ratio metrics bounded strictly between $0$ and $1$, Transitive Triad Intensity ($I_{\text{transitive}}$) is expressed in cumulative pass throughput units. For any functional 3-player progressive combination ($A \to B \to C$ and $A \to C$), the algorithm evaluates its capacity as the bottleneck-constrained minimum pass count across its three active channels ($\min(w_{AB}, w_{BC}, w_{AC})$), subsequently awarding this capacity score to all three participating players. Because central playmakers sit at the intersection of numerous overlapping spatial units, their total score reflects the sum of throughput capacities across dozens of simultaneous 3-player combinations. Consequently, absolute values (such as Kim Little’s squad-leading $1069.0$ units relative to the team global average of $582.55$) should be interpreted as cumulative progressive capacity: scores above $900$ denote central playmaking engines involved in nearly all team progression loops, mid-tier scores ($500–900$) highlight key sectoral originators and link players, while low scores ($< 150$) isolate terminal endpoints and specialized target receivers.
 
 
+> TODO: STRIP OUT THIS WHOLE SECTION ITS STARTED WITH ONE CLUSTERING APPROACH BUT IT WASNT APPROPRAITE. FIND A WAY TO EXPLAIN THIS FINDING IN A CONCISE WORD COULD. THEN PROPERLY EXPLAIN THE NEW APPRAOCH. ANALYSE THE RESULTS AND USE THE POLYGON PLOT TO DEMONSTATE
 
+> BASELINE GLOBAL NUMBER, PLAY LEVEL NUMBERS SCALED AGAINST BASELINE can be higher as they are in many trinagles where the passes overlap, TALK ABOUT THE ORDER TRIAD LIST, WHAT THE TRIPLETS MEAN and PLOT ON PITCH
 
 
 
