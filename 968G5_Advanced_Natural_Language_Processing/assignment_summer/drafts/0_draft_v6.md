@@ -403,7 +403,13 @@ Ultimately, however, to break through the ~$0.30$ precision ceiling, future syst
 
 
 
-Task 2
+
+
+
+
+
+
+# Task 2
 
 *Task 2: Build and evaluate either 2 different approaches or at least 2 variations on a single approach to detecting propaganda within a sentence. Your system should identify both the span and the propaganda technique used.*
 
@@ -466,6 +472,16 @@ That being said, the current proposal is probably the most sensible from a rheto
 Structually, the report itself should follow the structure used for Task 1. 
 
 ---
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -750,13 +766,11 @@ To prevent overfitting and maintain generalization during end-to-end fine-tuning
 ---
 
 #### Constrained CRF Transition Matrix Initialization
-
 To enforce BIO sequence grammar directly within the Linear-Chain CRF, we pre-initialized its trainable transition matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$ with hard structural constraints. Specifically, transitions originating from neutral text (O) directly into continuation tags (I-technique), as well as mid-span transitions between distinct technique types, were manually set to a large negative score ($-10\,000.0$) prior to model fine-tuning. In both training and Viterbi decoding, this penalty scales candidate sequence path scores such that illegal transitions receive a probability of virtually zero ($e^{-10000} \approx 0$). Consequently, the model is mathematically forced to initiate every predicted propaganda span strictly through a B- tag, eliminating orphaned I- sequences and ensuring output predictions conform to valid span boundaries
 
 ---
 
 #### Why Epochs Aren't Typically Included in Hyperparameter Search Grids
-
 In machine learning workflows, the number of epochs is rarely included in hyperparameter search grids because it simply measures time spent in optimization rather than controlling how the model learns. Treating epochs as a fixed variable in a search grid is largely redundant because Early Stopping dynamically tracks validation metrics (such as Validation Loss or Macro-$F_1$) to automatically halt training and save the optimal model checkpoint at the exact moment performance peaks. Furthermore, required epoch counts are strongly dependent downstream variables dictated by core hyperparameters like learning rate and batch size—meaning a fixed epoch limit suited for one trial might heavily underfit or overfit another. Relying on Early Stopping across trials instead of grid-searching epoch counts avoids wasting compute cycles on degraded iterations and allows the training process to halt as soon as convergence is reached.
 
 ---
@@ -780,7 +794,6 @@ Compute Eval and Analysus on Var2 and repeat on Var1 to compare differences.
 ---
 
 #### Hyperparameter Sweep Considerations for Variation 2
-
 To optimize the 17-class joint DeBERTa-CRF tagger while respecting strict compute constraints, we structured a minimal fidelity-based search space evaluated over 5 epochs. Given that transformer fine-tuning for sequence labeling exhibits high sensitivity to optimization dynamics, the sweep tests three distinct configurations—Conservative, Moderate, and Aggressive—varying the backbone learning rate ($1\times10^{-5}$ to $5\times10^{-5}$), linear projection and CRF head learning rates ($5\times10^{-4}$ to $2\times10^{-3}$), and simulated batch sizes via gradient accumulation ($16$ to $32$). Restricting the sweep horizon to 5 epochs provides sufficient iterations for both DeBERTa’s contextual representations and the constrained $17\times17$ CRF transition matrix to stabilize, allowing us to accurately determine the top-performing learning rate profile based on Validation Macro-$F_1$ before scaling the optimal configuration to a full 10-epoch training run. 
 
 - Run 1 (Conservative): 1e-5 ($0.00001$)
@@ -796,7 +809,6 @@ This $1:50$ ratio between the backbone and head learning rates is optimal becaus
 ---
 
 #### Training Loss Function
-
 To train the joint DeBERTa-CRF architecture, the loss function evaluates sequence-level probabilities rather than independent, token-level classifications. During the forward pass, DeBERTa extracts contextual token embeddings that a linear projection layer converts into raw emission scores $\mathbf{E} \in \mathbb{R}^{T \times 17}$ for each token across all 17 BIO tags. The Linear-Chain CRF then computes the unnormalized joint score for the gold-standard tag path $\mathbf{y}$ by summing these token emissions with the transition scores from its constrained parameter matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$. To minimize total error, the model computes the Negative Log-Likelihood (NLL) of the correct tag sequence: 
 
 $$\mathcal{L}_{\text{CRF}} = -\log P(\mathbf{y} \mid \mathbf{X}) = -\left( \text{Score}(\mathbf{X}, \mathbf{y}) - \log \sum_{\mathbf{y}' \in \mathbf{Y}} \exp(\text{Score}(\mathbf{X}, \mathbf{y}')) \right)$$
@@ -833,7 +845,6 @@ $$\mathcal{L}_{\text{CRF}} = -\log \left( \frac{\text{Probability of the Gold Pa
 ---
 
 #### Justification for a Closed-World 8-Class Formulation
-
 In designing the classification head for Variation 1, we deliberately restrict the taxonomy to a closed-world assumption of 8 distinct propaganda techniques, omitting an explicit not_propaganda (background/null) class. This architectural choice is driven by two theoretical and computational safeguards. First, introducing a background class creates severe semantic "weight-muddying." Because background text is inherently diverse, unstructured, and non-uniform, forcing the network to optimize gradients against a catch-all category directly conflicts with the crisp, mutually exclusive boundaries required for the 8 specific propaganda techniques, ultimately degrading feature representation learning. Second, and more importantly, the responsibility of identifying background text is already handled upstream by our 3-class boundary head (O, B-Prop, I-Prop).
 
 By separating the sequence segmentation task (identifying where propaganda occurs via the boundary CRF) from the categorical identification task (identifying what technique it is via the 8-class MLP head), background suppression is mathematically enforced through soft-broadcast composition before ever reaching the CRF. When the boundary head assigns a token to the O (background) state, its high negative boundary scores effectively neutralize any active class outputs from the MLP head. This decoupled design keeps the MLP's decision space clean, specialized, and immune to the class-imbalance and gradient-conflict issues typical of open-world background classification.
