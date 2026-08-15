@@ -38,19 +38,24 @@ Mock structure:
 The methodology for Task 2 constructs two modelling variations based off an adaptation of the CNN-BiLSTM-CRF framework introduced by Ma and Hovy (2016). 
 
 ### CNN-BiLSTM-CRF Framework 
-To start, we need to understand why this foundational framework was so influential. The authors were able to acheive robust performance by leveraging a three-tiered hierarchical processing pipeline:
-- A Convolutional Neural Network (CNN) works at the atomic unit, character-level as a localized feature extractor to capture sub-word morphological patterns. 
-- A Bidirectional Long Short-Term Memory (Bi-LSTM) network then processes the word sequence in both directions to map long-range contextual dependencies and sentinal context.
-- A Conditional Random Field (CRF) decoder evaluates the joint probability of the entire tag sequence, using a learned transition matrix to enforce global structural logic
+To understand the lineage of this approach, it is vital to examine why Ma and Hovy's baseline was so influential. The authors achieved robust sequence tagging by leveraging a three-tiered hierarchical processing pipeline:
+- A Convolutional Neural Network (CNN) operates at the character0level as a localized feature extractor to capture sub-word morphological patterns.
+- A Bidirectional Long Short-Term Memory (Bi-LSTM) processes the word sequence in both directions to map long-range contextual dependencies and sentinal context.
+- A Conditional Random Field (CRF) decoder evaluates the joint probability of the entire tag sequence, using a learned transition matrix to enforce global structural logic.
 
-When applied to the task of propaganda detection, this general-purpose framework offers key theoretical advantages. First, the character-level CNN allows the model to detect morphological irregularities common in manipulative language. For example the use of superlative affixes (`-est`, `-st`) used in terms like greatest or worst to amplify rhetorical framing. Second, the Bi-LSTM's contextual sequence representations capture non-local dependencies, allowing the network to recognize how earlier lexical choices subtly alter the manipulative tone of subsequent words, even across distant sequence spans. Third, when modeling propaganda fragments under a BIO schema, the CRF transition matrix enforces valid tag sequences (such as `B-` $\to$ `I-` or `I-` $\to$ `O`) while strictly prohibiting illegal transitions, such as initiating an overlapping `B-` tag mid-span. Finally, precise propaganda span delimitation remains highly disputed even among expert annotators (Da San Martino et al., 2019), making boundary identification exceptionally difficult. Under BIO sequence labeling, each token produces an emission distribution across candidate tags. The CRF leverages these parameters to let high-confidence interior tokens pull adjacent, lower-signal boundary predictions into a spatially coherent span — a dynamic formalized in this project as the "breadcrumb effect".
+> Convert to a clear paragraph
+
+When applied to propaganda detection, this general-purpose framework offers key theoretical advantages. First, the character-level CNN allows the model to detect morphological irregularities common in manipulative language—such as superlative affixes (`-est`, `-st`) used in terms like *greatest* or *worst* to amplify rhetorical framing. Second, the Bi-LSTM's sequence representations capture non-local dependencies, allowing the network to recognize how earlier lexical choices subtly alter the manipulative tone of subsequent words across distant sequence spans. Third, when modeling propaganda fragments under a BIO schema, the CRF transition matrix enforces valid tag sequences (such as `B-` $\to$ `I-` or `I-` $\to$ `O`) while strictly prohibiting illegal transitions, such as initiating an overlapping `B-` tag mid-span. Finally, precise propaganda span delimitation remains highly disputed even among expert annotators (Da San Martino et al., 2019), making boundary identification exceptionally difficult. Under BIO sequence labeling, each token produces an emission distribution across candidate tags. The CRF leverages these parameters to let high-confidence interior tokens pull adjacent, lower-signal boundary predictions into a spatially coherent span—a dynamic formalized in this project as the "breadcrumb effect."
 
 ### Modernization Updates
 This project builds on this established framework through a modernization update by substituting the sequential and convolutional layers with a deep Transformer encoder (DeBERTa) while keeping the global decoding properties of the terminal CRF layer.  
 
-This modernized update introduces four core architectural advantages over the classical baseline. First, SentencePiece tokenization eliminates the character-level CNN by decomposing out-of-vocabulary terms into subwords, resolving data sparsity without dedicated feature-extraction sub-networks. Second, global self-attention replaces sequential LSTM recurrence, providing direct all-to-all sequence connectivity that mitigates the context decay experienced by recurrency and ensures capture of long-range dependencies underlying manipulative rhetoric. Third, replacing a recurrent model trained from scratch with a pre-trained Transformer limits the risk catastrophic overfitting on the limited training data we have byleveraging the models broad linguistic representations. Finally, DeBERTa’s disentangled attention mechanisms evaluate token content and relative spatial position on separate vectors, granting the model the decoupled spatial awareness needed to isolate manipulative phrases where neutral vocabulary is weaponized through anomalous syntactic placement.
+This modernized update introduces four core architectural advantages over the classical baseline. First, SentencePiece tokenization eliminates the character-level CNN by decomposing out-of-vocabulary terms into subwords, resolving data sparsity without dedicated feature-extraction sub-networks. Second, global self-attention replaces sequential LSTM recurrence, providing direct all-to-all sequence connectivity that mitigates the context decay experienced by recurrency and ensures capture of long-range dependencies underlying manipulative rhetoric. Third, replacing a recurrent model trained from scratch with a pre-trained Transformer limits the risk catastrophic overfitting on the limited training data we have byleveraging the models broad linguistic representations. Finally, DeBERTa’s disentangled attention mechanisms evaluate token content and relative spatial position on separate vectors, granting the model the decoupled spatial awareness needed to isolate manipulative phrases where neutral vocabulary is weaponized through syntactic placement.
 
-To implement this modernized pipeline, we experiement and compare two variations: A Decoupled, Two-Stage Tagger and an The Integrated Multi-Class BIO-CRF Pipline. 
+> compress these into two tight paragraphs or a single bulleted list that directly contrasts CNN -> SentencePiece, BiLSTM -> Self-Attention, and Static/RNN -> DeBERTa Disentangled Attention.
+
+To evaluate this modernized pipeline, we experiment with two architectural variations: a Decoupled Two-Stage Tagger (Variation 1) and an Integrated Multi-Class BIO-CRF Pipeline (Variation 2).
+
 
 ### The Integrated Multi-Class BIO-CRF Model
 This approach addresses the propaganda identification task through a single-stage, end-to-end joint sequence labeling framework. That is to say, the sequence labelling learns both boundary detection and technique classification simultaneously. 
@@ -66,7 +71,7 @@ This granular formulation is particularly well-suited for propaganda detection b
 | :--- | :---: | :---: | :---: |
 | `flag_waving` | `B-flag_waving` | `I-flag_waving` | `O` |
 | `appeal_to_fear_prejudice` | `B-appeal_to_fear_prejudice` | `I-appeal_to_fear_prejudice` | `O` |
-| `causal_simplification` | `B-causal_simplification` | `I-causal_simplification` | `O` |
+| `causal_oversimplification` | `B-causal_oversimplification` | `I-causal_oversimplification` | `O` |
 | `doubt` | `B-doubt` | `I-doubt` | `O` |
 | `exaggeration,minimisation` | `B-exaggeration,minimisation` | `I-exaggeration,minimisation` | `O` |
 | `loaded_language` | `B-loaded_language` | `I-loaded_language` | `O` |
@@ -98,7 +103,7 @@ Inference uses Viterbi decoding to extract the globally optimal sequence $\hat{\
 $$\hat{\mathbf{y}} = \arg\max_{\mathbf{y}' \in \mathcal{Y}^{N}} S(\mathbf{x}, \mathbf{y}')$$
 
 #### Hyperparameter Search & Optimization Strategy
-To prevent gradient instability and catastrophic forgetting during optimization, Architecture Variation 2 employs a staggered learning rate schedule whilst deploying the AdamW optimizer.
+To prevent gradient instability and catastrophic forgetting during optimization, Architecture Variation 2 employs a differential learning rate schedule whilst deploying the AdamW optimizer.
 
 Co-training a massive pre-trained Transformer alongside randomly initialized linear projection and CRF layers creates a severe optimization imbalance. Standard learning rates for the CRF convergence ($10^{-3}$ to $10^{-4}$) risk destroying DeBERTa's pre-trained representations, whereas typical transformer rates ($10^{-5}$) would stall the convergence of the initialized heads. 
 
@@ -117,22 +122,65 @@ The final production model was trained for 10 epochs under the conservative Run 
 
 ---
 
-
-
-
-
-
-
-
-
 ## Architecture Variation 1: Decoupled, Two-Stage Tagger
-Variation 1 presents a modular, two-stage decoupled pipeline for propaganda detection and classification whereby a sequence labeler is responsible for boundary detection using the BIO framework and an independently trained classifer head performance inference on the detected spans. 
+In contrast to the single-stage joint decoding pass of Variation 2, Architecture Variation 1 adopts a modular, two-stage pipeline for propaganda detection and classification. Rather than forcing a single network to perform spatial boundary localization and multi-class technique identification simultaneously, Variation 1 decouples the task into two specialized sub-networks:
 
-While this decoupled architecture offers clear conceptual separation and allows each stage to be optimized independently, it is recognised that is risks a single-point failure bottleneck, where boundary errors directly limit downstream classification performance.
+1. **Stage 1 (Span Localization Tagger):** A 3-class sequence tagger trained exclusively to identify the presence and boundaries of propagandistic text within full-sentence context. The target space collapses into three discrete BIO states. Non-propaganda background text is assigned the `O` tag, the onset token of any propaganda phrase is tagged `B-Propaganda`, and interior tokens extending the span are tagged `I-Propaganda`.
+2. **Stage 2 (Technique Classifier Head):** An independent Multi-Layer Perceptron (MLP) classifier head that mean-pools subword embeddings extracted from Stage 1's predicted candidate spans and categorizes them into one of eight rhetorical techniques.
 
-> I am not sure we need to express limitations here. 
+This decoupled architecture offers distinct theoretical advantages grounded in data density and task specialization. By collapsing all eight fine-grained propaganda techniques into a generic binary target space ($\mathcal{Y}_3$), Stage 1 maximizes positive label density across the sequence labeling dataset, enabling the tagger to build a robust generalized representation of manipulative text versus neutral background context without being fragmented by rare technique sub-classes. Furthermore, isolating the downstream classification head allows Stage 2 to act as a dedicated domain expert, optimizing rhetorical feature boundaries independently of spatial sequence constraints. Nevertheless, this two-stage division creates an inherent single-point failure bottleneck, where early Stage 1 localization omissions or boundary offsets permanently constrain the downstream performance of Stage 2.
 
-The label space for the detection model is completely technique agnostic and therefore operates on a generic binary target space $\mathcal{Y}_3 = \{\text{O}, \text{B-Propaganda}, \text{I-Propaganda}\}$, essentially collaposing
+$$\mathcal{Y}_3 = \{\text{O}, \text{B-Propaganda}, \text{I-Propaganda}\}$$
+
+### Model Architecture & Forward Pass
+Stage 1 employs a DeBERTa-CRF sequence tagging architecture that follows the exact structural topology, contextual subword encoding, linear projection, and global CRF decoding operations formalized in Equations (1)–(5) of Section 4.2.4 for Variation 2.
+
+The primary architectural distinction lies in the target emission dimension: Stage 1 restricts the projection matrix to a 3-class emission matrix $\mathbf{E} \in \mathbb{R}^{N \times 3}$ and evaluates transitions via a reduced 3-class transition matrix $\mathbf{A} \in \mathbb{R}^{3 \times 3}$.
+
+When Stage 1 identifies an active span, Stage 2 executes a contextualized span-pooling operation. Stage 2 re-encodes the entire input sentence through DeBERTa to produce contextualized token representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$. Following this, the sequence of representations is sliced to the exact indices of the predicted span $[p_{\text{start}}, p_{\text{end}}]$. This is done to intensify the core propaganda signal and strip away uninformative neutral text that has already been contextualized by DeBERTa’s self-attention layers.
+
+The remaining contextualized vectors are then isolated and mean-pooled into a single 384-dimensional span representation $\mathbf{h}_{\text{pooled}}$:
+
+$$\mathbf{h}_{\text{pooled}} = \frac{1}{p_{\text{end}} - p_{\text{start}} + 1} \sum_{i=p_{\text{start}}}^{p_{\text{end}}} \mathbf{H}_i$$
+
+Mean-pooling serves as a length-invariant representational interface, condensing candidate phrases of arbitrary length into a fixed-size 384-dimensional vector optimized for downstream dense classification.
+
+This pooled embedding is fed through a specialized two-layer Multi-Layer Perceptron (MLP) classification head:
+
+$$\mathbf{z} = \text{Linear}_{64 \to 8}\Big(\text{Dropout}\Big(\text{LayerNorm}\Big(\text{ReLU}\Big(\text{Linear}_{384 \to 64}(\mathbf{h}_{\text{pooled}})\Big)\Big)\Big)\Big)$$
+
+The MLP head architecture is engineered to balance feature compression with regularization. The initial linear projection ($384 \to 64$) maps dense 384-dimensional embeddings down to a compact 64-dimensional feature subspace, forcing out uninformative background noise. The ReLU introduces non-linear decision boundaries required to highlight subtle rhetorical techniques, while Layer Normalization stabilizes gradient variance across small-batch training ($B=16$). Dropout ($p=0.3$) regularizes the dense layer, preventing the classifier from memorizing frequent journalistic vocabulary and ensuring the head generalizes across unseen news topics. Finally, the terminal layer maps the normalized features to 8-way technique logits $\mathbf{z} \in \mathbb{R}^8$.
+
+If Stage 1 predicts no active span ($p_{\text{start}} = -1$), the pipeline short-circuits and defaults to `not_propaganda` without invoking Stage 2, preserving computational efficiency on clean context.
+
+### Hyperparameter Search & Optimization Strategy
+To properly optimize Variation 1 and establish a theoretical upper bound for Stage 2, training and hyperparameter tuning were divided into two isolated protocols:
+
+#### 1. Stage 2 Head Training & The Oracle Ceiling
+To ensure the Stage 2 classifier learned clean technique representations without being degraded by early Stage 1 prediction errors, Stage 2 was trained exclusively on gold-standard propaganda spans extracted from the training corpus. DeBERTa backbone parameters were completely frozen, updating only the parameters of the MLP head using AdamW ($\text{LR} = 1\times 10^{-3}$, $B = 16$) over 10 epochs. When evaluated on validation gold spans, Stage 2 established an Oracle Ceiling of 0.5106 Macro-F1 (and 0.5178 Accuracy), representing the maximum possible performance Variation 1 could achieve under perfect ($100\%$) spatial localization.
+
+
+#### 2. Stage 1 Hyperparameter Grid Search
+Stage 1 was independently tuned via a grid search across transformer learning rates ($\eta_{\text{base}} \in \{5\times 10^{-6}, 1\times 10^{-5}, 3\times 10^{-5}\}$) and head learning rates ($\eta_{\text{head}} \in \{3\times 10^{-4}, 5\times 10^{-4}, 1\times 10^{-3}\}$) over 3 training epochs. Evaluating purely on boundary localization accuracy within the allowable $\delta$-tolerance window yielded the optimal configuration:
+
+- Backbone LR ($\eta_{\text{base}}$): $3\times 10^{-5}$
+- Heads LR ($\eta_{\text{head}}$): $1\times 10^{-3}$
+- Micro-Batch Size ($B$): $16$
+- Stage 1 Standalone Benchmark: 0.3834 Span-F1 (Precision: $0.4924$, Recall: $0.3139$)
+
+> Wait how did we optimize on the boundaries? what was the loss function?
+
+```
+Tuning Trial | Backbone LR (ηbase​) | Heads LR (ηhead​)Span Precision | Span Recall | Standalone | Span-F1 | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Trial 1 | 5e-6 | 3e-4 | 0.4327 | 0.2395 | 0.3083 |
+| Trial 4 | 1e-5 | 3e-4 | 0.4140 | 0.2492 | 0.3111 |
+| Trial 6 | 1e-5 | 1e-3 | 0.4415 | 0.2686 | 0.3340 |
+| Trial 9 (Selected) | 3e-5 | 1e-3 | 0.4924 | 0.3139 | 0.3834 |
+```
+
+
+---
 
 
 #### 1. Stage 1: 3-Class Span Detection Tagger
@@ -226,15 +274,6 @@ During end-to-end inference, Variation 1 operates sequentially
   [Predict 'not_propaganda'] [Stage 2 Classifier] ──> Mean-pools [p_start, p_end] & emits technique
 ```
 
-This sequential execution introduces two severe empirical failure modes that crippled Variation 1's performance
-
-###### 1. Cascading Recall Lock (The Single-Point Bottleneck)
-Because Stage 1's span recall was capped at $\sim 32\%$ on the validation set, over two-thirds of active propaganda spans were completely missed during Stage 1 decoding. In a decoupled cascade, any missed span immediately defaults to a False Negative. Stage 2 is never invoked for these instances, permanently blinding the downstream classifier and locking Variation 1's end-to-end recall to 0.1500
-
-##### 2. Feature Dilution via Boundary Offsets
-When Stage 1 predicts a span that is slightly misaligned (e.g., predicting "the toxic narrative was" instead of the gold target "toxic narrative"), Stage 2 is forced to mean-pool the core technique tokens alongside neutral background words. Incorporating uninformative background vectors shifts the resulting pooled embedding in feature space, diluting its semantic signal and making it substantially harder for the classification head to assign the correct technique label.
-
-As a direct result of these cascading failure points, Variation 1's end-to-end performance plummeted from its 0.5106 Oracle Ceiling to a terminal 0.1684 Macro-F1, representing a catastrophic localization degradation ($\Delta$) of -0.3422
 
 --- 
 
