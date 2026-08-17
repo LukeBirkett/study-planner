@@ -60,3 +60,5 @@ group of people without investigating the complexities of an issue |
 | **`MISC`** | `MONEY`, `EVENT`, `PERCENT`, `WORK_OF_ART`, `FAC`, `LAW`, `PRODUCT`, `LANGUAGE`, `QUANTITY` | Homogenized | Aggregates low-frequency entity classes to preserve feature density. |
 
 ---
+
+### Appendix E: Custom Stopword List
