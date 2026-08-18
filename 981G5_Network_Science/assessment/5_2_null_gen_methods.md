@@ -223,10 +223,6 @@ Calibrating $\lambda$: We can outline a quick 5-line Python script using your St
 
 Structuring Section 5.2 (Iterative MVP Development): We can write out the text explaining how you progress from naive shuffles $\to$ pass-level rewiring $\to$ this spatial distance-decay pass engine.
 
-
-
-
-
 1. Pass Re-Wire, Recipient Player Only: This takes the fully established topology and re-wired the in-degree, receiving player only. This produces Null Baseslines which model the expected behaviour of players based on their assigned position. Players like Harry Kane who are strikers but drop deep to receive passes will show up when compare to Baseslines as unique as they break the expected in-degree patterns. Similarly, free flowing positional players like inverted full-backs will show up. 
 
 2. Pass Re-Wire, Recipient Player + Pass End Location. This takes the fully established topology and re-wires the in-degree of the receiving player but it allows for variance in the passing players passing "ability". Elite passers like Trent will execute passing from a Right-Back position that most will not. Therefore, a Null Baseline will genreally produce passes equivelant to the average right-back, highlight Trent as unique. Note, this approach also obtain the same leverage as 1. meaning the behaviour of the receiving player will also have an influence. This isn't ideal and we would prefer to isolate the variables. We could model the recipiet probably distribution for each team/match and therefore the baseline would keep the in-degree behaviour fixed. However, the plan was to build the probabiltiy distributions on a season/league level, utilising all the data. It is undecided wether we will keep it this way for parsimonious or build a probably distribution for each team. Probably the form and explcititly explain this as a limitation. 

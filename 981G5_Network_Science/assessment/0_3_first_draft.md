@@ -232,7 +232,7 @@ However, this structural democracy contrasts sharply with the team's pass-volume
 
 > Also stress that we are still looking at very grnaular data whereby we are having to pick up many different metrics and calcualtions to form analysis. We are clear terminal metrics to evaluate by, otherwise, we may as well invest heavily in a in-person scouts and do this all manually by scouting experts
 
-> **Previous Transition:**
+> **Previous Transition Draft Pargraph:**
 > "While unweighted degree analysis provides an intuitive baseline of player involvement and channel availability, it struggles to capture the weighted intensity and directional flow of modern possession football. Attempting to artificially extend basic degree moments into weighted variants quickly leads to a fragmentation of metrics. This limitation directly motivates the deployment of our advanced metric suite (Betweenness Centrality, Weighted Clustering Coefficient, and Average Shortest Path Length) to rigorously model indirect flow, local clustering, and global efficiency."
 > - If you try to adapt every basic statistical moment (mean, variance, second moment, $CV_k$) to account for in-strength, out-strength, total volume, and edge weights, your exploratory section becomes bloated with 15–20 superficial variation tables before you've even touched core graph theory.
 > - By demonstrating that standard, unweighted degree metrics ($\langle k \rangle$, $CV_k$, etc.) flatten the nuance of a passing network (e.g., showing near-homogeneous degree counts because almost every outfield player connects with every other at least once), you explicitly justify why advanced metrics are necessary.
@@ -360,77 +360,26 @@ While path lengths and betweenness centrality evaluate macro-level circulation a
 
 > We can reference heavily Buldu's work with Barcelona here. 
 
-To compute clustering in a directed, heavily weighted passing network, we adopt the formulation by Ahnert et al. (2007). Edge weights ($w_{ij}$) are first normalized against the maximum observed passing weight in the team ($w_{\max}$):
+##### 4.4.1 Framework Scoping
+To evaluate local passing cohesiveness without the distortions of classical network metrics, this section adopts a progressive, bottleneck-weighted triad workflow tailored to spatial football dynamics.
 
-$$\tilde{w}_{ij} = \frac{w_{ij}}{w_{\max}} \in [0, 1]$$
+Traditional network clustering measures closed, cyclical loops ($i \to j \to k \to i$). However, these cycles fail to capture progressive football build-up and suffer from spatial boundary biases that penalize wide players operating in restricted corridors. 
 
-For player $i$, the local weighted directed clustering coefficient $C_w(i)$ measures the intensity of directed triangles containing $i$, normalized by the maximum possible directed topological triplets that player $i$ could form:
+Additionally, pure cyclical triangles in football do not means much. We want to see players using triangles to reach a third player and we want to measure the density of passing triangles to identifical working sub groups, but we don't care about pure circles. 
 
-Where:
-- $\tilde{W}$ is the normalized weighted adjacency matrix.
-- $\tilde{W}^{1/3}$ represents an element-wise geometric transformation ($\tilde{w}_{ij}^{1/3}$) that penalizes triangles containing a weak link.
-- $d_i^{\text{tot}} = d_i^{\text{in}} + d_i^{\text{out}}$ is the total unweighted degree (unique incoming and outgoing passing channels) for player $i$.
-- $d_i^{\leftrightarrow}$ represents the number of reciprocal (bilateral) passing channels connected to player $i$.
+While standard network theory relies on closed, cyclical loops ($i \to j \to k \to i$) to calculate local clustering, this classical formulation presents a fundamental misalignment with football tactics. In possessional dynamics, the primary objective of a passing triangle is not to recycle the ball endlessly back to its origin, but to establish progressive support, wall-pass combinations, and alternative routes to bypass opposition pressing lines.
 
-The team-wide Global Weighted Clustering Coefficient ($C_w$) is computed as the unweighted mean across all $N = 11$ players:
+This leads the framework to evaluating combination structures — such as wall-passes and support triangles — where an originator ($A$) links to a target ($C$) both directly and via an intermediate support option ($B$).
 
-$$C_w = \frac{1}{N} \sum_{i=1}^{N} C_w(i)$$
+A forward-moving transitive triad—where Player $A$ passes to Player $B$, who then finds Player $C$, while Player $A$ also maintains a direct line to Player $C$ ($A \to B \to C$ and $A \to C$)—represents a highly effective tactical overload, yet standard cyclic clustering assigns it a score of zero.
 
-Translating directed, weighted triad formulas into computational code requires careful linear algebra handling to preserve topological accuracy:
+To account for tactical flow, each 3-player combination is weighted by its weakest passing link, ensuring that a passing sequence is evaluated only as fluid as its lowest-volume channel.
 
-**Max-Weight Normalization ($\tilde{w}_{ij} = w_{ij} / w_{\max}$):**
-Normalizing by the single highest edge weight across the graph ensures that all transformed weights fall cleanly into the range $[0, 1]$. This prevents raw pass counts (e.g., $128$ passes between center-backs vs. $8$ passes to a forward) from generating arbitrarily large unbounded values, bounding $C_w(i)$ appropriately.
+Finally, individual player scores are computed by summing the minimum capacities across all active transitive triads in which a player participates, effectively mapping their integration into the team's overarching build-up engine room.
 
-**The "Matrix Cube Trick" ($\tilde{W}^3_{ii}$) & Geometric Weighting:**
-In algebraic graph theory, raising an adjacency matrix to the $3^{\text{rd}}$ power ($A^3$) computes the exact number of $3$-step closed walks starting and ending at node $i$. By applying an element-wise cube root ($\tilde{w}_{ij}^{1/3}$) before matrix multiplication, the calculation computes the geometric mean of the three edge weights in each triangle ($\sqrt[3]{\tilde{w}_{ij} \tilde{w}_{jk} \tilde{w}_{ki}}$). Tactically, this enforces a strict constraint: a passing triangle is only as strong as its weakest link. If two players exchange $50$ passes, but the third link involves only $1$ pass, the geometric mean severely penalizes the triad score. Symmetrizing $S = \tilde{W}^{1/3} + (\tilde{W}^T)^{1/3}$ captures all $8$ possible directional orientations of a directed triangle, with the factor $\frac{1}{8}$ ($0.125$) correcting for symmetry expansion.
+> Does this retain the matrix cube trick? 
 
-**Maximum Topological Triplet Denominator:**
-The denominator measures the maximum potential directed triangles player $i$ could form given their unweighted connectivity. The term $2 \left[ d_i^{\text{tot}} (d_i^{\text{tot}} - 1) - 2 d_i^{\leftrightarrow} \right]$ accounts for directed edge permutations while subtracting reciprocal edges ($d_i^{\leftrightarrow}$) to prevent double-counting two-way passing channels. This ensures that player scores reflect actual triangular density relative to their physical neighborhood size.
-
-<!--
-| Player | Position | Local Weighted Clustering $C_w(i)$ |
-| :--- | :--- | :---: |
-| Victoria Pelova | Right Defensive Midfield | 0.0297 |
-| Kim Little | Left Defensive Midfield | 0.0287 |
-| Leah Williamson | Right Center Back | 0.0262 |
-| Carlotte Wubben-Moy | Left Center Back | 0.0259 |
-| Emily Ann Fox | Right Back | 0.0239 |
-| Stephanie-Elise Catley | Left Back | 0.0224 |
-| Alessia Russo | Center Attacking Midfield | 0.0193 |
-| Sabrina D’Angelo | Goalkeeper | 0.0178 |
-| Bethany Mead | Right Wing | 0.0161 |
-| Caitlin Jade Foord | Left Wing | 0.0148 |
-| Emma Stina Blackstenius | Center Forward | 0.0085 |
--->
-
-The team-wide Global Weighted Clustering Coefficient of $C_w = 0.0212$ demonstrates that Arsenal WFC’s possession structure operates primarily as an expansive, direct progression network rather than a heavily localized overload system. Rather than repeatedly cycling the ball within tight $3$-player loops, ball movement flows via direct distribution routes connecting the defensive origin to the attacking periphery.
-
-To accurately interpret the team-wide global value of $C_w = 0.0212$, two crucial mathematical features of the Ahnert et al. (2007) formulation must be highlighted. First, the metric is strictly directional and cycle-dependent, measuring only fully closed, sequential passing loops ($i \to j \to k \to i$). It does not count static spatial triangles or transitive forward progressions where the ball flows to an advanced receiver via two separate paths ($i \to j \to k$ and $i \to k$) without returning to the originator. If any single leg of a directed 3-player circuit is absent—such as a winger receiving from the backline but never passing back into the build-up—that loop contributes zero to the score. Second, because the algorithm applies an element-wise geometric mean ($\sqrt[3]{\tilde{w}_{ij} \tilde{w}_{jk} \tilde{w}_{ki}}$) to max-normalized edge weights, the calculation severely penalizes unbalanced passing volumes. Even when a physical triangle exists, if two legs carry high pass volumes (e.g., $100$ passes) but the return leg is negligible (e.g., $1$ pass), the geometric mean suppresses the triad score toward zero. Consequently, a global score of $C_w = 0.0212$ (representing just $\approx 2.1\%$ of theoretical maximum density) mathematically proves that Arsenal operates an expansive, vertically oriented progression network: once possession advances into forward channels, it is converted into direct attacking actions rather than recycled in continuous 3-player loops.
-
-The standard Ahnert et al. (2007) denominator normalizes player $i$'s local triangle count against the maximum theoretical directed triplets player $i$ could form with all of their active neighbors across the entire pitch:
-
-$$\text{Standard Denominator} = 2 \left[ d_i^{\text{tot}}(d_i^{\text{tot}} - 1) - 2d_i^{\leftrightarrow} \right]$$
-
-Because an active outfield player connects with 8–10 different teammates across a match, this denominator scales quadratically with their total degree ($d_i^{\text{tot}}$
-
-A Left Back (e.g., Steph Catley) might form dense, highly efficient passing triangles on the left flank with the Left Center Back (Wubben-Moy), Left Midfielder (Kim Little), and Left Winger (Foord). However, because Catley also has weak, long-range, or occasional connections to the Right Center Back (Williamson), Right Back (Fox), and Right Winger (Mead), the standard formula expects her to also form passing triangles with those right-sided players!When she naturally does not form triangles across the pitch, the standard denominator massively dilutes her local score, driving all player values down into the $0.01 - 0.03$ range.
-
-> "A critical consideration when interpreting player-level local clustering ($C_w(i)$) in spatial sports networks is the influence of positional boundaries on graph denominators. Standard network theory normalizes local triad counts against all possible edge permutations across a player's entire unweighted neighbor set ($d_i^{\text{tot}}$). In a football network, this creates an inherent spatial bias:A flank player—such as Steph Catley ($C_w(i) = 0.0224$) or Emily Fox ($C_w(i) = 0.0239$)—operates within a bounded 180-degree spatial corridor. While they may participate in dense, highly efficient passing triads with their immediate left-sided partners (Left Center-Back, Left Midfielder, Left Winger), the standard denominator penalizes them for failing to construct cross-pitch triads with right-sided players with whom they maintain only occasional direct contact.Consequently, the player-level $C_w(i)$ values should not be read as absolute percentages of local overload efficiency, but rather as relative indicators of spatial centrality. Central double-pivots (Pelova and Little) achieve the highest scores ($0.0297$ and $0.0287$) because their central spatial footprint permits 360-degree triad formation, whereas wide and advanced players experience structural metric suppression due to the spatial segregation of modern tactical formations."
-
-At the individual level, a clear positional gradient emerges from deep to advanced zones:
-
-**The Double-Pivot Overload Hubs:** Victoria Pelova ($C_w(i) = 0.0297$) and Kim Little ($0.0287$) record the highest local clustering scores across the squad. Operating in central midfield, Pelova and Little act as the primary facilitators of triangular passing combinations, consistently forming $3$-player recycling loops with the central defenders and full-backs to bypass opposition pressing traps.
-
-**Defensive Circuit Stability:** Central defenders Leah Williamson ($0.0262$) and Carlotte Wubben-Moy ($0.0259$), alongside full-backs Emily Fox ($0.0239$) and Steph Catley ($0.0224$), form the second cluster of local density. This proves that Arsenal’s backline maintains secure, multi-option passing structures during early build-up rather than relying on isolated long-ball clearances.
-
-**Attacking Isolation in the Final Third:** Moving into advanced areas, clustering values decay rapidly: central attacking midfielder Alessia Russo ($0.0193$), wide forwards Beth Mead ($0.0161$) and Caitlin Foord ($0.0148$), and center-forward Stina Blackstenius ($0.0085$) record the lowest triad densities. In the final third, possessional dynamics shift away from multi-pass triangular loops toward direct $1$-on-$1$ take-ons, crossing opportunities, and shot generation. Blackstenius's minimal score ($0.0085$) further reinforces her tactical role as an off-the-ball box finisher operating entirely detached from the team's build-up triangles.
-
-> Truthlly, I don't think this the correct approach to analysing clustering. In football, we don't care about a complete circular triangle, we care about the existence of the triangle as it allows players reach a blocked player via another. 
-
-
-While standard network theory relies on closed, cyclical loops ($i \to j \to k \to i$) to calculate local clustering, this classical formulation presents a fundamental misalignment with football tactics. In possessional dynamics, the primary objective of a passing triangle is not to recycle the ball endlessly back to its origin, but to establish progressive support, wall-pass combinations, and alternative routes to bypass opposition pressing lines. A forward-moving transitive triad—where Player $A$ passes to Player $B$, who then finds Player $C$, while Player $A$ also maintains a direct line to Player $C$ ($A \to B \to C$ and $A \to C$)—represents a highly effective tactical overload, yet standard cyclic clustering assigns it a score of zero. To align our network model with spatial realities on the pitch, we transition to a Total Directed Triad Intensity approach. By evaluating all functional 3-player combinations (incorporating both transitive/progressive channels and cyclical loops) weighted by their minimum channel throughput, this refined metric eliminates structural pitch-boundary penalties and accurately quantifies a player's ability to participate in press-resistant, multi-option passing combinations.
-
-> we dropped cyclical loops. it basically doesn't mean anything in football expect for maybe identifying tika takq tactics
+To align our network model with spatial realities on the pitch, we transition to a Total Directed Triad Intensity approach. By evaluating all functional 3-player combinations (incorporating both transitive/progressive channels and cyclical loops) weighted by their minimum channel throughput, this refined metric eliminates structural pitch-boundary penalties and accurately quantifies a player's ability to participate in press-resistant, multi-option passing combinations.
 
 Focusing purely on forward-moving, line-breaking combinations, we eliminate cyclical loops to isolate Transitive Triads ($i \to j \to k$ with $i \to k$). In tactical graph theory, a transitive triad measures a player’s ability to participate in multi-option passing structures where an originator ($i$) can reach a target ($k$) both directly and via an intermediate wall-pass or support option ($j$).
 
@@ -448,6 +397,46 @@ $$I_{\text{team}} = \frac{1}{N} \sum_{i=1}^{N} I_{\text{transitive}}(i)$$
 
 The following script iterates through all unique 3-player combinations ($N = 11 \implies \binom{11}{3} = 165$ potential triplets), evaluates all 6 directed transitive permutations ($a \to b$, $b \to c$, $a \to c$), and aggregates total progressive triad participation scores for each player.
 
+NOTE: the coded implementation specifically looks at clusters that link two players using a second. i.e. a and c with a b included. e.g. w_ab = W[a, b], w_bc = W[b, c], w_ac = W[a, c]. It does not care about c -> a or c -> b. This is because we are looking at clusters, i.e. passing groups, that facilitate linkage. this is a footballing appplication. 
+
+By stripping out cyclical loops and evaluating pure transitive triads ($A \to B \to C$ with $A \to C$), we measure a player's ability to participate in multi-option, forward-moving combinations. Rather than tracking how often the ball cycles backward to its origin, $I_{\text{transitive}}$ quantifies the volume and throughput of progressive wall-passes, line-breaking support options, and alternative passing lanes.
+
+
+##### Results
+
+##### Team Level (The Macro View)
+Focusing on tactical aggregation, roster composition, dynamic pairings, or team-wide identity. This answers how these cluster archetypes combine to impact collective output or performance.
+
+The team-wide Global Transitive Triad Intensity of $I_{\text{team}} = 582.55$ pass units demonstrates a high collective capacity for structured, multi-receiver ball progression through central and half-space channels.
+
+
+##### Player Level (The Micro View):
+Focusing on individual profiles, player traits, positional roles, or specific performance metrics. This tells you who a player is and why they belong in a particular bucket.
+
+By transitioning from classical cyclic clustering to Pure Transitive Triad Intensity ($I_{\text{transitive}}$), our network model shifts from measuring backward possession recycling to isolating high-value, forward-moving tactical combinations ($A \to B \to C$ and $A \to C$). 
+
+Expressed directly in cumulative pass throughput units — where each 3-player wall-pass or progressive triad is weighted by its bottleneck-constrained minimum channel volume ($\min(w_{AB}, w_{BC}, w_{AC})$) — a player’s score reflects their total integrated participation across all overlapping 3-player progression units. 
+
+Consequently, the team-wide global metric ($I_{\text{team}} = 582.55$) does not represent a percentage bound between $0$ and $1$, but rather functions as the structural baseline dividing Arsenal’s progressive engine room from its specialized final-third executors. 
+
+Players operating well above this baseline—led by central double-pivots Kim Little ($1069.0$) and Victoria Pelova ($927.0$), alongside central defenders Carlotte Wubben-Moy ($864.0$) and Leah Williamson ($814.0$)—form an integrated core responsible for virtually all multi-option line-breaking combinations across the pitch.
+
+Conversely, the sharp drop-off seen in wide outlets (Mead at $450.0$, Foord at $275.0$) and central striker Stina Blackstenius ($95.0$) confirms a clear tactical boundary where Arsenal’s central spine builds multi-receiver passing structures to bypass opposition pressure, while advanced attackers operate as terminal receivers tasked with 1-on-1 isolation and direct box execution.
+
+**The Double-Pivot as the Transitive Engine:**
+Our understanding of Kim Little ($1069.0$) and Victoria Pelova ($927.0$). They heavily dominate the squad in transitive intensity, proving that their primary tactical function is providing the crucial intermediate wall-pass option ($B$) that allows deep defenders ($A$) to bypass pressing lines and find advanced attackers ($C$).
+
+**Deep Build-Up Originators:**
+Central defenders Carlotte Wubben-Moy ($864.0$) and Leah Williamson ($814.0$) form the second highest tier. Their high transitive scores indicate that when they play progressive passes into midfield or the wings, they consistently maintain a secondary direct channel to the target receiver, ensuring built-in redundancy during first-phase progression.
+
+**Alessia Russo’s Key Linking Role:**
+Alessia Russo ($641.0$) ranks significantly higher in transitive intensity than any other attacking or wide player. Operating in central attacking midfield, Russo actively drops into intermediate pockets to receive wall-passes and lay possession off to advancing wingers (Beth Mead, $450.0$) or full-backs (Steph Catley, $645.0$).
+
+**Frontline Terminal Isolation:**
+As expected in a transitive model, wide forward Caitlin Foord ($275.0$) and center-forward Stina Blackstenius ($95.0$) rank at the bottom of the outfield players. Because Blackstenius operates on the shoulder of the last defender, she acts as a final-third receiver rather than a multi-pass facilitator, meaning few progressive sequences originate from or route through her to a third teammate.
+
+Unlike normalized ratio metrics bounded strictly between $0$ and $1$, Transitive Triad Intensity ($I_{\text{transitive}}$) is expressed in cumulative pass throughput units. For any functional 3-player progressive combination ($A \to B \to C$ and $A \to C$), the algorithm evaluates its capacity as the bottleneck-constrained minimum pass count across its three active channels ($\min(w_{AB}, w_{BC}, w_{AC})$), subsequently awarding this capacity score to all three participating players. Because central playmakers sit at the intersection of numerous overlapping spatial units, their total score reflects the sum of throughput capacities across dozens of simultaneous 3-player combinations. Consequently, absolute values (such as Kim Little’s squad-leading $1069.0$ units relative to the team global average of $582.55$) should be interpreted as cumulative progressive capacity: scores above $900$ denote central playmaking engines involved in nearly all team progression loops, mid-tier scores ($500–900$) highlight key sectoral originators and link players, while low scores ($< 150$) isolate terminal endpoints and specialized target receivers.
+
 <!--
 | Player | Position | Transitive Triad Intensity ($I_{\text{transitive}}$) | Tactical Role Profile |
 | :--- | :--- | :---: | :--- |
@@ -464,66 +453,42 @@ The following script iterates through all unique 3-player combinations ($N = 11 
 | Emma Stina Blackstenius | Center Forward | 95.0 | Terminal Penetration Target |
 -->
 
-By stripping out cyclical loops and evaluating pure transitive triads ($A \to B \to C$ with $A \to C$), we measure a player's ability to participate in multi-option, forward-moving combinations. Rather than tracking how often the ball cycles backward to its origin, $I_{\text{transitive}}$ quantifies the volume and throughput of progressive wall-passes, line-breaking support options, and alternative passing lanes.
+##### Triad Level/The Clusters Themselves (The Meso View):
+Focusing on the clusters, their centroids, boundaries, and mathematical validity (e.g., silhouette scores, cluster size, overlap). This defines what the distinct archetypes or profiles actually are across your dataset.
 
-The team-wide Global Transitive Triad Intensity of $I_{\text{team}} = 582.55$ pass units demonstrates a high collective capacity for structured, multi-receiver ball progression through central and half-space channels.
+Transitive triads ($A \to B \to C$ alongside $A \to C$) measure a team's capacity for progressive ball circulation, wall-passes, and line-breaking combination plays. Because each triad's capacity is constrained by the minimum throughput across its three active channels ($\min(w_{AB}, w_{BC}, w_{AC})$), these top 10 results reveal the primary, press-resistant passing circuits that drive Arsenal WFC's build-up play.
 
-By transitioning from classical cyclic clustering to Pure Transitive Triad Intensity ($I_{\text{transitive}}$), our network model shifts from measuring backward possession recycling to isolating high-value, forward-moving tactical combinations ($A \to B \to C$ and $A \to C$). Expressed directly in cumulative pass throughput units—where each 3-player wall-pass or progressive triad is weighted by its bottleneck-constrained minimum channel volume ($\min(w_{AB}, w_{BC}, w_{AC})$)—a player’s score reflects their total integrated participation across all overlapping 3-player progression units. Consequently, the team-wide global metric ($I_{\text{team}} = 582.55$) does not represent a percentage bound between $0$ and $1$, but rather functions as the structural baseline dividing Arsenal’s progressive engine room from its specialized final-third executors. Players operating well above this baseline—led by central double-pivots Kim Little ($1069.0$) and Victoria Pelova ($927.0$), alongside central defenders Carlotte Wubben-Moy ($864.0$) and Leah Williamson ($814.0$)—form an integrated core responsible for virtually all multi-option line-breaking combinations across the pitch. Conversely, the sharp drop-off seen in wide outlets (Mead at $450.0$, Foord at $275.0$) and central striker Stina Blackstenius ($95.0$) confirms a clear tactical boundary where Arsenal’s central spine builds multi-receiver passing structures to bypass opposition pressure, while advanced attackers operate as terminal receivers tasked with 1-on-1 isolation and direct box execution.
+Kim little is in 7 of the top 10. This tell use that her volumne is distributed through different sub-communities. 5 as the taget, 2 as the intermediary. Little acts as the essential linkage between deep central defenders (Wubben-Moy, Williamson) and intermediate facilitators (Pelova, Russo). She ensures Arsenal can cycle possession through central areas while maintaining direct forward lines.
 
-**The Double-Pivot as the Transitive Engine:**
-Moving from cyclic clustering to transitive triad intensity completely transforms our understanding of Kim Little ($1069.0$) and Victoria Pelova ($927.0$). They heavily dominate the squad in transitive intensity, proving that their primary tactical function is not looping possession backward, but providing the crucial intermediate wall-pass option ($B$) that allows deep defenders ($A$) to bypass pressing lines and find advanced attackers ($C$).
+The top two triads contain Carlotte Wubben-Moy ↔ Kim Little showing us they work as be units in an abstract sub-comminity and involves over players beyond them. they facilitiate the movement of the ball often. Steph Catley (Left Back), Wubben-Moy (Left Center Back), and Kim Little form a dense, high-volume overload triangle on the left side of the pitch. This allows Arsenal to comfortably play out from the back under pressure along the left touchline.
 
-**Deep Build-Up Originators:**
-Central defenders Carlotte Wubben-Moy ($864.0$) and Leah Williamson ($814.0$) form the second highest tier. Their high transitive scores indicate that when they play progressive passes into midfield or the wings, they consistently maintain a secondary direct channel to the target receiver, ensuring built-in redundancy during first-phase progression.
+Central defenders Carlotte Wubben-Moy (present in 6 of top 7 triads) and Leah Williamson (present in triads 1, 5, 7, and 8) establish a highly **redundant** base. When passing out from defence, Wubben-Moy and Williamson do not rely on single linear passes; they consistently form 3-player structures with Little or Pelova, giving the passer two distinct receiving options.
 
-**Alessia Russo’s Key Linking Role:**
-Alessia Russo ($641.0$) ranks significantly higher in transitive intensity than any other attacking or wide player. Operating in central attacking midfield, Russo actively drops into intermediate pockets to receive wall-passes and lay possession off to advancing wingers (Beth Mead, $450.0$) or full-backs (Steph Catley, $645.0$).
+Asymmetric Progression: Left vs. Right Flank: Left-flank and deep-left circuits dominate the highest-capacity ranks (110+ units). Right-sided progression through Emily Ann Fox (Right Back) appears only in Rank 8 and Rank 10 (55.0 and 51.0 units). This indicates that while Arsenal's left side is used for heavy, high-volume build-up, the right flank is utilized more selectively as a secondary or switching outlet.
 
-**Frontline Terminal Isolation:**
-As expected in a transitive model, wide forward Caitlin Foord ($275.0$) and center-forward Stina Blackstenius ($95.0$) rank at the bottom of the outfield players. Because Blackstenius operates on the shoulder of the last defender, she acts as a final-third receiver rather than a multi-pass facilitator, meaning few progressive sequences originate from or route through her to a third teammate.
+Absence of Final-Third Attackers; Only one triad features a central attacking midfielder (Alessia Russo at Rank 9 with 51.0 units), and no top-10 triads feature primary wingers or strikers (e.g., Mead, Foord, Blackstenius). This demonstrates a clear structural split: Arsenal uses a tightly connected 5-to-6 player unit (defenders and double-pivot midfielders) to construct play and break lines, before releasing the ball into advanced areas where attackers operate in 1v1 situations or direct finishing roles rather than continuous 3-player loops.
 
-Unlike normalized ratio metrics bounded strictly between $0$ and $1$, Transitive Triad Intensity ($I_{\text{transitive}}$) is expressed in cumulative pass throughput units. For any functional 3-player progressive combination ($A \to B \to C$ and $A \to C$), the algorithm evaluates its capacity as the bottleneck-constrained minimum pass count across its three active channels ($\min(w_{AB}, w_{BC}, w_{AC})$), subsequently awarding this capacity score to all three participating players. Because central playmakers sit at the intersection of numerous overlapping spatial units, their total score reflects the sum of throughput capacities across dozens of simultaneous 3-player combinations. Consequently, absolute values (such as Kim Little’s squad-leading $1069.0$ units relative to the team global average of $582.55$) should be interpreted as cumulative progressive capacity: scores above $900$ denote central playmaking engines involved in nearly all team progression loops, mid-tier scores ($500–900$) highlight key sectoral originators and link players, while low scores ($< 150$) isolate terminal endpoints and specialized target receivers.
+```
+================================================================================
+Top 10 Active Transitive Triads
+================================================================================
+     Player 1 (Origin/Target) Player 2 (Intermediate) Player 3 (Target/Origin)  Total Capacity (Pass Units)
+Rank                                                                                                       
+1                  Kim Little     Carlotte Wubben-Moy          Leah Williamson                        116.0
+2      Stephanie-Elise Catley              Kim Little      Carlotte Wubben-Moy                        111.0
+3      Stephanie-Elise Catley              Kim Little          Victoria Pelova                         76.0
+4                  Kim Little     Carlotte Wubben-Moy          Victoria Pelova                         69.0
+5                  Kim Little         Victoria Pelova          Leah Williamson                         67.0
+6      Stephanie-Elise Catley     Carlotte Wubben-Moy          Victoria Pelova                         65.0
+7         Carlotte Wubben-Moy         Victoria Pelova          Leah Williamson                         60.0
+8             Victoria Pelova         Leah Williamson            Emily Ann Fox                         55.0
+9                  Kim Little           Alessia Russo          Victoria Pelova                         51.0
+10                 Kim Little         Victoria Pelova            Emily Ann Fox                         51.0
+```
 
-
-> TODO: STRIP OUT THIS WHOLE SECTION ITS STARTED WITH ONE CLUSTERING APPROACH BUT IT WASNT APPROPRAITE. FIND A WAY TO EXPLAIN THIS FINDING IN A CONCISE WORD COULD. THEN PROPERLY EXPLAIN THE NEW APPRAOCH. ANALYSE THE RESULTS AND USE THE POLYGON PLOT TO DEMONSTATE
-
-> BASELINE GLOBAL NUMBER, PLAY LEVEL NUMBERS SCALED AGAINST BASELINE can be higher as they are in many trinagles where the passes overlap, TALK ABOUT THE ORDER TRIAD LIST, WHAT THE TRIPLETS MEAN and PLOT ON PITCH
-
-
-
-
-
-
-
+> TODO: PRESENT THE POLYGON PLOT
 
 ---
-
-Phase 2: Metric Suite Calculation
-
-B. Betweenness Centrality $g(i)$
-- Compute shortest-path betweenness using Dijkstra’s topological distances ($l_{ij} = 1 / w_{ij}$).
-- Identify structural "hubs" and critical conduits responsible for linking defensive, midfield, and attacking sectors.
-
-C. Weighted Clustering Coefficient $C_w(i)$ & Global $C_w$
-- Calculate local weighted clustering $C_w(i)$ for each player using the Ahnert et al. (2007) formulation to measure local passing triad density.
-- Average across all 11 players to derive global team clustering $C_w$
-
-D. Average Shortest Path ($d$)
-- Invert weights to establish edge lengths ($l_{ij} = 1 / w_{ij}$).
-- Apply Dijkstra’s algorithm to calculate the all-pairs shortest topological path matrix $p_{ij}$
-- Compute global team circulation distance: $d = \frac{1}{N(N-1)} \sum_{i \neq j} p_{ij}$ 
-
-Phase 3: Visualization & Tabular Output Layout
-
-The goal here is to put together simple, visual workflow. After computing the metrics, we want to plot then and/or put them into a table. This allows any written analysis to be clear and consice using this visual content as reference. 
-
-The main visual tool should be networks, bar charts or tables. 
-
-1. **Spatial PassMaps:** Custom $100 \times 100$ vertical pitch with node size proportional to total strength ($s_i^{\text{in}} + s_i^{\text{out}}$), node color reflecting Betweenness Centrality $g(i)$, edge width scaled to pass volume $w_{ij}$, and curved arrows (connectionstyle="arc3,rad=0.15") separating directional flows.
-2. **Bar Charts:** This is a great oppurtunity to show how networks themselves are the analytical tool, not the fact they can be visualised themselves. We take the networks/adj matrics, compute metrics and then present the network property metrics on a bar chart. We can take a pair of properties, or even more, and the goal is goal is the uncover architypes: Combinations of metrics and infer something. A simple idea could be a dual-bar chart displaying Net Pass Flow ($\Delta s_i$) alongside Betweenness Centrality $g(i)$ for all 11 players, where net flow is: ($\Delta s_i = s_i^{\text{out}} - s_i^{\text{in}}$). The difference between total passes a player completes ($s_i^{\text{out}}$) and total passes a player receives ($s_i^{\text{in}}$). Pairing these we could see a few different types of players. i.e. Positive Bars ($\Delta s_i > 0$): Players who "export" or originate more ball volume than they receive (e.g., Central Defenders or Deep Midfielders initiating build-up from tackles/turnovers)., Negative Bars ($\Delta s_i < 0$): Players who "import" or absorb ball volume (e.g., Strikers or Wingers receiving passes in high-risk attacking areas where possession usually ends in a shot, cross, or turnover)The Deep Playmaker (e.g., Xavi / Rodri type): High positive Net Flow ($\Delta s_i > 0$) combined with high Betweenness Centrality ($g(i)$). Doing this allows us to immediately spot player roles and structural reliance in a single glance. This is a key tool for performance analysis for coaching or player identification or recuitment. However, there are many suitable groups of metrics we could use: Total Volume vs. Betweenness, Betweenness Centrality vs. Local Clustering $C_w(i)$ (Hubs vs. Triangles), but I think a strong approach is to use a network property like centrality with simple degees based properties, i.e in, out, diff, tota.
-> I think I'll actually just plot all my suite metrics + 1 degree based.
-3. **Summary Table of Case Study Metrics:** The final is a metric table shich can be split down by player + team
-
 
 ##### Summary Table of Case Study Metrics:
 Player / Metric,Position,kiin​ / kiout​,siin​ (Received),siout​ (Passed),Net Flow (Δsi​),Betweenness g(i),Clustering Cw​(i)
@@ -532,10 +497,13 @@ Player 2 (CB),Center Back,...,...,...,...,...,...
 ...,...,...,...,...,...,...,...
 Team Global,Macro Summary,--,Total: 720,Total: 720,Mean: 0,Max: gmax​,Global Cw​
 Team d,Avg Shortest Path,d=x.xx,--,--,--,--,--
+
+> TODO: Not sure I will build this table. If I do itll probably go in the appendix
+
 ---
 
-**Analytical Observation: Exposing the Interpretation Gap**
-The narrative of Section 4.1 concludes by highlighting a fundamental methodological dilemma: **The Interpretation Gap.**
+#### 4.2 Analytical Observation: Exposing the Interpretation Gap*
+Quickly explains a fundamental methodological dilemma: **The Interpretation Gap.**
 
 **The Observed Readout:** The case study demonstrates impressive raw metric values—extremely high node strengths, a low Average Shortest Path ($d$), high global weighted clustering ($C_w$), and a prominent playmaking hub with high betweenness centrality $g(i)$.
 
@@ -549,85 +517,247 @@ This dilemma directly justifies moving to Section 4.2 (Macro Empirical Baselines
 
 ---
 
-#### 4.2. Macro-Level Context: Empirical League Baselines
-**Objective:** Test whether evaluating the single match against the global empirical distribution ($N=234$) provides meaningful context.
+#### 4.2. Macro-Level Context: Empirical League Baselines & The Sparsity Trap
+To evaluate whether an observed match network exhibits genuine tactical structure, we must first attempt to contextualize its metrics against an empirical baseline. To test the validity of empirical benchmarking, we isolate a core macro-level network property: Global Average Shortest Path ($d$). We compute team-level passing networks across the entire empirical dataset ($N=264$ team-match instances across 132 games) to construct a league-wide reference distribution.
 
-**Execution:**
-- Compute the same suite of network properties across all 234 match networks in the dataset.
-- Map the case study match onto the full league distributions (e.g., box plots or KDE distribution curves showing mean, range, and percentiles).
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      THE EMPIRICAL BASELINE DILEMMA                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 1. Raw League Baseline (N=264)  ──► Conflates high & low volume teams   │
+│                                     (Apples-to-Oranges Comparison)      │
+│                                                                         │
+│ 2. Volume Sub-Filter (800-899)  ──► Sample collapses to n=1 match       │
+│                                     (The Pass Volume Sparsity Trap)     │
+│                                                                         │
+│ 3. Tactical Formation Filter   ──► Splits modal bins across 11 setups   │
+│    (300-399 Pass Range)             (The Tactical Heterogeneity Trap)   │
+└─────────────────────────────────────────────────────────────────────────┘
 
-**Analytical Observation:** Confirm that the selected match sits at the upper extreme for properties like density and hub strength. However, critique this baseline: comparing a high-possession/high-pass game against low-possession or defensively counter-attacking matches conflates fundamentally different tactical structures.
+##### 1. The Pass Volume Bias
+Topological distance in a passing network is defined as the inverse of pass frequency ($l_{ij} = 1/w_{ij}$). Consequently, raw average shortest path lengths ($d$) are inherently coupled with absolute pass volume: completing a higher volume of passes naturally compresses topological edge costs across the graph.
+
+As shown in Figure 1, there is a strong inverse relationship between total team passes and $d$. Our case study match represents an extreme outlier in pass volume, ranking in the top $1\%$ of the dataset with $847$ completed passes. Correspondingly, its global shortest path ($d = 0.1884$) ranks $10^{\text{th}}$ out of $264$ networks (placing it in the top $3.41\%$ most topologically efficient matches).
+
+While this confirms that pass volume broadly dictates the bounds of $d$, the variance present within individual volume bands indicates that topological efficiency is not purely deterministic. However, comparing a high-possession network directly against a raw league distribution dominated by low-possession or defensively direct teams creates a fundamental "apples-to-oranges" conflation.
+
+##### 2. The Data Sparsity Trap
+To eliminate volume bias, the logical next step is to filter the empirical dataset to matches with comparable pass volumes. However, as demonstrated in Figure 2, the empirical distribution of team passes is heavily right-skewed and centered around modal match dynamics.
+
+Attempting to construct a volume-controlled baseline around our case study ($800\text{--}899$ passes) triggers the Data Sparsity Trap: the bin contains exactly $1$ match—our case study itself. Even expanding the contextual window highlights severe sample decay across non-modal tiers ($100\text{--}199$ passes: $n=7$; $600\text{--}699$ passes: $n=13$; $700\text{--}799$ passes: $n=3$).
+
+##### 3. The Tactical Heterogeneity Dilemma
+Even where empirical volume appears sufficient, contextual filtering collapses under tactical heterogeneity. The modal league bin ($300\text{--}399$ passes) contains $88$ team-match instances ($33.33\%$ of the dataset), seemingly offering an adequate empirical sample size.
+
+However, a valid control group must also account for tactical spatial alignment (formation topology). Different tactical formations impose distinct spatial constraints and passing preferences; for instance, a compact $4\text{-}4\text{-}2$ emphasizes direct vertical progression, whereas a $4\text{-}3\text{-}3$ or $4\text{-}2\text{-}3\text{-}1$ naturally encourages triangular passing clusters.
+
+When we decompose the $300\text{--}399$ pass bin by starting formation, the $88$ matches fragment across $11$ distinct tactical setups:
+- $4\text{-}2\text{-}3\text{-}1$: $n = 23$ ($26.14\%$)
+- $3\text{-}4\text{-}3$: $n = 19$ ($21.59\%$)
+- $3\text{-}5\text{-}2$: $n = 12$ ($13.64\%$)
+- $4\text{-}1\text{-}4\text{-}1$: $n = 11$ ($12.50\%$)
+- $4\text{-}3\text{-}3$: $n = 9$ ($10.23\%$)
+- Other Formations: $n = 14$ ($15.90\%$)
+
+Filtering simultaneously for both pass volume and tactical formation collapses even the most data-rich empirical bins into statistically fragile sub-samples.
+
+Furthermore, while our dataset is robust ($N=264$ team-matches across a full 22-game season), many sports network studies operate under severe data constraints, often analyzing only a handful of fixtures (Gama et al., 2026)
+
+Finally, while this demonstration focuses on a single macro-level metric ($d$), the sparsity problem compounds exponentially for micro-level, player-based properties (such as Betweenness Centrality or In-Degree). Player metrics require distributing data across specific tactical positions ($11$ positions per team), multiplying the degree of fragmentation and rendering empirical baselines entirely unviable for rigorous hypothesis testing. 
+
+This systemic failure of empirical controls directly dictates the necessity of Spatially-Constrained Generative Null Models. Rather than searching for rare empirical matches that match a team's volume and formation, generative nulls synthesize randomized reference ensembles that natively preserve a team's exact edge weights and degree sequences while testing for genuine tactical organization.
+
+
+##### Figure 1. Total Passes vs. Global Shortest Path
+![Total Passes vs. Global Shortest Path](URL_or_file_path "Optional Hover Title")
+
+##### Figure 2. Pass Distribution
+![Pass Distribution](URL_or_file_path "Optional Hover Title")
 
 ---
 
-#### 4.3. Tactical Sub-Filtering & The Data Sparsity Trap
-**Objective:** Attempt to refine the empirical baseline by controlling for tactical context (e.g., filtering for high pass volume and/or matching tactical formations).
+### 5. Null Modelling
 
-Demonstration of the Trap:
-- Apply strict contextual filters (e.g., passes $> X$, formation $= 4\text{-}3\text{-}3$).
-- Show that sub-setting drastically reduces the available sample size ($n \le 2$), often leaving only the same team across a couple of fixtures.
+#### 5.1. Conceptual Pivot: The Necessity of Synthetic Null Models
+Given empirical match data cannot simultaneously provide volume control and statistical power, evaluating passing networks against unconditioned league distributions remains fundamentally flawed. The only mathematically viable solution is to transition from observational controls to Generative Synthetic Null Models.
 
-**Methodological Conclusion:** Empirical sub-baselines fail because real-world match data suffers from the Data Sparsity Trap. You cannot build a statistically robust empirical control group without introducing confounding structural differences.
+In network science, a null model constructs a randomized reference ensemble ($\mathcal{G}_{\text{null}}$) designed to preserve low-level graph invariants—such as total edge weight ($W$), node count ($N$), or exact degree sequences ($k_i$) — while systematically destroying higher-order structural organization. Across broader network science literature, raw topological measures are widely recognized as uninformative unless evaluated against randomized reference configurations (Maslov & Sneppen, 2002; Newman, 2010).
+
+In the specific context of sports graphs, Buldú et al. (2018) — citing Sarzynska et al. (2016) — explicitly argue that passing network metrics must be interpreted relative to reference values derived from domain-appropriate null models. They frame null models as the essential mathematical mechanism to quantify structural order versus stochastic disorder, stressing that a realistic baseline must preserve game-specific constraints such as degree distributions, pass lengths, and player roles. This includes preserving both physical spatial coordinates on the pitch and functional player roles—ensuring, for example, that a goalkeeper's distribution profile is not artificially transformed into that of a central playmaker.
+
+This conceptual pivot aligns directly with Gama et al. (2026), who demonstrated that even advanced dynamic indices remain vulnerable to the exact same limitation: without a null model, observed structural variations cannot be distinguished from random match fluctuations or raw pass-volume artifacts. Consequently, Gama et al. (2026) explicitly call for randomized null benchmarks as an absolute requirement for football network analysis.
+
+However, standard topological nulls (such as Erdős–Rényi graphs or unconstrained degree rewiring) fail in sports analytics because they treat the pitch as an abstract, non-spatial graph. As spatial network theory confirms, spatial embeddedness fundamentally dictates connection probability (Barthélemy, 2011); ignoring pitch geometry and distance decay inevitably misinterprets physical spatial constraints as tactical anomalies.
+
+Therefore, to construct a valid benchmark, Section 6 introduces a Spatially-Constrained Generative Null Model — a generative engine that reconciles network randomization with pitch geography, player positional density surfaces, and physical spatial decay.
 
 ---
 
-#### 4.4. Conceptual Pivot: The Necessity of Synthetic Null Models
-**Objective:** Formalize the requirement for randomized, spatial null baselines as the solution to the network evaluation problem.
+##### 5.2 The Failure of Traditional Topological Nulls in Football
+Standard network null models—such as the Erdős–Rényi random graph $G(N, p)$ or the Degree-Preserving Rewiring Model (Configuration Model)—fail when applied to football passing networks because they treat the playing surface as an abstract metric-free topology. When applied directly to aggregated pass matrices, unconstrained rewiring algorithms generate either complete structural collapse or severe combinatorial deadlocks.
 
-##### 4.4.1. Defining the Baseline: What is a Null Model?
-In network science, a null model is a generative framework designed to produce a family of randomized graphs ($\mathcal{G}_{\text{null}}$) that preserve selected low-level topological properties of an empirical network ($G$)—such as node count ($N$), total edge weight ($W$), or degree sequence ($k_i$)—while systematically destroying higher-order structural patterns.
+###### Table 1. Graph-Theoretic Comparison: Empirical Baseline vs. Traditional Topological Null Models
 
-By comparing the empirical network against this randomized ensemble, researchers can perform hypothesis testing to determine whether an observed structural feature (e.g., high clustering coefficient, central hub formation, or motif frequency) is a non-trivial emergent property of system design or merely a statistical artifact of lower-level constraints.
 
-In the context of football analytics, passing networks are frequently evaluated using unconstrained network metrics (e.g., eigenvector centrality, modularity, or passing entropy). However, without a null baseline, assessing whether a team's passing structure reflects genuine tactical intent or merely compulsory spatial proximity becomes impossible. A null model isolates tactical signal from structural noise.
+##### 1. Erdős–Rényi $G(N, p)$: Global Homogenization & Spurious Structure
+The $G(N, p)$ baseline assumes uniform connection probability across all player pairs while preserving total pass volume ($W=847$). As shown in Table 1, this unconstrained approach completely erases team structure:
+- Collapse of Volume Hierarchy: In empirical matches, central distributors handle vast pass volumes relative to peripheral outlets, producing extreme strength variance ($\text{Var}(s_{\text{tot}}) = 5681.90$). By scattering passes uniformly, $G(N, p)$ collapses strength variance by $97\%$ ($\text{Var}(s_{\text{tot}}) = 171.72$), turning a tactical hierarchy into an artificially flat graph.
+- Degree Homogenization: The $G(N, p)$ model compresses degree variance down to $2.26$ ($CV_k$ drops from $0.17$ to $0.09$), forcing every player toward an unrealistically uniform connectivity profile centered around $\langle k \rangle \approx 16.91$.
+- Spurious Triad Inflation: Lacking spatial distance decay, the model connects distant player pairs across the pitch with equal probability. Scattering $847$ passes across all available channels activates dozens of cross-pitch player triplets that exchange zero passes in real match play, artificially inflating Global Transitive Triad Intensity from $582.55$ to $844.36$ (+45%).
 
-##### 4.4.2. Calls for Domain-Aware Nulls in the Literature
-The necessity of null baselines in spatial and sports networks is well-documented:
-- **Separating Randomness from Design:** Network science literature emphasizes that raw topological measures are uninformative without comparison against randomized configurations (Maslov & Sneppen, 2002; Newman, 2010).
-- **Accounting for Spatial Embeddedness and Baseline References:** Buldú et al. (2018) emphasize that network metrics must be interpreted relative to reference values derived from adequate null models. They explicitly argue that to be realistic, passing network nulls must incorporate the intrinsic, spatial, and topological constraints of the game—specifically player positions on the pitch, pass lengths, and the degree distribution—in order to accurately quantify disorder and structural complexity without treating physical constraints as anomalies.
+##### 2. Whole-Edge Rewiring: Deceptive Metrics & The Small-Graph Deadlock
+Unlike $G(N, p)$, the Whole-Edge Rewired Null Model (directed Configuration Model) appears to perform well at first glance. Because it explicitly preserves each player's directed degree sequence ($k_i^{\text{in}}, k_i^{\text{out}}$), its unweighted degree metrics ($\langle k \rangle = 16.18$, $CV_k = 0.17$) match the empirical baseline almost perfectly, and it recovers $88.5\%$ of the empirical strength variance ($\text{Var}(s_{\text{tot}}) = 5033.36$).
 
-> Buldú et al. (2018) specifically cite Sarzynska et al. (2016) to state that "the interpretation of network metrics should be referred to reference values, which can be obtained from adequate null models".
+However, these "acceptable" numbers mask a fundamental methodological deadlock: Degrees-of-Freedom Collapse on Small Micro-Graphs.
 
-> Game-Specific Parameters: They explicitly list what a realistic football null model must preserve: degree distribution, length of passes, and player positions on the pitch.
+Classical configuration models assume large, sparse networks ($N \to \infty, p \to 0$). In an $11$-player graph, there are only $N(N-1) = 110$ possible directed channels. Because elite passing networks activate 60% to 70% of these channels, the space of valid degree-preserving reconfigurations shrinks to near zero. When attempting 2-edge swaps ($A \to B, C \to D \implies A \to D, C \to B$), the vast majority of proposed swaps are rejected because the candidate target channels ($A \to D, C \to B$) already exist in the empirical network.
 
-> Quantifying Order vs. Noise: They frame null models as the mathematical mechanism to "determine the level of randomness of the topology" and "quantify the amount of disorder and complexity" in passing networks.
+Consequently, degree-preserving rewiring fails due to three core limitations:
+1. Topological Stagnation: Rather than constructing a randomized reference ensemble ($\mathcal{G}_{\text{null}}$), the algorithm becomes combinatorially locked, outputting a slightly perturbed version of the empirical graph rather than a genuine synthetic baseline.
+2. Disruption of Spatial Cooperation: On the few occasions where high-volume edge vectors successfully swap, they do so without spatial awareness. Swapping a heavy build-up channel (e.g., 40 passes between goalkeeper and central defender) to a distant receiver generates severe spatial paradoxes—such as direct, high-frequency goalkeeper-to-striker links—which breaks localized tactical triangles and drops Transitive Triad Intensity down to $513.00$ ($-11.9\%$).
+3. Inability to Model Synthetic Counterfactuals: Because the model merely re-encodes the specific match's degree sequence, it cannot simulate how an "average league team" would structure play under similar volume or spatial conditions.
 
-- **The Full-Circle Moment in Football Analytics:** Serving as a primary theoretical catalyst for this project, Gama et al. (2026) represent a full-circle realization in football network literature. While historical efforts shifted toward complex Markov-spectral dynamics in an attempt to capture possession flow beyond static SNA, Gama et al. (2026) demonstrate that higher-order dynamic indices (e.g., Entropy Rate, Spectral Gap, Kemeny's Constant) remain vulnerable to the same fundamental limitation: without a null model, observed structural or stochastic variations cannot be distinguished from random match fluctuations or raw pass-volume artifacts. Consequently, Gama et al. (2026) explicitly call for randomized null benchmarks as an absolute requirement for passing network analysis as a whole
-- **Spatial Network Theory:** Expert consensus in spatial graph analysis (Barthélemy, 2011) confirms that spatial embeddedness fundamentally governs link probability. A model that ignores distance decay will inevitably treat normal physical constraints as structural anomalies.
+##### 3. Conceptual Shift: From Single-Match Swapping to League-Wide Generative Nulls
+This methodological failure highlights a critical scope requirement for sports graph analytics. Unlike social networks or web graphs—where single monolithic networks are analyzed in isolation—football network analysis evaluates discrete, low-node-count realizations ($N=11$) sampled from a broader underlying domain.
 
-##### 4.4.3. The Failure of Traditional Topological Nulls in Football
-Standard network null models—such as the Erdős–Rényi random graph $G(N, p)$ or the Degree-Preserving Rewiring / Configuration Model—fail when applied to football passing networks because they treat the pitch as a topological abstraction rather than a physical, bounded metric space.
+We do not wish to randomize the isolated 11-node graph of a single match. Rather, our goal is to model the generalized spatial and structural properties of the league season as a baseline reference. While an individual match graph contains only 11 nodes, our full dataset comprises 264 match networks across the season.
 
-> This it to be demonstration section. We will take the network we are working with and try to reshufle it directly using the traditional/classical/basic Null appraoches. They will be easily fail infact, most iterations we try should be complete failures but we will run the models several times to get extreme examples which we can present and talk about here.. 
+A valid null model must therefore move away from rigid, single-match edge-swapping and transition toward a Spatially-Constrained Generative Engine. Section 6 introduces this framework—a generative model that captures league-wide positional density surfaces, distance decay functions, and tactical role constraints to produce true synthetic reference ensembles.
 
-When applied to passing data, this unconstrained edge-swapping produces structurally absurd dynamics:
-- **The "Goalkeeper-Centric Hub" Paradox:** Standard rewiring preserves total passes made and received by each player ($k_in, k_out$). Because goalkeepers and central defenders exchange numerous short passes in modern build-up play, rewiring redistributes these edges across the entire vertex set. The goalkeeper suddenly acquires high-frequency direct passing connections to the opposition penalty box, acting as a hyper-central playmaker.
-- **Physically Impossible Geometries:** In a real match, pass completion probability decays exponentially with distance, pitch boundary constraints, and opposition pressure. Standard topological nulls ignore spatial coordinates ($(x, y)$), routinely generating networks dominated by 70-yard diagonal passes and extreme cross-pitch loops executed with equal probability to a 5-yard lateral lay-off.
-- **Violation of Dynamic Phase Flow:** Football passes follow a directional directional vector toward the opponent's goal. Topological rewiring breaks the natural forward/backward sequence, creating unnatural closed-loop passes between attackers and deep defenders that violate tactical logic.
+---
 
-> There is also something about violating relationships which isn't quite the same are geometries. Because the pass map models accumuclated passes, it's not that a cross field relationships represent cross field passes but it could be that is violates where the player tends to operate. A players node locaiton is their average possition on the pitch, and in our case is modelled by pass average pass location. A striker and goalkeeper can pass to eachother, however, this being a heavy link violates their positioning. This is still spatially considerate but just a little different to "Physically Impossible Geometrie". 
+## 6. League-Wide Generative Null
 
-> Recall that we have in and out degree. This may make it easier to explain some of the points. Also, in and out degree tend to work in pairs. Either that 2 players tend to pass alot between each other, or there is a clear tactic relationship between two players, i.e. a crossing winger will pass in the strikers path but the reverse link will not happen much as most strikers don't contributing to passing play much and they tend to be the highest terminal player hence rarely have anyone to pass forward to
+> "However, these null models must incorporate the particular features of the system they are describing, and the Euclidean position of the nodes and temporal evolution should be taken into account (Sarzynska et al., 2016)." — Buldú et al. (2018)
 
-Null Model Type,Preserved Parameters,Fatal Flaw in Football Context
-"Erdős–Rényi G(N,p)","Node count N, Edge probability p",Uniform connection probability completely destroys team structure and spatial positioning.
-Configuration Model,Exact degree sequence ki​,Preserves pass counts but generates physically impossible pass vectors and nonsensical player roles.
-Distance-Decay Null,Pass distance distribution P(d),"Accounts for pass length but ignores pitch geography, field boundaries, and player spatial zones."
+### 6.1 The Conceptual Pivot: Requirements for a Valid Football Null
+The failure of unconstrained topological rewiring necessitates a fundamental conceptual shift. A valid null model for football passing networks cannot treat the pitch as an abstract graph topology; it must respect the spatial, physical, and tactical realities of match play.
 
-##### 4.4.4. The Conceptual Pivot: Requirements for a Valid Football Null
-Because classic topological models fail, we establish a core conceptual pivot: A valid null model for football passing networks must be spatially considerate, rule-constrained, and domain-aware.
+To serve as a meaningful benchmark, a synthetic null process must satisfy three core domain requirements:
+- Spatial Coordinates & Distance Decay: Passing probability must be parameterized by spatial origin $(x_i, y_i)$ and target $(x_j, y_j)$, enforcing physical pitch boundaries and the exponential decay of pass completion over distance.
+- Positional Density & Spatial Occupancy: The null must reflect the spatial probability density of where players actually operate on the pitch rather than treating nodes as fixed points or abstract indices.
+- Domain & Phase Dynamics: The null process must maintain realistic tactical relationships, preserving the directional vectors of possession (progression versus retention) and the natural asymmetry of positional pairings.
 
-To construct a meaningful benchmark, a synthetic null baseline for football must explicitly account for three non-negotiable physical constraints:
-1. **Spatial Coordinates & Pitch Boundaries:** Passing probability must be parameterized by spatial origin $(x_i, y_i)$ and target $(x_j, y_j)$, enforcing physical spatial bounds.
-2. **Occupancy & Positional Vectors:** The null must reflect the spatial probability density of where players actually operate on the pitch rather than treating nodes as fixed points or abstract indices.
-3. **Domain Dynamics:** The null must respect directional flow (progression vs. retention) and phase transition constraints innate to the game.
+Without incorporating these physical and tactical dimensions, downstream detection of team "complexity," "efficiency," or "style" remains an artifact of raw spatial distribution rather than collective organization.
 
-> These explainations are a bit fluffy and sound AI generate. I will rewrite this stating that null models must reflect the spatial and physics relaties of football. But also that shuffling must also be aware of the domain, maintaining realistic relationships and tactical nuances (progressions, retension, positions)
+### 6.2 Evaluating Null Realism: From Rigid Matching to Probabilistic Expectations
+Buldú et al. (2018) emphasize that null models for passing networks must maintain high realism by incorporating intrinsic features of the game, including degree distributions, pass lengths, and spatial player positions. In classical graph theory, preserving degree distribution requires holding each node's exact number of incoming ($k_i^{\text{in}}$) and outgoing ($k_i^{\text{out}}$) edges strictly fixed during randomization. However, as established in Section 5, forcing an $11 \times 11$ football graph to maintain exact empirical pass counts while swapping edges creates severe combinatorial deadlocks and generates physically impossible spatial vectors, such as high-frequency 70-yard channels between goalkeepers and advanced attackers.
 
-> Note as of this section, we haven't introduce the concept of scoping back from the aggregated network and working with the underling pass data to produce a viabale null network. Therefore, 
+A domain-aware null model reinterprets degree preservation as matching probabilistic domain expectations rather than rigid point values. Instead of forcing a central midfielder to complete exactly 60 passes in every synthetic realization, a valid generative framework samples from a learned probability distribution governing what a player in that specific tactical position and formation typically produces. In this paradigm, outgoing volume ($s^{\text{out}}$) reflects intentional tactical choices, whereas incoming volume ($s^{\text{in}}$) emerges naturally from spatial occupancy, receiver availability, and opponent pressure.
 
-Without incorporating these spatial and tactical dimensions into the null baseline, any downstream detection of tactical "complexity," "efficiency," or "style" remains a artifact of raw spatial distribution rather than collective team organization.
+> off track
 
-Transition to Section 5: Having established the theoretical necessity and spatial criteria for a football null model, Section 5 presents our formal mathematical framework: a Spatially-Constrained Markovian Null Model that generates randomized passing baselines conditioned on pitch geography, player density surfaces, and transition probabilities.
+To determine whether a generated null ensemble ($\mathcal{G}_{\text{null}}$) provides a valid baseline, we evaluate it against both macro-level topological benchmarks and domain-specific footballing constraints. As demonstrated by Narizuka et al. (2014) and surveyed by Alves et al. (2025), real football passing graphs exhibit distinct Small-World properties (Watts & Strogatz, 1998) without following scale-free power laws. Real match networks maintain high local clustering ($C \approx 0.25$) due to localized tactical triangles (e.g., fullback, winger, and central midfielder), alongside short average path lengths ($l \approx 3.3$) that facilitate rapid pitch traversal. Furthermore, because human physical limits, match duration, and pitch boundaries prevent infinite hub growth, valid degree distributions follow a Truncated Gamma Distribution ($f(k) \propto k^{\nu-1} e^{-k/\lambda}$) rather than an unbounded heavy-tailed power law.
+
+Consequently, candidate generative models must satisfy a lightweight four-part terminal evaluation suite before downstream tactical inference can occur. First, the synthetic ensemble must achieve topological alignment by reproducing empirical Small-World clustering and path length bounds ($C_{\text{null}} \approx C_{\text{empirical}}$ and $l_{\text{null}} \approx l_{\text{empirical}}$), avoiding both Erdős–Rényi graph flattening ($C \to 0$) and scale-free hub explosion. Second, the generated networks must preserve degree heterogeneity, maintaining realistic volume variance between primary playmakers and peripheral outlets while respecting upper degree cutoffs. Third, the model must enforce functional role realism, ensuring that central defenders and deep midfielders act as primary structural hubs (Gama et al., 2026) while preventing "Goalkeeper-Centric Hub Paradox" anomalies. Finally, the pass generation engine must incorporate physical spatial vector bounding, applying exponential distance decay to suppress impossible cross-pitch connections between non-adjacent pitch sectors.
+
+> 1. Metric(s) to measure small world. if we can reuse our metrics from earlier that would be great
+> 2. Use the degree analysis heterogeneity on hetro from earlier. maybe something to do with player ratios ranges (volume agnostic)
+> 3. could use betwenees to record what the position distribution of hubs is. variance is fine but the nulls shouldnt produce extreme, i.e. 1000 nulls 25% has hubs at left back when the league ratio was approx 5%
+> 4. Not sure how to do this yet. I think it should be at the network level. record the length of each edge and its weight. produce a table which bins the length and produces a distribution of weight. do this for empirical and null generated
+> A. Rememeber this process is new. we don't have to have robust evalution framework, we will just build bull process and "evaluate" them by conducting this analysis. A conclusion and future work will call for a comprehensive and robust evaluation framework for football nulls, i.e. what qualifys and null network for football, what is good enough. 
+
+### 6.3 The Generative Framework: Scaling to Event-Level Resampling
+Generating a robust baseline requires scoping back from the aggregated $11 \times 11$ network matrices to the underlying event-level pass distributions. As Gama et al. (2026) highlight, establishing a true statistical baseline to distinguish genuine tactical adaptations from normal match-to-match noise requires leveraging a larger dataset to construct a generative resampling engine.
+
+Instead of rewiring a single match network in isolation, our framework utilizes a full season dataset comprising 264 matches ($N = 264$). By training on this broader event-level corpus, the generative process constructs underlying spatial and tactical probability distributions. From these learned distributions, the engine samples thousands of synthetic pass realizations ($\mathcal{G}_{\text{null}}$).
+
+Each empirical match network can then be benchmarked directly against the generated null ensemble range. Observed topological properties that fall within expected variance (e.g., within $\pm 1\,\text{SD}$) represent standard spatial/tactical expectations, whereas significant deviations expose true collective team organization.
+
+### 6.4 Mathematical Foundations: Markovian Processes and Stochastic Transformations
+To construct a spatially considerate and domain-aware generative baseline, we draw upon a mature lineage of football network literature that models match dynamics through stochastic processes. Pioneer works in this domain—most notably Narizuka et al. (2014) and Gama et al. (2026)—demonstrate that sequence transitions and possession flows across a pitch are inherently Markovian. However, adapting these stochastic models for null generation requires an explicit methodological transition: flipping models designed for studying dynamics on a network into generative engines that govern the dynamics of the network.
+
+#### 1. The "Dynamics-ON" to "Dynamics-OF" Paradigm Inversion
+A foundational distinction in spatial network science is the separation between processes operating on a graph versus processes constructing the graph itself:
+- Dynamics ON the Network: Existing literature predominantly uses Markov chains to model how possession diffuses across a static, pre-existing passing graph. In this framework, the adjacency matrix $A$ is held fixed, and linear algebra transformations quantify ball circulation speed, spatial navigation, and possession transition probabilities between players or pitch zones (Gama et al., 2026; Narizuka et al., 2014).
+- Dynamics OF the Network: In contrast, our generative task requires synthesizing brand-new baseline graph topologies ($\mathcal{G}_{\text{null}}$).
+
+We invert this analytical paradigm. Rather than applying transition probabilities to calculate stochastic flow over an established network, we utilize learned spatial and tactical transition rules as the generative engine that samples, places, and grows synthetic pass events. Once this synthetic event corpus is generated, its resulting network is constructed and aggregated normally.
+
+EXISTING LITERATURE (Dynamics ON)           OUR GENERATIVE NULL (Dynamics OF)
+┌─────────────────────────────────┐         ┌─────────────────────────────────┐
+│ Empirical Adjacency Matrix (A)   │         │ Event Corpus & Spatial Rules    │
+└────────────────┬────────────────┘         └────────────────┬────────────────┘
+                 │                                           │
+                 ▼                                           ▼
+┌─────────────────────────────────┐         ┌─────────────────────────────────┐
+│ Markovian Transition Prob. P    │         │ Spatial & Receiver Draw Rules, Transition Probabilities P(j|i)   │
+└────────────────┬────────────────┘         └────────────────┬────────────────┘
+                 │                                           │
+                 ▼                                           ▼
+┌─────────────────────────────────┐         ┌─────────────────────────────────┐
+│ Quantify Possession Diffusion   │         │ Generate Synthetic Pass Data &  │
+│ & Stochastic Flow               │         │ Construct Null Network (G_null) │
+└─────────────────────────────────┘         └─────────────────────────────────┘
+
+
+
+This inversion addresses a methodological loop in recent literature. While stochastic flow models were originally developed in part to bypass traditional network nulls by treating transition properties as self-baselining, researchers now recognize that evaluating whether observed flow properties (such as diffusion speed or structural robustness) reflect tactical organization requires benchmarking them against an underlying spatial null model (Gama et al., 2026).
+
+#### 2. Justifying the First-Order Memoryless Assumption
+A stochastic process follows a first-order Markov chain if the transition probability to the next state $X_{t+1}$ depends strictly and exclusively on the current state $X_t$, operating completely blind to prior sequence history (Norris, 1998):
+
+$$P(X_{t+1} = x \mid X_t = x_t, X_{t-1} = x_{t-1}, \dots, X_1 = x_1) = P(X_{t+1} = x \mid X_t = x_t)$$
+
+In passing generation terms, the first-order assumption dictates that a passer’s target choice depends solely on the current spatial state or passer identity, irrespective of who passed them the ball two seconds prior.
+
+While higher-order memory is undeniably crucial for capturing multi-step possession sequences and complex tactical patterns (Dynamics ON), a first-order memoryless model is mathematically sufficient, parsimonious, and optimal for synthesizing static PassMap topologies (Dynamics OF):
+1. Topological Alignment with Aggregated PassMaps: An aggregated $11 \times 11$ match PassMap naturally compresses temporal sequence memory into a static directed matrix ($A_{ij}$). Because the target graph representation itself washes away sequential order, modeling null graph generation as a first-order Markov process maintains complete structural consistency with the network data.
+2. Empirical Proof of Topological Sufficiency: Narizuka et al. (2014) provided mathematical proof that a first-order spatial Markov process—driven purely by exponential spatial distance decay ($e^{-\beta L_j}$)—is fully capable of synthesizing the macro-level small-world topology, high clustering coefficients ($C$), and Truncated Gamma degree distributions characteristic of real match networks. It achieves this without requiring complex preferential attachment mechanisms or higher-order sequential rules.
+
+---
+
+### 6.5 Null Methodologies
+
+Ideally, there will be 3 null approaches that cascade in depth and connect to each other. I would like to construct, benchmark and evaluate each - word limit permitting. 
+
+#### "Player Recipient Rewire"
+The first will be a "Player Recipient Rewire". Here we will take the passes of a given network. The goal will be operate a "reshuffling" process on the recipient player only. 
+
+To do this we will need to work with the all the passes in the dataset. We will extract the end location only and look at the position of players that received the ball. We will chop the pitch up into bins (undecided on the ganularity) and produce a frequence count for every position in that location. Prior to this we will need to build an understand of all the position that exist in the dataset, we may need to map some very similar positions into homogenous cateogries, i.e. left wing back to left back, but this decision will be based on volumne and if there are any rare categrorys. Using this, we will model the probability distribution for every position in the every pitch bin. This distribution is all we need to conduct the null modelling. We take the team/match pass data and we iterate through every pass, we take the end location of the pass, identify the bin it fall in and draw from the distribution give us a position. we then map this position to the most suited player in the team. i.e. the rewire draws and leftback so we assign that to the teams left back. there is an issue here pertaining to matching positions. we have a few options, we either take the frequence counts for each bin, delete the positions that the team doesn't have, and then generate prob distributions from this. Or we map to the most appropriate player, although this requires some thinking. I think the former is the safest. The only thing we need to think about is for teams that have more than one player of the same position, i.e. striker, I am not sure what the correct thing to do here is. I think if we draw a striker and split 50/50 then maybe we are obscuring the true probaility, although actually if there are two players occupy the same positon maybe this is correct, they cant both be recieive the ball in the same place. Ultimately this approach is useful because it entirely retains the network structure, we rewires players behaviour based on the parameter of the team and its topology. This allows us to identify truely unique players performance, i.e. harry kane is striker who drops deep and receives lots of passes. Most strikers don't do this and just focus on goalscoring as per our arsenal network. Therefore, in a rewire, which is based on the league averages for position, unique and great players behaviour will be wiped out. Therefore, when analysising such a network and comparing them to the nulls, clear inference can be made on the player level to say if a metric, maybe a centrality metric is unique. On the other hand, it entirely encodes/retains the exact topology of the basenetwork, it encodes the passing players behaviour and the whole teams interations, the network itself will barely change aside from vastly unique players. It will be similar to the rewiring appraoch expect it will enitrely encode player roles and spatial permeter (given the passes don't change). 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Create an average recipient location for every position on the field.
+
+Ensure that each player on the pitch has a unique position. 
+
+Map their position to the average position to obtain average coordinates.
+
+Use these average coordinates to compute Euclidean distance from the pass end and convert into probs.
+
+For each pass, draw the next (potentially same) recipient from the probably distribution.
+
+Use this to re-wire and randoize to createcrste nulls
+
+I think there needs to be an additional step here. A location only step will over allocate passes to less likely players. For example, strikers do not receive many passes. But passes in the box will be overly allocated to strikers.
+1. This might be sorted but the lack of lacks into the box.
+2. Instead of using Euclidean distance, segment the pitch into bins. Each bin holds a prob dist of each position receiving the balls. For each end location, draw from the bin and this is the rewire.
+3. This also has the benefit of being much quicker at inference as the computation has already been done.
+
+---
+
+Similar thing for end location, though probably simpler. Take the start location and create a probability distribution of where the pass could end. 
+
+If we want to be really accurate here, the prob distribution would again be split by player position, though this may not be required.
+
+I think we can justify using all passes to model the output location. This way we maximise data.
+
+Different positions pass differently, even in the same locations, but maybe this works well for a null models.
+
+Additionally, because we are using so much pass data, invariably the locations should average the dominate positions. I.e. in the left back position, the passes will be dominated by left backs, or nearby players. Of course there will be others in that location who are fundamentally different, the law of averages should regress to the mean, also unique passes from out of position players increase the variance for our prob distributions and make it more realistic.
+
+---
+
+Finally, for generating the pass start location, this should be computed using the position of the player. This way we can say, we have a lift back with 60 passes, draw from the probability  distribtuon to see where these 60 could come front, then iterative over the end and recipient distributions to be an entirely shuffled network
 
 ---

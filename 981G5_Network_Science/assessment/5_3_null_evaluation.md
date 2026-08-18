@@ -44,42 +44,6 @@ Alves et al. (2025) provide frequency metrics on what the field actually uses:
 
 Density, Weighted Clustering, Betweenness Centrality, and Shortest Path—these are the exact standard metrics highlighted by the 2025 review.
 
-
-
-
-
-
-
-
-
-
-
-# TOOD: I think this goes into 4. NULL
-
-> It explains why we need nulls. However, it also cleaning follows the evaluation logic. Perhaps if this is already explained in 4. then the evaluation section can just refer to it. 
-
-This leads into the question, if we have this much data, why can't we just compare any findings to empirical baselines. 
-
-This is leads into the topic of data sparisty and specificty. 
-
-The empirical baselines are a true average of all the teams, systems and results in a season. If we find something interesting it is largely invalid or misleading to compare it to the league. 
-
-This is ecapsulated by Buldu 2019 who demonstate that FCB have higher network properties because they make more passes. 
-
-We use the Null Models to generate a baseline which coordinates against number of passes and as well as things like formation
-
-Again, the question prevails, why cant we just filter the empirical data. 
-
-This is where the question of sparsity comes in. As you begin to filter you loose signficant data. There is a huge range of passes that teams make per game, even if you try and discrete bucket these it is sparse. Then as you try to add more complexity, i.e. player positions, formation, the data reduces dramatically. 
-
-Given the uniqueness of teams appraochs, given the number of options and variabels in a complex ysstem like football, you invariabe end up filtering the (large) baseline dataset to the team you are trying to analysis, meaning you are baselinng them against themselves. 
-
-By modelling a generative process with learning the probabilsitic nature of football and its physical/spatial constraints, you can generate a baseline(s) which is team-agnostic and follows the rules of the league you are analysis but is explicity the "average".
-
-For example, if you produce a generate rewire process which retains degrees but models passes on the spatial trends of the league, then its will rewiring to a baseline possible network. If the team, or player, you are looking at is truely unique, it will sit at the outer limit, or even beyond, what a suite of 1000 nulls models can produce randomly. Only then will you be able to infer if your finding is specifal or just a likely produce of the topolicial, spatial and domain constraints of the game. 
-
-Null Baselines are much more robustx
-
 ---
 
 ## Gama (2026)
