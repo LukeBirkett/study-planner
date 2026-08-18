@@ -707,57 +707,245 @@ While higher-order memory is undeniably crucial for capturing multi-step possess
 ---
 
 ### 6.5 Null Methodologies
+To establish a comprehensive experimental benchmark, we construct a three-tiered cascading suite of generative null models. Each tier incrementally relaxes empirical constraints—moving from pass-recipient rewiring to full spatial event generation and sub-network window synthesis—while maintaining 1st-order spatial awareness.
 
-Ideally, there will be 3 null approaches that cascade in depth and connect to each other. I would like to construct, benchmark and evaluate each - word limit permitting. 
-
-#### "Player Recipient Rewire"
-The first will be a "Player Recipient Rewire". Here we will take the passes of a given network. The goal will be operate a "reshuffling" process on the recipient player only. 
-
-To do this we will need to work with the all the passes in the dataset. We will extract the end location only and look at the position of players that received the ball. We will chop the pitch up into bins (undecided on the ganularity) and produce a frequence count for every position in that location. Prior to this we will need to build an understand of all the position that exist in the dataset, we may need to map some very similar positions into homogenous cateogries, i.e. left wing back to left back, but this decision will be based on volumne and if there are any rare categrorys. Using this, we will model the probability distribution for every position in the every pitch bin. This distribution is all we need to conduct the null modelling. We take the team/match pass data and we iterate through every pass, we take the end location of the pass, identify the bin it fall in and draw from the distribution give us a position. we then map this position to the most suited player in the team. i.e. the rewire draws and leftback so we assign that to the teams left back. there is an issue here pertaining to matching positions. we have a few options, we either take the frequence counts for each bin, delete the positions that the team doesn't have, and then generate prob distributions from this. Or we map to the most appropriate player, although this requires some thinking. I think the former is the safest. The only thing we need to think about is for teams that have more than one player of the same position, i.e. striker, I am not sure what the correct thing to do here is. I think if we draw a striker and split 50/50 then maybe we are obscuring the true probaility, although actually if there are two players occupy the same positon maybe this is correct, they cant both be recieive the ball in the same place. Ultimately this approach is useful because it entirely retains the network structure, we rewires players behaviour based on the parameter of the team and its topology. This allows us to identify truely unique players performance, i.e. harry kane is striker who drops deep and receives lots of passes. Most strikers don't do this and just focus on goalscoring as per our arsenal network. Therefore, in a rewire, which is based on the league averages for position, unique and great players behaviour will be wiped out. Therefore, when analysising such a network and comparing them to the nulls, clear inference can be made on the player level to say if a metric, maybe a centrality metric is unique. On the other hand, it entirely encodes/retains the exact topology of the basenetwork, it encodes the passing players behaviour and the whole teams interations, the network itself will barely change aside from vastly unique players. It will be similar to the rewiring appraoch expect it will enitrely encode player roles and spatial permeter (given the passes don't change). 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Create an average recipient location for every position on the field.
-
-Ensure that each player on the pitch has a unique position. 
-
-Map their position to the average position to obtain average coordinates.
-
-Use these average coordinates to compute Euclidean distance from the pass end and convert into probs.
-
-For each pass, draw the next (potentially same) recipient from the probably distribution.
-
-Use this to re-wire and randoize to createcrste nulls
-
-I think there needs to be an additional step here. A location only step will over allocate passes to less likely players. For example, strikers do not receive many passes. But passes in the box will be overly allocated to strikers.
-1. This might be sorted but the lack of lacks into the box.
-2. Instead of using Euclidean distance, segment the pitch into bins. Each bin holds a prob dist of each position receiving the balls. For each end location, draw from the bin and this is the rewire.
-3. This also has the benefit of being much quicker at inference as the computation has already been done.
+┌─────────────────────────────────────────────────────────────────────────┐
+│                 TIER 1: Player Recipient Rewire Null                    │
+│ • Preserves empirical pass vectors, origins (x1, y1), & destinations (x2, y2)│
+│ • Re-allocates pass receivers via league-wide spatial positional distributions│
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │  Relaxes Empirical Receiver Choices
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                 TIER 2: Full Event Pass Generation Engine               │
+│ • Samples synthetic pass vectors (x1, y1) -> (x2, y2) from league rules │
+│ • Solves data sparsity by training on 150k+ season-wide pass events     │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │  Relaxes Empirical Pass Geometries
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                 TIER 3: Sub-Network / Window Generation Engine          │
+│ • Generates 11x11 adjacency matrices incrementally in volume batches    │
+│ • Evaluates macro-topological decay & temporal sequence scaling          │
+└─────────────────────────────────────────────────────────────────────────┘
 
 ---
 
-Similar thing for end location, though probably simpler. Take the start location and create a probability distribution of where the pass could end. 
+#### 6.5.1 Tier 1: Player Recipient Rewiring Null
+##### 1. Conceptual Framework & Rationale
+The Tier 1 null model operates a spatial "recipient reshuffling" process. It holds the team's empirical passing execution strictly constant—preserving every pass origin $(x_1, y_1)$, end destination $(x_2, y_2)$, and passer identity—while re-allocating the pass recipient based on season-wide positional occupancy probabilities.
 
-If we want to be really accurate here, the prob distribution would again be split by player position, though this may not be required.
+By benchmarking an empirical match against this baseline, we isolate individual tactical outliers from standardized positional norms. For example, an elite deep-lying playmaker or dropping striker (e.g., Harry Kane) frequently receives passes in pitch zones typically reserved for central midfielders. In this baseline—which reflects league-wide positional standards—such anomalous receiving habits are re-allocated to standard positional occupiers. Consequently, comparing empirical centrality metrics against the Tier 1 null ensemble provides direct inference on whether a player's spatial involvement represents a genuine tactical innovation or routine positional noise.
 
-I think we can justify using all passes to model the output location. This way we maximise data.
+TIER 1 REWIRING PIPELINE
 
-Different positions pass differently, even in the same locations, but maybe this works well for a null models.
+┌──────────────────────────────────────────────────────────────────────┐
+│ Empirical Pass Event: Passer i at (x1, y1) ──► Target Bin at (x2, y2)│
+└──────────────────────────────────┬───────────────────────────────────┘
+                                   │
+                                   ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Extract Positional Frequency Distribution P(Pos | Pitch Bin)         │
+ │ • Filter distribution against Active Team Roster                     │
+ │ • Re-normalize probabilities: sum(P_filtered) = 1.0                  │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Draw Target Position ──► Disambiguate Duplicates (Uniform Split 1/m) │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Assign Final Recipient Player j ──► Construct Rewired Matrix A_null  │
+ └──────────────────────────────────────────────────────────────────────┘
 
-Additionally, because we are using so much pass data, invariably the locations should average the dominate positions. I.e. in the left back position, the passes will be dominated by left backs, or nearby players. Of course there will be others in that location who are fundamentally different, the law of averages should regress to the mean, also unique passes from out of position players increase the variance for our prob distributions and make it more realistic.
+##### 2. Pitch Discretization & Positional Categorization
+To estimate spatial receiving probability distributions, the pitch surface is discretized into a 2D grid of spatial bins $B_{u,v}$. Prior to probability estimation, the raw event taxonomy is mapped into a standardized set of core tactical categories to eliminate rare, under-sampled positional codes (e.g., mapping "Left Wing Back" and "Left Back" into a unified "LB" class based on spatial volume).
+
+> inc table of positions
+
+For every pitch bin $B_{u,v}$, we calculate the empirical receiving frequency of each tactical position $p \in \mathcal{P}$ across the season dataset ($N = 264$ matches):
+
+$$f(p \mid B_{u,v}) = \sum_{e \in \mathcal{E}_{\text{season}}} \mathbb{I}\left(\text{dest}(e) \in B_{u,v} \land \text{pos}(e) = p\right)$$
+
+> note 1 thing here will be to add a 1 to every position to ensure there are no impossible passes
+
+##### 3. Roster Filtering, Probability Normalization, & Multi-Player Disambiguation
+When evaluating a specific team in a given match, the global positional distribution $f(p \mid B_{u,v})$ must be adapted to the team's active tactical formation $\mathcal{F}_{\text{match}} \subset \mathcal{P}$.
+1. **Roster Filtering:** Any tactical position $p \notin \mathcal{F}_{\text{match}}$ not present in the team's active formation is pruned from the bin distribution.
+2. **Conditional Normalization:** The remaining frequencies are normalized to form a valid, team-conditioned probability vector:
+
+$$P(p \mid B_{u,v}, \mathcal{F}_{\text{match}}) = \frac{f(p \mid B_{u,v})}{\sum_{q \in \mathcal{F}_{\text{match}}} f(q \mid B_{u,v})}$$
+
+3. **Multi-Player Disambiguation:** If a drawn position $p^*$ is occupied by multiple players in the team's lineup (e.g., two Central Defenders or two Strikers in a 4-4-2), the pass is allocated among the $m$ duplicate positional occupiers with uniform probability $\frac{1}{m}$. This accurately models spatial competition: if two players occupy the same functional role on the pitch, both share equal probability of receiving a ball landing in their shared zone of influence.
+
+##### 4. Algorithmic Execution Procedure
+For each pass event $e = \left(i, (x_1, y_1), (x_2, y_2)\right)$ in the empirical match:
+1. Identify the destination pitch bin $B_{u,v}$ corresponding to $(x_2, y_2)$.
+2. Sample a target tactical position $p^* \sim P(p \mid B_{u,v}, \mathcal{F}_{\text{match}})$.
+3. Map $p^*$ to team member $j \in \mathcal{F}_{\text{match}}$ (enforcing $j \neq i$ to prevent self-passes).
+4. Append the rewired directed edge $(i \to j)$ to the synthetic graph $\mathcal{G}_{\text{null}}$.
+
+> Is Tier 1 Markovian? Yes, this approach is a 1st-order Spatial Markov Chain, specifically operating as a State-Dependent Spatial Transition Process. In formal probability theory, a sequence is 1st-order Markovian if the next state choice $X_{t+1}$ depends strictly on the current state $X_t$ and is independent of prior history $X_{t-1}, X_{t-2}, \dots$. Here, the spatial destination bin $B_{u,v}$ acts as the current state $X_t$, and the assigned receiver player $j$ acts as the next state $X_{t+1}$. The receiver draw is governed entirely by the conditional transition probability $P(X_{t+1} = j \mid X_t = B_{u,v})$. Because this draw depends strictly on the spatial state $B_{u,v}$ and completely ignores who passed the ball previously or how many passes occurred earlier in the possession, it strictly fulfills the mathematical definition of a memoryless 1st-order spatial Markov process.
+
+> note in this technqiue, we are shuffling the passing capabiltiy of the passer and replacing it with the leage average. This should have identifiable impacts on the network if there is something unique to analyse. 
 
 ---
 
-Finally, for generating the pass start location, this should be computed using the position of the player. This way we can say, we have a lift back with 60 passes, draw from the probability  distribtuon to see where these 60 could come front, then iterative over the end and recipient distributions to be an entirely shuffled network
+#### 6.5.2 Tier 2: Pass End Location Rewiring Null
+##### 1. Conceptual Framework & Rationale
+While Tier 1 reshuffles recipients while keeping empirical pass vectors strictly fixed, Tier 2 relaxes the empirical pass geometry itself. The Tier 2 null model operates an end-location regeneration process: it preserves each passer's origin location $(x_1, y_1)$ and passing volume, but replaces the empirical destination $(x_2, y_2)$ with a synthetically sampled spatial end coordinate drawn from season-wide spatial transition rules.
+
+By benchmarking an empirical match against this baseline, we isolate team-specific passing execution and spatial risk-taking from generalized spatial pass decay. In real matches, a team’s tactical style may favor aggressive, long-range progressive passes or tight, short-range retaining combinations. By replacing empirical pass end-locations with a learned, season-wide spatial probability surface—and subsequently applying the Tier 1 recipient pipeline to assign receiving players—Tier 2 evaluates whether a team's spatial pass vector distribution reflects intentional tactical progression or standard spatial passing norms.
+
+TIER 2 REWIRING PIPELINE
+
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Empirical Pass Event: Passer i at Start Location (x1, y1)            │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Identify Start Pitch Bin B_start                                     │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Sample End Bin B_end ~ P(B_target | B_start)                        │
+ │ • Drawn from Season-Wide Spatial Transition Matrix (All Data)        │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Sample Continuous Coordinate (x2_null, y2_null) within B_end Centroid│
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Pass to Tier 1 Recipient Pipeline P(p | B_end, F_match)              │
+ │ • Assign Final Recipient Player j                                    │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Append Rewired Edge (i -> j) with Synthetic Geometry to G_null       │
+ └──────────────────────────────────────────────────────────────────────┘
+
+##### 2. Spatial Pitch Discretization & Data-Density Optimization
+To model spatial pass trajectories without overfitting or encountering data sparsity, the pitch surface is discretized into an identical 2D spatial grid $B_{u,v}$ used in the Tier 1 pipeline. Re-using the same grid layout ensures mathematical consistency across the cascading framework while simplifying spatial coordinate transformations.
+
+A central design consideration is whether to parameterize spatial end-location distributions at the positional level (e.g., $P(B_{\text{end}} \mid B_{\text{start}}, \text{Position})$) or at the generalized spatial level (e.g., $P(B_{\text{end}} \mid B_{\text{start}})$):
+- **Data Sparsity vs. Spatial Robustness:** Even across a multi-match dataset containing over 150,000 pass events, slicing spatial transitions by 11 individual tactical positions across fine-grained 2D start/end bin pairs yields extremely sparse or empty conditional bins (particularly in peripheral pitch zones).
+- **Generalized Spatial Selection:** We opt for a generalized spatial model trained across all season pass events ($N = 264$ matches). At the elite level, modern positional fluidities and rotation patterns mean spatial origin $(x_1, y_1)$ exerts a far stronger constraint on pass completion and length than static player role labels. A defender operating in the attacking third behaves under similar physical space and pressure constraints as a midfielder in that same zone.
+
+##### 3. Spatial Transition Probability Modeling
+For every origin pitch bin $B_{\text{start}}$, we construct a discrete probability distribution over all possible target destination bins $B_{\text{target}}$ using the season-wide event corpus:
+
+$$P(B_{\text{target}} \mid B_{\text{start}}) = \frac{\sum_{e \in \mathcal{E}_{\text{season}}} \mathbb{I}\left(\text{origin}(e) \in B_{\text{start}} \land \text{dest}(e) \in B_{\text{target}}\right)}{\sum_{e \in \mathcal{E}_{\text{season}}} \mathbb{I}\left(\text{origin}(e) \in B_{\text{start}}\right)}$$
+
+Because this transition matrix is learned directly from empirical pass events, it inherently encodes physical pitch boundaries, directional possession flow, and exponential distance decay ($e^{-\beta d}$). Consequently, the generative engine cannot produce physically absurd passes (such as high-frequency 70-yard backward diagonal passes), guaranteeing that every synthetic pass vector conforms to real-world passing physics.
+
+> tecnically this isn't true as be need to +1 for every bin to avoid "impossible" but in generate of nulls this will be noise
+
+##### 4. Algorithmic Execution & Cascading Integration
+For each empirical pass event $e = \left(i, (x_1, y_1), (x_2, y_2)\right)$ executed by passer $i$:
+1. Start Bin Identification: Determine the origin pitch bin $B_{\text{start}}$ corresponding to $(x_1, y_1)$.
+2. End Bin Sampling: Sample a synthetic destination bin $B_{\text{end}} \sim P(B_{\text{target}} \mid B_{\text{start}})$.
+3. Continuous Coordinate Synthesis: Sample continuous end coordinates $(x_{2,\text{null}}, y_{2,\text{null}})$ from a uniform spatial distribution centered around the geometric centroid of $B_{\text{end}}$.
+4. Tier 1 Cascading Recipient Allocation: Feed the synthetic destination $(x_{2,\text{null}}, y_{2,\text{null}})$ into the Tier 1 pipeline:
+    - Filter the positional receiving distribution $P(p \mid B_{\text{end}}, \mathcal{F}_{\text{match}})$ for the team's active lineup.
+    - Draw target position $p^*$, resolve duplicate positional occupiers via uniform split $\frac{1}{m}$, and assign recipient player $j \neq i$.
+5. Draw target position $p^*$, resolve duplicate positional occupiers via uniform split $\frac{1}{m}$, and assign recipient player $j \neq i$.
+
+> Stochastic Classification: 1st-Order Spatial State-Space Chain:
+> Technical Clarification: Tier 2 operates as a Two-Stage Cascading 1st-Order Spatial Markov Chain.
+> Stage 1 (Pass Vector Generation): The origin pitch bin $B_{\text{start}}$ serves as current state $X_t$, and the sampled destination bin $B_{\text{end}}$ acts as state $X_{t+1}$. The transition probability $P(X_{t+1} = B_{\text{end}} \mid X_t = B_{\text{start}})$ depends strictly on spatial origin and is memoryless with respect to prior pass history.
+> Stage 2 (Spatial Recipient Draw): The sampled destination $B_{\text{end}}$ becomes the state input $Y_t$ for the Tier 1 recipient pipeline, selecting receiver player $j$ via $P(Y_{t+1} = j \mid Y_t = B_{\text{end}})$.
+
+By cascading two memoryless spatial stages, Tier 2 maintains rigorous mathematical parsimony while successfully decoupling team spatial passing execution from individual receiver allocation.
 
 ---
+
+#### 6.5.3 Tier 3: Positional Origin & Volume Generation Null
+##### 1. Conceptual Framework & Rationale
+Where Tier 1 re-allocates recipients and Tier 2 regenerates pass trajectories, Tier 3 relaxes the empirical pass origin locations $(x_1, y_1)$ themselves. The Tier 3 null model operates a positional origin and volume generation process: it strips away all match-specific player passing habits and spatial tendencies, replacing them with synthetically generated pass origins sampled from season-wide, position-specific spatial density surfaces.
+
+By benchmarking an empirical match against this baseline, we test match-specific tactical positioning and individual player spatial identity against generalized formation norms. At this level of abstraction, all unique player personalities—such as a winger who inverted inwards or a fullback who overlapped aggressively—are erased and replaced by league-average positional behaviors.
+
+Consequently, Tier 3 represents the most variable and unconstrained model in the cascading framework. It maintains team formation geometry and player role allocations, but evaluates whether observed network properties reflect specific match adaptations or merely standard, formation-driven positional expectations.
+
+TIER 3 GENERATIVE PIPELINE
+
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Input: Team Lineup & Formation F_match + Volume Noise Factor δ       │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ For each Player i with Position p:                                   │
+ │ • Sample Synthetic Pass Volume N_i_null = N_i_emp + Normal(0, σ_vol) │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ For each Pass Event 1..N_i_null:                                     │
+ │ • Sample Origin Bin B_start ~ P_laplace(B_start | Position p)        │
+ │ • Sample Continuous Coordinates (x1_null, y1_null) in B_start        │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Cascade to Tier 2: Sample End Bin B_end ~ P(B_target | B_start)      │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Cascade to Tier 1: Sample Recipient j ~ P(q | B_end, F_match)        │
+ └──────────────────────────────────┬───────────────────────────────────┘
+                                    │
+                                    ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │ Append Edge (i -> j) to Tier 3 Null Graph G_null, T3                 │
+ └──────────────────────────────────────────────────────────────────────┘
+
+##### 2. Position-Specific Spatial Density Modeling & Laplace Additive Smoothing
+Unlike Tier 2—which utilized a generalized, position-agnostic spatial model to preserve trajectory density—origin generation must be parameterized at the tactical position level ($p \in \mathcal{P}$). Players operating in distinct roles exhibit highly specialized spatial operating zones (e.g., Left Backs vs. Central Midfielders).
+
+Because positional data across the season ($N = 264$ matches) produces high sample counts for standard tactical roles, central operating areas generate dense probability clusters. However, to account for low-frequency tactical shifts—such as a defender pressing high or a winger tracking back—and to avoid "zero-probability" spatial deadlocks in peripheral pitch bins, we apply Laplace Additive Smoothing ($+1$ pseudocount) across the spatial origin grid $B_{u,v}$:
+
+$$P(B_{\text{start}} \mid \text{Position } p) = \frac{\sum_{e \in \mathcal{E}_{\text{season}}} \mathbb{I}\left(\text{origin}(e) \in B_{\text{start}} \land \text{pos}(e) = p\right) + 1}{\sum_{B \in \mathcal{B}} \left( \sum_{e \in \mathcal{E}_{\text{season}}} \mathbb{I}\left(\text{origin}(e) \in B \land \text{pos}(e) = p\right) + 1 \right)}$$
+
+This smoothing ensures that while a player generates passes predominantly within their primary positional zone, every pitch bin retains a non-zero probability of pass initiation, preventing artificial spatial boundaries
+
+##### 3. Injecting Realistic Volume Noise
+A common limitation of classical network nulls is rigid volume determinism, where generated graphs produce identical total edge sums, collapsing metric variance. To introduce realistic stochasticity without distorting structural hierarchies, Tier 3 incorporates controlled volume perturbation noise.
+
+For each player $i$ with empirical pass count $N_{i,\text{emp}}$, the synthetic pass volume $N_{i,\text{null}}$ is sampled from a rounded Gaussian distribution centered on their empirical total:
+
+$$N_{i,\text{null}} = \max\left(1, \left\lfloor N_{i,\text{emp}} + \mathcal{N}(0, \sigma_{\text{vol}}^2) \right\rceil\right)$$
+
+where $\sigma_{\text{vol}}$ is scaled proportionally to positional volume variance observed across the league dataset (e.g., higher absolute variance for central midfielders, lower for goalkeepers). This preserves macro-level volume hierarchy while generating a realistic distribution of network metrics across null iterations.
+
+##### 4. Algorithmic Execution & Three-Tier Cascading Pipeline
+For a given match with team lineup $\mathcal{F}_{\text{match}}$
+1. Volume Perturbation: For each player $i \in \mathcal{F}_{\text{match}}$ with position $p_i$, calculate $N_{i,\text{null}}$.
+2. Origin Synthesis: For pass event $k \in \{1, \dots, N_{i,\text{null}}\}$:
+    - Sample an origin pitch bin $B_{\text{start}} \sim P(B_{\text{start}} \mid \text{Position } p_i)$.
+    - Derive continuous origin coordinates $(x_{1,\text{null}}, y_{1,\text{null}})$ centered within $B_{\text{start}}$.
+3. Tier 2 Trajectory Cascade: Pass $(x_{1,\text{null}}, y_{1,\text{null}})$ to the Tier 2 spatial engine to sample destination bin $B_{\text{end}} \sim P(B_{\text{target}} \mid B_{\text{start}})$ and derive $(x_{2,\text{null}}, y_{2,\text{null}})$.
+4. Tier 1 Recipient Cascade: Pass $B_{\text{end}}$ to the Tier 1 recipient engine, filtering for $\mathcal{F}_{\text{match}}$ and resolving multi-player overlap to select receiver $j \neq i$.
+5. Network Construction: Aggregate all synthetic edges $(i \to j)$ to construct the fully unconstrained Tier 3 null network $\mathcal{G}_{\text{null, T3}}$.
+
+##### 5. Methodological Hypothesis & Evaluation Risks
+Because Tier 3 strips away all individual player tendencies and relies entirely on league-average positional distributions, it carries distinct evaluation risks:
+- The Homogenization Hazard: If league-wide positional origin distributions $P(B_{\text{start}} \mid p)$ are overly broad, synthetic networks risk collapsing into identical, generic formation templates. Under evaluation, this would cause generated null ensembles to yield near-zero variance in global metrics (e.g., clustering coefficients or average path lengths), failing to provide a meaningful statistical range for benchmarking.
+- Evaluation Baseline Value: Conversely, if Tier 3 successfully retains structural variance via volume noise and positional anchor geometry, it provides the ultimate control baseline. Comparing an empirical match against Tier 3 isolates whether a team's passing structure is a product of their tactical system or simply a mathematical artifact of lining up in a standard 4-3-3 or 4-2-3-1 formation.
+
+> also biggest risk of markovian first not being a good fit. no recognistion of how a location is generated. no context of the match. just leage averages. limitation no temporal
+
+---
+
+## 7 implementation
+
+
