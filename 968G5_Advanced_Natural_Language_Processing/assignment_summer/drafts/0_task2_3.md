@@ -65,141 +65,97 @@ Mock structure:
 ## 1. Architectural Approach
 The methodologies for Task 2 are derived as variations of an adapted, modernized CNN-BiLSTM-CRF framework (Ma and Hovy, 2016)
 
-### 1.1 CNN-BiLSTM-CRF Framework
-To understand the lineage of this approach, it is vital to examine why Ma and Hovy's baseline was so influential. The authors achieved robust sequence tagging by leveraging a three-tiered hierarchical processing pipeline:
-- A Convolutional Neural Network (CNN) operates at the character0level as a localized feature extractor to capture sub-word morphological patterns.
-- A Bidirectional Long Short-Term Memory (Bi-LSTM) processes the word sequence in both directions to map long-range contextual dependencies and sentinal context.
-- A Conditional Random Field (CRF) decoder evaluates the joint probability of the entire tag sequence, using a learned transition matrix to enforce global structural logic.
+### 1.1 From Classical BiLSTM-CRF to Modernized Transformer-CRF
+Ma and Hovy’s (2016) classical sequence-tagging framework combined character-level CNNs for morphological extraction, Bidirectional LSTMs for contextual dependencies, and a Conditional Random Field (CRF) decoder to enforce valid tag transitions. Applied to propaganda detection, this architecture captures manipulative superlative affixes (e.g., -est), long-range rhetorical framing, and structural constraints. Crucially, the CRF enables high-confidence interior tokens to resolve ambiguous span boundaries. This dynamic is formalized as the "breadcrumb effect" and mitigates noisy annotation boundaries (Da San Martino et al., 2019).
 
-> Convert to a clear paragraph
+This project modernizes the classical baseline by replacing sequential and convolutional layers with a pre-trained DeBERTa encoder while retaining terminal CRF global decoding. This architectural shift yields four core advantages. SentencePiece tokenization natively standardizes subword morphology, eliminating the need to train dedicated character-CNNs. Global self-attention replaces recurrency to prevent context decay. Fine-tuning pre-trained representations mitigates catastrophic overfitting on small corpora. Finally, DeBERTa’s disentangled attention decouples content from relative position. This grants the model the spatial awareness needed when neutral vocabulary is weaponized through strategic placement.
 
-When applied to propaganda detection, this general-purpose framework offers key theoretical advantages. First, the character-level CNN allows the model to detect morphological irregularities common in manipulative language—such as superlative affixes (`-est`, `-st`) used in terms like *greatest* or *worst* to amplify rhetorical framing. Second, the Bi-LSTM's sequence representations capture non-local dependencies, allowing the network to recognize how earlier lexical choices subtly alter the manipulative tone of subsequent words across distant sequence spans. Third, when modeling propaganda fragments under a BIO schema, the CRF transition matrix enforces valid tag sequences (such as `B-` $\to$ `I-` or `I-` $\to$ `O`) while strictly prohibiting illegal transitions, such as initiating an overlapping `B-` tag mid-span. Finally, precise propaganda span delimitation remains highly disputed even among expert annotators (Da San Martino et al., 2019), making boundary identification exceptionally difficult. Under BIO sequence labeling, each token produces an emission distribution across candidate tags. The CRF leverages these parameters to let high-confidence interior tokens pull adjacent, lower-signal boundary predictions into a spatially coherent span—a dynamic formalized in this project as the "breadcrumb effect."
-
-### 1.2 Modernization Updates
-This project builds on this established framework through a modernization update by substituting the sequential and convolutional layers with a deep Transformer encoder (DeBERTa) while keeping the global decoding properties of the terminal CRF layer.  
-
-This modernized update introduces four core architectural advantages over the classical baseline. First, SentencePiece tokenization eliminates the character-level CNN by decomposing out-of-vocabulary terms into subwords, resolving data sparsity without dedicated feature-extraction sub-networks. Second, global self-attention replaces sequential LSTM recurrence, providing direct all-to-all sequence connectivity that mitigates the context decay experienced by recurrency and ensures capture of long-range dependencies underlying manipulative rhetoric. Third, replacing a recurrent model trained from scratch with a pre-trained Transformer limits the risk catastrophic overfitting on the limited training data we have byleveraging the models broad linguistic representations. Finally, DeBERTa’s disentangled attention mechanisms evaluate token content and relative spatial position on separate vectors, granting the model the decoupled spatial awareness needed to isolate manipulative phrases where neutral vocabulary is weaponized through syntactic placement.
-
-To evaluate this modernized pipeline, we experiment with two architectural variations: a Decoupled Two-Stage Tagger (Variation 1) and an Integrated Multi-Class BIO-CRF Pipeline (Variation 2).
+To benchmark this modernized pipeline, we evaluate two architectural variations: a Decoupled Two-Stage Tagger (Variation 1) and an Integrated Multi-Class BIO-CRF Pipeline (Variation 2).
 
 ## 2. Architecture Variation 2: The Integrated Multi-Class BIO-CRF Model
-This approach addresses the propaganda identification task through a single-stage, end-to-end joint sequence labeling framework. That is to say, the sequence labelling learns both boundary detection and technique classification simultaneously. 
-
-This achieved through an expanded, granular BIO schema, incorporating all eight rhetorical techniques directly into the spatial tagset. Here, both the `B-` and `I-` tagset are joined with a suffix containing a propaganda technique, i.e. `B-Loaded`. Resulting in 8 B-Tags, 8-Tags and single O-Tag. 
+Variation 2 frames propaganda detection as a single-stage, end-to-end joint sequence labeling task, learning span boundaries and technique classifications simultaneously. This is achieved by expanding the 17-state BIO schema, joining `B-` and `I-` prefixes with technique suffixes plus a neutral `O` state (Appendix F):
 
 $$\mathcal{Y}_{17} = \{\text{O}\} \cup \{\text{B-}k \mid k \in \mathcal{T}\} \cup \{\text{I-}k \mid k \in \mathcal{T}\}$$
 
-This granular formulation is particularly well-suited for propaganda detection because, while rhetorical techniques share underlying manipulative intent, their linguistic signatures remain distinct. By expanding the label space to 17 states, the CRF optimizes spatial boundaries and technique classifications in tandem rather than collapsing semantic distinctions into a binary indicator. Crucially, this wide probability distribution enhances the "breadcrumb effect" during sequence decoding. In a collapsed 3-class BIO schema, ambiguous boundary predictions often collapse into an uninformative ~50/50 split between neutral text and propaganda. In a 17-class schema, however, an uncertain prediction is dispersed across multiple technique states. When a small probability mass (e.g., $0.15$) aligns with a high-confidence technique prediction further along the sequence (e.g., a strong interior `I-loaded_language` token), the CRF's transition matrix uses that semantic linkage to pull the ambiguous boundary token into a spatially coherent span, substantially improving boundary detection.
+This granular label space optimizes boundaries and techniques in tandem. Tag expansion enhances the "breadcrumb effect" during decoding. Instead of collapsing uncertain boundaries into an uninformative ~50/50 binary split, probability mass is dispersed across technique states. When a small boundary mass aligns with a high-confidence interior token, the CRF transition matrix leverages that semantic linkage to pull ambiguous boundary tokens into coherent spans.
 
-##### Table X: Complete 17-Class BIO Tagset Mapping (Variation 2)
-| Propaganda Technique Label | Beginning Tag (`B-`) | Inside Tag (`I-`) | Outside / Sentinel Tag |
-| :--- | :---: | :---: | :---: |
-| `flag_waving` | `B-flag_waving` | `I-flag_waving` | `O` |
-| `appeal_to_fear_prejudice` | `B-appeal_to_fear_prejudice` | `I-appeal_to_fear_prejudice` | `O` |
-| `causal_oversimplification` | `B-causal_oversimplification` | `I-causal_oversimplification` | `O` |
-| `doubt` | `B-doubt` | `I-doubt` | `O` |
-| `exaggeration,minimisation` | `B-exaggeration,minimisation` | `I-exaggeration,minimisation` | `O` |
-| `loaded_language` | `B-loaded_language` | `I-loaded_language` | `O` |
-| `name_calling,labeling` | `B-name_calling,labeling` | `I-name_calling,labeling` | `O` |
-| `repetition` | `B-repetition` | `I-repetition` | `O` |
----
 
 ### 2.1 Model Architecture & Forward Pass
-Adapting the modernized Ma and Hovy (2016) framework, this pipeline couples a pre-trained Transformer encoder with a Linear-Chain Conditional Random Field (CRF) layer. An input sequence $\mathbf{x} = (x_1, \dots, x_N)$ tokenized via SentencePiece is encoded by `deberta-v3-xsmall` into contextual representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$:
+Coupling a pre-trained Transformer with a Linear-Chain CRF, `deberta-v3-xsmall` encodes input sequence $\mathbf{x} = (x_1, \dots, x_N)$ into representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$:
 
 $$\mathbf{H} = \text{DeBERTa}(\mathbf{x})$$
 
-A linear projection maps $\mathbf{H}$ to unnormalized emission logits $\mathbf{E} \in \mathbb{R}^{N \times 17}$ across the 17 BIO states, where $\mathbf{W}_e \in \mathbb{R}^{17 \times 384}$ and $\mathbf{b}_e \in \mathbb{R}^{17}$:
+A linear layer projects $\mathbf{H}$ to unnormalized emission logits $\mathbf{E} \in \mathbb{R}^{N \times 17}$:
 
 $$\mathbf{E}_i = \mathbf{W}_e \mathbf{H}_i + \mathbf{b}_e \quad (i \in \{1, \dots, N\})$$
 
-To prevent label bias and eliminate local softmax independence, $\mathbf{E}$ passes to a Linear-Chain CRF featuring a trainable transition matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$. To enforce valid syntax, invalid paths—such as span onset on interior tags ($\text{O} \to \text{I-}k$) or mid-phrase technique switches ($\text{B-}k_1 \to \text{I-}k_2$)—are masked with hard penalties ($-10000.0$).
+To eliminate local independence assumptions, $\mathbf{E}$ is passed to a Linear-Chain CRF with a trainable transition matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$. Invalid paths, such as initiating spans on interior tags ($\text{O} \to \text{I-}k$) or mid-phrase technique switches ($\text{B-}k_1 \to \text{I-}k_2$), are masked with hard penalties ($-10000.0$).
 
-The score $S(\mathbf{x}, \mathbf{y})$ for tag sequence $\mathbf{y}$ combines emission and transition scores:
+Sequence score $S(\mathbf{x}, \mathbf{y})$ sums emissions and transitions:
 
 $$S(\mathbf{x}, \mathbf{y}) = \sum_{i=1}^{N} \mathbf{E}_{i, y_i} + \sum_{i=1}^{N-1} \mathbf{A}_{y_i, y_{i+1}}$$
 
-Training minimizes the negative log-likelihood (NLL) of the gold path $\mathbf{y}^*$ over path space $\mathcal{Y}^N$:
+Training minimizes the negative log-likelihood (NLL) of the gold path $\mathbf{y}^*$:
 
 $$\mathcal{L}_{\text{CRF}}(\theta) = -\log \left( \frac{\exp(S(\mathbf{x}, \mathbf{y}^*))}{\sum_{\mathbf{y}' \in \mathcal{Y}^{N}} \exp(S(\mathbf{x}, \mathbf{y}'))} \right)$$
 
-Inference uses Viterbi decoding to extract the globally optimal sequence $\hat{\mathbf{y}}$:
+Inference uses Viterbi decoding to extract the optimal path $\hat{\mathbf{y}}$:
 
 $$\hat{\mathbf{y}} = \arg\max_{\mathbf{y}' \in \mathcal{Y}^{N}} S(\mathbf{x}, \mathbf{y}')$$
 
 ### 2.2 Hyperparameter Search & Optimization Strategy
-To prevent gradient instability and catastrophic forgetting during optimization, Architecture Variation 2 employs a differential learning rate schedule whilst deploying the AdamW optimizer.
+To prevent gradient instability, the pipeline uses differential learning rates with AdamW. Co-training pre-trained DeBERTa alongside randomly initialized linear projection and CRF layers creates an optimization imbalance where standard CRF learning rates ($10^{-3}$) risk destroying encoder features, whereas typical transformer rates ($10^{-5}$) stall CRF convergence.
 
-Co-training a massive pre-trained Transformer alongside randomly initialized linear projection and CRF layers creates a severe optimization imbalance. Standard learning rates for the CRF convergence ($10^{-3}$ to $10^{-4}$) risk destroying DeBERTa's pre-trained representations, whereas typical transformer rates ($10^{-5}$) would stall the convergence of the initialized heads. 
+A hyperparameter search across three configurations identified optimal bounds, with the conservative setup (Run 1) achieving the lowest loss (NLL = $3.7016$).
 
-To identify optimal optimization bounds, a hyperparameter search was executed over 5 epochs using a 10% modulo internal validation split across three training setups. The conservative configuration (Run 1) yielded the lowest negative log-likelihood (NLL = $3.7016$), preventing early divergence in the CRF layer while steadily lowering training loss.
-
-##### Table X
+##### Table 2: Variation 2 Hyperparameter Configurations
 | Parameter Configuration | Backbone LR ($\eta_{\text{base}}$) | Heads LR ($\eta_{\text{head}}$) | Batch Size ($B$) | Dev Loss (CRF NLL) |
 | :--- | :---: | :---: | :---: | :---: |
 | **Run 1 (Conservative)** | **1e-5** | **5e-4** | **16** | **3.7016** *(Selected)* |
 | **Run 2 (Moderate)** | 2e-5 | 1e-3 | 16 | 4.0252 |
 | **Run 3 (Aggressive)** | 5e-5 | 2e-3 | 32 | 4.2202 |
 
-This optimization setup is specifically tailored to the domain of propaganda detection. Staggered learning rates preserve DeBERTa’s pre-trained contextual representations for subtle rhetorical cues while enabling the CRF to rapidly learn the structural transition matrix. Micro-batching ($B = 16$) provides frequent parameter updates that prevent the loss from oversaturating on dominant background text class `0`. Finally, combining AdamW weight decay ($0.01$) with gradient clipping ($\le 1.0$) stabilizes CRF optimization against heavy transition penalties while preventing the encoder from overfitting to high-frequency journalistic terminology that underpins this corpus.
-
-The final production model was trained for 10 epochs under the conservative Run 1 configuration, utilizing negative log-likelihood (CRF NLL) loss and gradient accumulation to ensure stable joint convergence across all 17 BIO sequence states.
+This differential scheme preserves DeBERTa's representations for subtle rhetorical cues while enabling the CRF to rapidly learn structural transitions. Micro-batching ($B=16$) prevents loss saturation on background `O` tokens, while AdamW weight decay ($0.01$) and gradient clipping ($\le 1.0$) stabilize CRF optimization against heavy transition penalties. The production model was trained for 10 epochs under Run 1 parameters.
 
 ---
 
 ## 3. Architecture Variation 1: Decoupled, Two-Stage Tagger
-In contrast to the single-stage joint decoding pass of Variation 2, Architecture Variation 1 adopts a modular, two-stage pipeline for propaganda detection and classification. Rather than forcing a single network to perform spatial boundary localization and multi-class technique identification simultaneously, Variation 1 decouples the task into two specialized sub-networks:
-
-1. **Stage 1 (Span Localization Tagger):** A 3-class sequence tagger trained exclusively to identify the presence and boundaries of propagandistic text within full-sentence context. The target space collapses into three discrete BIO states. Non-propaganda background text is assigned the `O` tag, the onset token of any propaganda phrase is tagged `B-Propaganda`, and interior tokens extending the span are tagged `I-Propaganda`.
-2. **Stage 2 (Technique Classifier Head):** An independent Multi-Layer Perceptron (MLP) classifier head that mean-pools subword embeddings extracted from Stage 1's predicted candidate spans and categorizes them into one of eight rhetorical techniques.
-
-This decoupled architecture offers distinct theoretical advantages grounded in data density and task specialization. By collapsing all eight fine-grained propaganda techniques into a generic binary target space ($\mathcal{Y}_3$), Stage 1 maximizes positive label density across the sequence labeling dataset, enabling the tagger to build a robust generalized representation of manipulative text versus neutral background context without being fragmented by rare technique sub-classes. Furthermore, isolating the downstream classification head allows Stage 2 to act as a dedicated domain expert, optimizing rhetorical feature boundaries independently of spatial sequence constraints. Nevertheless, this two-stage division creates an inherent single-point failure bottleneck, where early Stage 1 localization omissions or boundary offsets permanently constrain the downstream performance of Stage 2.
+Variation 1 adopts a modular pipeline that decouples propaganda detection into two specialized sub-networks:
+1. **Stage 1 (Span Localization Tagger):** A 3-class sequence tagger ($\mathcal{Y}_3 = \{\text{O}, \text{B-Propaganda}, \text{I-Propaganda}\}$) trained exclusively to identify propagandistic boundaries within full-sentence context.
+2. **Stage 2 (Technique Classifier Head):** An independent Multi-Layer Perceptron (MLP) that mean-pools subword embeddings from Stage 1’s predicted spans and categorizes them into one of eight rhetorical techniques.
 
 $$\mathcal{Y}_3 = \{\text{O}, \text{B-Propaganda}, \text{I-Propaganda}\}$$
 
+Collapsing techniques into a 3-class target maximizes positive label density, enabling Stage 1 to learn robust spatial boundaries without fragmentation from rare sub-classes. Stage 2 then acts as a specialized domain expert, optimizing rhetorical features independently of sequence constraints. However, this decoupling creates a single-point failure bottleneck, where early Stage 1 boundary errors permanently limit downstream Stage 2 performance.
+
 ### 3.1 Model Architecture & Forward Pass
-Stage 1 employs a DeBERTa-CRF sequence tagging architecture that follows the exact structural topology, contextual subword encoding, linear projection, and global CRF decoding operations formalized in Equations (1)–(5) of Section 4.2.4 for Variation 2.
+Stage 1 employs a DeBERTa-CRF architecture (Section 2), restricting emissions to $\mathbf{E} \in \mathbb{R}^{N \times 3}$ and transitions to $\mathbf{A} \in \mathbb{R}^{3 \times 3}$. When Stage 1 detects an active span, Stage 2 re-encodes the sentence into token representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$, slices the sequence to predicted indices $[p_{\text{start}}, p_{\text{end}}]$, and isolates the target vectors. This slicing is done to intensify the core propaganda signal and strip away uninformative neutral text that has already been contextualized by DeBERTa’s self-attention layers.
 
-The primary architectural distinction lies in the target emission dimension: Stage 1 restricts the projection matrix to a 3-class emission matrix $\mathbf{E} \in \mathbb{R}^{N \times 3}$ and evaluates transitions via a reduced 3-class transition matrix $\mathbf{A} \in \mathbb{R}^{3 \times 3}$.
+The sliced embeddings are mean-pooled into a fixed 384-dimensional vector $\mathbf{h}_{\text{pooled}}$:
 
-When Stage 1 identifies an active span, Stage 2 executes a contextualized span-pooling operation. Stage 2 re-encodes the entire input sentence through DeBERTa to produce contextualized token representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$. Following this, the sequence of representations is sliced to the exact indices of the predicted span $[p_{\text{start}}, p_{\text{end}}]$. This is done to intensify the core propaganda signal and strip away uninformative neutral text that has already been contextualized by DeBERTa’s self-attention layers.
-
-The remaining contextualized vectors are then isolated and mean-pooled into a single 384-dimensional span representation $\mathbf{h}_{\text{pooled}}$:
-
-$$\mathbf{h}_{\text{pooled}} = \frac{1}{p_{\text{end}} - p_{\text{start}} + 1} \sum_{i=p_{\text{start}}}^{p_{\text{end}}} \mathbf{H}_i$$
-
-Mean-pooling serves as a length-invariant representational interface, condensing candidate phrases of arbitrary length into a fixed-size 384-dimensional vector optimized for downstream dense classification.
-
-This pooled embedding is fed through a specialized two-layer Multi-Layer Perceptron (MLP) classification head:
+This pooled embedding is processed through a two-layer MLP classification head:
 
 $$\mathbf{z} = \text{Linear}_{64 \to 8}\Big(\text{Dropout}\Big(\text{LayerNorm}\Big(\text{ReLU}\Big(\text{Linear}_{384 \to 64}(\mathbf{h}_{\text{pooled}})\Big)\Big)\Big)\Big)$$
 
-The MLP head architecture is engineered to balance feature compression with regularization. The initial linear projection ($384 \to 64$) maps dense 384-dimensional embeddings down to a compact 64-dimensional feature subspace, forcing out uninformative background noise. The ReLU introduces non-linear decision boundaries required to highlight subtle rhetorical techniques, while Layer Normalization stabilizes gradient variance across small-batch training ($B=16$). Dropout ($p=0.3$) regularizes the dense layer, preventing the classifier from memorizing frequent journalistic vocabulary and ensuring the head generalizes across unseen news topics. Finally, the terminal layer maps the normalized features to 8-way technique logits $\mathbf{z} \in \mathbb{R}^8$.
+The initial projection ($384 \to 64$) compresses dense noise, ReLU introduces non-linear decision boundaries, Layer Normalization stabilizes small-batch variance ($B=16$), and Dropout ($p=0.3$) prevents topic memorization. If no span is detected ($p_{\text{start}} = -1$), the pipeline defaults to neutral text, bypassing Stage 2.
 
-If Stage 1 predicts no active span ($p_{\text{start}} = -1$), the pipeline short-circuits and defaults to `not_propaganda` without invoking Stage 2, preserving computational efficiency on clean context.
 
 ### 3.2 Hyperparameter Search & Optimization Strategy
-To properly optimize Variation 1 and establish a theoretical upper bound for Stage 2, training and hyperparameter tuning were divided into two isolated protocols:
-
-#### 3.2.1 Stage 2 Head Training & The Oracle Ceiling
-To ensure the Stage 2 classifier learned clean technique representations without being degraded by early Stage 1 prediction errors, Stage 2 was trained exclusively on gold-standard propaganda spans extracted from the training corpus. DeBERTa parameters were completely frozen, updating only the parameters of the MLP head ($\theta_{\text{MLP}}$) using multi-class Cross-Entropy loss:
+#### 3.2.1 Stage 2 Head Training & Performance Ceiling
+Stage 2 was trained exclusively on gold-standard spans to isolate technique classification from localization errors. Keeping DeBERTa frozen to retain linguistic baseline, the MLP head ($\theta_{\text{MLP}}$) was optimized with multi-class Cross-Entropy loss ($\mathcal{L}_{\text{CE}}$) using AdamW ($\text{LR} = 10^{-3}, B = 16$) over 10 epochs:
 
 $$\mathcal{L}_{\text{CE}}(\theta_{\text{MLP}}) = -\sum_{k=1}^{8} y_{k} \log \hat{y}_{k}$$
 
-where $y_k \in \{0, 1\}$ represents the one-hot gold technique indicator and $\hat{y}_k = \text{softmax}(\mathbf{z})_k$ is the predicted probability for technique $k$. The classification head was optimized via AdamW ($\text{LR} = 1\times 10^{-3}$, $B = 16$) over 10 epochs. Freezing the backbone prevented gradient instability and memorization of political vocabulary during head optimization. When evaluated on validation gold spans, Stage 2 established an Oracle Ceiling of 0.5106 Macro-F1 (and 0.5178 Accuracy), representing the maximum theoretical performance Variation 1 could achieve under perfect ($100\%$) spatial localization.
+Evaluated on validation gold spans, Stage 2 established a performance ceiling of $0.5106$ Macro-$F_1$ ($0.5178$ Accuracy), benchmarking the maximum theoretical classification performance given $100\%$ spatial localization.
 
 #### 3.2.2 Stage 1 Hyperparameter Grid Search
-Stage 1 parameters ($\theta_{\text{S1}}$) were trained by minimizing the sequence Negative Log-Likelihood ($\mathcal{L}_{\text{CRF}}$) over the collapsed 3-class BIO space ($\mathcal{Y}_3$):
+Stage 1 (Sequence Labeller) parameters ($\theta_{\text{S1}}$) were trained by minimizing negative log-likelihood ($\mathcal{L}_{\text{CRF}}$) over 3-class space $\mathcal{Y}_3$:
 
-$$\mathcal{L}_{\text{CRF}}(\theta_{\text{S1}}) = -\log P(\mathbf{y}^* \mid \mathbf{x}) = -\log \left( \frac{\exp(S(\mathbf{x}, \mathbf{y}^*))}{\sum_{\mathbf{y}' \in \mathcal{Y}_3^{N}} \exp(S(\mathbf{x}, \mathbf{y}'))} \right)$$
+$$\mathcal{L}_{\text{CRF}}(\theta_{\text{S1}}) = -\log \left( \frac{\exp(S(\mathbf{x}, \mathbf{y}^*))}{\sum_{\mathbf{y}' \in \mathcal{Y}_3^{N}} \exp(S(\mathbf{x}, \mathbf{y}'))} \right)$$
 
-where $\mathbf{y}^* \in \mathcal{Y}_3^N$ represents the gold 3-class target path (O, B-Propaganda, I-Propaganda) and $S(\mathbf{x}, \mathbf{y})$ evaluates combined emission and 3-class transition scores.
+A grid-search across learning rates evaluated Viterbi paths against ground-truth spans using length-adaptive $\delta$-tolerance routing. Trial 9 achieved top spatial performance ($0.3834$ Span-$F_1$).
 
-To identify optimal optimization bounds for spatial boundary detection, a grid search was conducted across Transformer learning rates ($\eta_{\text{base}} \in \{5\times 10^{-6}, 1\times 10^{-5}, 3\times 10^{-5}\}$) and head learning rates ($\eta_{\text{head}} \in \{3\times 10^{-4}, 5\times 10^{-4}, 1\times 10^{-3}\}$) over 3 training epochs.
-
-While parameters were updated via $\mathcal{L}_{\text{CRF}}$ during backward passes, hyperparameter selection was guided by evaluating decoded Viterbi paths against ground-truth spans using the length-adaptive $\delta$-tolerance boundary router. Trial 9 achieved the highest standalone spatial performance (0.3834 Span-F1), balancing boundary precision ($0.4924$) and recall ($0.3139$).
-
-##### Table X: 
+##### Table 3: 
 ```
 Tuning Trial | Backbone LR (ηbase​) | Heads LR (ηhead​)Span Precision | Span Recall | Standalone | Span-F1 | 
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -208,31 +164,23 @@ Tuning Trial | Backbone LR (ηbase​) | Heads LR (ηhead​)Span Precision | Sp
 | Trial 6 | 1e-5 | 1e-3 | 0.4415 | 0.2686 | 0.3340 |
 | Trial 9 **(Selected)** | 3e-5 | 1e-3 | 0.4924 | 0.3139 | 0.3834 |
 ```
----
 
-#### 3.2.3 Final Decoupled Pipeline
-The final production system couples the independently optimized Stage 1 tagger and Stage 2 classifier. Stage 1 was trained for 10 epochs under the winning Trial 9 configuration ($\eta_{\text{base}} = 3\times 10^{-5}$, $\eta_{\text{head}} = 1\times 10^{-3}$, $B = 16$), utilizing gradient accumulation and gradient clipping ($\le 1.0$) to ensure stable convergence across 3-class CRF transition paths. During end-to-end inference, an input sentence is processed sequentially: Stage 1 executes Viterbi decoding to predict candidate token span bounds $[p_{\text{start}}, p_{\text{end}}]$. If an active span is detected ($p_{\text{start}} \neq -1$), Stage 2 re-encodes the sentence, mean-pools subword vectors across $[p_{\text{start}}, p_{\text{end}}]$, and outputs an 8-way technique prediction. If Stage 1 detects no active span ($p_{\text{start}} = -1$), the pipeline short-circuits and assigns a neutral `not_propaganda` label, bypassing Stage 2 entirely.
+The final system couples both stages: Stage 1 extracts span bounds via Viterbi decoding under Trial 9 parameters, and Stage 2 classifies active spans into 8-way technique predictions.
 
 ---
 
 ## 4. Stochastic Random-Guessing Baseline
-To establish an absolute mathematical lower bound and guarantee that sequence models learn authentic rhetorical patterns rather than picking up on sequence length heuristics, we implement an unintelligent, probabilistic random-guessing baseline.
-
-For a target sequence comprising $N$ tokens $T = (t_1, t_2, \dots, t_N)$, the baseline operates via a three-step stochastic sampling procedure:
-1. A Bernoulli trial determines whether the sentence contains propaganda with uniform probability $P(\text{prop}) = P$. Sequences assigned $P(\text{prop}) P$ are output as entirely neutral (`O` across all $N$ tokens, mapping to `not_propaganda`). $P$ is determined by the split of positive instances vs `not_propaganda` of the training set. 
-2. If propaganda existence is flagged, start and end token indices $(i, j)$ are drawn uniformly at random yielding a predicted boundary span $\hat{S} = [t_i, \dots, t_j]$.
+To establish a mathematical lower bound and confirm that neural models learn authentic rhetorical patterns rather than length heuristics, we implement a probabilistic baseline operating via a three-step stochastic sampling procedure:
+1. A Bernoulli trial determines propaganda existence using the training set's positive label distribution $P$. Sentences flagged as clean return all `O` tags.
+2. If propaganda is flagged, start and end indices $(i, j)$ are drawn uniformly at random:
 
 $$i \sim \text{Uniform}(1, N), \quad j \sim \text{Uniform}(i, N)$$
 
-3. A technique label $k$ is drawn uniformly from the 8 positive propaganda categories, mimicing the random baseline appraoch from Task 1:
+3. A technique $k$ is drawn uniformly across the 8 categories:$$k \sim \text{Uniform}(1, 8)$$
 
 $$k \sim \text{Uniform}(1, 8)$$
 
-The output of this process yeilds a 3-part vector containing a propagdana route and stand and end indices where qualifiying. Information means a given tokenized sequence can be tagged with its appropriate BIO representation. 
-
-> Include an example going from vector and sequence to bio
-
-From here, we can evaluate the sequences using our evaluation suite, defining the floor against which downstream neural architectures are benchmarked.
+This generates a triple $(1, [i, j], k)$, mapping tokens to BIO tags. For example, in a 5-token sequence where $(i=2, j=3, k=\text{Loaded})$, token $t_2$ maps to `B-Loaded`, $t_3$ to `I-Loaded`, and remaining tokens to `O`. Evaluated via our test suite, this establishes our benchmark performance floor.
 
 ---
 
