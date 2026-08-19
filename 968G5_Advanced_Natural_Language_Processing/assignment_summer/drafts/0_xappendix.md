@@ -62,3 +62,19 @@ group of people without investigating the complexities of an issue |
 ---
 
 ### Appendix E: Custom Stopword List
+
+
+---
+
+### Appendix F: Complete 17-Class BIO Tagset Mapping (Variation 2)
+| Propaganda Technique Label | Beginning Tag (`B-`) | Inside Tag (`I-`) | Outside / Sentinel Tag |
+| :--- | :---: | :---: | :---: |
+| `flag_waving` | `B-flag_waving` | `I-flag_waving` | `O` |
+| `appeal_to_fear_prejudice` | `B-appeal_to_fear_prejudice` | `I-appeal_to_fear_prejudice` | `O` |
+| `causal_oversimplification` | `B-causal_oversimplification` | `I-causal_oversimplification` | `O` |
+| `doubt` | `B-doubt` | `I-doubt` | `O` |
+| `exaggeration,minimisation` | `B-exaggeration,minimisation` | `I-exaggeration,minimisation` | `O` |
+| `loaded_language` | `B-loaded_language` | `I-loaded_language` | `O` |
+| `name_calling,labeling` | `B-name_calling,labeling` | `I-name_calling,labeling` | `O` |
+| `repetition` | `B-repetition` | `I-repetition` | `O` |
+---
