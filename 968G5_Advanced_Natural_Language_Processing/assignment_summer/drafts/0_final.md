@@ -228,7 +228,7 @@ A grid search over 3 hyperparameters (Table 3) was conducted on a $10\%$ modulo 
 
 <br>
 
-## 4.5 Evaluation Metrics
+## 4.5 Evaluation Framework
 Although our corpus is balanced, real-world propaganda datasets are typically highly imbalanced (Da San Martino et al., 2020). Consequently, we design an evaluation framework tailored to imbalanced test distributions. Standard accuracy is an insufficient terminal evaluation metric because it is vulnerable to masking poor minority performance behind dominant classes.
 
 In a single-label multi-class setting across $K$ classes, Micro-averaged $F_1$ score mathematically decomposes into global accuracy, making it blind to systematic class imbalances:
@@ -318,20 +318,284 @@ Future work could explore hybrid models that leverage BoW’s orthogonal trigger
 
 ---
 
+<br>
 
+# 5 Task 2: Joint Propaganda Span Detection and Classification
+Task 2 expands the experimental scope from classifying known, unlabelled instances of propaganda to jointly identifying manipulative text boundaries and classifying the sequence technique. This objective is framed as a token-level sequence labeling task utilising the Beginning, Inside, Outside (BIO) encoding schema. Formally, given an input sequence of $N$ tokens $\mathbf{x} = (x_1, x_2, \dots, x_N)$, the model learns a mapping function $f: \mathbf{x} \to \mathbf{y}$ to predict a sequence of target tags $\mathbf{y} = (y_1, y_2, \dots, y_N)$ from a label space $y_i \in \mathcal{Y}$:
 
+- $y_i = \text{O}$ for neutral, non-propagandistic context.
+- $y_i = \text{B}$ for the initial triggering propaganda token.
+- $y_i = \text{I}$ for interior span tokens.
 
+The figure below demonstrates a sequence translation:
 
+$$
+\begin{array}{rcccccccccccccc}
+\text{Tokens } (x_i): & \texttt{[CLS]} & \texttt{The} & \texttt{mainstream} & \texttt{media} & \texttt{is} & \texttt{spreading} & \mathbf{\texttt{blatant}} & \mathbf{\texttt{lies}} & \texttt{about} & \texttt{the} & \texttt{policy} & \texttt{.} & \texttt{[SEP]} \\[2pt]
+& \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow \\[2pt]
+\text{BIO Tags } (y_i): & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \mathbf{\texttt{B}} & \mathbf{\texttt{I}} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O}
+\end{array}
+$$
 
+The methodologies for Task 2 are derived as variations of an adapted, modernized CNN-BiLSTM-CRF framework (Ma and Hovy, 2016)
 
+---
 
+<br>
 
+## 5.1 Architectural Approach
+The methodologies for Task 2 are derived as variations of an adapted, modernized CNN-BiLSTM-CRF framework (Ma and Hovy, 2016).
 
+Ma and Hovy’s (2016) classical sequence-tagging framework combined character-level CNNs for morphological extraction, Bidirectional LSTMs for contextual dependencies, and a Conditional Random Field (CRF) decoder to enforce valid tag transitions. Applied to propaganda detection, this architecture captures manipulative superlative affixes (e.g., -est), long-range rhetorical framing, and structural constraints. Crucially, the CRF enables high-confidence interior tokens to resolve ambiguous span boundaries. This dynamic is formalized as the "breadcrumb effect" and mitigates noisy annotation boundaries (Da San Martino et al., 2019).
 
+This project modernizes the classical baseline by replacing sequential and convolutional layers with a pre-trained DeBERTa encoder while retaining terminal CRF global decoding. This architectural shift yields four core advantages. SentencePiece tokenization natively standardizes subword morphology, eliminating the need to train dedicated character-CNNs. Global self-attention replaces recurrency to prevent context decay. Fine-tuning pre-trained representations mitigates catastrophic overfitting on small corpora. Finally, DeBERTa’s disentangled attention decouples content from relative position. This grants the model the spatial awareness needed when neutral vocabulary is weaponized through strategic placement.
 
+To benchmark this modernized pipeline, we evaluate two architectural variations: a Decoupled Two-Stage Tagger (Variation 1) and an Integrated Multi-Class BIO-CRF Pipeline (Variation 2).
 
+---
 
+<br>
 
+## 5.2 Architecture Variation 2: The Integrated Multi-Class BIO-CRF Model
+Variation 2 frames propaganda detection as an end-to-end joint sequence labeling task, learning span boundaries and technique classifications simultaneously. This is achieved by expanding the 17-state BIO schema, joining `B-` and `I-` prefixes with technique suffixes plus a neutral `O` state (Appendix F):
+
+$$\mathcal{Y}_{17} = \{\text{O}\} \cup \{\text{B-}k \mid k \in \mathcal{T}\} \cup \{\text{I-}k \mid k \in \mathcal{T}\}$$
+
+This granular label space optimizes boundaries and techniques in tandem. Tag expansion enhances the "breadcrumb effect" during decoding. Instead of collapsing uncertain boundaries into an uninformative ~50/50 binary split, probability mass is dispersed across technique states. When a small boundary mass aligns with a high-confidence interior token, the CRF transition matrix leverages that semantic linkage to pull ambiguous boundary tokens into coherent spans.
+
+---
+
+### 5.2.1 Model Architecture
+Coupling a pre-trained Transformer with a Linear-Chain CRF, `deberta-v3-xsmall` encodes input sequence $\mathbf{x} = (x_1, \dots, x_N)$ into representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$:
+
+$$\mathbf{H} = \text{DeBERTa}(\mathbf{x})$$
+
+A linear layer projects $\mathbf{H}$ to unnormalized emission logits $\mathbf{E} \in \mathbb{R}^{N \times 17}$:
+
+$$\mathbf{E}_i = \mathbf{W}_e \mathbf{H}_i + \mathbf{b}_e \quad (i \in \{1, \dots, N\})$$
+
+To eliminate local independence assumptions, $\mathbf{E}$ is passed to a Linear-Chain CRF with a trainable transition matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$. Invalid paths, such as initiating spans on interior tags ($\text{O} \to \text{I-}k$) or mid-phrase technique switches ($\text{B-}k_1 \to \text{I-}k_2$), are masked with hard penalties ($-10000.0$).
+
+Sequence score $S(\mathbf{x}, \mathbf{y})$ sums emissions and transitions:
+
+$$S(\mathbf{x}, \mathbf{y}) = \sum_{i=1}^{N} \mathbf{E}_{i, y_i} + \sum_{i=1}^{N-1} \mathbf{A}_{y_i, y_{i+1}}$$
+
+Training minimizes the negative log-likelihood (NLL) of the gold path $\mathbf{y}^*$:
+
+$$\mathcal{L}_{\text{CRF}}(\theta) = -\log \left( \frac{\exp(S(\mathbf{x}, \mathbf{y}^*))}{\sum_{\mathbf{y}' \in \mathcal{Y}^{N}} \exp(S(\mathbf{x}, \mathbf{y}'))} \right)$$
+
+Inference uses Viterbi decoding to extract the optimal path $\hat{\mathbf{y}}$:
+
+$$\hat{\mathbf{y}} = \arg\max_{\mathbf{y}' \in \mathcal{Y}^{N}} S(\mathbf{x}, \mathbf{y}')$$
+
+---
+
+### 5.2.2 Hyperparameter Search & Optimization Strategy
+To prevent gradient instability, the pipeline uses differential learning rates with AdamW. Co-training pre-trained DeBERTa alongside randomly initialized linear projection and CRF layers creates an optimization imbalance where standard CRF learning rates ($10^{-3}$) risk destroying encoder features, whereas typical transformer rates ($10^{-5}$) stall CRF convergence.
+
+A hyperparameter search across three configurations identified optimal bounds, with the conservative setup (Run 1) achieving the lowest loss (NLL = $3.7016$).
+
+This differential scheme preserves DeBERTa's representations for subtle rhetorical cues while enabling the CRF to rapidly learn structural transitions. Micro-batching ($B=16$) prevents loss saturation on background `O` tokens, while AdamW weight decay ($0.01$) and gradient clipping ($\le 1.0$) stabilize CRF optimization against heavy transition penalties. The production model was trained for 10 epochs under Run 1 parameters.
+
+##### Table 7: Variation 2 Hyperparameter Configurations
+| Parameter Configuration | Transformer LR ($\eta_{\text{base}}$) | Heads LR ($\eta_{\text{head}}$) | Batch Size ($B$) | Dev Loss (CRF NLL) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Run 1 (Conservative)** | **1e-5** | **5e-4** | **16** | **3.7016** *(Selected)* |
+| **Run 2 (Moderate)** | 2e-5 | 1e-3 | 16 | 4.0252 |
+| **Run 3 (Aggressive)** | 5e-5 | 2e-3 | 32 | 4.2202 |
+
+---
+
+<br>
+
+## 5.3 Architecture Variation 1: Decoupled, Two-Stage Tagger
+Variation 1 adopts a modular pipeline that decouples propaganda detection into two specialized sub-networks:
+1. **Stage 1 (Span Localization Tagger):** A 3-class sequence tagger ($\mathcal{Y}_3 = \{\text{O}, \text{B-Propaganda}, \text{I-Propaganda}\}$) trained exclusively to identify propagandistic boundaries within full-sentence context.
+2. **Stage 2 (Technique Classifier Head):** An independent Multi-Layer Perceptron (MLP) that mean-pools subword embeddings from Stage 1’s predicted spans and categorizes them into one of eight rhetorical techniques.
+
+$$\mathcal{Y}_3 = \{\text{O}, \text{B-Propaganda}, \text{I-Propaganda}\}$$
+
+Collapsing techniques into a 3-class target maximizes positive label density, enabling Stage 1 to learn robust generalized propaganda boundaries without fragmentation from rare sub-classes. Stage 2 then acts as a specialized domain expert, optimizing rhetorical features independently. 
+
+---
+
+### 5.3.1 Model Architecture
+Stage 1 employs the same DeBERTa-CRF architecture but restricts emissions to $\mathbf{E} \in \mathbb{R}^{N \times 3}$ and transitions to $\mathbf{A} \in \mathbb{R}^{3 \times 3}$. When Stage 1 detects an active span, Stage 2 re-encodes the sentence into token representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$, slices the sequence to predicted indices $[p_{\text{start}}, p_{\text{end}}]$, and isolates the target vectors. This slicing is done to intensify the core propaganda signal and strip away uninformative neutral text that has already been contextualized by DeBERTa’s self-attention layers. The sliced embeddings are mean-pooled into a fixed 384-dimensional vector $\mathbf{h}_{\text{pooled}}$ and processed through a two-layer MLP classification head:
+
+$$\mathbf{z} = \text{Linear}_{64 \to 8}\Big(\text{Dropout}\Big(\text{LayerNorm}\Big(\text{ReLU}\Big(\text{Linear}_{384 \to 64}(\mathbf{h}_{\text{pooled}})\Big)\Big)\Big)\Big)$$
+
+The initial projection ($384 \to 64$) compresses dense noise, ReLU introduces non-linear decision boundaries, Layer Normalization stabilizes small-batch variance ($B=16$), and Dropout ($p=0.3$) prevents topic memorization. If no span is detected ($p_{\text{start}} = -1$), the pipeline defaults to neutral text, bypassing Stage 2.
+
+---
+
+### 5.3.2 Hyperparameter Search & Optimization Strategy
+#### 5.3.2.1 Stage 2 Head Training & Performance Ceiling
+Stage 2 was trained on the gold-standard spans, abstracting it from any detection pipeline errors. Keeping DeBERTa frozen to retain linguistic baseline, the MLP head ($\theta_{\text{MLP}}$) was optimized with multi-class Cross-Entropy loss ($\mathcal{L}_{\text{CE}}$) using AdamW ($\text{LR} = 10^{-3}, B = 16$) over 10 epochs:
+
+$$\mathcal{L}_{\text{CE}}(\theta_{\text{MLP}}) = -\sum_{k=1}^{8} y_{k} \log \hat{y}_{k}$$
+
+The trained model established a performance ceiling of $0.5106$ Macro-$F_1$ ($0.5178$ Accuracy), benchmarking the maximum theoretical classification performance given $100\%$ spatial localization.
+
+#### 5.3.2.2 Stage 1 Hyperparameter Grid Search
+Stage 1 (Sequence Labeller) parameters ($\theta_{\text{S1}}$) were trained by minimizing negative log-likelihood ($\mathcal{L}_{\text{CRF}}$) over 3-class space $\mathcal{Y}_3$:
+
+$$\mathcal{L}_{\text{CRF}}(\theta_{\text{S1}}) = -\log \left( \frac{\exp(S(\mathbf{x}, \mathbf{y}^*))}{\sum_{\mathbf{y}' \in \mathcal{Y}_3^{N}} \exp(S(\mathbf{x}, \mathbf{y}'))} \right)$$
+
+A grid-search across learning rates evaluated Viterbi paths against ground-truth spans using length-adaptive $\delta$-tolerance routing. Trial 9 achieved top spatial performance ($0.3834$ Span-$F_1$).
+
+The final system couples both stages: Stage 1 extracts span bounds using Viterbi decoding under Trial 9 parameters, and Stage 2 classifies active spans into 8-way technique predictions.
+
+##### Table 8: Stage 1 Hyperparameter Search Results
+| Trial | Transformer LR ($\eta_{\text{base}}$) | Heads LR ($\eta_{\text{head}}$) | Span Precision | Span Recall | Standalone Span-$F_1$ |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Trial 1** | 5e-6 | 3e-4 | 0.4327 | 0.2395 | 0.3083 |
+| **Trial 4** | 1e-5 | 3e-4 | 0.4140 | 0.2492 | 0.3111 |
+| **Trial 6** | 1e-5 | 1e-3 | 0.4415 | 0.2686 | 0.3340 |
+| **Trial 9 (Selected)** | **3e-5** | **1e-3** | **0.4924** | **0.3139** | **0.3834** |
+
+---
+
+<br>
+
+## 5.4 Stochastic Random-Guessing Baseline
+To establish a mathematical lower bound and confirm authentic rhetorical patterns learning, we implement a probabilistic baseline operating using a three-step stochastic sampling procedure:
+1. A Bernoulli trial determines propaganda existence using the training set's positive label distribution $P$. Sentences flagged as clean return all `O` tags.
+2. If propaganda is flagged, start and end indices $(i, j)$ are drawn uniformly at random:
+
+$$i \sim \text{Uniform}(1, N), \quad j \sim \text{Uniform}(i, N)$$
+
+3. A technique $k$ is drawn uniformly across the 8 categories:$$k \sim \text{Uniform}(1, 8)$$
+
+$$k \sim \text{Uniform}(1, 8)$$
+
+This generates a triple $(1, [i, j], k)$, mapping tokens to BIO tags. For example, in a 5-token sequence where $(i=2, j=3, k=\text{Loaded})$, token $t_2$ maps to `B-Loaded`, $t_3$ to `I-Loaded`, and remaining tokens to `O`. Evaluated via our test suite, this establishes our benchmark performance floor.
+
+---
+
+<br>
+
+## 5.5 Evaluation Framework 
+Evaluating propaganda sequence labeling requires balancing spatial boundary precision with technique classification. To establish an interpretable benchmark, our evaluation approach combines adaptive boundary routing, penalized error scoring, and a diagnostic audit.
+
+---
+
+### 5.5.1 Boundary Qualification Router
+To accommodate minor offsets without masking severe misalignment, predicted spans $(p_{\text{start}}, p_{\text{end}})$ are evaluated against gold spans $(g_{\text{start}}, g_{\text{end}})$ using a length-adaptive tolerance window ($\delta$). This mimics the lack of agreement observed on human annotators (Da San Martino et al., 2019).
+
+Predictions passing the gate ($\vert p_{\text{start}} - g_{\text{start}} \vert \le \delta$ and $\vert p_{\text{end}} - g_{\text{end}} \vert \le \delta$) qualify for classification. Correct technique predictions yield a True Positive (TP) and incorrect techniques yield a misclassification. Spans failing $\delta$-tolerance receive a double penalty—scored simultaneously as a False Positive (hallucination) and a False Negative (omission).
+
+##### Table 9: Length-Adaptive Boundary Tolerance ($\delta$)
+| Span Length (Tokens) |
+| :--- | :--- |
+| **$\le 5$** | 0 tokens |
+| **$6\text{--}10$** | $\pm 1$ token |
+| **$11\text{--}15$** | $\pm 2$ tokens |
+| **$16\text{--}50$** | Step-wise scaling |
+| **$> 50$** | $\pm 10$ tokens |
+---
+
+### 5.5.2 Primary Optimization Metric: Macro-Weighted F1
+Continuing from Task 1 (Section 4.5), terminal performance is evaluated using the standard Macro-$F_1$ score averaged across the eight active propaganda categories $\mathcal{T}$:
+
+$$\text{Macro-F1} = \frac{1}{\vert{}\mathcal{T}\vert{}} \sum_{k \in \mathcal{T}} \frac{2 \cdot P_k \cdot R_k}{P_k + R_k}$$
+
+Predicted spans must pass through the boundary router before technique evaluation, therefore, localization failures directly penalize $P_k$ and $R_k$. Consequently, higher Macro-$F_1$ scores inherently reflects superior boundary detection alongside accurate technique classification. Due to this joint dependency, Task 1 and Task 2 Macro-$F_1$ metrics are not directly comparable. Task 1's metric evaluates classification over fixed pre-delimited spans, Task 2's measures end-to-end joint span detection and classification.
+
+---
+
+### 5.5.3 Diagnostic Error Analysis
+To isolate detection errors from downstream misclassifications, a three-phase audit is conducted. First, sequence predictions (Stage 1) are categorised into True Negatives, Omissions, Hallucinations, Disqualified Near-Misses, or Qualified Spans to evaluate boundary isolation capabilities. Second, the near-miss analysis evaluates technique accuracy on the subset of predicted but disqualified spans to test whether misaligned predictions maintain rhetorical features. Finally, the ceiling gap analysis compares multi-class technique accuracy on qualified spans against the ceiling model, quantifying the exact performance degradation caused by boundary noise and embedding offsets.
+
+---
+
+<br>
+
+## 5.6 Results
+Empirical performance is presented across the stochastic random baseline, Variation 1 (Decoupled), and Variation 2 (Integrated). Evaluated on the test split ($N = 640$ sentences; $309$ positive instances) using our length-adaptive boundary routing ($\delta$), performance is reported across Macro Precision, Recall, and $F_1$.
+
+---
+
+### 5.6.1 Baseline Performance
+A stochastic random-guessing baseline established the empirical lower bound, sampling span presence using a training prior ($52.19\%$) while drawing token bounds and techniques uniformly at random. The baseline achieved a Macro-$F_1$ of $0.0027$ (Precision: $0.0026$, Recall: $0.0028$). Out of $334$ active predictions across $640$ validation sentences, only $11$ spans satisfied $\delta$-tolerance routing, with zero correct technique assignments.
+
+This near-zero floor highlights the complexity of joint sequence tagging. In propaganda detection, arbitrary span extraction almost universally fails because manipulative phrases are tightly embedded within neutral syntactic prose. Thus, any non-trivial performance achieved directly reflects learned linguistic representations rather than stochastic spatial alignment.
+
+---
+
+### 5.6.2 Terminal Results
+End-to-end evaluation demonstrates that Variation 2 (Integrated) outperforms Variation 1 (Decoupled) across all primary metrics. Variation 2 achieved a terminal Macro-$F_1$ of $0.2034$, exceeding Variation 1 ($0.1684$) by $3.5$ percentage points.
+
+The substantial advantage in Macro Precision ($0.2914$ vs. $0.2000$) reflects capacity to suppress false-positive hallucinations on background text. Jointly optimizing boundaries and techniques within a unified 17-state CRF allows interior technique signals (e.g., `I-Loaded`) to refine span edges, avoiding the single-point localization bottleneck that limits Variation 1. Furthermore, Variation 2 demonstrated a superior Macro Recall ($0.1698$ vs. $0.1500$). Given the sparsity of manipulative text relative to surrounding neutral text, this $1.98$ percentage point absolute gain enables the integrated tagger to discover $\sim 13\%$ more total propaganda targets ($40$ vs. $35$ targets across $640$ validation sentences).
+
+##### Table 10: Task 2 Terminal Results
+| Pipeline | Macro Precision | Macro Recall | Macro-F1 |
+| :--- | :---: | :---: | :---: |
+| **Random-Guessing Baseline** | 0.0026 | 0.0028 | 0.0027 |
+| **Variation 1 (Decoupled Cascade)** | 0.2000 | 0.1500 | 0.1684 |
+| **Variation 2 (17-Class Joint Tagger)** | **0.2914** | **0.1698** | **0.2034** |
+
+---
+
+### 5.6.3 Class-Level Results
+Per-class metrics reveal key trade-offs across propaganda techniques. Variation 2 achieves higher $F_1$ scores across five of eight categories, driven by sharp precision gains on classes like `name_calling,labeling` ($0.50$ vs. $0.21$). Both architectures performed best on explicit, structural categories like `causal_oversimplification` ($F_1 = 0.36$), where overt logical connectors ("because of") form clear contextual anchors.
+
+Conversely, `flag_waving` is the sole category where Variation 1 led ($F_1 = 0.32$ vs. $0.20$), as its generic 3-class tagger captures extended multi-word entity phrases without multi-class state fragmentation. Joint decoding yielded its most dramatic improvement on `exaggeration,minimisation`, boosting $F_1$ from $0.04$ to $0.19$ via a 7-fold recall surge ($0.03 \to 0.20$). Short, implicit triggers like `loaded_language` ($F_1 \le 0.10$) remained difficult, as isolated emotive words frequently fail exact-match $\delta$-tolerance checks ($L \le 5$) when adjacent adverbs are slightly over-predicted.
+
+##### Table 11: Task 2 Class-Level Performance
+| Technique | Var 1 Precision | Var 1 Recall | Var 1 F1 | Var 2 Precision | Var 2 Recall | Var 2 F1 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **flag_waving** | 0.33 | 0.31 | **0.32** | 0.29 | 0.16 | 0.20 |
+| **appeal_to_fear_prejudice** | 0.15 | 0.14 | 0.14 | **0.32** | **0.19** | **0.24** |
+| **causal_oversimplification** | 0.39 | **0.34** | **0.36** | **0.42** | 0.31 | **0.36** |
+| **doubt** | 0.22 | 0.16 | 0.19 | **0.32** | **0.23** | **0.27** |
+| **loaded_language** | 0.09 | 0.03 | 0.04 | **0.10** | **0.10** | **0.10** |
+| **name_calling,labeling** | 0.21 | **0.15** | 0.17 | **0.50** | 0.12 | **0.19** |
+| **repetition** | 0.17 | **0.05** | **0.11** | **0.20** | **0.05** | 0.08 |
+| **exaggeration,minimisation** | 0.06 | 0.03 | 0.04 | **0.18** | **0.20** | **0.19** |
+| **Macro Average** | 0.20 | 0.15 | 0.17 | **0.29** | **0.17** | **0.20** |
+
+---
+
+### 5.6.4 Diagnostic Error Analysis Error
+The performance gains of Variation 2 stem from span hallucination suppression ($12.7\%$ vs. $33.5\%$) and superior span qualification ($42.7\%$ vs. $32.0\%$). While both models filter background text effectively ($\sim 98\%$ True Negatives), Variation 1's Stage 1 boundary detector passes $111$ false spans downstream to trigger cascading false positives in the Stage 2 classifier.
+
+Filtering to router disqualified spans we see that Variation 1's Stage 2 and Variation 2 retain $42.3\%$ and $46.1\%$ technique accuracy, highlighting a deficiency with the $\delta$-tolerance windows to locate core manipulative phrases. This proves models capture true semantic signals despite boundary drift, highlighting further the inter-annotator consensus problem (Da San Martino et al., 2019).
+
+Finally, comparison against ceiling performance demonstrates that on qualified spans ($N=102$), Variation 2 achieves $0.5098$ accuracy, virtually eliminating the gap ($\Delta -0.0080$) to the $0.5178$ performance ceiling (Section 5.3.2.1). Conversely, Variation 1 exhibits a larger degradation gap ($\Delta -0.0330$). This confirms that when spatial boundaries are correctly resolved, joint sequence tagging captures propaganda semantics as effectively as an isolated gold-span classifier.
+
+---
+
+##### Table 12: Detection Error Analysis
+| Category | Routing | Variation 1 (Decoupled) | Variation 2 (Integrated) |
+| :--- | :--- | :---: | :---: |
+| **True Negatives (TN)** | Clean background correctly predicted as neutral (`O`) | 322/331 (97.3%) | 325/331 (98.2%) |
+| **Complete Omissions (FN)** | Active propaganda target entirely missed (predicted `O`) | 148/309 (47.9%) | 122/309 (39.5%) |
+| **Hallucinations (FP)** | Neutral background incorrectly tagged as propaganda | 111/331 (33.5%) | 42/331 (12.7%) |
+| **Disqualified Near-Misses** | Target detected but failed $\delta$-tolerance boundary check | 62/309 (20.1%) | 55/309 (17.8%) |
+| **Qualified Spans** | Target detected AND satisfied $\delta$-tolerance check | 99/309 (32.0%) | 132/309 (42.7%) |
+---
+
+##### Table 13: Ceiling Performance Gap Summary
+| Pipeline | Qualified Spans | Qualified Accuracy | Ceiling Gap ($\Delta$) |
+| :--- | :---: | :---: | :---: |
+| **Random Baseline** | 11 spans | 0.0000 | -0.5178 |
+| **Variation 2 (17-Class Joint)** | **102 spans** | **0.5098** | **-0.0080** |
+| **Variation 1 (Decoupled)** | 99 spans | 0.4848 | -0.0330 |
+
+---
+
+## 5.7 Conclusions, Limitations and Future Work
+This project evaluated joint propaganda span detection and technique classification, demonstrating that a joint tagger (Variation 2) outperforms a decoupled cascade (Variation 1) in terminal Macro-$F_1$ ($0.2034$ vs. $0.1684$). 
+
+The integrated CRF better leverages interior tokens as semantic anchors ("breadcrumbs") to resolve ambiguous boundaries, suppressing false-positive hallucinations. Isolating qualified spans, Variation 2 achieved $0.5098$ accuracy, recovering $98.5\%$ of the $0.5178$ ceiling performance. Meanwhile, the random baseline ($0.0027$ Macro-$F_1$) confirmed any non-trvial result reflects genuine learning rather than chance.
+
+To retain Variation 1's modular control without cascading failure bottlenecks, future work should explore end-to-end differentiable fine-tuning. Pre-training the detector and classifier independently, then fine-tuning them jointly with full gradient propagation, allowing spatial localization to benefit directly from rich downstream semantic loss.
+
+Additionally, while evaluation utilized tolerant routing, training relied on strict exact-match loss. Adopting distance-weighted or soft-margin sequence losses would penalize near-miss boundaries proportionally rather than as total omissions.
+
+Finally, applying Unsupervised Domain-Adaptive Pre-Training (DAPT) on news corpora and scaling to `deberta-v3-large` would enhance background representations, improving recall on subtle, short-span techniques like `loaded_language`.
+
+---
 
 
 
