@@ -2,7 +2,7 @@
 
 Luke Birkett
 
-Word Count: 4612
+Word Count: 4679
 - Not including headings, latex formulas denoted between $$, tables or figures. Also exlcluding the abstract, references, appendeix, contents and this cover page. 
 
 Abstract:
