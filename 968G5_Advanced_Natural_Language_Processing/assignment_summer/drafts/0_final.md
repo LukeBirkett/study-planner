@@ -100,7 +100,7 @@ AI was not used to generate any original content. AI was not used derive insight
 ---
 
 ## 1 Introduction
-Propaganda is the deliberate, systematic attempt to shape perceptions, manipulate cognitions, and direct behavior to achieve a response that furthers the desired intent of the propagandist (Jowett & O'Donnell, 2018). It involves managing collective attitudes by manipulating significant symbols (Lasswell, 1927) and using rhetorical devices to bypass rational analysis rather than relying on outright falsehoods. 
+Propaganda is the deliberate, systematic attempt to shape perceptions, manipulate cognitions, and direct behavior to achieve a response that furthers the desired intent of the propagandist (Jowett & O'Donnell, 2018). It involves managing collective attitudes by manipulating significant symbols (Lasswell, 1926) and using rhetorical devices to bypass rational analysis rather than relying on outright falsehoods. 
 
 Given the velocity and volume of modern digital information, automated detection mechanisms are increasingly vital for maintaining the integrity of online discourse. This report explores automatically identifying propaganda through two core challenges: classifying known propagandistic snippets (Task 1) and jointly identifying manipulative spans and techniques within raw text (Task 2).
 
@@ -678,11 +678,11 @@ Da San Martino, G., Yu, S., Barrón-Cedeño, A., Petrov, R. and Nakov, P. (2019)
 
 Da San Martino, G., Barrón-Cedeño, A., Da San Martino, C., Petrov, R. and Nakov, P. (2020) 'SemEval-2020 Task 11: Detection of propaganda techniques in news articles', In Proceedings of the fourteenth workshop on semantic evaluation (pp. 1377-1414).
 
-Devlin, J., Chang, M.-W., Lee, K. and Toutanova, K. (2019) 'BERT: Pre-training of deep bidirectional transformers for language understanding', Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Minneapolis, Minnesota, June, pp. 4171–4186.
+Devlin, J., Chang, M.-W., Lee, K. and Toutanova, K. (2019) 'BERT: Pre-training of deep bidirectional transformers for language understanding', In Proceedings of the 2019 conference of the North American chapter of the association for computational linguistics: human language technologies, volume 1 (long and short papers) (pp. 4171-4186).
 
 Harris, Z. S. (1954) 'Distributional structure', Word, 10(2-3), pp. 146–162.
 
-Hobbs, R. and McGee, S. (2008) 'Teaching about propaganda: An examination of historical and contemporary media', Journal of Media Literacy Education, 1(2), pp. 56–68.
+Hobbs, R. and McGee, S. (2014) 'Teaching about propaganda: An examination of historical and contemporary media', Journal of Media Literacy Education, 6(2), pp.56-66.
 
 Hochreiter, S. and Schmidhuber, J. (1997) 'Long short-term memory', Neural Computation, 9(8), pp. 1735–1780.
 
@@ -692,19 +692,19 @@ Jowett, G. S. and O'Donnell, V. (2012) Propaganda and Persuasion. 5th edn. Thous
 
 Jowett, G. S. and O'Donnell, V. (2018) Propaganda and Persuasion. 7th edn. Thousand Oaks: SAGE Publications.
 
-Khosla, S., et al. (2020) 'Integrating syntactic and entity-level signals for robust text classification', Journal of Natural Language Engineering, 26(4), pp. 415–432.
+Khosla, S., Joshi, R., Dutt, R., Black, A.W. and Tsvetkov, Y., 2020, December. LTIatCMU at SemEval-2020 Task 11: Incorporating multi-level features for multi-granular propaganda span identification. In Proceedings of the Fourteenth Workshop on Semantic Evaluation (pp. 1756-1763).
 
 Kojima, T., Gu, S. S., Reid, M., Matsuo, Y. and Iwasawa, Y. (2022) 'Large language models are zero-shot reasoners', Advances in Neural Information Processing Systems, 35, pp. 22199–22213.
 
 Kranzlein, M., Seeber, M. and Nickel, F. (2020) 'Team DoNotDistribute at SemEval-2020 Task11: Features, finetuning, and data augmentation in neural models for propaganda detection in news articles', Proceedings of the Fourteenth Workshop on Semantic Evaluation (SemEval-2020), Barcelona, Spain, December, pp. 1045–1052.
 
-Lasswell, H. D. (1927) Propaganda Technique in the World War. London: Kegan Paul, Trench, Trubner & Co.
+Lasswell, H. D. (1927) Propaganda Technique in the World War. (Doctoral dissertation, The University of Chicago)
 
-Levy, O. and Goldberg, Y. (2014) 'Neural word embedding as implicit matrix factorization', Advances in Neural Information Processing Systems, 27, pp. 2177–2185.
+Levy, O. and Goldberg, Y. (2014) 'Neural word embedding as implicit matrix factorization', Advances in neural information processing systems, 27.
 
-Ma, X. and Hovy, E. (2016) 'End-to-end sequence labeling via bi-directional LSTM-CNNs-CRF', Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Berlin, Germany, August, pp. 1064–1074.
+Ma, X. and Hovy, E. (2016) 'End-to-end sequence labeling via bi-directional LSTM-CNNs-CRF', In Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) (pp. 1064-1074).
 
-Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S. and Dean, J. (2013) 'Distributed representations of words and phrases and their compositionality', Advances in Neural Information Processing Systems, 26, pp. 3111–3119.
+Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S. and Dean, J. (2013) 'Distributed representations of words and phrases and their compositionality', Advances in neural information processing systems, 26.
 
 Miller, C. R. (1939) The Techniques of Propaganda. From “How to Detect and Analyze Propaganda,” an address given at Town Hall. The Center for learning.
 
@@ -712,11 +712,11 @@ Miller, G. A. (1995) 'WordNet: A lexical database for English', Communications o
 
 Pedersen, T. (2010) 'Information content measures of semantic similarity perform better without sense-tagged text'. In Human Language Technologies: The 2010 Annual Conference of the North American Chapter of the Association for Computational Linguistics (pp. 329-332).
 
-Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K. and Zettlemoyer, L. (2018) 'Deep contextualized word representations', Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, New Orleans, Louisiana, June, pp. 2227–2237.
+Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K. and Zettlemoyer, L. (2018) 'Dissecting contextual word embeddings: Architecture and representation', In Proceedings of the 2018 conference on empirical methods in natural language processing (pp. 1499-1509).
 
 Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., Zhou, Y., Li, W. and Liu, P. J. (2020) 'Exploring the limits of transfer learning with a unified text-to-text transformer', Journal of Machine Learning Research, 21(140), pp. 1–67.
 
-Rashkin, H., Choi, E., Jang, J. Y., Volova, S. and Choi, Y. (2017) 'Truth of the varying shades: Analyzing language in fake news and political fact-checking', Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing, Copenhagen, Denmark, September, pp. 2931–2937.
+Rashkin, H., Choi, E., Jang, J. Y., Volova, S. and Choi, Y. (2017) 'Truth of the varying shades: Analyzing language in fake news and political fact-checking', In Proceedings of the 2017 conference on empirical methods in natural language processing (pp. 2931-2937).
 
 Sag, I. A., Baldwin, T., Bond, F., Copestake, A. and Flickinger, D. (2002) 'Multiword expressions: A pain in the neck for NLP', In International conference on intelligent text processing and computational linguistics (pp. 1-15). Berlin, Heidelberg: Springer Berlin Heidelberg.
 
@@ -735,7 +735,7 @@ Weston, A. (2000) A Rulebook for Arguments. 3rd edn. Indianapolis: Hackett Publi
 ### Appendix A: Propaganda Technique Definitions According to Da San Martino et al. (2020)
 | Label | Definition |
 | :--- | :--- |
-| `flag_waving` | Playing on strong national feeling (or with respect to any group, e.g., race, gender, political preference) to justify or promote an action or idea (Hobbs and Mcgee, 2008). |
+| `flag_waving` | Playing on strong national feeling (or with respect to any group, e.g., race, gender, political preference) to justify or promote an action or idea (Hobbs and Mcgee, 2014). |
 | `appeal_to_fear_prejudice` | Seeking to build support for an idea by instilling anxiety and/or panic in the population towards an alternative, possibly based on preconceived judgments. |
 | `causal_simplification` | Assuming a single cause or reason when there are multiple causes behind an issue. We include in the definition also scapegoating, e.g., transferring the blame to one person or
 group of people without investigating the complexities of an issue |
