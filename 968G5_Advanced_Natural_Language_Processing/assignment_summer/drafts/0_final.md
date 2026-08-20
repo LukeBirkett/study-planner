@@ -1,13 +1,20 @@
 # Advanced Natural Language Processing (968G5): Assessed coursework
 
 Luke Birkett
+22411525
 
 Word Count: 4679
-- Not including headings, latex formulas denoted between $$, tables or figures. Also exlcluding the abstract, references, appendeix, contents and this cover page. 
+The word count was derived whilst the report was writtin in markdown, before tranfering the content into full latex. The word count did not include headings, latex formulas (anything between two `$$`), tables or figures. Neither does it include the bibliography or appendix. It also doesn't include anything before the start of the report: `1 Introduction`
 
 Abstract:
+This report investigates automated propaganda detection across two core challenges: classifying isolated persuasive snippets (Task 1) and jointly identifying manipulative span boundaries and rhetorical techniques within raw text (Task 2). Using a subset of the Propaganda Techniques Corpus augmented using zero-shot Chain-of-Thought prompting with `Llama_3_8B`, we evaluate static feature spaces and modernized neural sequence models. For Task 1, sparse Bag-of-Words models ($\text{Macro-}F_1 = 0.3200$) outperform dense Word2Vec embeddings ($\text{Macro-}F_1 = 0.2927$), proving discrete lexical triggers are superior to continuous vector averages for isolating emotive language. For Task 2, an integrated 17-class DeBERTa-CRF tagger outperforms a decoupled two-stage pipeline ($\text{Macro-}F_1 = 0.2034$ vs. $0.1684$). Global CRF transition decoding leverages interior technique tokens as semantic anchors to resolve ambiguous span edges, suppressing false-positive hallucinations by $20.8$ percentage points and recovering $98.5\%$ of the theoretical gold-span classification ceiling.
 
-AI Usage: 
+AI Usage:
+In accordance with university guidelines, generative AI tools — specifically Gemini — were used strictly in an assistive role throughout the preparation of this report.
+
+AI was deployed as a refining and coding partner to improve report readability through spell-checking, grammar refinement, and copywriting iteration. It was also utilized to convert technical functions and explanations into LaTeX equations and to generate inline code comments.
+
+AI was not used to generate any original content. AI was not used derive insights or analyse results. All methodologies, analysis, conclusions, and interpretations represent my own independent work based on learning from this module. All AI-assisted text and code were carefully reviewed, edited, and approved prior to submission, and I take full responsibility for all submitted material.
 
 ---
 
@@ -78,6 +85,17 @@ AI Usage:
 - [Table 11: Task 2 Class-Level Results]()
 - [Table 12: Detection Error Analysis]()
 - [Table 13: Ceiling Performance Gap Summary]()
+
+---
+
+## Appendix Directory
+- [Appendix A: Propaganda Technique Definitions According to Da San Martino et al. (2020)]()
+- [Appendix B: Universal Text Pre-processing Steps]()
+- [Appendix C: Silver Data, Llama-3 Zero-Shot Chain-of-Thought Augmentation Prompt Architecture]()
+- [Appendix D: Mapped Universal POS Tagset]()
+- [Appendix E: Simplified NER Tagset]()
+- [Appendix F: Custom Stopword List]()
+- [Appendix G: Complete 17-Class BIO Tagset Mapping (Variation 2)]()
 
 ---
 
@@ -650,68 +668,65 @@ Finally, applying Unsupervised Domain-Adaptive Pre-Training (DAPT) on news corpo
 <br>
 
 # Bibliography
-
-
-Jowett, G. S. and O'Donnell, V. (2018) Propaganda and Persuasion. 7th edn. Thousand Oaks: SAGE Publications.
-
-Lasswell, H. D. (1927) Propaganda Technique in the World War. London: Kegan Paul, Trench, Trubner & Co.
-
-Da San Martino, G., Yu, S., Barrón-Cedeño, A., Petrov, R. and Nakov, P. (2019) 'Fine-grained analysis of propaganda in news article', Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), Hong Kong, China, November, pp. 5636–5646.
-
-Rashkin, H., Choi, E., Jang, J. Y., Volova, S. and Choi, Y. (2017) 'Truth of the varying shades: Analyzing language in fake news and political fact-checking', Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing, Copenhagen, Denmark, September, pp. 2931–2937.
-
-Sag, I. A., Baldwin, T., Bond, F., Copestake, A. and Flickinger, D. (2002) 'Multiword expressions: A pain in the neck for NLP', Proceedings of the Third International Conference on Language Resources and Evaluation (LREC'02), Las Palmas, Canary Islands, May.
-
-Miller, G. A. (1995) 'WordNet: A lexical database for English', Communications of the ACM, 38(11), pp. 39–41.
-
-Harris, Z. S. (1954) 'Distributional structure', Word, 10(2-3), pp. 146–162.
-
-Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S. and Dean, J. (2013) 'Distributed representations of words and phrases and their compositionality', Advances in Neural Information Processing Systems, 26, pp. 3111–3119.
-
-Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K. and Zettlemoyer, L. (2018) 'Deep contextualized word representations', Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, New Orleans, Louisiana, June, pp. 2227–2237.
-
-Hochreiter, S. and Schmidhuber, J. (1997) 'Long short-term memory', Neural Computation, 9(8), pp. 1735–1780.
-
-Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł. and Polosukhin, I. (2017) 'Attention is all you need', Advances in Neural Information Processing Systems, 30, pp. 5998–6008.
-
-Devlin, J., Chang, M.-W., Lee, K. and Toutanova, K. (2019) 'BERT: Pre-training of deep bidirectional transformers for language understanding', Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Minneapolis, Minnesota, June, pp. 4171–4186.
+Baroni, M., Dinu, G. and Kruszewski, G. (2014) 'Don't count, predict! A systematic comparison of context-counting vs. context-predicting semantic vectors', Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Baltimore, Maryland, June, pp. 238–247.
 
 Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J. D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A. and Agarwal, S. (2020) 'Language models are few-shot learners', Advances in Neural Information Processing Systems, 33, pp. 1877–1901.
 
-Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., Zhou, Y., Li, W. and Liu, P. J. (2020) 'Exploring the limits of transfer learning with a unified text-to-text transformer', Journal of Machine Learning Research, 21(140), pp. 1–67.
-
-Da San Martino, G., Barrón-Cedeño, A., Da San Martino, C., Petrov, R. and Nakov, P. (2020) 'SemEval-2020 Task 11: Detection of propaganda techniques in news articles', Proceedings of the Fourteenth Workshop on Semantic Evaluation, Barcelona, Spain, December, pp. 563–575.
-
-Kranzlein, M., Seeber, M. and Nickel, F. (2020) 'Data augmentation and transfer learning for propaganda detection', Proceedings of the Fourteenth Workshop on Semantic Evaluation (SemEval-2020), Barcelona, Spain, December, pp. 1045–1052.
-
-Kojima, T., Gu, S. S., Reid, M., Matsuo, Y. and Iwasawa, Y. (2022) 'Large language models are zero-shot reasoners', Advances in Neural Information Processing Systems, 35, pp. 22199–22213.
-
-Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, Z., Chi, E., Le, Q. V. and Zhou, D. (2022) 'Chain-of-thought prompting elicits reasoning in large language models', Advances in Neural Information Processing Systems, 35, pp. 24824–24837.
-
-Khosla, S., et al. (2020) 'Integrating syntactic and entity-level signals for robust text classification', Journal of Natural Language Engineering, 26(4), pp. 415–432.
-
-Levy, O. and Goldberg, Y. (2014) 'Neural word embedding as implicit matrix factorization', Advances in Neural Information Processing Systems, 27, pp. 2177–2185.
-
-Baroni, M., Dinu, G. and Kruszewski, G. (2014) 'Don't count, predict! A systematic comparison of context-counting vs. context-predicting semantic vectors', Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Baltimore, Maryland, June, pp. 238–247.
-
-Hornik, K., Stinchcombe, M. and White, H. (1989) 'Multilayer feedforward networks are universal approximators', Neural Networks, 2(5), pp. 359–366.
-
-Pedersen, T., 2010, June. Information content measures of semantic similarity perform better without sense-tagged text. In Human Language Technologies: The 2010 Annual Conference of the North American Chapter of the Association for Computational Linguistics (pp. 329-332).
-
 Cruz, N., et al. (2019) 'Evaluating discrete vs continuous representations in political and persuasive texts', Natural Language Processing Journal, 12(3), pp. 112–128.
 
-Ma, X. and Hovy, E. (2016) 'End-to-end sequence labeling via bi-directional LSTM-CNNs-CRF', Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Berlin, Germany, August, pp. 1064–1074.
+Da San Martino, G., Yu, S., Barrón-Cedeño, A., Petrov, R. and Nakov, P. (2019) 'Fine-grained analysis of propaganda in news article', In Proceedings of the 2019 conference on empirical methods in natural language processing and the 9th international joint conference on natural language processing (EMNLP-IJCNLP) (pp. 5636-5646).
+
+Da San Martino, G., Barrón-Cedeño, A., Da San Martino, C., Petrov, R. and Nakov, P. (2020) 'SemEval-2020 Task 11: Detection of propaganda techniques in news articles', In Proceedings of the fourteenth workshop on semantic evaluation (pp. 1377-1414).
+
+Devlin, J., Chang, M.-W., Lee, K. and Toutanova, K. (2019) 'BERT: Pre-training of deep bidirectional transformers for language understanding', Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Minneapolis, Minnesota, June, pp. 4171–4186.
+
+Harris, Z. S. (1954) 'Distributional structure', Word, 10(2-3), pp. 146–162.
 
 Hobbs, R. and McGee, S. (2008) 'Teaching about propaganda: An examination of historical and contemporary media', Journal of Media Literacy Education, 1(2), pp. 56–68.
 
+Hochreiter, S. and Schmidhuber, J. (1997) 'Long short-term memory', Neural Computation, 9(8), pp. 1735–1780.
+
+Hornik, K., Stinchcombe, M. and White, H. (1989) 'Multilayer feedforward networks are universal approximators', Neural Networks, 2(5), pp. 359–366.
+
 Jowett, G. S. and O'Donnell, V. (2012) Propaganda and Persuasion. 5th edn. Thousand Oaks: SAGE Publications.
 
+Jowett, G. S. and O'Donnell, V. (2018) Propaganda and Persuasion. 7th edn. Thousand Oaks: SAGE Publications.
+
+Khosla, S., et al. (2020) 'Integrating syntactic and entity-level signals for robust text classification', Journal of Natural Language Engineering, 26(4), pp. 415–432.
+
+Kojima, T., Gu, S. S., Reid, M., Matsuo, Y. and Iwasawa, Y. (2022) 'Large language models are zero-shot reasoners', Advances in Neural Information Processing Systems, 35, pp. 22199–22213.
+
+Kranzlein, M., Seeber, M. and Nickel, F. (2020) 'Team DoNotDistribute at SemEval-2020 Task11: Features, finetuning, and data augmentation in neural models for propaganda detection in news articles', Proceedings of the Fourteenth Workshop on Semantic Evaluation (SemEval-2020), Barcelona, Spain, December, pp. 1045–1052.
+
+Lasswell, H. D. (1927) Propaganda Technique in the World War. London: Kegan Paul, Trench, Trubner & Co.
+
+Levy, O. and Goldberg, Y. (2014) 'Neural word embedding as implicit matrix factorization', Advances in Neural Information Processing Systems, 27, pp. 2177–2185.
+
+Ma, X. and Hovy, E. (2016) 'End-to-end sequence labeling via bi-directional LSTM-CNNs-CRF', Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Berlin, Germany, August, pp. 1064–1074.
+
+Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S. and Dean, J. (2013) 'Distributed representations of words and phrases and their compositionality', Advances in Neural Information Processing Systems, 26, pp. 3111–3119.
+
+Miller, C. R. (1939) The Techniques of Propaganda. From “How to Detect and Analyze Propaganda,” an address given at Town Hall. The Center for learning.
+
+Miller, G. A. (1995) 'WordNet: A lexical database for English', Communications of the ACM, 38(11), pp. 39–41.
+
+Pedersen, T. (2010) 'Information content measures of semantic similarity perform better without sense-tagged text'. In Human Language Technologies: The 2010 Annual Conference of the North American Chapter of the Association for Computational Linguistics (pp. 329-332).
+
+Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K. and Zettlemoyer, L. (2018) 'Deep contextualized word representations', Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, New Orleans, Louisiana, June, pp. 2227–2237.
+
+Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., Zhou, Y., Li, W. and Liu, P. J. (2020) 'Exploring the limits of transfer learning with a unified text-to-text transformer', Journal of Machine Learning Research, 21(140), pp. 1–67.
+
+Rashkin, H., Choi, E., Jang, J. Y., Volova, S. and Choi, Y. (2017) 'Truth of the varying shades: Analyzing language in fake news and political fact-checking', Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing, Copenhagen, Denmark, September, pp. 2931–2937.
+
+Sag, I. A., Baldwin, T., Bond, F., Copestake, A. and Flickinger, D. (2002) 'Multiword expressions: A pain in the neck for NLP', In International conference on intelligent text processing and computational linguistics (pp. 1-15). Berlin, Heidelberg: Springer Berlin Heidelberg.
+
+Torok, R. (2015) Symbiotic radicalisation strategies: Propaganda tools and neuro linguistic programming. In Proceedings of the Australian Security and Intelligence Conference, pages 58–65, Perth, Australia
+
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł. and Polosukhin, I. (2017) 'Attention is all you need', Advances in Neural Information Processing Systems, 30, pp. 5998–6008.
+
+Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, Z., Chi, E., Le, Q. V. and Zhou, D. (2022) 'Chain-of-thought prompting elicits reasoning in large language models', Advances in Neural Information Processing Systems, 35, pp. 24824–24837.
+
 Weston, A. (2000) A Rulebook for Arguments. 3rd edn. Indianapolis: Hackett Publishing.
-
-Miller, C. R. (1939) The Techniques of Propaganda Analysis. New York: Institute for Propaganda Analysis.
-
-Torok, R. (2015) 'The mechanics of propaganda and radicalisation', Journal of Policing, Intelligence and Counter Terrorism, 10(1), pp. 88–101.
-
 
 ---
 
@@ -734,6 +749,8 @@ group of people without investigating the complexities of an issue |
 ---
 
 ### Appendix B: Universal Text Pre-processing Steps
+The following pipeline steps clean raw TSV sequences to standardize token boundaries and remove digital parsing artifacts prior to model tokenization.
+
 | Step | Target | Transformation | Rationale |
 | :--- | :--- | :--- | :--- |
 | **Whitespace Normalization** | Leading/trailing & inline whitespace | `text.strip()`, `.split()` join | Standardizes token boundaries across raw TSV parses. |
@@ -801,6 +818,8 @@ To execute the one-to-one generative data augmentation strategy (Section 3.3), a
 ---
 
 ### Appendix D: Mapped Universal POS Tagset
+The 36 fine-grained Penn Treebank tags emitted by NLTK’s `averaged_perceptron_tagger` are mapped down to the 12 Universal POS categories below to streamline POS feature representation in Task 1.
+
 | Universal POS Tag | Description | Mapped Penn Treebank Tags (NLTK Perceptron) |
 | :---: | :--- | :--- |
 | **`ADJ`** | Adjectives | `JJ`, `JJR`, `JJS` |
@@ -819,6 +838,9 @@ To execute the one-to-one generative data augmentation strategy (Section 3.3), a
 ---
 
 ### Appendix E: Simplified NER Tagset
+SpaCy’s default 18-class entity space was compressed into 9 core categories by collapsing low-frequency entity classes (e.g., `LAW`, `FAC`, `PERCENT`) into a generic `MISC` slot to prevent vector sparsity.
+
+
 | Tag | Entity Category |
 | :---: | :--- |
 | **`PERSON`** | People, including fictional characters |
@@ -834,12 +856,15 @@ To execute the one-to-one generative data augmentation strategy (Section 3.3), a
 ---
 
 ### Appendix F: Custom Stopword List
-
+The custom stopword filter consists of the following 8 high-frequency connective terms and punctuation tokens removed during Bag-of-Words (BoW) vocabulary construction:
+- **Stopwords:** "the", ",", "to", "of", "and", "in", "a", "that"
 
 
 ---
 
 ### Appendix G: Complete 17-Class BIO Tagset Mapping (Variation 2)
+In Task 2 Variation 2, joint span boundary detection and technique classification are operationalized across a 17-state expanded BIO schema combining prefix states with technique sub-labels.
+
 | Propaganda Technique Label | Beginning Tag (`B-`) | Inside Tag (`I-`) | Outside / Sentinel Tag |
 | :--- | :---: | :---: | :---: |
 | `flag_waving` | `B-flag_waving` | `I-flag_waving` | `O` |
@@ -850,4 +875,5 @@ To execute the one-to-one generative data augmentation strategy (Section 3.3), a
 | `loaded_language` | `B-loaded_language` | `I-loaded_language` | `O` |
 | `name_calling,labeling` | `B-name_calling,labeling` | `I-name_calling,labeling` | `O` |
 | `repetition` | `B-repetition` | `I-repetition` | `O` |
+
 ---
