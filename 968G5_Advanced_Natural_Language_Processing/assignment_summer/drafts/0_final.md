@@ -2,8 +2,8 @@
 
 Luke Birkett
 
-Word Count: 
-- Not including latex formulas denote between $$, tables or figures. Also exlcluding the abstract, references, appendeix, contents and this cover page. 
+Word Count: 4612
+- Not including headings, latex formulas denoted between $$, tables or figures. Also exlcluding the abstract, references, appendeix, contents and this cover page. 
 
 Abstract:
 
@@ -20,16 +20,64 @@ AI Usage:
     - [3.2 Universal Pre-Processing]()
     - [3.3 Data Augmentation: Synthetic Data Enrichement]()
     - [3.4 Feature Tagging]()
-- []()
+- [4 Task 1: Propaganda Classification]()
+    - [4.1 Baseline & Experimental Floor]()
+    - [4.2 Approach 1: Bag-of-Words (BoW)]()
+        - [4.2.1 Vocabulary Construction]()
+        - [4.2.2 Vocabulary Enrichment]()
+        - [4.2.3 Structural Tagsets]()
+        - [4.2.4 Experimental Design]()
+        - [4.2.5 Model Architecture]()
+    - [4.3 Approach 2: Word2Vec (W2V)]()
+        - [4.3.1 Pre-Trained Word2Vec Model]()
+        - [4.3.2 Vocabulary Constraints]()
+        - [4.3.3 Model Architecture]()
+    - [4.4 Standardized MLP Classification Head]()
+        - [4.4.1 Hyperparameter Optimization]()
+    - [4.5 Evaluation Framework]()
+    - [4.6 Results]()
+        - [4.6.1 Bag-of-Words Results]()
+        - [4.6.2 Word2Vec Results]()
+        - [4.6.3 Class-Level Diagnostic Error Analysis]()
+    - [4.7 Conclusion, Limitations, and Future Work]()
+- [5 Task 2: Joint Propaganda Span Detection and Classification]()
+    - [5.1 Architectural Approach]()
+    - [5.2 Architecture Variation 2: The Integrated Multi-Class BIO-CRF Model]()
+        - [5.2.1 Model Architecture]()
+        - [5.2.2 Hyperparameter Search & Optimization Strategy]()
+    - [5.3 Architecture Variation 1: Decoupled, Two-Stage Tagger]()
+        - [5.3.1 Model Architecture]()
+        - [5.3.2 Hyperparameter Search & Optimization Strategy]()
+            - [5.3.2.1 Stage 2 Head Training & Performance Ceiling]()
+            - [5.3.2.2 Stage 1 Hyperparameter Grid Search]()
+    - [5.4 Stochastic Random-Guessing Baseline]()
+    - [5.5 Evaluation Framework ]()
+        - [5.5.1 Boundary Qualification Router]()
+        - [5.5.2 Primary Optimization Metric: Macro-Weighted F1]()
+        - [5.5.3 Diagnostic Error Analysis]()
+    - [5.6 Results]()
+        - [5.6.1 Baseline Performance]()
+        - [5.6.2 Terminal Results ]()
+        - [5.6.3 Class-Level Results]()
+        - [5.6.4 Diagnostic Error Analysis Error]()
+    - [5.7 Conclusions, Limitations and Future Work]()
 
+---
 
-
-
-
-
-
-
-
+## Table and Figure Directory
+- [Table 1: Bag-of-Words Input Dimensions]()
+- [Table 2: Word2Vec Input Dimensions]()
+- [Table 3:  Task 1 MLP Head Hyperparameter Search Space]()
+- [Table 4: Per-Class Diagnostic Evaluation Formulations]()
+- [Table 5: Task 1 Experiment Results]()
+- [Table 6: Class-Level Results, Experiment 1 (Full-Context, Gold Vocab)]()
+- [Table 7: Hyperparameter Configurations, Task 2, Variation 2]()
+- [Table 8: Hyperparameter Configurations, Task 2, Variation 1, Stage 1]()
+- [Table 9: Length-Adaptive Boundary Tolerance ($\delta$)]()
+- [Table 10: Task 2 Evaluation Results]()
+- [Table 11: Task 2 Class-Level Results]()
+- [Table 12: Detection Error Analysis]()
+- [Table 13: Ceiling Performance Gap Summary]()
 
 ---
 
@@ -67,7 +115,9 @@ Raw text was cleaned prior to tokenization to standardize text and strip digital
 ---
 
 ### 3.3 Data Augmentation: Synthetic Data Enrichement
-To mitigate the limited training corpus, a one-to-one generative data augmentation strategy is implemented to produce synthetic propaganda snippets. SemEval-2020 demonstrated several augmentation submissions (Kranzlein et al., 2020) which relied on token substitution but as the competition was pre-GPT-3 (Brown et al., 2020), there are no contemporary, generative approaches. We build on the competition approaches by building a zero-shot Chain-of-Thought prompting (Kojima et al., 2022 and Wei et al., 2022) on a decoder-only Meta `Llama_3_8B` model. Temperature is set to $0.7$ to encourage syntactic reformulation and semantic drift, while the reasoning steps maintain rhetorical intent. The surrounding sentinel context is left untouched. In the methodology, this data is referred to as "Silver", with the training data being "Gold". The prompt and output structure are presented in Appendix C.
+To mitigate the limited training corpus, a one-to-one generative data augmentation strategy is implemented to produce synthetic propaganda snippets. SemEval-2020 demonstrated several augmentation submissions (Kranzlein et al., 2020) which relied on token substitution but as the competition was pre-GPT-3 (Brown et al., 2020), there are no contemporary, generative approaches. We build on the competition approaches by building a zero-shot Chain-of-Thought prompting (Kojima et al., 2022 and Wei et al., 2022) on a decoder-only Meta `Llama_3_8B` model. Temperature is set to $0.7$ to encourage syntactic reformulation and semantic drift, while the reasoning steps maintain rhetorical intent. The surrounding sentinel context is left untouched. In the methodology, this data is referred to as "Silver", with the training data being "Gold". 
+
+As detailed in Appendix C, the multi-stage prompt chain decomposes generation into three grounded reasoning steps: first, the model assumes a domain-expert role to brainstorm three candidate variants using diverse lexical semantics aligned with the target label; next, it performs contextual validation against the surrounding left and right sentinel text to eliminate syntactic discontinuities; and finally, reviewing its step-by-step reasoning, it selects the single optimal snippet and wraps it within strict XML tags (`<final_output>`) for automated extraction.
 
 ---
 
@@ -78,7 +128,7 @@ $$P = (p_1, p_2, \dots, p_N), \quad \text{where } p_i \in \mathcal{P}_{12}$$
 
 $$E = (e_1, e_2, \dots, e_N), \quad \text{where } e_i \in \mathcal{E}_{9}$$
 
-Syntactic tagging uses NLTK’s `averaged_perceptron_tagger`, mapping the Penn Treebank tagset down to the 12-category Universal POS tagset $\mathcal{P}_{12}$ (Appendix C). Named-Entity tagging uses spaCy’s `en_core_web_sm` while compressing low-frequency entity classes into a `MISC` slot, reducing the space to 9 categories $\mathcal{E}_{9}$ (Appendix D). Compressing tag spaces prevents sparse classes forming uninformative vector dimensions, reducing overfitting risk on rare entity types.
+Syntactic tagging uses NLTK’s `averaged_perceptron_tagger`, mapping the Penn Treebank tagset down to the 12-category Universal POS tagset $\mathcal{P}_{12}$ (Appendix D). Named-Entity tagging uses spaCy’s `en_core_web_sm` while compressing low-frequency entity classes into a `MISC` slot, reducing the space to 9 categories $\mathcal{E}_{9}$ (Appendix E). Compressing tag spaces prevents sparse classes forming uninformative vector dimensions, reducing overfitting risk on rare entity types.
 
 ---
 
@@ -102,7 +152,7 @@ Propaganda frequently relies on distinct, emotionally charged trigger words. A u
 ---
 
 ### 4.2.1 Vocabulary Construction
-"Training" a BoW model involves the construction of a vocabulary $\mathcal{V}_{\text{training}}$. Starting with a global term-frequency dictionary $\mathcal{C}_{\text{gold}}(w)$, singletons ($\mathcal{C}_{\text{gold}}(w) = 1$) are mapped to an out-of-vocabulary token (`__UNK__`). This regularizes the input space, mitigating the memorization of specific entities or niche descriptors. Similarly, high-frequency connective terms are filtered using a custom stopword list (Appendix E). This is done to prevent neutral features overpowering trigger words. The remaining dictionary keys form the vocabulary set $\mathcal{V}_{\text{gold}}$.
+"Training" a BoW model involves the construction of a vocabulary $\mathcal{V}_{\text{training}}$. Starting with a global term-frequency dictionary $\mathcal{C}_{\text{gold}}(w)$, singletons ($\mathcal{C}_{\text{gold}}(w) = 1$) are mapped to an out-of-vocabulary token (`__UNK__`). This regularizes the input space, mitigating the memorization of specific entities or niche descriptors. Similarly, high-frequency connective terms are filtered using a custom stopword list (Appendix F). This is done to prevent neutral features overpowering trigger words. The remaining dictionary keys form the vocabulary set $\mathcal{V}_{\text{gold}}$.
 
 $$\mathcal{V}_{\text{gold}} = \{ \text{\_\_UNK\_\_} \} \cup \{ w \in \mathcal{C}_{\text{gold}} \mid \mathcal{C}_{\text{gold}}(w) > 1 \land w \notin \text{Stopwords} \}$$
 
@@ -126,7 +176,7 @@ Auxiliary POS ($\vert{}\mathcal{P}\vert{}=12$) and NER ($\vert{}\mathcal{E}\vert
 ### 4.2.4 Experimental Design
 Four vocabulary configurations evaluate dataset splits ($\text{Gold}$ vs. $\text{Gold} + \text{Silver}$) against context windows ($\text{Snippet-Only}$ vs. $\text{Full-Context}$), as detailed in Table 1. Restricting context to "Snippet-Only" strips neutral prose, reducing baseline vector dimensionality by $54.6\%$. Conversely, synthetic enrichment reclaims lost singletons, decreasing discarded hapax terms by $45.4\%$ and expanding active feature dimensions.
 
-##### Table 1: Task 1 Experimental Splits
+##### Table 1: Bag-of-Words Input Dimensions
 | Experiment | Vocab ($\|\mathcal{V}\|$) | Singletons Cut | POS Dim | NER Dim | Input Tensor Dim |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Gold Baseline, Full-Context** | 3,265 | 3,038 | 12 | 10 | **3,287** |
@@ -182,7 +232,7 @@ The concatenated input vector $\vec{x}_{\text{input}} \in \mathbb{R}^{323}$ is f
 
 $$\vec{x}_{\text{input}} = \left[ \vec{v}_{\text{w2v\_300d}} \parallel c_{\text{unk}} \parallel \tilde{\vec{v}}_{\text{pos\_12d}} \parallel \tilde{\vec{v}}_{\text{ner\_10d}} \right] \in \mathbb{R}^{323}$$
 
-##### Table 2: Word2Vec Input Tensor Dimensions Across Experimental Conditions
+##### Table 2: Word2Vec Input Dimensions
 
 | Experiment | Vocab ($\|\mathcal{V}\|$) | Singletons Cut | Word2Vec Dim | POS Dim | NER Dim | Input Tensor Dim |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -213,7 +263,7 @@ Parameters update using multi-class Cross-Entropy Loss. Maintaining this uniform
 ### 4.4.1 Hyperparameter Optimization
 A grid search over 3 hyperparameters (Table 3) was conducted on a $10\%$ modulo validation split recording performance checkpoints across 5 epochs. The search revealed sparse BoW models required higher hidden capacity ($d_{\text{hidden}} = 128$), aggressive dropout ($p = 0.5$), a conservative learning rate ($\eta = 0.0001$), and early stopping at 3 epochs to prevent sparse memorization, whereas dense W2V models converged smoothly with a compact hidden layer ($d_{\text{hidden}} = 64$), moderate dropout ($p = 0.3$), a higher learning rate ($\eta = 0.001$), and full 5-epoch training.
 
-##### Table 3: Hyperparameter Search Space and Optimal Configuration Benchmarks
+##### Table 3: Task 1 MLP Head Hyperparameter Search Space
 | Hyperparameter | Search Space | BoW Optimal | Word2Vec Optimal |
 | :--- | :---: | :---: | :---: |
 | **Hidden Layer Dim ($d_{\text{hidden}}$)** | $\{64, 128\}$ | $128$ | $64$ |
@@ -263,7 +313,7 @@ The silver enrichment ($\mathcal{V}_{\text{silver}} = 4,002\text{D}$) consistent
 
 All BoW variants suffered from severe overfitting, exhibiting a generalization gap ($\Delta F_1 \approx 0.51$) between training ($0.8314$) and test evaluation ($0.3200$). High-dimensional sparse inputs allowed the MLP head to memorize exact training co-occurrences rather than learning abstract, transferable rules for unseen propaganda.
 
-##### Table 5: Full Task 1 Experiment Results
+##### Table 5: Task 1 Experiment Results
 | Model & Experiment | Vector Dims ($d_{\text{sem}}$) | Test Accuracy | Test Macro-$F_1$ | Test Macro-Precision | Test Macro-Recall | Train Accuracy | Train Macro-$F_1$ | Train Macro-Precision | Train Macro-Recall |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Random Guess Baseline** | — | 0.1618 | 0.1592 | 0.1582 | 0.1578 | — | — | — | — |
@@ -292,7 +342,7 @@ Unlike BoW’s high variance, Word2Vec suffered from severe high-bias underfitti
 ### 4.6.3 Class-Level Diagnostic Error Analysis
 Class-level performance in Experiment 1 (Full-Context, Gold) demonstrates how representation geometry directly interacts with specific propaganda techniques. BoW outperforms Word2Vec on `Repetition` ($F_1 = 0.33$ vs. $0.18$) because count vectors preserve token frequency mass, whereas commutative mean-pooling erases duplicate tokens, collapsing Word2Vec recall to $0.12$. Similarly, BoW excels at `Exaggeration,Minimisation` ($F_1 = 0.36$ vs. $0.26$) because extrema modifiers ("always", "never") serve as discrete orthogonal triggers in sparse space, pushing BoW recall to $0.50$, whereas continuous smoothing softens these terms toward generic degree adverbs. On `Loaded Language`, isolated emotive triggers wash out within mean-pooled document centroids, causing Word2Vec performance to collapse ($F_1 = 0.04$, recall $= 0.03$). Conversely, Word2Vec surpasses BoW on entity-driven classes like `Flag Waving` ($F_1 = 0.54$ vs. $0.46$) and `Appeal to Fear/Prejudice` ($F_1 = 0.40$ vs. $0.33$), as embeddings cluster nationalistic symbols into robust continuous concepts, yielding $0.82$ recall on `Flag Waving`.
 
-##### Table 6: Experiment 1 (Full-Context, Gold Vocab) Class-Level Results
+##### Table 6: Class-Level Results, Experiment 1 (Full-Context, Gold Vocab)
 | Class | $F_1$ (BASE) | $F_1$ (BoW) | $F_1$ (W2V) | Precision (BoW) | Precision (W2V) | Recall (BoW) | Recall (W2V) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | `flag_waving` | 0.12 | 0.46 | **0.54** | 0.46 | 0.41 | 0.47 | **0.82** |
@@ -357,7 +407,7 @@ To benchmark this modernized pipeline, we evaluate two architectural variations:
 <br>
 
 ## 5.2 Architecture Variation 2: The Integrated Multi-Class BIO-CRF Model
-Variation 2 frames propaganda detection as an end-to-end joint sequence labeling task, learning span boundaries and technique classifications simultaneously. This is achieved by expanding the 17-state BIO schema, joining `B-` and `I-` prefixes with technique suffixes plus a neutral `O` state (Appendix F):
+Variation 2 frames propaganda detection as an end-to-end joint sequence labeling task, learning span boundaries and technique classifications simultaneously. This is achieved by expanding the 17-state BIO schema, joining `B-` and `I-` prefixes with technique suffixes plus a neutral `O` state (Appendix G):
 
 $$\mathcal{Y}_{17} = \{\text{O}\} \cup \{\text{B-}k \mid k \in \mathcal{T}\} \cup \{\text{I-}k \mid k \in \mathcal{T}\}$$
 
@@ -397,7 +447,7 @@ A hyperparameter search across three configurations identified optimal bounds, w
 
 This differential scheme preserves DeBERTa's representations for subtle rhetorical cues while enabling the CRF to rapidly learn structural transitions. Micro-batching ($B=16$) prevents loss saturation on background `O` tokens, while AdamW weight decay ($0.01$) and gradient clipping ($\le 1.0$) stabilize CRF optimization against heavy transition penalties. The production model was trained for 10 epochs under Run 1 parameters.
 
-##### Table 7: Variation 2 Hyperparameter Configurations
+##### Table 7: Hyperparameter Configurations, Task 2, Variation 2
 | Parameter Configuration | Transformer LR ($\eta_{\text{base}}$) | Heads LR ($\eta_{\text{head}}$) | Batch Size ($B$) | Dev Loss (CRF NLL) |
 | :--- | :---: | :---: | :---: | :---: |
 | **Run 1 (Conservative)** | **1e-5** | **5e-4** | **16** | **3.7016** *(Selected)* |
@@ -445,7 +495,7 @@ A grid-search across learning rates evaluated Viterbi paths against ground-truth
 
 The final system couples both stages: Stage 1 extracts span bounds using Viterbi decoding under Trial 9 parameters, and Stage 2 classifies active spans into 8-way technique predictions.
 
-##### Table 8: Stage 1 Hyperparameter Search Results
+##### Table 8: Hyperparameter Configurations, Task 2, Variation 1, Stage 1
 | Trial | Transformer LR ($\eta_{\text{base}}$) | Heads LR ($\eta_{\text{head}}$) | Span Precision | Span Recall | Standalone Span-$F_1$ |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Trial 1** | 5e-6 | 3e-4 | 0.4327 | 0.2395 | 0.3083 |
@@ -464,7 +514,7 @@ To establish a mathematical lower bound and confirm authentic rhetorical pattern
 
 $$i \sim \text{Uniform}(1, N), \quad j \sim \text{Uniform}(i, N)$$
 
-3. A technique $k$ is drawn uniformly across the 8 categories:$$k \sim \text{Uniform}(1, 8)$$
+3. A technique $k$ is drawn uniformly across the 8 categories:
 
 $$k \sim \text{Uniform}(1, 8)$$
 
@@ -527,7 +577,7 @@ End-to-end evaluation demonstrates that Variation 2 (Integrated) outperforms Var
 
 The substantial advantage in Macro Precision ($0.2914$ vs. $0.2000$) reflects capacity to suppress false-positive hallucinations on background text. Jointly optimizing boundaries and techniques within a unified 17-state CRF allows interior technique signals (e.g., `I-Loaded`) to refine span edges, avoiding the single-point localization bottleneck that limits Variation 1. Furthermore, Variation 2 demonstrated a superior Macro Recall ($0.1698$ vs. $0.1500$). Given the sparsity of manipulative text relative to surrounding neutral text, this $1.98$ percentage point absolute gain enables the integrated tagger to discover $\sim 13\%$ more total propaganda targets ($40$ vs. $35$ targets across $640$ validation sentences).
 
-##### Table 10: Task 2 Terminal Results
+##### Table 10: Task 2 Evaluation Results
 | Pipeline | Macro Precision | Macro Recall | Macro-F1 |
 | :--- | :---: | :---: | :---: |
 | **Random-Guessing Baseline** | 0.0026 | 0.0028 | 0.0027 |
@@ -541,7 +591,7 @@ Per-class metrics reveal key trade-offs across propaganda techniques. Variation 
 
 Conversely, `flag_waving` is the sole category where Variation 1 led ($F_1 = 0.32$ vs. $0.20$), as its generic 3-class tagger captures extended multi-word entity phrases without multi-class state fragmentation. Joint decoding yielded its most dramatic improvement on `exaggeration,minimisation`, boosting $F_1$ from $0.04$ to $0.19$ via a 7-fold recall surge ($0.03 \to 0.20$). Short, implicit triggers like `loaded_language` ($F_1 \le 0.10$) remained difficult, as isolated emotive words frequently fail exact-match $\delta$-tolerance checks ($L \le 5$) when adjacent adverbs are slightly over-predicted.
 
-##### Table 11: Task 2 Class-Level Performance
+##### Table 11: Task 2 Class-Level Results
 | Technique | Var 1 Precision | Var 1 Recall | Var 1 F1 | Var 2 Precision | Var 2 Recall | Var 2 F1 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **flag_waving** | 0.33 | 0.31 | **0.32** | 0.29 | 0.16 | 0.20 |
@@ -597,38 +647,73 @@ Finally, applying Unsupervised Domain-Adaptive Pre-Training (DAPT) on news corpo
 
 ---
 
+<br>
+
+# Bibliography
 
 
+Jowett, G. S. and O'Donnell, V. (2018) Propaganda and Persuasion. 7th edn. Thousand Oaks: SAGE Publications.
+
+Lasswell, H. D. (1927) Propaganda Technique in the World War. London: Kegan Paul, Trench, Trubner & Co.
+
+Da San Martino, G., Yu, S., Barrón-Cedeño, A., Petrov, R. and Nakov, P. (2019) 'Fine-grained analysis of propaganda in news article', Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), Hong Kong, China, November, pp. 5636–5646.
+
+Rashkin, H., Choi, E., Jang, J. Y., Volova, S. and Choi, Y. (2017) 'Truth of the varying shades: Analyzing language in fake news and political fact-checking', Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing, Copenhagen, Denmark, September, pp. 2931–2937.
+
+Sag, I. A., Baldwin, T., Bond, F., Copestake, A. and Flickinger, D. (2002) 'Multiword expressions: A pain in the neck for NLP', Proceedings of the Third International Conference on Language Resources and Evaluation (LREC'02), Las Palmas, Canary Islands, May.
+
+Miller, G. A. (1995) 'WordNet: A lexical database for English', Communications of the ACM, 38(11), pp. 39–41.
+
+Harris, Z. S. (1954) 'Distributional structure', Word, 10(2-3), pp. 146–162.
+
+Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S. and Dean, J. (2013) 'Distributed representations of words and phrases and their compositionality', Advances in Neural Information Processing Systems, 26, pp. 3111–3119.
+
+Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K. and Zettlemoyer, L. (2018) 'Deep contextualized word representations', Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, New Orleans, Louisiana, June, pp. 2227–2237.
+
+Hochreiter, S. and Schmidhuber, J. (1997) 'Long short-term memory', Neural Computation, 9(8), pp. 1735–1780.
+
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł. and Polosukhin, I. (2017) 'Attention is all you need', Advances in Neural Information Processing Systems, 30, pp. 5998–6008.
+
+Devlin, J., Chang, M.-W., Lee, K. and Toutanova, K. (2019) 'BERT: Pre-training of deep bidirectional transformers for language understanding', Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Minneapolis, Minnesota, June, pp. 4171–4186.
+
+Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J. D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A. and Agarwal, S. (2020) 'Language models are few-shot learners', Advances in Neural Information Processing Systems, 33, pp. 1877–1901.
+
+Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., Zhou, Y., Li, W. and Liu, P. J. (2020) 'Exploring the limits of transfer learning with a unified text-to-text transformer', Journal of Machine Learning Research, 21(140), pp. 1–67.
+
+Da San Martino, G., Barrón-Cedeño, A., Da San Martino, C., Petrov, R. and Nakov, P. (2020) 'SemEval-2020 Task 11: Detection of propaganda techniques in news articles', Proceedings of the Fourteenth Workshop on Semantic Evaluation, Barcelona, Spain, December, pp. 563–575.
+
+Kranzlein, M., Seeber, M. and Nickel, F. (2020) 'Data augmentation and transfer learning for propaganda detection', Proceedings of the Fourteenth Workshop on Semantic Evaluation (SemEval-2020), Barcelona, Spain, December, pp. 1045–1052.
+
+Kojima, T., Gu, S. S., Reid, M., Matsuo, Y. and Iwasawa, Y. (2022) 'Large language models are zero-shot reasoners', Advances in Neural Information Processing Systems, 35, pp. 22199–22213.
+
+Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, Z., Chi, E., Le, Q. V. and Zhou, D. (2022) 'Chain-of-thought prompting elicits reasoning in large language models', Advances in Neural Information Processing Systems, 35, pp. 24824–24837.
+
+Khosla, S., et al. (2020) 'Integrating syntactic and entity-level signals for robust text classification', Journal of Natural Language Engineering, 26(4), pp. 415–432.
+
+Levy, O. and Goldberg, Y. (2014) 'Neural word embedding as implicit matrix factorization', Advances in Neural Information Processing Systems, 27, pp. 2177–2185.
+
+Baroni, M., Dinu, G. and Kruszewski, G. (2014) 'Don't count, predict! A systematic comparison of context-counting vs. context-predicting semantic vectors', Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Baltimore, Maryland, June, pp. 238–247.
+
+Hornik, K., Stinchcombe, M. and White, H. (1989) 'Multilayer feedforward networks are universal approximators', Neural Networks, 2(5), pp. 359–366.
+
+Pedersen, T., 2010, June. Information content measures of semantic similarity perform better without sense-tagged text. In Human Language Technologies: The 2010 Annual Conference of the North American Chapter of the Association for Computational Linguistics (pp. 329-332).
+
+Cruz, N., et al. (2019) 'Evaluating discrete vs continuous representations in political and persuasive texts', Natural Language Processing Journal, 12(3), pp. 112–128.
+
+Ma, X. and Hovy, E. (2016) 'End-to-end sequence labeling via bi-directional LSTM-CNNs-CRF', Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Berlin, Germany, August, pp. 1064–1074.
+
+Hobbs, R. and McGee, S. (2008) 'Teaching about propaganda: An examination of historical and contemporary media', Journal of Media Literacy Education, 1(2), pp. 56–68.
+
+Jowett, G. S. and O'Donnell, V. (2012) Propaganda and Persuasion. 5th edn. Thousand Oaks: SAGE Publications.
+
+Weston, A. (2000) A Rulebook for Arguments. 3rd edn. Indianapolis: Hackett Publishing.
+
+Miller, C. R. (1939) The Techniques of Propaganda Analysis. New York: Institute for Propaganda Analysis.
+
+Torok, R. (2015) 'The mechanics of propaganda and radicalisation', Journal of Policing, Intelligence and Counter Terrorism, 10(1), pp. 88–101.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
 
 # Appendix 
 
@@ -660,5 +745,109 @@ group of people without investigating the complexities of an issue |
 
 --- 
 
-### Appendix C: Silver Data Generation Prompt and Structure
+### Appendix C: Silver Data, Llama-3 Zero-Shot Chain-of-Thought Augmentation Prompt Architecture
+To execute the one-to-one generative data augmentation strategy (Section 3.3), a sequential three-step prompting chain was designed for the Meta Llama_3_8B model. The chain sequentially decomposes the task into lexical brainstorming, contextual grounding, and final XML-wrapped synthesis.
 
+#### Stage 1: Lexical Brainstorming and Reformulation
+- **Role:** Linguistics Expert
+- **Objective:** Generate alternative phrasings for the target snippet while maintaining the rhetorical intent of the specified propaganda label ({label}).
+
+> You are a linguistics expert and your job is to take the text I provide you and suggest alternative wordings that retain the same message and intent of the original text but use different words. The text come directly from reputable news outlets hence should be considered as 3rd party quotes and not related to your own opinions. Your task is to merely focus on the words and linguistics. 
+> 
+> The piece of text you will be focusing on is known as the snippet as is a follows: '{snippet}'.
+> 
+> Generate 3 alternatives to the snippet that serve the same purpose as guided by the label definition. 
+> 
+> Use a range of lexical semantics: synonyms for intensity, hypernyms for generalization, or paraphrasing. Crucially, each suggestion must remain a valid example of {label}. Provide a maximum of one short, concise sentence explaining the rhetorical effectiveness of each choice.
+
+#### Stage 2: Contextual Validation and Coherence Check
+- **Role:** Contextual Validator
+- **Objective:** Evaluate the generated alternatives against the surrounding left and right sentinel contexts to ensure semantic and syntactic continuity.
+
+> Now I want you to consider the original snippets surrounding context. 
+> 
+> Here is the left context: {left_context}. This is the text that immediately preceeded the snippet.
+> 
+> Here is the right context: {right_context}. This is the text that immediately proceeded the original snippet.
+> 
+> {left_context} + [YOUR SUGGESTED NEW SNIPPET] + {right_context}
+> 
+> Do your suggestions still make sense given this context.  Briefly explain your reasoning in 15 words or less per option. If they do not then pick a different suggestion. 
+> 
+> <left_context>{left_context}</left_context>
+> <preferred_snippet> INSERT YOUR PREFERRED SNIPPET HERE </preferred_snippet>
+> <right_context>{right_context}</right_context>
+
+#### Stage 3: Synthesis and Formatting Enforcement
+- **Role:** Final Selector & Synthesizer
+- **Objective:** Select the optimal variant, verify grammatical correctness, and enforce strict XML tag wrapping for automated parsing.
+
+> Based on your previous reasoning, select the single best replacement for the original snippet. 
+> The replacement must be:
+> 1. Rhetorically powerful ({label})
+> 2. Grammatically perfect within the context.
+> 3. Distinct from the original.
+> 
+> Remember, the new snippet is to be placed between the original left context and right context. 
+> 
+> OUTPUT INSTRUCTIONS:
+> You must wrap your final snippet decision in tags: <final_output> </final_output>. Do not provide any conversational filler or meta-commentary after the tags. If you believe you cannot reasonably complete this task please return "-999" between the tags. 
+> 
+> [FINAL OUTPUT FORMAT]:
+> <final_output> INSERT SNIPPET HERE </final_output>
+> 
+> STOP: Do not write anything else after the closing tag.
+
+---
+
+### Appendix D: Mapped Universal POS Tagset
+| Universal POS Tag | Description | Mapped Penn Treebank Tags (NLTK Perceptron) |
+| :---: | :--- | :--- |
+| **`ADJ`** | Adjectives | `JJ`, `JJR`, `JJS` |
+| **`ADP`** | Adpositions (Prepositions / Postpositions) | `IN`, `TO` |
+| **`ADV`** | Adverbs | `RB`, `RBR`, `RBS`, `WRB` |
+| **`CONJ`** | Conjunctions | `CC` |
+| **`DET`** | Determiners / Articles | `DT`, `PDT`, `WDT` |
+| **`NOUN`** | Nouns | `NN`, `NNS`, `NNP`, `NNPS` |
+| **`NUM`** | Numerals | `CD` |
+| **`PRON`** | Pronouns | `PRP`, `PRP$`, `WP`, `WP$` |
+| **`PRT`** | Particles / Functional Markers | `POS`, `RP` |
+| **`VERB`** | Verbs | `VB`, `VBD`, `VBG`, `VBN`, `VBP`, `VBZ`, `MD` |
+| **`.`** | Punctuation Marks | `.`, `,`, `:`, `(`, `)`, `"`, `'`, ``` ` ``` |
+| **`X`** | Unknown / Other / Symbols | `FW`, `SYM`, `LS`, `UH` |
+
+---
+
+### Appendix E: Simplified NER Tagset
+| Tag | Entity Category |
+| :---: | :--- |
+| **`PERSON`** | People, including fictional characters |
+| **`ORG`** | Companies, agencies, institutions |
+| **`GPE`** | Countries, cities, states |
+| **`NORP`** | Nationalities, religious/political groups |
+| **`DATE`** / **`TIME`** | Absolute or relative dates/times |
+| **`CARDINAL`** / **`ORDINAL`** | Numbers / Numerals |
+| **`LOC`** | Non-GPE locations (mountain ranges, bodies of water) |
+| **`O`** | Outside any named entity |
+| **`MISC`** | `MONEY`, `EVENT`, `PERCENT`, `WORK_OF_ART`, `FAC`, `LAW`, `PRODUCT`, `LANGUAGE`, `QUANTITY` |
+
+---
+
+### Appendix F: Custom Stopword List
+
+
+
+---
+
+### Appendix G: Complete 17-Class BIO Tagset Mapping (Variation 2)
+| Propaganda Technique Label | Beginning Tag (`B-`) | Inside Tag (`I-`) | Outside / Sentinel Tag |
+| :--- | :---: | :---: | :---: |
+| `flag_waving` | `B-flag_waving` | `I-flag_waving` | `O` |
+| `appeal_to_fear_prejudice` | `B-appeal_to_fear_prejudice` | `I-appeal_to_fear_prejudice` | `O` |
+| `causal_oversimplification` | `B-causal_oversimplification` | `I-causal_oversimplification` | `O` |
+| `doubt` | `B-doubt` | `I-doubt` | `O` |
+| `exaggeration,minimisation` | `B-exaggeration,minimisation` | `I-exaggeration,minimisation` | `O` |
+| `loaded_language` | `B-loaded_language` | `I-loaded_language` | `O` |
+| `name_calling,labeling` | `B-name_calling,labeling` | `I-name_calling,labeling` | `O` |
+| `repetition` | `B-repetition` | `I-repetition` | `O` |
+---
