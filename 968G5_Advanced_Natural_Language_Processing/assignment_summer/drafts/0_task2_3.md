@@ -235,11 +235,9 @@ Variation 2’s substantial advantage in Macro Precision ($0.2914$ vs. $0.2000$)
 | **Variation 2 (17-Class Joint Tagger)** | **0.2914** | **0.1698** | **0.2034** |
 
 ### 6.3 Class-Level Results
-Per-class metrics reveal key representational trade-offs across individual propaganda techniques. Variation 2 achieves higher $F_1$ scores across five of the eight categories, driven by substantial precision gains across almost all classes, most notably on `name_calling,labeling` ($0.50$ vs. $0.21$) and `appeal_to_fear_prejudice` ($0.32$ vs. $0.15$).
+Per-class metrics reveal key representational trade-offs across propaganda techniques. Variation 2 achieves higher $F_1$ scores across five of eight categories, driven by sharp precision gains on classes like `name_calling,labeling` ($0.50$ vs. $0.21$). Both architectures performed best on explicit, structural categories like `causal_oversimplification` ($F_1 = 0.36$), where overt logical connectors ("because of") form clear contextual anchors.
 
-Both architectures performed best on structural and explicit categories like `causal_oversimplification` ($F_1 = 0.36$ for both variants), where overt logical connectors ("because of", "led to") form clear contextual triggers. Conversely, `flag_waving` represents the sole category where Variation 1 outperformed Variation 2 ($F_1 = 0.32$ vs. $0.20$). Because nationalistic rhetoric relies on multi-word entity phrases ("our glorious nation"), Stage 1's generic 3-class tagger isolates extended spatial boundaries effectively without suffering from multi-class state fragmentation.
-
-The integrated 17-class schema yields its most dramatic improvement on `exaggeration,minimisation`, driving $F_1$ from $0.04$ to $0.19$ via a nearly 7-fold increase in Recall ($0.03 \to 0.20$). Extrema modifiers ("unprecedented", "disaster") act as immediate spatial anchors when boundary and technique states are jointly decoded. Conversely, short, implicit triggers like `loaded_language` ($F_1 = 0.04$ vs. $0.10$) and `repetition` ($F_1 = 0.11$ vs. $0.08$) remain severely challenging. Isolated emotive words frequently fail length-adaptive $\delta$-tolerance checks ($L \le 5$ requires an exact token match) whenever surrounding neutral adverbs are slightly over-predicted.
+Conversely, `flag_waving` is the sole category where Variation 1 led ($F_1 = 0.32$ vs. $0.20$), as its generic 3-class tagger captures extended multi-word entity phrases without multi-class state fragmentation. Joint decoding yielded its most dramatic improvement on `exaggeration,minimisation`, boosting $F_1$ from $0.04$ to $0.19$ via a 7-fold recall surge ($0.03 \to 0.20$). Short, implicit triggers like `loaded_language` ($F_1 \le 0.10$) remained difficult, as isolated emotive words frequently fail exact-match $\delta$-tolerance checks ($L \le 5$) when adjacent adverbs are slightly over-predicted.
 
 ##### Table 7: Class-Level Performance Across Pipeline Variants
 | Propaganda Technique | Support | Var 1 Precision | Var 1 Recall | Var 1 F1 | Var 2 Precision | Var 2 Recall | Var 2 F1 |
@@ -255,67 +253,43 @@ The integrated 17-class schema yields its most dramatic improvement on `exaggera
 | **Macro Average** | 309 | 0.20 | 0.15 | 0.17 | **0.29** | **0.17** | **0.20** |
 
 ### 6.4 Diagnostic Analysis & Error Interpretation
-To isolate spatial localization errors from downstream semantic misclassifications, we execute the three-phase diagnostic audit established in Section 5.3 across model outputs.
+Executing the three-phase audit (Section 5.3) highlights the root of errors.
 
-#### Phase 1: Structural Localization Audit
-The Structural Localization Audit evaluates raw background filtering and boundary isolation by categorizing validation sentence predictions into five discrete routing states.
+In Phase 1, demonstrates that V2's edge stems from hallucination suppression ($12.7\%$ vs. $33.5\%$) and superior span qualification ($42.7\%$ vs. $32.0\%$). While both models filter background text effectively ($\sim 98\%$ True Negatives), V1's Stage 1 boundary detector passes $111$ false spans downstream to trigger cascading false positives in the Stage 2 classifier. 
 
-The audit reveals that Variation 2’s performance edge is heavily driven by hallucination suppression ($12.7\%$ vs. $33.5\%$) and superior spatial qualification ($42.7\%$ vs. $32.0\%$). While both models filter pure background text well ($\sim 98\%$ TN), Variation 1 suffers from severe over-generation in Stage 1, producing $111$ hallucinated spans that pass to Stage 2 and trigger downstream false positives.
+Phase 2 reveals that on router disqualified spans, V1's Stage 2 and V2 retain $42.3\%$ and $46.1\%$ technique accuracy, highlighting a deficency with the $\delta$-tolerance windows to locate core manipulative phrases. This proves models capture true semantic signals despite boundary drift, highlighting further the inter-annotator consensus problem (Da San Martino et al., 2019). 
+
+Finally, Phase 3's Semantic Ceiling Comparison demonstrates that on qualified spans ($N=102$), Variation 2 achieves $0.5098$ accuracy—virtually eliminating the gap ($\Delta -0.0080$) to the $0.5178$ Oracle Ceiling. Conversely, Variation 1 exhibits a larger degradation gap ($\Delta -0.0330$). This confirms that when spatial boundaries are correctly resolved, joint sequence tagging captures propaganda semantics as effectively as an isolated gold-span classifier.
 
 ##### Table 8: Structural Localization Audit Across Pipeline Variants
-| Localization Category | Description / Routing Condition | Variation 1 (Decoupled) | Variation 2 (Integrated) |
+| Localization Category | Routing Description | Variation 1 (Decoupled) | Variation 2 (Integrated) |
 | :--- | :--- | :---: | :---: |
-| **True Negatives (TN)** | Clean background correctly predicted as neutral (`O`) | 322 / 331 (97.3%) | 325 / 331 (98.2%) |
-| **Complete Omissions (FN)** | Active propaganda target entirely missed (predicted `O`) | 148 / 309 (47.9%) | 122 / 309 (39.5%) |
-| **Hallucinations (FP)** | Neutral background incorrectly tagged as propaganda | 111 / 331 (33.5%) | 42 / 331 (12.7%) |
-| **Disqualified Near-Misses** | Target detected but failed $\delta$-tolerance boundary check | 62 / 309 (20.1%) | 55 / 309 (17.8%) |
-| **Qualified Spans** | Target detected AND satisfied $\delta$-tolerance check | 99 / 309 (32.0%) | 132 / 309 (42.7%) |
-
-#### Phase 2: Near-Miss Semantic Signal Analysis
-Near-miss spans locate the core manipulative phrase but fail the strict length-adaptive $\delta$-tolerance window (e.g., extending a 3-token loaded_language span by two adjacent neutral adverbs). Under our evaluation protocol, these receive a double penalty (scored simultaneously as FP and FN).
-
-Evaluating technique classification accuracy exclusively on these disqualified near-miss spans reveals that Stage 2 achieved $42.3\%$ multi-class accuracy (and Variation 2 achieved $46.1\%$). This confirms that models frequently possess correct semantic awareness of propaganda techniques, but get penalized due to boundary drift. Because human annotators exhibit low inter-annotator agreement on exact character offsets (Da San Martino et al., 2019), strict spatial evaluation understates the true semantic capability of the underlying representations.
-
-#### Phase 3: Ceiling Gap Analysis
-The Ceiling Gap Analysis measures multi-class technique accuracy on spatially qualified spans against an Oracle model (Stage 2 evaluated on $100\%$ gold spans, achieving an Oracle Macro-$F_1$ Ceiling of $0.5106$).
-
-When evaluated strictly on qualified spans, Variation 2 operates within $0.0986$ $F_1$ points of the Oracle Ceiling, whereas Variation 1 exhibits a larger qualification gap ($-0.1656$). When accounting for unmitigated boundary omissions and hallucinations end-to-end, the total localization degradation gap expands to $-0.3072$ for Variation 2 and $-0.3422$ for Variation 1. This demonstrates that while feature noise degrades technique classification on valid spans by $\sim 10\text{--}16\%$, early spatial omissions and boundary disqualifications account for the remaining $\sim 30\text{--}34\%$ collapse in end-to-end performance.
+| **True Negatives (TN)** | Clean background correctly predicted as neutral (`O`) | 322/331 (97.3%) | 325/331 (98.2%) |
+| **Complete Omissions (FN)** | Active propaganda target entirely missed (predicted `O`) | 148/309 (47.9%) | 122/309 (39.5%) |
+| **Hallucinations (FP)** | Neutral background incorrectly tagged as propaganda | 111/331 (33.5%) | 42/331 (12.7%) |
+| **Disqualified Near-Misses** | Target detected but failed $\delta$-tolerance boundary check | 62/309 (20.1%) | 55/309 (17.8%) |
+| **Qualified Spans** | Target detected AND satisfied $\delta$-tolerance check | 99/309 (32.0%) | 132/309 (42.7%) |
+---
 
 ##### Table 9: Ceiling & Performance Gap Summary
-| Pipeline Evaluation Setup | Primary Metric | Primary Score | Gap vs. Oracle Ceiling ($\Delta$) |
-| :--- | :--- | :---: | :---: |
-| **Oracle Ceiling Model (Gold Spans)** | Multi-Class Macro-$F_1$ | **0.5106** | — |
-| **Variation 2 Spatially Qualified Subset** | Qualified Technique $F_1$ | **0.4120** | **-0.0986** |
-| **Variation 1 Spatially Qualified Subset** | Qualified Technique $F_1$ | **0.3450** | **-0.1656** |
-| **Variation 2 Terminal End-to-End** | Joint Macro-$F_1$ | **0.2034** | **-0.3072** |
-| **Variation 1 Terminal End-to-End** | Joint Macro-$F_1$ | **0.1684** | **-0.3422** |
-
+| Pipeline Variant | Qualified Spans | Qualified Accuracy | Oracle Gap ($\Delta$) |
+| :--- | :---: | :---: | :---: |
+| **Random Baseline** | 11 spans | 0.0000 | -0.5178 |
+| **Variation 2 (17-Class Joint)** | **102 spans** | **0.5098** | **-0.0080** |
+| **Variation 1 (Decoupled)** | 99 spans | 0.4848 | -0.0330 |
 
 ---
 
 ## 7. Conclusions, Limitations and Future Work
-This project investigated joint propaganda span detection and rhetorical technique classification by comparing a two-stage decoupled cascading architecture (Variation 1) against a single-stage 17-class integrated joint tagger (Variation 2). The empirical results and multi-phase diagnostic audits demonstrate that unifying spatial localization and multi-class technique identification within a single global sequence decoding pass offers substantial structural and semantic advantages over cascading pipelines.
+This project evaluated joint propaganda span detection and technique classification, demonstrating that a joint tagger (Variation 2) outperforms a decoupled cascade (Variation 1) in terminal Macro-$F_1$ ($0.2034$ vs. $0.1684$). 
 
-### 7.1 Key Conclusions
-Architecture Variation 2 proved superior to Architecture Variation 1 across terminal performance (0.2034 vs. 0.1684 Macro-$F_1$) and Macro Precision (0.2914 vs. 0.2000), validating that joint optimization effectively suppresses false-positive span hallucinations on background text. This advantage stems from the structural dynamics of both models. Decoupling span localization from technique classification in Variation 1 creates a single-point failure bottleneck where Stage 1's standalone span recall ceiling ($\sim 31.39\%$) effectively caps end-to-end recall at 0.1500, while Stage 1 boundary offsets cause feature dilution during mean-pooling that degrades downstream classification accuracy. Conversely, expanding Variation 2's BIO label space to 17 states enables high-confidence interior tokens (`I-technique`) to act as semantic "breadcrumbs." The linear-chain CRF transition matrix uses these strong interior signals to "pull" weaker, ambiguous boundary tokens (`B-technique`) into spatially coherent spans without discarding surrounding sentence context.
+The integrated CRF better leverages interior tokens as semantic anchors ("breadcrumbs") to resolve ambiguous boundaries, suppressing false-positive hallucinations. Isolating qualified spans, Variation 2 achieved $0.5098$ accuracy, recovering $98.5\%$ of the $0.5178$ ceiling performance. Meanwhile, the random baseline ($0.0027$ Macro-$F_1$) confirmed any non-trvial result reflects genuine learning rather than chance.
 
-On spatially qualified spans that successfully passed the length-adaptive $\delta$-tolerance window, Variation 2 achieved a semantic classification accuracy of 0.5098, recovering $98.5\%$ of the theoretical Stage 2 Oracle Ceiling (0.5178 Accuracy / 0.5106 Macro-$F_1$) and confirming that joint decoding preserves semantic representations cleanly when spatial boundaries align. Finally, the stochastic random-guessing baseline achieved a terminal Macro-$F_1$ of 0.0027 with zero end-to-end True Positives, proving the complexity of Task 2 and confirming that downstream neural gains represent authentic linguistic learning rather than heuristic exploitation.
+To retain Variation 1's modular control without cascading failure bottlenecks, future work should explore end-to-end differentiable fine-tuning. Pre-training the detector and classifier independently, then fine-tuning them jointly with full gradient propagation, allows spatial localization to benefit directly from rich downstream semantic loss.
 
----
+Additionally, while evaluation utilized tolerant routing, training relied on strict exact-match loss. Adopting distance-weighted or soft-margin sequence losses would penalize near-miss boundaries proportionally rather than as total omissions.
 
-### 7.2 System Limitations
-The evaluation framework presents notable structural limitations. The length-adaptive boundary qualification router ($\delta$) enforces a double penalty on disqualified near-miss spans, scoring misaligned predictions simultaneously as a False Positive and a False Negative. Consequently, Phase 2 diagnostic audits revealed that both models retained significant latent semantic understanding across disqualified spans ($\sim 30\text{--}31\%$ near-miss technique accuracy), but minor character-level boundary deviations heavily suppressed terminal Macro-$F_1$, obscuring instances where the network correctly identified the underlying rhetorical technique.
+Finally, applying Unsupervised Domain-Adaptive Pre-Training (DAPT) on news corpora and scaling to `deberta-v3-large` would enhance background representations, improving recall on subtle, short-span techniques like `loaded_language`.
 
-Representation vulnerabilities and class imbalance further constrained performance. In Variation 1, slicing subword representations across slightly misaligned Stage 1 spans incorporates uninformative neutral context words (e.g., "the", "was"), diluting the core propaganda representation and creating an architectural vulnerability for short, delicate spans. Furthermore, both architectures struggled on subtle, implicit techniques such as loaded_language ($F_1 \le 0.10$), where brief rhetorical triggers yield low boundary recall without specialized feature injection.
 
----
 
-### 7.3 Future Work
-To address the disconnect between rigid BIO sequence labeling and human annotator boundary variance, future work should explore distance-weighted or soft-margin loss functions during training. Incorporating a continuous distance-penalty metric into the sequence loss function would explicitly train the network to prefer near-miss boundary predictions over complete span omissions.
-
-> Note, eval metric allows for tolerence but training loss was strict on exact matching
-> An exact-match training loss provides a crisp, uncompromised optimization gradient that forces the network to learn strict sequential grammar and precise start-stop boundaries without settling for sloppy approximations. However, its primary drawback is extreme optimization aggressiveness: it penalizes a 1-character boundary offset just as severely as a complete span omission, ignoring near-miss semantic signals and causing gradient instability when training on subjective text where human annotators themselves disagree on exact boundaries.
-
-Model scaling and pre-training offer additional avenues for improvement. Executing Unsupervised Domain-Adaptive Pre-Training (DAPT) on a large corpus of standard news and opinion articles prior to fine-tuning would expose the DeBERTa backbone to broad newsroom syntax, strengthening its baseline representation of neutral journalistic prose so that manipulative rhetorical departures become more salient. Scaling the underlying encoder from deberta-v3-xsmall to deberta-v3-large would also likely improve absolute F1 scores across fine-grained classes like loaded_language. Finally, to preserve the modular task separation of Variation 1 without suffering from single-point cascading failures, future research could implement an end-to-end differentiable multi-task architecture where separate boundary and technique heads have their logits combined via late fusion and decoded through a single sequence loss function.
-
----
