@@ -1,4 +1,4 @@
-# 4. Task 1: Propaganda Classification
+# 4 Task 1: Propaganda Classification
 Task 1 is a single-label, multi-class classification problem targeting instances of recognised but unlabelled propaganda. Experimentally, two non-contextual, static feature representation paradigms are benchmarked: High-dimensional sparse representations derived from frequency-based Bag-of-Words (BoW) modeling against low-dimensional, dense representations from Word2Vec embeddings.
 
 # 4.1 Baseline & Experimental Floor
@@ -59,7 +59,7 @@ To mitigate the Zipfian sparsity inherent in small propaganda corpora, Word2Vec 
 Training a custom Word2Vec model on a corpus of this size would overfit embeddings to propagandistic contexts rather than standard linguistic usages. Deploying pre-trained Google News embeddings ($\mathbf{E} \in \mathbb{R}^{\vert{}V_{\text{google}}\vert{} \times 300}$) grounds words in task-agnostic meanings. This semantic baseline enables the classifier to identify manipulative language as anomalous usage patterns, improving linear separability across rhetorical techniques.
 
 #### 4.2.2.2 Vocabulary Constraints
-Using a pre-trained Word2Vec model involves mapping vocabulary terms to an embedding lookup space. To maintain strict experimental control, the lookup was restricted to the vocabulary topologies defined in Approach 1, isolating embedding density (Sparse vs. Dense) as the sole independent variable.
+Using a pre-trained Word2Vec model involves mapping vocabulary terms to an embedding lookup space. To maintain strict experimental control, the lookup was restricted to the vocabulary topologies defined in Approach 1, isolating embedding density (Sparse vs. Dense) as the sole independent variable, omitting the models superior vocabulary depth.
 
 Consequently, the pipeline retains an out-of-vocabulary (`__UNK__`) slot for rare terms, scaling it by a scalar ratio $c_{\text{unk}} \in [0, 1]$ to reflect OOV density while matching Word2Vec embedding magnitudes.
 
@@ -144,7 +144,7 @@ Finally, per-class precision, recall, and $F_1$ scores are logged to provide the
 ## 4.5 Experimental Results:
 
 ### 4.5.1 Bag-of-Words Results
-The Bag-of-Words (BoW) framework achieved its top performance under the Gold-Only, Full-Context baseline ($\text{Macro-}F_1 = 0.3200$). Systematically evaluating variants reveals critical interactions between context scope, feature density, and synthetic data augmentation.
+The BoW framework achieved its top performance under the Gold-Only, Full-Context baseline ($\text{Macro-}F_1 = 0.3200$). Systematically evaluating variants reveals critical interactions between context scope, feature density, and synthetic data augmentation.
 
 Restricting input to "Snippet-Only" sequences was intended to isolate emotional trigger words, yet it uniformly degraded performance across Gold ($0.3200 \to 0.3183$) and Enriched ($0.3174 \to 0.3129$) splits. Paralleling Pedersen (2010), retaining broader background text provides essential co-occurrence statistics that cushion sparse vector spaces, proving that surrounding neutral context acts as a vital data-density stabilizer.
 
