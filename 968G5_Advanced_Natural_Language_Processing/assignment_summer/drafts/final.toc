@@ -1,13 +1,60 @@
-\contentsline {section}{\numberline {1}Introduction}{iii}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Problem Outline}{iii}{subsection.1.1}%
-\contentsline {section}{\numberline {A}Propaganda Technique Definitions}{vii}{appendix.A}%
-\contentsline {section}{\numberline {B}Universal Text Pre-processing Steps}{viii}{appendix.B}%
-\contentsline {section}{\numberline {C}Silver Data, Llama-3 Zero-Shot Chain-of-Thought Augmentation Prompt Architecture}{ix}{appendix.C}%
-\contentsline {subsection}{\numberline {C.1}Stage 1: Lexical Brainstorming and Reformulation}{ix}{subsection.C.1}%
-\contentsline {subsection}{\numberline {C.2}Stage 2: Contextual Validation and Coherence Check}{ix}{subsection.C.2}%
-\contentsline {subsection}{\numberline {C.3}Stage 3: Synthesis and Formatting Enforcement}{x}{subsection.C.3}%
-\contentsline {section}{\numberline {D}Mapped Universal POS Tagset}{xi}{appendix.D}%
-\contentsline {section}{\numberline {E}Simplified NER Tagset}{xii}{appendix.E}%
-\contentsline {section}{\numberline {F}Custom Stopword List}{xiii}{appendix.F}%
-\contentsline {paragraph}{Filter Summary:}{xiii}{section*.5}%
-\contentsline {section}{\numberline {G}Complete 17-Class BIO Tagset Mapping (Variation 2)}{xiv}{appendix.G}%
+\contentsline {section}{\numberline {1}Introduction}{iv}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Problem Outline}{iv}{subsection.1.1}%
+\contentsline {section}{\numberline {2}Related Work: Evolution of NLP}{iv}{section.2}%
+\contentsline {section}{\numberline {3}Dataset}{iv}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Corpus Overview}{iv}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Universal Pre-Processing}{v}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Data Augmentation: Synthetic Data Enrichment}{v}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Feature Tagging}{v}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Task 1: Propaganda Classification}{vi}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Baseline \& Experimental Floor}{vi}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Approach 1: Bag-of-Words (BoW)}{vi}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Vocabulary Construction}{vi}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Vocabulary Enrichment}{vi}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}Structural Tagsets}{vii}{subsubsection.4.2.3}%
+\contentsline {subsubsection}{\numberline {4.2.4}Experimental Design}{vii}{subsubsection.4.2.4}%
+\contentsline {subsubsection}{\numberline {4.2.5}Model Architecture}{vii}{subsubsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.3}Approach 2: Word2Vec (W2V)}{vii}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Pre-Trained Word2Vec Model}{viii}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Vocabulary Constraints}{viii}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Model Architecture}{viii}{subsubsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.4}Standardized MLP Classification Head}{ix}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}Hyperparameter Optimization}{ix}{subsubsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.5}Evaluation Framework}{x}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Results}{xi}{subsection.4.6}%
+\contentsline {subsubsection}{\numberline {4.6.1}Bag-of-Words Results}{xi}{subsubsection.4.6.1}%
+\contentsline {subsubsection}{\numberline {4.6.2}Word2Vec Results}{xi}{subsubsection.4.6.2}%
+\contentsline {subsubsection}{\numberline {4.6.3}Class-Level Diagnostic Error Analysis}{xii}{subsubsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.7}Conclusion, Limitations, and Future Work}{xii}{subsection.4.7}%
+\contentsline {section}{\numberline {5}Task 2: Joint Span Detection and Classification}{xiv}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Architectural Approach}{xiv}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Architecture Variation 2: The Integrated Multi-Class BIO-CRF Model}{xv}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}Model Architecture}{xv}{subsubsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2}Hyperparameter Search \& Optimization Strategy}{xvi}{subsubsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.3}Architecture Variation 1: Decoupled, Two-Stage Tagger}{xvi}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.3.1}Model Architecture}{xvi}{subsubsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.2}Hyperparameter Search \& Optimization Strategy}{xvii}{subsubsection.5.3.2}%
+\contentsline {paragraph}{Stage 2 Head Training \& Performance Ceiling}{xvii}{section*.3}%
+\contentsline {paragraph}{Stage 1 Hyperparameter Grid Search}{xvii}{section*.4}%
+\contentsline {subsection}{\numberline {5.4}Stochastic Random-Guessing Baseline}{xvii}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Evaluation Framework}{xviii}{subsection.5.5}%
+\contentsline {subsubsection}{\numberline {5.5.1}Boundary Qualification Router}{xviii}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.2}Primary Optimization Metric: Macro-Weighted F1}{xviii}{subsubsection.5.5.2}%
+\contentsline {subsubsection}{\numberline {5.5.3}Diagnostic Error Analysis}{xix}{subsubsection.5.5.3}%
+\contentsline {subsection}{\numberline {5.6}Results}{xix}{subsection.5.6}%
+\contentsline {subsubsection}{\numberline {5.6.1}Baseline Performance}{xix}{subsubsection.5.6.1}%
+\contentsline {subsubsection}{\numberline {5.6.2}Terminal Results}{xx}{subsubsection.5.6.2}%
+\contentsline {subsubsection}{\numberline {5.6.3}Class-Level Results}{xx}{subsubsection.5.6.3}%
+\contentsline {subsubsection}{\numberline {5.6.4}Diagnostic Error Analysis}{xx}{subsubsection.5.6.4}%
+\contentsline {subsection}{\numberline {5.7}Conclusions, Limitations and Future Work}{xxii}{subsection.5.7}%
+\contentsline {section}{\numberline {A}Propaganda Technique Definitions}{xxvi}{appendix.A}%
+\contentsline {section}{\numberline {B}Universal Text Pre-processing Steps}{xxvii}{appendix.B}%
+\contentsline {section}{\numberline {C}Silver Data, Llama-3 Zero-Shot Chain-of-Thought Augmentation Prompt Architecture}{xxviii}{appendix.C}%
+\contentsline {subsection}{\numberline {C.1}Stage 1: Lexical Brainstorming and Reformulation}{xxviii}{subsection.C.1}%
+\contentsline {subsection}{\numberline {C.2}Stage 2: Contextual Validation and Coherence Check}{xxviii}{subsection.C.2}%
+\contentsline {subsection}{\numberline {C.3}Stage 3: Synthesis and Formatting Enforcement}{xxix}{subsection.C.3}%
+\contentsline {section}{\numberline {D}Mapped Universal POS Tagset}{xxx}{appendix.D}%
+\contentsline {section}{\numberline {E}Simplified NER Tagset}{xxxi}{appendix.E}%
+\contentsline {section}{\numberline {F}Custom Stopword List}{xxxii}{appendix.F}%
+\contentsline {paragraph}{Filter Summary:}{xxxii}{section*.6}%
+\contentsline {section}{\numberline {G}Complete 17-Class BIO Tagset Mapping (Variation 2)}{xxxiii}{appendix.G}%

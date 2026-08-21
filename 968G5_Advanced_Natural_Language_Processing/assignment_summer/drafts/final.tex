@@ -7,11 +7,11 @@
 \usepackage{booktabs}                 % Professional tables
 \usepackage{hyperref}                 % Interactive links and bookmarks
 \usepackage{xcolor}                   % Enables color commands and standard color names
-\usepackage{booktabs}                 % Professional tables
 \usepackage{tabularx}                 % Enables tabularx environment and X columns (FIXES ERROR)
 \usepackage{array}                    % Advanced table array handling
 \usepackage{mdframed} % Creates clean bordered boxes for prompt blocks
 \usepackage{enumitem} % Advanced list formatting
+\usepackage{makecell} % Allows manual line breaks \\ inside table headers
 
 % --- Hyperlink Formatting ---
 \hypersetup{
@@ -61,7 +61,7 @@
     \begin{minipage}{0.92\textwidth}
         \tiny
         \color{gray}
-        * \textit{Word Count Note:} The word count of 4,679 words was calculated prior to \LaTeX{} formatting. It excludes the abstract, section headings, formulas/equations, tables, figures, bibliography, appendix, and cover-page text prior to Section 1 (this page).
+        * \textit{Word Count Note:} The word count of 4,679 words was calculated prior to \LaTeX{} formatting. It excludes the abstract, section headings, formulas/equations, tables, figures, bibliography, appendix, and cover-page text prior to Section 1 (this page). Word count included inline (author-date, year) references before latex converison to bracketed number.
     \end{minipage}
     
 \end{titlepage}
@@ -80,42 +80,837 @@
 \listoftables
 \vspace{1cm}
 
-% 3. List of Figures (Optional)
-\listoffigures
-\newpage
-
-
-
-
 % ==============================================================================
 % START OF REPORT
 % ==============================================================================
 
+\newpage
 \section{Introduction}
+\label{sec:introduction}
 Propaganda is the deliberate, systematic attempt to shape perceptions, manipulate cognitions, and direct behavior to achieve a response that furthers the desired intent of the propagandist \cite{jowett2018}. It involves managing collective attitudes by manipulating significant symbols \cite{lasswell1927} and using rhetorical devices to bypass rational analysis rather than relying on outright falsehoods. 
 
 Given the velocity and volume of modern digital information, automated detection mechanisms are increasingly vital for maintaining the integrity of online discourse. This report explores automatically identifying propaganda through two core challenges: classifying known propagandistic snippets (Task 1) and jointly identifying manipulative spans and techniques within raw text (Task 2).
 
 \subsection{Problem Outline}
+\label{subsec:problem_outline}
 Automating detection is challenging because the boundary between legitimate persuasion and manipulative rhetoric is highly subjective \cite{dasan2019}. Historical models classified entire documents \cite{rashkin2017}, but modern moderation requires detecting localized, nuanced rhetorical shifts. Problematically, such detection must overcome significant structural irregularity as propagandists often sacrifice grammatical purity for rhetorical impact, relying on non-compositional multi-word expressions \cite{sag2002} and domain-specific terms that present severe out-of-vocabulary challenges for traditional NLP.
 
+\section{Related Work: Evolution of NLP}
+\label{sec:related_work}
+
+NLP evolved from symbolic taxonomies like WordNet \cite{miller1995} to statistical representations based on the Distributional Hypothesis \cite{harris1954}. Static word embeddings like Word2Vec \cite{miklov2013} provided dense vectors but failed to resolve polysemy \cite{peters2018}. Sequential models like LSTMs \cite{hochreiter1997} addressed context, leading to the Transformer architecture \cite{vaswani2017}. Encoders such as BERT \cite{devlin2019} replaced recurrence with self-attention to generate dynamic, contextual representations across sentences. Modern NLP relies on autoregressive language models like GPT-3 \cite{brown2020}, shifting the dominant paradigm from fine-tuning toward in-context learning \cite{raffel2020}.
+
+\section{Dataset}
+\label{sec:dataset}
+
+\subsection{Corpus Overview}
+\label{subsec:corpus_overview}
+
+This report takes a subset of the Propaganda Techniques Corpus, created by \cite{dasan2020} for SemEval-2020 Task 11, which set out to evaluate pipelines identifying and classifying manipulative spans. Our subset tracks nine propaganda techniques, including a \texttt{not\_propaganda} class, across $2,560$ rows. The input data is a string-formatted sequence of text containing two tag markers (\texttt{<BOS>} and \texttt{<EOS>}). The text between these tags has been identified as one of the 8 positive propaganda labels, while the remaining text provides neutral sentinel context. The original paper's technique definitions are presented in Appendix~\ref{app:taxonomy}.
+
+\subsection{Universal Pre-Processing}
+\label{subsec:preprocessing}
+
+Raw text was cleaned prior to tokenization to standardize text and strip digital artifacts or publication-specific formatting. This removes noise and prevents models from exploiting publisher-specific stylistic backdoors (Appendix~\ref{app:preprocessing}).
+
+\subsection{Data Augmentation: Synthetic Data Enrichment}
+\label{subsec:data_augmentation}
+
+To mitigate the limited training corpus, a one-to-one generative data augmentation strategy is implemented to produce synthetic propaganda snippets. SemEval-2020 demonstrated several augmentation submissions \cite{kranzlein2020} which relied on token substitution. However, as the competition was conducted prior to GPT-3 \cite{brown2020}, contemporary generative approaches were absent. We build on the competition methodologies by employing zero-shot Chain-of-Thought prompting \cite{kojima2022, wei2022} using the decoder-only \texttt{Meta Llama\_3\_8B} model. Temperature is set to $0.7$ to encourage syntactic reformulation and semantic drift, while the reasoning steps maintain rhetorical intent. The surrounding sentinel context is left untouched. In the methodology, this synthetic augmented set is referred to as ``Silver'' data, with the authentic training data designated as ``Gold''.
+
+As detailed in Appendix~\ref{app:prompt_architecture}, the multi-stage prompt chain decomposes generation into three grounded reasoning steps: first, the model assumes a domain-expert role to brainstorm three candidate variants using diverse lexical semantics aligned with the target label; next, it performs contextual validation against the surrounding left and right sentinel text to eliminate syntactic discontinuities; and finally, reviewing its step-by-step reasoning, it selects the single optimal snippet and wraps it within strict XML tags (\texttt{<final\_output>}) for automated extraction.
+
+\subsection{Feature Tagging}
+\label{subsec:feature_tagging}
+
+In Task 1, an input sequence of $N$ whole tokens $T = (t_1, t_2, \dots, t_N)$ is mapped to parallel Part-of-Speech (POS) and Named-Entity Recognition (NER) tag sequences to enrich lexical representations with syntactic and entity-level signals \cite{khosla2020}, enforcing strict 1-to-1 sequence length alignment ($\vert T \vert = \vert P \vert = \vert E \vert = N$):
+$$P = (p_1, p_2, \dots, p_N), \quad \text{where } p_i \in \mathcal{P}_{12}$$
+$$E = (e_1, e_2, \dots, e_N), \quad \text{where } e_i \in \mathcal{E}_{9}$$
+
+Syntactic tagging uses NLTK's \texttt{averaged\_perceptron\_tagger}, mapping the Penn Treebank tagset down to the 12-category Universal POS tagset $\mathcal{P}_{12}$ (Appendix~\ref{app:pos_mapping}). Named-Entity tagging uses spaCy's \texttt{en\_core\_web\_sm} while compressing low-frequency entity classes into a \texttt{MISC} slot, reducing the space to 9 categories $\mathcal{E}_{9}$ (Appendix~\ref{app:ner_mapping}). Compressing tag spaces prevents sparse classes forming uninformative vector dimensions, reducing overfitting risk on rare entity types.
+
+
+
+% ====================================
+% TASK 1
+% ====================================
+\newpage
+\section{Task 1: Propaganda Classification}
+\label{sec:task1}
+
+Task 1 is a single-label, multi-class classification problem targeting instances of recognized but unlabeled propaganda. Experimentally, two non-contextual, static feature representation paradigms are benchmarked: high-dimensional sparse representations derived from frequency-based Bag-of-Words (BoW) modeling against low-dimensional, dense representations from Word2Vec embeddings.
+
+% ====================================
+% Baseline
+% ====================================
+\subsection{Baseline \& Experimental Floor}
+\label{subsec:task1_baseline}
+
+For model calibration, an unintelligent random-guessing baseline defines the lower bound. For an 8-class balanced target distribution, uniform random selection yields an expected accuracy of:
+\[
+P = \frac{1}{8} = 0.125 \quad (12.5\%)
+\]
+To guarantee reproducibility, a random seed is set: $\text{SEED} = 142$.
+
+% ====================================
+% BOW
+% ====================================
+\subsection{Approach 1: Bag-of-Words (BoW)}
+\label{subsec:bow_approach}
+
+Propaganda frequently relies on distinct, emotionally charged trigger words. A unigram Bag-of-Words (BoW) pipeline decomposes text sequences into high-dimensional, orthogonal count vectors. By mapping terms to independent coordinate axes, count vectors record features as immutable atomic units, ensuring their presence regardless of how the vector develops.
+
+\subsubsection{Vocabulary Construction}
+\label{subsubsec:vocab_construction}
+
+``Training'' a BoW model involves the construction of a vocabulary $\mathcal{V}_{\text{training}}$. Starting with a global term-frequency dictionary $\mathcal{C}_{\text{gold}}(w)$, singletons ($\mathcal{C}_{\text{gold}}(w) = 1$) are mapped to an out-of-vocabulary token (\texttt{\_\_UNK\_\_}). This regularizes the input space, mitigating the memorization of specific entities or niche descriptors. Similarly, high-frequency connective terms are filtered using a custom stopword list (Appendix~\ref{app:stopwords}). This is done to prevent neutral features from overpowering trigger words. The remaining dictionary keys form the vocabulary set $\mathcal{V}_{\text{gold}}$:
+\[
+\mathcal{V}_{\text{gold}} = \{ \text{\texttt{\_\_UNK\_\_}} \} \cup \{ w \in \mathcal{C}_{\text{gold}} \mid \mathcal{C}_{\text{gold}}(w) > 1 \land w \notin \text{Stopwords} \}
+\]
+
+An index mapping $\mathcal{I}_{\text{vocab}}: w \mapsto i$ translates $\mathcal{V}_{\text{gold}}$ to vector coordinates $i \in \{0, \dots, \vert \mathcal{V}_{\text{gold}} \vert - 1\}$, allowing a sequence of tokens to be parsed into a fixed-dimensional vector space.
+
+\subsubsection{Vocabulary Enrichment}
+\label{subsubsec:vocab_enrichment}
+
+The ``Silver'' data (Section~\ref{subsec:data_augmentation}) is utilized to provide additional feature density and establish a secondary enriched vocabulary ($\mathcal{V}_{\text{silver}}$). This works by iterating through the synthetic snippets to increment term counts in the term-frequency dictionary $\mathcal{C}_{\text{gold}}(w)$.
+
+This does not introduce new features into the vocabulary, working solely to promote existing singletons past the frequency threshold ($\mathcal{C}_{\text{silver}}(w) > 1$), shifting viable features out of \texttt{\_\_UNK\_\_} and increasing the vector dimensions. This process safeguards legitimate trigger words that were regularized due to limited corpus size:
+\[
+\mathcal{C}_{\text{silver}}(w) = \mathcal{C}_{\text{gold}}(w) + \sum_{S \in \mathcal{D}_{\text{silver}}} \sum_{t_i \in S} \mathbb{I}(t_i = w \land w \in \mathcal{C}_{\text{gold}})
+\]
+
+\subsubsection{Structural Tagsets}
+\label{subsubsec:structural_tagsets}
+
+Auxiliary POS ($\vert \mathcal{P} \vert = 12$) and NER ($\vert \mathcal{E} \vert = 10$) channels are vectorized using identical term-frequency mapping. Extracted across full sequences prior to vocabulary regularization, these channels bypass singleton pruning. This guarantees structural and entity signals are retained even when lexical tokens collapse to \texttt{\_\_UNK\_\_}. Preserving this context captures propagandistic devices where rare vocabulary is used within distinct relational templates, such as framing a target through patterns like \texttt{[PERSON]} is \texttt{[ADJECTIVE]}.
+
+\subsubsection{Experimental Design}
+\label{subsubsec:experimental_design}
+
+Four vocabulary configurations evaluate dataset splits ($\text{Gold}$ vs.\ $\text{Gold} + \text{Silver}$) against context windows ($\text{Snippet-Only}$ vs.\ $\text{Full-Context}$), as detailed in Table~\ref{tab:bow_dimensions}. Restricting context to ``Snippet-Only'' strips neutral prose, reducing baseline vector dimensionality by $54.6\%$. Conversely, synthetic enrichment reclaims lost singletons, decreasing discarded hapax terms by $45.4\%$ and expanding active feature dimensions..
+
+\begin{table}[htbp]
+  \centering
+  \caption{Bag-of-Words Input Dimensions Across Vocabulary Configurations}
+  \label{tab:bow_dimensions}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabularx}{\textwidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}c >{\centering\arraybackslash}c >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Experiment} & \makecell{\textbf{Vocab}\\\textbf{($\Vert\mathcal{V}\Vert$)}} & \makecell{\textbf{Singles}\\\textbf{Cut}} & \makecell{\textbf{POS}\\\textbf{Dim}} & \makecell{\textbf{NER}\\\textbf{Dim}} & \makecell{\textbf{Input}\\\textbf{Dim}} \\
+    \midrule
+    \textbf{Gold Baseline, Full-Context}   & 3,265 & 3,038 & 12 & 10 & \textbf{3,287} \\
+    \addlinespace
+    \textbf{Silver Enriched, Full-Context} & 4,002 & 2,301 & 12 & 10 & \textbf{4,024} \\
+    \addlinespace
+    \textbf{Gold Baseline, Snippet-Only}   & 1,483 & 2,051 & 12 & 10 & \textbf{1,505} \\
+    \addlinespace
+    \textbf{Silver Enriched, Snippet-Only} & 2,415 & 1,119 & 12 & 10 & \textbf{2,437} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsubsection{Model Architecture}
+\label{subsubsec:model_architecture_bow}
+
+Token, POS, and NER frequencies map into three discrete count vectors:
+\[
+\vec{v}_{\text{vocab}}[i] = \sum_{t \in T} \mathbb{I}(\mathcal{I}_{\text{vocab}}(t) = i), \quad 
+\vec{v}_{\text{pos}}[j] = \sum_{p \in P} \mathbb{I}(\mathcal{I}_{\text{pos}}(p) = j), \quad 
+\vec{v}_{\text{ner}}[k] = \sum_{e \in E} \mathbb{I}(\mathcal{I}_{\text{ner}}(e) = k)
+\]
+
+These vectors are concatenated into a single input tensor $\vec{x}_{\text{input}}$ passed directly to an MLP classification head:
+\[
+\vec{x}_{\text{input}} = \left[ \vec{v}_{\text{vocab}} \parallel \vec{v}_{\text{pos}} \parallel \vec{v}_{\text{ner}} \right] \in \mathbb{R}^{\vert \mathcal{V} \vert + \vert \mathcal{P} \vert + \vert \mathcal{E} \vert}
+\]
+
+While structural auxiliary channels remain constant ($\vert \mathcal{P} \vert = 12$, $\vert \mathcal{E} \vert = 10$), the MLP input space dynamically scales ($\mathbb{R}^{1,505}$ to $\mathbb{R}^{4,024}$) based on the experimental configuration.
+
+% ====================================
+% Word2Vec
+% ====================================
+\subsection{Approach 2: Word2Vec (W2V)}
+\label{subsec:w2v_approach}
+
+To mitigate the Zipfian sparsity inherent to small propaganda corpora, Word2Vec maps semantic similarity into geometric proximity \cite{miklov2013}. By performing implicit matrix factorization \cite{levy2014}, continuous embeddings share statistical strength across synonyms, allowing the classifier to recognize alternative phrasing and generalize across synonymous rhetorical injections. As propaganda techniques frequently manifest as localized emotive triggers, Word2Vec's local window optimization provides a superior representation over global co-occurrence models \cite{baroni2014}.
+
+\subsubsection{Pre-Trained Word2Vec Model}
+\label{subsubsec:pretrained_w2v}
+
+Training a custom Word2Vec model on a corpus of this size would overfit embeddings to propagandistic contexts rather than standard linguistic usages. Deploying pre-trained Google News embeddings ($\mathbf{E} \in \mathbb{R}^{\vert V_{\text{google}} \vert \times 300}$) grounds words in task-agnostic meanings. This semantic baseline enables the classifier to identify manipulative language as anomalous usage patterns, improving linear separability across rhetorical techniques.
+
+\subsubsection{Vocabulary Constraints}
+\label{subsubsec:w2v_vocab_constraints}
+
+Using a pre-trained Word2Vec model involves mapping vocabulary terms to an embedding lookup space. To maintain experimental control, the lookup was restricted to the vocabulary topologies defined in Approach 1 (Section~\ref{subsec:bow_approach}), isolating embedding density (Sparse vs.\ Dense) as the sole independent variable and omitting the model's superior vocabulary depth. Consequently, the pipeline retains a frequency-based OOV (\texttt{\_\_UNK\_\_}) slot for rare terms. This is scaled $c_{\text{unk}} \in [0, 1]$ to match Word2Vec embedding magnitudes and therefore reflects OOV density.
+
+\subsubsection{Model Architecture}
+\label{subsubsec:model_architecture_w2v}
+
+To construct sequence representations from word vectors, valid tokens are aggregated using arithmetic mean-pooling:
+\[
+\vec{v}_{\text{w2v}} = \frac{1}{\vert T_{\text{valid}} \vert} \sum_{w \in T_{\text{valid}}} \mathbf{E}(w)
+\]
+
+Given vector addition is commutative, mean-pooling discards word order and compositional syntax, meaning Word2Vec's capacity to process non-compositional syntactic departures is restricted to the signal strength of isolated trigger words and their linear combinations. 
+
+To assemble the final input tensor $\vec{x}_{\text{input}}$, the structural tagset count vectors ($\vec{v}_{\text{pos}}$ and $\vec{v}_{\text{ner}}$) are $L_1$-normalized into relative probability distributions ($[0, 1]$), aligning to embedding magnitudes and preventing unscaled integer counts from dominating loss gradients during backpropagation:
+\[
+\tilde{\vec{v}}_{\text{pos}} = \frac{\vec{v}_{\text{pos}}}{\sum_j \vec{v}_{\text{pos}}[j]}, \quad \tilde{\vec{v}}_{\text{ner}} = \frac{\vec{v}_{\text{ner}}}{\sum_k \vec{v}_{\text{ner}}[k]}
+\]
+
+The concatenated input vector $\vec{x}_{\text{input}} \in \mathbb{R}^{323}$ is fed directly into the MLP classification head. Unlike the dynamically scaled BoW input space, this tensor dimension remains strictly invariant ($\mathbb{R}^{323}$) across all experimental conditions:
+\[
+\vec{x}_{\text{input}} = \left[ \vec{v}_{\text{w2v\_300d}} \parallel c_{\text{unk}} \parallel \tilde{\vec{v}}_{\text{pos\_12d}} \parallel \tilde{\vec{v}}_{\text{ner\_10d}} \right] \in \mathbb{R}^{323}
+\]
+
+\newpage
+\begin{table}[htbp]
+  \centering
+  \caption{Word2Vec Input Dimensions Across Experimental Configurations}
+  \label{tab:w2v_dimensions}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabularx}{\textwidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}c >{\centering\arraybackslash}c >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Experiment} & \makecell{\textbf{Vocab}\\\textbf{($\Vert\mathcal{V}\Vert$)}} & \makecell{\textbf{Singles}\\\textbf{Cut}} & \makecell{\textbf{W2V}\\\textbf{Dim}} & \makecell{\textbf{POS}\\\textbf{Dim}} & \makecell{\textbf{NER}\\\textbf{Dim}} & \makecell{\textbf{Input}\\\textbf{Dim}} \\
+    \midrule
+    \textbf{Gold Baseline, Full-Context}   & 3,265 & 3,038 & 300 (+1 $c_{\text{unk}}$) & 12 & 10 & \textbf{323} \\
+    \addlinespace
+    \textbf{Silver Enriched, Full-Context} & 4,002 & 2,301 & 300 (+1 $c_{\text{unk}}$) & 12 & 10 & \textbf{323} \\
+    \addlinespace
+    \textbf{Gold Baseline, Snippet-Only}   & 1,483 & 2,051 & 300 (+1 $c_{\text{unk}}$) & 12 & 10 & \textbf{323} \\
+    \addlinespace
+    \textbf{Silver Enriched, Snippet-Only} & 2,415 & 1,119 & 300 (+1 $c_{\text{unk}}$) & 12 & 10 & \textbf{323} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+
+% ====================================
+% MLP Head
+% ====================================
+\subsection{Standardized MLP Classification Head}
+\label{subsec:mlp_head}
+
+To isolate representation quality from architectural bias, a standardized Multi-Layer Perceptron (MLP) classification head is used throughout Task 1 and dynamically adapts to incoming feature tensors:
+\[
+\mathbf{x} = [\mathbf{x}_{\text{sem}} \mathbin{\Vert} \mathbf{x}_{\text{POS}} \mathbin{\Vert} \mathbf{x}_{\text{NER}}], \quad d_{\text{in}} = d_{\text{sem}} + 22
+\]
+
+Grounded in the Universal Approximation Theorem \cite{hornik1989}, a single hidden layer prevents overfitting while resolving non-linear decision boundaries. The forward pass applies linear projection, ReLU activation to capture non-linearity, Layer Normalization to stabilize instance updates, Dropout regularization ($p$), and a terminal linear projection emitting 8-way logits $\mathbf{s} \in \mathbb{R}^8$:
+\[
+\mathbf{h} = \text{ReLU}(\mathbf{W}_1 \mathbf{x} + \mathbf{b}_1)
+\]
+\[
+\mathbf{z} = \text{Dropout}(\text{LayerNorm}(\mathbf{h}), p)
+\]
+\[
+\mathbf{s} = \mathbf{W}_2 \mathbf{z} + \mathbf{b}_2
+\]
+
+Parameters update using multi-class Cross-Entropy Loss. Maintaining this uniform topology guarantees performance variances reflect representation geometry rather than head capacity.
+
+\subsubsection{Hyperparameter Optimization}
+\label{subsubsec:task1_hyperparameters}
+
+A grid search over 3 hyperparameters (Table~\ref{tab:task1_hyperparameters}) was conducted on a $10\%$ modulo validation split recording performance checkpoints across 5 epochs. The search revealed sparse BoW models required higher hidden capacity ($d_{\text{hidden}} = 128$), aggressive dropout ($p = 0.5$), a conservative learning rate ($\eta = 0.0001$), and early stopping at 3 epochs to prevent sparse memorization, whereas dense W2V models converged smoothly with a compact hidden layer ($d_{\text{hidden}} = 64$), moderate dropout ($p = 0.3$), a higher learning rate ($\eta = 0.001$), and full 5-epoch training.
+
+\newpage
+\begin{table}[htbp]
+  \centering
+  \caption{Task 1 MLP Head Hyperparameter Search Space and Optimal Values}
+  \label{tab:task1_hyperparameters}
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabularx}{\textwidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Hyperparameter} & \textbf{Search Space} & \textbf{BoW Optimal} & \textbf{W2V Optimal} \\
+    \midrule
+    \textbf{Hidden Layer Dim ($d_{\text{hidden}}$)} & $\{64, 128\}$ & $128$ & $64$ \\
+    \addlinespace
+    \textbf{Learning Rate ($\eta$)} & $\left\{ \makecell{0.005, \\ 0.001, \\ 0.0005, \\ 0.0001} \right\}$ & $0.0001$ & $0.001$ \\
+    \addlinespace
+    \textbf{Dropout Rate ($p$)} & $\{0.3, 0.5\}$ & $0.5$ & $0.3$ \\
+    \addlinespace
+    \textbf{Optimal Training Epochs} & Tested up to $5$ & $3$ & $5$ \\
+    \addlinespace
+    \textbf{Weight Decay ($\lambda$)} & Fixed ($0.05$) & $0.05$ & $0.05$ \\
+    \addlinespace
+    \textbf{Optimizer} & AdamW & AdamW & AdamW \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ====================================
+% Evaluation
+% ====================================
+\subsection{Evaluation Framework}
+\label{subsec:evaluation_framework}
+
+Although our corpus is balanced, real-world propaganda datasets are typically highly imbalanced \cite{dasan2020}. Consequently, we design an evaluation framework tailored to imbalanced test distributions. Standard accuracy is an insufficient terminal evaluation metric because it is vulnerable to masking poor minority performance behind dominant classes.
+
+In a single-label multi-class setting across $K$ classes, Micro-averaged $F_1$ score mathematically decomposes into global accuracy, making it blind to systematic class imbalances:
+\[
+\text{Accuracy} = \text{Micro-}F_1 = \frac{\sum_{k=1}^{K} \text{TP}_k}{\sum_{k=1}^{K} (\text{TP}_k + \text{FP}_k)}
+\]
+
+Macro-averaged $F_1$ score calculates the harmonic mean of precision and recall for each class independently before averaging them unweighted:
+\[
+\text{Macro-}F_1 = \frac{1}{K} \sum_{k=1}^{K} F_{1, k} = \frac{1}{K} \sum_{k=1}^{K} \left( 2 \cdot \frac{P_k \cdot R_k}{P_k + R_k} \right)
+\]
+
+By weighting every category equally regardless of support size, Macro-$F_1$ ensures that poor performance on minority classes cannot be masked by dominant baseline predictions. Macro-$F_1$ is therefore selected as the primary terminal evaluation metric across all experimental conditions.
+
+Finally, per-class precision, recall, and $F_1$ scores are logged to provide the granular diagnostic inference needed to analyze specific pipeline representation bottlenecks.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Per-Class Diagnostic Evaluation Formulations}
+  \label{tab:diagnostic_evaluation}
+  \vspace{4pt}
+  \small
+  \setlength{\tabcolsep}{8pt}
+  \begin{tabularx}{\textwidth}{l >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Metric} & \textbf{Mathematical Formulation} \\
+    \midrule
+    \textbf{Class Precision ($P_k$)} & $\frac{\text{TP}_k}{\text{TP}_k + \text{FP}_k}$ \\
+    \addlinespace
+    \textbf{Class Recall ($R_k$)} & $\frac{\text{TP}_k}{\text{TP}_k + \text{FN}_k}$ \\
+    \addlinespace
+    \textbf{Class $F_1$ Score ($F_{1, k}$)} & $2 \cdot \frac{P_k \cdot R_k}{P_k + R_k}$ \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+
+% ====================================
+% Results
+% ====================================
+\subsection{Results}
+\label{subsec:task1_results}
+
+\subsubsection{Bag-of-Words Results}
+\label{subsubsec:bow_results}
+
+The BoW framework achieved top performance under the ``Gold-Only, Full-Context'' experiment ($\text{Macro-}F_1 = 0.3200$). Systematically evaluating the experiments reveals interactions between context scope, feature density, and synthetic data augmentation.
+
+Restricting input to ``Snippet-Only'' sequences was intended to isolate emotional trigger words, yet it degraded performance across Gold ($0.3200 \rightarrow 0.3183$) and Enriched ($0.3174 \rightarrow 0.3129$) splits. Paralleling \cite{pedersen2010}, retaining broader background text provides essential co-occurrence statistics that cushion sparse vector spaces, proving that surrounding context acts as a vital data-density stabilizer.
+
+The silver enrichment ($\mathcal{V}_{\text{silver}} = 4,002\text{D}$) consistently impaired generalization. LLM reformulations introduced semantic drift, corrupting the linear boundaries required to isolate lexical triggers and suggesting precise terms denote propaganda rather than semantic equivalents. Furthermore, promoting singletons into active dimensions expanded vector sparsity, allowing the classifier to memorize spurious synthetic artifacts.
+
+All BoW variants suffered from severe overfitting, exhibiting a generalization gap ($\Delta F_1 \approx 0.51$) between training ($0.8314$) and test evaluation ($0.3200$). High-dimensional sparse inputs allowed the MLP head to memorize exact training co-occurrences rather than learning abstract, transferable rules for unseen propaganda.
+
+
+\begin{table}[htbp]
+  \centering
+  \caption{Task 1 Results}
+  \label{tab:task1_results}
+  \vspace{4pt}
+  \scriptsize
+  \setlength{\tabcolsep}{2.5pt}
+  \begin{tabularx}{\textwidth}{l c c c c c c c c c}
+    \toprule
+    \textbf{Model \& Experiment} & \makecell{\textbf{Vector}\\\textbf{Dims}} & \makecell{\textbf{Test}\\\textbf{Acc.}} & \makecell{\textbf{Test}\\\textbf{Macro-$F_1$}} & \makecell{\textbf{Test}\\\textbf{Prec.}} & \makecell{\textbf{Test}\\\textbf{Rec.}} & \makecell{\textbf{Train}\\\textbf{Acc.}} & \makecell{\textbf{Train}\\\textbf{Macro-$F_1$}} & \makecell{\textbf{Train}\\\textbf{Prec.}} & \makecell{\textbf{Train}\\\textbf{Rec.}} \\
+    \midrule
+    \textbf{Random Guess Baseline} & — & 0.1618 & 0.1592 & 0.1582 & 0.1578 & — & — & — & — \\
+    \midrule
+    \textbf{BoW, Gold, Full-Context} & 3,265 & 0.3333 & \textbf{0.3200} & 0.3254 & 0.3326 & 0.8149 & 0.8148 & 0.8199 & 0.8157 \\
+    \addlinespace
+    \textbf{BoW, Gold, Snippet-Only} & 1,483 & 0.3301 & 0.3183 & 0.3157 & 0.3305 & 0.6700 & 0.6696 & 0.6798 & 0.6712 \\
+    \addlinespace
+    \textbf{BoW, Silver+, Full-Context} & 4,002 & 0.3269 & 0.3174 & 0.3179 & 0.3262 & 0.8319 & 0.8314 & 0.8341 & 0.8327 \\
+    \addlinespace
+    \textbf{BoW, Silver+, Snippet-Only} & 2,415 & 0.3236 & 0.3129 & 0.3292 & 0.3215 & 0.7529 & 0.7516 & 0.7599 & 0.7538 \\
+    \midrule
+    \textbf{W2V, Gold, Full-Context} & 301 & 0.3301 & 0.2835 & 0.2962 & 0.3184 & 0.4601 & 0.4440 & 0.5118 & 0.4621 \\
+    \addlinespace
+    \textbf{W2V, Gold, Snippet-Only} & 301 & \textbf{0.3366} & 0.2927 & 0.2911 & 0.3274 & 0.4779 & 0.4646 & 0.5030 & 0.4808 \\
+    \addlinespace
+    \textbf{W2V, Silver+, Full-Context} & 301 & 0.3236 & 0.2861 & 0.3076 & 0.3169 & 0.4640 & 0.4509 & 0.5084 & 0.4656 \\
+    \addlinespace
+    \textbf{W2V, Silver+, Snippet-Only} & 301 & 0.3074 & 0.2571 & 0.2672 & 0.3007 & 0.4826 & 0.4714 & 0.5338 & 0.4840 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsubsection{Word2Vec Results}
+\label{subsubsec:w2v_results}
+
+Word2Vec underperformed the BoW baseline across all experiments, peaking at $0.2927$ Test Macro-$F_1$ under ``Gold Baseline, Snippet-Only'' and suffering an average terminal drop of $\Delta 0.035$. With identical heads, this differential isolates a fundamental representational bottleneck in static continuous vector spaces for propaganda detection.
+
+Propaganda relies on exact lexical choices rather than broad distributional semantics. While BoW represents loaded terms and neutral equivalents as orthogonal dimensions, Word2Vec maps them into overlapping geometric clusters (e.g., ``regime'' vs.\ ``government''), blurring linear decision boundaries.
+
+Furthermore, mean-pooling dilutes manipulative signals with neutral prose, pulling the centroid towards generic news representation. This mechanism explains why Word2Vec peaked under the Snippet-Only condition ($0.2927$) rather than Full-Context ($0.2835$). Stripping neutral background tokens reduces the averaging denominator, allowing trigger vectors to retain higher proportional weight.
+
+Unlike BoW's high variance, Word2Vec suffered from severe high-bias underfitting, achieving a Train Macro-$F_1$ of only $0.4646$ (vs.\ BoW's $0.8148$). However, its compact generalization gap ($\Delta F_1 = 0.1719$) confirms that while mean-pooling causes severe signal loss, continuous representations maintain stable out-of-sample consistency.
+
+\subsubsection{Class-Level Diagnostic Error Analysis}
+\label{subsubsec:class_level_error_analysis}
+
+Class-level performance in Experiment 1 (Full-Context, Gold) demonstrates how representation geometry directly interacts with specific propaganda techniques. BoW outperforms Word2Vec on \texttt{repetition} ($F_1 = 0.33$ vs.\ $0.18$) because count vectors preserve token frequency mass, whereas commutative mean-pooling erases duplicate tokens, collapsing Word2Vec recall to $0.12$. Similarly, BoW excels at \texttt{exaggeration,minimisation} ($F_1 = 0.36$ vs.\ $0.26$) because extrema modifiers (``always'', ``never'') serve as discrete orthogonal triggers in sparse space, pushing BoW recall to $0.50$, whereas continuous smoothing softens these terms toward generic degree adverbs. On \texttt{loaded\_language}, isolated emotive triggers wash out within mean-pooled document centroids, causing Word2Vec performance to collapse ($F_1 = 0.04$, recall $= 0.03$).
+
+Conversely, Word2Vec surpasses BoW on entity-driven classes like \texttt{flag\_waving} ($F_1 = 0.54$ vs.\ $0.46$) and \texttt{appeal\_to\_fear\_prejudice} ($F_1 = 0.40$ vs.\ $0.33$), as embeddings cluster nationalistic symbols into robust continuous concepts, yielding $0.82$ recall on \texttt{flag\_waving}.
+
+
+\begin{table}[htbp]
+  \centering
+  \caption{Task 1 Class-Level Results for Experiment 1 (Gold, Full-Context)}
+  \label{tab:class_level_results}
+  \scriptsize
+  \setlength{\tabcolsep}{3.5pt}
+  \begin{tabularx}{\textwidth}{X c c c c c c c}
+    \toprule
+    \textbf{Class} & \makecell{\textbf{$F_1$}\\\textbf{(BASE)}} & \makecell{\textbf{$F_1$}\\\textbf{(BoW)}} & \makecell{\textbf{$F_1$}\\\textbf{(W2V)}} & \makecell{\textbf{Precision}\\\textbf{(BoW)}} & \makecell{\textbf{Precision}\\\textbf{(W2V)}} & \makecell{\textbf{Recall}\\\textbf{(BoW)}} & \makecell{\textbf{Recall}\\\textbf{(W2V)}} \\
+    \midrule
+    \texttt{flag\_waving} & 0.12 & 0.46 & \textbf{0.54} & 0.46 & 0.41 & 0.47 & \textbf{0.82} \\
+    \addlinespace
+    \texttt{appeal\_to\_fear\_prejudice} & 0.18 & 0.33 & \textbf{0.40} & 0.33 & 0.36 & 0.33 & \textbf{0.44} \\
+    \addlinespace
+    \texttt{causal\_oversimplification} & 0.16 & 0.32 & \textbf{0.34} & 0.29 & 0.29 & 0.34 & \textbf{0.40} \\
+    \addlinespace
+    \texttt{doubt} & 0.14 & \textbf{0.39} & 0.31 & 0.35 & \textbf{0.39} & \textbf{0.44} & 0.26 \\
+    \addlinespace
+    \texttt{exaggeration,minimisation} & 0.09 & \textbf{0.36} & 0.26 & \textbf{0.28} & 0.24 & \textbf{0.50} & 0.30 \\
+    \addlinespace
+    \texttt{repetition} & 0.15 & \textbf{0.33} & 0.18 & \textbf{0.42} & 0.33 & \textbf{0.28} & 0.12 \\
+    \addlinespace
+    \texttt{name\_calling,labeling} & 0.13 & \textbf{0.24} & 0.19 & \textbf{0.28} & 0.21 & \textbf{0.21} & 0.18 \\
+    \addlinespace
+    \texttt{loaded\_language} & 0.14 & \textbf{0.13} & 0.04 & \textbf{0.19} & 0.14 & \textbf{0.10} & 0.03 \\
+    \midrule
+    \textbf{Macro Average} & \textbf{0.14} & \textbf{0.32} & \textbf{0.28} & \textbf{0.33} & \textbf{0.30} & \textbf{0.33} & \textbf{0.32} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ====================================
+% CONCLUSION
+% ====================================
+
+\subsection{Conclusion, Limitations, and Future Work}
+\label{subsec:task1_conclusion}
+
+This study systematically benchmarked sparse discrete representations against static continuous vector spaces for propaganda detection. Contradicting the general NLP paradigm favoring dense embeddings, empirical results demonstrated that discrete orthogonality is superior for isolating manipulative text. The unigram Bag-of-Words (BoW) model ($\text{Macro-}F_1 = 0.3200$) outperformed dense Word2Vec ($\text{Macro-}F_1 = 0.2927$), providing strong empirical support for the power of lexical triggers and aligning with previous studies \cite{rashkin2017}. BoW dominated techniques reliant on exact string matches, such as \texttt{repetition} ($0.33$ vs.\ $0.18$) and \texttt{exaggeration,minimisation} ($0.36$ vs.\ $0.26$), as orthogonal dimensions preserve token frequencies structuring decision boundaries. Furthermore, evaluating context windows revealed that surrounding neutral text acts as an essential data-density stabilizer, with snippet-only representations consistently degrading performance.
+
+Several methodological limitations constrained overall performance. Both paradigms hit a structural precision ceiling ($\sim 0.30\text{--}0.35$) due to vocabulary overlap, as common news terminology triggered widespread false positives without contextual awareness. Additionally, constraining Word2Vec's lookup space to match BoW suppressed its native out-of-vocabulary generalization. Silver enrichment introduced unvalidated semantic drift, corrupting linear boundaries, while BoW's reliance on raw counts without TF-IDF weighting allowed ubiquitous non-informative terms to retain unscaled frequency mass.
+
+Future work could explore hybrid models that leverage BoW's orthogonal trigger precision to dynamically weight Word2Vec sequence pooling, alongside evaluating Word2Vec with unconstrained OOV handling. Ultimately, overcoming the precision ceiling requires transitioning to Transformer encoders whose self-attention mechanisms provide the contextual reasoning needed to separate objective reporting from manipulative prose.
+
+
+% ====================================
+% TASK 2
+% ====================================
+\newpage
+\section{Task 2: Joint Span Detection and Classification}
+\label{sec:task2}
+
+Task 2 expands the experimental scope from classifying known, unlabeled instances of propaganda to jointly identifying manipulative text boundaries and classifying the sequence technique. This objective is framed as a token-level sequence labeling task utilizing the Beginning, Inside, Outside (BIO) encoding schema. Formally, given an input sequence of $N$ tokens $\mathbf{x} = (x_1, x_2, \dots, x_N)$, the model learns a mapping function $f: \mathbf{x} \rightarrow \mathbf{y}$ to predict a sequence of target tags $\mathbf{y} = (y_1, y_2, \dots, y_N)$ from a label space $y_i \in \mathcal{Y}$:
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item $y_i = \text{O}$ for neutral, non-propagandistic context.
+    \item $y_i = \text{B}$ for the initial triggering propaganda token.
+    \item $y_i = \text{I}$ for interior span tokens.
+\end{itemize}
+The mapping below demonstrates a token-level sequence translation:
+\[
+\scriptsize
+\setlength{\arraycolsep}{2.5pt} % Reduces horizontal space between columns
+\begin{array}{rcccccccccccccc}
+\text{Tokens } (x_i): & \texttt{[CLS]} & \texttt{The} & \texttt{mainstream} & \texttt{media} & \texttt{is} & \texttt{spreading} & \mathbf{\texttt{blatant}} & \mathbf{\texttt{lies}} & \texttt{about} & \texttt{the} & \texttt{policy} & \texttt{.} & \texttt{[SEP]} \\[2pt]
+& \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \downarrow \\[2pt]
+\text{BIO Tags } (y_i): & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \mathbf{\texttt{B}} & \mathbf{\texttt{I}} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O}
+\end{array}
+\]
+The methodologies for Task 2 are derived as variations of an adapted, modernized CNN-BiLSTM-CRF framework \cite{ma2016}.
+
+\subsection{Architectural Approach}
+\label{subsec:architectural_approach}
+
+The methodologies for Task 2 are derived as variations of an adapted, modernized CNN-BiLSTM-CRF framework \cite{ma2016}.
+
+Ma and Hovy's \cite{ma2016} classical sequence-tagging framework combined character-level CNNs for morphological extraction, Bidirectional LSTMs for contextual dependencies, and a Conditional Random Field (CRF) decoder to enforce valid tag transitions. Applied to propaganda detection, this architecture captures manipulative superlative affixes (e.g., \texttt{-est}), long-range rhetorical framing, and structural constraints. Crucially, the CRF enables high-confidence interior tokens to resolve ambiguous span boundaries. This dynamic is formalized as the ``breadcrumb effect'' and mitigates noisy annotation boundaries \cite{dasan2019}.
+
+This project modernizes the classical baseline by replacing sequential and convolutional layers with a pre-trained DeBERTa encoder while retaining terminal CRF global decoding. This architectural shift yields four core advantages:
+\begin{enumerate}[leftmargin=*, noitemsep]
+    \item \textbf{Subword Morphology:} SentencePiece tokenization natively standardizes subword morphology, eliminating the need to train dedicated character-CNNs.
+    \item \textbf{Global Self-Attention:} Self-attention replaces recurrency to prevent context decay across long text sequences.
+    \item \textbf{Pre-trained Representations:} Fine-tuning pre-trained representations mitigates catastrophic overfitting on small corpora.
+    \item \textbf{Disentangled Attention:} DeBERTa's disentangled attention decouples content from relative position. This grants the model the spatial awareness needed when neutral vocabulary is weaponized through strategic placement.
+\end{enumerate}
+
+To benchmark this modernized pipeline, we evaluate two architectural variations: a Decoupled Two-Stage Tagger (Variation 1) and an Integrated Multi-Class BIO-CRF Pipeline (Variation 2).
+
+
+% ====================================
+% VARIATION 2: INTEGRATED
+% ====================================
+\subsection{Architecture Variation 2: The Integrated Multi-Class BIO-CRF Model}
+\label{subsec:task2_variation2}
+
+Variation 2 frames propaganda detection as an end-to-end joint sequence labeling task, learning span boundaries and technique classifications simultaneously. This is achieved by expanding the 17-state BIO schema, joining \texttt{B-} and \texttt{I-} prefixes with technique suffixes plus a neutral \texttt{O} state (Appendix~\ref{app:bio_tagset}):
+\[
+\mathcal{Y}_{17} = \{\text{O}\} \cup \{\text{B-}k \mid k \in \mathcal{T}\} \cup \{\text{I-}k \mid k \in \mathcal{T}\}
+\]
+
+This granular label space optimizes boundaries and techniques in tandem. Tag expansion enhances the ``breadcrumb effect'' during decoding. Instead of collapsing uncertain boundaries into an uninformative $\sim 50/50$ binary split, probability mass is dispersed across technique states. When a small boundary mass aligns with a high-confidence interior token, the CRF transition matrix leverages that semantic linkage to pull ambiguous boundary tokens into coherent spans.
+
+\subsubsection{Model Architecture}
+\label{subsubsec:task2_architecture}
+
+Coupling a pre-trained Transformer with a Linear-Chain CRF, \texttt{deberta-v3-xsmall} encodes input sequence $\mathbf{x} = (x_1, \dots, x_N)$ into representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$:
+\[
+\mathbf{H} = \text{DeBERTa}(\mathbf{x})
+\]
+
+A linear layer projects $\mathbf{H}$ to unnormalized emission logits $\mathbf{E} \in \mathbb{R}^{N \times 17}$:
+\[
+\mathbf{E}_i = \mathbf{W}_e \mathbf{H}_i + \mathbf{b}_e \quad (i \in \{1, \dots, N\})
+\]
+
+To eliminate local independence assumptions, $\mathbf{E}$ is passed to a Linear-Chain CRF with a trainable transition matrix $\mathbf{A} \in \mathbb{R}^{17 \times 17}$. Invalid paths, such as initiating spans on interior tags ($\text{O} \rightarrow \text{I-}k$) or mid-phrase technique switches ($\text{B-}k_1 \rightarrow \text{I-}k_2$), are masked with hard penalties ($-10000.0$).
+
+
+Sequence score $S(\mathbf{x}, \mathbf{y})$ sums emissions and transitions:
+\[
+S(\mathbf{x}, \mathbf{y}) = \sum_{i=1}^{N} \mathbf{E}_{i, y_i} + \sum_{i=1}^{N-1} \mathbf{A}_{y_i, y_{i+1}}
+\]
+Training minimizes the negative log-likelihood (NLL) of the gold path $\mathbf{y}^*$:
+\[
+\mathcal{L}_{\text{CRF}}(\theta) = -\log \left( \frac{\exp(S(\mathbf{x}, \mathbf{y}^*))}{\sum_{\mathbf{y}' \in \mathcal{Y}^{N}} \exp(S(\mathbf{x}, \mathbf{y}'))} \right)
+\]
+Inference uses Viterbi decoding to extract the optimal path $\hat{\mathbf{y}}$:
+\[
+\hat{\mathbf{y}} = \arg\max_{\mathbf{y}' \in \mathcal{Y}^{N}} S(\mathbf{x}, \mathbf{y}')
+\]
+
+\subsubsection{Hyperparameter Search \& Optimization Strategy}
+\label{subsubsec:task2_hyperparameters}
+
+To prevent gradient instability, the pipeline uses differential learning rates with AdamW. Co-training pre-trained DeBERTa alongside randomly initialized linear projection and CRF layers creates an optimization imbalance where standard CRF learning rates ($10^{-3}$) risk destroying encoder features, whereas typical transformer rates ($10^{-5}$) stall CRF convergence.
+
+A hyperparameter search across three configurations identified optimal bounds, with the conservative setup (Run 1) achieving the lowest loss (NLL = $3.7016$).
+
+This differential scheme preserves DeBERTa's representations for subtle rhetorical cues while enabling the CRF to rapidly learn structural transitions. Micro-batching ($B=16$) prevents loss saturation on background \texttt{O} tokens, while AdamW weight decay ($0.01$) and gradient clipping ($\le 1.0$) stabilize CRF optimization against heavy transition penalties. The production model was trained for 10 epochs under Run 1 parameters.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Hyperparameter Configurations for Task 2 (Variation 2)}
+  \label{tab:task2_hyperparameters}
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabularx}{\textwidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}c >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Parameter Configuration} & \makecell{\textbf{Transformer LR}\\\textbf{($\eta_{\text{base}}$)}} & \makecell{\textbf{Heads LR}\\\textbf{($\eta_{\text{head}}$)}} & \makecell{\textbf{Batch Size}\\\textbf{($B$)}} & \makecell{\textbf{Dev Loss}\\\textbf{(CRF NLL)}} \\
+    \midrule
+    \textbf{Run 1 (Conservative)} & \textbf{1e-5} & \textbf{5e-4} & \textbf{16} & \textbf{3.7016} \textit{(Selected)} \\
+    \addlinespace
+    \textbf{Run 2 (Moderate)}     & 2e-5          & 1e-3          & 16          & 4.0252 \\
+    \addlinespace
+    \textbf{Run 3 (Aggressive)}   & 5e-5          & 2e-3          & 32          & 4.2202 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
 
 
 
 
 
+% ====================================
+% VARIATION 1: DECOUPLED
+% ====================================
+\subsection{Architecture Variation 1: Decoupled, Two-Stage Tagger}
+\label{subsec:task2_variation1}
+
+Variation 1 adopts a modular pipeline that decouples propaganda detection into two specialized sub-networks:
+\begin{enumerate}[leftmargin=*, noitemsep]
+    \item \textbf{Stage 1 (Span Localization Tagger):} A 3-class sequence tagger trained exclusively to identify propagandistic boundaries within full-sentence context.
+    \item \textbf{Stage 2 (Technique Classifier Head):} An independent Multi-Layer Perceptron (MLP) that mean-pools subword embeddings from Stage 1's predicted spans and categorizes them into one of eight rhetorical techniques.
+\end{enumerate}
+\[
+\mathcal{Y}_3 = \{\text{O}, \text{B-Propaganda}, \text{I-Propaganda}\}
+\]
+
+Collapsing techniques into a 3-class target maximizes positive label density, enabling Stage 1 to learn robust generalized propaganda boundaries without fragmentation from rare sub-classes. Stage 2 then acts as a specialized domain expert, optimizing rhetorical features independently.
+
+\subsubsection{Model Architecture}
+\label{subsubsec:task2_var1_architecture}
+
+Stage 1 employs the same DeBERTa-CRF architecture but restricts emissions to $\mathbf{E} \in \mathbb{R}^{N \times 3}$ and transitions to $\mathbf{A} \in \mathbb{R}^{3 \times 3}$. When Stage 1 detects an active span, Stage 2 re-encodes the sentence into token representations $\mathbf{H} \in \mathbb{R}^{N \times 384}$, slices the sequence to predicted indices $[p_{\text{start}}, p_{\text{end}}]$, and isolates the target vectors. This slicing is done to intensify the core propaganda signal and strip away uninformative neutral text that has already been contextualized by DeBERTa's self-attention layers. The sliced embeddings are mean-pooled into a fixed 384-dimensional vector $\mathbf{h}_{\text{pooled}}$ and processed through a two-layer MLP classification head:
+\[
+\mathbf{z} = \text{Linear}_{64 \rightarrow 8}\Big(\text{Dropout}\Big(\text{LayerNorm}\Big(\text{ReLU}\Big(\text{Linear}_{384 \rightarrow 64}(\mathbf{h}_{\text{pooled}})\Big)\Big)\Big)\Big)
+\]
+
+The initial projection ($384 \rightarrow 64$) compresses dense noise, ReLU introduces non-linear decision boundaries, Layer Normalization stabilizes small-batch variance ($B=16$), and Dropout ($p=0.3$) prevents topic memorization. If no span is detected ($p_{\text{start}} = -1$), the pipeline defaults to neutral text, bypassing Stage 2.
 
 
+\subsubsection{Hyperparameter Search \& Optimization Strategy}
+\label{subsubsec:task2_var1_hyperparameters}
+
+\paragraph{Stage 2 Head Training \& Performance Ceiling}
+Stage 2 was trained on the gold-standard spans, abstracting it from any detection pipeline errors. Keeping DeBERTa frozen to retain linguistic baseline, the MLP head ($\theta_{\text{MLP}}$) was optimized with multi-class Cross-Entropy loss ($\mathcal{L}_{\text{CE}}$) using AdamW ($\text{LR} = 10^{-3}, B = 16$) over 10 epochs:
+\[
+\mathcal{L}_{\text{CE}}(\theta_{\text{MLP}}) = -\sum_{k=1}^{8} y_{k} \log \hat{y}_{k}
+\]
+
+The trained model established a performance ceiling of $0.5106$ Macro-$F_1$ ($0.5178$ Accuracy), benchmarking the maximum theoretical classification performance given $100\%$ spatial localization.
+
+\paragraph{Stage 1 Hyperparameter Grid Search}
+Stage 1 (Sequence Labeler) parameters ($\theta_{\text{S1}}$) were trained by minimizing negative log-likelihood ($\mathcal{L}_{\text{CRF}}$) over 3-class space $\mathcal{Y}_3$:
+\[
+\mathcal{L}_{\text{CRF}}(\theta_{\text{S1}}) = -\log \left( \frac{\exp(S(\mathbf{x}, \mathbf{y}^*))}{\sum_{\mathbf{y}' \in \mathcal{Y}_3^{N}} \exp(S(\mathbf{x}, \mathbf{y}'))} \right)
+\]
+
+A grid-search across learning rates evaluated Viterbi paths against ground-truth spans using length-adaptive $\delta$-tolerance routing. Trial 9 achieved top spatial performance ($0.3834$ Span-$F_1$).
+
+The final system couples both stages: Stage 1 extracts span bounds using Viterbi decoding under Trial 9 parameters (Table~\ref{tab:task2_var1_hyperparameters}), and Stage 2 classifies active spans into 8-way technique predictions.
+
+% ====================================
+% TASK 2 BASELINE
+% ====================================
+\subsection{Stochastic Random-Guessing Baseline}
+\label{subsec:task2_baseline}
+
+To establish a mathematical lower bound and confirm authentic rhetorical pattern learning, we implement a probabilistic baseline operating via a three-step stochastic sampling procedure:
+\begin{enumerate}[leftmargin=*, noitemsep]
+    \item A Bernoulli trial determines propaganda existence using the training set's positive label distribution $P$. Sentences flagged as clean return all \texttt{O} tags.
+    \item If propaganda is flagged, start and end indices $(i, j)$ are drawn uniformly at random:
+    \[
+    i \sim \text{Uniform}(1, N), \quad j \sim \text{Uniform}(i, N)
+    \]
+    \item A technique $k$ is drawn uniformly across the 8 categories:
+    \[
+    k \sim \text{Uniform}(1, 8)
+    \]
+\end{enumerate}
+
+This generates a triple $(1, [i, j], k)$, mapping tokens to BIO tags. For example, in a 5-token sequence where $(i=2, j=3, k=\text{\texttt{loaded\_language}})$, token $t_2$ maps to \texttt{B-loaded\_language}, $t_3$ to \texttt{I-loaded\_language}, and remaining tokens to \texttt{O}. Evaluated via our test suite, this establishes our benchmark performance floor.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Hyperparameter Configurations for Task 2, Variation 1 (Stage 1)}
+  \label{tab:task2_var1_hyperparameters}
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabularx}{\textwidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}c >{\centering\arraybackslash}c >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Trial} & \makecell{\textbf{Transformer LR}\\\textbf{($\eta_{\text{base}}$)}} & \makecell{\textbf{Heads LR}\\\textbf{($\eta_{\text{head}}$)}} & \makecell{\textbf{Span}\\\textbf{Precision}} & \makecell{\textbf{Span}\\\textbf{Recall}} & \makecell{\textbf{Standalone}\\\textbf{Span-$F_1$}} \\
+    \midrule
+    \textbf{Trial 1}          & 5e-6          & 3e-4          & 0.4327          & 0.2395          & 0.3083 \\
+    \addlinespace
+    \textbf{Trial 4}          & 1e-5          & 3e-4          & 0.4140          & 0.2492          & 0.3111 \\
+    \addlinespace
+    \textbf{Trial 6}          & 1e-5          & 1e-3          & 0.4415          & 0.2686          & 0.3340 \\
+    \addlinespace
+    \textbf{Trial 9 (Selected)} & \textbf{3e-5} & \textbf{1e-3} & \textbf{0.4924} & \textbf{0.3139} & \textbf{0.3834} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
 
 
+% ====================================
+% EVALUATION
+% ====================================
 
+\subsection{Evaluation Framework}
+\label{subsec:task2_evaluation}
 
+Evaluating propaganda sequence labeling requires balancing spatial boundary precision with technique classification. To establish an interpretable benchmark, our evaluation approach combines adaptive boundary routing, penalized error scoring, and a diagnostic audit.
 
+\subsubsection{Boundary Qualification Router}
+\label{subsubsec:boundary_router}
 
+To accommodate minor offsets without masking severe misalignment, predicted spans $(p_{\text{start}}, p_{\text{end}})$ are evaluated against gold spans $(g_{\text{start}}, g_{\text{end}})$ using a length-adaptive tolerance window ($\delta$). This mimics the lack of agreement observed among human annotators \cite{dasan2019}.
 
+Predictions passing the gate ($\vert p_{\text{start}} - g_{\text{start}} \vert \le \delta$ and $\vert p_{\text{end}} - g_{\text{end}} \vert \le \delta$) qualify for classification. Correct technique predictions yield a True Positive (TP), whereas incorrect techniques yield a misclassification. Spans failing $\delta$-tolerance receive a double penalty—scored simultaneously as a False Positive (hallucination) and a False Negative (omission).
 
+\begin{table}[htbp]
+  \centering
+  \caption{Length-Adaptive Boundary Tolerance ($\delta$) Rules Across Span Lengths}
+  \label{tab:boundary_tolerance}
+  \small
+  \setlength{\tabcolsep}{12pt}
+  \begin{tabularx}{0.65\textwidth}{l >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Span Length (Tokens)} & \textbf{Tolerance ($\delta$)} \\
+    \midrule
+    \textbf{$\le 5$} & $0$ tokens \\
+    \addlinespace
+    \textbf{$6\text{--}10$} & $\pm 1$ token \\
+    \addlinespace
+    \textbf{$11\text{--}15$} & $\pm 2$ tokens \\
+    \addlinespace
+    \textbf{$16\text{--}50$} & Step-wise scaling \\
+    \addlinespace
+    \textbf{$> 50$} & $\pm 10$ tokens \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
 
+\subsubsection{Primary Optimization Metric: Macro-Weighted F1}
+\label{subsubsec:task2_primary_metric}
 
+Continuing from Task 1 (Section~\ref{subsec:evaluation_framework}), terminal performance is evaluated using the standard Macro-$F_1$ score averaged across the eight active propaganda categories $\mathcal{T}$:
+\[
+\text{Macro-}F_1 = \frac{1}{\vert \mathcal{T} \vert} \sum_{k \in \mathcal{T}} \frac{2 \cdot P_k \cdot R_k}{P_k + R_k}
+\]
+
+Predicted spans must pass through the boundary router before technique evaluation; therefore, localization failures directly penalize $P_k$ and $R_k$. Consequently, higher Macro-$F_1$ scores inherently reflect superior boundary detection alongside accurate technique classification. Due to this joint dependency, Task 1 and Task 2 Macro-$F_1$ metrics are not directly comparable: Task 1's metric evaluates classification over fixed pre-delimited spans, whereas Task 2's measures end-to-end joint span detection and classification.
+
+\subsubsection{Diagnostic Error Analysis}
+\label{subsubsec:task2_diagnostic_error}
+
+To isolate detection errors from downstream misclassifications, a three-phase audit is conducted. First, sequence predictions (Stage 1) are categorised into True Negatives, Omissions, Hallucinations, Disqualified Near-Misses, or Qualified Spans to evaluate boundary isolation capabilities. Second, the near-miss analysis evaluates technique accuracy on the subset of predicted but disqualified spans to test whether misaligned predictions maintain rhetorical features. Finally, the ceiling gap analysis compares multi-class technique accuracy on qualified spans against the ceiling model, quantifying the exact performance degradation caused by boundary noise and embedding offsets.
+
+% ====================================
+% RESULTS
+% ====================================
+\subsection{Results}
+\label{subsec:task2_results}
+
+Empirical performance is presented across the stochastic random baseline, Variation 1 (Decoupled), and Variation 2 (Integrated). Evaluated on the test split ($N = 640$ sentences; $309$ positive instances) using our length-adaptive boundary routing ($\delta$), performance is reported across Macro Precision, Recall, and $F_1$.
+
+\subsubsection{Baseline Performance}
+\label{subsubsec:task2_baseline_results}
+
+A stochastic random-guessing baseline established the empirical lower bound, sampling span presence using a training prior ($52.19\%$) while drawing token bounds and techniques uniformly at random. The baseline achieved a Macro-$F_1$ of $0.0027$ (Precision: $0.0026$, Recall: $0.0028$). Out of $334$ active predictions across $640$ validation sentences, only $11$ spans satisfied $\delta$-tolerance routing, with zero correct technique assignments.
+
+This near-zero floor highlights the complexity of joint sequence tagging. In propaganda detection, arbitrary span extraction almost universally fails because manipulative phrases are tightly embedded within neutral syntactic prose. Thus, any non-trivial performance achieved directly reflects learned linguistic representations rather than stochastic spatial alignment.
+
+\subsubsection{Terminal Results}
+\label{subsubsec:task2_terminal_results}
+
+End-to-end evaluation demonstrates that Variation 2 (Integrated) outperforms Variation 1 (Decoupled) across all primary metrics. Variation 2 achieved a terminal Macro-$F_1$ of $0.2034$, exceeding Variation 1 ($0.1684$) by $3.5$ percentage points.
+
+The substantial advantage in Macro Precision ($0.2914$ vs.\ $0.2000$) reflects capacity to suppress false-positive hallucinations on background text. Jointly optimizing boundaries and techniques within a unified 17-state CRF allows interior technique signals (e.g., \texttt{I-loaded\_language}) to refine span edges, avoiding the single-point localization bottleneck that limits Variation 1. Furthermore, Variation 2 demonstrated a superior Macro Recall ($0.1698$ vs.\ $0.1500$). Given the sparsity of manipulative text relative to surrounding neutral text, this $1.98$ percentage point absolute gain enables the integrated tagger to discover $\sim 13\%$ more total propaganda targets ($40$ vs.\ $35$ targets across $640$ validation sentences).
+
+\begin{table}[htbp]
+  \centering
+  \caption{Task 2 End-to-End Evaluation Results}
+  \label{tab:task2_terminal_results}
+  \vspace{4pt}
+  \small
+  \setlength{\tabcolsep}{12pt}
+  \begin{tabularx}{0.85\textwidth}{l l l l}
+    \toprule
+    \textbf{Pipeline} & \textbf{M-Precision} & \textbf{M-Recall} & \textbf{M-$F_1$} \\
+    \midrule
+    \textbf{Random-Guessing Baseline} & 0.0026 & 0.0028 & 0.0027 \\
+    \addlinespace
+    \textbf{Variation 1 (Decoupled)} & 0.2000 & 0.1500 & 0.1684 \\
+    \addlinespace
+    \textbf{Variation 2 (Integrated)} & \textbf{0.2914} & \textbf{0.1698} & \textbf{0.2034} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsubsection{Class-Level Results}
+\label{subsubsec:task2_class_level_results}
+
+Per-class metrics reveal key trade-offs across propaganda techniques. Variation 2 achieves higher $F_1$ scores across five of eight categories, driven by sharp precision gains on classes like \texttt{name\_calling,labeling} ($0.50$ vs.\ $0.21$). Both architectures performed best on explicit, structural categories like \texttt{causal\_oversimplification} ($F_1 = 0.36$), where overt logical connectors (``because of'') form clear contextual anchors.
+
+Conversely, \texttt{flag\_waving} is the sole category where Variation 1 led ($F_1 = 0.32$ vs.\ $0.20$), as its generic 3-class tagger captures extended multi-word entity phrases without multi-class state fragmentation. Joint decoding yielded its most dramatic improvement on \texttt{exaggeration,minimisation}, boosting $F_1$ from $0.04$ to $0.19$ via a 7-fold recall surge ($0.03 \rightarrow 0.20$). Short, implicit triggers like \texttt{loaded\_language} ($F_1 \le 0.10$) remained difficult, as isolated emotive words frequently fail exact-match $\delta$-tolerance checks ($L \le 5$) when adjacent adverbs are slightly over-predicted.
+
+\subsubsection{Diagnostic Error Analysis}
+\label{subsubsec:task2_diagnostic_error_results}
+
+The performance gains of Variation 2 stem from span hallucination suppression ($12.7\%$ vs.\ $33.5\%$) and superior span qualification ($42.7\%$ vs.\ $32.0\%$). While both models filter background text effectively ($\sim 98\%$ True Negatives), Variation 1's Stage 1 boundary detector passes $111$ false spans downstream to trigger cascading false positives in the Stage 2 classifier.
+
+Filtering to router-disqualified spans reveals that Variation 1's Stage 2 and Variation 2 retain $42.3\%$ and $46.1\%$ technique accuracy, respectively, highlighting a limitation with the $\delta$-tolerance windows to locate core manipulative phrases. This proves models capture true semantic signals despite boundary drift, further highlighting the inter-annotator consensus problem \cite{dasan2019}.
+
+Finally, comparison against ceiling performance demonstrates that on qualified spans ($N=102$), Variation 2 achieves $0.5098$ accuracy, virtually eliminating the gap ($\Delta -0.0080$) to the $0.5178$ performance ceiling (Section~\ref{subsubsec:task2_var1_hyperparameters}). Conversely, Variation 1 exhibits a larger degradation gap ($\Delta -0.0330$). This confirms that when spatial boundaries are correctly resolved, joint sequence tagging captures propaganda semantics as effectively as an isolated gold-span classifier.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Task 2 Class-Level Results}
+  \label{tab:task2_class_level_results}
+  \vspace{4pt}
+  \scriptsize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabularx}{\textwidth}{X c c c c c c}
+    \toprule
+    \textbf{Technique} & \makecell{\textbf{Var 1}\\\textbf{Prec.}} & \makecell{\textbf{Var 1}\\\textbf{Rec.}} & \makecell{\textbf{Var 1}\\\textbf{$F_1$}} & \makecell{\textbf{Var 2}\\\textbf{Prec.}} & \makecell{\textbf{Var 2}\\\textbf{Rec.}} & \makecell{\textbf{Var 2}\\\textbf{$F_1$}} \\
+    \midrule
+    \texttt{flag\_waving} & 0.33 & 0.31 & \textbf{0.32} & 0.29 & 0.16 & 0.20 \\
+    \addlinespace
+    \texttt{appeal\_to\_fear\_prejudice} & 0.15 & 0.14 & 0.14 & \textbf{0.32} & \textbf{0.19} & \textbf{0.24} \\
+    \addlinespace
+    \texttt{causal\_oversimplification} & 0.39 & \textbf{0.34} & \textbf{0.36} & \textbf{0.42} & 0.31 & \textbf{0.36} \\
+    \addlinespace
+    \texttt{doubt} & 0.22 & 0.16 & 0.19 & \textbf{0.32} & \textbf{0.23} & \textbf{0.27} \\
+    \addlinespace
+    \texttt{loaded\_language} & 0.09 & 0.03 & 0.04 & \textbf{0.10} & \textbf{0.10} & \textbf{0.10} \\
+    \addlinespace
+    \texttt{name\_calling,labeling} & 0.21 & \textbf{0.15} & 0.17 & \textbf{0.50} & 0.12 & \textbf{0.19} \\
+    \addlinespace
+    \texttt{repetition} & 0.17 & \textbf{0.05} & \textbf{0.11} & \textbf{0.20} & \textbf{0.05} & 0.08 \\
+    \addlinespace
+    \texttt{exaggeration,minimisation} & 0.06 & 0.03 & 0.04 & \textbf{0.18} & \textbf{0.20} & \textbf{0.19} \\
+    \midrule
+    \textbf{Macro Average} & 0.20 & 0.15 & 0.17 & \textbf{0.29} & \textbf{0.17} & \textbf{0.20} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Detection Error Analysis}
+  \label{tab:detection_error_analysis}
+  \small
+  \setlength{\tabcolsep}{1pt}
+  \begin{tabularx}{\textwidth}{l >{\raggedright\arraybackslash}X >{\centering\arraybackslash}c >{\centering\arraybackslash}c}
+    \toprule
+    \textbf{Category} & \textbf{Routing Definition} & \makecell{\textbf{Variation 1}\\\textbf{(Decoupled)}} & \makecell{\textbf{Variation 2}\\\textbf{(Integrated)}} \\
+    \midrule
+    \textbf{True Negatives (TN)} & Correctly predicted (\texttt{O}) & 322/331 (97.3\%) & 325/331 (98.2\%) \\
+    \addlinespace
+    \textbf{Complete Omissions (FN)} & Entirely missed (predicted \texttt{O}) & 148/309 (47.9\%) & 122/309 (39.5\%) \\
+    \addlinespace
+    \textbf{Hallucinations (FP)} & Neutral tagged as propaganda & 111/331 (33.5\%) & 42/331 (12.7\%) \\
+    \addlinespace
+    \textbf{Disqualified Near-Misses} & Failed $\delta$ check & 62/309 (20.1\%) & 55/309 (17.8\%) \\
+    \addlinespace
+    \textbf{Qualified Spans} & Detected AND Qualifed & 99/309 (32.0\%) & 132/309 (42.7\%) \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Ceiling Performance Gap Summary}
+  \label{tab:ceiling_performance_gap}
+  \small
+  \setlength{\tabcolsep}{10pt}
+  \begin{tabularx}{0.85\textwidth}{l X X X}
+    \toprule
+    \textbf{Pipeline} & \textbf{Qualified} & \textbf{Accuracy} & \textbf{Ceiling ($\Delta$)} \\
+    \midrule
+    \textbf{Random Baseline} & 11 & 0.0000 & $-0.5178$ \\
+    \addlinespace
+    \textbf{Variation 2 (17-Class Joint)} & \textbf{102} & \textbf{0.5098} & \textbf{$-0.0080$} \\
+    \addlinespace
+    \textbf{Variation 1 (Decoupled)} & 99 & 0.4848 & $-0.0330$ \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ====================================
+% BIBLIOGRAPHY
+% ====================================
+\subsection{Conclusions, Limitations and Future Work}
+\label{subsec:task2_conclusions}
+
+This project evaluated joint propaganda span detection and technique classification, demonstrating that a joint tagger (Variation 2) outperforms a decoupled cascade (Variation 1) in terminal Macro-$F_1$ ($0.2034$ vs.\ $0.1684$). 
+
+The integrated CRF better leverages interior tokens as semantic anchors (``breadcrumbs'') to resolve ambiguous boundaries, suppressing false-positive hallucinations. Isolating qualified spans, Variation 2 achieved $0.5098$ accuracy, recovering $98.5\%$ of the $0.5178$ ceiling performance. Meanwhile, the random baseline ($0.0027$ Macro-$F_1$) confirmed any non-trivial result reflects genuine learning rather than chance.
+
+To retain Variation 1's modular control without cascading failure bottlenecks, future work should explore end-to-end differentiable fine-tuning. Pre-training the detector and classifier independently, then fine-tuning them jointly with full gradient propagation, allowing spatial localization to benefit directly from rich downstream semantic loss.
+
+Additionally, while evaluation utilized tolerant routing, training relied on strict exact-match loss. Adopting distance-weighted or soft-margin sequence losses would penalize near-miss boundaries proportionally rather than as total omissions.
+
+Finally, applying Unsupervised Domain-Adaptive Pre-Training (DAPT) on news corpora and scaling to \texttt{deberta-v3-large} would enhance background representations, improving recall on subtle, short-span techniques like \texttt{loaded\_language}.
 
 % ====================================
 % BIBLIOGRAPHY

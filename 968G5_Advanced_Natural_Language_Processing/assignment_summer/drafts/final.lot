@@ -1,6 +1,19 @@
-\contentsline {table}{\numberline {1}{\ignorespaces Propaganda Technique Taxonomy and Definitions \cite {dasan2020}}}{vii}{table.1}%
-\contentsline {table}{\numberline {2}{\ignorespaces Universal Pre-Processing Pipeline and Transformation Rationale}}{viii}{table.2}%
-\contentsline {table}{\numberline {3}{\ignorespaces Mapping Penn Treebank Tags to the Universal POS Tagset}}{xi}{table.3}%
-\contentsline {table}{\numberline {4}{\ignorespaces Compressed Named Entity Recognition (NER) Categories}}{xii}{table.4}%
-\contentsline {table}{\numberline {5}{\ignorespaces Custom Stopwords and Punctuation List}}{xiii}{table.5}%
-\contentsline {table}{\numberline {6}{\ignorespaces 17-Class BIO Tagset Mapping for Task 2 (Variation 2)}}{xiv}{table.6}%
+\contentsline {table}{\numberline {1}{\ignorespaces Bag-of-Words Input Dimensions Across Vocabulary Configurations}}{vii}{table.1}%
+\contentsline {table}{\numberline {2}{\ignorespaces Word2Vec Input Dimensions Across Experimental Configurations}}{ix}{table.2}%
+\contentsline {table}{\numberline {3}{\ignorespaces Task 1 MLP Head Hyperparameter Search Space and Optimal Values}}{x}{table.3}%
+\contentsline {table}{\numberline {4}{\ignorespaces Per-Class Diagnostic Evaluation Formulations}}{x}{table.4}%
+\contentsline {table}{\numberline {5}{\ignorespaces Task 1 Results}}{xi}{table.5}%
+\contentsline {table}{\numberline {6}{\ignorespaces Task 1 Class-Level Results for Experiment 1 (Gold, Full-Context)}}{xii}{table.6}%
+\contentsline {table}{\numberline {7}{\ignorespaces Hyperparameter Configurations for Task 2 (Variation 2)}}{xvi}{table.7}%
+\contentsline {table}{\numberline {8}{\ignorespaces Hyperparameter Configurations for Task 2, Variation 1 (Stage 1)}}{xviii}{table.8}%
+\contentsline {table}{\numberline {9}{\ignorespaces Length-Adaptive Boundary Tolerance ($\delta $) Rules Across Span Lengths}}{xix}{table.9}%
+\contentsline {table}{\numberline {10}{\ignorespaces Task 2 End-to-End Evaluation Results}}{xx}{table.10}%
+\contentsline {table}{\numberline {11}{\ignorespaces Task 2 Class-Level Results}}{xxi}{table.11}%
+\contentsline {table}{\numberline {12}{\ignorespaces Detection Error Analysis}}{xxi}{table.12}%
+\contentsline {table}{\numberline {13}{\ignorespaces Ceiling Performance Gap Summary}}{xxi}{table.13}%
+\contentsline {table}{\numberline {14}{\ignorespaces Propaganda Technique Taxonomy and Definitions \cite {dasan2020}}}{xxvi}{table.14}%
+\contentsline {table}{\numberline {15}{\ignorespaces Universal Pre-Processing Pipeline and Transformation Rationale}}{xxvii}{table.15}%
+\contentsline {table}{\numberline {16}{\ignorespaces Mapping Penn Treebank Tags to the Universal POS Tagset}}{xxx}{table.16}%
+\contentsline {table}{\numberline {17}{\ignorespaces Compressed Named Entity Recognition (NER) Categories}}{xxxi}{table.17}%
+\contentsline {table}{\numberline {18}{\ignorespaces Custom Stopwords and Punctuation List}}{xxxii}{table.18}%
+\contentsline {table}{\numberline {19}{\ignorespaces 17-Class BIO Tagset Mapping for Task 2 (Variation 2)}}{xxxiii}{table.19}%
