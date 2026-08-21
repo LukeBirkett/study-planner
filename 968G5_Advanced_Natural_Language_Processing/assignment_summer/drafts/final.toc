@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}Introduction}{iii}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Problem Outline}{iii}{subsection.1.1}%
+\contentsline {section}{\numberline {A}Propaganda Technique Definitions}{vii}{appendix.A}%
+\contentsline {section}{\numberline {B}Universal Text Pre-processing Steps}{viii}{appendix.B}%
+\contentsline {section}{\numberline {C}Silver Data, Llama-3 Zero-Shot Chain-of-Thought Augmentation Prompt Architecture}{ix}{appendix.C}%
+\contentsline {subsection}{\numberline {C.1}Stage 1: Lexical Brainstorming and Reformulation}{ix}{subsection.C.1}%
+\contentsline {subsection}{\numberline {C.2}Stage 2: Contextual Validation and Coherence Check}{ix}{subsection.C.2}%
+\contentsline {subsection}{\numberline {C.3}Stage 3: Synthesis and Formatting Enforcement}{x}{subsection.C.3}%
+\contentsline {section}{\numberline {D}Mapped Universal POS Tagset}{xi}{appendix.D}%
+\contentsline {section}{\numberline {E}Simplified NER Tagset}{xii}{appendix.E}%
+\contentsline {section}{\numberline {F}Custom Stopword List}{xiii}{appendix.F}%
+\contentsline {paragraph}{Filter Summary:}{xiii}{section*.5}%
+\contentsline {section}{\numberline {G}Complete 17-Class BIO Tagset Mapping (Variation 2)}{xiv}{appendix.G}%

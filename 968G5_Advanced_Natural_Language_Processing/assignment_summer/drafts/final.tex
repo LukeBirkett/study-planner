@@ -1,0 +1,474 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- Essential Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}     % Standard 1-inch margins
+\usepackage{amsmath, amssymb}         % Math formatting
+\usepackage{booktabs}                 % Professional tables
+\usepackage{hyperref}                 % Interactive links and bookmarks
+\usepackage{xcolor}                   % Enables color commands and standard color names
+\usepackage{booktabs}                 % Professional tables
+\usepackage{tabularx}                 % Enables tabularx environment and X columns (FIXES ERROR)
+\usepackage{array}                    % Advanced table array handling
+\usepackage{mdframed} % Creates clean bordered boxes for prompt blocks
+\usepackage{enumitem} % Advanced list formatting
+
+% --- Hyperlink Formatting ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
+\begin{document}
+
+% ==============================================================================
+% COVER PAGE
+% ==============================================================================
+\begin{titlepage}
+    \centering
+    \vspace*{0.5cm}
+    
+    % Course Title
+    {\Large \textbf{Advanced Natural Language Processing (968G5)}}\\[0.3cm]
+    {\large \textbf{Propaganda Detection Assessed Coursework}}\\[0.1cm]
+    
+    % Author & Candidate Info
+    \begin{tabular}{r l}
+        \textbf{Author:} & Luke Birkett \\
+        \textbf{Candidate ID:} & 22411525 \\
+        \textbf{Word Count:} & 4,679* \\
+    \end{tabular}\\[0.5cm]
+    
+    % Abstract Section
+    \begin{minipage}{0.92\textwidth}
+        \small
+        \textbf{\abstractname}\\[0.3em]
+        This report investigates automated propaganda detection across two core challenges: classifying isolated persuasive snippets (Task 1) and jointly identifying manipulative span boundaries and rhetorical techniques within raw text (Task 2). Using a subset of the Propaganda Techniques Corpus (Da San Martino et al., 2020) augmented using zero-shot Chain-of-Thought prompting with \texttt{Llama\_3\_8B}, we evaluate static feature spaces and modernized neural sequence models. For Task 1, sparse Bag-of-Words models ($\text{Macro-}F_1 = 0.3200$) outperform dense Word2Vec embeddings ($\text{Macro-}F_1 = 0.2927$), proving discrete lexical triggers are superior to continuous vector averages for isolating emotive language. For Task 2, an integrated 17-class DeBERTa-CRF tagger outperforms a decoupled two-stage pipeline ($\text{Macro-}F_1 = 0.2034$ vs. $0.1684$). Global CRF transition decoding leverages interior technique tokens as semantic anchors to resolve ambiguous span edges, suppressing false-positive hallucinations by 20.8 percentage points and recovering 98.5\% of the theoretical gold-span classification ceiling.
+    \end{minipage}\\[1cm]
+    
+    % AI Usage Statement Section
+    \begin{minipage}{0.92\textwidth}
+        \small
+        \textbf{AI Usage Statement}\\[0.3em]
+        In accordance with university guidelines, generative AI tools---specifically Gemini---were used strictly in an assistive role throughout the preparation of this report. AI was deployed as a refining and coding partner to improve report readability through spell-checking, grammar refinement, and copywriting iteration. It was also utilized to convert technical functions and explanations into \LaTeX{} equations and to generate inline code comments. AI was not used to generate any original content. AI was not used derive insights or analyse results. All methodologies, analysis, conclusions, and interpretations represent my own independent work based on learning from this module. All AI-assisted text and code were carefully reviewed, edited, and approved prior to submission, and I take full responsibility for all submitted material.
+    \end{minipage}
+
+    \vfill
+    
+    % Footnote on Word Count Methodology
+    \begin{minipage}{0.92\textwidth}
+        \tiny
+        \color{gray}
+        * \textit{Word Count Note:} The word count of 4,679 words was calculated prior to \LaTeX{} formatting. It excludes the abstract, section headings, formulas/equations, tables, figures, bibliography, appendix, and cover-page text prior to Section 1 (this page).
+    \end{minipage}
+    
+\end{titlepage}
+
+% ==============================================================================
+% FRONT MATTER: CONTENTS & LISTS
+% ==============================================================================
+\newpage
+\pagenumbering{roman} % Uses roman numerals (i, ii, iii...) for front matter
+
+% 1. Table of Contents
+\tableofcontents
+\newpage
+
+% 2. List of Tables (Optional but recommended for reports with many tables)
+\listoftables
+\vspace{1cm}
+
+% 3. List of Figures (Optional)
+\listoffigures
+\newpage
+
+
+
+
+% ==============================================================================
+% START OF REPORT
+% ==============================================================================
+
+\section{Introduction}
+Propaganda is the deliberate, systematic attempt to shape perceptions, manipulate cognitions, and direct behavior to achieve a response that furthers the desired intent of the propagandist \cite{jowett2018}. It involves managing collective attitudes by manipulating significant symbols \cite{lasswell1927} and using rhetorical devices to bypass rational analysis rather than relying on outright falsehoods. 
+
+Given the velocity and volume of modern digital information, automated detection mechanisms are increasingly vital for maintaining the integrity of online discourse. This report explores automatically identifying propaganda through two core challenges: classifying known propagandistic snippets (Task 1) and jointly identifying manipulative spans and techniques within raw text (Task 2).
+
+\subsection{Problem Outline}
+Automating detection is challenging because the boundary between legitimate persuasion and manipulative rhetoric is highly subjective \cite{dasan2019}. Historical models classified entire documents \cite{rashkin2017}, but modern moderation requires detecting localized, nuanced rhetorical shifts. Problematically, such detection must overcome significant structural irregularity as propagandists often sacrifice grammatical purity for rhetorical impact, relying on non-compositional multi-word expressions \cite{sag2002} and domain-specific terms that present severe out-of-vocabulary challenges for traditional NLP.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% ====================================
+% BIBLIOGRAPHY
+% ====================================
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{baroni2014} Baroni, M., Dinu, G. and Kruszewski, G. (2014) \textit{Don't count, predict! A systematic comparison of context-counting vs. context-predicting semantic vectors}. Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), Baltimore, Maryland, June, pp. 238–247.
+
+\bibitem{brown2020} Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J. D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A. and Agarwal, S. (2020) \textit{Language models are few-shot learners}. Advances in Neural Information Processing Systems, 33, pp. 1877–1901.
+
+\bibitem{dasan2019} Da San Martino, G., Yu, S., Barrón-Cedeño, A., Petrov, R. and Nakov, P. (2019) \textit{Fine-grained analysis of propaganda in news article}. In Proceedings of the 2019 conference on empirical methods in natural language processing and the 9th international joint conference on natural language processing (EMNLP-IJCNLP) (pp. 5636-5646).
+
+\bibitem{dasan2020} Da San Martino, G., Barrón-Cedeño, A., Da San Martino, C., Petrov, R. and Nakov, P. (2020) \textit{SemEval-2020 Task 11: Detection of propaganda techniques in news articles}. In Proceedings of the fourteenth workshop on semantic evaluation (pp. 1377-1414).
+
+\bibitem{devlin2019} Devlin, J., Chang, M.-W., Lee, K. and Toutanova, K. (2019) \textit{BERT: Pre-training of deep bidirectional transformers for language understanding}. In Proceedings of the 2019 conference of the North American chapter of the association for computational linguistics: human language technologies, volume 1 (long and short papers) (pp. 4171-4186).
+
+\bibitem{harris1954} Harris, Z. S. (1954) \textit{Distributional structure}.  Word, 10(2-3), pp. 146–162.
+
+\bibitem{hobbs2014} Hobbs, R. and McGee, S. (2014) \textit{Teaching about propaganda: An examination of historical and contemporary media}. Journal of Media Literacy Education, 6(2), pp.56-66.
+
+\bibitem{hochreiter1997} Hochreiter, S. and Schmidhuber, J. (1997) \textit{Long short-term memory}. Neural Computation, 9(8), pp. 1735–1780.
+
+\bibitem{hornik1989} Hornik, K., Stinchcombe, M. and White, H. (1989) 'Multilayer feedforward networks are universal approximators', \textit{Neural Networks}, 2(5), pp. 359–366.
+
+\bibitem{jowett2012} Jowett, G. S. and O'Donnell, V. (2012) \textit{Propaganda and Persuasion}. 5th edn. Thousand Oaks: SAGE Publications.
+
+\bibitem{jowett2018} Jowett, G. S. and O'Donnell, V. (2018) \textit{Propaganda and Persuasion}. 7th edn. Thousand Oaks: SAGE Publications.
+
+\bibitem{khosla2020} Khosla, S., Joshi, R., Dutt, R., Black, A.W. and Tsvetkov, Y. (2020) \textit{LTIatCMU at SemEval-2020 Task 11: Incorporating multi-level features for multi-granular propaganda span identification}. In Proceedings of the Fourteenth Workshop on Semantic Evaluation (pp. 1756-1763).
+
+\bibitem{kojima2022} Kojima, T., Gu, S. S., Reid, M., Matsuo, Y. and Iwasawa, Y. (2022) \textit{Large language models are zero-shot reasoners}. Advances in Neural Information Processing Systems, 35, pp. 22199–22213.
+
+\bibitem{kranzlein2020} Kranzlein, M., Seeber, M. and Nickel, F. (2020) \textit{Team DoNotDistribute at SemEval-2020 Task11: Features, finetuning, and data augmentation in neural models for propaganda detection in news articles}. Proceedings of the Fourteenth Workshop on Semantic Evaluation (SemEval-2020), Barcelona, Spain, December, pp. 1045–1052.
+
+\bibitem{lasswell1927} Lasswell, H. D. (1927) \textit{Propaganda Technique in the World War}.  (Doctoral dissertation, The University of Chicago).
+
+\bibitem{levy2014} Levy, O. and Goldberg, Y. (2014) \textit{Neural word embedding as implicit matrix factorization}. Advances in neural information processing systems, 27.
+
+\bibitem{ma2016} Ma, X. and Hovy, E. (2016) \textit{End-to-end sequence labeling via bi-directional LSTM-CNNs-CRF}. In Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) (pp. 1064-1074).
+
+\bibitem{miklov2013} Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S. and Dean, J. (2013) \textit{Distributed representations of words and phrases and their compositionality}. Advances in neural information processing systems, 26.
+
+\bibitem{miller1939} Miller, C. R. (1939) \textit{The Techniques of Propaganda. From “How to Detect and Analyze Propaganda”}. an address given at Town Hall. The Center for learning.
+
+\bibitem{miller1995} Miller, G. A. (1995) \textit{WordNet: A lexical database for English}. Communications of the ACM, 38(11), pp. 39–41.
+
+\bibitem{pedersen2010} Pedersen, T. (2010) \textit{Information content measures of semantic similarity perform better without sense-tagged text}. In Human Language Technologies: The 2010 Annual Conference of the North American Chapter of the Association for Computational Linguistics (pp. 329-332).
+
+\bibitem{peters2018} Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K. and Zettlemoyer, L. (2018) \textit{Dissecting contextual word embeddings: Architecture and representation}. In Proceedings of the 2018 conference on empirical methods in natural language processing (pp. 1499-1509).
+
+\bibitem{raffel2020} Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., Zhou, Y., Li, W. and Liu, P. J. (2020) \textit{Exploring the limits of transfer learning with a unified text-to-text transformer}. Journal of Machine Learning Research, 21(140), pp. 1–67.
+
+\bibitem{rashkin2017} Rashkin, H., Choi, E., Jang, J. Y., Volova, S. and Choi, Y. (2017) \textit{Truth of the varying shades: Analyzing language in fake news and political fact-checking}. In Proceedings of the 2017 conference on empirical methods in natural language processing (pp. 2931-2937).
+
+\bibitem{sag2002} Sag, I. A., Baldwin, T., Bond, F., Copestake, A. and Flickinger, D. (2002) \textit{Multiword expressions: A pain in the neck for NLP}. In International conference on intelligent text processing and computational linguistics (pp. 1-15). Berlin, Heidelberg: Springer Berlin Heidelberg.
+
+\bibitem{torok2015} Torok, R. (2015) \textit{Symbiotic radicalisation strategies: Propaganda tools and neuro linguistic programming}. In Proceedings of the Australian Security and Intelligence Conference, pages 58–65, Perth, Australia.
+
+\bibitem{vaswani2017} Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł. and Polosukhin, I. (2017) \textit{Attention is all you need}. Advances in Neural Information Processing Systems, 30, pp. 5998–6008.
+
+\bibitem{wei2022} Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, Z., Chi, E., Le, Q. V. and Zhou, D. (2022) \textit{Chain-of-thought prompting elicits reasoning in large language models}. Advances in Neural Information Processing Systems, 35, pp. 24824–24837.
+
+\bibitem{weston2000} Weston, A. (2000) \textit{A Rulebook for Arguments}. 3rd edn. Indianapolis: Hackett Publishing.
+
+\end{thebibliography}
+
+% ====================================
+% APPENDIX
+% ====================================
+\newpage
+\appendix
+
+
+% APPENDIX A
+\section{Propaganda Technique Definitions}
+\label{app:taxonomy}
+
+Table~\ref{tab:propaganda_taxonomy} outlines the fine-grained propaganda technique taxonomy and definitions established by \cite{dasan2020}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Propaganda Technique Taxonomy and Definitions \cite{dasan2020}}
+  \label{tab:propaganda_taxonomy}
+  \small
+  \begin{tabularx}{\textwidth}{l X}
+    \toprule
+    \textbf{Label} & \textbf{Definition} \\
+    \midrule
+    \texttt{flag\_waving} & Playing on strong national feeling (or with respect to any group, e.g., race, gender, political preference) to justify or promote an action or idea \cite{hobbs2014}. \\
+    \addlinespace
+    \texttt{appeal\_to\_fear\_prejudice} & Seeking to build support for an idea by instilling anxiety and/or panic in the population towards an alternative, possibly based on preconceived judgments. \\
+    \addlinespace
+    \texttt{causal\_simplification} & Assuming a single cause or reason when there are multiple causes behind an issue. Includes scapegoating, i.e., transferring blame to one person or group without investigating the issue's complexities. \\
+    \addlinespace
+    \texttt{doubt} & Questioning the credibility of someone or something. \\
+    \addlinespace
+    \texttt{exaggeration,minimisation} & Either representing something in an excessive manner (making things larger, better, worse) or making something seem less important or smaller than it actually is \cite{jowett2012}. \\
+    \addlinespace
+    \texttt{loaded\_language} & Using specific words and phrases with strong emotional implications (either positive or negative) to influence an audience \cite{weston2000}. \\
+    \addlinespace
+    \texttt{name\_calling,labeling} & Labeling the object of the propaganda campaign as something the target audience fears, hates, finds undesirable, or praises \cite{miller1939}. \\
+    \addlinespace
+    \texttt{repetition} & Repeating the same message repeatedly so that the audience will eventually accept it \cite{miller1939, torok2015}. \\
+    \addlinespace
+    \texttt{not\_propaganda} & No propaganda identified in the snippet. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+
+% APPENDIX B
+\newpage
+\section{Universal Text Pre-processing Steps}
+\label{app:preprocessing}
+
+The following pipeline steps clean raw TSV sequences to standardize token boundaries and remove digital parsing artifacts prior to model tokenization.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Universal Pre-Processing Pipeline and Transformation Rationale}
+  \label{tab:preprocessing_pipeline}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}l X l}
+    \toprule
+    Step & Target & Transformation \\
+    \midrule
+    Whitespace Normalization & Leading/trailing \& inline whitespace & \texttt{text.strip()}, \texttt{.split()} join \\
+    \addlinespace
+    Escape Syntax Cleanup & Python string escapes (\texttt{\textbackslash'}, \texttt{\textbackslash"}) & Stripped backslashes \\ % <-- ADDED & Stripped backslashes
+    \addlinespace
+    Quote Normalization & Curved / Smart quotes (“,”, ‘, ’) & Converted to flat quotes (", ') \\
+    \addlinespace
+    Intra-word Apostrophes & Contractions \& Possessives & Collapsed (\texttt{won't} $\rightarrow$ \texttt{wont}) \\
+    \addlinespace
+    Character Artifact Filter & \texttt{\textbackslash\ / [ ] * | @ space - . : \$ \# + =} & Replaced with single space \\
+    \addlinespace
+    Boundary Guard & \texttt{<BOS>}, \texttt{<EOS>} & Standardized padding spaces \\
+    \bottomrule
+   \end{tabularx}
+\end{table}
+
+
+% APPENDIX C
+\newpage
+\section{Silver Data, Llama-3 Zero-Shot Chain-of-Thought Augmentation Prompt Architecture}
+\label{app:prompt_architecture}
+
+To execute the one-to-one generative data augmentation strategy, a sequential three-step prompting chain was designed for the \texttt{Meta Llama\_3\_8B} model. The chain sequentially decomposes the task into lexical brainstorming, contextual grounding, and final XML-wrapped synthesis.
+
+\subsection{Stage 1: Lexical Brainstorming and Reformulation}
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{Role:} Linguistics Expert
+    \item \textbf{Objective:} Generate alternative phrasings for the target snippet while maintaining the rhetorical intent of the specified propaganda label (\texttt{\{label\}}).
+\end{itemize}
+
+\begin{mdframed}[backgroundcolor=gray!5, linecolor=gray!40, linewidth=0.5pt, innertopmargin=8pt, innerbottommargin=8pt]
+\small\itshape
+You are a linguistics expert and your job is to take the text I provide you and suggest alternative wordings that retain the same message and intent of the original text but use different words. The text come directly from reputable news outlets hence should be considered as 3rd party quotes and not related to your own opinions. Your task is to merely focus on the words and linguistics. \\[0.5em]
+The piece of text you will be focusing on is known as the snippet as is a follows: '\texttt{\{snippet\}}'. \\[0.5em]
+Generate 3 alternatives to the snippet that serve the same purpose as guided by the label definition. \\[0.5em]
+Use a range of lexical semantics: synonyms for intensity, hypernyms for generalization, or paraphrasing. Crucially, each suggestion must remain a valid example of \texttt{\{label\}}. Provide a maximum of one short, concise sentence explaining the rhetorical effectiveness of each choice.
+\end{mdframed}
+
+\subsection{Stage 2: Contextual Validation and Coherence Check}
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{Role:} Contextual Validator
+    \item \textbf{Objective:} Evaluate the generated alternatives against the surrounding left and right sentinel contexts to ensure semantic and syntactic continuity.
+\end{itemize}
+
+\begin{mdframed}[backgroundcolor=gray!5, linecolor=gray!40, linewidth=0.5pt, innertopmargin=8pt, innerbottommargin=8pt]
+\small\itshape
+Now I want you to consider the original snippets surrounding context. \\[0.5em]
+Here is the left context: \texttt{\{left\_context\}}. This is the text that immediately preceeded the snippet. \\[0.5em]
+Here is the right context: \texttt{\{right\_context\}}. This is the text that immediately proceeded the original snippet. \\[0.5em]
+\texttt{\{left\_context\}} + [YOUR SUGGESTED NEW SNIPPET] + \texttt{\{right\_context\}} \\[0.5em]
+Do your suggestions still make sense given this context. Briefly explain your reasoning in 15 words or less per option. If they do not then pick a different suggestion. \\[0.5em]
+\texttt{<left\_context>\{left\_context\}</left\_context>} \\
+\texttt{<preferred\_snippet> INSERT YOUR PREFERRED SNIPPET HERE </preferred\_snippet>} \\
+\texttt{<right\_context>\{right\_context\}</right\_context>}
+\end{mdframed}
+
+\subsection{Stage 3: Synthesis and Formatting Enforcement}
+\begin{itemize}[leftmargin=*, noitemsep]
+    \item \textbf{Role:} Final Selector \& Synthesizer
+    \item \textbf{Objective:} Select the optimal variant, verify grammatical correctness, and enforce strict XML tag wrapping for automated parsing.
+\end{itemize}
+
+\begin{mdframed}[backgroundcolor=gray!5, linecolor=gray!40, linewidth=0.5pt, innertopmargin=8pt, innerbottommargin=8pt]
+\small\itshape
+Based on your previous reasoning, select the single best replacement for the original snippet. \\
+The replacement must be:
+\begin{enumerate}[leftmargin=1.5em, noitemsep]
+    \item Rhetorically powerful (\texttt{\{label\}})
+    \item Grammatically perfect within the context.
+    \item Distinct from the original.
+\end{enumerate}
+Remember, the new snippet is to be placed between the original left context and right context. \\[0.5em]
+OUTPUT INSTRUCTIONS: \\
+You must wrap your final snippet decision in tags: \texttt{<final\_output> </final\_output>}. Do not provide any conversational filler or meta-commentary after the tags. If you believe you cannot reasonably complete this task please return "-999" between the tags. \\[0.5em]
+[FINAL OUTPUT FORMAT]: \\
+\texttt{<final\_output> INSERT SNIPPET HERE </final\_output>} \\[0.5em]
+STOP: Do not write anything else after the closing tag.
+\end{mdframed}
+
+
+% APPENDIX D
+\newpage
+\section{Mapped Universal POS Tagset}
+\label{app:pos_mapping}
+
+The 36 fine-grained Penn Treebank tags emitted by NLTK's \texttt{averaged\_perceptron\_tagger} are mapped down to the 12 Universal POS categories in Table~\ref{tab:pos_mapping} to streamline POS feature representation in Task 1.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Mapping Penn Treebank Tags to the Universal POS Tagset}
+  \label{tab:pos_mapping}
+  \small
+  \begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{2.8cm} X X}
+    \toprule
+    \textbf{Universal POS Tag} & \textbf{Description} & \textbf{Mapped Penn Treebank Tags (NLTK)} \\
+    \midrule
+    \texttt{ADJ}  & Adjectives & \texttt{JJ}, \texttt{JJR}, \texttt{JJS} \\
+    \addlinespace
+    \texttt{ADP}  & Adpositions (Prepositions / Postpositions) & \texttt{IN}, \texttt{TO} \\
+    \addlinespace
+    \texttt{ADV}  & Adverbs & \texttt{RB}, \texttt{RBR}, \texttt{RBS}, \texttt{WRB} \\
+    \addlinespace
+    \texttt{CONJ} & Conjunctions & \texttt{CC} \\
+    \addlinespace
+    \texttt{DET}  & Determiners / Articles & \texttt{DT}, \texttt{PDT}, \texttt{WDT} \\
+    \addlinespace
+    \texttt{NOUN} & Nouns & \texttt{NN}, \texttt{NNS}, \texttt{NNP}, \texttt{NNPS} \\
+    \addlinespace
+    \texttt{NUM}  & Numerals & \texttt{CD} \\
+    \addlinespace
+    \texttt{PRON} & Pronouns & \texttt{PRP}, \texttt{PRP\$}, \texttt{WP}, \texttt{WP\$} \\
+    \addlinespace
+    \texttt{PRT}  & Particles / Functional Markers & \texttt{POS}, \texttt{RP} \\
+    \addlinespace
+    \texttt{VERB} & Verbs & \texttt{VB}, \texttt{VBD}, \texttt{VBG}, \texttt{VBN}, \texttt{VBP}, \texttt{VBZ}, \texttt{MD} \\
+    \addlinespace
+    \texttt{.}    & Punctuation Marks & \texttt{.}\,, \texttt{,}\,, \texttt{:}\,, \texttt{(}\,, \texttt{)}\,, \texttt{"}\,, \texttt{'}\,, \texttt{`} \\
+    \addlinespace
+    \texttt{X}    & Unknown / Other / Symbols & \texttt{FW}, \texttt{SYM}, \texttt{LS}, \texttt{UH} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+
+% APPENDIX E
+\newpage
+\section{Simplified NER Tagset}
+\label{app:ner_mapping}
+
+SpaCy's default 18-class entity space was compressed into 9 core categories by collapsing low-frequency entity classes (e.g., \texttt{LAW}, \texttt{FAC}, \texttt{PERCENT}) into a generic \texttt{MISC} slot to prevent vector sparsity in Task 1.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Compressed Named Entity Recognition (NER) Categories}
+  \label{tab:ner_mapping}
+  \small
+  \begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{3.2cm} X}
+    \toprule
+    \textbf{Tag} & \textbf{Entity Category} \\
+    \midrule
+    \texttt{PERSON} & People, including fictional characters \\
+    \addlinespace
+    \texttt{ORG} & Companies, agencies, institutions \\
+    \addlinespace
+    \texttt{GPE} & Countries, cities, states \\
+    \addlinespace
+    \texttt{NORP} & Nationalities, religious/political groups \\
+    \addlinespace
+    \texttt{DATE} / \texttt{TIME} & Absolute or relative dates/times \\
+    \addlinespace
+    \texttt{CARDINAL} / \texttt{ORDINAL} & Numbers / Numerals \\
+    \addlinespace
+    \texttt{LOC} & Non-GPE locations (mountain ranges, bodies of water) \\
+    \addlinespace
+    \texttt{O} & Outside any named entity \\
+    \addlinespace
+    \texttt{MISC} & \texttt{MONEY}, \texttt{EVENT}, \texttt{PERCENT}, \texttt{WORK\_OF\_ART}, \texttt{FAC}, \texttt{LAW}, \texttt{PRODUCT}, \texttt{LANGUAGE}, \texttt{QUANTITY} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+
+% APPENDIX F
+\newpage
+\section{Custom Stopword List}
+\label{app:stopwords}
+
+The custom stopword filter consists of the 8 high-frequency connective terms and punctuation tokens detailed in Table~\ref{tab:stopwords}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Custom Stopwords and Punctuation List}
+  \label{tab:stopwords}
+  \small
+  \begin{tabularx}{\textwidth}{c X}
+    \toprule
+    \textbf{Category} & \textbf{Filtered Tokens} \\
+    \midrule
+    \textbf{Custom Stopwords} & \texttt{"the"}, \texttt{","}, \texttt{"to"}, \texttt{"of"}, \texttt{"and"}, \texttt{"in"}, \texttt{"a"}, \texttt{"that"} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\paragraph{Filter Summary:}
+The full set of filtered tokens includes:
+\begin{itemize}
+    \item \textbf{Lexical Stopwords:} \texttt{the}, \texttt{to}, \texttt{of}, \texttt{and}, \texttt{in}, \texttt{a}, \texttt{that}
+    \item \textbf{Punctuation Tokens:} \texttt{,} (comma)
+\end{itemize}
+
+
+% APPENDIX G
+\newpage
+\section{Complete 17-Class BIO Tagset Mapping (Variation 2)}
+\label{app:bio_tagset}
+
+In Task 2 Variation 2, joint span boundary detection and technique classification are operationalized across a 17-state expanded BIO schema combining prefix states with technique sub-labels, as detailed in Table~\ref{tab:bio_tagset}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{17-Class BIO Tagset Mapping for Task 2 (Variation 2)}
+  \label{tab:bio_tagset}
+  \scriptsize                      % 1. Reduces font size slightly below \small
+  \setlength{\tabcolsep}{3pt}      % 2. Reduces horizontal padding between columns
+  \begin{tabularx}{\textwidth}{l X X c}
+    \toprule
+    \textbf{Propaganda Technique Label} & \textbf{Beginning Tag (\texttt{B-})} & \textbf{Inside Tag (\texttt{I-})} & \textbf{Outside Tag} \\
+    \midrule
+    \texttt{flag\_waving} & \texttt{B-flag\_waving} & \texttt{I-flag\_waving} & \texttt{O} \\
+    \addlinespace
+    \texttt{appeal\_to\_fear\_prejudice} & \texttt{B-appeal\_to\_fear\_prejudice} & \texttt{I-appeal\_to\_fear\_prejudice} & \texttt{O} \\
+    \addlinespace
+    \texttt{causal\_oversimplification} & \texttt{B-causal\_oversimplification} & \texttt{I-causal\_oversimplification} & \texttt{O} \\
+    \addlinespace
+    \texttt{doubt} & \texttt{B-doubt} & \texttt{I-doubt} & \texttt{O} \\
+    \addlinespace
+    \texttt{exaggeration,minimisation} & \texttt{B-exaggeration,minimisation} & \texttt{I-exaggeration,minimisation} & \texttt{O} \\
+    \addlinespace
+    \texttt{loaded\_language} & \texttt{B-loaded\_language} & \texttt{I-loaded\_language} & \texttt{O} \\
+    \addlinespace
+    \texttt{name\_calling,labeling} & \texttt{B-name\_calling,labeling} & \texttt{I-name\_calling,labeling} & \texttt{O} \\
+    \addlinespace
+    \texttt{repetition} & \texttt{B-repetition} & \texttt{I-repetition} & \texttt{O} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+
+\end{document}
