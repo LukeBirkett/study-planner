@@ -6,6 +6,17 @@ Utility functions for data processing, network analysis, and viz.
 """
 
 # -----------------------------------------------------------------------------
+# FILE STRUCTURE
+# 1. IMPORTS
+# 2. CONSTANTS & CONFIGURATION
+# 3. STATSBOMB CALLS
+# 4. DATA PROCESSING & TRANSFORMATIONS
+# 5. NETWORK & GRAPH ANALYSIS
+# 6. PLOTTING & VISUALIZATION UTILITIES
+# -----------------------------------------------------------------------------
+
+
+# -----------------------------------------------------------------------------
 # 1. IMPORTS
 # -----------------------------------------------------------------------------
 # Standard library imports
@@ -25,11 +36,15 @@ from statsbombpy import sb
 from statsbombpy.api_client import NoAuthWarning
 
 
+
 # -----------------------------------------------------------------------------
 # 2. CONSTANTS & CONFIGURATION
 # -----------------------------------------------------------------------------
 PITCH_LENGTH = 120.0
 PITCH_WIDTH = 80.0
+FIG_SIZE = (6.5, 9.0)
+
+
 
 
 # -----------------------------------------------------------------------------
@@ -140,8 +155,11 @@ def extract_successful_passes(events_df: pd.DataFrame, team_name: str) -> pd.Dat
 
 
 
+
+
+
 # -----------------------------------------------------------------------------
-# 3. DATA PROCESSING & TRANSFORMATIONS
+# 4. DATA PROCESSING & TRANSFORMATIONS
 # -----------------------------------------------------------------------------
 
 def scale_coord(val, axis='x'):
@@ -238,8 +256,12 @@ def extract_top11_pass_events(events_df: pd.DataFrame, team_name: str, top_11_id
 
 
 
+
+
+
+
 # -----------------------------------------------------------------------------
-# 4. NETWORK & GRAPH ANALYSIS
+# 5. NETWORK & GRAPH ANALYSIS
 # -----------------------------------------------------------------------------
 
 def compute_player_average_positions(passes_df: pd.DataFrame) -> dict:
@@ -375,11 +397,90 @@ def analyze_degree_and_heterogeneity(G, top_n_hubs=5):
     
     return metrics_df, macro_metrics, hubs_df
 
+import numpy as np
+import pandas as pd
+import networkx as nx
+
+
+def calculate_average_shortest_path(G):
+    """
+    Computes the inverted distance matrix, all-pairs shortest path matrix, 
+    and global average shortest path length (d) using Dijkstra's algorithm.
+    
+    Parameters:
+        G (nx.DiGraph): Directed NetworkX graph with 'weight' edge attributes.
+        
+    Returns:
+        d_global (float): Team-wide average shortest path length.
+        distance_matrix_df (pd.DataFrame): N x N matrix of shortest topological distances (p_ij).
+        player_path_df (pd.DataFrame): Player-level mean outgoing and incoming path lengths.
+    """
+    # 1. Create a copy to avoid mutating the original graph
+    G_dist = G.copy()
+    
+    # 2. Add inverted weight transformation: l_ij = 1 / w_ij
+    for u, v, data in G_dist.edges(data=True):
+        weight = data.get('weight', 1)
+        if weight > 0:
+            data['distance'] = 1.0 / weight
+        else:
+            data['distance'] = np.inf
+
+    # 3. Compute All-Pairs Shortest Paths via Dijkstra's Algorithm
+    # dict of dicts: path_lengths[source][target] = distance
+    path_lengths = dict(nx.all_pairs_dijkstra_path_length(G_dist, weight='distance'))
+    
+    # Convert path lengths into an N x N DataFrame (p_ij matrix)
+    nodes = list(G_dist.nodes())
+    distance_matrix_df = pd.DataFrame(index=nodes, columns=nodes, dtype=float)
+    
+    for src in nodes:
+        for tgt in nodes:
+            if src == tgt:
+                distance_matrix_df.loc[src, tgt] = 0.0
+            else:
+                # If path exists, store length; otherwise np.nan (unreachable)
+                distance_matrix_df.loc[src, tgt] = path_lengths.get(src, {}).get(tgt, np.nan)
+                
+    # 4. Compute Global Average Shortest Path Length (d)
+    # Exclude diagonal (i == j)
+    off_diagonal_mask = ~np.eye(len(nodes), dtype=bool)
+    valid_distances = distance_matrix_df.values[off_diagonal_mask]
+    
+    # Filter out any unobserved/infinite paths (if graph is not strongly connected)
+    valid_distances = valid_distances[~np.isnan(valid_distances)]
+    
+    d_global = np.mean(valid_distances)
+    
+    # 5. Extract Player-Level Path Averages (Outward reachability vs. Inward accessibility)
+    # Mean Outgoing Path: How efficiently player_i can reach all other teammates
+    # Mean Incoming Path: How efficiently all other teammates can reach player_i
+    player_paths = []
+    for player in nodes:
+        # Exclude self-distance (0.0)
+        out_paths = [distance_matrix_df.loc[player, tgt] for tgt in nodes if tgt != player]
+        in_paths = [distance_matrix_df.loc[src, player] for src in nodes if src != player]
+        
+        player_paths.append({
+            "Player": player,
+            "Position": G.nodes[player].get("position", "N/A"),
+            "Mean Outward Path Length (d_out)": np.mean(out_paths),
+            "Mean Inward Path Length (d_in)": np.mean(in_paths)
+        })
+        
+    player_path_df = pd.DataFrame(player_paths).set_index("Player")
+    player_path_df = player_path_df.sort_values(by="Mean Outward Path Length (d_out)")
+    
+    return d_global, distance_matrix_df, player_path_df
+
+
+
+
 
 
 
 # -----------------------------------------------------------------------------
-# 5. PLOTTING & VISUALIZATION UTILITIES
+# 6. PLOTTING & VISUALIZATION UTILITIES
 # -----------------------------------------------------------------------------
 
 def draw_vertical_pitch(ax=None, pitch_color='#f4f6f4', line_color='#708090', zorder=0):
@@ -390,7 +491,7 @@ def draw_vertical_pitch(ax=None, pitch_color='#f4f6f4', line_color='#708090', zo
     - Y (0 to 100): Vertical Axis (Length - Defending Goal at Y=0 to Attacking Goal at Y=100)
     """
     if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 11))
+        fig, ax = plt.subplots(figsize=FIG_SIZE)
         
     ax.set_facecolor(pitch_color)
     
@@ -435,7 +536,7 @@ def draw_vertical_pitch(ax=None, pitch_color='#f4f6f4', line_color='#708090', zo
 def plot_player_raw_passes(events_df: pd.DataFrame, team_name: str, player_name=None, ax=None) -> plt.Axes:
     """Plots all successful completed passes for an individual player on a pitch underlay."""
     if ax is None:
-        fig, ax = plt.subplots(figsize=(3, 6))
+        fig, ax = plt.subplots(figsize=FIG_SIZE)
     
     # Draw pitch background
     draw_vertical_pitch(ax)
@@ -484,7 +585,7 @@ def plot_passmap_on_pitch(
     """
     Overlays a NetworkX passmap graph onto a custom vertical pitch.
     """
-    if ax is None: fig, ax = plt.subplots(figsize=(8, 11), facecolor='#ffffff')
+    if ax is None: fig, ax = plt.subplots(figsize=FIG_SIZE, facecolor='#ffffff')
     draw_vertical_pitch(ax=ax)
     
 
@@ -582,7 +683,7 @@ def plot_passmap_frameless(
     the figure frame while preserving relative spatial player layout.
     """
     if ax is None: 
-        fig, ax = plt.subplots(figsize=(8, 10), facecolor='#ffffff')
+        fig, ax = plt.subplots(figsize=FIG_SIZE, facecolor='#ffffff')
 
     # Extract spatial coordinates from graph nodes
     raw_x = [data['x'] for _, data in G.nodes(data=True)]
@@ -685,3 +786,69 @@ def plot_passmap_frameless(
     ax.set_title(title_text, fontsize=13, fontweight='bold', color='black', pad=10)
 
     return ax
+
+
+def plot_path_length_scatterplot(player_path_df, d_global, team_name="Arsenal WFC"):
+    """
+    Plots a quadrant scatter plot comparing Mean Outward Path Length (d_out) 
+    vs. Mean Inward Path Length (d_in) for each player.
+    """
+    fig, ax = plt.subplots(figsize=(9,6.5), facecolor="#ffffff")
+    
+    # Seaborn Scatter Plot
+    sns.scatterplot(
+        data=player_path_df,
+        x="Mean Inward Path Length (d_in)",
+        y="Mean Outward Path Length (d_out)",
+        s=120,
+        color="crimson",
+        edgecolor="black",
+        linewidth=1.2,
+        zorder=5,
+        ax=ax
+    )
+    
+    # Add Mean Reference Lines (Quadrant Dividers)
+    mean_in = player_path_df["Mean Inward Path Length (d_in)"].mean()
+    mean_out = player_path_df["Mean Outward Path Length (d_out)"].mean()
+    
+    ax.axvline(mean_in, color="#808080", linestyle="--", alpha=0.7, label=f"Mean $d_{{in}}$ ({mean_in:.3f})")
+    ax.axhline(mean_out, color="#808080", linestyle=":", alpha=0.7, label=f"Mean $d_{{out}}$ ({mean_out:.3f})")
+    
+    # Annotate Player Names
+    for player, row in player_path_df.iterrows():
+        short_name = player.split()[-1]  # Extract surname for clean plotting
+        ax.text(
+            row["Mean Inward Path Length (d_in)"] + 0.002,
+            row["Mean Outward Path Length (d_out)"] + 0.002,
+            short_name,
+            fontsize=6,
+            fontweight="bold",
+            color="#222222"
+        )
+        
+    # 4. Add Quadrant Tactical Labels
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
+
+    # High d_in, High d_out (Bottom Right quadrant of plot area)
+    ax.text(xlim[1] - (xlim[1]-xlim[0])*0.30, ylim[1] - (ylim[1]-ylim[0])*0.08, 
+            "⚠ Peripheral Outlets\n(High $d_{in}$, High $d_{out}$)", 
+            fontsize=9, fontweight="bold", color="darkred", alpha=0.8)
+    
+    # 5. Styling & Labels
+    ax.set_title(
+        f"Inward vs. Outward Path Accessibility — {team_name}\nGlobal Team Mean ($d_{{global}}$): {d_global:.3f}",
+        fontsize=8,
+        fontweight="bold",
+        pad=12
+    )
+    ax.set_xlabel("Mean Inward Path Length ($d_{in}$) — How easily teammates find player", fontsize=10, fontweight="bold")
+    ax.set_ylabel("Mean Outward Path Length ($d_{out}$) — How easily player reaches teammates", fontsize=10, fontweight="bold")
+    
+    ax.grid(True, linestyle="--", alpha=0.4)
+    ax.legend(loc="upper left")
+    sns.despine(ax=ax)
+    
+    plt.tight_layout()
+    plt.show()
