@@ -421,7 +421,24 @@ def extract_passes_with_recipient_position(events_df: pd.DataFrame) -> pd.DataFr
 
     return processed_passes
 
+def get_recipient_position_counts(pass_df, mapped=False):
+    """Returns a DataFrame containing recipient positions and their pass counts."""
 
+    if mapped:
+        counts_df = (
+        pass_df["recipient_position_11"]
+        .value_counts(dropna=False)
+        .reset_index()
+    )
+        counts_df.columns = ["recipient_position_11", "count"]
+    else:
+        counts_df = (
+        pass_df["recipient_position"]
+        .value_counts(dropna=False)
+        .reset_index()
+    )
+        counts_df.columns = ["recipient_position", "count"]
+    return counts_df
 
 
 
@@ -1658,3 +1675,54 @@ def draw_pitch_with_grid(
                 )
 
     return ax
+
+
+def plot_position_reception_diagnostics(
+    passes_df: pd.DataFrame,
+    target_position: Optional[str] = None,
+    bin_filter: Optional[Tuple[int, int]] = None,
+    grid_pitch_func: Callable = draw_pitch_with_grid,
+    base_pitch_func: Callable = draw_vertical_pitch,
+    dot_color: str = "#d90429",
+    dot_alpha: float = 0.3,
+):
+    """Plots pass reception coordinates over a vertical pitch grid for a target position or bin."""
+    df = passes_df.copy()
+
+    if target_position:
+        df = df[df['recipient_position_11'] == target_position]
+
+    if bin_filter:
+        df = df[df['pass_start_bin'] == bin_filter]
+
+    # Scale X (StatsBomb length, 0-120) and Y (StatsBomb width, 0-80)
+    # Extract as list and map the function across each individual scalar
+    y_plot = np.asarray([scale_coord(val, axis='x') for val in df['location'].str[0]])
+    x_plot = np.asarray([scale_coord(val, axis='y') for val in df['location'].str[1]])
+
+    fig, ax = plt.subplots(figsize=(6.5, 9.0))
+    
+    # Pass base_pitch_func as the first argument to grid_pitch_func
+    grid_pitch_func(
+        original_pitch_func=base_pitch_func,
+        ax=ax,
+        grid_size=(10, 10),
+        show_bin_labels=True
+    )
+
+    label_text = f"{target_position or 'All'} Receptions (n={len(df):,})"
+    ax.scatter(
+        x_plot, y_plot,
+        color=dot_color,
+        alpha=dot_alpha,
+        s=18,
+        edgecolors="none",
+        zorder=4,
+        label=label_text,
+    )
+
+    title_text = f"[{target_position}]" if target_position else "Pass Receptions"
+    ax.set_title(f"Diagnostic Map: {title_text}", fontsize=14, pad=15, weight="bold")
+    ax.legend(loc="lower right", frameon=True, facecolor="white", framealpha=0.9)
+
+    plt.show()
