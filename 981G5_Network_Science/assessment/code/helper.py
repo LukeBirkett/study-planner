@@ -260,9 +260,72 @@ def extract_top11_pass_events(events_df: pd.DataFrame, team_name: str, top_11_id
 
 
 
+
+
+
+
+
 # -----------------------------------------------------------------------------
 # 5. NETWORK & GRAPH ANALYSIS
 # -----------------------------------------------------------------------------
+
+def build_passmap_network(match_record: dict, events_df: Optional[pd.DataFrame] = None) -> nx.DiGraph:
+    """Constructs a weighted, directed NetworkX graph (nx.DiGraph) for a team passmap.
+    
+    Parameters
+    ----------
+    match_record : dict
+        A team-match dictionary containing 'match_id', 'team', and 'top_11_players'.
+    events_df : pd.DataFrame, optional
+        Pre-loaded events DataFrame for the match. If None, fetches directly via API.
+            
+    Returns
+    -------
+    nx.DiGraph
+        Directed passmap graph.
+    """
+    # Compile the Match-Team records
+    m_id = match_record["match_id"]
+    team_name = match_record["team"]
+    top_11_players = match_record["top_11_players"]
+    top_11_ids = {p['Player ID'] for p in top_11_players}
+    player_id_to_name = {p['Player ID']: p['Player Name'] for p in top_11_players}
+    
+    # API Fallback
+    if events_df is None:
+        events_df = sb.events(match_id=m_id)
+
+    # Extract raw pass (Edges) and Position (Node) information
+    passes_df = extract_top11_pass_events(events_df, team_name, top_11_ids)
+    avg_locations = compute_player_average_positions(passes_df)
+    
+    G = nx.DiGraph(
+    team_name=team_name,
+    total_passes=match_record["total_passes"]
+    )
+
+    # Construct the network nodes from the 11 players
+    for p in top_11_players:
+        p_id, p_name, p_pos = p['Player ID'], p['Player Name'], p['Position']
+        loc = avg_locations.get(p_id, {'x': 50.0, 'y': 50.0})
+        
+        G.add_node(
+            p_name,
+            player_id=p_id,
+            position=p_pos,
+            pos=(loc['x'], loc['y']),
+            x=loc['x'],
+            y=loc['y']
+        )
+        
+    edges = aggregate_pass_edges(passes_df, player_id_to_name)
+    for passer, recipient, weight in edges:
+        G.add_edge(passer, recipient, weight=weight)
+
+    G.graph["true_total_passes"] = sum(d.get('weight', 0) for _, _, d in G.edges(data=True))
+        
+    return G
+
 
 def compute_player_average_positions(passes_df: pd.DataFrame) -> dict:
     """Calculates the average (x, y) pitch location for each player based on pass locations."""
@@ -323,7 +386,7 @@ def analyze_degree_and_heterogeneity(G, top_n_hubs=5):
     N = len(nodes)
     
     # -------------------------------------------------------------------------
-    # 1. PLAYER-LEVEL DEGREE & STRENGTH METRICS
+    # PLAYER-LEVEL DEGREE & STRENGTH METRICS
     # -------------------------------------------------------------------------
     in_degree = dict(G.in_degree())
     out_degree = dict(G.out_degree())
@@ -384,7 +447,7 @@ def analyze_degree_and_heterogeneity(G, top_n_hubs=5):
     }
     
     # -------------------------------------------------------------------------
-    # 4. HUB DETECTION (Rank-Ordered by Pass Volume)
+    # HUB DETECTION (Rank-Ordered by Pass Volume)
     # -------------------------------------------------------------------------
     mean_s_tot = metrics_df["Total Volume (s_tot)"].mean()
     
@@ -474,8 +537,385 @@ def calculate_average_shortest_path(G):
     return d_global, distance_matrix_df, player_path_df
 
 
+import numpy as np
+import pandas as pd
+import networkx as nx
 
 
+
+
+def calculate_betweenness_centrality(G, distance_matrix_df=None):
+    """
+    Computes weighted shortest-path betweenness centrality for a directed passing network.
+    
+    Parameters:
+        G (nx.DiGraph): Directed NetworkX graph with 'weight' edge attributes.
+        distance_matrix_df (pd.DataFrame, optional): Pre-computed distance matrix from Part 1.
+        
+    Returns:
+        betweenness_df (pd.DataFrame): Player-level betweenness centrality scores.
+    """
+    G_dist = G.copy()
+
+    # normalize/scale weights
+    for u, v, data in G_dist.edges(data=True):
+        weight = data.get('weight', 1)
+        if weight > 0:
+            data['distance'] = 1.0 / weight
+        else:
+            data['distance'] = np.inf
+
+    # 2. Calculate Weighted Betweenness Centrality using shortest paths (normalized=True by default)
+    # NetworkX automatically accounts for directed edges and path weights.
+    betweenness_dict = nx.betweenness_centrality(G_dist, weight='distance', normalized=True)
+    
+    # 3. Compile into a DataFrame
+    nodes = list(G_dist.nodes())
+    betweenness_data = []
+    
+    for node in nodes:
+        betweenness_data.append({
+            "Player": node,
+            "Position": G.nodes[node].get("position", "N/A"),
+            "Betweenness Centrality g(i)": betweenness_dict.get(node, 0.0)
+        })
+        
+    betweenness_df = pd.DataFrame(betweenness_data).set_index("Player")
+    
+    # Sort by betweenness score descending (highest bridge/control value first)
+    betweenness_df = betweenness_df.sort_values(by="Betweenness Centrality g(i)", ascending=False)
+    
+    return betweenness_df, betweenness_dict
+
+
+
+
+
+def calculate_transitive_triad_intensity(G):
+    """
+    Computes Pure Transitive Triad Intensity (I_transitive) for a weighted passing network.
+    Exclusively evaluates progressive wall-passes and multi-option forward combinations:
+    (a -> b, b -> c, a -> c), weighted by minimum channel throughput min(w_ab, w_bc, w_ac).
+    
+    Returns:
+        global_I_team (float): Average team-wide transitive triad intensity.
+        triad_df (pd.DataFrame): Player-level Transitive Triad Intensity scores.
+        active_triads (list): List of detected transitive triads with players, capacities, and permutations.
+    """
+    nodes = list(G.nodes())
+    player_triad_scores = {node: 0.0 for node in nodes}
+    active_triads = []
+    
+    # Extract weighted adjacency matrix (NumPy)
+    W = nx.to_numpy_array(G, nodelist=nodes, weight='weight')
+    node_to_idx = {node: idx for idx, node in enumerate(nodes)}
+    idx_to_node = {idx: node for node, idx in node_to_idx.items()}
+    
+    # Iterate over all unique 3-player combinations (i, j, k)
+    for triplet in itertools.combinations(nodes, 3):
+        i, j, k = triplet
+        idx_i, idx_j, idx_k = node_to_idx[i], node_to_idx[j], node_to_idx[k]
+        
+        triplet_capacity_sum = 0.0
+        triplet_permutations = []
+        perms = list(itertools.permutations([idx_i, idx_j, idx_k]))
+        
+        # Loop through cominations of a,b,c
+        for p in perms:
+            a, b, c = p
+            w_ab = W[a, b]
+            w_bc = W[b, c]
+            w_ac = W[a, c]
+            
+            # EXCLUSIVELY TRANSITIVE: a -> b, b -> c, a -> c
+            # atleast one pass in each relationship forms a cluster
+            if w_ab > 0 and w_bc > 0 and w_ac > 0:
+                cap = min(w_ab, w_bc, w_ac) 
+                triplet_capacity_sum += cap # cluster is weighted by lowest pair
+                triplet_permutations.append({
+                    "origin": idx_to_node[a],
+                    "intermediate": idx_to_node[b],
+                    "target": idx_to_node[c],
+                    "capacity": cap
+                })
+                
+        # If valid transitive structures exist for this 3-player set
+        if triplet_capacity_sum > 0:
+            player_triad_scores[i] += triplet_capacity_sum
+            player_triad_scores[j] += triplet_capacity_sum
+            player_triad_scores[k] += triplet_capacity_sum
+            
+            active_triads.append({
+                "players": (i, j, k),
+                "total_capacity": triplet_capacity_sum,
+                "permutations": triplet_permutations
+            })
+
+    # Compute Team-Wide Global Average
+    global_I_team = float(np.mean(list(player_triad_scores.values())))
+
+    # Min-Max Normalization Calculations
+    scores = np.array(list(player_triad_scores.values()))
+    min_score, max_score = scores.min(), scores.max()
+
+    score_range = max_score - min_score
+
+    # Calculate normalized team score
+    global_I_team_norm = (
+        float((global_I_team - min_score) / score_range)
+        if score_range > 0
+        else 0.0
+    )
+    
+    # Format into Player DataFrame
+    triad_data = []
+    for node in nodes:
+        raw_score = player_triad_scores[node]
+
+        # 0.0 - 1.0 Min-Max scaling across squad
+        norm_score = (
+            (raw_score - min_score) / score_range if score_range > 0 else 0.0
+        )
+
+        # % of highest individual involvement
+        rel_score = (raw_score / max_score) if max_score > 0 else 0.0
+
+        triad_data.append({
+            "Player": node,
+            "Position": G.nodes[node].get("position", "N/A"),
+            "Raw Intensity": round(raw_score, 2),
+            "Normalized (0-1)": round(norm_score, 3),
+            "Relative to Max": round(rel_score, 3),
+        })
+
+    player_triad_df = pd.DataFrame(triad_data).set_index("Player")
+    player_triad_df = player_triad_df.sort_values(
+        by="Raw Intensity", ascending=False
+    )
+
+    # Sort active triads by highest bottleneck capacity
+    active_triads = sorted(active_triads, key=lambda x: x["total_capacity"], reverse=True)
+    
+    return global_I_team, global_I_team_norm, player_triad_df, active_triads
+
+
+def compute_league_global_shortest_paths(match_records):
+    """Computes global average shortest path (d) and pass counts for all team-match pairs in the empirical dataset.
+
+    Parameters:
+        integrated_match_records (list): List of match records, where each entry
+          contains: [match_index, match_id, team_name, total_passes,
+          player_list, top_11_players]
+
+    Returns:
+        league_df (pd.DataFrame): Empirical dataset of (Match_ID, Team,
+        Total_Passes, d_global)
+    """
+    results = []
+
+    for record in match_records:
+        m_id = record['match_id']
+        team_name = record['team']
+        total_passes = record['total_passes']
+        formation = record['formation']
+
+        # Build the network for this specific team and match
+        G = build_passmap_network(record)
+        d_global, _, _ = calculate_average_shortest_path(G)
+
+        results.append({
+            "Match_ID": m_id,
+            "Team": team_name,
+            "Total_Passes": G.graph.get('true_total_passes', 'Team'),
+            "d_global": d_global,
+            "Formation": formation
+        })
+
+    league_df = pd.DataFrame(results)
+    return league_df
+
+def evaluate_global_d(G, league_df, d_attr="d_global"):
+    """Compares a network's global value directly against a league distribution."""
+
+    # Compute Network Metric
+    network_global, _, _ = calculate_average_shortest_path(G)
+    
+    # Benchmark rank, percentile
+    series = league_df[d_attr]
+    sorted_series = series.sort_values(ascending=True).reset_index(drop=True)
+    rank = np.searchsorted(sorted_series, network_global) + 1
+    percentile = stats.percentileofscore(series, network_global, kind="strict")
+    z_score = (network_global - series.mean()) / series.std()
+
+    print(f"{' EMPIRICAL POSITION REPORT ':=^50}")
+    print(
+        f"Case Study d_global:  {network_global:.4f}\n"
+        f"League Range:         [{series.min():.4f} to {series.max():.4f}]\n"
+        f"League Mean ± Std:    {series.mean():.4f} ± {series.std():.4f}\n"
+        f"{'-'*50}\n"
+        f"Absolute Rank:        {rank} / {len(series)}\n"
+        f"Percentile Score:     {percentile:.2f}%\n"
+        f"{'-'*50}\n"
+    )
+
+    return rank, percentile, (
+        series.min(), series.max(), series.mean(), series.std())
+
+
+def generate_erdos_renyi_null_incremental(G_empirical: nx.DiGraph, seed: Optional[int] = None) -> nx.DiGraph:
+    """Generates a G(N, p) Erdős–Rényi directed null network preserving node attributes
+
+    and total pass volume via uniform incremental pass distribution.
+    """
+    if seed is not None: np.random.seed(seed)
+
+    # Construct null and attributes
+    G_null = nx.DiGraph(
+        team_name=f"{G_empirical.graph.get('team_name', 'Team')} (ER Null)",
+        total_passes=G_empirical.graph.get("total_passes", 0),
+        true_total_passes=G_empirical.graph.get("true_total_passes", 0)
+    )
+
+    # Copy the nodes from the input network
+    G_null.add_nodes_from(G_empirical.nodes(data=True))
+    
+    nodes = list(G_null.nodes())
+    N = len(nodes)
+    if N < 2:
+        return G_null
+
+    # Compute Erdős–Rényi connection probability p
+    total_volume = G_empirical.graph.get("true_total_passes", 0)
+    num_edges = G_empirical.number_of_edges()
+    max_edges = N * (N - 1)
+    p = num_edges / max_edges if max_edges > 0 else 0.0
+
+    # Vectorized Bernoulli trials to sample active directed pairs G(N, p)
+    all_pairs = [(u, v) for u in nodes for v in nodes if u != v]
+    active_mask = np.random.binomial(1, p, size=len(all_pairs)).astype(bool)
+    active_edges = [pair for pair, active in zip(all_pairs, active_mask) if active]
+
+    # Fallback safeguard: guarantee at least 1 channel if trials yield 0
+    if not active_edges and all_pairs:
+        active_edges = [all_pairs[np.random.choice(len(all_pairs))]]
+
+    # Allocate pass volume uniformly across active channels
+    chosen_indices = np.random.choice(len(active_edges), size=total_volume)
+    unique_pairs, counts = np.unique(chosen_indices, return_counts=True)
+
+    # Populate null network edges
+    for idx, count in zip(unique_pairs, counts):
+        u, v = active_edges[idx]
+        G_null.add_edge(u, v, weight=int(count))
+
+    return G_null
+
+
+def generate_whole_edge_rewired_null(
+    G_empirical, n_swaps_factor=10, max_attempts=100000, seed=None
+):
+    """Generates a Directed Whole-Edge Degree-Preserving Rewired Null Model
+
+    (Configuration Model).
+    """
+    import random 
+
+    if seed is not None: random.seed(seed)
+
+    G_null = nx.DiGraph()
+    G_null.add_nodes_from(G_empirical.nodes(data=True))
+
+    edges = list(G_empirical.edges(data=True))
+    if len(edges) < 2: return G_empirical.copy()
+
+    # Format: [(u1, v1, weight1), ...]
+    edge_list = [(u, v, d.get("weight", 1)) for u, v, d in edges]
+    num_edges = len(edge_list)
+    target_swaps = num_edges * n_swaps_factor
+
+    adj_set = set((u, v) for u, v, _ in edge_list)
+
+    successful_swaps = 0
+    attempts = 0
+
+
+    while successful_swaps < target_swaps and attempts < max_attempts:
+        attempts += 1
+
+        # Fast native selection of two distinct edge indices
+        idx1, idx2 = random.sample(range(num_edges), 2)
+        u1, v1, w1 = edge_list[idx1]
+        u2, v2, w2 = edge_list[idx2]
+
+        # Ensure all 4 involved nodes are distinct to avoid self-loops and redundant swaps
+        if len({u1, v1, u2, v2}) < 4:
+            continue
+
+        new_edge1 = (u1, v2)
+        new_edge2 = (u2, v1)
+
+        # Check if proposed directed edges exist in current graph state
+        if (new_edge1 not in adj_set) and (new_edge2 not in adj_set):
+            # Update lookup set
+            adj_set.remove((u1, v1))
+            adj_set.remove((u2, v2))
+            adj_set.add(new_edge1)
+            adj_set.add(new_edge2)
+
+            # Update edge list while keeping original edge weight vectors intact
+            edge_list[idx1] = (u1, v2, w1)
+            edge_list[idx2] = (u2, v1, w2)
+
+            successful_swaps += 1
+
+    print(f"total rewiring attempts: {attempts}")
+    print(f"successful rewires: {successful_swaps}")
+
+    for u, v, weight in edge_list:
+        G_null.add_edge(u, v, weight=weight)
+
+    return G_null
+
+
+def compute_adjacency_correlation(G_orig: nx.DiGraph, G_null: nx.DiGraph) -> float:
+    """Computes Pearson's correlation coefficient (r) between the flattened adjacency
+
+    matrices of the empirical network and rewired null network.
+    """
+    # 1. Align node orders
+    nodes = list(G_orig.nodes())
+
+    # 2. Extract weighted adjacency matrices as 1D vectors
+    adj_orig = nx.to_numpy_array(G_orig, nodelist=nodes, weight="weight").ravel()
+    adj_null = nx.to_numpy_array(G_null, nodelist=nodes, weight="weight").ravel()
+
+    # 3. Pearson correlation coefficient matrix -> extract r (off-diagonal element)
+    corr_matrix = np.corrcoef(adj_orig, adj_null)
+
+    return float(corr_matrix[0, 1])
+
+
+def compute_top_k_edge_retention(
+    G_orig: nx.DiGraph, G_null: nx.DiGraph, top_percent: float = 0.25
+) -> float:
+    """Calculates the proportion of the top-k% highest-weighted edges from the empirical
+
+    network that persist as active edges in the rewired null network.
+    """
+    # 1. Extract and rank empirical edges by weight
+    orig_edges = [
+        (u, v, data.get("weight", 1)) for u, v, data in G_orig.edges(data=True)
+    ]
+    orig_edges.sort(key=lambda x: x[2], reverse=True)
+
+    # 2. Isolate top k% strongest edge pairs
+    k = max(1, int(np.ceil(len(orig_edges) * top_percent)))
+    top_k_pairs = {(u, v) for u, v, _ in orig_edges[:k]}
+
+    # 3. Check persistence in the rewired network
+    retained_count = sum(1 for u, v in top_k_pairs if G_null.has_edge(u, v))
+
+    return float(retained_count / k)
 
 
 
@@ -658,13 +1098,17 @@ def plot_passmap_on_pitch(
         font_color='white', 
         font_weight='bold'
     )
-    
+
     # Title Formatting
-    title_text = f"PassMap Network Topology\n{G.graph["team_name"]} ({G.graph["total_passes"]} Total Passes)"
+    team_name = G.graph["team_name"]
+    total_passes = G.graph["total_passes"]
+    true_total_passes = G.graph["true_total_passes"]
+
+    title_text = f"PassMap Network: {team_name}\n {total_passes} ({true_total_passes}) Total Passes"
     if metric_name is not None and global_metric is not None:
         title_text += f"\n{metric_name}: {global_metric}"
     
-    ax.set_title(title_text, fontsize=14, fontweight='bold', color='black', pad=15)
+    ax.set_title(title_text, fontsize=12, fontweight='bold', color='black', pad=1)
     
     return ax
 
@@ -850,5 +1294,123 @@ def plot_path_length_scatterplot(player_path_df, d_global, team_name="Arsenal WF
     ax.legend(loc="upper left")
     sns.despine(ax=ax)
     
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_transitive_triads_updated( 
+    G,
+    triads, 
+    top_n=4, 
+    palette=["#00E676", "#FFD600", "#00E5FF", "#FF6D00", "#E040FB", "#7C4DFF"],
+    ax=None
+):
+    """
+    Plots active transitive triads as layered polygon patches, edge networks,
+    and node overlays on a pitch axis.
+    """
+    if ax is None: 
+            fig, ax = plt.subplots(figsize=FIG_SIZE, facecolor='#ffffff')
+    
+
+    node_positions = {node: (data['y'], data['x']) for node, data in G.nodes(data=True)}
+
+    # Filter down to triads that have valid coordinates for all 3 players
+    valid_triads = triads[:top_n]
+    print(valid_triads[0])
+    print(valid_triads[1])
+    print(valid_triads[2])
+    print(valid_triads[3])
+
+    # Find max capacity to scale transparency dynamically
+    max_capacity = max(t.get("total_capacity", 1.0) for t in valid_triads) or 1.0
+
+    # Render Polygons and Edges
+    for idx, triad in enumerate(valid_triads):
+        p1, p2, p3 = triad["players"]
+        color = palette[idx % len(palette)]
+        coords = [node_positions[p] for p in (p1, p2, p3)]
+        
+        # Calculate dynamic transparency (between 0.15 and 0.45)
+        capacity = triad.get("total_capacity", max_capacity)
+        alpha_val = 0.15 + 0.30 * (capacity / max_capacity)
+
+        # Polygon fill
+        poly = Polygon(
+            coords,
+            closed=True,
+            facecolor=color,
+            edgecolor="none",
+            alpha=alpha_val,
+            zorder=3,
+        )
+        ax.add_patch(poly)
+
+        # Crisp polygon border
+        poly_border = Polygon(
+            coords,
+            closed=True,
+            facecolor="none",
+            edgecolor=color,
+            linewidth=1.8,
+            linestyle="-",
+            alpha=0.8,
+            zorder=4,
+        )
+        ax.add_patch(poly_border)
+
+
+def plot_league_pass_distribution(league, G):
+    """Plots the empirical distribution of total pass volumes across all team-matches in the dataset."""
+    sns.set_theme(style="whitegrid")
+    fig, ax = plt.subplots(figsize=(8, 5), facecolor="#ffffff")
+
+    team_name = G.graph.get('team_name', 'Team')
+    team_passes = G.graph.get('true_total_passes', 0)
+    league_mean = league["Total_Passes"].mean()
+
+    # #  Histogram w/ Bins
+    sns.histplot(
+        data=league,
+        x="Total_Passes",
+        kde=True,
+        color="#2b5c8f",
+        bins=range(0, 1001, 100),
+        ax=ax,
+    )
+
+    # Add Reference Lines
+    league_mean = league["Total_Passes"].mean()
+
+    ax.axvline(
+        team_passes,
+        color="crimson",
+        linestyle="--",
+        linewidth=2,
+        label=f"{team_name} Case Study ({team_passes} Passes)",
+    )
+
+    ax.axvline(
+        league_mean,
+        color="black",
+        linestyle=":",
+        linewidth=1.5,
+        label=f"League Mean ({league_mean:.1f} Passes)",
+    )
+
+    # Formatting
+    ax.set_title(
+        f"Empirical League Distribution of Team Pass Volumes (N={len(league)})",
+        fontsize=12,
+        fontweight="bold",
+        pad=12,
+    )
+
+    ax.set_xlabel("Total Team Passes in Match", fontsize=10, fontweight="bold")
+    ax.set_ylabel("Match Frequency", fontsize=10, fontweight="bold")
+    ax.set_xlim(0, 1000)
+    ax.legend(loc="upper right")
+    sns.despine(ax=ax)
+
     plt.tight_layout()
     plt.show()
