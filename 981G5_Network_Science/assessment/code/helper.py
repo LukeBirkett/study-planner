@@ -23,7 +23,7 @@ Utility functions for data processing, network analysis, and viz.
 import copy
 import itertools
 import warnings
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple, Any
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc, Circle, Polygon, Rectangle
@@ -36,13 +36,48 @@ from statsbombpy import sb
 from statsbombpy.api_client import NoAuthWarning
 
 
-
 # -----------------------------------------------------------------------------
 # 2. CONSTANTS & CONFIGURATION
 # -----------------------------------------------------------------------------
 PITCH_LENGTH = 120.0
 PITCH_WIDTH = 80.0
 FIG_SIZE = (6.5, 9.0)
+
+POSITION_MAP_11 = {
+    # Center Backs
+    "Center Back": "CB",
+    "Left Center Back": "CB",
+    "Right Center Back": "CB",
+    # Goalkeeper
+    "Goalkeeper": "GK",
+    # Fullbacks/Wingbacks (Left)
+    "Left Back": "LB",
+    "Left Wing Back": "LB",
+    # Fullbacks/Wingbacks (Right)
+    "Right Back": "RB",
+    "Right Wing Back": "RB",
+    # Defensive/Central Midfielders
+    "Left Defensive Midfield": "DM",
+    "Center Defensive Midfield": "DM",
+    "Right Defensive Midfield": "DM",
+    # Central Midfielders
+    "Left Center Midfield": "CM",
+    "Right Center Midfield": "CM",
+    # Attacking Midfielders
+    "Center Attacking Midfield": "CAM",
+    "Right Attacking Midfield": "CAM",
+    "Left Attacking Midfield": "CAM",
+    # Strikers/Forwards
+    "Center Forward": "ST",
+    "Left Center Forward": "ST",
+    "Right Center Forward": "ST",
+    # Wide Left
+    "Left Wing": "LM",
+    "Left Midfield": "LM",
+    # Wide Right
+    "Right Wing": "RM",
+    "Right Midfield": "RM",
+}
 
 
 
@@ -252,6 +287,144 @@ def extract_top11_pass_events(events_df: pd.DataFrame, team_name: str, top_11_id
     passes_df['y'] = passes_df['location'].apply(lambda loc: scale_coord(loc[1], axis='y') if isinstance(loc, list) else None)
     
     return passes_df
+
+
+def bin_coordinates(coord_tuple, grid_size=(10, 10)):
+    """
+    Normalizes coordinates and bin.
+    """
+    x,y=coord_tuple[0],coord_tuple[1]
+    n_rows, n_cols = grid_size
+
+    # Normalize StatsBomb coordinates to 0-100 scale
+    x_norm = (np.asarray(x) / 120.0) * 100.0
+    y_norm = (np.asarray(y) / 80.0) * 100.0
+
+    # Calculate bin sizes
+    bin_size_x = 100.0 / n_cols
+    bin_size_y = 100.0 / n_rows
+
+    # Map to matrix row (y-axis) and column (x-axis)
+    x_rows = np.clip((x_norm // bin_size_x).astype(int), 0, n_cols - 1)
+    y_cols = np.clip((y_norm // bin_size_y).astype(int), 0, n_rows - 1)
+
+    if np.isscalar(x) and np.isscalar(y):
+        return int(x_rows), int(y_cols)
+
+    return list(zip(x_rows, y_cols))
+
+
+def extract_first_position(positions: Any) -> str | None:
+    """Extracts the first recorded position from a StatsBomb positions list."""
+    if isinstance(positions, list) and len(positions) > 0:
+        return positions[0].get('position')
+    return None
+
+
+def extract_match_lineup_positions(match_id: int) -> List[Dict[str, Any]]:
+    """Fetches lineup data for a single match and returns recipient position mappings."""
+    match_lineups = sb.lineups(match_id=match_id)
+    records = []
+
+    for _, lineup_df in match_lineups.items():
+        for _, player in lineup_df.iterrows():
+            first_pos = extract_first_position(player.get('positions', []))
+            if first_pos:
+                records.append({
+                    'match_id': match_id,
+                    'pass_recipient_id': player['player_id'],
+                    'recipient_position': first_pos
+                })
+    return records
+
+def build_lineup_lookup(match_ids: List[int]) -> pd.DataFrame:
+    """Creates a deduplicated positional lookup table for a list of match IDs."""
+    all_positions = [
+        pos 
+        for match_id in match_ids 
+        for pos in extract_match_lineup_positions(match_id)
+    ]
+    
+    if not all_positions:
+        return pd.DataFrame(columns=['match_id', 'pass_recipient_id', 'recipient_position'])
+
+    return (
+        pd.DataFrame(all_positions)
+        .drop_duplicates(subset=['match_id', 'pass_recipient_id'], keep='first')
+    )
+
+
+def filter_successful_passes(events_df: pd.DataFrame) -> pd.DataFrame:
+    """Filters events DataFrame for successful pass events only."""
+    is_pass = events_df['type'] == 'Pass'
+    is_successful = events_df['pass_outcome'].isna()
+    return events_df[is_pass & is_successful].copy()
+
+
+def select_available_columns(df: pd.DataFrame, required_cols: List[str]) -> pd.DataFrame:
+    """Selects only the columns from required_cols that exist in the DataFrame."""
+    available_cols = [col for col in required_cols if col in df.columns]
+    return df[available_cols]
+
+
+def enrich_passes_with_positions(passes_df: pd.DataFrame, lookup_df: pd.DataFrame) -> pd.DataFrame:
+    """Merges passes with position lookup, validating many-to-one constraints."""
+    return passes_df.merge(
+        lookup_df,
+        on=['match_id', 'pass_recipient_id'],
+        how='left',
+        validate='many_to_one'
+    )
+
+
+def map_position(position_name):
+    """Maps a single StatsBomb position string to its 11-class taxonomy equivalent.
+
+    Returns None if the position is unrecognized or NaN.
+    """
+    return POSITION_MAP_11.get(position_name, None)
+
+
+def condense_recipient_positions(passes_df: pd.DataFrame) -> pd.DataFrame:
+    """Maps granular position strings to broader positional groupings."""
+    return passes_df.assign(
+        recipient_position_11=passes_df['recipient_position'].map(POSITION_MAP_11)
+    )
+
+
+def extract_passes_with_recipient_position(events_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Main pipeline function orchestrating the transformation sequence using Method Chaining/Piping.
+    """
+    REQUIRED_COLUMNS = [
+        'id', 'match_id', 'type', 'location', 'possession_team',
+        'player', 'position', 'possession_team_id', 'pass_end_location',
+        'pass_recipient', 'pass_recipient_id', 'pass_length'
+    ]
+
+    # Build lookup table from unique matches in events
+    unique_matches = events_df['match_id'].unique().tolist()
+    lineup_lookup = build_lineup_lookup(unique_matches)
+
+    # Execute functional data pipeline via pandas .pipe()
+    processed_passes = (
+        events_df
+        .pipe(filter_successful_passes)
+        .pipe(select_available_columns, required_cols=REQUIRED_COLUMNS)
+        .pipe(enrich_passes_with_positions, lookup_df=lineup_lookup)
+        .pipe(condense_recipient_positions)
+    )
+
+    # Apply row-by-row using .apply()
+    processed_passes['pass_start_bin'] = processed_passes['location'].apply(bin_coordinates)
+    processed_passes['pass_end_bin'] = processed_passes['pass_end_location'].apply(bin_coordinates)
+
+    return processed_passes
+
+
+
+
+
 
 
 
@@ -1414,3 +1587,74 @@ def plot_league_pass_distribution(league, G):
 
     plt.tight_layout()
     plt.show()
+
+
+def draw_pitch_with_grid(
+    original_pitch_func,
+    ax=None,
+    grid_size=(10, 10),
+    grid_color="#888888",
+    grid_linestyle="--",
+    grid_alpha=0.5,
+    show_bin_labels=False,
+    **kwargs,
+):
+    """Wraps any original pitch-drawing function and overlays a spatial grid
+
+    without modifying the original function.
+    """
+    ax = original_pitch_func(ax=ax, **kwargs)
+    if ax is None: return ax
+
+    n_rows, n_cols = grid_size
+    x_step = 100.0 / n_cols
+    y_step = 100.0 / n_rows
+
+    # Statsbomb X = length of pitch, row/horiztonal lines
+    # Statbomb Y  = width of pitch, col/vertical lines
+
+    # Draw Vertical Grid Lines: "Y"
+    for c in range(1, n_cols):
+        x = c * x_step
+        ax.plot(
+            [x, x],
+            [0, 100],
+            color=grid_color,
+            linestyle=grid_linestyle,
+            alpha=grid_alpha,
+            lw=1,
+            zorder=1,
+        )
+
+    # Draw Horizontal Grid Lines: "X"
+    for r in range(1, n_rows):
+        y = r * y_step
+        ax.plot(
+            [0, 100],
+            [y, y],
+            color=grid_color,
+            linestyle=grid_linestyle,
+            alpha=grid_alpha,
+            lw=1,
+            zorder=1,
+        )
+
+    # Label matrix (row, col) indices
+    if show_bin_labels:
+        for r in range(n_rows):
+            for c in range(n_cols):
+                center_x = (c + 0.5) * x_step
+                center_y = (r + 0.5) * y_step
+                ax.text(
+                    center_x,
+                    center_y,
+                    f"({r},{c})",
+                    color=grid_color,
+                    fontsize=7,
+                    ha="center",
+                    va="center",
+                    alpha=0.7,
+                    zorder=2,
+                )
+
+    return ax
