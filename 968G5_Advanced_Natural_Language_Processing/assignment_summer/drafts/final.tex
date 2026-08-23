@@ -192,7 +192,7 @@ Four vocabulary configurations evaluate dataset splits ($\text{Gold}$ vs.\ $\tex
 
 \begin{table}[htbp]
   \centering
-  \caption{Bag-of-Words Input Dimensions Across Vocabulary Configurations}
+  \caption{Bag-of-Words Input Dimensions}
   \label{tab:bow_dimensions}
   \small
   \setlength{\tabcolsep}{4pt}
@@ -269,7 +269,7 @@ The concatenated input vector $\vec{x}_{\text{input}} \in \mathbb{R}^{323}$ is f
 \newpage
 \begin{table}[htbp]
   \centering
-  \caption{Word2Vec Input Dimensions Across Experimental Configurations}
+  \caption{Word2Vec Input Dimensions}
   \label{tab:w2v_dimensions}
   \small
   \setlength{\tabcolsep}{4pt}
@@ -321,7 +321,7 @@ A grid search over 3 hyperparameters (Table~\ref{tab:task1_hyperparameters}) was
 \newpage
 \begin{table}[htbp]
   \centering
-  \caption{Task 1 MLP Head Hyperparameter Search Space and Optimal Values}
+  \caption{Task 1 MLP Head Hyperparameter Search}
   \label{tab:task1_hyperparameters}
   \small
   \setlength{\tabcolsep}{6pt}
@@ -368,7 +368,7 @@ Finally, per-class precision, recall, and $F_1$ scores are logged to provide the
 
 \begin{table}[htbp]
   \centering
-  \caption{Per-Class Diagnostic Evaluation Formulations}
+  \caption{Per-Class Evaluation Formulations}
   \label{tab:diagnostic_evaluation}
   \vspace{4pt}
   \small
@@ -524,7 +524,6 @@ The mapping below demonstrates a token-level sequence translation:
 \text{BIO Tags } (y_i): & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \mathbf{\texttt{B}} & \mathbf{\texttt{I}} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O} & \texttt{O}
 \end{array}
 \]
-The methodologies for Task 2 are derived as variations of an adapted, modernized CNN-BiLSTM-CRF framework \cite{ma2016}.
 
 \subsection{Architectural Approach}
 \label{subsec:architectural_approach}
@@ -547,10 +546,10 @@ To benchmark this modernized pipeline, we evaluate two architectural variations:
 % ====================================
 % VARIATION 2: INTEGRATED
 % ====================================
-\subsection{Architecture Variation 2: The Integrated Multi-Class BIO-CRF Model}
+\subsection{Architecture Variation 2: The Integrated Model}
 \label{subsec:task2_variation2}
 
-Variation 2 frames propaganda detection as an end-to-end joint sequence labeling task, learning span boundaries and technique classifications simultaneously. This is achieved by expanding the 17-state BIO schema, joining \texttt{B-} and \texttt{I-} prefixes with technique suffixes plus a neutral \texttt{O} state (Appendix~\ref{app:bio_tagset}):
+Variation 2 frames propaganda detection as an end-to-end joint sequence labeling task, learning span boundaries and technique classifications simultaneously. This is achieved by expanding to a 17-state BIO schema, joining \texttt{B-} and \texttt{I-} prefixes with technique suffixes plus a neutral \texttt{O} state (Appendix~\ref{app:bio_tagset}):
 \[
 \mathcal{Y}_{17} = \{\text{O}\} \cup \{\text{B-}k \mid k \in \mathcal{T}\} \cup \{\text{I-}k \mid k \in \mathcal{T}\}
 \]
@@ -621,7 +620,7 @@ This differential scheme preserves DeBERTa's representations for subtle rhetoric
 % ====================================
 % VARIATION 1: DECOUPLED
 % ====================================
-\subsection{Architecture Variation 1: Decoupled, Two-Stage Tagger}
+\subsection{Architecture Variation 1: The Decoupled Model}
 \label{subsec:task2_variation1}
 
 Variation 1 adopts a modular pipeline that decouples propaganda detection into two specialized sub-networks:
@@ -690,7 +689,7 @@ This generates a triple $(1, [i, j], k)$, mapping tokens to BIO tags. For exampl
 
 \begin{table}[htbp]
   \centering
-  \caption{Hyperparameter Configurations for Task 2, Variation 1 (Stage 1)}
+  \caption{Hyperparameter Configurations for Task 2, (Variation 1, Stage 1)}
   \label{tab:task2_var1_hyperparameters}
   \small
   \setlength{\tabcolsep}{6pt}
@@ -728,7 +727,7 @@ Predictions passing the gate ($\vert p_{\text{start}} - g_{\text{start}} \vert \
 
 \begin{table}[htbp]
   \centering
-  \caption{Length-Adaptive Boundary Tolerance ($\delta$) Rules Across Span Lengths}
+  \caption{Length-Adaptive Boundary Tolerance ($\delta$) Rules}
   \label{tab:boundary_tolerance}
   \small
   \setlength{\tabcolsep}{12pt}
@@ -788,7 +787,7 @@ The substantial advantage in Macro Precision ($0.2914$ vs.\ $0.2000$) reflects c
 
 \begin{table}[htbp]
   \centering
-  \caption{Task 2 End-to-End Evaluation Results}
+  \caption{Task 2 Evaluation Results}
   \label{tab:task2_terminal_results}
   \vspace{4pt}
   \small
@@ -856,7 +855,7 @@ Finally, comparison against ceiling performance demonstrates that on qualified s
 
 \begin{table}[htbp]
   \centering
-  \caption{Detection Error Analysis}
+  \caption{Error Analysis}
   \label{tab:detection_error_analysis}
   \small
   \setlength{\tabcolsep}{1pt}
@@ -994,7 +993,7 @@ Table~\ref{tab:propaganda_taxonomy} outlines the fine-grained propaganda techniq
 
 \begin{table}[htbp]
   \centering
-  \caption{Propaganda Technique Taxonomy and Definitions \cite{dasan2020}}
+  \caption{Propaganda Technique Definitions \cite{dasan2020}}
   \label{tab:propaganda_taxonomy}
   \small
   \begin{tabularx}{\textwidth}{l X}
@@ -1032,7 +1031,7 @@ The following pipeline steps clean raw TSV sequences to standardize token bounda
 
 \begin{table}[htbp]
   \centering
-  \caption{Universal Pre-Processing Pipeline and Transformation Rationale}
+  \caption{Universal Pre-Processing Pipeline}
   \label{tab:preprocessing_pipeline}
   \small
   \begin{tabularx}{\textwidth}{>{\bfseries}l X l}

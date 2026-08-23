@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1787319916.43397 "/Users/lukebirkett/Repos/study-planner/968G5_Advanced_Natural_Language_Processing/assignment_summer/drafts/final.tex" "final.pdf" "final" 1787319917.39532 0
-  "/Users/lukebirkett/Repos/study-planner/968G5_Advanced_Natural_Language_Processing/assignment_summer/drafts/final.tex" 1787319916.20165 90258 ad1f686738fe0aa6ab4385711669de94 ""
+["pdflatex"] 1787481323.64173 "/Users/lukebirkett/Repos/study-planner/968G5_Advanced_Natural_Language_Processing/assignment_summer/drafts/final.tex" "final.pdf" "final" 1787481324.47088 0
+  "/Users/lukebirkett/Repos/study-planner/968G5_Advanced_Natural_Language_Processing/assignment_summer/drafts/final.tex" 1787481322.55677 89924 e48707fcb366df7cc0befd9129b6b604 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
@@ -128,11 +128,11 @@
   "/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1787260417 5573038 b99aad5e4898a9034e953632f940512b ""
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1787260357 3636772 b41746d223bf6963c3376b8245f88cde ""
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
-  "final.aux" 1787319917.28115 20515 0af7a2225deecd7800149ad904a3985d "pdflatex"
-  "final.lot" 1787319917.28435 2286 7855a845aa3b0cf78272b54317a73e1f "pdflatex"
-  "final.out" 1787319917.28395 12067 152fbbecc62a3c8da5e4b27bd3b76cf4 "pdflatex"
-  "final.tex" 1787319916.20165 90258 ad1f686738fe0aa6ab4385711669de94 ""
-  "final.toc" 1787319917.28428 5886 4c0f1fdb2845b3adbe996b7391ae2913 "pdflatex"
+  "final.aux" 1787481324.37523 20067 a707d153bf3dc35d18339c56269c43e9 "pdflatex"
+  "final.lot" 1787481324.37805 2100 80046a810f5f426657a73d903c9fa2f5 "pdflatex"
+  "final.out" 1787481324.37748 11921 97e2ffd53286bf1c37e5031d3ead2ee5 "pdflatex"
+  "final.tex" 1787481322.55677 89924 e48707fcb366df7cc0befd9129b6b604 ""
+  "final.toc" 1787481324.37798 5857 49d5a0a3fa3c6881392c6fe8bcd7aa0c "pdflatex"
   (generated)
   "final.aux"
   "final.log"

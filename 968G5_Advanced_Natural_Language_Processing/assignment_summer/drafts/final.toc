@@ -28,10 +28,10 @@
 \contentsline {subsection}{\numberline {4.7}Conclusion, Limitations, and Future Work}{xii}{subsection.4.7}%
 \contentsline {section}{\numberline {5}Task 2: Joint Span Detection and Classification}{xiv}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Architectural Approach}{xiv}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Architecture Variation 2: The Integrated Multi-Class BIO-CRF Model}{xv}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.2}Architecture Variation 2: The Integrated Model}{xv}{subsection.5.2}%
 \contentsline {subsubsection}{\numberline {5.2.1}Model Architecture}{xv}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2}Hyperparameter Search \& Optimization Strategy}{xvi}{subsubsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.3}Architecture Variation 1: Decoupled, Two-Stage Tagger}{xvi}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.2.2}Hyperparameter Search \& Optimization Strategy}{xv}{subsubsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.3}Architecture Variation 1: The Decoupled Model}{xvi}{subsection.5.3}%
 \contentsline {subsubsection}{\numberline {5.3.1}Model Architecture}{xvi}{subsubsection.5.3.1}%
 \contentsline {subsubsection}{\numberline {5.3.2}Hyperparameter Search \& Optimization Strategy}{xvii}{subsubsection.5.3.2}%
 \contentsline {paragraph}{Stage 2 Head Training \& Performance Ceiling}{xvii}{section*.3}%
