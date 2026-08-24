@@ -13,7 +13,9 @@ Utility functions for data processing, network analysis, and viz.
 # 4. DATA PROCESSING & TRANSFORMATIONS
 # 5. NETWORK & GRAPH ANALYSIS
 # 6. PLOTTING & VISUALIZATION UTILITIES
+# 7. MARKOV MODELLING
 # -----------------------------------------------------------------------------
+
 
 
 # -----------------------------------------------------------------------------
@@ -23,7 +25,7 @@ Utility functions for data processing, network analysis, and viz.
 import copy
 import itertools
 import warnings
-from typing import Callable, Dict, List, Optional, Tuple, Any
+from typing import Callable, Dict, List, Optional, Tuple, Any, Union
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc, Circle, Polygon, Rectangle
@@ -57,9 +59,9 @@ POSITION_MAP_11 = {
     "Right Back": "RB",
     "Right Wing Back": "RB",
     # Defensive/Central Midfielders
-    "Left Defensive Midfield": "DM",
-    "Center Defensive Midfield": "DM",
-    "Right Defensive Midfield": "DM",
+    "Left Defensive Midfield": "CM",
+    "Center Defensive Midfield": "CM",
+    "Right Defensive Midfield": "CM",
     # Central Midfielders
     "Left Center Midfield": "CM",
     "Right Center Midfield": "CM",
@@ -387,9 +389,9 @@ def map_position(position_name):
 
 def condense_recipient_positions(passes_df: pd.DataFrame) -> pd.DataFrame:
     """Maps granular position strings to broader positional groupings."""
-    return passes_df.assign(
-        recipient_position_11=passes_df['recipient_position'].map(POSITION_MAP_11)
-    )
+    passes_df['recipient_position_11'] = passes_df['recipient_position'].map(POSITION_MAP_11)
+    passes_df['passer_position_11'] = passes_df['position'].map(POSITION_MAP_11)
+    return passes_df
 
 
 def extract_passes_with_recipient_position(events_df: pd.DataFrame) -> pd.DataFrame:
@@ -398,7 +400,7 @@ def extract_passes_with_recipient_position(events_df: pd.DataFrame) -> pd.DataFr
     """
     REQUIRED_COLUMNS = [
         'id', 'match_id', 'type', 'location', 'possession_team',
-        'player', 'position', 'possession_team_id', 'pass_end_location',
+        'player', 'player_id', 'position', 'possession_team_id', 'pass_end_location',
         'pass_recipient', 'pass_recipient_id', 'pass_length'
     ]
 
@@ -421,6 +423,7 @@ def extract_passes_with_recipient_position(events_df: pd.DataFrame) -> pd.DataFr
 
     return processed_passes
 
+
 def get_recipient_position_counts(pass_df, mapped=False):
     """Returns a DataFrame containing recipient positions and their pass counts."""
 
@@ -441,6 +444,31 @@ def get_recipient_position_counts(pass_df, mapped=False):
     return counts_df
 
 
+def get_random_player_by_short_position(team, short_pos):
+    """Returns a random player matching the provided shortened position code."""
+    import random
+
+    # Matching Positions 
+    ## e.g. CB -> Left Centre Back, Right Centre Back, Centre Back
+    matching_full_positions = {
+        full_pos
+        for full_pos, code in POSITION_MAP_11.items()
+        if code == short_pos
+    }
+
+    # Matching player(s)
+    eligible_players = [
+        player
+        for player in team
+        if player.get("Position") in matching_full_positions
+    ]
+
+    # Return players name
+    if eligible_players:
+        selected_player = random.choice(eligible_players)
+        return selected_player.get("Player Name") 
+
+    return None
 
 
 
@@ -1726,3 +1754,99 @@ def plot_position_reception_diagnostics(
     ax.legend(loc="lower right", frameon=True, facecolor="white", framealpha=0.9)
 
     plt.show()
+
+
+
+
+
+
+
+
+
+
+
+# -----------------------------------------------------------------------------
+# 7. MARKOV MODELLING
+# -----------------------------------------------------------------------------
+def build_prebinned_spatial_probability_model(
+    passes_df: pd.DataFrame,
+    bin_col: str = "pass_end_bin",
+    pos_col: str = "recipient_position_11",
+    grid_size: Tuple[int, int] = (10, 10),
+    alpha: float = 1.0,
+    position_map: dict = POSITION_MAP_11,
+) -> Tuple[np.ndarray, np.ndarray, Dict[str, int], Dict[int, str]]:
+    """
+    Builds raw frequency and Laplace-smoothed probability tensors from pre-binned pass data
+    using high-performance vectorized operations.
+
+    Returns:
+        prob_tensor (np.ndarray): P(Position | Bin) tensor of shape (n_rows, n_cols, N_pos).
+        smoothed_counts (np.ndarray): Frequency tensor with +alpha applied directly.
+        pos_to_idx (Dict[str, int]): Mapping from position string to tensor slice index.
+        idx_to_pos (Dict[int, str]): Mapping from tensor slice index back to position string.
+    """
+    n_rows, n_cols = grid_size
+
+    # Clean valid observations
+    valid_df = passes_df.dropna(subset=[bin_col, pos_col]).copy()
+
+    # Extract row and column coordinates from bin tuple/list column
+    bin_coords = np.stack(valid_df[bin_col].values)
+    r_coords = bin_coords[:, 0].astype(int)
+    c_coords = bin_coords[:, 1].astype(int)
+
+    # Filter out any bins out of bounds
+    valid_mask = (r_coords >= 0) & (r_coords < n_rows) & (c_coords >= 0) & (c_coords < n_cols)
+    r_coords = r_coords[valid_mask]
+    c_coords = c_coords[valid_mask]
+    positions_series = valid_df[pos_col].values[valid_mask]
+
+    # Positional mappings
+    positions = sorted(list(set(position_map.values())))
+    pos_to_idx = {pos: i for i, pos in enumerate(positions)}
+    idx_to_pos = {i: pos for i, pos in enumerate(positions)}
+
+    # Map positions to numerical indices
+    pos_indices = np.array([pos_to_idx[p] for p in positions_series])
+
+    # Populate 3D raw frequency tensor using numpy's fast un-buffered add
+    raw_counts = np.zeros((n_rows, n_cols, len(positions)), dtype=int)
+    np.add.at(raw_counts, (r_coords, c_coords, pos_indices), 1)
+
+    # Apply Laplace Additive Smoothing directly to frequencies
+    smoothed_counts = raw_counts.astype(float) + alpha
+
+    # Normalize across positions per bin to form valid probability distribution
+    bin_totals = smoothed_counts.sum(axis=-1, keepdims=True)
+    prob_tensor = smoothed_counts / bin_totals
+
+    return prob_tensor, smoothed_counts, pos_to_idx, idx_to_pos
+
+
+def get_position_distribution_for_bin(
+    r: int,
+    c: int,
+    prob_tensor: np.ndarray,
+    idx_to_pos: Dict[int, str],
+    as_df: bool = True
+) -> Union[pd.DataFrame, Dict[str, float]]:
+    """
+    Queries a specific matrix bin (r, c) and returns P(Position | Bin) 
+    for all positions, sorted from most likely to least likely.
+    """
+    # Extract 1D probability array across all positions for bin (r, c)
+    bin_prob_vector = prob_tensor[r, c, :]
+    
+    # Vectorized DataFrame creation for fast querying
+    if as_df:
+        df = pd.DataFrame({
+            'Position': [idx_to_pos[i] for i in range(len(bin_prob_vector))],
+            'Probability': bin_prob_vector
+        })
+        df['Probability (%)'] = (df['Probability'] * 100).round(2)
+        return df.sort_values(by='Probability', ascending=False).reset_index(drop=True)
+    
+    # Return sorted dictionary directly
+    dist = {idx_to_pos[i]: float(prob) for i, prob in enumerate(bin_prob_vector)}
+    return dict(sorted(dist.items(), key=lambda item: item[1], reverse=True))
