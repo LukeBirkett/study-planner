@@ -399,9 +399,9 @@ def extract_passes_with_recipient_position(events_df: pd.DataFrame) -> pd.DataFr
     Main pipeline function orchestrating the transformation sequence using Method Chaining/Piping.
     """
     REQUIRED_COLUMNS = [
-        'id', 'match_id', 'type', 'location', 'possession_team',
-        'player', 'player_id', 'position', 'possession_team_id', 'pass_end_location',
-        'pass_recipient', 'pass_recipient_id', 'pass_length'
+        'id', 'match_id', 'type', 'location', 'team',
+        'player', 'player_id', 'position', 'pass_end_location',
+        'pass_recipient', 'pass_recipient_id', 'pass_length', 'pass_outcome'
     ]
 
     # Build lookup table from unique matches in events
@@ -466,12 +466,42 @@ def get_random_player_by_short_position(team, short_pos):
     # Return players name
     if eligible_players:
         selected_player = random.choice(eligible_players)
-        return selected_player.get("Player Name") 
+        return (
+            selected_player.get("Player Name"),
+            selected_player.get("Player ID")
+        )
 
     return None
 
 
+def calculate_striker_pass_percentage(match_ids, striker_positions, passes):
+    """Calculates the percentage of completed passes made by strikers."""
+    total_completed_passes = 0
+    striker_completed_passes = 0
 
+    for m_id in match_ids:
+        completed_passes = passes[(passes['match_id'] == m_id)].copy()
+        total_completed_passes += len(completed_passes)
+
+        # Filter completed passes by striker positions
+        striker_passes = completed_passes[
+            completed_passes["position"].isin(striker_positions)
+        ]
+        striker_completed_passes += len(striker_passes)
+
+    # Calculate percentage
+    if total_completed_passes > 0:
+        pct = (striker_completed_passes / total_completed_passes) * 100
+    else:
+        pct = 0.0
+
+    # Print summary output
+    if total_completed_passes > 0:
+        print(f"Total Completed Passes: {total_completed_passes:,}")
+        print(f"Striker Completed Passes: {striker_completed_passes:,}")
+        print(f"Percentage by Strikers: {pct:.2f}%")
+    else:
+        print("No pass data found.")
 
 
 
@@ -552,18 +582,29 @@ def compute_player_average_positions(passes_df: pd.DataFrame) -> dict:
     return passes_df.groupby('player_id')[['x', 'y']].mean().to_dict('index')
 
 
-def aggregate_pass_edges(passes_df: pd.DataFrame, player_id_to_name: dict) -> list[tuple[str, str, int]]:
+def aggregate_pass_edges(
+        passes_df: pd.DataFrame, 
+        player_id_to_name: dict,
+        null: str = False
+        ) -> list[tuple[str, str, int]]:
     """Aggregates completed pass counts between player pairs into graph edge tuples."""
-    pass_counts = passes_df.groupby(['player_id', 'pass_recipient_id']).size().reset_index(name='weight')
+    if null:
+        rec = "resampled_recipient_id"
+    else: 
+        rec = "pass_recipient_id"
+
+    pass_counts = passes_df.groupby(['player_id', rec]).size().reset_index(name='weight')
     
     edges = []
     for _, row in pass_counts.iterrows():
         passer = player_id_to_name[row['player_id']]
-        recipient = player_id_to_name[row['pass_recipient_id']]
+        recipient = player_id_to_name[row[rec]]
         weight = int(row['weight'])
         edges.append((passer, recipient, weight))
         
     return edges
+
+
 
 def filter_graph_edges(G, min_weight=5):
     """
@@ -1713,12 +1754,18 @@ def plot_position_reception_diagnostics(
     base_pitch_func: Callable = draw_vertical_pitch,
     dot_color: str = "#d90429",
     dot_alpha: float = 0.3,
+    sample: str = "original",
 ):
     """Plots pass reception coordinates over a vertical pitch grid for a target position or bin."""
     df = passes_df.copy()
 
-    if target_position:
-        df = df[df['recipient_position_11'] == target_position]
+    if sample == "original":
+        if target_position:
+            df = df[df['recipient_position_11'] == target_position]
+    elif sample == "resample":
+        if target_position:
+            df = df[df['resampled_recipient_position'] == target_position]
+
 
     if bin_filter:
         df = df[df['pass_start_bin'] == bin_filter]
@@ -1850,3 +1897,67 @@ def get_position_distribution_for_bin(
     # Return sorted dictionary directly
     dist = {idx_to_pos[i]: float(prob) for i, prob in enumerate(bin_prob_vector)}
     return dict(sorted(dist.items(), key=lambda item: item[1], reverse=True))
+
+
+def resample_pass_recipients(
+    sample_match_df: pd.DataFrame, 
+    prob_tensor: np.ndarray, 
+    idx_to_pos: dict, 
+    top_11_players: list,
+    max_retries: int = 100,
+    seed: Optional[int] = None
+) -> pd.DataFrame:
+    """
+    Loops through pass events and resamples a recipient player based on spatial probability bins.
+    Guarantees that a player cannot pass to themselves via a retry mechanism.
+    """
+    rng = np.random.default_rng(seed)
+
+    resampled_recipients = []
+    resampled_positions = []
+    resampled_ids = []
+    
+    for _, row in sample_match_df.iterrows():
+        r, c = row['pass_end_bin']
+        original_passer = row['player']
+        
+        # Bin's probability distribution
+        p_vector = prob_tensor[r, c, :]
+        
+        valid_player_found = False
+        retries = 0
+        
+        # Retry Loop: Keep sampling until we find a player who isn't the original passer
+        while not valid_player_found and retries < max_retries:
+            # Sample a position index using the probability distribution
+            sampled_idx = rng.choice(len(p_vector), p=p_vector)
+            sampled_position = idx_to_pos[sampled_idx]
+            
+            # Map sampled position to player
+            sampled_player, sampled_id = get_random_player_by_short_position(
+                top_11_players, 
+                sampled_position
+            )
+            
+            # Verify the player exists and is not passing to themselves
+            if sampled_player and sampled_player != original_passer:
+                valid_player_found = True
+                resampled_recipients.append(sampled_player)
+                resampled_ids.append(sampled_id)
+                resampled_positions.append(sampled_position)
+            
+            retries += 1
+            
+        # Fallback
+        if not valid_player_found:
+            resampled_recipients.append(None)
+            resampled_ids.append(None)
+            resampled_positions.append(sampled_position)
+
+    # Assign new columns to the DataFrame
+    result_df = sample_match_df.copy()
+    result_df['resampled_recipient'] = resampled_recipients
+    result_df['resampled_recipient_position'] = resampled_positions
+    result_df['resampled_recipient_id'] = resampled_ids
+    
+    return result_df
