@@ -72,8 +72,7 @@ To analyze a system through network science, a domain problem must first be deco
 
 To overcome this, completed passes offer a highly pragmatic and objective interaction metric. A completed pass physically connects two teammates (Player A $\rightarrow$ Player B), serving as a discrete event that encodes tactical intent, team strategy, and the structural constraints imposed by the game environment. The representation of teammates as nodes and completed passes as directed edges is known as the PassMap paradigm (Buldú et al., 2018). While several variations of this framework exist — which will be detailed and visualized in Section 1.3: The PassMap Paradigm — the output network is fundamentally a weighted, directed graph where edge weights reflect cumulative passing volume between player pairs.
 
-There are numerous ways this emergent PassMap network can be decomposed into structural network properties and flow dynamics. In 
-Section 2.2: Metric Taxonomy, we analyse 1-hop degrees-level metrics to infer insight on a given team-match network but also devel into more avanced properties, Average Shortest Path (Section X), Betweenness Centrality (Seciton X) and Clustering (Section X), to provide inference on how network properties can be used to produce in-depth on-field analysis that might otherwise take a team of high skilled scouts and analyst to conver. 
+There are numerous ways this emergent PassMap network can be decomposed into structural network properties and flow dynamics. In Section X, we analyse 1-hop degrees-level metrics to infer insight on a given team-match network but also devel into more avanced properties, Average Shortest Path (Section X), Betweenness Centrality (Seciton X) and Clustering (Section X), to provide inference on how network properties can be used to produce in-depth on-field analysis that might otherwise take a team of high skilled scouts and analyst to conver. 
 > Needs polishing
 
 ---
@@ -170,17 +169,6 @@ Macro-scale metrics evaluate the network as an integrated whole, reducing a team
 To evaluate tactical performance without overwhelming the analysis with redundant properties, this project scopes down to three core tiers of network metrics: Micro-Level Player Degree Distributions (including weighted in/out-strength $s_{in}, s_{out}$ and Net Flow $\Delta s_i$), Macro-Level Network Heterogeneity ($CV_k$ and Node Volume Variance $\text{Var}(s_{\text{tot}})$), and Path Efficiency / Local Clustering (Average Shortest Path $d$, Betweenness Centrality $g(i)$, and Transitive Triad Intensity $I_{transitive}$). These metrics balance intuitive football interpretations with theoretical rigor.
 
 > Include the full translation table from gama in the appendix.
-
-##### Appendix: Table A: Metrics Suite
-> Place holder table, needs updating with actually focus. May be moved to appendex.
-| Metric Name | Mathematical Definition / Concept | Primary Application in Football Network Analysis | Tactical & Analytic Interpretation | Key Limitations / Caveats |
-| :--- | :--- | :--- | :--- | :--- |
-| **Pass Subgraph Density** | $D = \frac{2E}{V(V-1)}$ where $E$ is observed passes and $V$ is subset nodes | Measuring connectivity density within specific sub-units (e.g., left-flank trio, midfield pivot). | Indicates how tightly integrated a subset of players is in ball circulation; high values signify localized combination play. | Sensitive to subset size ($V$); does not account for pass directional quality, distance, or pressure. |
-| **Subnetwork Clustering Coefficient** | $C_i = \frac{2 e_i}{k_i(k_i - 1)}$ averaged across subset nodes $i$ | Evaluating local triangulation and passing triangles within a positional sector. | Higher values reflect strong local support networks and frequent triangular passing structures, crucial for positional play (*Juego de Posición*). | High clustering can sometimes reflect redundant lateral/backward passing rather than progressive play. |
-| **Sub-network Flow Centrality (Subset Betweenness)** | Fraction of shortest weighted passing paths passing through a specific subset $S \subset V$ | Identifying sector-level bottlenecks and key transitional hubs (e.g., central midfield block). | Quantifies how heavily a specific unit acts as a bridge between defense, flanks, and attack during buildup sequences. | Heavily dependent on team passing volume; can overvalue frequent short passes over rare line-breaking passes. |
-| **Eigenvector Centrality (Subset Aggregation)** | $\lambda x_i = \sum_{j \in S} A_{ij} x_j$ restricted to subset interactions | Measuring influential passing clusters (e.g., double pivot + attacking midfielder). | Identifies whether a player is connected to *other highly connected players* within a specific tactical subgroup. | Susceptible to dominant possession styles; skewing toward high-volume passing teams regardless of efficiency. |
-| **Sub-Graph Modularity ($Q_{sub}$)** | $Q = \sum_{i=1}^{c} \left( e_{ii} - a_i^2 \right)$ calculated for tactical modules | Detecting natural passing cliques or tactical clusters (e.g., wing-back + winger + interior). | Assesses whether a team operates via distinct tactical "silos" or exhibits fluid, total-team connectivity across sectors. | Threshold selection for community detection algorithms (e.g., Louvain) can alter identified subset boundaries. |
-| **Pass Reciprocity (Dyadic / Triadic)** | $r = \frac{\sum_{i \neq j} (A_{ij} - \bar{A})(A_{ji} - \bar{A})}{\sum_{i \neq j} (A_{ij} - \bar{A})^2}$ within subset | Evaluating two-way passing interactions between key pairings (e.g., CB-CB, W-FB). | High reciprocity demonstrates strong two-way dynamic partnerships and balance in spatial buildup. | High dyadic reciprocity can indicate structural stagnation or an inability to break forward lines. |
 
 ---
 
@@ -390,6 +378,18 @@ Attacking Roles (Russo vs. Blackstenius): Alessia Russo ($0.561$) functions as a
 
 > update to use main figure
 
+#### Top Active Transitive Triads
+By ranking individual triads by bottleneck capacity ($W_{\text{min}}$), we isolate the specific three-player passing circuits where Arsenal most frequently established progressive combination play.
+
+The top active triads confirm that Arsenal's most frequent passing loops occur deep within the central defensive and midfield units. The highest-capacity triad—Little–Wubben-Moy–Williamson ($116.0$)—highlights a resilient central triangle that anchors initial build-up play, while left-sided loops involving Steph Catley account for three of the top six most active circuits.
+
+Overlaying the highest-capacity transitive triads directly onto the spatial PassMap provides structural clarity, converting dense edge networks into identifiable positional passing triangles.
+
+
+#### Figure 6: Top Transitive Triad Overlay Plot
+![plotting the top n triads over the top of the pass network](./figures/triad_plot.png)
+
+
 #### Table 6: Player-Level Transitive Triad Intensity Summary
 | Player | Position | Raw Intensity | Normalized (0–1) | Relative to Max | Tactical & Structural Role |
 | :--- | :--- | :---: | :---: | :---: | :--- |
@@ -404,18 +404,6 @@ Attacking Roles (Russo vs. Blackstenius): Alessia Russo ($0.561$) functions as a
 | **Caitlin Jade Foord** | Left Wing | 275.0 | 0.185 | 0.257 | Wide Isolation: Operates primarily as an isolated 1v1 outlet rather than a triad loop hub. |
 | **Sabrina D’Angelo** | Goalkeeper | 114.0 | 0.020 | 0.107 | Restricted Origin: Low involvement; acts primarily as a initial reset node rather than a triad bridge. |
 | **Emma Stina Blackstenius** | Center Forward | 95.0 | 0.000 | 0.089 | Terminal Endpoint: Lowest score squad-wide (0.000 normalized); functions strictly as a finisher rather than a link player. |
-
-#### Top Active Transitive Triads
-By ranking individual triads by bottleneck capacity ($W_{\text{min}}$), we isolate the specific three-player passing circuits where Arsenal most frequently established progressive combination play.
-
-The top active triads confirm that Arsenal's most frequent passing loops occur deep within the central defensive and midfield units. The highest-capacity triad—Little–Wubben-Moy–Williamson ($116.0$)—highlights a resilient central triangle that anchors initial build-up play, while left-sided loops involving Steph Catley account for three of the top six most active circuits.
-
-Overlaying the highest-capacity transitive triads directly onto the spatial PassMap provides structural clarity, converting dense edge networks into identifiable positional passing triangles.
-
-
-#### Figure 6: Top Transitive Triad Overlay Plot
-![plotting the top n triads over the top of the pass network](./figures/triad_plot.png)
-
 
 #### Table 7: Top 10 Active Transitive Passing Triads
 | Rank | Origin / Target ($A$) | Intermediate ($B$) | Target / Origin ($C$) | Bottleneck Capacity ($W_{\text{min}}$ Pass Units) |
@@ -520,15 +508,6 @@ Plotting these null triads yields an impossible overlay of pitch-wide, non-local
 
 ## 7 Markovian Null Model
 The failure of traditional, naive null models necessitates a fundamental conceptual shift. A valid null model for football passing networks cannot treat the pitch as an abstract, unconstrained graph topology, it must strictly respect the spatial, physical, and tactical realities of match play.
-
-
-7.1 Mathematical Foundations: Markovian Processes and Stochastic Transformations
-7.2 Justifying First Order Markovian Processes 
-7.3 Domain Requirements & Theoretical Framework
-7.4 Generative Resampling Engine & Spatial Tensor Training
-7.5 Synthetic Null Network Generation & Benchmarking
-7.6 Single Football Null Network; Null Degree Analysis; Sense Cheching the Results
-
 
 ---
 
