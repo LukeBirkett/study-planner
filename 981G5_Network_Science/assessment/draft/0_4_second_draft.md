@@ -620,15 +620,19 @@ Figure 10 shows us the areas where the striker was resample receptions. Note tha
 ### 7.6 Single Football Null Network 
 Visual comparison of the empirical network alongside a single spatial null realization demonstrates that spatial recipient resampling produces a natural, pitch-constrained topology. Unlike the Erdős–Rényi model, the rewired graph avoids pitch-wide "hairball" artifacts while maintaining realistic player positioning and passing channels.
 
-##### Figure 11: Null Generated Network with Original (Left)
+##### Figure 11: Empirical PassMap (Left) vs. Single Spatial Null Realization (Right)
 ![a visual of the original network and a null generate version](./figures/resample_orig_null.png)
 
-#### Null Degree Analysis
-The degree analysis for this single null reveals an interesting set of stories. 
+#### 7.6.1 Topological Degree Diagnosticss
+Evaluating macro-level degree properties across this single realization confirms that the spatial engine successfully synthesizes domain-valid reference networks.
 
-ER null collapsed $G(N, p)$ down to 514.99 from 5681.90. THe recipient rewire preserves the metric to $\text{Var}(s_{\text{tot}}) = 2955.90$. Because we preserve the exact passes ($s_i^{\text{out}}$) we recover  over half of the empirical volume variance ($\text{Var}(s_{\text{tot}})$. This proves that passer initiative (who starts the pass and how often) accounts for roughly $50\%$ of team volume centralization, while receiver availability drives the remaining $50\%$. The increase of **Unweighted Connection Density** to ($\langle k \rangle = 17.6364$) means the rewired network becomes even denser ($\approx 88\%$ of all possible directed channels are active). This could be variance, or it could be because low freq channels which were ignores tacticly are bound back in by the league average behaviour. This also explains why the network become more homogenizaed abstracted links like Stina Blackstenius were wrapped back in. 
+While the Erdős–Rényi null collapses Team Node Volume Variance ($\text{Var}(s_{\text{tot}})$) down to $514.99$, the spatial null recovers over half of the empirical volume variance ($\text{Var}(s_{\text{tot}}) = 2955.90$). Holding each passer’s outgoing volume ($s_i^{\text{out}}$) fixed preserves primary structural anchors, demonstrating that passer initiative accounts for roughly 52% of team workload inequality while targeted receiver choice drives the remaining 48%.
 
-Utilimately, this determines tha the null process is producing valid football networks, unlike the ER null.
+The Mean Unweighted Degree increases to $\langle k \rangle = 17.6364$, corresponding to an active connection density of 88.2% across all directed channels. Reallocating recipients via league-wide spatial distributions activates low-frequency passing channels that were avoided tactically in the empirical match.
+
+Shuffling recipients reduces the Coefficient of Variation ($CV_k = 0.1115$) below both the empirical baseline ($0.1724$) and the Erdős–Rényi model ($0.1305$). Replacing match-specific tactical preferences with league-average spatial probabilities flattens connection variance across players, wrapping peripheral nodes like Stina Blackstenius back into mainstream passing sequences.
+
+The Normalized Second Moment ($\frac{\langle k^2 \rangle}{\langle k \rangle} = 17.8557$) tracks closely with the mean degree, confirming that fixed empirical origin coordinates ($(x_1, y_1)$) preserve structural density without creating unrealistic scale-free hub anomalies.
 
 ##### Table 13: Macro-Level Network Metrics Comparison Across Single Realization
 | Metric | Real Empirical Network (Arsenal WFC) | Erdős–Rényi ($G(N,p)$) | Tier 1: Recipient Rewired Null | Diagnostic Trend |
@@ -640,6 +644,49 @@ Utilimately, this determines tha the null process is producing valid football ne
 
 ---
 
+## 8 Null Validation
+Evaluating a single graph realization demonstrates local feasibility, but validating a generative null process requires executing a multi-run simulation to establish statistical stability and boundary constraints. By running a Monte Carlo pipeline across $N = 500$ independent realizations, we assess whether the 1st-order Spatial Markovian engine reliably generates valid reference topologies across the entire null distribution. Rather than performing tactical benchmark evaluations, the objective of this validation step is to confirm that spatial recipient resampling strips away match-specific tactical nuances while strictly preserving domain-level topological invariants. Establishing these boundary conditions represents a foundational contribution toward formalizing generative null validation standards within sports network science.
+
+### 8.1 Macro-Level Heterogeneity and Structural Density
+Across the 500-iteration ensemble, the macro-level degree metrics confirm that spatial recipient resampling maintains realistic structural density while suppressing extreme topological distortions. The Mean Unweighted Degree yields an ensemble average of $\langle k \rangle = 17.7411$ (95% CI: $[16.9955, 18.3636]$), representing an active connection density of $\approx 88.7\%$ across the 11-player graph. This slight densification over the empirical baseline ($16.1818$) occurs because spatial probability sampling populates peripheral channels with low-frequency passes; however, connection density remains strictly bounded below the theoretical maximum of $20$.
+
+The scale-invariant Coefficient of Variation ($CV_k$) averages $0.1196$ across the ensemble (95% CI: $[0.0813, 0.1615]$), ranging between a minimum of $0.0648$ and a maximum of $0.1755$. Critically, no realization approaches $CV_k \ge 1.0$, proving that the spatial tensor prevents the formation of unrealistic, scale-free star networks. The empirical network's $CV_k$ of $0.1724$ sits above the ensemble’s 95% upper confidence bound ($0.1615$), demonstrating that real match play imposes higher structural heterogeneity than spatial occupancy alone dictates. Reallocating recipients via spatial averages flattens individual role separation, forcing node connectivity toward a uniform spatial baseline. Furthermore, the Normalized Second Moment ($\frac{\langle k^2 \rangle}{\langle k \rangle}$) averages $18.0011$ (95% CI: $[17.3529, 18.5998]$), tracking near-identically with the mean degree $\langle k \rangle$ across all 500 runs. This ratio confirms that pitch boundary constraints successfully prevent the emergence of centralized super-hubs.
+
+### 8.2 Workload Variance
+Holding each passer's outgoing volume ($s_i^{\text{out}}$) fixed allows the null model to recover over half of the empirical workload inequality. The ensemble Team Node Volume Variance ($\text{Var}(s_{\text{tot}})$) averages $3117.3808$ (95% CI: $[2672.0826, 3629.0008]$), recovering roughly $55\%$ of the empirical match variance ($5681.9008$). This statistical consistency proves that passer initiative accounts for approximately $55\%$ of overall volume centralization, whereas targeted receiver selection drives the remaining $45\%$.
+
+However, a critical limitation of the generative engine is its inability to replicate the extreme, highly nuanced volume variance observed in exceptional empirical matches. Even at the upper bound of the 95% confidence interval ($3629.0008$) and across all 500 iterations (maximum: $4000.4463$), the simulated distribution falls significantly short of the empirical match’s value ($5681.9008$). While the model reliably produces valid reference networks under normal conditions, it fails to capture the extreme structural skew present in highly unique scenarios—such as this candidate match, which featured overwhelming team-wide possession combined with a specialized, off-ball striker who virtually abstained from circulation. Shuffling recipients according to league-average spatial probabilities naturally smooths out these extreme tactical anomalies, highlighting a boundary where generic spatial occupancy rules meet their limit against highly stylized team dynamics.
+
+### 8.3 Role Realism
+Functional role realism is similarly preserved across all iterations. Goalkeeper Sabrina D’Angelo’s total pass volume stays tightly bounded with an ensemble mean of $43.2300$ passes (95% CI: $[38.0000, 49.0000]$) and a range of $[35.0, 51.0]$. Unlike Erdős–Rényi random graphs that erroneously transform the goalkeeper into an active playmaking hub, the spatial engine enforces defensive boundary constraints across every generated instance.
+
+### 8.4 Generative Matrix Variance
+Evaluating the correlation between empirical and resampled weighted adjacency matrices yields an ensemble mean of $\bar{r} = 0.6753$ (95% CI: $[0.6026, 0.7468]$). This moderate-to-high correlation verifies that while the model preserves fundamental spatial structure and high-volume passing channels, it introduces sufficient generative variance to shuffle tactical nuances without collapsing into uncorrelated random noise or duplicating the input matrix.
+
+
+##### Table 14: Tier 1 Spatial Markovian Null Model Validation Summary (N=500 Iterations)
+| Metric | Empirical Value | Null Mean | Null Std | Min | Max | 95% CI Lower | 95% CI Upper | Diagnostic Validation Interpretation |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **Mean Unweighted Degree ($\langle k \rangle$)** | 16.1818 | 17.7411 | 0.3923 | 16.7273 | 18.7273 | 16.9955 | 18.3636 | Stable graph density (~88.7%); bounded below maximum capacity ($20.0$). |
+| **Coefficient of Variation ($CV_k$)** | 0.1724 | 0.1196 | 0.0209 | 0.0648 | 0.1755 | 0.0813 | 0.1615 | Mild heterogeneity; strictly avoids scale-free star networks ($CV_k \ge 1.0$). |
+| **Normalized Second Moment ($\frac{\langle k^2 \rangle}{\langle k \rangle}$)** | 16.6629 | 18.0011 | 0.3303 | 17.0978 | 18.8738 | 17.3529 | 18.5998 | Tracks closely with $\langle k \rangle$, confirming absence of distorted hubs. |
+| **Node Volume Variance ($\text{Var}(s_{\text{tot}})$)** | 5681.9008 | 3117.3808 | 246.0137 | 2382.2645 | 4000.4463 | 2672.0826 | 3629.0008 | Recovers ~55% of empirical volume variance via fixed passer out-strength. |
+| **Goalkeeper Total Volume ($s_{\text{tot}}$)** | 38.0000 | 43.2300 | 2.9443 | 35.0000 | 51.0000 | 38.0000 | 49.0000 | Role preservation confirmed; prevents Goalkeeper Hub Paradox across all runs. |
+| **Adjacency Correlation ($r$)** | 1.0000 | 0.6753 | 0.0377 | 0.5544 | 0.7678 | 0.6026 | 0.7468 | Preserves spatial structure while shuffling tactical nuances without matrix duplication. |
+
+--- 
+
+## 9. Null-Baselined Metric Evaluation
+
+For the null baselined evaluation I would like to import 3 levels of anaylsis: 
+
+We should run the null model 1000 times. 
+
+For each iteration we should compute an log the global shortest path in a list. this will be our macro analysis. At the end we will see where the empirical network sits in this range. 
+
+For each iteration we should compute the triads and log the stength and rank of the triad. This is involves a few steps. First we need to compute and store all the possible 3 way traids. Then for each iteation we need to log both the triad rank and score each in a list. This is our meso analysis. At the end, we will see where the eimpirical networks top 5 triads sit as an average rank, cumulative score, or average score. 
+
+For iteration be need to compute betweensness. We will store the betweenness compute values as positions. We will take the true, non-condensed positions of the team and log the betweenness score for each position in a list. At the end, we will compare for each position where the eimpirical position sit compare to the null range. 
 
 
 
@@ -647,73 +694,4 @@ Utilimately, this determines tha the null process is producing valid football ne
 
 
 
-
-
-
-
-
-
-
-
-
-# 8 Null Validation
-We need to validate the null networks we create to determine that we are suitable for analysis. So far we have some up with the following conditions: Hetrogenity; Small-word (according to the lit); Goalkeeper not hubs; Null appropriately different from the input network.Note that the goal is not to have a comprehsive finalise evaluation framework but instead to start the chain of one given the liturature does not have one. 
-
-> I think these results are really great. We are destroying the tactical naunces of the network and replacing it was a generic "football" network. We are retaining football composition by reusing the actual real passes and maining true relationship by training the prob distribution on the real binned data. What is happening is that the tactic experiences of the underling network are being washed out but the topological contrains remain. It gives us a chance to really highlight what our given network did that was interesting
-
-**Metrics to look at:**
-Coefficient of Variation ($CV_k$) and the Normalized Second Moment ($\frac{\langle k^2 \rangle}{\langle k \rangle}$) are unequivocally the best metrics for testing and evaluating degree heterogeneity. 
-
-Coefficient of Variation ($CV_k$): $CV_k$ is scale-invariant. It normalizes the standard deviation against the mean degree, allowing you to compare relative heterogeneity directly across different networks, match samples, or null generated ensembles regardless of total edge volume.  $CV_k \approx 0$: Complete homogeneity (a regular grid where every player connects to the exact same number of partners). $CV_k \approx 0.15\text{--}0.25$: Typical football passing network topology (mild heterogeneity, reflecting a dense graph with minor positional channel variation).  $CV_k > 1.0$: Strong heterogeneity (a heavy-tailed, scale-free network dominated by extreme hubs)
-
-
-Normalized Second Moment / Heterogeneity Ratio ($\frac{\langle k^2 \rangle}{\langle k \rangle}$):  In network science (particularly when modeling spreading dynamics or structural robustness), comparing the second moment $\langle k^2 \rangle$ directly to the mean $\langle k \rangle$ determines how much hub creation distorts the graph topology relative to a uniform random graph.  
-
-$\frac{\langle k^2 \rangle}{\langle k \rangle} \approx \langle k \rangle$: The network is homogeneously connected with minimal degree fluctuation (standard for an $11 \times 11$ football passmap). $\frac{\langle k^2 \rangle}{\langle k \rangle} \gg \langle k \rangle$: The network features extreme degree variance and distinct hub nodes.
-
-Team Node Volume Variance Var(s_tot)
-
-
-To validate that this null process is appropriate we need to execute the process many times to build up a range of output metrics. Runs 500 times with different seeds. Each iteration destorys the A to B and resamples the B based on the league avergae behaviour. Above we analysed 1 null formulation but this just represents a single formulation from the distribution. We need to compute a range of nulls to understand if the Null model has the capacity to veere into unrealistically bounds.
-
-============================================================
-Tier 1 Null Model Resampling Summary (N=500 Iterations)
-============================================================
-                         Metric   Null Mean   Null Std         Min         Max  95% CI Lower  95% CI Upper
-                     Mean (<k>)   17.741091   0.392332   16.727273   18.727273     16.995455     18.363636
-                           CV_k    0.119604   0.020934    0.064765    0.175451      0.081345      0.161542
-Second Moment Ratio (<k^2>/<k>)   18.001052   0.330348   17.097826   18.873786     17.352857     18.599752
-   Node Vol Variance Var(s_tot) 3117.380826 246.013749 2382.264463 4000.446281   2672.082645   3629.000826
-            Keeper Total Volume   43.230000   2.944334   35.000000   51.000000     38.000000     49.000000
-                Adj Correlation    0.675327   0.037679    0.554435    0.767834      0.602600      0.746788
-
-**Mean Unweighted Degree ($\langle k \rangle$).**
-
-The impirical was 16.18 and the mean was 17.74 from a possible max of $20$ in an 11 plaeyr nework. An average degree of $17.74$ represents an active connection density of $\approx 88.7\%$. We expect a dense netowrk, particualrly with this many passes but it is good see tha tthere are no max netowrks, nor a skew towards. The fact that the empirical network is lower then the mean just tell us that there are really tactic decison taking place to leaves specific passing channels unused, whereas random spatial reallocation populates peripheral channels with 1–2 passes, creating a slightly oversaturated graph.
-
-**Coefficient of Variation ($CV_k$)**: 
-
-Null Ensemble: Mean = 0.1201, Range = [0.0665, 0.1858], 95% CI = [0.0759, 0.1707]. Compare to Empirical Arsenal Value: 0.1724. None of the generated networks hit $CV_k \ge 1.0$ (which would indicate an unrealistic scale-free star network). However, the lower min (0.0665) approaches near-perfect lattice homogeneity. The empirical value of $0.1724$ sits above the 95% CI upper bound ($0.1707$). This is a critical finding: real passing networks possess significantly higher structural heterogeneity than spatial occupancy alone dictates. Reallocating recipients via league-average distributions washes out tactical role separation, forcing nodes toward uniform connectivity profiles. The fact that arsneal didnot homogenize with this many passes is the insight. These lower bound networks are just possibilities at thispass level, not mistakes.
-
-**Normalized Second Moment ($\frac{\langle k^2 \rangle}{\langle k \rangle}$):** 
-
-Null Ensemble: Mean = 18.00, Range = [17.09, 18.84], 95% CI = [17.31, 18.66]. Across all 100 iterations, $\frac{\langle k^2 \rangle}{\langle k \rangle} \approx \langle k \rangle$ holds true. This confirms that Tier 1 never accidentally produces a distorted "star network" hub (e.g., a goalkeeper absorbing all connections). The ratio tracks closely with the mean degree, proving that the generative engine respects pitch boundary conditions and avoids scale-free structural anomalies.
-
-When we talk about hubs in football is subtle definition. we don't expect to see superhubs whereby the network cannot function without them. 
-
-**Node Volume Variance ($\text{Var}(s_{\text{tot}})$):** 
-
-Empirical Arsenal Value: 5681.90, Null Ensemble: Mean = 3126.62, Range = [2620.63, 3705.54], 95% CI = [2708.09, 3572.05]. Unlike Erdős–Rényi $G(N, p)$—which collapses volume variance down to $514.99$—Tier 1 recovers over $55\%$ of the empirical volume variance ($3126.62 / 5681.90$).  Because Tier 1 holds each passer's outgoing volume ($s_i^{\text{out}}$) fixed, it preserves the primary volume anchors (central defenders and double pivots). The empirical match’s value ($5681.90$) far exceeds the null's max ($3705.54$), proving that while passer initiative drives $55\%$ of workload inequality, targeted receiver choice accounts for the remaining $45\%$
-
-
-
-**Keeper Roll**
-
-**Adj Similarity**
-
----
-
-
-
-
-
+Calculate empirical $z$-score and percentile rank:
