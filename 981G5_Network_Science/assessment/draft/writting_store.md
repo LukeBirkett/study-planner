@@ -1,4 +1,6 @@
 
+In their seminal paper introducing the PassMap paradigms, Buldu et al. (2018) stated that Null models were a requirement for football analysis and their production of a valid null framework was imminent. However, football's network science research lineage took a heavy turn toward "dynamic on the network" focused work (include exmaples and reference). They've processes were thought to preclude the requirement for null baselines as the probabilsitic mechanisms were self evaluating. That said, the lituruature that has ultiamtely come full circle and recognised that these advanced, dynamical proccess too need robust null baselines to infer value. Hence, this project serves as a direct response to the explicit calls in recent literature for generative, spatially constrained null models capable of establishing robust statistical baselines in football analytics (Gama et al., 2026).
+
 ---
 
 Narizuka et al. (2014) leveraged this framework to scale up the available node count significantly beyond eleven. This increase in data density allowed them to re-evaluate prior claims that football passing networks exhibit scale-free properties (Yamamoto & Yokoyama, 2011). By expanding the network via spatial discretization, Narizuka et al. concluded that passing networks actually adhere to a Gamma distribution rather than a power law.

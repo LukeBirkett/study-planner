@@ -1,3 +1,8 @@
+
+> Include the full translation table from gama in the appendix.
+
+
+
 #### Appendix X: The Mapping of PLayer Positions to Conddensed Position Set
 POSITION_MAP_11 = {
     # Center Backs
