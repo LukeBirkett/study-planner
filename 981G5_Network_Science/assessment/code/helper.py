@@ -1262,7 +1262,7 @@ def plot_player_raw_passes(events_df: pd.DataFrame, team_name: str, player_name=
     ax.quiver(x_start, y_start, x_end - x_start, y_end - y_start, 
         angles='xy', scale_units='xy', scale=1, width=0.005, zorder=3
     )
-    ax.scatter(x_start, y_start, s=20, zorder=4)
+    ax.scatter(x_start, y_start, s=20, zorder=4, color='#000000')
 
     if player_name is None:
         ax.set_title(f"{team_name} Pass Map", fontsize=10)
