@@ -709,37 +709,11 @@ Evaluating the correlation between empirical and resampled weighted adjacency ma
 ## 9. Null-Baselined Metric Evaluation
 
 ### 9.1 Experimental Setup & Simulation Scope
-
-Run $N = 1000$ independent spatial Markovian resampling iterations over the target match event stream.
-
-Logging Infrastructure: Maintain three dedicated tracking structures to store metrics per iteration:
-
-macro_sp_list: $1D$ list of global average shortest path values ($d$).
-
-meso_triad_store: Dictionary mapping all unique 3-player positional combinations to arrays of capacity scores and iteration ranks.
-
-micro_betweenness_store: Dictionary mapping the 11 specific tactical positions (uncondensed) to arrays of betweenness centrality scores ($g(i)$).
+To evaluate the empirical network properties against a spatially constrained baseline, we executed $N = 1000$ independent spatial Markovian resampling iterations over the target match event stream. For each Monte Carlo iteration, three dedicated tracking structures logged the multi-scale graph metrics: a one-dimensional array recorded the global average shortest path values ($d$), a positional lookup dictionary tracked bottleneck capacity scores and ordinal ranks across all unique 3-player combinations, and a micro-level store captured shortest-path betweenness centrality scores ($g(i)$) mapped directly to each of the eleven starting tactical positions.
 
 ---
 
 ### 9.2 Macro-Level Evaluation: Global Circulation Distance ($d$)
-9.2 Macro-Level Evaluation: Global Circulation Distance ($d$)
-
-$$d^{(k)} = \frac{1}{N(N-1)} \sum_{i \neq j} p_{ij}^{(k)}$$
-
-Statistical Output:
-Compute the ensemble mean $\bar{d}_{\text{null}}$, standard deviation $\sigma_{d}$, and 95% Confidence Interval ($[2.5\%, 97.5\%]$ percentiles).
-
-Calculate empirical $z$-score and percentile rank:
-$$z_d = \frac{d_{\text{emp}} - \bar{d}_{\text{null}}}{\sigma_d}$$
-
-Analytical Goal: Determine whether Arsenal WFC’s empirical circulation efficiency ($d = 0.1884$) reflects deliberate, highly optimized team-wide tactical fluidness or is merely an expected emergent property of high pass volume within spatial pitch boundaries.
-
-**Results:**
-#### Table: Null-Baselined Macro Evaluation Summary
-| Scale | Metric | Empirical Value | Null Mean | Null 95% CI | Z-Score |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **Macro** | Global Shortest Path ($d$) | 0.1884 | 0.1932 | [0.1732, 0.2120] | -0.43 |
 
 Evaluating the macro-level global average shortest path ($d = 0.1884$) against the 1000-iteration spatial null ensemble reveals that Arsenal WFC’s circulation efficiency is largely an emergent property of spatial territory and extreme pass volume, rather than an anomalous macro-topological structure.
 
@@ -747,26 +721,15 @@ The empirical path length sits slightly below the null ensemble mean ($\bar{d}_{
 
 Furthermore, while Arsenal’s network operates below the spatial average, it remains noticeably above the ensemble’s theoretical minimum bound ($0.1732$). This gap stems from tactical channel selection: by concentrating high pass volumes through specific build-up hubs (e.g., left-back and central double-pivot pairings) rather than distributing play uniformly across all short-distance spatial options, Arsenal accepts a slight trade-off in global path length to execute deliberate, localized tactical overloads.
 
+#### Table: Null-Baselined Macro Evaluation Summary
+| Scale | Metric | Empirical Value | Null Mean | Null 95% CI | Z-Score |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **Macro** | Global Shortest Path ($d$) | 0.1884 | 0.1932 | [0.1732, 0.2120] | -0.43 |
+
 ---
 
 ### 9.3 Meso-Level Evaluation: Transitive Triad Dynamics ($I_{\text{transitive}}$)
-Permutation Pre-computation: Pre-generate all $\binom{11}{3} = 165$ unique 3-player positional triplets $(A, B, C)$ and their 6 internal directed permutations.
-
-Iteration Logging: For each resampled network $G_{\text{null}}^{(k)}$:
-1. Evaluate bottleneck capacity $W_{\text{min}} = \min(W_{AB}, W_{BC}, W_{AC})$ for all active transitive triads.
-2. Rank-order active triads by bottleneck capacity.
-3. Log both the raw capacity score ($W_{\text{min}}$) and relative ordinal rank ($1$ to $R_{\text{max}}$) into meso_triad_store for each positional combination.
-
-Statistical Output & Empirical Comparison:
-Extract the top 5 empirical transitive triads (e.g., Little–Wubben-Moy–Williamson).
-
-Benchmark each empirical triad against its specific null counterpart across three metrics:
-1. Mean Null Capacity: $\bar{W}_{\text{min, null}}$ vs. $W_{\text{min, emp}}$
-2. Mean Null Ordinal Rank: $\bar{R}_{\text{null}}$ vs. $R_{\text{emp}}$
-3. Rank Retention Frequency: Percentage of iterations where the specific triplet remains in the top 5 network triads.
-
-Analytical Goal: Isolate whether Arsenal’s primary passing triangles (such as the central double-pivot and left-flank overload circuits) occur due to specific tactical instruction or standard spatial occupancy density.
-
+To determine whether Arsenal’s primary passing triangles stem from deliberate tactical instruction or simple spatial occupancy density, we evaluate transitive triads across the 1,000-iteration null ensemble. The framework pre-computes all $\binom{11}{3} = 165$ unique three-player positional triplets alongside their internal directed permutations. For each generated null realization $G_{\text{null}}^{(k)}$, the engine calculates the bottleneck capacity ($W_{\text{min}} = \min(W_{AB}, W_{BC}, W_{AC})$) for every active transitive triad, rank-orders them by strength, and logs both their capacity scores and ordinal ranks into a positional tracking store. Any triplet that fails to form in a specific iteration is assigned a zero capacity and a maximum penalty rank of 165 to prevent survivor bias. Finally, the empirical team's top passing triads are benchmarked against their specific null distributions by evaluating mean capacity ($\bar{W}_{\text{min, null}}$), average ordinal rank ($\bar{R}_{\text{null}}$), and rank retention frequency across the ensemble.
 
 Benchmarking the top 20 empirical transitive triads against the 1,000-iteration spatial null ensemble reveals distinct structural patterns that separate spatial baseline expectations from intentional, highly organized tactical mechanics.
 
@@ -803,19 +766,21 @@ Finally, the null baseline exposes the deep-dropping connector role executed by 
 ---
 
 ### 9.4 Micro-Level Evaluation: Positional Betweenness Centrality ($g(i)$)
-Position-Based Node Tracking: Map each player node to their exact, uncondensed starting position string (e.g., Left Center Back, Right Center Midfield, Goalkeeper) to allow consistent role-based tracking across iterations.
+To quantify positional routing control and determine whether key playmakers act as central conduits beyond spatial baseline expectations, we evaluate weighted shortest-path betweenness centrality ($g(i)$) across the 1,000-iteration null ensemble. Each player node is mapped to their exact, uncondensed starting position (e.g., Left Center Back, Goalkeeper) to maintain consistent role-based tracking across resampling runs. For every generated network $G_{\text{null}}^{(k)}$, Dijkstra's algorithm computes all-pairs shortest topological paths using inverted pass weights ($l_{ij} = 1/w_{ij}$), logging each position's betweenness score into a dedicated tracking store. From these iterations, 95% confidence intervals and expected baseline distributions are established for all eleven tactical positions. Benchmarking empirical scores ($g_{\text{emp}}(i)$) against these positional null ranges isolates deliberate tactical routing bottlenecks—such as central defender or deep midfielder circulation—while verifying whether peripheral positions remain strictly bounded near zero.
 
-Iteration Logging: For each resampled network $G_{\text{null}}^{(k)}$, compute weighted shortest-path betweenness centrality:
+Evaluating empirical betweenness centrality scores against the 1,000-iteration spatial null baseline isolates the specific positional hubs driving Arsenal WFC's tactical buildup. The results demonstrate that while peripheral roles strictly align with spatial expectations, the central defensive core operates as a statistically significant routing engine.
 
-$$g^{(k)}(i) = \sum_{s \neq i \neq t} \frac{\sigma_{st}^{(k)}(i)}{\sigma_{st}^{(k)}}$$
+The most prominent tactical signal emerges from the central defensive pairing. Both the Right Center Back ($g = 0.3000, z = +2.85$) and Left Center Back ($g = 0.3222, z = +2.73$) exceed the upper 95% confidence bounds of the null ensemble ($[0.0111, 0.2556]$ and $[0.0222, 0.2668]$, respectively). In a purely spatial model, central defenders are expected to account for a moderate routing share ($\bar{g} \approx 0.11 - 0.15$). Recording values above $0.3000$ proves that their role as primary build-up pivots is a deliberate, highly concentrated tactical instruction rather than a simple byproduct of spatial pitch geography.
 
-Append $g^{(k)}(i)$ to the position’s specific score array in micro_betweenness_store.
+Furthermore, benchmarking against the spatial baseline uncovers noticeable asymmetries across the flank and midfield units. 
 
-Statistical Output:
-- Build a 95% Confidence Interval and distribution range for each of the 11 tactical positions.
-- Compare empirical scores ($g_{\text{emp}}(i)$) against positional null ranges via a comparative boxplot or point-interval plot.
+Left Back betweenness ($g = 0.1222, z = +1.73$) approaches the upper 95% bound ($0.1556$) and far outstrips Right Back betweenness ($g = 0.0000, z = -0.38$), confirming a pronounced left-sided structural bias during initial progression out of defense.
 
-Analytical Goal: Quantify positional routing control. Verify if center-backs (Wubben-Moy, Williamson) and central midfielders (Little, Pelova) act as significantly higher bridging hubs than spatial baseline expectations, while confirming whether peripheral positions (wingers, goalkeeper) remain strictly bounded near $0.0$.
+> its really to important to focus on the ranges here. left back is [0.0000, 0.1556]  where as right back [0.0000, 0.0667]. The ranges are fundementally skewed because the retain the actually pass volumne and positions but rewire the recipient based on the league average. What we are saying is, if a team played exactly like this with the exact number of reasons, how would a random player reshuffle fair. Arsneals left back demonstates a player who is inherently more importantant for the circuluation and distribution of the ball than an average player is. This explicity takes into account the volumne of passes in their area of the pitch!
+
+Conversely, midfield circulation displays a tactical reversal: under baseline spatial rules, the Left Defensive Midfielder is expected to absorb the largest routing share squad-wide ($\bar{g} = 0.2896$), yet Kim Little’s empirical score ($g = 0.1778, z = -1.31$) falls significantly below this spatial expectation. Instead of over-funneling possession through a single central midfield channel, Arsenal delegates routing duties more evenly across the double-pivot while relying directly on the center-backs to bridge play.
+
+Finally, the null baseline confirms strict boundary enforcement across terminal and peripheral positions. Attacking wingers, the central forward, the center attacking midfielder, and the goalkeeper all register empirical scores of $g = 0.0000$, placing them well within their respective null ranges ($\bar{g} \approx 0.0000 - 0.0071$). This alignment demonstrates that terminal execution nodes and deep defensive anchors operate strictly outside the team's primary path-routing network, preserving functional role boundaries across match play.
 
 ##### Table: Null-Baselined Micro Evaluation Summary (Positional Betweenness Centrality)
 | Scale | Targeted Metric / Position | Empirical Value | Null Mean | Null 95% CI | Z-Score |
@@ -832,32 +797,6 @@ Analytical Goal: Quantify positional routing control. Verify if center-backs (Wu
 | **Micro** | Betweenness: Goalkeeper | 0.0000 | 0.0001 | [0.0000, 0.0000] | -0.03 |
 | **Micro** | Betweenness: Center Forward | 0.0000 | 0.0000 | [0.0000, 0.0000] | 0.00 |
 
-Evaluating empirical betweenness centrality scores against the 1,000-iteration spatial null baseline isolates the specific positional hubs driving Arsenal WFC's tactical buildup. The results demonstrate that while peripheral roles strictly align with spatial expectations, the central defensive core operates as a statistically significant routing engine.
-
-The most prominent tactical signal emerges from the central defensive pairing. Both the Right Center Back ($g = 0.3000, z = +2.85$) and Left Center Back ($g = 0.3222, z = +2.73$) exceed the upper 95% confidence bounds of the null ensemble ($[0.0111, 0.2556]$ and $[0.0222, 0.2668]$, respectively). In a purely spatial model, central defenders are expected to account for a moderate routing share ($\bar{g} \approx 0.11 - 0.15$). Recording values above $0.3000$ proves that their role as primary build-up pivots is a deliberate, highly concentrated tactical instruction rather than a simple byproduct of spatial pitch geography.
-
-Furthermore, benchmarking against the spatial baseline uncovers noticeable asymmetries across the flank and midfield units. 
-
-Left Back betweenness ($g = 0.1222, z = +1.73$) approaches the upper 95% bound ($0.1556$) and far outstrips Right Back betweenness ($g = 0.0000, z = -0.38$), confirming a pronounced left-sided structural bias during initial progression out of defense.
-
-> its really to important to focus on the ranges here. left back is [0.0000, 0.1556]  where as right back [0.0000, 0.0667]. The ranges are fundementally skewed because the retain the actually pass volumne and positions but rewire the recipient based on the league average. What we are saying is, if a team played exactly like this with the exact number of reasons, how would a random player reshuffle fair. Arsneals left back demonstates a player who is inherently more importantant for the circuluation and distribution of the ball than an average player is. This explicity takes into account the volumne of passes in their area of the pitch!
-
-Conversely, midfield circulation displays a tactical reversal: under baseline spatial rules, the Left Defensive Midfielder is expected to absorb the largest routing share squad-wide ($\bar{g} = 0.2896$), yet Kim Little’s empirical score ($g = 0.1778, z = -1.31$) falls significantly below this spatial expectation. Instead of over-funneling possession through a single central midfield channel, Arsenal delegates routing duties more evenly across the double-pivot while relying directly on the center-backs to bridge play.
-
-Finally, the null baseline confirms strict boundary enforcement across terminal and peripheral positions. Attacking wingers, the central forward, the center attacking midfielder, and the goalkeeper all register empirical scores of $g = 0.0000$, placing them well within their respective null ranges ($\bar{g} \approx 0.0000 - 0.0071$). This alignment demonstrates that terminal execution nodes and deep defensive anchors operate strictly outside the team's primary path-routing network, preserving functional role boundaries across match play.
-
----
-
-#### Table 15: Comprehensive 1000-Iteration Null-Baselined Evaluation Summary
-
-| Scale | Targeted Metric / Entity | Empirical Value | Null Ensemble Mean | Null 95% CI Range | Empirical Percentile / Z-Score | Tactical Verdict |
-| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
-| **Macro** | Global Shortest Path ($d$) | 0.1884 | [Mean] | [[Lower], [Upper]] | [Percentile]% (z = [Z]) | [Structural Optimization / Baseline Spatial Property] |
-| **Meso** | Triad 1: Little-Wubben-Moy-Williamson | 116.0 (Rank 1) | [Cap] (Rank [R]) | [[Lower], [Upper]] | [Percentile]% | [Deliberate Tactical Loop / Spatial Expectation] |
-| **Meso** | Triad 2: Catley-Little-Wubben-Moy | 111.0 (Rank 2) | [Cap] (Rank [R]) | [[Lower], [Upper]] | [Percentile]% | [Left-Flank Tactical Overload / Baseline] |
-| **Micro** | Left Center Back Betweenness $g(i)$ | 0.3222 | [Mean] | [[Lower], [Upper]] | [Percentile]% | [Primary Routing Bottleneck] |
-| **Micro** | Left Midfield Betweenness $g(i)$ | 0.1778 | [Mean] | [[Lower], [Upper]] | [Percentile]% | [Central Conduit Engine] |
-| **Micro** | Goalkeeper Betweenness $g(i)$ | 0.0000 | [Mean] | [[Lower], [Upper]] | [Percentile]% | [Enforced Role Boundary] |
 
 ---
 
