@@ -1658,12 +1658,12 @@ def plot_league_pass_distribution(league, G):
     )
 
     # Formatting
-    ax.set_title(
-        f"Empirical League Distribution of Team Pass Volumes (N={len(league)})",
-        fontsize=12,
-        fontweight="bold",
-        pad=12,
-    )
+    # ax.set_title(
+    #     f"Empirical League Distribution of Team Pass Volumes (N={len(league)})",
+    #     fontsize=12,
+    #     fontweight="bold",
+    #     pad=12,
+    # )
 
     ax.set_xlabel("Total Team Passes in Match", fontsize=10, fontweight="bold")
     ax.set_ylabel("Match Frequency", fontsize=10, fontweight="bold")
