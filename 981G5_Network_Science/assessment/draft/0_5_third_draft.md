@@ -1,56 +1,5 @@
 # Network Science (981G5) Assessment
 
-#### Contents
-- [1. Introduction](#1-introduction)
-  - [1.1 Network Science Introduction](#11-network-science-introduction)
-  - [1.2 Why Apply Network Science to Football](#12-why-apply-network-science-to-football)
-  - [1.3 How Apply Network Science to Football](#13-how-apply-network-science-to-football)
-  - [1.4 The Null Baseline Problem and Project Scope](#14-the-null-baseline-problem-and-project-scope)
-- [2 Data](#2-data)
-- [3 Passing Network Paradigms](#3-passing-network-paradigms)
-- [4 Football Network Metrics](#4-football-network-metrics)
-  - [4.1 The Multi-Scale Network Framework](#41-the-multi-scale-network-framework)
-    - [4.1.1 Micro-Scale Analysis](#411-micro-scale-analysis)
-    - [4.1.2 Meso-Scale Analysis](#412-meso-scale-analysis)
-    - [4.1.3 Macro-Scale Analysis](#413-macro-scale-analysis)
-  - [4.2 Metric Suite](#42-metric-suite)
-  - [4.3 Degree Analysis](#43-degree-analysis)
-    - [4.3.1 Macro Degree Analysis](#431-macro-degree-analysis)
-    - [4.3.2 Micro Degree Analysis](#432-micro-degree-analysis)
-  - [4.3 Average Shortest Path](#43-average-shortest-path)
-  - [4.4 Betweenness Centrality (g(i))](#44-betweenness-centrality-gi)
-  - [4.5 Clustering (Transitive Triads)](#45-clustering-transitive-triads)
-- [5 Empirical Baseline](#5-empirical-baseline)
-- [6 Traditional Nulls](#6-traditional-nulls)
-  - [6.1 Erdős–Rényi (ER) Random Model](#61-erdős–rényi-er-random-model)
-  - [6.2 Macro-Level Metrics & Structural Flattening](#62-macro-level-metrics--structural-flattening)
-  - [6.3 Downstream Clustering Failure & Triad Anomalies](#63-downstream-clustering-failure--triad-anomalies)
-- [7 Markovian Null Model](#7-markovian-null-model)
-  - [7.1 Mathematical Foundations: Markovian Processes and Stochastic Transformations](#71-mathematical-foundations-markovian-processes-and-stochastic-transformations)
-  - [7.2 Justifying First Order Markovian Processes](#72-justifying-first-order-markovian-processes)
-  - [7.3 Domain Requirements & Theoretical Framework](#73-domain-requirements--theoretical-framework)
-  - [7.4 Data Corpus Engineering](#74-data-corpus-engineering)
-  - [7.5 Spatial Probability Distribution Training](#75-spatial-probability-distribution-training)
-  - [7.6 Generative Markovian Recipient Resampling](#76-generative-markovian-recipient-resampling)
-    - [7.6.1 Sense Cheching the Recampled Recipient Dataset](#761-sense-cheching-the-recampled-recipient-dataset)
-  - [7.6 Single Football Null Network](#76-single-football-null-network)
-    - [7.6.1 Topological Degree Diagnosticss](#761-topological-degree-diagnosticss)
-- [8 Null Validation](#8-null-validation)
-  - [8.1 Macro-Level Heterogeneity and Structural Density](#81-macro-level-heterogeneity-and-structural-density)
-  - [8.2 Workload Variance](#82-workload-variance)
-  - [8.3 Role Realism](#83-role-realism)
-  - [8.4 Generative Matrix Variance](#84-generative-matrix-variance)
-- [9. Null-Baselined Metric Evaluation](#9-null-baselined-metric-evaluation)
-  - [9.1 Experimental Setup & Simulation Scope](#91-experimental-setup--simulation-scope)
-  - [9.2 Macro-Level Evaluation: Global Circulation Distance (d)](#92-macro-level-evaluation-global-circulation-distance-d)
-  - [9.3 Meso-Level Evaluation: Transitive Triad Dynamics (I_transitive)](#93-meso-level-evaluation-transitive-triad-dynamics-i_transitive)
-  - [9.4 Micro-Level Evaluation: Positional Betweenness Centrality (g(i))](#94-micro-level-evaluation-positional-betweenness-centrality-gi)
-- [10 Conclusion, Limitations and Future Work](#10-conclusion-limitations-and-future-work)
-  - [10.1 Conclusion](#101-conclusion)
-  - [10.2 Limitations](#102-limitations)
-  - [10.3 Future Work](#103-future-work)
-
-
 ## 1. Introduction
 
 ### 1.1 Network Science Introduction
@@ -95,10 +44,10 @@ To preserve an $N = 11$ network structure despite match substitutions, we model 
 | **Competition / Season** | FA Women's Super League (WSL) $2023/2024$ |
 | **Total Matches** | `132` |
 | **Total Team Network** | `264` |
-| **Total Season Passes Recorded** | `105,262` |
+| **Total Season Passes Recorded** | `89,781` |
 | **Mean Passes per Team per Match** | `399` (Range: `120-847`) |
 | **Mean Unique Players Used per Team per Match** | `15.1` (Range: `12-16`) |
-> this table needs a review. I think the passes have changed. 
+
 
 ---
 
@@ -108,7 +57,6 @@ Team organization is modeled using the PassMap paradigm popularized by Buldú et
 While literature outlines alternative formulations — such as purely geographic Pitch-Location networks or high-density composite Player-Pitch networks (Buldú et al., 2018; Narizuka et al., 2014) — this project focuses exclusively on the Player PassMap paradigm. Here, the node set corresponds directly to the eleven players ($\vert V \vert = 11$), enriched with individual identities and mean spatial $(x, y)$ coordinates. Appending average positions leaves topological graph invariants unchanged while significantly enhancing visual interpretability and establishing spatial baselines.
 
 Player Networks represent the standard approach in football analytics (Duch et al., 2010; Gama et al., 2026; Alves et al., 2025). They maintain intuitive alignment with real-world tactical play while avoiding artificial spatial discretization steps that lack consensus standards (Narizuka et al., 2014; Arriaza-Ardiles et al., 2018). As shown in Figure 2, plotting these networks either directly overlaying pitch boundaries or in a frameless spatial layout preserves structural clarity while surfacing emergent team interactions.
-> i might remove this in the next draft cut down
 
 #### Figure 2: Player Network PassMap Paradigm Examples: Pitch vs Frameless
 ![passing network demonstate on pitch overlay vs frameless](./figures/passmap_examples.png)
@@ -325,7 +273,6 @@ This partitions the pitch into discrete spatial sectors governing recipient like
 For each empirical pass in the target match, the engine retains the origin, end location, and passer identity. The terminal coordinates query the learned probability tensor $P(p \mid r, c)$ to sample a recipient position, which is mapped to an active teammate. Self-passes ($A \to A$) are strictly prevented. Evaluating the resampled event stream prior to network aggregation confirms the engine successfully balances generative variance with domain realism. As detailed in Appendix X, the spatial model avoids simply reproducing the input network while strictly enforcing defensive boundaries and realistically redistributing high-volume territorial possession.
 
 ##### Table 12: Sample Event Resampling and Player Mapping Stream
-> Check this is a real example
 | Pass ID | Passer (Origin) | Terminal Bin | Drawn Position | Empirical Recipient | Resampled Recipient | Self-Pass Safeguard |
 | :---: | :--- | :---: | :---: | :--- | :--- | :---: |
 | 101 | Carlotte Wubben-Moy | (2, 4) | CB | Leah Williamson | Leah Williamson | Valid ($A \neq B$) |
@@ -362,17 +309,17 @@ Replacing match-specific target preferences with league-average spatial probabil
 ---
 
 ## 8 Null Validation
-Evaluating a single graph realization demonstrates local feasibility, but validating a generative null process requires executing a multi-run simulation to establish statistical stability and boundary constraints. By running a Monte Carlo pipeline across $N = 500$ independent realizations, we assess whether the 1st-order Spatial Markovian engine reliably generates valid reference topologies across the entire null distribution. Rather than performing tactical benchmark evaluations, the objective of this validation step is to confirm that spatial recipient resampling strips away match-specific tactical nuances while strictly preserving domain-level topological invariants. Establishing these boundary conditions represents a foundational contribution toward formalizing generative null validation standards within sports network science.
+While a single realization confirms local feasibility, formal validation requires a multi-run simulation to establish statistical stability and boundary constraints. Executing a 500-run Monte Carlo pipeline confirms that spatial recipient resampling reliably strips away match-specific tactical nuances across the entire null ensemble while strictly preserving domain-level topological invariants.
 
 ### 8.1 Macro-Level Heterogeneity and Structural Density
-Across the 500-iteration ensemble, the macro-level degree metrics confirm that spatial recipient resampling maintains realistic structural density while suppressing extreme topological distortions. The Mean Unweighted Degree yields an ensemble average of $\langle k \rangle = 17.7411$ (95% CI: $[16.9955, 18.3636]$), representing an active connection density of $\approx 88.7\%$ across the 11-player graph. This slight densification over the empirical baseline ($16.1818$) occurs because spatial probability sampling populates peripheral channels with low-frequency passes; however, connection density remains strictly bounded below the theoretical maximum of $20$.
+Across the 500-iteration ensemble, macro-level degree metrics confirm that spatial resampling maintains realistic structural density while suppressing extreme topological distortions (Table 14). The Mean Unweighted Degree averages $\langle k \rangle = 17.7411$ (95% CI: $[16.9955, 18.3636]$), representing an expected connection density ($\approx 88.7\%$) that populates peripheral channels without exceeding pitch boundaries.
 
-The scale-invariant Coefficient of Variation ($CV_k$) averages $0.1196$ across the ensemble (95% CI: $[0.0813, 0.1615]$), ranging between a minimum of $0.0648$ and a maximum of $0.1755$. Critically, no realization approaches $CV_k \ge 1.0$, proving that the spatial tensor prevents the formation of unrealistic, scale-free star networks. The empirical network's $CV_k$ of $0.1724$ sits above the ensemble’s 95% upper confidence bound ($0.1615$), demonstrating that real match play imposes higher structural heterogeneity than spatial occupancy alone dictates. Reallocating recipients via spatial averages flattens individual role separation, forcing node connectivity toward a uniform spatial baseline. Furthermore, the Normalized Second Moment ($\frac{\langle k^2 \rangle}{\langle k \rangle}$) averages $18.0011$ (95% CI: $[17.3529, 18.5998]$), tracking near-identically with the mean degree $\langle k \rangle$ across all 500 runs. This ratio confirms that pitch boundary constraints successfully prevent the emergence of centralized super-hubs.
+The Coefficient of Variation ($CV_k = 0.1196$) remains well below scale-free thresholds ($CV_k \ge 1.0$), while the empirical value ($0.1724$) sits above the upper confidence bound ($0.1615$), confirming match-specific tactical heterogeneity. Additionally, the Normalized Second Moment ($18.0011$) closely tracks mean degree, proving the ensemble operates within logical domain boundaries without generating central super-hubs.
 
 ### 8.2 Workload Variance
-Holding each passer's outgoing volume ($s_i^{\text{out}}$) fixed allows the null model to recover over half of the empirical workload inequality. The ensemble Team Node Volume Variance ($\text{Var}(s_{\text{tot}})$) averages $3117.3808$ (95% CI: $[2672.0826, 3629.0008]$), recovering roughly $55\%$ of the empirical match variance ($5681.9008$). This statistical consistency proves that passer initiative accounts for approximately $55\%$ of overall volume centralization, whereas targeted receiver selection drives the remaining $45\%$.
+Holding passer volume ($s_i^{\text{out}}$) fixed allows the spatial model to recover over half of empirical workload inequality. The ensemble Team Node Volume Variance ($\text{Var}(s_{\text{tot}})$) averages $3117.38$ (95% CI: $[2672.08, 3629.00]$), capturing $55\%$ of empirical variance ($5681.90$). This establishes that passer initiative accounts for roughly $55\%$ of volume centralization, while targeted receiver selection drives $45\%$.
 
-However, a critical limitation of the generative engine is its inability to replicate the extreme, highly nuanced volume variance observed in exceptional empirical matches. Even at the upper bound of the 95% confidence interval ($3629.0008$) and across all 500 iterations (maximum: $4000.4463$), the simulated distribution falls significantly short of the empirical match’s value ($5681.9008$). While the model reliably produces valid reference networks under normal conditions, it fails to capture the extreme structural skew present in highly unique scenarios—such as this candidate match, which featured overwhelming team-wide possession combined with a specialized, off-ball striker who virtually abstained from circulation. Shuffling recipients according to league-average spatial probabilities naturally smooths out these extreme tactical anomalies, highlighting a boundary where generic spatial occupancy rules meet their limit against highly stylized team dynamics.
+However, even the maximum simulated variance ($4000.45$) falls short of the empirical value. League-average spatial probabilities naturally smooth out extreme tactical dynamics — such as high team possession paired with an off-ball striker — highlighting the boundary where generic spatial occupancy rules meet highly stylized team play.
 
 ### 8.3 Role Realism
 Functional role realism is similarly preserved across all iterations. Goalkeeper Sabrina D’Angelo’s total pass volume stays tightly bounded with an ensemble mean of $43.2300$ passes (95% CI: $[38.0000, 49.0000]$) and a range of $[35.0, 51.0]$. Unlike Erdős–Rényi random graphs that erroneously transform the goalkeeper into an active playmaking hub, the spatial engine enforces defensive boundary constraints across every generated instance.
@@ -382,31 +329,28 @@ Evaluating the correlation between empirical and resampled weighted adjacency ma
 
 
 ##### Table 14: Tier 1 Spatial Markovian Null Model Validation Summary (N=500 Iterations)
-| Metric | Empirical Value | Null Mean | Null Std | Min | Max | 95% CI Lower | 95% CI Upper | Diagnostic Validation Interpretation |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Mean Unweighted Degree ($\langle k \rangle$)** | 16.1818 | 17.7411 | 0.3923 | 16.7273 | 18.7273 | 16.9955 | 18.3636 | Stable graph density (~88.7%); bounded below maximum capacity ($20.0$). |
-| **Coefficient of Variation ($CV_k$)** | 0.1724 | 0.1196 | 0.0209 | 0.0648 | 0.1755 | 0.0813 | 0.1615 | Mild heterogeneity; strictly avoids scale-free star networks ($CV_k \ge 1.0$). |
-| **Normalized Second Moment ($\frac{\langle k^2 \rangle}{\langle k \rangle}$)** | 16.6629 | 18.0011 | 0.3303 | 17.0978 | 18.8738 | 17.3529 | 18.5998 | Tracks closely with $\langle k \rangle$, confirming absence of distorted hubs. |
-| **Node Volume Variance ($\text{Var}(s_{\text{tot}})$)** | 5681.9008 | 3117.3808 | 246.0137 | 2382.2645 | 4000.4463 | 2672.0826 | 3629.0008 | Recovers ~55% of empirical volume variance via fixed passer out-strength. |
-| **Goalkeeper Total Volume ($s_{\text{tot}}$)** | 38.0000 | 43.2300 | 2.9443 | 35.0000 | 51.0000 | 38.0000 | 49.0000 | Role preservation confirmed; prevents Goalkeeper Hub Paradox across all runs. |
-| **Adjacency Correlation ($r$)** | 1.0000 | 0.6753 | 0.0377 | 0.5544 | 0.7678 | 0.6026 | 0.7468 | Preserves spatial structure while shuffling tactical nuances without matrix duplication. |
+| Metric | Empirical | Null Mean | Null Std | Min | Max | 95% CI Lower | 95% CI Upper |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Mean Unweighted Degree ($\langle k \rangle$)** | 16.1818 | 17.7411 | 0.3923 | 16.7273 | 18.7273 | 16.9955 |
+| **Coefficient of Variation ($CV_k$)** | 0.1724 | 0.1196 | 0.0209 | 0.0648 | 0.1755 | 0.0813 | 0.1615 |
+| **Normalized Second Moment ($\frac{\langle k^2 \rangle}{\langle k \rangle}$)** | 16.6629 | 18.0011 | 0.3303 | 17.0978 | 18.8738 | 17.3529 | 18.5998 |
+| **Node Volume Variance ($\text{Var}(s_{\text{tot}})$)** | 5681.9008 | 3117.3808 | 246.0137 | 2382.2645 | 4000.4463 | 2672.0826 | 3629.0008 |
+| **Goalkeeper Total Volume ($s_{\text{tot}}$)** | 38.0000 | 43.2300 | 2.9443 | 35.0000 | 51.0000 | 38.0000 | 49.0000 |
+| **Adjacency Correlation ($r$)** | 1.0000 | 0.6753 | 0.0377 | 0.5544 | 0.7678 | 0.6026 | 0.7468 |
 
 --- 
 
 ## 9. Null-Baselined Metric Evaluation
 
 ### 9.1 Experimental Setup & Simulation Scope
-To evaluate the empirical network properties against a spatially constrained baseline, we executed $N = 1000$ independent spatial Markovian resampling iterations over the target match event stream. For each Monte Carlo iteration, three dedicated tracking structures logged the multi-scale graph metrics: a one-dimensional array recorded the global average shortest path values ($d$), a positional lookup dictionary tracked bottleneck capacity scores and ordinal ranks across all unique 3-player combinations, and a micro-level store captured shortest-path betweenness centrality scores ($g(i)$) mapped directly to each of the eleven starting tactical positions.
+To evaluate empirical network properties against a spatially constrained baseline, we executed $N = 1000$ spatial Markovian resampling iterations over the target match event stream. Dedicated tracking structures logged multi-scale graph metrics across each Monte Carlo run, including global shortest paths ($d$), 3-player transitive triad bottleneck capacities, and player-level betweenness centrality ($g(i)$).
 
 ---
 
 ### 9.2 Macro-Level Evaluation: Global Circulation Distance ($d$)
+Evaluating global average shortest path ($d = 0.1884$) against the 1000-iteration spatial null ensemble reveals that Arsenal WFC’s circulation efficiency emerges primarily from spatial territory and pass volume rather than unique tactics or elite performance.
 
-Evaluating the macro-level global average shortest path ($d = 0.1884$) against the 1000-iteration spatial null ensemble reveals that Arsenal WFC’s circulation efficiency is largely an emergent property of spatial territory and extreme pass volume, rather than an anomalous macro-topological structure.
-
-The empirical path length sits slightly below the null ensemble mean ($\bar{d}_{\text{null}} = 0.1932$), reflecting a marginal increase in overall circulation efficiency ($z = -0.43$). However, because the empirical value falls well within the 95% confidence interval ($[0.1732, 0.2120]$), the observed global accessibility cannot be classified as statistically significant tactical optimization. Instead, the null baseline confirms that completing over 700 passes within these specific spatial pitch zones inherently bounds global topological distance between $0.1732$ and $0.2120$.
-
-Furthermore, while Arsenal’s network operates below the spatial average, it remains noticeably above the ensemble’s theoretical minimum bound ($0.1732$). This gap stems from tactical channel selection: by concentrating high pass volumes through specific build-up hubs (e.g., left-back and central double-pivot pairings) rather than distributing play uniformly across all short-distance spatial options, Arsenal accepts a slight trade-off in global path length to execute deliberate, localized tactical overloads.
+The empirical path length sits slightly below the null mean ($\bar{d}_{\text{null}} = 0.1932$, $z = -0.43$), well within the 95% confidence interval ($[0.1732, 0.2120]$). Completing over 700 passes inherently dictates and bounds the global distance. One reasons Arsenal's path length remains above the theoretical minimum ($0.1732$) is because they forgo global efficiency in lieu of deliberate, localized tactical overloads.
 
 #### Table: Null-Baselined Macro Evaluation Summary
 | Scale | Metric | Empirical Value | Null Mean | Null 95% CI | Z-Score |
@@ -416,17 +360,15 @@ Furthermore, while Arsenal’s network operates below the spatial average, it re
 ---
 
 ### 9.3 Meso-Level Evaluation: Transitive Triad Dynamics ($I_{\text{transitive}}$)
-To determine whether Arsenal’s primary passing triangles stem from deliberate tactical instruction or simple spatial occupancy density, we evaluate transitive triads across the 1,000-iteration null ensemble. The framework pre-computes all $\binom{11}{3} = 165$ unique three-player positional triplets alongside their internal directed permutations. For each generated null realization $G_{\text{null}}^{(k)}$, the engine calculates the bottleneck capacity ($W_{\text{min}} = \min(W_{AB}, W_{BC}, W_{AC})$) for every active transitive triad, rank-orders them by strength, and logs both their capacity scores and ordinal ranks into a positional tracking store. Any triplet that fails to form in a specific iteration is assigned a zero capacity and a maximum penalty rank of 165 to prevent survivor bias. Finally, the empirical team's top passing triads are benchmarked against their specific null distributions by evaluating mean capacity ($\bar{W}_{\text{min, null}}$), average ordinal rank ($\bar{R}_{\text{null}}$), and rank retention frequency across the ensemble.
+Benchmarking the top 20 empirical transitive triads against the 1,000-iteration spatial null ensemble separates intentional tactical mechanics from simple spatial occupancy (Table 15).
 
-Benchmarking the top 20 empirical transitive triads against the 1,000-iteration spatial null ensemble reveals distinct structural patterns that separate spatial baseline expectations from intentional, highly organized tactical mechanics.
+Deep build-up triangles demonstrate extreme statistical significance. The rank 1 triad (Wubben-Moy–Little–Williamson; $116.00$ units, $z = +3.83$) and rank 2 left-flank triangle (Wubben-Moy–Little–Catley; $111.00$ units, $z = +5.67$) comfortably exceed null 95% upper bounds ($98.00$ and $78.00$, respectively), confirming an intentional left-sided overloading mechanism for progressive build-up.
 
-The primary build-up triangles out of deep defense exhibit extraordinary statistical significance. The rank 1 triad featuring central defenders Carlotte Wubben-Moy and Leah Williamson anchored by Kim Little ($116.00$ pass units, $z = +3.83$) exceeds the null ensemble's 95% upper confidence bound ($98.00$) by a wide margin. Even more prominent is the rank 2 triad incorporating left-back Steph Catley alongside Wubben-Moy and Little ($111.00$ pass units, $z = +5.67$). In a purely spatial model, this left-flank triangle averages a capacity of $61.11$ units; reaching $111.00$ units confirms an extreme, statistically significant left-sided overloading mechanism designed to construct progressive build-up play through high-density local combinations.
+Conversely, central double-pivot recycling loops operate directly in line with spatial expectations. Triads like Wubben-Moy–Little–Pelova ($69.00$ units, $z = -0.28$) track null means ($\bar{W} = 71.53$) almost perfectly, proving their high volume reflects spatial density rather than specialized tactics.
 
-In contrast, central double-pivot recycling loops operate directly in line with baseline spatial expectations. The rank 4 triad (Wubben-Moy – Little – Pelova, $69.00$ units, $z = -0.28$) and rank 5 triad (Little – Williamson – Pelova, $67.00$ units, $z = +0.01$) track the ensemble means almost perfectly ($\bar{W} = 71.53$ and $66.89$, respectively). This alignment demonstrates that while these central combinations carry high absolute pass volume, their capacity is entirely explained by local spatial occupancy density rather than a specialized, tactical anomaly.
+Finally, Alessia Russo’s participation across progressive triads consistently surpasses null bounds ($z$-scores between $+1.84$ and $+2.78$), proving her deep-dropping movement represents deliberate tactical linkage rather than spatial chance.
 
-Finally, the null baseline exposes the deep-dropping connector role executed by Alessia Russo. Across every top-20 triad in which Russo participates—including combinations with the central defenders and double-pivot (ranks 12, 14, 15, 16, and 17)—her empirical capacity significantly exceeds the null 95% upper bounds, generating consistent Z-scores between $+1.84$ and $+2.78$. Because a generic spatial model assigns lower baseline forward-reception probabilities to dropping central attacking players, Russo’s systematic participation in progressive triangles reflects deliberate tactical movement to link midfield circulation into the attacking third.
-
-##### Table: Null-Baselined Meso Evaluation Summary (Transitive Triads Top 20)
+##### Table 15: Null-Baselined Meso Evaluation Summary (Transitive Triads Top 20)
 | Scale | Targeted Metric / Entity | Empirical Value | Null Mean | Null 95% CI | Z-Score |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | **Meso** | Triad (Emp Rank 1): Wubben-Moy – Little – Williamson | 116.00 | 79.23 | [61.00, 98.00] | +3.83 |
@@ -453,21 +395,11 @@ Finally, the null baseline exposes the deep-dropping connector role executed by 
 ---
 
 ### 9.4 Micro-Level Evaluation: Positional Betweenness Centrality ($g(i)$)
-To quantify positional routing control and determine whether key playmakers act as central conduits beyond spatial baseline expectations, we evaluate weighted shortest-path betweenness centrality ($g(i)$) across the 1,000-iteration null ensemble. Each player node is mapped to their exact, uncondensed starting position (e.g., Left Center Back, Goalkeeper) to maintain consistent role-based tracking across resampling runs. For every generated network $G_{\text{null}}^{(k)}$, Dijkstra's algorithm computes all-pairs shortest topological paths using inverted pass weights ($l_{ij} = 1/w_{ij}$), logging each position's betweenness score into a dedicated tracking store. From these iterations, 95% confidence intervals and expected baseline distributions are established for all eleven tactical positions. Benchmarking empirical scores ($g_{\text{emp}}(i)$) against these positional null ranges isolates deliberate tactical routing bottlenecks—such as central defender or deep midfielder circulation—while verifying whether peripheral positions remain strictly bounded near zero.
+Evaluating empirical betweenness centrality ($g(i)$) against the 1,000-iteration spatial null baseline reveals how Arsenal WFC explicitly structures its build-up play (Table 16).
 
-Evaluating empirical betweenness centrality scores against the 1,000-iteration spatial null baseline isolates the specific positional hubs driving Arsenal WFC's tactical buildup. The results demonstrate that while peripheral roles strictly align with spatial expectations, the central defensive core operates as a statistically significant routing engine.
+The central defensive core operates as a primary routing engine: both Left Center Back ($g = 0.3222, z = +2.73$) and Right Center Back ($g = 0.3000, z = +2.85$) exceed their upper 95% confidence bounds ($0.2668$ and $0.2556$), proving their central conduit role is an explicit tactical instruction.
 
-The most prominent tactical signal emerges from the central defensive pairing. Both the Right Center Back ($g = 0.3000, z = +2.85$) and Left Center Back ($g = 0.3222, z = +2.73$) exceed the upper 95% confidence bounds of the null ensemble ($[0.0111, 0.2556]$ and $[0.0222, 0.2668]$, respectively). In a purely spatial model, central defenders are expected to account for a moderate routing share ($\bar{g} \approx 0.11 - 0.15$). Recording values above $0.3000$ proves that their role as primary build-up pivots is a deliberate, highly concentrated tactical instruction rather than a simple byproduct of spatial pitch geography.
-
-Furthermore, benchmarking against the spatial baseline uncovers noticeable asymmetries across the flank and midfield units. 
-
-Left Back betweenness ($g = 0.1222, z = +1.73$) approaches the upper 95% bound ($0.1556$) and far outstrips Right Back betweenness ($g = 0.0000, z = -0.38$), confirming a pronounced left-sided structural bias during initial progression out of defense.
-
-> its really to important to focus on the ranges here. left back is [0.0000, 0.1556]  where as right back [0.0000, 0.0667]. The ranges are fundementally skewed because the retain the actually pass volumne and positions but rewire the recipient based on the league average. What we are saying is, if a team played exactly like this with the exact number of reasons, how would a random player reshuffle fair. Arsneals left back demonstates a player who is inherently more importantant for the circuluation and distribution of the ball than an average player is. This explicity takes into account the volumne of passes in their area of the pitch!
-
-Conversely, midfield circulation displays a tactical reversal: under baseline spatial rules, the Left Defensive Midfielder is expected to absorb the largest routing share squad-wide ($\bar{g} = 0.2896$), yet Kim Little’s empirical score ($g = 0.1778, z = -1.31$) falls significantly below this spatial expectation. Instead of over-funneling possession through a single central midfield channel, Arsenal delegates routing duties more evenly across the double-pivot while relying directly on the center-backs to bridge play.
-
-Finally, the null baseline confirms strict boundary enforcement across terminal and peripheral positions. Attacking wingers, the central forward, the center attacking midfielder, and the goalkeeper all register empirical scores of $g = 0.0000$, placing them well within their respective null ranges ($\bar{g} \approx 0.0000 - 0.0071$). This alignment demonstrates that terminal execution nodes and deep defensive anchors operate strictly outside the team's primary path-routing network, preserving functional role boundaries across match play.
+Controlling for empirical spatial volume highlights a distinct flank asymmetry. The Left Back baseline range ($[0.0000, 0.1556]$) reflects high local pass density; Steph Catley’s score ($g = 0.1222, z = +1.73$) approaches this upper limit, whereas the Right Back registers $g = 0.0000$. Conversely, Left Defensive Midfield falls below its high spatial expectation ($\bar{g} = 0.2896$ vs. $g = 0.1778, z = -1.31$), demonstrating that Arsenal avoids over-funneling progression through a single central pivot. Finally, terminal attackers and the goalkeeper register $g = 0.0000$, preserving functional role boundaries.
 
 ##### Table: Null-Baselined Micro Evaluation Summary (Positional Betweenness Centrality)
 | Scale | Targeted Metric / Position | Empirical Value | Null Mean | Null 95% CI | Z-Score |
@@ -489,29 +421,22 @@ Finally, the null baseline confirms strict boundary enforcement across terminal 
 
 ## 10 Conclusion, Limitations and Future Work
 ### 10.1 Conclusion
-This project successfully demonstrated the powerful intersection of network science and sports analytics, establishing a rigorous framework for evaluating collective tactical behavior in association football. By leveraging open-source StatsBomb event data from the 2023/2024 FA Women's Super League, the research not only engineered raw spatiotemporal logs into directed, weighted PassMaps but also actively addressed the systemic underrepresentation of women's football datasets within the current academic literature.
+This project demonstrates the intersection of network science and sports analytics, exploring spatially aware framework for evaluating collective tactical behavior in football. By leveraging open-source StatsBomb event data from the 2023/2024 FA Women's Super League, the project converts raw spatiotemporal events into directed, weighted PassMaps while actively addressing the systemic underrepresentation of women's football research. 
 
-The project deployed a comprehensive, multi-scale diagnostic suite—ranging from micro-level 1-hop degree analysis to macro-level circulation efficiency and meso-level transitive triad clustering. To support this analytical framework, custom spatial visualization tools were developed from scratch, allowing abstract graph topologies to be seamlessly overlaid onto intuitive pitch coordinates.
+The project deployed a comprehensive, multi-scale diagnostic suite across micro (betweenness centrality), meso (transitive triads), and macro (global shortest paths) graph dimensions, supported by custom spatial visualization tools.
 
-Crucially, this research addressed a direct and outstanding call in contemporary literature (e.g., Gama et al., 2026) for the establishment of robust null models in football. Traditional network randomizations, such as the Erdős–Rényi model, were mathematically proven to fail in this domain, as they destroy spatial constraints, erase tactical workload inequality, and generate impossible structural anomalies like goalkeeper-to-striker playmaking loops.
+This research responds to direct calls in literature (Gama et al., 2026) for robust null baselines. We validate that traditional randomizations, such as Erdős–Rényi, fail in this domain by destroying pitch geometry, flattening workload inequality, and generating structural role anomalies.
 
-In response, this project engineered a novel 1st-order Spatial Markovian generative null process. By adapting "dynamics on the network" research, the model inverted the paradigm to govern the "dynamics of the network." The generative engine successfully stripped away match-specific tactical nuances by resampling pass recipients based on league-average spatial probabilities, while strictly preserving the empirical pass coordinates, passer identities, and physical pitch boundaries.
+In response, we engineered a novel 1st-order Spatial Markovian generative null process. By inverting the paradigm to govern the dynamics of the network, the generative engine resamples pass recipients using league-average spatial probabilities while strictly preserving empirical origin coordinates, passer identities, and physical pitch boundaries.
 
-This approach laid the foundational groundwork for a generative null validation framework, proving that the synthetic ensemble maintained scale-invariant heterogeneity, preserved true defensive role boundaries, and recovered structural volume variance. Ultimately, executing this Monte Carlo null pipeline against an extreme, high-volume empirical match allowed for the robust isolation of true tactical signals—such as deliberate left-flank overloads and center-back routing hubs—from baseline spatial noise, enabling profound micro-level player evaluation that would be impossible using flawed empirical comparisons alone.
+Ultimately, executing this Monte Carlo null pipeline against an extreme high-volume match separated baseline geometric inevitabilities from deliberate tactical architecture, isolating true tactical signals like left-flank overloads and center-back re-distribution from baseline spatial noise.
+
 
 ### 10.2 Limitations
-While the first-order Markovian approach was mathematically justified and proved highly effective for synthesizing static PassMaps, it carries inherent structural limitations.
-
-Firstly, the memoryless assumption of a first-order process fails to truly encode deeper, multi-step on-pitch relationships. In reality, football teams naturally fragment into localized "work groups" where specific players knit together unique, rehearsed playing styles to support one another. Because the generative engine samples recipients based purely on isolated spatial bins, it washes out these sequential, higher-order tactical relationships, which slightly limits the depth of complex triad and clustering analysis.
-
-Secondly, and most significantly, the generative model lacks temporal understanding. Time and game state are critical contextual factors that dictate on-pitch behavior; a pass played into the final third in the 90th minute while a team is aggressively chasing a 1-0 deficit carries fundamentally different tactical parameters than a pass in the same location during early-game consolidation. While literature precedents (such as Buldú et al., 2019) address temporality by segmenting matches into 50-pass increments, our framework aggregates spatial totals across the entire 90 minutes. Consequently, while the resampled recipients represent a broad spatial average, the model currently fails to account for the specific temporal game state in which the original pass was executed.
+While effective for synthesizing static PassMaps, the first-order Markovian framework carries two primary structural limitations. First, its memoryless assumption evaluates passes in isolation based purely on terminal spatial coordinates. By ignoring sequential, multi-step player interactions, the model washes out localized "work group" dynamics and complex combinational routines, which restricts higher-order triad analysis. Second, the framework lacks temporal and game-state context. Aggregating pass totals across full 90-minute matches ignores time elapsed and scoreline dynamics, such as chasing a late deficit versus early-game consolidation. Consequently, resampled recipients reflect broad spatial averages rather than the specific tactical context of the original pass.
 
 ### 10.3 Future Work
-Future research must build upon the null validation framework initiated in this study. Currently, there is no formalized, algorithmic consensus in the literature defining the exact mathematical bounds of a "valid" football passing network. While this project utilized established Small-World properties and domain intuition (e.g., functional role constraints) to validate the synthetic graphs, football contains a massive matrix of variables. Future work should establish a rigorous, parameterized set of network properties that dynamically adjust for variations in tactical formation, team strength, and game state.
-
-Additionally, the generative Markovian engine itself should be expanded. Beyond incorporating the aforementioned temporal game states and higher-order sequence memory, the scope of the spatial probability distributions can be traversed further. While this project successfully isolated receiver utility and tactical targeting by resampling the recipient, future models could resample the pass destination by training probability distributions mapping origin bins to terminal bins.
-
-Furthermore, the model could be extended to resample pass origins based on a player's tactical role and out-degree constraints. Ensembling these steps to regenerate entirely synthetic, spatially logical event streams would allow analysts to benchmark not just receiver importance, but passer initiative, decision-making, and systemic ball progression across any tactical scenario.
+Future research should expand the null validation framework by establishing algorithmic bounds that dynamically adjust for tactical formations, team quality, and game states. Expanding the generative engine requires integrating temporal context, higher-order sequence memory, and multi-step player interactions to better reflect localized combination play. Additionally, broadening the generative scope beyond pass recipient to resample pass destinations and origins based on role constraints would enable full synthetic event-stream generation. Ensembling these steps will allow analysts to systematically benchmark passer initiative, decision-making, and systemic ball progression across any tactical scenario.
 
 ---
 

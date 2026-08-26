@@ -57,8 +57,71 @@
 | **10** | Kim Little | Victoria Pelova | Emily Ann Fox | 51.0 |
 
 
+#### Table 6: Player-Level Transitive Triad Intensity Summary
+| Player | Position | Raw Intensity | Normalized (0–1) | Relative to Max | Tactical & Structural Role |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| **Kim Little** | Left Defensive Midfield | 1069.0 | 1.000 | 1.000 | Primary Linkage Hub: Anchors central combinations; highest involvement in progressive triangles. |
+| **Victoria Pelova** | Right Defensive Midfield | 927.0 | 0.854 | 0.867 | Double-Pivot Engine: Pairs with Little to form a high-volume central link between defense and attack. |
+| **Carlotte Wubben-Moy** | Left Center Back | 864.0 | 0.790 | 0.808 | Deep Circulation Base: High score confirms short, triangular build-up out of the back. |
+| **Leah Williamson** | Right Center Back | 814.0 | 0.738 | 0.761 | Right-Sided Base: Complements Wubben-Moy to establish deep defensive triangles. |
+| **Stephanie-Elise Catley** | Left Back | 645.0 | 0.565 | 0.603 | Left-Flank Overload: Noticeably outscores Fox (514.0), reflecting a left-leaning build-up preference. |
+| **Alessia Russo** | Center Attacking Midfield | 641.0 | 0.561 | 0.600 | Inverted Connector: High score shows she drops deep into central pockets to link mid-block triads. |
+| **Emily Ann Fox** | Right Back | 514.0 | 0.430 | 0.481 | Wide Outlet: Secondary wide option in right-sided combination loops. |
+| **Bethany Mead** | Right Wing | 450.0 | 0.364 | 0.421 | Final-Third Link: Moderate involvement in localized wide combination play. |
+| **Caitlin Jade Foord** | Left Wing | 275.0 | 0.185 | 0.257 | Wide Isolation: Operates primarily as an isolated 1v1 outlet rather than a triad loop hub. |
+| **Sabrina D’Angelo** | Goalkeeper | 114.0 | 0.020 | 0.107 | Restricted Origin: Low involvement; acts primarily as a initial reset node rather than a triad bridge. |
+| **Emma Stina Blackstenius** | Center Forward | 95.0 | 0.000 | 0.089 | Terminal Endpoint: Lowest score squad-wide (0.000 normalized); functions strictly as a finisher rather than a link player. |
 
+---
 
+##### Table X: Formation and Passing Binning
+| Starting Formation | Match Count (n) | Percentage (%) |
+| :--- | :---: | :---: |
+| **4-2-3-1** | 29 | 30.85 |
+| **3-5-2** | 14 | 14.89 |
+| **4-3-3** | 12 | 12.77 |
+| **4-1-4-1** | 11 | 11.70 |
+| **3-4-3** | 11 | 11.70 |
+| **4-4-2** | 6 | 6.38 |
+| **4-4-1-1** | 5 | 5.32 |
+| **3-4-1-2** | 3 | 3.19 |
+| **3-4-2-1** | 1 | 1.06 |
+| **4-1-2-1-2** | 1 | 1.06 |
+| **4-5-1** | 1 | 1.06 |
+---
+
+#### Table 9: Top 10 Active Transitive Triads (Erdős–Rényi Null Model)
+| Rank | Origin / Target ($A$) | Intermediate ($B$) | Target / Origin ($C$) | Bottleneck Capacity ($W_{\text{min}}$ Pass Units) |
+| :---: | :--- | :--- | :--- | :---: |
+| **1** | Emma Stina Blackstenius | Carlotte Wubben-Moy | Bethany Mead | 69.0 |
+| **2** | Sabrina D’Angelo | Emma Stina Blackstenius | Emily Ann Fox | 51.0 |
+| **3** | Emma Stina Blackstenius | Carlotte Wubben-Moy | Emily Ann Fox | 46.0 |
+| **4** | Emma Stina Blackstenius | Emily Ann Fox | Bethany Mead | 44.0 |
+| **5** | Emily Ann Fox | Caitlin Jade Foord | Bethany Mead | 44.0 |
+| **6** | Stephanie-Elise Catley | Caitlin Jade Foord | Bethany Mead | 43.0 |
+| **7** | Stephanie-Elise Catley | Kim Little | Bethany Mead | 42.0 |
+| **8** | Stephanie-Elise Catley | Emily Ann Fox | Caitlin Jade Foord | 41.0 |
+| **9** | Carlotte Wubben-Moy | Emily Ann Fox | Bethany Mead | 40.0 |
+| **10** | Kim Little | Victoria Pelova | Bethany Mead | 39.0 |
+
+---
+
+##### Table 10: Condensed Position Categories Across Season Corpus
+> possibly move to appendix
+| Rank | Recipient Position (Condensed) | Pass Reception Count |
+| :---: | :--- | :---: |
+| 1 | Center Back (CB) | 25,544 |
+| 2 | Central Midfielder (CM) | 20,027 |
+| 3 | Left Back (LB) | 8,554 |
+| 4 | Right Back (RB) | 8,003 |
+| 5 | Striker / Center Forward (ST) | 7,066 |
+| 6 | Goalkeeper (GK) | 6,730 |
+| 7 | Left Midfielder / Winger (LM) | 5,461 |
+| 8 | Right Midfielder / Winger (RM) | 5,256 |
+| 9 | Center Attacking Midfielder (CAM) | 3,140 |
+
+> Appendix X: The Mapping of PLayer Positions to Conddensed Position Set
+> Appendix X: Original Position Count
 
 #### Appendix X: The Mapping of PLayer Positions to Conddensed Position Set
 POSITION_MAP_11 = {
@@ -97,8 +160,6 @@ POSITION_MAP_11 = {
     "Right Midfield": "RM",
 }
 
-
-
 ### Appendix X: Original Position Count
            recipient_position  count
 0            Left Center Back  11956
@@ -126,11 +187,21 @@ POSITION_MAP_11 = {
 22    Left Attacking Midfield    198
 
 
+---
 
+#### 7.6.1 Appendix X Sense Checking the Resampled Recipient Dataset
+Evaluating the resampled event stream directly prior to network aggregation confirms that the spatial engine successfully balances generative variance with domain realism. Across a single match realization, 22.08% of passes remapped to their exact empirical recipient, verifying that while localized spatial dominance is preserved, the model does not simply reproduce the input network.
 
+The resampling process preserves key defensive constraints while highlighting structural model trade-offs. Goalkeeper Sabrina D’Angelo’s receptions remain tightly constrained (dropping from 19 to 13 passes), demonstrating that the spatial model strictly enforces defensive role boundaries instead of transforming the goalkeeper into an artificial playmaker. Conversely, wingers Caitlin Foord and Beth Mead experience inflated pass shares due to playing only 63 minutes in the real match. Because the framework operates on full-match spatial totals without temporal substitution weighting, it models substitute players as 90-minute participants.
 
+Striker Stina Blackstenius exhibits the largest shift, moving from 10 empirical receptions (1.39%) to 104 resampled receptions (14.55%). In empirical match play, Blackstenius possesses an exceptionally distinct tactical profile, functioning as a specialized off-ball target who rarely engages in general possession buildup. The generative spike to 104 receptions stems from match-specific territory. Arsenal dominated possession deep in the opposition half, where spatial tensor bins assign high baseline reception probabilities to central forwards. The resampled allocation replaces Blackstenius's unique off-ball isolation with the expected spatial density of the final third, reflecting territorial volume rather than a generative model failure (Figure X).
 
+##### Figure 10: Striker Resampled Pitch Plot
+![the plot of the areas that the resampled striker receives the ball](./figures/striker_resample_plot.png)
 
+> Appendix X : Change in Pass Share (Empirical vs. Resampled Receptions)
+
+---
 
 ##### Appendix X : Change in Pass Share (Empirical vs. Resampled Receptions)
 | Player | Original Passes Received (Count) | Original Share (%) | Resampled Passes Received (Count) | Resampled Share (%) |
