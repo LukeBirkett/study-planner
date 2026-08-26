@@ -1,0 +1,108 @@
+\begin{thebibliography}{10}
+
+\bibitem{gama2026stoch}
+Gama J, Dias G, Couceiro MS, Mendes R, Mendes RS, Vaz V.
+\newblock Linking network structures and stochastic flow properties: An exploratory Markov-spectral case study in professional football.
+\newblock Proceedings of the Institution of Mechanical Engineers, Part P: Journal of Sports Engineering and Technology. 2026:17543371261448957.
+
+\bibitem{wasserman1994}
+Wasserman S.
+\newblock Advances in social network analysis: Research in the social and behavioral sciences. vol. 171.
+\newblock Sage; 1994.
+
+\bibitem{newman2001}
+Newman ME.
+\newblock The structure of scientific collaboration networks.
+\newblock Proceedings of the national academy of sciences. 2001;98(2):404-9.
+
+\bibitem{fortunato2010}
+Fortunato S.
+\newblock Community detection in graphs.
+\newblock Physics Reports. 2010;486(3--5):75-174.
+
+\bibitem{pastor2001}
+Pastor-Satorras R, Vespignani A.
+\newblock Epidemic spreading in scale-free networks.
+\newblock Physical review letters. 2001;86(14):3200.
+
+\bibitem{lusseau2003emergent}
+Lusseau D.
+\newblock The emergent properties of a dolphin social network.
+\newblock Proceedings of the Royal Society B: Biological Sciences. 2003;270(Suppl 2):S186.
+
+\bibitem{newman2003structure}
+Newman ME.
+\newblock The structure and function of complex networks.
+\newblock SIAM review. 2003;45(2):167-256.
+
+\bibitem{araujo2006ecological}
+Ara{\'u}jo D, Davids K, Hristovski R.
+\newblock The ecological dynamics of decision making in sport.
+\newblock Psychology of sport and exercise. 2006;7(6):653-76.
+
+\bibitem{duch2010quantifying}
+Duch J, Waitzman JS, Amaral LAN.
+\newblock Quantifying the performance of individual players in a team activity.
+\newblock PloS one. 2010;5(6):e10937.
+
+\bibitem{pollard1997xg}
+Pollard R, Reep C.
+\newblock Measuring the effectiveness of playing strategies at soccer.
+\newblock Journal of the Royal Statistical Society Series D: The Statistician. 1997;46(4):541-50.
+
+\bibitem{buldu2019}
+Buld{\'u} JM, Busquets J, Echegoyen I, Seirul~lo F.
+\newblock Defining a historic football team: Using Network Science to analyze Guardiola’s FC Barcelona.
+\newblock Scientific reports. 2019;9(1):13602.
+
+\bibitem{buldu2018}
+Buld{\'u} JM, Busquets J, Mart{\'\i}nez JH, Herrera-Diestra JL, Echegoyen I, Galeano J, et~al.
+\newblock Using network science to analyse football passing networks: Dynamics, space, time, and the multilayer nature of the game.
+\newblock Frontiers in psychology. 2018;9:1900.
+
+\bibitem{alves2025review}
+Alves R, Dias G, Nunes NA, Querido SM, Vaz V.
+\newblock Social network analysis in football: a systematic review of performance and tactical applications.
+\newblock Frontiers in Psychology. 2025;16:1659603.
+
+\bibitem{narizuka2014statistical}
+Narizuka T, Yamamoto K, Yamazaki Y.
+\newblock Statistical properties of position-dependent ball-passing networks in football games.
+\newblock Physica A: Statistical Mechanics and its Applications. 2014;412:157-68.
+
+\bibitem{gama2026review}
+Gama J, Dias G, Pereira M, Mendes R, Mendes RS, Sarmento H, et~al.
+\newblock Network analysis to understand variability and patterns of individual and collective behaviour in professional football: A systematic review.
+\newblock International Journal of Performance Analysis in Sport. 2026:1-62.
+
+\bibitem{arriaza2018applying}
+Arriaza-Ardiles E, Mart{\'\i}n-Gonz{\'a}lez J, Zuniga M, S{\'a}nchez-Flores J, De~Saa Y, Garc{\'\i}a-Manso JM.
+\newblock Applying graphs and complex networks to football metric interpretation.
+\newblock Human movement science. 2018;57:236-43.
+
+\bibitem{pena2012network}
+Pena JL, Touchette H.
+\newblock A network theory analysis of football strategies.
+\newblock arXiv preprint arXiv:12066904. 2012.
+
+\bibitem{watts1998collective}
+Watts DJ, Strogatz SH.
+\newblock Collective dynamics of ‘small-world’ networks.
+\newblock nature. 1998;393(6684):440-2.
+
+\bibitem{pena2015can}
+Pe{\~n}a JL, Navarro RS.
+\newblock Who can replace Xavi? A passing motif analysis of football players.
+\newblock arXiv preprint arXiv:150607768. 2015.
+
+\bibitem{gilbert1959}
+Gilbert EN.
+\newblock Random Graphs.
+\newblock The Annals of Mathematical Statistics. 1959;30(4):1141-4.
+
+\bibitem{erdos1959}
+Erd{\"o}s P, R{\'e}nyi A.
+\newblock On Random Graphs {I}.
+\newblock Publicationes Mathematicae Debrecen. 1959;6:290-7.
+
+\end{thebibliography}

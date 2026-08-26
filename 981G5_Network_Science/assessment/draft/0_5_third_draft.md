@@ -33,8 +33,6 @@ Raw non-relational event logs are engineered into directed, weighted adjacency m
 
 StatsBomb's $120 \times 80$ yard pitch coordinates are rescaled to a normalized $100 \times 100$ grid to standardize across varying venue dimensions (Buldú et al., 2019). Figure 1 illustrates this raw pass data before graph transformation.
 
-To preserve an $N = 11$ network structure despite match substitutions, we model only the eleven players with the highest total volume. Unlike literature methods that merge substitutes into contiguous positional nodes — obscuring individual identities — or expand the graph ($N > 11$), distorting density and clustering metrics (Narizuka et al., 2014; Buldú et al., 2019), this parsimonious filtering isolates true player dynamics without skewing core network properties.
-
 #### Figure 1: Raw Pass Plotting for 1 Match: Sub-plot 1 Indivudal player vs Sub-plot 2 Whole Team
 ![Raw passes plotted by individual player and entire team](./figures/raw_passes.png)
 
@@ -55,6 +53,8 @@ To preserve an $N = 11$ network structure despite match substitutions, we model 
 Team organization is modeled using the PassMap paradigm popularized by Buldú et al. (2019), represented as a directed, weighted graph $G = (V, E, W)$ where edges ($E$) denote completed passes and edge weights ($W$) quantify pass volume between nodes over a 90-minute match.
 
 While literature outlines alternative formulations — such as purely geographic Pitch-Location networks or high-density composite Player-Pitch networks (Buldú et al., 2018; Narizuka et al., 2014) — this project focuses exclusively on the Player PassMap paradigm. Here, the node set corresponds directly to the eleven players ($\vert V \vert = 11$), enriched with individual identities and mean spatial $(x, y)$ coordinates. Appending average positions leaves topological graph invariants unchanged while significantly enhancing visual interpretability and establishing spatial baselines.
+
+To preserve an $N = 11$ network structure despite match substitutions, we model only the eleven players with the highest total volume. Unlike literature methods that merge substitutes into contiguous positional nodes — obscuring individual identities — or expand the graph ($N > 11$), distorting density and clustering metrics (Narizuka et al., 2014; Buldú et al., 2019), this parsimonious filtering isolates true player dynamics without skewing core network properties.
 
 Player Networks represent the standard approach in football analytics (Duch et al., 2010; Gama et al., 2026; Alves et al., 2025). They maintain intuitive alignment with real-world tactical play while avoiding artificial spatial discretization steps that lack consensus standards (Narizuka et al., 2014; Arriaza-Ardiles et al., 2018). As shown in Figure 2, plotting these networks either directly overlaying pitch boundaries or in a frameless spatial layout preserves structural clarity while surfacing emergent team interactions.
 
@@ -441,38 +441,6 @@ Future research should expand the null validation framework by establishing algo
 ---
 
 # Biblography
-<!--
-- Wasserman & Faust (1994)
-- Newman (2001)
-- Rodrigues (2019)
-- Fortunato (2010)
-- Pastor-Satorras & Vespignani (2001)
-- Barrat et al. (2008)
-- Lusseau (2003)
-- Newman (2003)
-- Araújo et al. (2006)
-- Duch et al. (2010)
-- Pollard & Reep (1997)
-- Buldú et al. (2019)
-- Gama et al. (2026)
-- Buldú et al. (2018)
-- Alves et al. (2025)
-- Narizuka et al. (2014)
-- Yamamoto & Yokoyama (2011)
-- Grund
-- Camerino et al. (2012)
-- Arriaza-Ardiles et al. (2018)
-- López-Peña & Touchette (2012)
-- Cotta et al. (2013)
-- Peña & Navarro (2015)
-- López-Peña & Sánchez Navarro (2015)
-- Clemente et al. (2015)
-- Watts & Strogatz (1998)
-- Cintia et al. (2015)
-- Pina et al. (2017)
-- Ribeiro et al. (2017)
-- Norris (1998)
--->
 
 
 
