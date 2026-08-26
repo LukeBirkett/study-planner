@@ -38,21 +38,21 @@
     \vspace*{0.5cm}
     
     % Course Title
-    {\Large \textbf{Module ()}}\\[0.3cm]
-    {\large \textbf{Assessment Title}}\\[0.1cm]
+    {\Large \textbf{Separating Noise from Architecture: A Spatial Markovian Null Model for Passing Networks in Women’s Football}}\\[0.3cm]
+    {\large \textbf{Network Science (981G5)}}\\[0.1cm]
     
     % Author & Candidate Info
     \begin{tabular}{r l}
         \textbf{Author:} & Luke Birkett \\
         \textbf{Candidate ID:} & 22411525 \\
-        \textbf{Word Count:} &  \\
+        \textbf{Word Count:} & ~4200* \\
     \end{tabular}\\[0.5cm]
     
     % Abstract Section
     \begin{minipage}{0.92\textwidth}
         \small
         \textbf{\abstractname}\\[0.3em]
-        This report 
+        This research evaluates collective tactical behavior in football by integrating network science with spatiotemporal sports analytics. Using open source StatsBomb event data from the 2023/2024 FA Women's Super League, raw pass data were converted into directed, weighted PassMaps to address the underrepresentation of women's football in quantitative literature. We deployed a multiscale diagnostic suite across micro (betweenness centrality), meso (transitive triads), and macro (global shortest paths) graph dimensions to evaluate empirical match networks. Applying this framework to synthetic baselines demonstrated that traditional Erdos Renyi randomizations fail to produce valid football networks by destroying pitch geometry, flattening workload inequality, and generating structural role anomalies. In response, we engineered a novel first order Spatial Markovian generative null model. By shifting the analytical lens from dynamics \textit{on} the network to dynamics \textit{of} the network, the engine resamples pass recipients using league average spatial probabilities while preserving origin coordinates, passer identities, and pitch constraints. Executing this Monte Carlo pipeline against a high volume match successfully isolates true tactical signals, such as left flank overloads, from baseline geometric spatial noise.
     \end{minipage}\\[1cm]
     
     % AI Usage Statement Section
@@ -63,6 +63,13 @@
     \end{minipage}
 
     \vfill
+
+    % Footnote on Word Count Methodology
+    \begin{minipage}{0.92\textwidth}
+        \tiny
+        \color{gray}
+        * \textit{Word Count Note:} The word count does not include contents pages, headings, tables, figures, or latex formulas. 
+    \end{minipage}
     
 \end{titlepage}
 
@@ -406,7 +413,7 @@ Raw StatsBomb pitch coordinates ($120 \times 80$) are normalized to a standardiz
 \subsection{Recipient Probability Distribution Training}
 \label{subsec:recipient_prob_training}
 
-Using the discretized spatial grid and condensed positional taxonomy, we compile the pass data into a 3D Spatial Probability Tensor $\mathcal{P}$ of shape $(10, 10, N_{\text{pos}})$, where $N_{\text{pos}} = 9$. Each tensor element $\mathcal{P}(r, c, p)$ records pass frequencies terminating in cell $(r, c)$ received by position $p$. To prevent zero-probability artifacts in sparse pitch zones, we apply Laplace Additive Smoothing ($\alpha = 1.0$):
+Using the discretized spatial grid and condensed positional taxonomy, we compile the pass data into a 3D Spatial Probability Tensor $\mathcal{P}$ of shape $(10, 10, N_{\text{pos}})$, where $N_{\text{pos}} = 9$. Each tensor element $\mathcal{P}(r, c, p)$ records pass frequencies terminating in the cell $(r, c)$ received by position $p$. To prevent zero-probability artifacts in sparse pitch zones, we apply Laplace Additive Smoothing ($\alpha = 1.0$):
 \begin{equation}
     \text{Counts}_{\text{smoothed}}(r, c, p) = \text{RawCount}(r, c, p) + 1.0
 \end{equation}
@@ -540,7 +547,7 @@ However, even the maximum simulated variance ($4000.45$) falls short of the empi
 \subsection{Role Realism}
 \label{subsec:role_realism}
 
-Functional role realism is similarly preserved across all iterations. Goalkeeper Sabrina D’Angelo’s total pass volume stays tightly bounded with an ensemble mean of $43.2300$ passes ($95\%$ CI: $[38.0000, 49.0000]$) and a range of $[35.0, 51.0]$. Unlike Erd{\H{o}}s--R{\'e}nyi random graphs that erroneously transform the goalkeeper into an active playmaking hub, the spatial engine encodes positional constraints across every generated instance.
+Functional role realism is similarly preserved across all iterations. Goalkeeper Sabrina D’Angelo’s total pass volume stays tightly bound with an ensemble mean of $43.2300$ passes ($95\%$ CI: $[38.0000, 49.0000]$) and a range of $[35.0, 51.0]$. Unlike Erd{\H{o}}s--R{\'e}nyi random graphs that erroneously transform the goalkeeper into an active playmaking hub, the spatial engine encodes positional constraints across every generated instance.
 
 \subsection{Generative Matrix Variance}
 \label{subsec:matrix_variance}
@@ -1096,6 +1103,61 @@ Striker Stina Blackstenius shows the largest shift, rising from 11 empirical rec
     \end{tabularx}
 \end{table}
 
+
+\clearpage
+\section*{1. Dataset Overview \& FAIR Alignment}
+\begin{itemize}
+    \item \textbf{Dataset Name:} FA Women's Super League (WSL) Spatial PassMap and Markovian Null Ensembles (2023/2024).
+    \item \textbf{Short Description:} A curated collection of directed, weighted passing networks and spatial probability tensors derived from the 2023/2024 FA Women's Super League season, alongside synthetic generative null networks.
+    \item \textbf{Source:} Programmatically extracted via the \texttt{statsbombpy} API client accessing free StatsBomb open data.
+    \item \textbf{Curator/Data Engineering:} Built using a custom Python pipeline (\texttt{pandas}, \texttt{networkx}, \texttt{matplotlib}, \texttt{scipy}) for the Network Science assessment.
+    \item \textbf{License:} Open-access for academic research under the StatsBomb User Agreement.
+    \item \textbf{FAIR Compliance:} Adheres to FAIR principles (Findable, Accessible, Interoperable, Reusable) by converting raw, proprietary spatiotemporal event streams into standardized adjacency matrices, percentage-scaled coordinates, and portable edge-list formats.
+\end{itemize}
+
+\section*{2. Motivation \& Purpose}
+\begin{itemize}
+    \item \textbf{Primary Purpose:} Created to lay the computational groundwork for domain-aware, spatially constrained generative null models for network analysis in association football.
+    \item \textbf{Research Gap Addressed:} Directly responds to systemic underrepresentation of women's football in quantitative sports literature while addressing the lack of valid null baselines in spatial network science.
+    \item \textbf{Intended Use Cases:} Multi-scale network diagnostics (micro-level betweenness centrality, meso-level transitive triad intensity, macro-level shortest path lengths) and benchmarking tactical passing structures.
+    \item \textbf{Known Limitations:} Empirical benchmarking across real matches suffers from extreme data sparsity at high pass volumes ($>700$ passes). Grouping matches by formation and volume bins yields underpopulated sample sizes, highlighting the necessity of generative null modeling over pure empirical baselines.
+\end{itemize}
+
+\section*{3. Dataset Composition \& Network Topology}
+\begin{itemize}
+    \item \textbf{Network Format:} Directed, weighted, spatially constrained networks ($G = (V, E, W)$).
+    \item \textbf{Nodes ($V$):} 11 nodes per network, representing the starting 11 tactical positions / active players with the highest appearance duration in each match-team instance.
+    \item \textbf{Edges ($E$) \& Weights ($W$):} Directed pass counts ($A \to B$) representing successfully completed passes between teammates (incomplete or intercepted passes are filtered out).
+    \item \textbf{Macro Corpus Scope:} 264 total team-match networks comprising 105,262 successful completed passes across the 2023/2024 WSL season, filtered to 89,781 for the scope of the project.
+    \item \textbf{Case Study Network:} An extreme high-volume match (Arsenal WFC, Match ID 3913160; 847 total passes) utilized for stress-testing spatial null baselines against high-density graph topologies.
+\end{itemize}
+
+\section*{4. Data Collection, Normalization \& Engineering}
+\begin{itemize}
+    \item \textbf{API Ingestion:} Match lineups and event streams were fetched programmatically using \texttt{statsbombpy.sb.events()} and \texttt{statsbombpy.sb.lineups()}.
+    \item \textbf{Positional Taxonomy Mapping:} Fine-grained StatsBomb positions (e.g., \textit{Left Center Back}, \textit{Right Center Back}) were mapped into a condensed 11-class taxonomy (e.g., \texttt{CB}, \texttt{CM}, \texttt{ST}) to maximize data density and eliminate team-specific lateral biases during probability modeling.
+    \item \textbf{Spatial Normalization \& Binning:} Pitch coordinates were normalized from StatsBomb's raw scale ($120 \times 80$) to a standardized percentage scale ($100 \times 100$) and discretized into a $10 \times 10$ uniform spatial grid of 100 cells.
+    \item \textbf{Markov Probability Tensor:} Compiled a season-wide frequency tensor of pass end locations binned by condensed recipient position. Applied Laplace additive smoothing ($\alpha = 1.0$) to establish a valid conditional probability model $P(\text{Position} \mid \text{Grid Bin})$.
+    \item \textbf{Generative Recipient Resampling:} Synthetic null event streams were generated by preserving empirical origin coordinates, passer identities, and total pass counts while resampling recipient positions from $P(\text{Position} \mid \text{Grid Bin})$. Self-passes ($A \to A$) were strictly prevented via an iterative rejection sampler.
+\end{itemize}
+
+\section*{5. Ethical, Privacy \& Bias Considerations}
+\begin{itemize}
+    \item \textbf{Privacy \& PII:} Contains public-figure PII (player names, positions, and match appearance statistics). As all data is derived from publicly broadcast professional sports events and published open-access databases, it carries zero risk of disclosing sensitive personal, medical, or private private-life information.
+    \item \textbf{Domain Equity:} Promotes open data accessibility in women's sports science by developing open-source visualization and graph analysis pipelines.
+    \item \textbf{Tactical and Performance Biases:} The spatial probability tensor is trained on elite-level professional matchplay (FA WSL). Tactical behaviors (e.g., double-pivot build-ups or terminal off-the-ball striker roles) reflect high-level professional dynamics and may not directly generalize to lower-tier or amateur networks.
+\end{itemize}
+
+\section*{6. Suggested Analysis \& Benchmarking}
+\begin{itemize}
+    \item \textbf{Recommended Metrics:}
+    \begin{itemize}
+        \item \textit{Micro:} Unweighted degree ($k_{\text{in}}, k_{\text{out}}$), net flow ($\Delta s_i$), and weighted betweenness centrality $g(i)$.
+        \item \textit{Meso:} Pure transitive triad intensity ($\bar{I}_{\text{transitive}}$) isolating progressive wall-pass combinations ($A \to B \to C$ with $A \to C$).
+        \item \textit{Macro:} Global average shortest path length ($d_{\text{global}}$) using inverted weights ($l_{ij} = 1/w_{ij}$) and degree coefficient of variation ($CV_k$).
+    \end{itemize}
+    \item \textbf{Null Model Recommendations:} Users should benchmark empirical PassMaps against the provided 1st-order Spatial Markovian null model. Traditional randomizations (e.g., Erd{\H{o}}s--R{\'e}nyi $G(N,p)$ or degree-preserving rewiring) are fundamentally invalid for football networks because they destroy pitch geometry, flatten workload inequality, and generate impossible tactical anomalies (such as high-volume passing triangles between goalkeepers and strikers).
+\end{itemize}
 
 
 \end{document}
