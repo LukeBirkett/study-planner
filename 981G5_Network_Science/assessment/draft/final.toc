@@ -14,7 +14,7 @@
 \contentsline {section}{\numberline {5}Empirical Baseline Constraints}{8}{section.5}%
 \contentsline {section}{\numberline {6}Traditional Nulls}{9}{section.6}%
 \contentsline {subsection}{\numberline {6.1}Erd{\H {o}}s--R{\'e}nyi (ER) Random Model}{9}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Null Network Validation}{9}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.2}Traditional Null Network Validation}{9}{subsection.6.2}%
 \contentsline {section}{\numberline {7}Markovian Null Model}{11}{section.7}%
 \contentsline {subsection}{\numberline {7.1}Markovian Processes and Stochastic Transformations}{11}{subsection.7.1}%
 \contentsline {subsubsection}{\numberline {7.1.1}Justifying First-Order Markovian Processes}{11}{subsubsection.7.1.1}%
@@ -33,17 +33,19 @@
 \contentsline {subsection}{\numberline {9.1}Experimental Setup \& Simulation Scope}{18}{subsection.9.1}%
 \contentsline {subsection}{\numberline {9.2}Macro-Level Evaluation: Global Circulation Distance ($d$)}{18}{subsection.9.2}%
 \contentsline {subsection}{\numberline {9.3}Meso-Level Evaluation: Transitive Triad Dynamics ($I_{\text {transitive}}$)}{18}{subsection.9.3}%
-\contentsline {subsection}{\numberline {9.4}Micro-Level Evaluation: Positional Betweenness Centrality ($g(i)$)}{19}{subsection.9.4}%
-\contentsline {section}{\numberline {10}Conclusion, Limitations, and Future Work}{21}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Conclusion}{21}{subsection.10.1}%
-\contentsline {subsection}{\numberline {10.2}Limitations}{21}{subsection.10.2}%
-\contentsline {subsection}{\numberline {10.3}Future Work}{21}{subsection.10.3}%
+\contentsline {subsection}{\numberline {9.4}Micro-Level Evaluation: Positional Betweenness Centrality ($g(i)$)}{18}{subsection.9.4}%
+\contentsline {section}{\numberline {10}Conclusion, Limitations, and Future Work}{20}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Conclusion}{20}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Limitations}{20}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Future Work}{20}{subsection.10.3}%
 \contentsline {section}{Appendices}{24}{section*.5}%
 \contentsline {section}{\numberline {A}Football Network Metrics Taxonomy}{24}{appendix.A}%
-\contentsline {section}{\numberline {B}Dataset and Positional Taxonomy}{26}{appendix.B}%
-\contentsline {section}{\numberline {C}Null Model Triad Evaluation}{27}{appendix.C}%
-\contentsline {section}{\numberline {D}Condensed Positional Taxonomy and Mapping Logical}{28}{appendix.D}%
-\contentsline {section}{\numberline {E}Original Position Counts}{29}{appendix.E}%
-\contentsline {section}{\numberline {F}Resampled Player Pass Share}{30}{appendix.F}%
-\contentsline {section}{\numberline {G}Sense Checking the Resampled Recipient Dataset}{31}{appendix.G}%
-\contentsline {section}{\numberline {H}League Wide Striker Pass Summary}{32}{appendix.H}%
+\contentsline {section}{\numberline {B}Sample Network Betweenness Centrality Scores}{26}{appendix.B}%
+\contentsline {section}{\numberline {C}Top Empirical Transitive Passing Triads}{27}{appendix.C}%
+\contentsline {section}{\numberline {D}Dataset and Positional Taxonomy}{28}{appendix.D}%
+\contentsline {section}{\numberline {E}Null Model Triad Evaluation}{29}{appendix.E}%
+\contentsline {section}{\numberline {F}Condensed Positional Taxonomy and Mapping Logical}{30}{appendix.F}%
+\contentsline {section}{\numberline {G}Original Position Counts}{31}{appendix.G}%
+\contentsline {section}{\numberline {H}Resampled Player Pass Share}{32}{appendix.H}%
+\contentsline {section}{\numberline {I}Sense Checking the Resampled Recipient Dataset}{33}{appendix.I}%
+\contentsline {section}{\numberline {J}League Wide Striker Pass Summary}{34}{appendix.J}%

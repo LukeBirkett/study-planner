@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex final"] 1787763768.39105 "final.aux" "final.bbl" "final" 1787763770.44542 0
-  "./references.bib" 1787763766.07347 7821 07fd7843b3cd553b624aaa4a4e0bdb8e ""
+["bibtex final"] 1787773657.0201 "final.aux" "final.bbl" "final" 1787773756.72193 0
+  "./references.bib" 1787763861.18295 7821 07fd7843b3cd553b624aaa4a4e0bdb8e ""
   "/usr/local/texlive/2026/texmf-dist/bibtex/bst/vancouver/vancouver.bst" 1621023055 40624 ac6ae80a2b874e3abad2798e8fbde6a2 ""
-  "final.aux" 1787763770.0872 20748 517f29a47471fb0fb867215bd03a64e1 "pdflatex"
+  "final.aux" 1787773756.37512 21995 482801e278df3d2170d73bf5300bd1fa "pdflatex"
   (generated)
   "final.bbl"
   "final.blg"
   (rewritten before read)
-["pdflatex"] 1787763768.49654 "/Users/lukebirkett/Repos/study-planner/981G5_Network_Science/assessment/draft/final.tex" "final.pdf" "final" 1787763770.44562 0
-  "/Users/lukebirkett/Repos/study-planner/981G5_Network_Science/assessment/draft/final.tex" 1787763766.18247 71955 e1cf273ba196043e9a3e0b89407838ae ""
+["pdflatex"] 1787773754.72753 "/Users/lukebirkett/Repos/study-planner/981G5_Network_Science/assessment/draft/final.tex" "final.pdf" "final" 1787773756.72216 0
+  "/Users/lukebirkett/Repos/study-planner/981G5_Network_Science/assessment/draft/final.tex" 1787773754.49455 74407 7496f7d853115abb744d37c4f73feddd ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
@@ -39,6 +39,7 @@
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmti12.tfm" 1136768653 1484 ed72f8f5cf654cda15ecc8e32bfcbee5 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm" 1136768653 772 9a936b7f5e2ff0557fce0f62822f0bbf ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
@@ -57,6 +58,7 @@
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1248133631 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb" 1248133631 36118 fad905eba93cff5bce1e185fe980a177 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb" 1248133631 24252 1e4e051947e12dfb50fee0b7f4e26e3a ""
   "/usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb" 1215737283 136101 f533469f523533d38317ab5729d00c8a ""
   "/usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -143,13 +145,13 @@
   "figures/resample_orig_null.png" 1787672944.22313 305587 e621e291cc1cc7f237d4330c41b41c57 ""
   "figures/striker_resample_plot.png" 1787672668.2118 75694 a01bddabb2b30f2d9b2b4f3defd8052e ""
   "figures/triad_plot.png" 1787665749.54191 94629 8394dc6192af3fa0991ec9f9e4db5378 ""
-  "final.aux" 1787763770.0872 20748 517f29a47471fb0fb867215bd03a64e1 "pdflatex"
-  "final.bbl" 1787763768.49389 4576 586c97cec0613eb60390639fe7ea0296 "bibtex final"
-  "final.lof" 1787763770.09048 1129 35644fb5a29f114042ca4799bde48e5f "pdflatex"
-  "final.lot" 1787763770.09043 2257 16cf8f831583e4d3fc7e3856aa192e04 "pdflatex"
-  "final.out" 1787763770.09007 10462 ee9128979a7e5e00c2c1b33bd601ba18 "pdflatex"
-  "final.tex" 1787763766.18247 71955 e1cf273ba196043e9a3e0b89407838ae ""
-  "final.toc" 1787763770.09037 4626 8862260676534386a99bdfb69dfd750c "pdflatex"
+  "final.aux" 1787773756.37512 21995 482801e278df3d2170d73bf5300bd1fa "pdflatex"
+  "final.bbl" 1787773657.12908 4576 586c97cec0613eb60390639fe7ea0296 "bibtex final"
+  "final.lof" 1787773756.37819 1230 2b3ddb9ae093388e208c859e3fed9804 "pdflatex"
+  "final.lot" 1787773756.37815 2516 da3defc7df885b359a137c1e9db4ceaf "pdflatex"
+  "final.out" 1787773756.37768 11054 2c3c461b1b428ccf66be17c8a56f342c "pdflatex"
+  "final.tex" 1787773754.49455 74407 7496f7d853115abb744d37c4f73feddd ""
+  "final.toc" 1787773756.37806 4837 1540af6728c433028c57b254ab89cceb "pdflatex"
   (generated)
   "final.aux"
   "final.lof"
