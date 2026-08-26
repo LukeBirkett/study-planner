@@ -7,46 +7,46 @@ Reallocated global_strs (elt_size=200001) to 20 items from 10.
 Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: references.bib
-Warning--I didn't find a database entry for "cintia2015network"
-You've used 21 entries,
+Warning--empty pages in cintia2015network
+You've used 22 entries,
             3507 wiz_defined-function locations,
-            831 strings with 8912 characters,
-and the built_in function-call counts, 43237 in all, are:
-= -- 4949
-> -- 384
+            834 strings with 9121 characters,
+and the built_in function-call counts, 44537 in all, are:
+= -- 5103
+> -- 396
 < -- 290
-+ -- 148
-- -- 71
-* -- 3239
-:= -- 4603
-add.period$ -- 83
-call.type$ -- 21
-change.case$ -- 0
++ -- 154
+- -- 74
+* -- 3348
+:= -- 4747
+add.period$ -- 86
+call.type$ -- 22
+change.case$ -- 2
 chr.to.int$ -- 669
-cite$ -- 21
-duplicate$ -- 4242
-empty$ -- 4158
-format.name$ -- 77
-if$ -- 10239
+cite$ -- 23
+duplicate$ -- 4339
+empty$ -- 4287
+format.name$ -- 81
+if$ -- 10541
 int.to.chr$ -- 0
-int.to.str$ -- 21
-missing$ -- 222
-newline$ -- 108
-num.names$ -- 21
-pop$ -- 674
+int.to.str$ -- 22
+missing$ -- 229
+newline$ -- 113
+num.names$ -- 22
+pop$ -- 695
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 434
+skip$ -- 451
 stack$ -- 0
-substring$ -- 7441
-swap$ -- 563
+substring$ -- 7686
+swap$ -- 580
 text.length$ -- 83
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 221
-width$ -- 23
-write$ -- 231
+warning$ -- 1
+while$ -- 227
+width$ -- 24
+write$ -- 241
 (There was 1 warning)

@@ -1,4 +1,4 @@
-\contentsline {figure}{\numberline {1}{\ignorespaces Raw Pass Plotting: Sub-plot 1 Individual Player vs. Sub-plot 2 Whole Team.}}{2}{figure.1}%
+\contentsline {figure}{\numberline {1}{\ignorespaces Raw Pass Plotting: Individual Player vs. Whole Team.}}{2}{figure.1}%
 \contentsline {figure}{\numberline {2}{\ignorespaces Pitch-overlay PassMap vs. frameless spatial PassMap.}}{3}{figure.2}%
 \contentsline {figure}{\numberline {3}{\ignorespaces Highest Pass Sample Network Betweenness Centrality $g(i)$ distribution.}}{6}{figure.3}%
 \contentsline {figure}{\numberline {4}{\ignorespaces Top Transitive Triads Overlay.}}{7}{figure.4}%
@@ -6,4 +6,4 @@
 \contentsline {figure}{\numberline {6}{\ignorespaces ER Null Network Visual (Left) and ER Triad Network Plot (Right).}}{10}{figure.6}%
 \contentsline {figure}{\numberline {7}{\ignorespaces Pitch Plot Segmented into a $10 \times 10$ Spatial Grid.}}{13}{figure.7}%
 \contentsline {figure}{\numberline {8}{\ignorespaces Empirical PassMap (Left) vs. Spatial Null Realization PassMap (Right).}}{14}{figure.8}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Pitch plot illustrating spatial reception areas for the resampled striker position.}}{32}{figure.9}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Resampled Striker Reception Pitch Plot}}{31}{figure.9}%

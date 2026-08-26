@@ -138,7 +138,7 @@ StatsBomb's $120 \times 80$ yard pitch coordinates are rescaled to a normalized 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/raw_passes.png}
-    \caption{Raw Pass Plotting: Sub-plot 1 Individual Player vs. Sub-plot 2 Whole Team.}
+    \caption{Raw Pass Plotting: Individual Player vs. Whole Team.}
     \label{fig:raw_passes}
 \end{figure}
 
@@ -211,6 +211,23 @@ Evaluating unweighted degree across our high-volume sample network yields a Mean
 
 However, introducing weighted metrics highlights a critical tactical distinction between structural availability and actual flow of passes. The high Team Node Volume Variance ($\text{Var}(s_{\text{tot}}) = 5,681.90$) reveals that while available passing channels are widespread, pass workload is heavily skewed through specific players.
 
+\newpage
+\subsection{Average Shortest Path ($d$)}
+\label{subsec:asp}
+In PassMaps, edge weights ($w_{ij}$) reflect completed passes from player $i$ to player $j$. Pass volume is a stronger indicator of connectivity than physical distance, so edge weights are inverted to derive a topological distance:
+\begin{equation}
+    l_{ij} = \frac{1}{w_{ij}}
+\end{equation}
+
+This transformation ensures high-frequency passing channels yield lower topological resistance. Using Dijkstra’s algorithm, the shortest path ($p_{ij}$) between any pair of players represents the minimal cumulative cost required to move possession through the network.
+
+The macro-level baseline of a team's passing structure is established by the global average shortest path length ($d$), defined as:
+\begin{equation}
+    d = \frac{1}{N(N-1)} \sum_{i \neq j} p_{ij}
+\end{equation}
+
+Arsenal WFC demonstrates strong circulation efficiency with a global path length of $d = 0.1884$, meaning the average cost to route possession between any two arbitrary players is less than $0.20$. Low path length ($d$) is a prerequisite of the Small-World phenomenon \cite{watts1998collective}. In football, it indicates an integrated network capable of rapid ball circulation. However, evaluating $d = 0.1884$ in isolation is arbitrary and cannot confirm tactical superiority. This requires statistical benchmarking against domain-aware null models.
+
 \begin{table}[htbp]
     \centering
     \caption{Highest Pass Sample Network Macro Degree Metrics}
@@ -231,22 +248,6 @@ However, introducing weighted metrics highlights a critical tactical distinction
 \end{table}
 
 \newpage
-\subsection{Average Shortest Path ($d$)}
-\label{subsec:asp}
-In PassMaps, edge weights ($w_{ij}$) reflect completed passes from player $i$ to player $j$. Pass volume is a stronger indicator of connectivity than physical distance, so edge weights are inverted to derive a topological distance:
-\begin{equation}
-    l_{ij} = \frac{1}{w_{ij}}
-\end{equation}
-
-This transformation ensures high-frequency passing channels yield lower topological resistance. Using Dijkstra’s algorithm, the shortest path ($p_{ij}$) between any pair of players represents the minimal cumulative cost required to move possession through the network.
-
-The macro-level baseline of a team's passing structure is established by the global average shortest path length ($d$), defined as:
-\begin{equation}
-    d = \frac{1}{N(N-1)} \sum_{i \neq j} p_{ij}
-\end{equation}
-
-Arsenal WFC demonstrates strong circulation efficiency with a global path length of $d = 0.1884$, meaning the average cost to route possession between any two arbitrary players is less than $0.20$. Low path length ($d$) is a prerequisite of the Small-World phenomenon \cite{watts1998collective}. In football, it indicates an integrated network capable of rapid ball circulation. However, evaluating $d = 0.1884$ in isolation is arbitrary and cannot confirm tactical superiority. This requires statistical benchmarking against domain-aware null models.
-
 \subsection{Betweenness Centrality ($g(i)$)}
 \label{subsec:betweenness}
 To evaluate which players act as essential routing hubs, Betweenness Centrality ($g(i)$) is analyzed. Moving beyond volume, betweenness measures the proportion of a network's shortest topological paths ($l_{ij} = 1/w_{ij}$) traversing a given node, identifying possession flow:
@@ -270,6 +271,7 @@ Midfielders Kim Little ($0.1778$) and Victoria Pelova ($0.1389$) follow as tradi
     \label{fig:betweenness_bar}
 \end{figure}
 
+\newpage
 \subsection{Clustering: Transitive Triads ($I_{\text{transitive}}$)}
 \label{subsec:clustering}
 To evaluate localized spatial cohesiveness and combinational dynamics across the squad, we analyze Transitive Triad Intensity ($I_{\text{transitive}}$). Standard unweighted clustering coefficients can be misleading in football because they treat all connections equally regardless of direction or volume. Transitive triads explicitly isolate progressive wall-passes and multi-option positional triangles ($A \to B \to C$ with $A \to C$), omitting backward cyclic loops ($A \to B \to C \to A$) that rarely denote tactical progression.
@@ -283,9 +285,9 @@ By ranking individual triads by the strength of their weakest link ($W_{\text{mi
 
 The highest-capacity triad (Kim Little, Lotte Wubben-Moy, Leah Williamson, $W_{\text{min}} = 116.0$) highlights a resilient central triangle anchoring initial build-up out of defense, while left-sided loops involving Steph Catley account for three of the top six most active circuits, indicating asymmetric possessional competency. Overlaying these top-capacity transitive triads onto the PassMap (Figure~\ref{fig:triad_plot}) converts a dense network into identifiable passing triangles.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/triad_plot.png}
+    \includegraphics[height=0.52\textheight, keepaspectratio]{figures/triad_plot.png}
     \caption{Top Transitive Triads Overlay.}
     \label{fig:triad_plot}
 \end{figure}
@@ -513,7 +515,7 @@ Replacing match-specific target preferences with league-average spatial probabil
     \end{tabularx}
 \end{table}
 
-\newpage
+\clearpage
 \section{Null Validation}
 \label{sec:null_validation}
 
@@ -545,8 +547,9 @@ Evaluating the correlation between empirical and resampled weighted adjacency ma
 
 \begin{table}[htbp]
     \centering
-    \small
-    \caption{Tier 1 Spatial Markovian Null Model Validation Summary ($N=500$ Iterations).}
+    \scriptsize
+    \setlength{\tabcolsep}{3pt} % Reduces padding between columns
+    \caption{Markovian Null Model Validation Summary ($N=500$ Iterations).}
     \label{tab:null_validation_summary}
     \begin{tabularx}{\textwidth}{X c c c c c c c}
         \toprule
@@ -567,7 +570,7 @@ Evaluating the correlation between empirical and resampled weighted adjacency ma
     \end{tabularx}
 \end{table}
 
-
+\clearpage
 \section{Null-Baselined Metric Evaluation}
 \label{sec:null_baselined_evaluation}
 
@@ -586,7 +589,7 @@ The empirical path length sits slightly below the null mean ($\bar{d}_{\text{nul
 \begin{table}[htbp]
     \centering
     \small
-    \caption{Null-Baselined Macro Evaluation Summary.}
+    \caption{Null-Baselined Macro Evaluation Summary}
     \label{tab:null_macro_summary}
     \begin{tabularx}{0.85\textwidth}{l X c c c c}
         \toprule
@@ -608,39 +611,6 @@ Conversely, central double-pivot recycling loops operate directly in line with s
 
 Finally, Alessia Russo’s participation across progressive triads consistently surpasses null bounds ($z$-scores between $+1.84$ and $+2.78$), proving her deep-dropping movement represents deliberate tactical linkage rather than spatial chance.
 
-\begin{table}[htbp]
-    \centering
-    \small
-    \caption{Null-Baselined Meso Evaluation Summary (Transitive Triads Top 20).}
-    \label{tab:null_meso_summary}
-    \begin{tabularx}{\textwidth}{c X c c c c}
-        \toprule
-        \textbf{Rank} & \textbf{Targeted Triad ($A - B - C$)} & \textbf{Empirical} & \textbf{Null Mean} & \textbf{Null 95\% CI} & \textbf{$Z$-Score} \\
-        \midrule
-        1  & Wubben-Moy -- Little -- Williamson & 116.00 & 79.23 & [61.00, 98.00] & $+3.83$ \\
-        2  & Wubben-Moy -- Little -- Catley     & 111.00 & 61.11 & [44.00, 78.00] & $+5.67$ \\
-        3  & Little -- Catley -- Pelova         & 76.00  & 56.74 & [39.00, 74.00] & $+2.11$ \\
-        4  & Wubben-Moy -- Little -- Pelova     & 69.00  & 71.53 & [54.98, 89.00] & $-0.28$ \\
-        5  & Little -- Williamson -- Pelova     & 67.00  & 66.89 & [50.00, 85.00] & $+0.01$ \\
-        6  & Wubben-Moy -- Catley -- Pelova     & 65.00  & 49.48 & [34.00, 65.00] & $+1.97$ \\
-        7  & Wubben-Moy -- Williamson -- Pelova & 60.00  & 57.81 & [42.00, 73.00] & $+0.28$ \\
-        8  & Fox -- Williamson -- Pelova        & 55.00  & 37.90 & [24.00, 52.00] & $+2.47$ \\
-        9  & Russo -- Little -- Pelova          & 51.00  & 36.34 & [21.00, 51.00] & $+1.87$ \\
-        10 & Fox -- Little -- Pelova            & 51.00  & 40.84 & [25.00, 57.00] & $+1.30$ \\
-        11 & Fox -- Little -- Williamson        & 51.00  & 38.20 & [23.00, 54.00] & $+1.63$ \\
-        12 & Russo -- Little -- Williamson      & 42.00  & 24.05 & [10.00, 39.00] & $+2.44$ \\
-        13 & Mead -- Williamson -- Pelova       & 40.00  & 25.52 & [15.00, 37.02] & $+2.44$ \\
-        14 & Russo -- Wubben-Moy -- Little      & 39.00  & 25.58 & [12.00, 40.00] & $+1.84$ \\
-        15 & Russo -- Williamson -- Pelova      & 38.00  & 22.44 & [9.00, 36.00]  & $+2.30$ \\
-        16 & Russo -- Wubben-Moy -- Pelova      & 37.00  & 23.67 & [11.00, 37.00] & $+2.00$ \\
-        17 & Russo -- Wubben-Moy -- Williamson  & 35.00  & 18.79 & [7.00, 30.00]  & $+2.78$ \\
-        18 & Foord -- Little -- Catley          & 33.00  & 37.36 & [25.00, 50.00] & $-0.67$ \\
-        19 & Foord -- Catley -- Pelova          & 33.00  & 32.95 & [21.00, 45.00] & $+0.01$ \\
-        20 & Wubben-Moy -- Williamson -- D’Angelo & 33.00 & 32.70 & [21.00, 44.02] & $+0.05$ \\
-        \bottomrule
-    \end{tabularx}
-\end{table}
-
 \subsection{Micro-Level Evaluation: Positional Betweenness Centrality ($g(i)$)}
 \label{subsec:micro_evaluation}
 
@@ -650,10 +620,47 @@ The central defensive core operates as a primary routing engine: both Left Cente
 
 Controlling for empirical spatial volume highlights a distinct flank asymmetry. The Left Back baseline range ($[0.0000, 0.1556]$) reflects high local pass density; Steph Catley’s score ($g = 0.1222, z = +1.73$) approaches this upper limit, whereas the Right Back registers $g = 0.0000$. Conversely, Left Defensive Midfield falls below its high spatial expectation ($\bar{g} = 0.2896$ vs. $g = 0.1778, z = -1.31$), demonstrating that Arsenal avoids over-funneling progression through a single central pivot. Finally, terminal attackers and the goalkeeper register $g = 0.0000$, preserving functional role boundaries.
 
+\newpage
 \begin{table}[htbp]
     \centering
-    \small
-    \caption{Null-Baselined Micro Evaluation Summary (Positional Betweenness Centrality).}
+    \scriptsize
+    \setlength{\tabcolsep}{3pt} % Reduces padding between columns
+    \caption{Null-Baselined Meso Evaluation Summary}
+    \label{tab:null_meso_summary}
+    \begin{tabularx}{\textwidth}{c X c c c c}
+        \toprule
+        \textbf{Rank} & \textbf{Targeted Triad ($A - B - C$)} & \textbf{Empirical} & \textbf{Null Mean} & \textbf{Null 95\% CI} & \textbf{$Z$-Score} \\
+        \midrule
+        1  & Wubben-Moy---\allowbreak Little---\allowbreak Williamson & 116.00 & 79.23 & [61.00, 98.00] & $+3.83$ \\
+        2  & Wubben-Moy---\allowbreak Little---\allowbreak Catley     & 111.00 & 61.11 & [44.00, 78.00] & $+5.67$ \\
+        3  & Little---\allowbreak Catley---\allowbreak Pelova         & 76.00  & 56.74 & [39.00, 74.00] & $+2.11$ \\
+        4  & Wubben-Moy---\allowbreak Little---\allowbreak Pelova     & 69.00  & 71.53 & [54.98, 89.00] & $-0.28$ \\
+        5  & Little---\allowbreak Williamson---\allowbreak Pelova     & 67.00  & 66.89 & [50.00, 85.00] & $+0.01$ \\
+        6  & Wubben-Moy---\allowbreak Catley---\allowbreak Pelova     & 65.00  & 49.48 & [34.00, 65.00] & $+1.97$ \\
+        7  & Wubben-Moy---\allowbreak Williamson---\allowbreak Pelova & 60.00  & 57.81 & [42.00, 73.00] & $+0.28$ \\
+        8  & Fox---\allowbreak Williamson---\allowbreak Pelova        & 55.00  & 37.90 & [24.00, 52.00] & $+2.47$ \\
+        9  & Russo---\allowbreak Little---\allowbreak Pelova          & 51.00  & 36.34 & [21.00, 51.00] & $+1.87$ \\
+        10 & Fox---\allowbreak Little---\allowbreak Pelova            & 51.00  & 40.84 & [25.00, 57.00] & $+1.30$ \\
+        11 & Fox---\allowbreak Little---\allowbreak Williamson        & 51.00  & 38.20 & [23.00, 54.00] & $+1.63$ \\
+        12 & Russo---\allowbreak Little---\allowbreak Williamson      & 42.00  & 24.05 & [10.00, 39.00] & $+2.44$ \\
+        13 & Mead---\allowbreak Williamson---\allowbreak Pelova       & 40.00  & 25.52 & [15.00, 37.02] & $+2.44$ \\
+        14 & Russo---\allowbreak Wubben-Moy---\allowbreak Little      & 39.00  & 25.58 & [12.00, 40.00] & $+1.84$ \\
+        15 & Russo---\allowbreak Williamson---\allowbreak Pelova      & 38.00  & 22.44 & [9.00, 36.00]  & $+2.30$ \\
+        16 & Russo---\allowbreak Wubben-Moy---\allowbreak Pelova      & 37.00  & 23.67 & [11.00, 37.00] & $+2.00$ \\
+        17 & Russo---\allowbreak Wubben-Moy---\allowbreak Williamson  & 35.00  & 18.79 & [7.00, 30.00]  & $+2.78$ \\
+        18 & Foord---\allowbreak Little---\allowbreak Catley          & 33.00  & 37.36 & [25.00, 50.00] & $-0.67$ \\
+        19 & Foord---\allowbreak Catley---\allowbreak Pelova          & 33.00  & 32.95 & [21.00, 45.00] & $+0.01$ \\
+        20 & Wubben-Moy---\allowbreak Williamson---\allowbreak D’Angelo & 33.00 & 32.70 & [21.00, 44.02] & $+0.05$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+
+\begin{table}[htbp]
+    \centering
+    \scriptsize
+    \setlength{\tabcolsep}{3pt} % Reduces padding between columns
+    \caption{Null-Baselined Micro Evaluation Summary}
     \label{tab:null_micro_summary}
     \begin{tabularx}{\textwidth}{X c c c c}
         \toprule
@@ -674,7 +681,7 @@ Controlling for empirical spatial volume highlights a distinct flank asymmetry. 
     \end{tabularx}
 \end{table}
 
-\newpage
+\clearpage
 \section{Conclusion, Limitations, and Future Work}
 \label{sec:conclusion_limitations_future}
 
@@ -756,8 +763,6 @@ Future research should expand the null validation framework by establishing algo
         \textbf{PageRank Centrality} & \textbf{Tactical Reference Point:} Identifies players who receive passes due to their perceived importance and positional quality. High values suggest teammates actively seek them out as reliable options under pressure. \\
         \addlinespace[3pt]
         \textbf{Clustering Coefficient} & \textbf{Local Combination Play:} Identifies players who favor quick passing exchanges in tight spaces. High values indicate participation in short, repetitive passing patterns. \\
-        \addlinespace[3pt]
-        \textbf{Node Transition Entropy} & \textbf{Individual Passing Variability:} Measures how evenly a player distributes passes among teammates. Captures diversity of passing choices rather than volume. High values indicate unpredictable distribution; low values suggest predictable passing patterns. \\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -765,6 +770,7 @@ Future research should expand the null validation framework by establishing algo
 % ==============================================================================
 % APPENDIX TABLE 2: MACRO-SCALE NETWORK METRICS
 % ==============================================================================
+\newpage
 \begin{table}[htbp]
     \centering
     \small
@@ -791,8 +797,6 @@ Future research should expand the null validation framework by establishing algo
         \textbf{Global Centralization} & \textbf{Hub Dependence:} Indicates whether the team relies heavily on one or a few key players to conduct play. Higher values suggest tactical vulnerability if central hubs are marked out. \\
         \addlinespace[3pt]
         \textbf{Assortativity Coefficient} & \textbf{Role-Based Connectivity:} Identifies whether players tend to connect with similar or different positional roles. Negative values suggest functional integration across lines; positive values indicate within-role clustering. \\
-        \addlinespace[3pt]
-        \textbf{Network Transition Entropy} & \textbf{Team-Level Passing Unpredictability:} Global measure of how evenly passes are distributed across all possible connections. Dense networks can still be predictable if passes concentrate on a few links; high entropy indicates overall tactical unpredictability for opponents. \\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -807,11 +811,11 @@ Future research should expand the null validation framework by establishing algo
 \begin{table}[htbp]
     \centering
     \small
-    \caption{Distribution of Starting Formations Within the Modal Pass-Volume Tier (200--299 Passes, $n = 94$).}
+    \caption{Distribution of Formations (200--299 Passes, $n = 94$)}
     \label{tab:formation_binning}
     \begin{tabularx}{0.7\textwidth}{X c c}
         \toprule
-        \textbf{Starting Formation} & \textbf{Match Count ($n$)} & \textbf{Percentage (\%)} \\
+        \textbf{Formation} & \textbf{Match Count ($n$)} & \textbf{Percentage (\%)} \\
         \midrule
         \textbf{4-2-3-1} & 29 & 30.85 \\
         \textbf{3-5-2} & 14 & 14.89 \\
@@ -842,7 +846,7 @@ Future research should expand the null validation framework by establishing algo
     \label{tab:er_null_triads}
     \begin{tabularx}{\textwidth}{c X X X c}
         \toprule
-        \textbf{Rank} & \textbf{Origin / Target ($A$)} & \textbf{Intermediate ($B$)} & \textbf{Target / Origin ($C$)} & \textbf{Bottleneck Capacity ($W_{\text{min}}$)} \\
+        \textbf{Rank} & \textbf{Origin ($A$)} & \textbf{Middle ($B$)} & \textbf{Target ($C$)} & \textbf{Value ($W_{\text{min}}$)} \\
         \midrule
         \textbf{1} & Blackstenius & Wubben-Moy & Mead & 69.0 \\
         \textbf{2} & D’Angelo & Blackstenius & Fox & 51.0 \\
@@ -870,7 +874,7 @@ Future research should expand the null validation framework by establishing algo
 \begin{table}[htbp]
     \centering
     \small
-    \caption{Condensed Position Categories with Original Positions and Total Pass Volume.}
+    \caption{Condensed Position Categories with Original and Pass Volume.}
     \label{tab:condensed_positions_mapped}
     \begin{tabularx}{\textwidth}{c l X c}
         \toprule
@@ -990,26 +994,10 @@ Striker Stina Blackstenius shows the largest shift, rising from 11 empirical rec
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/striker_resample_plot.png}
-    \caption{Pitch plot illustrating spatial reception areas for the resampled striker position.}
+    \caption{Resampled Striker Reception Pitch Plot}
     \label{fig:striker_resample_plot}
 \end{figure}
 \end{samepage}
-
-\begin{table}[htbp]
-    \centering
-    \small
-    \caption{League-Wide Striker Pass Execution Summary.}
-    \label{tab:league_striker_summary}
-    \begin{tabularx}{0.75\textwidth}{X c}
-        \toprule
-        \textbf{Metric} & \textbf{Value} \\
-        \midrule
-        \textbf{Total Completed Passes} & 89,781 \\
-        \textbf{Striker Completed Passes} & 4,433 \\
-        \textbf{Percentage Completed by Strikers} & 4.94\% \\
-        \bottomrule
-    \end{tabularx}
-\end{table}
 
 % ------------------------------------------------------------------------------
 % APPENDIX H: LEAGUE-WIDE STRIKER PASS SUMMARY

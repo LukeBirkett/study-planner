@@ -4,16 +4,15 @@
 \contentsline {table}{\numberline {4}{\ignorespaces Spatial Recipient Probability Distribution for Pitch Bin $(5,5)$.}}{13}{table.4}%
 \contentsline {table}{\numberline {5}{\ignorespaces Sample Event Resampling and Player Mapping Stream.}}{14}{table.5}%
 \contentsline {table}{\numberline {6}{\ignorespaces Sample Null Macro-Level Metrics vs. Empirical and ER Baselines.}}{15}{table.6}%
-\contentsline {table}{\numberline {7}{\ignorespaces Tier 1 Spatial Markovian Null Model Validation Summary ($N=500$ Iterations).}}{17}{table.7}%
-\contentsline {table}{\numberline {8}{\ignorespaces Null-Baselined Macro Evaluation Summary.}}{18}{table.8}%
-\contentsline {table}{\numberline {9}{\ignorespaces Null-Baselined Meso Evaluation Summary (Transitive Triads Top 20).}}{19}{table.9}%
-\contentsline {table}{\numberline {10}{\ignorespaces Null-Baselined Micro Evaluation Summary (Positional Betweenness Centrality).}}{20}{table.10}%
-\contentsline {table}{\numberline {11}{\ignorespaces Micro-Scale Network Metrics and Football Interpretations \cite {gama2026stoch}.}}{25}{table.11}%
-\contentsline {table}{\numberline {12}{\ignorespaces Macro-Scale Network Metrics and Football Interpretations \cite {gama2026stoch}.}}{26}{table.12}%
-\contentsline {table}{\numberline {13}{\ignorespaces Distribution of Starting Formations Within the Modal Pass-Volume Tier (200--299 Passes, $n = 94$).}}{27}{table.13}%
-\contentsline {table}{\numberline {14}{\ignorespaces Top 10 Active Transitive Triads (Erd{\H {o}}s--R{\'e}nyi Null Model).}}{28}{table.14}%
-\contentsline {table}{\numberline {15}{\ignorespaces Condensed Position Categories with Original Positions and Total Pass Volume.}}{29}{table.15}%
-\contentsline {table}{\numberline {16}{\ignorespaces Original Granular Position Counts Across Season Corpus.}}{30}{table.16}%
-\contentsline {table}{\numberline {17}{\ignorespaces Change in Pass Share: Empirical vs. Resampled Receptions.}}{31}{table.17}%
-\contentsline {table}{\numberline {18}{\ignorespaces League-Wide Striker Pass Execution Summary.}}{33}{table.18}%
-\contentsline {table}{\numberline {19}{\ignorespaces League-Wide Striker Pass Execution Summary.}}{34}{table.19}%
+\contentsline {table}{\numberline {7}{\ignorespaces Markovian Null Model Validation Summary ($N=500$ Iterations).}}{17}{table.7}%
+\contentsline {table}{\numberline {8}{\ignorespaces Null-Baselined Macro Evaluation Summary}}{18}{table.8}%
+\contentsline {table}{\numberline {9}{\ignorespaces Null-Baselined Meso Evaluation Summary}}{20}{table.9}%
+\contentsline {table}{\numberline {10}{\ignorespaces Null-Baselined Micro Evaluation Summary}}{20}{table.10}%
+\contentsline {table}{\numberline {11}{\ignorespaces Micro-Scale Network Metrics and Football Interpretations \cite {gama2026stoch}.}}{24}{table.11}%
+\contentsline {table}{\numberline {12}{\ignorespaces Macro-Scale Network Metrics and Football Interpretations \cite {gama2026stoch}.}}{25}{table.12}%
+\contentsline {table}{\numberline {13}{\ignorespaces Distribution of Formations (200--299 Passes, $n = 94$)}}{26}{table.13}%
+\contentsline {table}{\numberline {14}{\ignorespaces Top 10 Active Transitive Triads (Erd{\H {o}}s--R{\'e}nyi Null Model).}}{27}{table.14}%
+\contentsline {table}{\numberline {15}{\ignorespaces Condensed Position Categories with Original and Pass Volume.}}{28}{table.15}%
+\contentsline {table}{\numberline {16}{\ignorespaces Original Granular Position Counts Across Season Corpus.}}{29}{table.16}%
+\contentsline {table}{\numberline {17}{\ignorespaces Change in Pass Share: Empirical vs. Resampled Receptions.}}{30}{table.17}%
+\contentsline {table}{\numberline {18}{\ignorespaces League-Wide Striker Pass Execution Summary.}}{32}{table.18}%
