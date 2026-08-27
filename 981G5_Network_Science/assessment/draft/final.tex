@@ -46,13 +46,14 @@
         \textbf{Author:} & Luke Birkett \\
         \textbf{Candidate ID:} & 22411525 \\
         \textbf{Word Count:} & ~4200* \\
+        \textbf{Dataset Card:} & Yes (end of document) \\
     \end{tabular}\\[0.5cm]
     
     % Abstract Section
     \begin{minipage}{0.92\textwidth}
         \small
         \textbf{\abstractname}\\[0.3em]
-        This research evaluates collective tactical behavior in football by integrating network science with spatiotemporal sports analytics. Using open source StatsBomb event data from the 2023/2024 FA Women's Super League, raw pass data were converted into directed, weighted PassMaps to address the underrepresentation of women's football in quantitative literature. We deployed a multiscale diagnostic suite across micro (betweenness centrality), meso (transitive triads), and macro (global shortest paths) graph dimensions to evaluate empirical match networks. Applying this framework to synthetic baselines demonstrated that traditional Erdos Renyi randomizations fail to produce valid football networks by destroying pitch geometry, flattening workload inequality, and generating structural role anomalies. In response, we engineered a novel first order Spatial Markovian generative null model. By shifting the analytical lens from dynamics \textit{on} the network to dynamics \textit{of} the network, the engine resamples pass recipients using league average spatial probabilities while preserving origin coordinates, passer identities, and pitch constraints. Executing this Monte Carlo pipeline against a high volume match successfully isolates true tactical signals, such as left flank overloads, from baseline geometric spatial noise.
+        This research evaluates collective tactical behavior in football by integrating network science with spatiotemporal sports analytics. Using open source StatsBomb event data from the 2023/2024 FA Women's Super League, raw pass data is converted into directed, weighted PassMaps to address the underrepresentation of women's football in quantitative literature. We deployed a multiscale diagnostic suite across micro (betweenness centrality), meso (transitive triads), and macro (global shortest paths) graph dimensions to evaluate empirical match networks. Applying this framework to synthetic baselines demonstrated that traditional Erdos Renyi randomizations fail to produce valid football networks by destroying pitch geometry, flattening workload inequality, and generating structural role anomalies. In response, we engineered a novel first order Spatial Markovian generative null model. By shifting the analytical lens from dynamics \textit{on} the network to dynamics \textit{of} the network, the engine resamples pass recipients using league average spatial probabilities while preserving origin coordinates, passer identities, and pitch constraints. Executing this Monte Carlo pipeline against a high volume match successfully isolates true tactical signals, such as left flank overloads, from baseline geometric spatial noise.
     \end{minipage}\\[1cm]
     
     % AI Usage Statement Section
@@ -114,7 +115,7 @@ Network science offers a versatile framework for examining complex systems. By r
 \label{subsec:why_network_football}
 This report focuses on applying network science to sport \cite{araujo2006ecological}, specifically football \cite{duch2010quantifying}. Traditional football analytics relies primarily on isolated, terminal metrics such as completed passes, goals scored, or advanced modeled metrics like Expected Goals (xG) \cite{pollard1997xg} to quantify performance. However, evaluating players in isolation is fundamentally limited because football operates as a complex adaptive system \cite{buldu2019}. Team success cannot be understood through individual actions alone, instead it emerges from continuous collective interactions, dynamic spatial relationships, and tactical organization \cite{gama2026stoch}.
 
-\subsection{How Apply Network Science to Football}
+\subsection{How to Apply Network Science to Football}
 \label{subsec:how_network_football}
 Applying network science requires decomposing a complex system into discrete nodes and directed edges. In football, outfield teammates are modeled as nodes ($N = 11$), while relational interactions between them form the connecting edges. Completed passes provide a pragmatic, objective event stream encoding tactical intent and spatial structure. Representing players as nodes and directed pass volumes as weighted edges forms the foundation of the PassMap paradigm \cite{buldu2018}. A comprehensive explanation of this paradigm is detailed and visualized in Section~\ref{sec:paradigms}.
 
@@ -212,7 +213,7 @@ Micro-scale analysis evaluates individual player workload, system asymmetry, and
 \label{subsec:degree_metrics}
 Degree-based metrics evaluate system topology using direct, 1-hop connections, avoiding global path-traversal costs to provide a computationally efficient proxy for tactical systems and pass distribution \cite{narizuka2014statistical}.
 
-Evaluating unweighted degree across our high-volume sample network yields a Mean Unweighted Degree of $\langle k \rangle = 16.18$, indicating high overall connectivity out of a theoretical maximum bound of 20. The low Coefficient of Variation ($CV_k = 0.1724$) and near-identical Normalized Second Moment ($\langle k^2 \rangle / \langle k \rangle = 16.66$) confirm that the existence of passing lanes is widely distributed across squad positions, eliminating absolute topological bottlenecks.
+Evaluating unweighted degree across our high-volume sample network (\hyperref[tab:degree_metrics]{Table~\ref{tab:degree_metrics}}) yields a Mean Unweighted Degree of $\langle k \rangle = 16.18$, indicating high overall connectivity out of a theoretical maximum bound of 20. The low Coefficient of Variation ($CV_k = 0.1724$) and near-identical Normalized Second Moment ($\langle k^2 \rangle / \langle k \rangle = 16.66$) confirm that the existence of passing lanes is widely distributed across squad positions, eliminating absolute topological bottlenecks.
 
 However, introducing weighted metrics highlights a critical tactical distinction between structural availability and actual flow of passes. The high Team Node Volume Variance ($\text{Var}(s_{\text{tot}}) = 5,681.90$) reveals that while available passing channels are widespread, pass workload is heavily skewed through specific players.
 
@@ -263,7 +264,7 @@ where $\sigma_{st}$ represents the total shortest paths between source player $s
 
 Providing deeper inference than 1-hop volume metrics, high scores denote players upon whom phase transitions depend, whereas scores of $0.0000$ mark peripheral endpoints whose exclusion does not disrupt global network routing.
 
-In our sample network, central defenders Lotte Wubben-Moy ($g(i) = 0.3222$) and Leah Williamson ($g(i) = 0.3000$) record the highest centrality, acting as primary structural pivots during recycling and build-up phases---a finding consistent with contemporary football network literature \cite{alves2025review}.
+In our sample network (\hyperref[fig:betweenness_bar]{Figure~\ref{fig:betweenness_bar}}), central defenders Lotte Wubben-Moy ($g(i) = 0.3222$) and Leah Williamson ($g(i) = 0.3000$) record the highest centrality, acting as primary structural pivots during recycling and build-up phases---a finding consistent with contemporary football network literature \cite{alves2025review}.
 
 Interpreting betweenness in football requires a key domain-specific nuance. In classic network science, high betweenness denotes a central bottleneck bridge. In football, topological distance allows a physically longer route to represent an easier, low-resistance option. Therefore, deep-lying central defenders can exhibit high centrality by recycling and re-routing phases of play.
 
@@ -306,7 +307,7 @@ The highest-capacity triad (Kim Little, Lotte Wubben-Moy, Leah Williamson, $W_{\
 
 Tactical network analysis generally requires benchmarking against a league-wide baseline. Evaluating global average shortest path lengths ($d$) across all season matches places our sample network ($d = 0.1884$) in the top 3.41\% of league efficiency, approaching the season minimum ($0.1748$) from a league mean (std) $0.3521 \pm 0.1263$ .
 
-However, networks properties are heavily dictated by edge volume and spatial topology and this match was selected as it is the league's peak pass volume outlier. Binning the pass data  exposes severe data-sparsity constraints for empirical comparisons.  Bins of 100-pass increments show that the 200--299 pass range holds $40.2\%$ of league matches (94 of 234), whereas higher volume tiers drop off rapidly: 500--599: 14 matches, 600--699: 8, and 700--799: 1, exclusively our single sample match (\hyperref[fig:pass_histogram]{Figure~\ref{fig:pass_histogram}}).
+However, network properties are heavily dictated by edge volume and spatial topology and this match was selected as it is the league's peak pass volume outlier. Binning the pass data  exposes severe data-sparsity constraints for empirical comparisons.  Bins of 100-pass increments show that the 200--299 pass range holds $40.2\%$ of league matches (94 of 234), whereas higher volume tiers drop off rapidly: 500--599: 14 matches, 600--699: 8, and 700--799: 1, exclusively our single sample match (\hyperref[fig:pass_histogram]{Figure~\ref{fig:pass_histogram}}).
 
 Benchmarking also requires controlling for tactical formation to normalize network topology. Segmenting even the largest pass-volume bin across the 11 recorded formations reduces the primary setup (4-2-3-1) to just 29 instances and 3 formation categories carry a single instance (\hyperref[app:positional_taxonomy]{Appendix~\ref{app:positional_taxonomy}}). Dual filtering for pass volume and formation severely restricts sample sizes, preventing robust statistical evaluation. Despite using a comprehensive season-wide dataset, that is large by literature standards \cite{gama2026stoch}, these sparsity constraints necessitate generating null models to benchmark analysis.
 
@@ -381,7 +382,7 @@ To construct a domain-aware generative baseline, we draw upon established footba
 
 While existing literature predominantly applies Markov chains to fixed adjacency matrices to analyze possession diffusion, our generative task synthesizes entirely new reference network topologies ($\mathcal{G}_{\text{null}}$). We invert this paradigm by using learned spatial transition rules as a generative engine to resample synthetic pass events before aggregating the final null network.
 
-This inversion addresses a critical research gap. Although stochastic flow models were originally used football network researchers to bypass traditional nulls, evaluating whether observed flow metrics reflect genuine tactical organization also ultimately requires benchmarking against a spatially constrained null ensemble \cite{gama2026stoch}.
+This inversion addresses a critical research gap. Although stochastic flow models were originally used by football network researchers to bypass traditional null models, evaluating whether observed flow metrics reflect genuine tactical organization also ultimately requires benchmarking against a spatially constrained null ensemble \cite{gama2026stoch}.
 
 \subsubsection{Justifying First-Order Markovian Processes}
 \label{subsubsec:first_order_justification}
@@ -466,11 +467,11 @@ For each empirical pass in the target match, the engine retains the origin, end 
 \begin{table}[htbp]
     \centering
     \small
-    \caption{Sample Event Resampling and Player Mapping Stream.}
+    \caption{Recipient Resampling Example and Player Mapping}
     \label{tab:sample_resampling_stream}
     \begin{tabularx}{\textwidth}{c X c c X X}
         \toprule
-        \textbf{Pass ID} & \textbf{Passer (Origin)} & \textbf{Bin} & \textbf{Drawn Pos.} & \textbf{Empirical} & \textbf{Resampled} \\
+        \textbf{Pass ID} & \textbf{Passer} & \textbf{Bin} & \textbf{Resampled Pos} & \textbf{Empirical} & \textbf{Resampled} \\
         \midrule
         101 & W-Moy & (2, 4) & CB & Williamson & Williamson \\
         102 & Little & (5, 5) & CM & Pelova & Pelova \\
@@ -588,10 +589,10 @@ Evaluating the correlation between empirical and resampled weighted adjacency ma
 
 To evaluate empirical network properties against a spatially constrained baseline, we executed $N = 1000$ Markovian resampling iterations over the target match event stream, tracking the full suite of network metrics detailed in \hyperref[sec:metrics]{Section~\ref{sec:metrics}} across each run.
 
-\subsection{Macro-Level Evaluation: Global Circulation Distance ($d$)}
+\subsection{Macro-Level Evaluation: Global Average Shortest Path ($d$)}
 \label{subsec:macro_evaluation}
 
-Evaluating global average shortest path ($d = 0.1884$) against the 1000-iteration spatial null ensemble reveals that Arsenal WFC’s circulation efficiency emerges primarily from spatial territory and pass volume rather than unique tactics or elite performance (\hyperref[tab:null_macro_summary]{Table~\ref{tab:null_macro_summary}}).
+Evaluating global average shortest path ($d = 0.1884$) against the 1000-iteration spatial null ensemble reveals that Arsenal WFC’s circulation efficiency emerges primarily from pass volume rather than unique tactics or elite performance (\hyperref[tab:null_macro_summary]{Table~\ref{tab:null_macro_summary}}).
 
 The empirical path length sits slightly below the null mean ($\bar{d}_{\text{null}} = 0.1932$, $z = -0.43$) but well within the $95\%$ confidence interval ($[0.1732, 0.2120]$). Completing over 700 passes inherently dictates the global distance. One reason Arsenal's path length remains above the theoretical minimum ($0.1732$) is because they forgo global efficiency in lieu of deliberate, localized tactical overloads.
 
@@ -609,7 +610,7 @@ The empirical path length sits slightly below the null mean ($\bar{d}_{\text{nul
     \end{tabularx}
 \end{table}
 
-\subsection{Meso-Level Evaluation: Transitive Triad Dynamics ($I_{\text{transitive}}$)}
+\subsection{Meso-Level Evaluation: Transitive Triads ($I_{\text{transitive}}$)}
 \label{subsec:meso_evaluation}
 
 Benchmarking the top 20 empirical transitive triads against the 1,000-iteration spatial null ensemble separates intentional tactical mechanics from simple spatial occupancy (\hyperref[tab:null_meso_summary]{Table~\ref{tab:null_meso_summary}}).
@@ -620,7 +621,7 @@ Conversely, central recycling loops operate directly in line with spatial expect
 
 Finally, Alessia Russo’s participation across progressive triads consistently surpasses null bounds ($z$-scores between $+1.84$ and $+2.78$), proving her deep-dropping movement represents deliberate tactical linkage rather than spatial chance.
 
-\subsection{Micro-Level Evaluation: Positional Betweenness Centrality ($g(i)$)}
+\subsection{Micro-Level Evaluation: Betweenness Centrality ($g(i)$)}
 \label{subsec:micro_evaluation}
 
 Evaluating empirical betweenness centrality ($g(i)$) against the 1,000-iteration spatial null baseline reveals how Arsenal WFC explicitly structures its build-up play (\hyperref[tab:null_micro_summary]{Table~\ref{tab:null_micro_summary}}).
@@ -827,7 +828,7 @@ Additionally, broadening the generative scope beyond pass recipient to resample 
 
 \begin{table}[htbp]
     \centering
-    \small
+    \scriptsize
     \caption{Sample Network Player Betweenness Centrality ($g(i)$) Scores.}
     \label{tab:app_sample_betweenness}
     \begin{tabularx}{0.85\textwidth}{X l c}
@@ -859,12 +860,12 @@ Additionally, broadening the generative scope beyond pass recipient to resample 
 
 \begin{table}[htbp]
     \centering
-    \small
+    \scriptsize
     \caption{Top 10 Active Transitive Passing Triads (Sample Network).}
     \label{tab:app_empirical_triads}
     \begin{tabularx}{\textwidth}{c X X X c}
         \toprule
-        \textbf{Rank} & \textbf{Origin / Target ($A$)} & \textbf{Intermediate ($B$)} & \textbf{Target / Origin ($C$)} & \textbf{Capacity ($W_{\text{min}}$)} \\
+        \textbf{Rank} & \textbf{Origin ($A$)} & \textbf{Intermediate ($B$)} & \textbf{Target ($C$)} & \textbf{Capacity ($W_{\text{min}}$)} \\
         \midrule
         \textbf{1} & Kim Little & Carlotte Wubben-Moy & Leah Williamson & 116.0 \\
         \textbf{2} & Stephanie-Elise Catley & Kim Little & Carlotte Wubben-Moy & 111.0 \\
@@ -948,12 +949,12 @@ Additionally, broadening the generative scope beyond pass recipient to resample 
 % APPENDIX F: CONDENSED POSITIONAL TAXONOMY AND MAPPING LOGIC
 % ------------------------------------------------------------------------------
 \clearpage
-\section{Condensed Positional Taxonomy and Mapping Logical}
+\section{Condensed Positional Taxonomy and Mapping}
 \label{app:cond_pos}
 
 \begin{table}[htbp]
     \centering
-    \small
+    \scriptsize
     \caption{Condensed Position Categories with Original and Pass Volume.}
     \label{tab:condensed_positions_mapped}
     \begin{tabularx}{\textwidth}{c l X c}
@@ -1126,7 +1127,7 @@ Striker Stina Blackstenius shows the largest shift, rising from 11 empirical rec
 \section*{3. Dataset Composition \& Network Topology}
 \begin{itemize}
     \item \textbf{Network Format:} Directed, weighted, spatially constrained networks ($G = (V, E, W)$).
-    \item \textbf{Nodes ($V$):} 11 nodes per network, representing the starting 11 tactical positions / active players with the highest appearance duration in each match-team instance.
+    \item \textbf{Nodes ($V$):} 11 nodes per network, representing the starting 11 tactical positions/active players with the highest appearance duration in each match-team instance.
     \item \textbf{Edges ($E$) \& Weights ($W$):} Directed pass counts ($A \to B$) representing successfully completed passes between teammates (incomplete or intercepted passes are filtered out).
     \item \textbf{Macro Corpus Scope:} 264 total team-match networks comprising 105,262 successful completed passes across the 2023/2024 WSL season, filtered to 89,781 for the scope of the project.
     \item \textbf{Case Study Network:} An extreme high-volume match (Arsenal WFC, Match ID 3913160; 847 total passes) utilized for stress-testing spatial null baselines against high-density graph topologies.
@@ -1145,7 +1146,7 @@ Striker Stina Blackstenius shows the largest shift, rising from 11 empirical rec
 \begin{itemize}
     \item \textbf{Privacy \& PII:} Contains public-figure PII (player names, positions, and match appearance statistics). As all data is derived from publicly broadcast professional sports events and published open-access databases, it carries zero risk of disclosing sensitive personal, medical, or private private-life information.
     \item \textbf{Domain Equity:} Promotes open data accessibility in women's sports science by developing open-source visualization and graph analysis pipelines.
-    \item \textbf{Tactical and Performance Biases:} The spatial probability tensor is trained on elite-level professional matchplay (FA WSL). Tactical behaviors (e.g., double-pivot build-ups or terminal off-the-ball striker roles) reflect high-level professional dynamics and may not directly generalize to lower-tier or amateur networks.
+    \item \textbf{Tactical  Performance Biases:}
 \end{itemize}
 
 \section*{6. Suggested Analysis \& Benchmarking}

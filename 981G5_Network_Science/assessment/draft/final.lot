@@ -2,7 +2,7 @@
 \contentsline {table}{\numberline {2}{\ignorespaces Highest Pass Match Network Macro Degree Metrics}}{5}{table.2}%
 \contentsline {table}{\numberline {3}{\ignorespaces ER Null Macro-Level Network Metrics vs. Empirical Sample}}{9}{table.3}%
 \contentsline {table}{\numberline {4}{\ignorespaces Spatial Recipient Probability Distribution for Pitch Bin $(5,5)$.}}{13}{table.4}%
-\contentsline {table}{\numberline {5}{\ignorespaces Sample Event Resampling and Player Mapping Stream.}}{14}{table.5}%
+\contentsline {table}{\numberline {5}{\ignorespaces Recipient Resampling Example and Player Mapping}}{14}{table.5}%
 \contentsline {table}{\numberline {6}{\ignorespaces Sample Null Macro-Level Metrics vs. Empirical and ER Baselines.}}{15}{table.6}%
 \contentsline {table}{\numberline {7}{\ignorespaces Markovian Null Model Validation Summary ($N=500$ Iterations).}}{17}{table.7}%
 \contentsline {table}{\numberline {8}{\ignorespaces Null-Baselined Macro Evaluation Summary}}{18}{table.8}%

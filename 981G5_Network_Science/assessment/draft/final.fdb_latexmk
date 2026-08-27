@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex final"] 1787779377.20475 "final.aux" "final.bbl" "final" 1787779385.28967 0
+["bibtex final"] 1787823597.25419 "final.aux" "final.bbl" "final" 1787824694.86918 0
   "./references.bib" 1787763861.18295 7821 07fd7843b3cd553b624aaa4a4e0bdb8e ""
   "/usr/local/texlive/2026/texmf-dist/bibtex/bst/vancouver/vancouver.bst" 1621023055 40624 ac6ae80a2b874e3abad2798e8fbde6a2 ""
-  "final.aux" 1787779384.96879 21995 c9a5ee50342804fce233fa44094a5e10 "pdflatex"
+  "final.aux" 1787824694.50655 21944 756c4c0cb26fabaa01770c5fd8d4e3b4 "pdflatex"
   (generated)
   "final.bbl"
   "final.blg"
   (rewritten before read)
-["pdflatex"] 1787779383.3532 "/Users/lukebirkett/Repos/study-planner/981G5_Network_Science/assessment/draft/final.tex" "final.pdf" "final" 1787779385.28987 0
-  "/Users/lukebirkett/Repos/study-planner/981G5_Network_Science/assessment/draft/final.tex" 1787779383.14983 82819 bb3c1dc58fb69de498dfa86e62cf994a ""
+["pdflatex"] 1787824692.83199 "/Users/lukebirkett/Repos/study-planner/981G5_Network_Science/assessment/draft/final.tex" "final.pdf" "final" 1787824694.86934 0
+  "/Users/lukebirkett/Repos/study-planner/981G5_Network_Science/assessment/draft/final.tex" 1787824692.61532 82665 69728dc2adb83407a43115fa6ffd1e18 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
@@ -149,13 +149,13 @@
   "figures/resample_orig_null.png" 1787672944.22313 305587 e621e291cc1cc7f237d4330c41b41c57 ""
   "figures/striker_resample_plot.png" 1787672668.2118 75694 a01bddabb2b30f2d9b2b4f3defd8052e ""
   "figures/triad_plot.png" 1787665749.54191 94629 8394dc6192af3fa0991ec9f9e4db5378 ""
-  "final.aux" 1787779384.96879 21995 c9a5ee50342804fce233fa44094a5e10 "pdflatex"
-  "final.bbl" 1787779377.30865 4576 586c97cec0613eb60390639fe7ea0296 "bibtex final"
-  "final.lof" 1787779384.97144 1230 2b3ddb9ae093388e208c859e3fed9804 "pdflatex"
-  "final.lot" 1787779384.9714 2516 da3defc7df885b359a137c1e9db4ceaf "pdflatex"
-  "final.out" 1787779384.97097 11054 2c3c461b1b428ccf66be17c8a56f342c "pdflatex"
-  "final.tex" 1787779383.14983 82819 bb3c1dc58fb69de498dfa86e62cf994a ""
-  "final.toc" 1787779384.97134 4837 1540af6728c433028c57b254ab89cceb "pdflatex"
+  "final.aux" 1787824694.50655 21944 756c4c0cb26fabaa01770c5fd8d4e3b4 "pdflatex"
+  "final.bbl" 1787823597.37445 4576 586c97cec0613eb60390639fe7ea0296 "bibtex final"
+  "final.lof" 1787824694.5093 1230 2b3ddb9ae093388e208c859e3fed9804 "pdflatex"
+  "final.lot" 1787824694.50926 2513 8411d099faeb60dac60ec957a2545616 "pdflatex"
+  "final.out" 1787824694.50891 10936 7fe457dab7ad0a90114055bb149fde80 "pdflatex"
+  "final.tex" 1787824692.61532 82665 69728dc2adb83407a43115fa6ffd1e18 ""
+  "final.toc" 1787824694.50919 4814 4f5cf79089aae9b0d9d32a3c59d48c15 "pdflatex"
   (generated)
   "final.aux"
   "final.lof"
