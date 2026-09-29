@@ -1,3 +1,0 @@
-This is a textfile.
-There are 3 lines of text.
-This is the last one.
