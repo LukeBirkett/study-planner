@@ -17,6 +17,9 @@
 3. [Julia Setup Guide](https://algorithmic-approaches-to-mathematics.github.io/prerequisites/installation/)
 4. [Study Helpers](https://canvas.sussex.ac.uk/courses/38867/pages/study-helpers?module_item_id=1669822)
 ---
+##### Lecture
+This lecture started as a general introduction to the course. The latter part of the lecture started on the basics of Linear Algebra. This is a topic which spans 2/3 weeks the notes for it are contained in the [Linear Algebra page](../../Linear_Algebra.md).
+
 
 
 - Julia stream: install Julia and get a Pluto notebook running
