@@ -21,12 +21,14 @@
             "id": "91713e62bc14274b",
             "type": "leaf",
             "state": {
-              "type": "pdf",
+              "type": "markdown",
               "state": {
-                "file": "Weeks/Week_3/Files/week_3_slides.pdf"
+                "file": "Weeks/Week_1/Week_1.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-file-text",
-              "title": "week_3_slides"
+              "icon": "lucide-file",
+              "title": "Week_1"
             }
           },
           {
@@ -227,8 +229,8 @@
   },
   "active": "91713e62bc14274b",
   "lastOpenFiles": [
-    "Linear_Algebra.md",
     "Weeks/Week_3/Files/week_3_slides.pdf",
+    "Linear_Algebra.md",
     "Weeks/Week_1/Files/week_1_slides.pdf",
     "Untitled.md",
     "Weeks/Week_3/Files",

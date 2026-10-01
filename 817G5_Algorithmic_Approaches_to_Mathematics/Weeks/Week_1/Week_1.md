@@ -20,9 +20,10 @@
 ##### Lecture
 This lecture started as a general introduction to the course. The latter part of the lecture started on the basics of Linear Algebra. This is a topic which spans 2/3 weeks the notes for it are contained in the [Linear Algebra page](../../Linear_Algebra.md).
 
+---
+##### Lab
+Notebook
 
+---
 
-- Julia stream: install Julia and get a Pluto notebook running
-- Seminar Notebook
-- Lecture (slides + video)
 
