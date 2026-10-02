@@ -37,12 +37,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Linear_Algebra.md",
+                "file": "Julia/Julia.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Linear_Algebra"
+              "title": "Julia"
             }
           },
           {
@@ -60,7 +60,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -227,18 +227,19 @@
       "bases:Create new base": false
     }
   },
-  "active": "91713e62bc14274b",
+  "active": "552175fa9aa1fdef",
   "lastOpenFiles": [
-    "Weeks/Week_3/Files/week_3_slides.pdf",
+    "Weeks/Week_1/Week_1.md",
+    "Julia/Julia.md",
+    "Weeks/Week_1/Files/week_1_all backup 1.jl",
     "Linear_Algebra.md",
     "Weeks/Week_1/Files/week_1_slides.pdf",
+    "Weeks/Week_3/Files/week_3_slides.pdf",
     "Untitled.md",
     "Weeks/Week_3/Files",
     "Weeks/Week_3",
-    "Weeks/Week_1/Week_1.md",
     "Weeks/Week_1/Content.md",
     "Weeks/Week_1/Files/Guide_to_writting_mathematics.pdf",
-    "Julia/Julia.md",
     "Weeks/Week_2/Week_2.md",
     "Homepage.md",
     "Weeks/Week_2/Files",

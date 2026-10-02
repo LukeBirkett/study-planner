@@ -107,9 +107,6 @@ md"""
 # ╔═╡ e0bced5e-fbd2-4d02-83bd-2d7ecf116875
 slide
 
-# ╔═╡ 6aea3218-3655-40f5-bdae-7e878d8cb22a
-
-
 # ╔═╡ 8bfeb7bb-e713-4e8a-8d2a-542d00544baf
 md"""
 ### Important points about Pluto notebooks
@@ -274,8 +271,11 @@ md"""
 	Modify the code below from (x==2) to (x==1). What happens? Why? If you're confused, refer to [the julia docs](https://docs.julialang.org/en/v1/manual/control-flow/#Short-Circuit-Evaluation)
 """
 
+# ╔═╡ e7629dcc-1209-45f2-8820-0c8cbcadf13c
+x
+
 # ╔═╡ 21991df6-74e8-49a3-bf58-ab76f0d6024f
-(x == 2) && (print("hi"))
+(x == 1) && (print("hi"))
 
 # ╔═╡ e17ae741-e9b0-4ca1-8fe4-3f839571ca3c
 ==(x, 1) == (x == 1) # make sure you understand this code
@@ -1681,11 +1681,10 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─53c366d6-e986-46fd-8ee1-035623023a09
 # ╠═29daa38c-eb61-465c-9fe2-87500bc1a420
 # ╠═e0bced5e-fbd2-4d02-83bd-2d7ecf116875
-# ╠═6aea3218-3655-40f5-bdae-7e878d8cb22a
 # ╟─8bfeb7bb-e713-4e8a-8d2a-542d00544baf
 # ╠═b61c093a-7961-45be-9cd1-367c6b1e08ec
 # ╠═efe36c0b-7ffa-47d5-8b7d-07fbab22c5e5
-# ╟─7764d0ba-df04-4776-b27d-3032ecb82692
+# ╠═7764d0ba-df04-4776-b27d-3032ecb82692
 # ╟─a5d65532-f1ea-46e3-a7a1-9baf5bd41a9f
 # ╠═a97f5d6f-5cca-4dbc-a17b-37c53d689f95
 # ╟─d5c1013d-a63f-4d7a-9ed9-9b913638223a
@@ -1702,10 +1701,11 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╠═7cf1c5f0-e2d6-4150-8c8a-6f48f9ddc430
 # ╟─6cd79c82-6817-4a4d-8a08-70fa57df3a77
 # ╟─834cc48d-067d-42e5-89a5-67b078738475
+# ╠═e7629dcc-1209-45f2-8820-0c8cbcadf13c
 # ╠═21991df6-74e8-49a3-bf58-ab76f0d6024f
 # ╠═e17ae741-e9b0-4ca1-8fe4-3f839571ca3c
 # ╟─e7482d85-ffa7-4d64-8b76-fd12d57c0314
-# ╠═9665d674-5c3c-4a48-8677-42e44e68ac89
+# ╟─9665d674-5c3c-4a48-8677-42e44e68ac89
 # ╟─0f0efd61-e3e5-4c4a-816e-5c119d6040da
 # ╟─f3a1cbdb-bdfc-44d1-b1ba-260d9277502a
 # ╠═74cd42cf-db7c-4afc-918e-aa08ff545e9e
