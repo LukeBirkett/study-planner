@@ -22,8 +22,33 @@ This lecture started as a general introduction to the course. The latter part of
 
 ---
 ##### Lab
-Notebook
+1. General introduction to doing maths in Julia. Notes compiled in the [Julia Notes](../../Julia/Julia.md)
+2. Basic syntax for calling and creating functions. 
+3. This is a mutli-line function
+   ```
+   function name(input_a, input_b)
+	   # stuff
+	   return input_a ^ input_b
+	end
+   ```
+4. This is a single line function using assignment. It doesn't need to take argument, this is important for functional programming.
+```
+square2(x) = x^2
+square3 = 🐂 -> 🐂^2
+```
+5. In Julia, we do not need to state `return` in order to return something from a function. Instead, the value of the last evaluated expression in returned
+6. **Returning a function:** Therefore if the final line is another function then you return a function 
+   ```
+   function pow(n) 
+	   inner_pow(x) = x^n 
+	end
+   ```
+7. `inner_power` is strictly local, not global.
+8. Calling this structure is a two step process. First you "call" the `pow` function  assigning the returned inner function to another variable `cube = pow(3)`
+9. The new variable is just the inner function so it is to be called again `result = cube(4)`
+10. 
+
+
 
 ---
-
 
