@@ -37,23 +37,6 @@
 **Ternary operator:** ` a ? b : c` if `a` is true run `b` else run `c`
 
 ---
-##### Mathematics
-| **Symbol**  | **Explanation**  |
-|---|---|
-| $$a \Rightarrow b$$  | a implies b   |
-| $$a \Leftarrow b$$  | a is implied by b   |
-| $$a \Leftrightarrow b$$  | a is equivalent to b   |
-| $$a^c$$  | The negation (opposite) of a  |
-| $$\therefore$$  | Therefore  |
-| $a \land b$  | a and b  |
-| $a \lor b$  | a or b  |
-| $\forall$  | for all or for each  |
-| $:$  | such that  |
-| $\exists$ | there exists  |
-| $\in$ | is a member of, e.g. $3 \in \mathbb{N}$  |
-| $!$ | unique, e.g. $\exists! x \in \mathbb{N}: x > 3 \land x < 5$  |
-
----
 
 ##### Unary Operators
 The unary plus (+x) and minus (-x) in isolate do nothing other an assign. This is important when creating independent variables and not copies of existing data. They act as the **identity operation**, simply returning the value unchanged.
@@ -80,7 +63,6 @@ Conversely, single `&` is a function (`Base.:&`) and forces the evaluation of bo
 
 
 
-as oppose to single digit representations. 
 
 
 

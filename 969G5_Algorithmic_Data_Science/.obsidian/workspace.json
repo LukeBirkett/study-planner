@@ -1,24 +1,38 @@
 {
   "main": {
-    "id": "58c353f869425634",
+    "id": "0817f112072d8066",
     "type": "split",
     "children": [
       {
-        "id": "d8c931f1c31cef60",
+        "id": "6a382fb48b52162a",
         "type": "tabs",
         "children": [
           {
-            "id": "7f81832ab6d401b4",
+            "id": "e9637a91eddea9d9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Homepage.md",
+                "file": "Week/Week_1/Week_1.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Homepage"
+              "title": "Week_1"
+            }
+          },
+          {
+            "id": "c2a77c0838017add",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README"
             }
           }
         ]
@@ -27,15 +41,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "a40c0b4b89fc40b6",
+    "id": "00906d19e47f9a02",
     "type": "split",
     "children": [
       {
-        "id": "6b791e904a382796",
+        "id": "7f50a5a1c114c299",
         "type": "tabs",
         "children": [
           {
-            "id": "fc0ec0b835e2c681",
+            "id": "3d9f39c1f9114fc2",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -50,7 +64,7 @@
             }
           },
           {
-            "id": "7648a769e0af78f9",
+            "id": "0660f8f4c8d6420e",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -67,7 +81,7 @@
             }
           },
           {
-            "id": "11da5c4be3c27e13",
+            "id": "b3c41def11ba055a",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -83,23 +97,23 @@
       }
     ],
     "direction": "horizontal",
-    "width": 324.82421875
+    "width": 200
   },
   "right": {
-    "id": "622efa4922ff550b",
+    "id": "039fe32ad248ae63",
     "type": "split",
     "children": [
       {
-        "id": "49dbfb04b1ebe87e",
+        "id": "af9c3a989bc93112",
         "type": "tabs",
         "children": [
           {
-            "id": "ebe8bbfd8805a4ae",
+            "id": "9b749600ea00ecce",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Algorithmic Approaches to Mathematics.md",
+                "file": "Week/Week_1/Week_1.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,12 +127,12 @@
             }
           },
           {
-            "id": "fe5953f3f6920d69",
+            "id": "1fce7072ffac6e4b",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Algorithmic Approaches to Mathematics.md",
+                "file": "Week/Week_1/Week_1.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -127,7 +141,7 @@
             }
           },
           {
-            "id": "654db1dd1150a429",
+            "id": "da5cf569054e994a",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -142,7 +156,7 @@
             }
           },
           {
-            "id": "a0208a2d00a6f364",
+            "id": "9f481a2b3da77b68",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -156,12 +170,12 @@
             }
           },
           {
-            "id": "e15177f1bbd1c1df",
+            "id": "a7f0c5ee03d8622c",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "Algorithmic Approaches to Mathematics.md",
+                "file": "Week/Week_1/Week_1.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -188,26 +202,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "7f81832ab6d401b4",
+  "active": "e9637a91eddea9d9",
   "lastOpenFiles": [
-    "Weeks/Week_1/Week_1.md",
-    "Julia/Julia.md",
-    "Mathematics.md",
-    "Weeks/Week_1/Files/Introductory_cheatsheet.pdf",
-    "Weeks/Week_1/Files/Guide_to_writting_mathematics.pdf",
     "Homepage.md",
-    "Linear_Algebra.md",
-    "Weeks/Week_1/Files/week_1_all backup 1.jl",
-    "Weeks/Week_1/Files/week_1_slides.pdf",
-    "Weeks/Week_3/Files/week_3_slides.pdf",
-    "Weeks/Week_3/Files",
-    "Weeks/Week_3",
-    "Weeks/Week_1/Content.md",
-    "Weeks/Week_2/Week_2.md",
-    "Weeks/Week_2/Files",
-    "Weeks/Week_2",
-    "Weeks",
+    "Week/Week_1/Week_1.md",
+    "Week/Week_1/Files",
+    "Week/Week_1",
     "README.md",
-    "Week.md"
+    "Week"
   ]
 }
