@@ -19,6 +19,6 @@ I have opted for the Julia route and a designated Julia page is set up [here](./
 ---
 
 #### Weekly Content
-1. [Week_1](./Weeks/Week_1/Week_1.md): Settling In, Julia, Maths "Basics"
-2. [Week 2](./Weeks/Week_2/Week_2.md)
+1. [Week_1](./Weeks/Week_1/Week_1.md): Settling In, Linear Algebra,  Julia, Maths "Basics"
+2. [Week 2](./Weeks/Week_2/Week_2.md): Programming, Algebra
 3. 

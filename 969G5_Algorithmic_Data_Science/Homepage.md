@@ -11,4 +11,4 @@ This module focuses on how data are represented and manipulated to achieve good 
 
 This is Python based module and uses ipython notebooks. The recommendation is to use JupyterLabs but Jupyter Notebook is fine too
 #### Weekly Content
-1. 
+1. [Week 1](Week/Week_1/Week_1.md): Data structures and data formats

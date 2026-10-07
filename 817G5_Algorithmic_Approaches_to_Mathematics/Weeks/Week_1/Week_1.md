@@ -1,4 +1,4 @@
-**| [Canvas Page](https://canvas.sussex.ac.uk/courses/38867/pages/week-1-summary?module_item_id=1669820) |**
+**| [Canvas Page](https://canvas.sussex.ac.uk/courses/38867/pages/week-1-summary?module_item_id=1669820) |** 
 ### Weekly Goals:
 - Introduction to mathematical syntax and its' manipulation
 - Understanding sets and set operations
