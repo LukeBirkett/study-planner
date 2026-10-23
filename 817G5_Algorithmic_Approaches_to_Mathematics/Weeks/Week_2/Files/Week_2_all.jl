@@ -157,6 +157,20 @@ md"""
 
 """
 
+# ╔═╡ 45847bce-1512-469b-aa3a-335cf7fdf76f
+begin
+	test_set = Set((1, "this", 0))
+	this_function(s::Set) = (i for i in s if i isa String)
+	i1 = collect(this_function(test_set))
+	function_i1(itr) = (Symbol(j) for j in itr if j isa String)
+	collect(function_i1(i1))
+	ff = function_i1 ∘ this_function
+	Set(ff(test_set))
+end
+
+# ╔═╡ 93edab50-4549-44b7-b6a7-447166278481
+
+
 # ╔═╡ 50076028-551a-47df-a655-640f2f798906
 answer_box(
 	md"""
@@ -185,6 +199,11 @@ md"""
 # ╔═╡ 0985a299-7d51-45cb-bbae-999fd60c81eb
 pow_iter = (y -> y^n for n in S)
 
+# ╔═╡ e4d9c603-0993-46bd-96bd-c0a8c66459a1
+for f in pow_iter
+    println(f(2))  # Calls each yielded function on the number 2
+end
+
 # ╔═╡ ea845072-e904-4688-9889-495671023f17
 md"""
 !!! info "Questions"
@@ -192,6 +211,11 @@ md"""
 	- Write `pow_iter` out in mathematical notation
 	- In one line of code, build a function `f(i::Number)` that returns an iterator. Each element of the iterator should correspond to an element of `pow_iter` evaluated at `i`. (Note that each element of pow_iter is a function)
 	- Boom, you've nested iterators!
+"""
+
+# ╔═╡ c5778e2e-4ead-4ca1-83a6-98504b23c073
+md"""
+$$f : S \to \{y \to y^n : n \in S \}$$
 """
 
 # ╔═╡ 8da5f64b-53cb-4649-be01-10167c2bc03e
@@ -504,6 +528,22 @@ fizzbuzz_without_ifs(1:20) |> collect
 ```
 """)
 
+# ╔═╡ 34425643-f4e3-4d27-9a54-f533e46d06aa
+function fizzbuzz_item(a::Integer)
+    a % 15 == 0 && return "FizzBuzz"
+    a % 3 == 0  && return "Fizz"
+    a % 5 == 0  && return "Buzz"
+    return a
+end
+
+# ╔═╡ ae3a833c-680e-4d3d-bd8c-de6b77485a24
+# fizzbuzz can now just broadcast or lazily map across the iterator
+fizzbuzz(iter) = (fizzbuzz_item(x) for x in iter)
+
+# ╔═╡ aecd24e8-45b6-42b7-87de-a0601ebd9fc1
+# Or simply call it directly using broadcasting:
+# fizzbuzz_item.(1:20)
+
 # ╔═╡ d6da8780-1993-436f-b3b7-486c957432e5
 md"""
 ## Tensors and Cartesian Indices
@@ -557,6 +597,9 @@ sum(A; dims=(1,2))
 
 # ╔═╡ 4f567af7-b2ee-4f73-aa29-20e7024e5cdd
 sum(A; dims=(1,)) #what type is the input to dims?
+
+# ╔═╡ e90303a9-d7e8-4aae-a3fe-72afcf7bf337
+sum(A; dims=(2,))
 
 # ╔═╡ d836c138-f683-4554-975b-431fdf99cd7c
 md"""
@@ -1001,7 +1044,7 @@ PlutoUI = "~0.7.71"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.13.1"
+julia_version = "1.13.2"
 manifest_format = "2.1"
 project_hash = "4e41e19f684a673adfda943ea4e37118599dc651"
 
@@ -1179,7 +1222,7 @@ version = "1.0.0"
 [[deps.LibCURL_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "LibSSH2_jll", "Libdl", "OpenSSL_jll", "Zlib_jll", "Zstd_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
-version = "8.18.0+1"
+version = "8.22.0+0"
 
 [[deps.LibGit2]]
 deps = ["LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
@@ -1189,7 +1232,7 @@ version = "1.11.0"
 [[deps.LibGit2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "LibSSH2_jll", "Libdl", "OpenSSL_jll", "PCRE2_jll", "Zlib_jll"]
 uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
-version = "1.9.1+0"
+version = "1.9.7+0"
 
 [[deps.LibSSH2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl", "OpenSSL_jll", "Zlib_jll"]
@@ -1253,7 +1296,7 @@ version = "0.3.30+0"
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "3.5.6+0"
+version = "3.5.8+0"
 
 [[deps.OrderedCollections]]
 git-tree-sha1 = "05868e21324cede2207c6f0f466b4bfef6d5e7ee"
@@ -1433,7 +1476,7 @@ version = "1.11.0"
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
-version = "1.3.1+2"
+version = "1.3.2+0"
 
 [[deps.Zstd_jll]]
 deps = ["CompilerSupportLibraries_jll", "Libdl"]
@@ -1448,12 +1491,12 @@ version = "5.15.0+0"
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
-version = "1.67.1+0"
+version = "1.70.0+0"
 
 [[deps.p7zip_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
-version = "17.8.2+0"
+version = "17.8.3+0"
 
 [registries.General]
 url = "https://github.com/JuliaRegistries/General.git"
@@ -1467,7 +1510,7 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─262ef047-9366-46ea-b769-0a3257e0ac77
 # ╠═387e3e5f-cccf-4bc7-b10a-e6c7e78ab217
 # ╠═55f9c84e-0d2b-455e-8b19-61f14c83593e
-# ╠═f3dda0bd-c32f-4931-a40f-da7dd45e7f05
+# ╟─f3dda0bd-c32f-4931-a40f-da7dd45e7f05
 # ╠═cfb60357-d978-461d-bcf1-7dbcb15e0679
 # ╠═4af2607d-69e5-4e39-91c3-082c11e6498b
 # ╠═f014889d-08bb-439c-90ba-3e1a22c2cf4c
@@ -1484,10 +1527,14 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─8b6ba0a5-75fd-4ab0-bef8-78428f346d99
 # ╟─264c9c7f-c1c1-416f-adbb-0403ca0257f4
 # ╟─e0e8f616-62d7-4249-92ab-d3d81f1e6f20
+# ╠═45847bce-1512-469b-aa3a-335cf7fdf76f
+# ╠═93edab50-4549-44b7-b6a7-447166278481
 # ╟─50076028-551a-47df-a655-640f2f798906
 # ╟─19928fb4-8dc3-4dce-8063-f54bbab889e7
 # ╠═0985a299-7d51-45cb-bbae-999fd60c81eb
+# ╠═e4d9c603-0993-46bd-96bd-c0a8c66459a1
 # ╟─ea845072-e904-4688-9889-495671023f17
+# ╠═c5778e2e-4ead-4ca1-83a6-98504b23c073
 # ╟─8da5f64b-53cb-4649-be01-10167c2bc03e
 # ╟─0691c52a-4820-48d4-ba0c-c3b2d308a4f3
 # ╠═f6fb4bc5-9956-4e17-ae3b-b9c76e427c12
@@ -1517,7 +1564,7 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─338e90ad-7b67-4662-a739-630a24a2077e
 # ╟─c35f8a0b-4aee-4aea-a8dd-0a0056d8cb66
 # ╟─3bc63945-f3a1-4135-850f-920a1367fe25
-# ╠═424315c3-2d2c-4a23-8ca2-3c113deab435
+# ╟─424315c3-2d2c-4a23-8ca2-3c113deab435
 # ╟─8a836cf1-00c2-481f-ab31-8a63e4459fd0
 # ╠═339080ab-addb-4495-8d61-56dfcb386403
 # ╠═7ef7c352-437c-401a-b487-d9c5a8d3583b
@@ -1531,6 +1578,9 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─55626b90-0a21-4f7a-8030-c7a97ff48d4b
 # ╟─c5dae429-c49d-4a5a-a64f-e9e59212a905
 # ╟─528f9a87-3e9d-485c-91c5-8ba2782eaa84
+# ╠═34425643-f4e3-4d27-9a54-f533e46d06aa
+# ╠═ae3a833c-680e-4d3d-bd8c-de6b77485a24
+# ╠═aecd24e8-45b6-42b7-87de-a0601ebd9fc1
 # ╟─d6da8780-1993-436f-b3b7-486c957432e5
 # ╠═6209a439-18f6-4bb4-bd57-49a996f509e1
 # ╟─4cde198b-42a4-4093-ae44-47905f0e630d
@@ -1538,12 +1588,13 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╠═358ddd95-0893-40d8-b47b-693a7a67cce8
 # ╠═ce9caee0-55a0-41e3-bd56-e2b2374a32e8
 # ╠═4f567af7-b2ee-4f73-aa29-20e7024e5cdd
+# ╠═e90303a9-d7e8-4aae-a3fe-72afcf7bf337
 # ╟─d836c138-f683-4554-975b-431fdf99cd7c
 # ╟─d9173851-c9ce-4b8c-87ec-db21e8222192
 # ╟─176a3b67-1fe7-4b5e-af45-2db2e634c4c0
 # ╠═016c0a0a-0ae4-4d24-9c22-92370291893c
 # ╟─8c94c6fb-641b-4edd-b017-02473431f444
-# ╟─c3ba9588-f977-40c5-bc4b-4cca56584dae
+# ╠═c3ba9588-f977-40c5-bc4b-4cca56584dae
 # ╟─b6c725af-ab6b-45c4-b4ca-782e32b87d60
 # ╟─64786a5e-aff1-4266-8bb9-f8b477660ed5
 # ╠═01802d58-6f3a-4858-a97d-820dbad8ce83

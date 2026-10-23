@@ -1,7 +1,8 @@
 **Self-Study Resources:**
-[Think Julia Study Book](https://benlauwens.github.io/ThinkJulia.jl/latest/book.html)
-[Julia Academy](https://juliaacademy.com/)
-[Julia Companion Course: Introduction to Computational Thinking](https://computationalthinking.mit.edu/Fall24/)
+- [Think Julia Study Book](https://benlauwens.github.io/ThinkJulia.jl/latest/book.html)
+- [Julia Academy](https://juliaacademy.com/)
+- [Julia Companion Course: Introduction to Computational Thinking](https://computationalthinking.mit.edu/Fall24/)
+- [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
 
 **Setup:**
 [Julia Setup Guide](https://algorithmic-approaches-to-mathematics.github.io/prerequisites/installation/)

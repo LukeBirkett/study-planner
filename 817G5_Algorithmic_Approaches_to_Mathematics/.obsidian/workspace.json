@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "d8c931f1c31cef60",
+        "id": "c2d4e186a01962b6",
         "type": "tabs",
         "children": [
           {
-            "id": "f87231a4f550f9c7",
+            "id": "cf2f38db304738a6",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -19,20 +19,6 @@
               },
               "icon": "lucide-file",
               "title": "Week_2"
-            }
-          },
-          {
-            "id": "6acf21ce85d41326",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Weeks/Week_1/Week_1.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Week_1"
             }
           }
         ]
@@ -97,7 +83,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 324.82421875
+    "width": 324.82421875,
+    "collapsed": true
   },
   "right": {
     "id": "622efa4922ff550b",
@@ -202,26 +189,27 @@
       "bases:Create new base": false
     }
   },
-  "active": "f87231a4f550f9c7",
+  "active": "cf2f38db304738a6",
   "lastOpenFiles": [
-    "Weeks/Week_1/Week_1.md",
-    "Weeks/Week_2/Week_2.md",
+    "Weeks/Week_2/Files/Week_2_all backup 1.jl",
+    "Julia/Julia.md",
+    "Mathematics.md",
     "Weeks/Week_2/Files/week_2_slides.pdf",
+    "Weeks/Week_2/Week_2.md",
+    "Linear_Algebra.md",
+    "Weeks/Week_3/Files/week_3_slides.pdf",
+    "Weeks/Week_1/Week_1.md",
+    "Weeks/Week_2/Files/norm_graph.png",
     "Weeks/Week_2/Files/Week_2_all.jl",
     "Homepage.md",
     "Weeks/Week_3/Week 3.md",
-    "Julia/Julia.md",
-    "Mathematics.md",
     "Weeks/Week_1/Files/Introductory_cheatsheet.pdf",
     "Weeks/Week_1/Files/Guide_to_writting_mathematics.pdf",
-    "Linear_Algebra.md",
     "Weeks/Week_1/Files/week_1_all backup 1.jl",
     "Weeks/Week_1/Files/week_1_slides.pdf",
-    "Weeks/Week_3/Files/week_3_slides.pdf",
     "Weeks/Week_3/Files",
     "Weeks/Week_3",
     "Weeks/Week_1/Content.md",
-    "Weeks/Week_2/Files",
     "README.md",
     "Week.md"
   ]
