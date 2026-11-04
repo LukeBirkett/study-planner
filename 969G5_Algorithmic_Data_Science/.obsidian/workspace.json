@@ -4,33 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "d94b01bb05cd8173",
+        "id": "ffda5e4a4a32eda3",
         "type": "tabs",
         "children": [
           {
-            "id": "42eb0e9096781f50",
+            "id": "bbf359fd4b3a383d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Week/Week_2/Week_2.md",
+                "file": "Week/Week_3/Week_3.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Week_2"
-            }
-          },
-          {
-            "id": "03bef5bab3f1b06e",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "Week/Week_2/Files/lecture2.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "lecture2"
+              "title": "Week_3"
             }
           }
         ]
@@ -95,8 +83,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "039fe32ad248ae63",
@@ -201,20 +188,25 @@
       "bases:Create new base": false
     }
   },
-  "active": "42eb0e9096781f50",
+  "active": "bbf359fd4b3a383d",
   "lastOpenFiles": [
-    "Week/Week_2/Files/lecture2.pdf",
+    "Week/Week_3/Files/lecture3.pdf",
+    "Week/Week_3/Week_3.md",
     "Week/Week_2/Week_2.md",
-    "Week/Week_1/Files/lecture1.pdf",
-    "Week/Week_2/Files/week3lab.ipynb",
+    "Week/Week_3/Files/week4 lab - solution.ipynb",
+    "Week/Week_3/Files/week4 lab.ipynb",
     "Week/Week_1/Week_1.md",
+    "Week/Week_3/Files",
+    "Week/Week_3",
+    "Week/Week_1/Files/lecture1.pdf",
+    "Problems and Functions.md",
+    "Algorithms vs Programs.md",
+    "Homepage.md",
+    "Quality of an Algorithm.md",
+    "Week/Week_2/Files/lecture2.pdf",
+    "Week/Week_2/Files/week3lab.ipynb",
     "Week/Week_2/Files",
     "Week/Week_2",
-    "Homepage.md",
-    "README.md",
-    "Week/Week_1/Files/week2lab.ipynb",
-    "Week/Week_1/Files",
-    "Week/Week_1",
-    "Week"
+    "README.md"
   ]
 }

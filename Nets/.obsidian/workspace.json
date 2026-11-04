@@ -4,24 +4,53 @@
     "type": "split",
     "children": [
       {
-        "id": "d1d68a863d13a223",
+        "id": "515e1afe059bed27",
         "type": "tabs",
         "children": [
           {
-            "id": "2f2fdda84df94104",
+            "id": "42ee21686ce9685b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Proposal.md",
+                "file": "Proposal_4.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Proposal"
+              "title": "Proposal_4"
+            }
+          },
+          {
+            "id": "8a097d6f89124f6c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Proposal/Proposal_5.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Proposal_5"
+            }
+          },
+          {
+            "id": "581cba3b23e33809",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Football Network Projects.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Football Network Projects"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -83,8 +112,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "94aa701e6d5870ba",
@@ -100,7 +128,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Networks.md",
+                "file": "Proposal_5.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +147,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Networks.md",
+                "file": "Proposal_5.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -162,7 +190,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Networks.md",
+                "file": "Proposal_5.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -171,7 +199,8 @@
               "title": "Outline"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -189,9 +218,24 @@
       "bases:Create new base": false
     }
   },
-  "active": "2f2fdda84df94104",
+  "active": "581cba3b23e33809",
   "lastOpenFiles": [
-    "Proposal.md",
+    "Summary.md",
+    "Football Network Projects.md",
+    "Proposal",
+    "Proposal/Proposal_5.md",
+    "Proposal/Proposal_4.md",
+    "Proposal/Proposal_3.md",
+    "Proposal/Proposal_2.md",
+    "Untitled.base",
+    "Proposal/Proposal.md",
+    "Files/trad_null_triad.png",
+    "Files/empirical_triad.png",
+    "Files/passes.png",
+    "Files/passmap.png",
+    "Files",
+    "Proposal/Proposal_Plan.md",
+    "Brief.md",
     "Networks.md",
     "Papers/A network framework of cultural history.md",
     "Papers"

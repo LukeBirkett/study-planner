@@ -1,5 +1,4 @@
-**| [Canvas Page](https://canvas.sussex.ac.uk/courses/39278/pages/overview-and-reading-unit-1?module_item_id=1685486) | [Video Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=f020f9a4-93c1-4d97-ac71-b4de00c5c45b) |**
-
+**| [Canvas Page](https://canvas.sussex.ac.uk/courses/39278/pages/overview-and-reading-unit-1?module_item_id=1685486) | [Video Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=f020f9a4-93c1-4d97-ac71-b4de00c5c45b) |** 
 This week we will be thinking about the complexity of an algorithm and how this impacts on run-time. We will consider how run-time grows with the size of a problem, defined in terms of the input data. For example, if we wish to sort a list of 10 numbers, the problem is small and it does not matter much which algorithm we use to solve the problem (it need only be correct). However, if we wish to sort billions of numbers, the need for an efficient algorithm becomes apparent. We will discuss best-case, worst-case and average-case variation (i.e., are there other factors which impact run-time other than size of input, e.g., the order of the input?), and introduce O notation. We apply the theory to sorting algorithms.
 
 ---
@@ -13,9 +12,31 @@ This week we will be thinking about the complexity of an algorithm and how this 
 - Chapter 3 Growth of Functions
 - Chapter 8 Sorting in Linear Time
 ---
-#### [Lecture](Files/lecture2.pdf)
+### [Lecture](Files/lecture2.pdf)
+1. [[#Algorithms vs Programs|Algorithms vs Programs]]
+2. [[#Problems|Problems]]
+3. [[#Quality of Algo|Quality of Algo]]
+4. [[#Comparing algorithms|Comparing algorithms]]
+5. [[#What could being faster mean?|What could being faster mean?]]
+6. [[#Complexity and Timing Framework|Complexity and Timing Framework]]
+7. [[#Constant-time Operations|Constant-time Operations]]
+8. [[#Iterations: Linear-time|Iterations: Linear-time]]
+9. [[#Nested iterations: quadratic tim|Nested iterations: quadratic tim]]
+10. [[#Broken Iterations: Linear-time|Broken Iterations: Linear-time]]
+11. [[#Asymptotic order of growth|Asymptotic order of growth]]
+12. [[#Time complexity O Notation: Loose definition.|Time complexity O Notation: Loose definition.]]
+13. [[#Divide-and-Conquer|Divide-and-Conquer]]
+14. [[#Insertion sort (Cormen et al. Notes)|Insertion sort (Cormen et al. Notes)]]
+15. [[#Insertion-Sort Algo (A)|Insertion-Sort Algo (A)]]
+16. [[#Merge-Sort|Merge-Sort]]
+17. [[#The Purpose of the Upper-Bound Constant (c) in Big-O (Cormen et al. Chapter 3)|The Purpose of the Upper-Bound Constant (c) in Big-O (Cormen et al. Chapter 3)]]
+18. [[#The Practical/Empirical Test (Doubling Test)|The Practical/Empirical Test (Doubling Test)]]
+19. [[#The Formal Mathematical Test (Limit Ratio Test)|The Formal Mathematical Test (Limit Ratio Test)]]
 
-##### algorithms vs programs
+
+
+---
+#### Algorithms vs Programs
 We use the term algorithm interchangabley with program (e.g., in Python). The emphasis is different though
 
 An algorithm 
@@ -40,8 +61,7 @@ def find_max_element(alist):
 Programs should be syntactically correct
 
 ---
-
-##### Problems
+#### Problems
 Recalling that we distinguish algorithms from problems (or functions), because intuitively we know that sometimes very different algorithms do the same thing i.e., solve the same problem
 
 An algorithm is a well-defined procedure that takes a value or set of values as input and produces some value or set of values as output
@@ -54,12 +74,9 @@ Many problems are also functions. For functions, the mapping is many-to-one or o
 
 We say that an algorithm $A$ implements a function problem $f$, if: 
 $$\forall x \in X, \forall y \in Y: f(x) = y \quad \text{if} \quad A(x) \text{ terminates and yields } y$$
-It is import
-
 
 ---
-
-##### Quality of Algo
+#### Quality of Algo
 Its not enough to write down an algorithm and say ‘Behold. Look at this marvellous algorithm I have written.
 
 We need to convince ourselves that:
@@ -68,7 +85,7 @@ We need to convince ourselves that:
 - The algorithm is better than other possible algorithms.
 
 ---
-##### Comparing algorithms
+#### Comparing algorithms
 What does it mean for algorithm A to be better than algorithm
 - **Time Complexity:** How long will my program take to run? Is algorithm A faster than algorithm B?
 - **Space Complexity:** How much memory will my program need? Does algorithm A use less memory than algorithm B?
@@ -76,7 +93,7 @@ What does it mean for algorithm A to be better than algorithm
 We are starting this module looking at only Time Complexity on a single machine with no parallel computing but we will later move onto considering memory and finally involving mutli-computer scenarios where the cost of transfer information across a network can slow things down.
 
 ---
-#### What could being faster mean? 
+### What could being faster mean? 
 - A runs faster than B on some inputs
 - A runs faster than B on all inputs
 - A runs faster than B on the best case
@@ -88,7 +105,7 @@ We are starting this module looking at only Time Complexity on a single machine 
 The default is to consider the worst case scenario. But specific use-cases may use specific definitions.
 
 ---
-##### Complexity and Timing Framework
+#### Complexity and Timing Framework
 We could scope into every detail and compute run times and mathematics for every component in the algorithm. However, this in itself would take a long time and outweigh the benefit. Really, we just want to run the algo and see what happens
 
 Certain things like "if my data doubles, how much this the run time increase" need quick and intuitive answers. 
@@ -96,7 +113,7 @@ Certain things like "if my data doubles, how much this the run time increase" ne
 We need a framework to get these estimates quickly. (this is for large data considerations)
 
 ---
-##### Constant-time Operations
+#### Constant-time Operations
 Some operations are instant meaning they always take the same amount of time. These are time constant operations. 
 
 Things like addition, subtraction, if-then-else are good approximations for time constant
@@ -118,7 +135,7 @@ nothing here depends on the length of the list. all the actions are instantly ex
 This is a constant-time function. The run-time is of the order of 1: O(1)
 
 ---
-##### Iterations: Linear-time
+#### Iterations: Linear-time
 Alternatively, we have linear-time actions. These are things that by definition scale the time taken by the size of the input
 ```
 def myfunc1(alist):
@@ -135,8 +152,7 @@ The length of time to complete depends linearly on the size of the input. If the
 The run time of proportional to $n$
 
 ---
-##### Nested iterations: quadratic tim
-
+#### Nested iterations: quadratic tim
 ```
 def myfunc2(alist):
 	for thing1 in alist:
@@ -153,8 +169,7 @@ The run-time is quadratic in the size of the input. If the length of the list do
 if the list doubles in size, the run time will quadruple. 
 
 ---
-##### Broken Iterations: Linear-time
-
+#### Broken Iterations: Linear-time
 ```
 def myfunc1b(alist,something):
 	for thing in alist:
@@ -170,7 +185,7 @@ The UPPER BOUND on the length of time to complete depends linearly on the size o
 The complexity is considered to be the upper possibility. we don't know what he something is and if it will impact. 
 
 ---
-##### Asymptotic order of growth
+#### Asymptotic order of growth
 Let’s assume we have two algorithms $A_1$ and $A_2$ for a given problem, and their run-time is given by $f_1$ for $A_1$ and $f_2$ for $A_2$ where:
 
 $f_1(n) = 0.00001 * 2^n$
@@ -179,7 +194,7 @@ $f_2(n) = 289346724587138654380 × n^2$
 For small data, $A_1$ is faster, but eventually, for big enough data $A_2$ is faster. We are interested in the behaviour of algorithms as the input data grows large.
 
 ---
-##### Time complexity O Notation: Loose definition.
+#### Time complexity O Notation: Loose definition.
 A run-time is $O(g(n))$ if:
 - For sufficiently large data, *const x* $g(n)$ approximates the run-time well, and the approximation generally gets better and better the bigger the data.
 
@@ -200,15 +215,14 @@ Big-O is fundamentally about **scaling behavior** as $n$ grows toward infinity, 
 
 
 ---
-##### Divide-and-Conquer
+#### Divide-and-Conquer
  Many useful algorithms are recursive in nature. They use the divide- and-conquer paradigm
  1. Divide the problem into a number of subproblems which are similar to the original problem but smaller in size
  2. Conquer the subproblems by solving them recursively. If the subproblems are small enough, solve them in an obvious way (the base case)
  3. Combine the solutions to the subproblems into the solution for the original problem 
 
 ---
-##### Insertion sort (Cormen et al. Notes) 
-
+#### Insertion sort (Cormen et al. Notes) 
 **Input:** A sequence of $n$ numbers $\langle a_1, a_2, ..., a_3 \rangle$
 **Output:** A permutation (reordering) $\langle a'_1, a'_2, ..., a'_3 \rangle$ of the input sequence such that $a'_1 \le a'_2 \le ... \le a'_n$
 
@@ -237,12 +251,11 @@ for j = 2 to A.length:
 This pseudocode demonstrates the in-place sorting. The first element of the list is forgone and considered to be sorted meaning the loop starts at `j=2`. The `key` is assigned to the second value, after which the indexer `i` is set to the value before `j`. Therefore, during the while loop, the first element accessed is `A[i]` which for the first iteration would be the first "sorted" element. If this value `A[i] > key` the second slot `A[i + 1]` is assigned to the original `A[i]` and the index incremented back again. This increment is so the function can iterate through $n$ sorted values. Once all values are checked or the conditions are violated, i.e. the key is no longer smaller than whatever `A[i]` is, the key is assigned to `A[i + 1] = key`. The index is `+1` because the final step in while loop is to lower it in anticipation for another index to check which never came. 
 
 ---
-##### Merge-Sort
+#### Merge-Sort
 Cormen has a comprehensive overview of merge and merge-sort but I didn't take notes. Maybe some back and do notes if it turns out to be important for the exam. 
 
 ---
-
-##### The Purpose of the Upper-Bound Constant ($c$) in Big-$O$ (Cormen et al. Chapter 3)
+#### The Purpose of the Upper-Bound Constant ($c$) in Big-$O$ (Cormen et al. Chapter 3)
 In $T(n) \le c \cdot f(n)$, the constant $c$ represents fixed hardware and language speed—it scales the curve up or down, but it **cannot change its shape**.
 
 **Why it proves complexity:**
@@ -284,8 +297,36 @@ $$\lim_{n \to \infty} \frac{n^2}{n} = \lim_{n \to \infty} n = \infty$$
 Because it blows up to infinity rather than settling under a finite constant bound, the notation is mathematically invalid.
 
 ---
-#### Lab
+### Lab
+### 1. Lab Objectives & Core Hypothesis
+- **Theoretical Claim:** The runtime $T(n)$ of Insertion Sort scales as a power-law relationship $T(n) \approx c_a n^\alpha$, where theory predicts quadratic growth ($\alpha = 2$) for sufficiently large $n$.
+- **Methodology:** Use empirical benchmarking (`timeit`), log-log transformation, and linear regression to extract the scaling exponent $\alpha$ and the machine-dependent constant $c_a$.
+---
+### 2. Experimental Procedure & Results
+**Log-Log Formulation:** Taking the natural logarithm of both sides converts the power law into a straight line:
+$$\ln(T) = \alpha \ln(n) + \ln(c_a)$$
+- **Gradient ($\text{slope}$):** Scaling power $\alpha$
+- **Y-intercept:** $\ln(c_a)$, from which the machine constant is calculated via $c_a = e^{\text{intercept}}$
 
+**Empirical Measurements (Random / Average Case):**
+- **Estimated exponent ($\alpha$):** $\approx 2.0155$ (closely matches the expected $\alpha = 2$ for quadratic growth)
+- **Estimated intercept ($\ln(c_a)$):** $-21.2351$
+- **Derived constant ($c_a$):** $\approx 5.9939 \times 10^{-10}\text{ s}$
+---
+### **3. Scenario Comparison: Best, Average, and Worst Cases**
+
+|**Metric / Property**|**Best Case (Already Sorted) IPYNB**|**Average Case (Random Lists) IPYNB**|**Worst Case (Reverse-Sorted) IPYNB**|
+|---|---|---|---|
+|**Log-Log Slope ($\alpha$)**|$\approx 1$ (flatter line)|$\approx 2$|$\approx 2$|
+|**Relative Line Position**|Lowest vertical placement|Middle vertical placement|Highest vertical placement|
+|**Growth Family ($\Theta$)**|$\Theta(n)$|$\Theta(n^2)$|$\Theta(n^2)$|
+|**Upper Bound ($O$)**|$O(n)$ (tight); $O(n^2)$ (loose)|$O(n^2)$|$O(n^2)$|
+
+---
+#### Key Analytical Takeaways
+- **Parallel Slopes:** The average- and worst-case curves run parallel on the log-log plot because both scale quadratically ($\alpha \approx 2$), confirming both belong to the exact same $\Theta(n^2)$ complexity class.
+- **Vertical Offset ($\ln(2)$):** The worst case is vertically shifted above the average case by an intercept difference of $\approx \ln(2)$ because an element in a reversed list shifts past all preceding items, whereas in a random list it shifts past roughly half on average ($c_{\text{worst}} \approx 2 \cdot c_{\text{avg}}$).
+- **Best-Case Divergence:** The best case is not parallel because it requires only a single comparison per element with zero shifts, yielding linear time $\Theta(n)$ and a slope of $\alpha \approx 1$.
 
 ---
 
