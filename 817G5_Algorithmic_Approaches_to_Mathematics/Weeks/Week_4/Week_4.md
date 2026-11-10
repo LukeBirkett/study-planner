@@ -1,4 +1,4 @@
-| [Canvas](https://canvas.sussex.ac.uk/courses/38867/pages/probability-slash-statistics-week-4-summary?module_item_id=1669829) | [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c0100f32-efdf-4002-9f38-b4ea00c7046c) |
+| [Canvas](https://canvas.sussex.ac.uk/courses/38867/pages/probability-slash-statistics-week-4-summary?module_item_id=1669829) | [Recording](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c0100f32-efdf-4002-9f38-b4ea00c7046c) | [Recording 2](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a707c175-360c-478d-bf9a-b4f100d6f000) |
 #### Goals 
 - Understanding the conceptual foundations of probability and statistics is really foundational to properly applying AI and data science algorithms.
 - Won't cover all the algorithms for data analysis on this course but provide the conceptual background to learn such topics. 

@@ -5,16 +5,16 @@
 - [ ] [Linear Algebra Cheatsheet](Files/LinearAlgebra_cheatsheet.pdf)
 #### Links
 **[3blue1brown](https://www.3blue1brown.com/?topic=linear-algebra) videos 1-5:**
-- [ ]  [Vectors](http://3blue1brown.com/?topic=linear-algebra&lesson=vectors)
-- [ ] [Linear combinations, span, and basis vectors](https://www.3blue1brown.com/?topic=linear-algebra&lesson=span)
-- [ ] [Linear Transformations and Matrices](https://www.3blue1brown.com/?topic=linear-algebra&lesson=linear-transformations)
-- [ ] [Matrix Multiplication](https://www.3blue1brown.com/?topic=linear-algebra&lesson=matrix-multiplication)
-- [ ] [3D Transformations](https://www.3blue1brown.com/?topic=linear-algebra&lesson=3d-transformations)
+- [x]  [Vectors](http://3blue1brown.com/?topic=linear-algebra&lesson=vectors)
+- [x] [Linear combinations, span, and basis vectors](https://www.3blue1brown.com/?topic=linear-algebra&lesson=span)
+- [x] [Linear Transformations and Matrices](https://www.3blue1brown.com/?topic=linear-algebra&lesson=linear-transformations)
+- [x] [Matrix Multiplication](https://www.3blue1brown.com/?topic=linear-algebra&lesson=matrix-multiplication)
+- [x] [3D Transformations](https://www.3blue1brown.com/?topic=linear-algebra&lesson=3d-transformations)
 ---
 - [ ] [Interactive Linear Algebra](https://textbooks.math.gatech.edu/ila/index.html) Chapters 1 and 2
 - [ ] [Introduction to Computational Thinking](https://computationalthinking.mit.edu/Fall24/) Module 1
 ---
-#### Lecture 
+# Lecture 
 ---
 - Understand the laws of matrix algebra (transposition, commutativity, existence of inverse)
 - Understand the concept of the dot product of vectors, and be able to perform them by hand
@@ -24,7 +24,7 @@
 - Start to understand the geometric intuition behind eigenvectors.
 
 The notes for this lecture are continued in the [Linear Algebra](../../Linear_Algebra.md) page under Part 2
-#### Lab
+# Lab
 ---
 - Be fluent in multiplying/adding/subtracting matrices, on paper and in code. Know what matrix sizes can be multiplied together, and the shape of the product (before calculating it)
 - Understand the concept of n-dimensional tensors, and how to build them in code
@@ -37,4 +37,4 @@ The notes for this lecture are continued in the [Linear Algebra](../../Linear_Al
 - Practice on performing mathematical proofs on the latter two goals.
 - Practice on shearing seagulls. More generally, interactive geometric insight into how 2d matrices transform images, to better get a 'feel' for 2d matrices.
 ---
-#### Cheatsheet
+# Cheatsheet
