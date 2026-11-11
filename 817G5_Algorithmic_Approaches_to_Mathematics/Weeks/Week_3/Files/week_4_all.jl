@@ -979,7 +979,7 @@ PlutoUI = "~0.7.71"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.13.1"
+julia_version = "1.13.2"
 manifest_format = "2.1"
 project_hash = "cc887e370a1908cdc8e4eb147dd4f808cd148003"
 
@@ -1137,7 +1137,7 @@ version = "1.0.0"
 [[deps.LibCURL_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "LibSSH2_jll", "Libdl", "OpenSSL_jll", "Zlib_jll", "Zstd_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
-version = "8.18.0+1"
+version = "8.22.0+0"
 
 [[deps.LibGit2]]
 deps = ["LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
@@ -1147,7 +1147,7 @@ version = "1.11.0"
 [[deps.LibGit2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "LibSSH2_jll", "Libdl", "OpenSSL_jll", "PCRE2_jll", "Zlib_jll"]
 uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
-version = "1.9.1+0"
+version = "1.9.7+0"
 
 [[deps.LibSSH2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl", "OpenSSL_jll", "Zlib_jll"]
@@ -1204,7 +1204,7 @@ version = "0.3.30+0"
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "3.5.6+0"
+version = "3.5.8+0"
 
 [[deps.OrderedCollections]]
 git-tree-sha1 = "05868e21324cede2207c6f0f466b4bfef6d5e7ee"
@@ -1350,7 +1350,7 @@ version = "1.11.0"
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
-version = "1.3.1+2"
+version = "1.3.2+0"
 
 [[deps.Zstd_jll]]
 deps = ["CompilerSupportLibraries_jll", "Libdl"]
@@ -1365,12 +1365,12 @@ version = "5.15.0+0"
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
-version = "1.67.1+0"
+version = "1.70.0+0"
 
 [[deps.p7zip_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
-version = "17.8.2+0"
+version = "17.8.3+0"
 
 [registries.General]
 url = "https://github.com/JuliaRegistries/General.git"
@@ -1385,7 +1385,7 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─949525b7-ba63-49c2-b4ff-25e6d635f302
 # ╟─3fcf9402-1f09-4031-b647-0aef2b2ed12f
 # ╟─ee12f122-7752-4a4d-95da-6349dbde5afb
-# ╠═c2f1f129-1faf-4890-b6de-d4c32efaef90
+# ╟─c2f1f129-1faf-4890-b6de-d4c32efaef90
 # ╟─2bc831d4-b0c3-40df-b3da-0de07849ad60
 # ╠═d9dcb2df-9bef-41d8-8d30-ead194ca7de5
 # ╟─d533fad2-dc2d-4ecd-b569-e610377dc3e3
@@ -1428,8 +1428,8 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─9313d596-bd17-4385-aca9-42cf127c9f96
 # ╟─7f624e97-7f0d-4f05-8b28-4f43f8d84f06
 # ╟─932bc70a-306c-4faf-bb32-43591ad4e2f6
-# ╟─5e318189-fdfc-44a1-bc69-16c98e01e80e
-# ╠═605a940d-6616-4a8e-adb4-e0f62eb39a83
+# ╠═5e318189-fdfc-44a1-bc69-16c98e01e80e
+# ╟─605a940d-6616-4a8e-adb4-e0f62eb39a83
 # ╟─4592dae2-392f-44fe-bce2-f0bb470a603f
 # ╟─1a53cf60-bbcd-44ca-af9d-3d7e619d879b
 # ╟─59e8a422-ee57-4a4a-a62e-2e6e4e926e97

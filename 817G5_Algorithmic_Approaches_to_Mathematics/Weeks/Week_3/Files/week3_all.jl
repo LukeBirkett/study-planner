@@ -87,6 +87,9 @@ question_box(md"""
 # ╔═╡ ef0939b4-2abd-4dd3-aae5-ba816a4460d0
 my_tensor = [1;2;1;2;;;;3;4;3;4;;;;5;6;5;6;;;;7;8;7;8]
 
+# ╔═╡ b2685801-1026-414c-ba48-881144a24ae0
+size(my_tensor)
+
 # ╔═╡ 40adf4f6-4608-4417-988a-4dac780bd1ef
 begin # different ways to do the same thing
 	C = reshape(A, (4,)) #(4,) is the desired size
@@ -95,6 +98,18 @@ end
 
 # ╔═╡ b524f9a0-4b27-4bbe-bcd5-5c807a1940dc
 prod(size(A)) == prod(size(C)) # invariant to reshaping. equals the total number of elements in the array.
+
+# ╔═╡ 767063be-aa7e-4e51-aa21-57edd5d62f56
+reordered_C = reshape(A', :) # ' Transposes A first
+
+# ╔═╡ 1f65a4d4-64e4-4e79-8b32-31596b25adae
+size(C)
+
+# ╔═╡ 3622e2fa-c125-4fe4-9dd0-d0242f5e66e6
+C
+
+# ╔═╡ 02544366-0340-4067-8465-0bcbbbbf4b0a
+reordered_C
 
 # ╔═╡ 6af9cb07-aa2e-4757-b188-d248f054e8ed
 md"""
@@ -207,6 +222,9 @@ If you want to apply a function  to each element of an array, you append the fun
 # ╔═╡ 11952fe0-8cff-43f1-8011-45df9bba84fe
 an_array = [3;4;;5;6]
 
+# ╔═╡ d2d2a58e-9bfa-422e-9169-66dc1cd755d7
+
+
 # ╔═╡ e1614adb-8978-488f-828b-f6326c523713
 md"""
 ### 3. Images are matrices
@@ -269,6 +287,9 @@ img = load(download("https://i.pinimg.com/originals/e9/84/90/e98490ea3dc49e5c326
 fieldnames(eltype(img)) # The more obvious way is to look up the fields of the RGB struct in the live docs. This is a quick way to get a list of the fields.
 
 #All computer colours are additive combinations of the three primary colours Red, Green, and Blue.  Thes fields correspond to the R,G,B values of the im.  To learn more about how images are built from RGB values, consult https://en.wikipedia.org/wiki/RGB_color_model
+
+# ╔═╡ a7650b7d-dde9-406d-ba95-733560e94931
+img
 
 # ╔═╡ 5a42850c-ed87-486f-934b-3fb05c6eeeb0
 answer_box(md"""
@@ -543,6 +564,9 @@ end
 # ╔═╡ 09583ece-8ce7-45f1-94fb-5bcb96747aca
 another_tensor = [a + b + c*d for a in 1:3, b in 1:2, c in 1:4, d in 1:3];
 
+# ╔═╡ 0ce87c08-0a7d-4c9b-8dc0-4a23da45a225
+size(another_tensor)
+
 # ╔═╡ 1a01e5d6-753f-491a-bcb5-5c893ab1f48f
 my_func(i::Integer) = 2i
 
@@ -557,8 +581,27 @@ map(an_array) do x
 	my_func(x)
 end #this is optional and julia specific, but quite nice for complicated mapping operations.
 
+
+# This version only makes sense if you are stacking mutliple manipulations within the function, e.g.:
+
+# map(users) do u
+#    cleaned_name = strip(u.name)
+#    age_months = u.age_years * 12
+#    (name = cleaned_name, months = age_months)
+# end
+
+# This is because in Julia, anonymous functions are compiled to specialized types, so the compiler often inlines x -> my_func(x), meaning there is usually zero runtime performance penalty.
+
+# Also, often multiline transformations are often ad-hoc using local variables meaning a stand alone function would be unnecessary clutter
+
 # ╔═╡ b8ab7927-dc7c-47ad-a9a6-ae4ddf092275
 [my_func(el) for el in an_array] #list comprehension
+
+# in Julia array comprehensions are designed around multidimensional iterators and Cartesian indices
+
+# it queries its shape using size(an_array) and allocates the resulting comprehension with that exact same size and shape.
+
+# languages like python would require a nested loop here to retain the input structure (2x2)
 
 # ╔═╡ 6c1f3788-c048-4e33-984c-b3b91a4201f7
 function crop_right_half_im(x::Matrix{T}) where T <: RGBA
@@ -801,22 +844,23 @@ question_box(md"""
 """)
 
 # ╔═╡ b960cf36-1af1-4b86-b680-29a1054e90e7
-answer_box(
 md"""
-We will prove that $S$ is a subspace of $V$, and thus, is also a vector space.  We can show this by proving that $S$ is closed under linear combinations.  Let $a,b \in S$ with coordinates $[\alpha_1, \alpha_2]$ and $[\beta_1, \beta_2]$, respectively.  Let us consider the linear combination, for arbitrary $\mu,\nu \in K$:
+We will prove that $S$ is a subspace of $V$, and thus, is also a vector space. We can show this by proving that $S$ is closed under linear combinations. Let $a,b \in S$ with coordinates $[\alpha_1, \alpha_2]$ and $[\beta_1, \beta_2]$, respectively. Let us consider the linear combination, for arbitrary $\mu,\nu \in K$:
 
-```math
-	
-\begin{align}
-\mu a + \nu b &= \mu(\alpha_1 e_1 + \alpha_2 e_2) + \nu (\beta_1 e_1 + \beta_2 e_2) \\
-&=  \mu\alpha_1 e_1 + \mu\alpha_2 e_2 + \nu\beta_1 e_1 + \nu\beta_2 e_2 \quad \text{K1} \\
-&= \mu\alpha_1 e_1  + \nu\beta_1 e_1 + \mu\alpha_2 e_2 +  \nu\beta_2 e_2 \quad \text{A1} \\
-&= (\mu\alpha_1 + \nu\beta_1) e_1 + (\mu\alpha_2 +  \nu\beta_2) e_2 \quad \text{K2} 
-	\end{align}
-	```
+$$
+\begin{aligned}
+\mu a + \nu b &= \mu(\alpha_1 e_1 + \alpha_2 e_2) + \nu (\beta_1 e_1 + \beta_2 e_2) \\\\
+&= \mu\alpha_1 e_1 + \mu\alpha_2 e_2 + \nu\beta_1 e_1 + \nu\beta_2 e_2 && \text{K1} \\\\
+&= \mu\alpha_1 e_1 + \nu\beta_1 e_1 + \mu\alpha_2 e_2 + \nu\beta_2 e_2 && \text{A1} \\\\
+&= (\mu\alpha_1 + \nu\beta_1) e_1 + (\mu\alpha_2 + \nu\beta_2) e_2 && \text{K2}
+\end{aligned}
+$$
 
-Because $K$ as a field is closed under addition and multiplication, thus the scalar factors in the last line are also elements of $K$.  Hence, we have shown that $S$ is closed under linear combinations, and is a subspace of $V$.
-""")
+Because $K$ as a field is closed under addition and multiplication, thus the scalar factors in the last line are also elements of $K$. Hence, we have shown that $S$ is closed under linear combinations, and is a subspace of $V$.
+"""
+
+# ╔═╡ 00447043-85c8-4b84-b630-997ff5c06e1c
+
 
 # ╔═╡ 1804bf55-a684-45d5-a7fe-d1e45b3ec0a5
 md"""
@@ -1594,7 +1638,7 @@ PlutoUI = "~0.7.83"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.13.1"
+julia_version = "1.13.2"
 manifest_format = "2.1"
 project_hash = "b284b7bada23f87cd40311689a31179fc2f0232c"
 
@@ -2480,7 +2524,7 @@ version = "1.0.0"
 [[deps.LibCURL_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "LibSSH2_jll", "Libdl", "OpenSSL_jll", "Zlib_jll", "Zstd_jll", "nghttp2_jll"]
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
-version = "8.18.0+1"
+version = "8.22.0+0"
 
 [[deps.LibGit2]]
 deps = ["LibGit2_jll", "NetworkOptions", "Printf", "SHA"]
@@ -2490,7 +2534,7 @@ version = "1.11.0"
 [[deps.LibGit2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "LibSSH2_jll", "Libdl", "OpenSSL_jll", "PCRE2_jll", "Zlib_jll"]
 uuid = "e37daf67-58a4-590a-8e99-b0245dd2ffc5"
-version = "1.9.1+0"
+version = "1.9.7+0"
 
 [[deps.LibSSH2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl", "OpenSSL_jll", "Zlib_jll"]
@@ -2758,7 +2802,7 @@ version = "0.8.7+0"
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "3.5.6+0"
+version = "3.5.8+0"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -3343,7 +3387,7 @@ version = "1.6.0+0"
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
-version = "1.3.1+2"
+version = "1.3.2+0"
 
 [[deps.Zstd_jll]]
 deps = ["CompilerSupportLibraries_jll", "Libdl"]
@@ -3435,7 +3479,7 @@ version = "1.11.4+0"
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
-version = "1.67.1+0"
+version = "1.70.0+0"
 
 [[deps.oneTBB_jll]]
 deps = ["Artifacts", "JLLWrappers", "LazyArtifacts", "Libdl"]
@@ -3447,7 +3491,7 @@ version = "2022.3.0+0"
 [[deps.p7zip_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
-version = "17.8.2+0"
+version = "17.8.3+0"
 
 [[deps.x264_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -3484,9 +3528,15 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─1c848b46-6ea8-44a3-84d4-2619f724375e
 # ╠═b9ed6c20-8a58-461c-b5b3-75d133858098
 # ╠═ef0939b4-2abd-4dd3-aae5-ba816a4460d0
+# ╠═b2685801-1026-414c-ba48-881144a24ae0
 # ╠═09583ece-8ce7-45f1-94fb-5bcb96747aca
+# ╠═0ce87c08-0a7d-4c9b-8dc0-4a23da45a225
 # ╠═40adf4f6-4608-4417-988a-4dac780bd1ef
 # ╠═b524f9a0-4b27-4bbe-bcd5-5c807a1940dc
+# ╠═767063be-aa7e-4e51-aa21-57edd5d62f56
+# ╠═1f65a4d4-64e4-4e79-8b32-31596b25adae
+# ╠═3622e2fa-c125-4fe4-9dd0-d0242f5e66e6
+# ╠═02544366-0340-4067-8465-0bcbbbbf4b0a
 # ╟─6af9cb07-aa2e-4757-b188-d248f054e8ed
 # ╟─aa8d4c23-7a89-40d7-a4ba-1ce53079ba2e
 # ╟─d08d299c-71bd-4620-86f0-ececd359ef11
@@ -3503,6 +3553,7 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╠═9fcbb1cf-b9d2-418c-92e1-4a3a12a3157b
 # ╠═74bc5258-ef53-497c-a3ac-3dd8c0cb6848
 # ╠═b8ab7927-dc7c-47ad-a9a6-ae4ddf092275
+# ╠═d2d2a58e-9bfa-422e-9169-66dc1cd755d7
 # ╟─e1614adb-8978-488f-828b-f6326c523713
 # ╟─545016b2-9baa-4439-92e2-f360916875ca
 # ╠═e3913345-f2e5-43ae-927a-c82aca59bcdd
@@ -3510,6 +3561,7 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─a538110d-6e14-4589-8301-2e9b08814c88
 # ╟─693e420d-2b36-4698-ae98-89eb98b525f6
 # ╠═86e90680-ad1b-4e39-93b0-919869fb187a
+# ╠═a7650b7d-dde9-406d-ba95-733560e94931
 # ╟─5a42850c-ed87-486f-934b-3fb05c6eeeb0
 # ╟─893d9277-384c-4125-9e71-c6e4bd1f362d
 # ╟─2fac2250-f530-4b43-a67d-999383491db6
@@ -3562,9 +3614,10 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─1a5dfb11-64be-4a0d-acc6-0630ba22027f
 # ╟─2150e64a-f3d7-4df3-a2a1-1b63a908b54e
 # ╟─daba127c-bfa1-4d81-b3d3-e3011e0f4a60
-# ╟─870ffdde-28ae-4376-a565-c9644e4979f0
+# ╠═870ffdde-28ae-4376-a565-c9644e4979f0
 # ╟─7f6ed4d9-14b9-43ce-8515-da0e89c48a0f
-# ╟─b960cf36-1af1-4b86-b680-29a1054e90e7
+# ╠═b960cf36-1af1-4b86-b680-29a1054e90e7
+# ╠═00447043-85c8-4b84-b630-997ff5c06e1c
 # ╟─1804bf55-a684-45d5-a7fe-d1e45b3ec0a5
 # ╟─194deaf5-a8dc-49e3-81ae-2f918763e2da
 # ╠═7aad6ffd-e504-472a-a9d5-0bf962e94d88
@@ -3584,7 +3637,7 @@ uuid = "23338594-aafe-5451-b93e-139f81909106"
 # ╟─8876ffc5-c00a-4c5e-94cd-c3dacb81eb67
 # ╟─e4cc355b-85e7-4d1a-9401-60be5bcb0880
 # ╟─fb36491e-6df0-4772-8066-f29cf00d04af
-# ╠═9a4f3052-70db-4b4c-84cd-2192e2b397a5
+# ╟─9a4f3052-70db-4b4c-84cd-2192e2b397a5
 # ╟─818df519-8154-4deb-97d2-8e70d7d6483f
 # ╟─642373b7-441f-4d17-8f23-41c09302f07c
 # ╟─e839ca44-a651-4911-a43f-09859262dbbb
