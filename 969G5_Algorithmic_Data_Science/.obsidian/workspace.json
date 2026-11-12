@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "ffda5e4a4a32eda3",
+        "id": "70d05b64081a229d",
         "type": "tabs",
         "children": [
           {
-            "id": "bbf359fd4b3a383d",
+            "id": "f089bfc621277e9c",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Week/Week_3/Week_3.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Week_3"
+              "title": "New tab"
             }
           }
         ]
@@ -188,28 +184,29 @@
       "bases:Create new base": false
     }
   },
-  "active": "bbf359fd4b3a383d",
+  "active": "f089bfc621277e9c",
   "lastOpenFiles": [
-    "Week/Week_2/Week_2.md",
-    "Week/Week_3/Week_3.md",
+    "Week/Week_3/Matrices.md",
+    "Week/Week_4/Processes_and_Concurrency.md",
     "Homepage.md",
-    "Week/Week_3/Files/lecture3.pdf",
+    "Week/Week_4/Files/week5lab-solutions/defs2.py",
+    "Week/Week_4/Files/week5lab-solutions/week5lab-solutions.ipynb",
+    "Week/Week_4/Files/week5lab-solutions/defs.py",
+    "Week/Week_4/Files/week5lab-solutions",
+    "Week/Week_4/Files/week5lab/week5lab.ipynb",
+    "Week/Week_4/Files/week5lab/defs.py",
+    "Week/Week_4/Files/week5lab",
+    "Week/Week_4/Files/week5lab-solutions.zip",
+    "Week/Week_4/Files/week5lab.zip",
+    "Week/Week_4/Files/lecture4.pdf",
+    "Week/Week_2/Complexity.md",
+    "Week/Week_1/Data_Structures.md",
     "Pasted image 20261105204722.png",
     "Simple Divide and Conquer Matrix Multiplication.md",
     "Chapter 4 - Divide and Conquer (Strassen's).md",
-    "Week/Week_3/Files/week4 lab - solution.ipynb",
-    "Week/Week_3/Files/week4 lab.ipynb",
-    "Week/Week_1/Week_1.md",
-    "Week/Week_3/Files",
-    "Week/Week_3",
-    "Week/Week_1/Files/lecture1.pdf",
     "Problems and Functions.md",
     "Algorithms vs Programs.md",
     "Quality of an Algorithm.md",
-    "Week/Week_2/Files/lecture2.pdf",
-    "Week/Week_2/Files/week3lab.ipynb",
-    "Week/Week_2/Files",
-    "Week/Week_2",
     "README.md"
   ]
 }

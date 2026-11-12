@@ -1,4 +1,4 @@
-**| [Canvas Page](https://canvas.sussex.ac.uk/courses/39278/modules#:~:text=Manipulation%20and%20computation-,Lecture,-3%20/%20Lab%204) | [Video Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=3e69d8a1-c959-4139-bda9-b4e500c5e2b5) |** 
+***| [Canvas Page](https://canvas.sussex.ac.uk/courses/39278/modules#:~:text=Manipulation%20and%20computation-,Lecture,-3%20/%20Lab%204) | [Video Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=3e69d8a1-c959-4139-bda9-b4e500c5e2b5) |***
 This week we will be looking at matrix algebra. We will start with basic matrix theory and consider operations such as transpose, inverse and multiplication, including Strassen's algorithm for matrix multiplication. We will consider what happens when we scale up to big data.
 
 ---
@@ -13,6 +13,8 @@ This week we will be looking at matrix algebra. We will start with basic matrix 
 - Chapter 28 (Matrix operations).
 ---
 # Lecture
+**_| [[lecture3.pdf | Slides]] |_**
+
 Do the recap as notes in the previous weeks lab. It covers the derivation on how to go the complex O() to working its out from the graph. 
 1. [[#What is a matrix: Terminology. | What is a matrix: Terminology.|]]
 2. [[#Matrix Operations | Matrix Operations]]
@@ -129,10 +131,12 @@ In practice, the large constant hidden in the running time makes Strassen’s al
 
 ---
 # Lab
-
-
-
-
+- Naive Implementation
+- Strassen's Implementation of Matrix Multiplication
+- Time comparison between the two over a range of size.
+- At lower numbers the Naive performs the same or better than Strassen's as the increase on constant load for Strassen's causes the lower complexity ($2.807$ vs. $3.0$) to not be realised. 
+- At $n=512$, which took several minutes to run, the different between Strassen's and the Naive method began to kick in. `Timeit` suggested that Naive took 150s and Strassen 30s.
+- Strassen's inefficiencies are caused by traversing down to the base case `n<=2`. The function can be manipulated to convert to matrix multiplication and higher quadrant sizes allowing quick run time at lower input sizes. 
 ---
 # Readings
 1. [[#Chapter 4 - Divide and Conquer (Strassen's) | Chapter 4 - Divide and Conquer (Strassen's)]]
