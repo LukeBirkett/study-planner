@@ -1,4 +1,4 @@
-***| [Canvas Page](https://canvas.sussex.ac.uk/courses/39278/modules#:~:text=Manipulation%20and%20computation-,Lecture,-3%20/%20Lab%204) | [Video Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=3e69d8a1-c959-4139-bda9-b4e500c5e2b5) |***
+***| [Canvas Page](https://canvas.sussex.ac.uk/courses/39278/modules#:~:text=Manipulation%20and%20computation-,Lecture,-3%20/%20Lab%204) | [Video Lecture](https://sussex.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6a2f67f4-3677-41ff-b275-b4ec00c5cbd5) |***
 This week we will be looking at matrix algebra. We will start with basic matrix theory and consider operations such as transpose, inverse and multiplication, including Strassen's algorithm for matrix multiplication. We will consider what happens when we scale up to big data.
 
 ---

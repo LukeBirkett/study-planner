@@ -4,17 +4,33 @@
     "type": "split",
     "children": [
       {
-        "id": "70d05b64081a229d",
+        "id": "fe51479a226a0b6d",
         "type": "tabs",
         "children": [
           {
-            "id": "f089bfc621277e9c",
+            "id": "55f62f26d6bc383f",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Week/Week_4/Processes_and_Concurrency.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Processes_and_Concurrency"
+            }
+          },
+          {
+            "id": "25f445c9eab8ed88",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "Week/Week_4/Files/Lecture4.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "Lecture4"
             }
           }
         ]
@@ -79,7 +95,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "039fe32ad248ae63",
@@ -184,10 +201,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "f089bfc621277e9c",
+  "active": "55f62f26d6bc383f",
   "lastOpenFiles": [
-    "Week/Week_3/Matrices.md",
+    "Week/Week_4/Files/Lecture4.pdf",
     "Week/Week_4/Processes_and_Concurrency.md",
+    "Week/Week_3/Matrices.md",
+    "Week/Week_4/Files/lecture4.pdf",
+    "Pasted image 20261105204722.png",
     "Homepage.md",
     "Week/Week_4/Files/week5lab-solutions/defs2.py",
     "Week/Week_4/Files/week5lab-solutions/week5lab-solutions.ipynb",
@@ -197,11 +217,8 @@
     "Week/Week_4/Files/week5lab/defs.py",
     "Week/Week_4/Files/week5lab",
     "Week/Week_4/Files/week5lab-solutions.zip",
-    "Week/Week_4/Files/week5lab.zip",
-    "Week/Week_4/Files/lecture4.pdf",
     "Week/Week_2/Complexity.md",
     "Week/Week_1/Data_Structures.md",
-    "Pasted image 20261105204722.png",
     "Simple Divide and Conquer Matrix Multiplication.md",
     "Chapter 4 - Divide and Conquer (Strassen's).md",
     "Problems and Functions.md",
