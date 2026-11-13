@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "74dce45e12395b75",
+        "id": "79154de256ba00e9",
         "type": "tabs",
         "children": [
           {
-            "id": "610207dc5397bf30",
+            "id": "b8e429b964e7b22f",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -83,7 +83,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 313.4665222167969
+    "width": 313.4665222167969,
+    "collapsed": true
   },
   "right": {
     "id": "622efa4922ff550b",
@@ -188,15 +189,22 @@
       "bases:Create new base": false
     }
   },
-  "active": "610207dc5397bf30",
+  "active": "b8e429b964e7b22f",
   "lastOpenFiles": [
+    "Weeks/Week_6/Files/rectangle_multiplication.png",
+    "Weeks/Week_6/Files/function_scaling.png",
+    "Weeks/Week_6/Files/function_additive.png",
+    "Weeks/Week_6/Calculus.md",
+    "Weeks/Week_6/Files/calculus_slides.pdf",
+    "Weeks/Week_6/Files/diff_mapping.png",
+    "Weeks/Week_6/Files/Screenshot 2026-11-13 at 19.28.53.png",
+    "Weeks/Week_6/Files/naive_velocity_interp.png",
+    "Weeks/Week_6/Files/calc_car_position_time.png",
     "Weeks/Week_6/Files/Week6_companion.jl",
     "Weeks/Week_6/Files/Week_6_all.jl",
-    "Weeks/Week_6/Files/calculus_slides.pdf",
     "Weeks/Week_6/Files/Calculus_cheatsheet.pdf",
     "Weeks/Week_1/Linear_Algebra_1.md",
     "Weeks/Week_2/Programming.md",
-    "Weeks/Week_6/Calculus.md",
     "Weeks/Week_5/Linear_Algebra_3.md",
     "Weeks/Week_6/Files",
     "Weeks/Week_6",
@@ -214,14 +222,8 @@
     "().md",
     "Weeks/Week_4/Probability.md",
     "Weeks/Week_3/Files/week_3_LA_2_Geometric.pdf",
-    "Weeks/Week_3/Files/week_3_LA_1_Symbolic.pdf",
     "Untitled.md",
-    "Weeks/Week_3/Files/unit_vector_correlation.png",
-    "Weeks/Week_3/Files/dot_prod_proj_back.png",
-    "Weeks/Week_3/Files/dot_prod_proj.png",
-    "Weeks/Week_3/Files/basis_vectors.png",
     "Julia/Julia.md",
-    "Weeks/Week_2/Files/norm_graph.png",
     "Homepage.md",
     "Weeks/Week_1/Content.md",
     "README.md",
