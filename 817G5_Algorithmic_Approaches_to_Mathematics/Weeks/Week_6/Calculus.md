@@ -15,38 +15,10 @@ In the second half of this course, we will investigate systems that **change ove
 [3B1B Calculus Series](https://www.3blue1brown.com/?topic=calculus)
 - [x] [The Essence of Calculus](https://www.3blue1brown.com/?topic=calculus&lesson=essence-of-calculus)
 - [x] [The Paradox of the Derivative](https://www.3blue1brown.com/?topic=calculus&lesson=derivatives)
-Well, as $dt$ approaches $0$, and those two points approach each other, the slope of that secant line approaches the slope of a line tangent to the graph at whatever point $t$ we're looking at. So the true, honest to goodness derivative, is not the rise-over-run slope between two nearby points on the graph; it's equal to the slope of a line _tangent_ to the graph at a single point.
-![[derivative_slope.png|206]]        ![[derivative_tangent.png|208]]
-
-So if we ask what happens as $dt$ approaches $0$, representing the idea of looking at smaller and smaller changes in time, we can ignore those! By eliminating the need to think of a specific $dt$, we've eliminated much of the complication in this expression! So what we're left with is a nice clean $3t^2$. This means the slope of a line tangent to the point at $t = 2$ on the graph of $t^3$ is exactly $3(2)^2$, or $12$.
-$$\frac{ds}{dt}(2) = 3(2)^2 + 3(2)(dt) + (dt)^2$$
-- [ ] [Power Rule Through Geometry](https://www.3blue1brown.com/?topic=calculus&lesson=derivatives-power-rule)
-The derivative of $x^3$ is the rate at which $x^3$ changes per unit of change in $x$ 
-
-So far, each of the monomial functions have had a nice geometric meaning. Nudging the input $x$ by a small amount $dx$ has allowed us to see how the geometry changes and find the derivative.
-
-![[nudging_geometry.png]]
-
- > For example, the geometric intution for a 3-dimensional equation is that the rate of is $3 \approx x^3 + 3x^2 dx$ because the 3 slabs which are grow by a rate of $x^2$, which is the area of the slab face, multiplied by the $dx$ change. The other terms represent the throw of the pillar and cube but we can ignore anything $\ge dx^2$ as it becomes too small to impact anything as the limit approaches 0. 
-
-The issue faced now is how to conceptualise higher dimensions. Thinking like a mathematician, the goal is the generalise and create abstract tools. 
-$$f(x) = x^2$$
-One path forward is to continue with algebra, using our geometric intuition to inform the base cases. For example, we can expand higher degree monomial expressions, where the input $x$ have been nudged by a small amount $dx$. This gives us the following series of expressions.
-
-| Polynomial   | Expansion                                                               | Approx                             |
-| :----------- | :---------------------------------------------------------------------- | :--------------------------------- |
-| $f(x) = x^1$ | $(x + dx)^1 = x + 1dx$                                                  | $(x + dx)^1 \approx x + 1dx$       |
-| $f(x) = x^2$ | $(x + dx)^2 = x^2 + 2x dx + dx^2$                                       | $(x + dx)^2 \approx x^2 + 2x dx$   |
-| $f(x) = x^3$ | $(x + dx)^3 = x^3 + 3x^2 dx + 3x dx^2 + dx^3$                           | $(x + dx)^3 \approx x^3 + 3x^2 dx$ |
-| $f(x) = x^4$ | $(x + dx)^4 = x^4 + 4x^3 dx + 6x^2 dx^2 + 4x dx^3 + dx^4$               | $(x + dx)^4 \approx x^4 + 4x^3 dx$ |
-| $f(x) = x^5$ | $(x + dx)^5 = x^5 + 5x^4 dx + 10x^3 dx^2 + 10x^2 dx^3 + 5x dx^4 + dx^5$ | $(x + dx)^5 \approx x^5 + 5x^4 dx$ |
-|              |                                                                         |                                    |
-
-Recalling, the intuition that we can ignore anything containing $dx^2$ and beyond, the pattern emerging is the "power rule". Given a monomial function raised to some power, $n$, applying the rule gives us the derivative of the function.
-$$\left. \begin{aligned} \frac{d(x^1)}{dx} &= 1x^0 \\ \frac{d(x^2)}{dx} &= 2x^1 \\ \frac{d(x^3)}{dx} &= 3x^2 \\ \frac{d(x^4)}{dx} &= 4x^3 \\ \frac{d(x^5)}{dx} &= 5x^4 \end{aligned} \right\} \implies \text{"Power Rule": } \frac{d(x^n)}{dx} = nx^{n-1}$$
-- [ ] [Trig Derivative Through Geometry](https://www.3blue1brown.com/lessons/derivatives-trig-functions/)
-- [ ] [Visualising the Chain Rule and Produce Rule](https://www.3blue1brown.com/?topic=calculus&lesson=chain-rule-and-product-rule)
-
+- [x] [Power Rule Through Geometry](https://www.3blue1brown.com/?topic=calculus&lesson=derivatives-power-rule)
+- [x] [Trig Derivative Through Geometry](https://www.3blue1brown.com/lessons/derivatives-trig-functions/)
+- [x] [Visualising the Chain Rule and Produce Rule](https://www.3blue1brown.com/?topic=calculus&lesson=chain-rule-and-product-rule)
+---
 Automatic Differentiation:
 - [A Quick Introduction to AD for Scientists](https://mitmath.github.io/18S096SciML/lecture7/ad)
 - [What is Automatic Differentiation](https://www.youtube.com/watch?v=wG_nF1awSSY)
@@ -268,17 +240,91 @@ Differentiate the **outside** function (leaving the inside untouched), then mult
 |                        |                    |                                           |
 
 ---
-
-
-
-
-
-
+# Lab
 
 
 
 ---
-# Lab
+# 3B1B
+**| [3B1B Calculus Series](https://www.3blue1brown.com/?topic=calculus) | [The Essence of Calculus](https://www.3blue1brown.com/?topic=calculus&lesson=essence-of-calculus) | [The Paradox of the Derivative](https://www.3blue1brown.com/?topic=calculus&lesson=derivatives) | [Power Rule Through Geometry](https://www.3blue1brown.com/?topic=calculus&lesson=derivatives-power-rule)| [Trig Derivative Through Geometry](https://www.3blue1brown.com/lessons/derivatives-trig-functions/)] | [Visualising the Chain Rule and Produce Rule](https://www.3blue1brown.com/?topic=calculus&lesson=chain-rule-and-product-rule) |**
 
+1. [[#Derivative Introduction]]
+2. [[#Power Rule]]
+3. [[#Sum Rule]]
+4. [[#Power Rule]]
+5. [[#Chain Rule]]
+6. [[#Rules Summary]]
 
+---
+## Derivative Introduction
+Well, as $dt$ approaches $0$, and those two points approach each other, the slope of that secant line approaches the slope of a line tangent to the graph at whatever point $t$ we're looking at. So the true, honest to goodness derivative, is not the rise-over-run slope between two nearby points on the graph; it's equal to the slope of a line _tangent_ to the graph at a single point.
+	![[derivative_slope.png|270]]        ![[derivative_tangent.png|270]]
+
+So if we ask what happens as $dt$ approaches $0$, representing the idea of looking at smaller and smaller changes in time, we can ignore those! By eliminating the need to think of a specific $dt$, we've eliminated much of the complication in this expression! So what we're left with is a nice clean $3t^2$. This means the slope of a line tangent to the point at $t = 2$ on the graph of $t^3$ is exactly $3(2)^2$, or $12$.
+$$\frac{ds}{dt}(2) = 3(2)^2 + 3(2)(dt) + (dt)^2$$
+---
+## Power Rule
+The derivative of $x^3$ is the rate at which $x^3$ changes per unit of change in $x$ 
+
+So far, each of the monomial functions have had a nice geometric meaning. Nudging the input $x$ by a small amount $dx$ has allowed us to see how the geometry changes and find the derivative.
+
+![[nudging_geometry.png]]
+
+ > For example, the geometric intution for a 3-dimensional equation is that the rate of is $3 \approx x^3 + 3x^2 dx$ because the 3 slabs which are grow by a rate of $x^2$, which is the area of the slab face, multiplied by the $dx$ change. The other terms represent the throw of the pillar and cube but we can ignore anything $\ge dx^2$ as it becomes too small to impact anything as the limit approaches 0. 
+
+The issue faced now is how to conceptualise higher dimensions. Thinking like a mathematician, the goal is the generalise and create abstract tools. 
+$$f(x) = x^2$$
+One path forward is to continue with algebra, using our geometric intuition to inform the base cases. For example, we can expand higher degree monomial expressions, where the input $x$ have been nudged by a small amount $dx$. This gives us the following series of expressions.
+
+| Polynomial   | Expansion                                                               | Approx                             |
+| :----------- | :---------------------------------------------------------------------- | :--------------------------------- |
+| $f(x) = x^1$ | $(x + dx)^1 = x + 1dx$                                                  | $(x + dx)^1 \approx x + 1dx$       |
+| $f(x) = x^2$ | $(x + dx)^2 = x^2 + 2x dx + dx^2$                                       | $(x + dx)^2 \approx x^2 + 2x dx$   |
+| $f(x) = x^3$ | $(x + dx)^3 = x^3 + 3x^2 dx + 3x dx^2 + dx^3$                           | $(x + dx)^3 \approx x^3 + 3x^2 dx$ |
+| $f(x) = x^4$ | $(x + dx)^4 = x^4 + 4x^3 dx + 6x^2 dx^2 + 4x dx^3 + dx^4$               | $(x + dx)^4 \approx x^4 + 4x^3 dx$ |
+| $f(x) = x^5$ | $(x + dx)^5 = x^5 + 5x^4 dx + 10x^3 dx^2 + 10x^2 dx^3 + 5x dx^4 + dx^5$ | $(x + dx)^5 \approx x^5 + 5x^4 dx$ |
+|              |                                                                         |                                    |
+
+Recalling, the intuition that we can ignore anything containing $dx^2$ and beyond, the pattern emerging is the "power rule". Given a monomial function raised to some power, $n$, applying the rule gives us the derivative of the function.
+$$\left. \begin{aligned} \frac{d(x^1)}{dx} &= 1x^0 \\ \frac{d(x^2)}{dx} &= 2x^1 \\ \frac{d(x^3)}{dx} &= 3x^2 \\ \frac{d(x^4)}{dx} &= 4x^3 \\ \frac{d(x^5)}{dx} &= 5x^4 \end{aligned} \right\} \implies \text{"Power Rule": } \frac{d(x^n)}{dx} = nx^{n-1}$$
+---
+## Sum Rule
+The derivative of a sum of two functions is the sum of their derivatives. The tiny bump in $dx$ results in a tiny increase in each function which can simply be added together to obtain the derivative of the output. 
+$$\frac{d}{dx}\left(g(x) + h(x)\right) = \frac{dg}{dx} + \frac{dh}{dx}$$
+---
+## Product Rule
+Geometrically, it helps to think of the product rule and a computation to work out the area of a square whereby each function represents a side. Adjusting $x$ impacts each side of the area calculation creating 2 new slivers (or reduction slivers) and a tiny square. 
+
+Each sliver comprise of a side which is made up by an original function against the $d$ change of the other. The tiny square of both of the $d$ changes multiplied against each other, we ignore it because it is tiny. 
+				![[product_rule_geometric.png|389]]
+
+Therefore, finding the change per unit $dx$ means finding the change created by the slivers. 
+$$f(x) = g(x)h(X) \quad \mapsto \quad \frac{df}{dx} = g(x)\frac{dh}{dx} + h(x)\frac{dg}{dx}$$
+---
+## Chain Rule
+Aside from addition and multiplication, the other common way to combine functions that comes up all the time is function composition. Here we are putting one function inside of another. Visually, a good way to thing about this is through a cascading number line where the input flows through the function onto the next number line. A nudge in $dx$ cascade through the function into the final output. 
+				   ![[cascading_number_line.png|373]]
+
+If we think about composition in terms of jumps, the first jump is $x \longrightarrow h(x)$, meaning we start with a number, nudge it a tiny bit $dx$ and pass it into a function $h(x)$. The "inner" function $h$ reacts to this nudge by stretching or shrinking it according to its own slope, $\frac{dh}{dx}$. So, the point on the middle number line moves by (the derivative of h with respect to x):
+$$dh \approx \frac{dh}{dx} \cdot dx$$
+Next, there is the second jump $h(x) \longrightarrow g(h(x))$. It is the movement of $dh$ itself that causes the nudge for the second, outer function $g()$. The outer function $g$ reacts to $dh$ according to _its_ slope at that spot, $\frac{dg}{dh}$. So, the final output on the bottom number line moves by:
+$$dg \approx \frac{dg}{dh} \cdot dh$$
+Putting the cascade together we get 
+$$dg \approx \underbrace{\frac{dg}{dh}}_{\text{Outer stretch}} \cdot \underbrace{\left(\frac{dh}{dx} \cdot dx\right)}_{\text{Inner stretch}}$$
+To find the overall rate of change (how much the final output moved per unit of initial nudge $dx$), divide both sides by $dx$:
+
+$$\frac{d}{dx} g(h(x)) = \frac{d}{dh} g(h(x)) \cdot \frac{d}{dx} h(x)$$
+Suppose you have $g(h(x)) = \sin(x^2)$, where the inner function is $h(x) = x^2$ and the outer function is $g(h) = \sin(h)$. Imagine you are at **$x = 3$** and nudge $x$ by **$0.01$**:
+1. **Inner jump ($x^2$):** At $x = 3$, the slope of $x^2$ is $2x = 6$. Your $0.01$ nudge gets stretched by $6$, so $h(x)$ moves by **$0.06$** (from $9$ to $9.06$).
+2. **Outer jump ($\sin$):** At $h = 9$, the slope of $\sin(h)$ is $\cos(9)$. That $0.06$ movement gets scaled by $\cos(9)$, so the final output moves by **$\cos(9) \cdot 0.06$**.
+3. **Total multiplier:** Your initial nudge of $0.01$ was multiplied by $6$ and then by $\cos(9)$, giving an overall derivative of $6\cos(9)$—or in general, $2x\cos(x^2)$.
+
+Despite its seeming complexity, we still only work out two derivatives (inner and outer function), its just important how we compose them. 
+- Take the outer derivative, **keep the original inner function $h(x)$ plugged inside it** (do not replace it with $x$, and do not put $h'(x)$ inside it).
+- **Multiply** that whole expression by the inner derivative.
+---
+## Rules Summary
+- **Addition / Scaling (Linearity):** Differentiate each piece and keep the exact same signs and constants.
+- **Multiplication (Product Rule):** Differentiate one at a time while leaving the other untouched, then add the two pairs together ($g \cdot f' + f \cdot g'$).
+- **Nesting (Chain Rule):** Differentiate the outside (keeping the original inside intact), then multiply by the derivative of the inside.
 ---
