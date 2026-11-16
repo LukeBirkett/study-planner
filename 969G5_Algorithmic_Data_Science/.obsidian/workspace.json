@@ -20,17 +20,25 @@
               "icon": "lucide-file",
               "title": "Processes_and_Concurrency"
             }
-          },
+          }
+        ]
+      },
+      {
+        "id": "2c776037dfc045cc",
+        "type": "tabs",
+        "children": [
           {
-            "id": "25f445c9eab8ed88",
+            "id": "25cf030d791d4b38",
             "type": "leaf",
             "state": {
-              "type": "pdf",
+              "type": "markdown",
               "state": {
-                "file": "Week/Week_4/Files/Lecture4.pdf"
+                "file": "Week/Week_4/Processes_and_Concurrency.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-file-text",
-              "title": "Lecture4"
+              "icon": "lucide-file",
+              "title": "Processes_and_Concurrency"
             }
           }
         ]
@@ -201,10 +209,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "55f62f26d6bc383f",
+  "active": "25cf030d791d4b38",
   "lastOpenFiles": [
     "Week/Week_4/Files/Lecture4.pdf",
     "Week/Week_4/Processes_and_Concurrency.md",
+    "Week/Week_4/Files/Screenshots",
+    "Week/Week_4/Files/Screenshots/pcb_data_structure.png",
+    "Week/Week_4/Files/Screenshots/pcb_state.png",
     "Week/Week_3/Matrices.md",
     "Week/Week_4/Files/lecture4.pdf",
     "Pasted image 20261105204722.png",
@@ -216,7 +227,6 @@
     "Week/Week_4/Files/week5lab/week5lab.ipynb",
     "Week/Week_4/Files/week5lab/defs.py",
     "Week/Week_4/Files/week5lab",
-    "Week/Week_4/Files/week5lab-solutions.zip",
     "Week/Week_2/Complexity.md",
     "Week/Week_1/Data_Structures.md",
     "Simple Divide and Conquer Matrix Multiplication.md",

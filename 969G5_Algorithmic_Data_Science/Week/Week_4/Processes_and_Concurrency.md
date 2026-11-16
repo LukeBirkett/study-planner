@@ -17,22 +17,47 @@ Operating System Concepts (9th) Silberschatz, Galvin and Gagne. ([1](https://git
 # Lecture
 - **_| [[Lecture4.pdf]] |_**
 ---
-Anatomy of a Processor
-- Compile slides + speech
+1. [[#Central Processing Unit (CPU) Cores]]
+	1. [[#Anatomy of a Processor]]
+	2. [[#CPUs have several components]]
+2. [[#Parallelism vs Concurrency]]
+3. [[#A process]]
+	1. [[#What is a process?]]
+	2. [[#Where do processes come from?]]
+4. [[#The Process Control Block]]
+5. [[#Process management — Creation]]
+6. [[#Process Queues]]
+7. [[#Process Management - Scheduling]]
+8. [[#Context Switch]]
+9. [[#Process management — Termination]]
+10. [[#Threads]]
+	1. [[#Thread Intuition]]
+	2. [[#What is a thread?]]
+11. [[#Coordinating Process - Concurrency]]
+12. [[#The Critical Section Problem]]
+	1. [[#Criteria/constraints Definitions]]
+13. [[#Synchronisation Tool 1 Lock]]
 ---
-Central Processing Unit (CPU) Cores
-- **TODO:** Compile slides + speech
-- Make this section minimal
-- + Table
+## Central Processing Unit (CPU) Cores
+### Anatomy of a Processor
+- CPUs (central processing unit) nowardays come with multiple “cores”
+- The number of cores is the number of things the CPU can do in p
+### CPUs have several components:
+| **Component**                   | **Function / Description**                                                                                                                       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Control Unit (CU)**           | Controls the flow of data and instructions within the CPU and to and from other devices.                                                         |
+| **Arithmetic Logic Unit (ALU)** | Performs arithmetic operations (addition, subtraction, multiplication, division) and logical operations (AND, OR, NOT) on data.                  |
+| **Registers**                   | Small, high-speed memory units within the CPU that store data, instructions, and intermediate results during processing.                         |
+| **Cache Memory**                | High-speed memory that stores frequently used data and instructions to speed up access and reduce the time taken to fetch data from main memory. |
+| **Kernel Memory**               | Stores operating system data and process control blocks (PCBs).                                                                                  |
+
 ---
-Parallelism vs Concurrency
-- Parallelism two CPU cores doing more than one thing at the same time. 
-	- Get definition from slide
-- Concurrency is alternating between doing multiple things. Not strictly doing them at the same time but possibly giving the impression of doing so. 
-	- Get definition from slide
-	- Cannot physically run two lines of code at the same time. 
+## Parallelism vs Concurrency
+- **Parallelism:** the ability of a multi-core CPU to run multiple instructions at the same time.
+- **Concurrency:** the ability of a single CPU core to run multiple programs at the same time. It is alternating between doing multiple things, not strictly doing them at the same time but possibly giving the impression of doing so. 
 ---
-The idea of a process
+## A process
+### What is a process?
 - A process is an abstraction which represents what is needed to run a single program
 - It is the execution of the programmes instructions
 - Run programme, process executes, output. 
@@ -42,22 +67,29 @@ The idea of a process
 	- Status of all registers
 	- Portion of memory allocated
 	- Ad-hoc allocations and security attributes
----
-Where do processes come from? 
+### Where do processes come from? 
 - Most Operating Systems (OS) provide a process management module which can create, run and terminal processes. 
 - Users make requests to this module using system calls.
 - Process as what makes a system call. 
 - This means processes are created by other processes.
 ---
-The Process Control Block
+## The Process Control Block
+- A create process system call creates a “Process Control Block” (PCB
 - PCV is the data structure that contains all the process information
-- **TODO:** get info from graph + speech notes
----
-Elements of the PCB
+
+	![[pcb_state.png|213]]
+
+The process state determines its current condition, and evolves as follows:
 - The pointer is used to link processes together to form queues.
-- TODO: speech notes + rest of slide notes
+- The process id is a unique integer identifier for the process. 
+- The registers are temporary storage used during execution. 
+- The memory limits determine the address space in which the process must run.
+
+	![[pcb_data_structure.png|385]]
+
 ---
-Process management — Creation
+## Process management — Creation
+- Processes are always created by some parent process, with the new process being referred to as a "child process.”
 - Initial process (at least one) on PC/OS turning on. 
 - Processes create more processes
 - Child inherits some or all of parents resources, i.e. CPU becomes distributed across processes.
@@ -65,36 +97,41 @@ Process management — Creation
 	- Parent and child run concurrently
 	- Parents waits for child to terminate
 ---
-Process Queues
-- TODO: collect info on different types of queues
+## Process Queues
+There are several different types of queues within an operating system 
+- Job queue — a list of all the process in existence (including those in disk)
+- Ready queue — a list of all processes currently in memory and ready to execute immediately.
+- Device queues — a list of all of the processes waiting for I/O service from a particular device.
 ---
-Process Management - Scheduling
+## Process Management - Scheduling
 - Scheduling of processes is done via a number of instances.
-- TODO: notes of short term vs long term. 
+	- **Short term**: this scheduler allocates the CPU to processes in the ready queue. Is very fast, as it is involved frequently
+	- **Long term**: in large systems not all processes are kept in memory, but some are stored temporarily on hard disk. This scheduler chooses processes from the job queue which are ready to execute but not yet in memory, and places them in the ready queue. This can be slow (as disk transfer is usually slow).
 - Processes can be
-	- I/O bound - perform a lot of input/output
-	- CPU bound - perform a lot of computation
+	- **I/O bound**: perform a lot of input/output
+	- **CPU bound**: perform a lot of computation
 - A good scheduler chooses a suitable mix of the two
 ---
-Context Switch
-- How does the scheduler allocate the CPU to a new process in the ready queue
-- Allocate resources to manage the reallocation of resrouces between processes. 
-- Regarding how to stop CPU allocation from one process to another 
-- Called "context switching"
-- TODO: slides and speech to get better notes
+## Context Switch
+- How does the scheduler allocate the CPU to a new process in the ready queue? 
+- Processes need access to resources which are finite so there needs to be a reallocation of resources between processes. 
+- This process is called "context switching"
+- First, the context of a currently executing process in the PCB needs to be stored (i.e. the value of registers, process state, program counter, etc)
+- Then, the context of a new new process from its PCB is loaded and the CPU is pointed at this process. 
+- Note, this operation costs overhead time and resources. 
+- Time taken depends on hardware and support (multiple register sets, high-speed cache) but is typically between 1 and 1000 microseconds
 ---
-Process management — Termination
-- 1. Could terminal itself by executing a terminal system call
-- 2. Parent may terminal child process (think about force quitting)
-- Complexities need to be considered when a parent is terminated
-	- Child also terminated, known as cascading termination
-	- Another parent is allocated to the child (grandparent, init)
+## Process management — Termination
+There are two main ways for a process to terminate:
+1. Could terminal itself by executing a terminal system call
+2. Parent may terminal child process (think about force quitting)
+
+Complexities need to be considered when a parent is terminated
+- Child also terminated, known as cascading termination
+- Another parent is allocated to the child (grandparent, init)
 ---
-Process State Transitions
-- Graphic
-- TOOD: Speech lecture explained what we should be remembering the regarding this entire block
----
-The Need for Threads: 
+## Threads
+### Thread Intuition
 - Thread is like a sub-process
 - Think about a complicated task involving many roles i.e. word processor. 
 - Receives input, renders images, calculating, perform spell check. 
@@ -102,7 +139,7 @@ The Need for Threads:
 - Another option is to have multiple small processes each performing one of these roles with an OS system sequencing them concurrently. 
 - However, these programmes should be grouped together some how. 
 ---
-The Thread Concept
+### What is a thread?
  - A thread is a lightweight process
  - Process are allow to have multiple threads. 
  - It has its own; identifier; register set; program counter; execution set
@@ -110,20 +147,36 @@ The Thread Concept
  - Some process has multithreads, others single
  - BUT, only one thread can still run at a time in the CPU, so it is still just concurrency but more intertwined by sharing resources
 ---
- Coordinating Process - Concurrency
+## Coordinating Process - Concurrency
+The Producer Consumer Problem:
  - Producer offers something in shared buffer (stock), a consumer takes them out. 
  - There needs to be synchronisation between processes for the buffer to suffice
 ---
-Critical Section problem — constraints
-- TODO: slide of definition
-- Also compile speech notes from this slide and the previous
+## The Critical Section Problem 
+This Producer/Consumer problem is an instance of a more general problem:
+- Given $n$ concurrent threads, $T_1, T_2, …, T_n$, of the form:
+```
+repeat 
+	entry code 
+		critical section
+	exit code 
+		remainder section 
+until
+```
+
+### Criteria/constraints Definitions:
+- **Mutual exclusion** — If thread Ti is executing in its critical section, then no other threads can also be executing in their critical sections.
+- **Progress** — If no thread is executing in its critical section and there exist some threads that wish to enter theirs, then the selection of the thread that will enter the critical section next cannot be postponed indefinitely.
+- **Bounded Waiting** — A bound must exist on the number of times that other threads are allowed to enter their critical sections after a thread has made a request to enter its critical section and before that request is granted
 ---
-Synchronisation Tool 1: Lock
+## Synchronisation Tool 1: Lock
 - "Synchronisation" is the jargon for making sure things run smoothly
 - A lock is a variable which an be free or held
 - When it is free, a thread attempting to get the lock will hold it. 
 - It is shared resource
 - Threads can only run, or access certain resources with a lock, therefore, other threads need join a queue to get the lock. 
+- When the lock is already held by another thread, a thread attempting to get the lock will join in a queue of threads blocked on the lock, and move from the ready state to the blocked state.
+- Queue of blocked threads is generally first come, first served.
 ---
 # Lab
 
