@@ -11,8 +11,8 @@ Operating System Concepts (9th) Silberschatz, Galvin and Gagne. ([1](https://git
 - [x] Chapter 1 - Introduction to basics of computer system architectures. 
 - [x] Chapter 3 - Processes.  
 - [x] Chapter 4 - Threads. 
-- [ ] Chapter 5 - Scheduling. 
-- [ ]  Chapter 6 & 7 - Synchronisation.
+- [x] Chapter 5 - Scheduling. 
+- [x]  Chapter 6 & 7 - Synchronisation.
 ---
 # Lecture
 - **_| [[Lecture4.pdf]] |_**
@@ -179,7 +179,16 @@ until
 - Queue of blocked threads is generally first come, first served.
 ---
 # Lab
-
+- **Processes vs. Cores:** `multiprocessing.Pool` spawns separate OS processes (each with its own Process Control Block and isolated RAM), while true parallelism is capped by physical CPU cores (10 on this machine: 8 Performance, 2 Efficiency).
+    
+- **Task Variables & Dispatching:** `num_loops` sets individual task weight (depth), while `num_processes` sets concurrent worker count (breadth). `Pool.map(func, iterable)` uses an internal queue to dynamically feed tasks to idle workers and blocks the parent notebook until all finish.
+    
+- **Scaling Workload (`num_processes` 1 $\rightarrow$ 20, 1 task each):** Run-time stays flat (~1.0–1.2s) up to 8 Performance cores, steps up slightly on Efficiency cores (9–10), and climbs linearly past 10 cores (~2.72s at 20 processes) because the OS scheduler time-slices all workers equally via context switching (incurring scheduling overhead and CPU cache eviction).
+	- If there are 20 software workers but only 10 cores then OS needs to use context switching to concurrently utilise them all. This is where the dilapidation in time comes because the increase input is being handled by concurrency, not parrellisation which is the case below 10 processes
+    
+- **Fixed Workload Speedup (`num_repeats = 20`, `num_processes` 1 $\rightarrow$ 20):** Time drops sharply from **20.49s** (1 process) down to **~2.5s** (10 processes), then flattens out once all 10 physical cores are saturated.
+    
+- **Limits & OS Theory:** Parallelism only speeds up execution when **Computation Time > Overhead**. Because processes use message passing (pickling, OS pipe transfer, unpickling) rather than shared memory, trivial tasks or huge return payloads create bottlenecks—illustrating **Amdahl's Law**, where the serial parent-process overhead caps maximum speedup.
 
 ---
 # Readings
@@ -187,6 +196,7 @@ until
 1. [[#Chapter 1 - Introduction]]
 2. [[#Chapter 3 - Processes]]
 3. [[#Chapter 4 - Threads]]
+4. [[#Chapter 5 - Process Synchronization]]
 
 ---
 ## Chapter 1 - Introduction
@@ -361,5 +371,163 @@ User threads are supported above the kernel and are managed without kernel suppo
 > **Concurrency (Dealing with multiple things at once):** Refers to program structure and scheduling where multiple tasks or threads are in progress simultaneously. On a **single-core CPU**, the operating system achieves concurrency through **time-slicing (rapid context switching)**—running Thread A for a few milliseconds, switching to Thread B, then Thread C, and back to Thread A. Because these switches happen thousands of times per second, all tasks advance together and appear to run simultaneously to the user.
 > 
 > **Parallelism (Doing multiple things at once):** Requires **multiple physical cores or processors** executing separate instruction streams at the **exact same instant in time**.
+
+
+
+
+---
+## Chapter 5 - Process Synchronisation
+1. [[#Introduction]]
+2. [[#Producer-Consumer Example]]
+3. [[#Critical-Section Problem]]
+	1. [[#Satisfiers]]
+4. [[#Locking]]
+	1. [[#test_and_set()]]
+	2. [[#Mutex Locks]]
+### Introduction
+A cooperating process is one that can affect or be affected by other processes executing in the system.
+- They could share a logical address space (code and/or data). 
+- or only share through files and messages
+
+The former is achieved through thread. But threads can become inconsistent regarding the data they share if two threads read and modify at the exact same time without coordination. 
+
+This is because threads she the same **heap memory** and **global variables**. Context switches can mess up the data path leading to something called "race condition"
+
+There are a variety of mechanisms to ensure the orderly execution of cooperating processes that share a logical address space, so that data consistency is maintained.
+
+A CPU scheduler switches rapidly between processes to provide concurrent execution. This means that one process may only partially complete execution before another process is scheduled. A process maybe be interrupted at any point in its instruction stream, and the processing core may be assigned to execute instructions of another process.
+
+Alternative, there is parallel execution, in which two instruction streams (representing different processes) execute simultaneously on separate processing cores.
+
+---
+### Producer-Consumer Example
+A good lens to think about this problem is through the producer-consumer example. The table below demonstrates how the global register state counter can be pushed out of sync when running the processes concurrently. 
+
+It shows both processes reading the register when it is 5 and concurrently writing their own independent change to the register, ignoring the sequential requirements of incrementing. 
+
+|Time|Process|Action|Instruction|State / Result|
+|---|---|---|---|---|
+|T0​|_producer_|**execute**|register1​=counter|{register1​=5}|
+|T1​|_producer_|**execute**|register1​=register1​+1|{register1​=6}|
+|T2​|_consumer_|**execute**|register2​=counter|{register2​=5}|
+|T3​|_consumer_|**execute**|register2​=register2​−1|{register2​=4}|
+|T4​|_producer_|**execute**|counter=register1​|{counter=6}|
+|T5​|_consumer_|**execute**|counter=register2​|{counter=4}|
+An incorrect state was created because we allowed both processes to manipulate the variable counter concurrently. 
+
+This is known as **"race condition"** -- Where several processes access and manipulate the same data concurrently and the outcome of the execution depends on the particular order in which the access takes place.
+
+To guard against the race condition above, we need to ensure that only one process at a time can be manipulating the variable counter. To make such a guarantee, we require that the processes be **synchronised** in some way.
+
+---
+### Critical-Section Problem
+Consider a system consisting of $n$ processes ${P0, P1, ..., Pn−1}$. Each process has a segment of code, called a critical section, in which the process may be changing common variables, updating a table, writing a file, and so on.
+- Note, if **write** actions to a shared variable are part of any process, then reading data must be protected as a critical section. This was the entire issue with the consumer-producer example where the wrong input data was being updated. 
+- "changing common variables" is shorthand for any read-modify-write sequence
+
+When one process is executing in its critical section, no other process is allowed to execute in its critical section. No two processes are executing in their critical sections at the same time.
+
+The critical-section problem is to design a protocol that the processes can use to cooperate. Each process must request permission to enter its critical section.
+
+This request is facilitated in the code as the **"entry section".** Additionally, the critical section must be followed by an **"exit section"**. The remaining code is the remainder section.
+
+```
+do {
+	||entry section||
+		critical section
+	||exit section||
+		remainder section
+} white (true);
+```
+
+#### Satisfiers 
+A solution to the critical-section problem must satisfy the following three requirements:
+
+| **Requirement**         | **Core Principle** | **Plain-English Meaning**                                                                                                                             | **What It Prevents**                                                              |
+| ----------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| **1. Mutual Exclusion** | Exclusivity        | Only **one** process can execute inside its critical section at any given moment.                                                                     | **Race conditions** and shared data corruption.                                   |
+| **2. Progress**         | Liveness           | If the critical section is empty, only processes actively trying to enter decide who goes next—and someone _must_ be chosen without indefinite delay. | **Deadlock** and being blocked by an uninvolved process in its remainder section. |
+| **3. Bounded Waiting**  | Fairness           | There is a **finite upper limit** on how many times other processes can enter the critical section after a process has requested entry.               | **Starvation** (a process being skipped and waiting forever).                     |
+
+### Locking
+Peterson’s is a software solution to the critical-section problem, however, it is not guaranteed to work. There are several more solutions to the problem that range from hardware to software-based APIs. All of these solutions are based on the premise of locking - protecting critical regions through the use of locks.
+
+The critical-section problem could be solved simply in a single-processor environment if we could prevent interrupts from occurring while a shared variable was being modified. Unfortunately, this is not feasible in a multiprocessor environment. 
+
+Many modern computer systems therefore provide special hardware instructions that allow us either to test and modify the content of a word or to swap the contents of two words atomically—that is, as one uninterruptible unit.
+- atomically = executes these two steps as one unbreakable instruction
+---
+#### test_and_set()
+We can have a function called `test and set()` which executed atomically meaning that is two processes are executed simultaneously on different CPUs, they will be executed sequentially in some arbitrary order. 
+
+If a machines hardware supports this function structure instructions, then mutual exclusion can be declared using a variable lock, initialised to false.
+- It is initialised as false because the execution of test_and_set flips the switch to true. 
+- This is the lock
+- If a second test_and_set is executed, it sees the lock=true and gets fed into the while loop
+- After the first function completes, it flips the switch, this allows the second function to break its loop and enter its critical section
+
+```
+do { 
+	while (test_and_set(&lock)) 
+		; /* do nothing */ 
+		
+		/* critical section */ 
+	
+	lock = false; 
+	
+		/* remainder section */ 
+
+} while (true);
+```
+
+This lock allows use to achieve **mutual exclusion**, as well as, **Progress**. However, it fails on **Bounded Waiting** as if multiple processes as spinning on while loops, the next to be executed is temporally decided randomly on whichever coincided with the unlocking, meaning one unlucky process could theoretically be skipped forever.
+
+---
+#### Mutex Locks
+This is a software approach to locking. We use the mutex lock to protect critical regions and thus prevent race conditions. A process must acquire the lock before entering a critical section; it releases the lock when it exits the critical section.
+
+The **acquire()** function acquires the lock, and the **release()** function releases the lock.
+
+The definition of **acquire()** is as follows:
+```
+// Shared boolean variable initialized to true (meaning the lock is free) 
+bool available = true; 
+
+// 1. Entry Operation: Wait until the lock is free, then claim it 
+void acquire() { 
+	while (!available) { 
+		; // Busy wait (spinlock): do nothing while another process holds the lock 
+	} 
+	available = false; // Lock is now claimed/unavailable 
+}
+```
+
+The definition of **release()** is as follows:
+```
+release() {
+	available = true; 
+}
+```
+
+The full solution to the critical-section problem using mutex locks would look like:
+```
+do {
+	acquire lock 
+		critical section 
+	release lock 
+		remainder section 
+} while (true);
+```
+
+Calls to either acquire() or release() must be performed atomically. Thus, mutex locks are often implemented using one of the hardware mechanisms described before (e.g. test_and_set)
+- `test_and_set` is a raw, low-level CPU assembly instruction. A **mutex lock** is a higher-level operating system or programming-language construct (like `pthread_mutex_lock()` in C or `Lock` in Python/Java) designed so developers don't have to write raw atomic assembly loops by hand.
+- A raw `test_and_set` loop **always busy-waits (spins)**—the waiting thread burns 100% of a CPU core in a `while` loop until the lock opens
+- mutexes using a simple busy-wait pseudocode example, **real-world OS mutexes usually put waiting threads to sleep** if the lock isn't immediately free.
+- The OS moves the waiting thread into a **waiting queue** (freeing the CPU core to run other useful programs) and wakes it up via a context switch when `release()` is called. (A mutex that _does_ stay in a busy-wait loop is specifically called a **spinlock**.)
+
+The main disadvantage of the implementation given here is that it requires busy waiting. While a process is in its critical section, any other process that tries to enter its critical section must loop continuously in the call to acquire(). In fact, this type of mutex lock is also called a spinlock.
+
+
+
 
 ---
