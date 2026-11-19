@@ -13,12 +13,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Week/Week_4/Processes_and_Concurrency.md",
+                "file": "Week/Week_5/Distributed_Computation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Processes_and_Concurrency"
+              "title": "Distributed_Computation"
+            }
+          },
+          {
+            "id": "de8b1913e357b09f",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "Week/Week_5/Files/lecture5.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "lecture5"
             }
           }
         ]
@@ -83,7 +95,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 266.3609275817871,
+    "collapsed": true
   },
   "right": {
     "id": "039fe32ad248ae63",
@@ -190,17 +203,19 @@
   },
   "active": "80a8e0e262224f5b",
   "lastOpenFiles": [
+    "Week/Week_5/Files/lecture5.pdf",
+    "Week/Week_5/Distributed_Computation.md",
+    "Week/Week_5/Files/Screenshots/encryption.png",
     "Week/Week_4/Processes_and_Concurrency.md",
+    "Week/Week_5/Files/Lab",
+    "Week/Week_5/Files/Screenshots",
+    "Week/Week_5/Files",
+    "Week/Week_5",
     "Week/Week_4/Files/week5lab/TimedProcessMainProcess.txt",
     "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-232.txt",
     "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-238.txt",
     "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-248.txt",
     "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-239.txt",
-    "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-249.txt",
-    "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-241.txt",
-    "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-244.txt",
-    "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-236.txt",
-    "Week/Week_4/Files/week5lab/TimedProcessSpawnPoolWorker-235.txt",
     "Week/Week_4/Files/Screenshots/pcb_data_structure.png",
     "Week/Week_4/Files/Screenshots/pcb_state.png",
     "Week/Week_3/Matrices.md",

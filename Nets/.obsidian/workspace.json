@@ -4,53 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "515e1afe059bed27",
+        "id": "155280c14b8ea382",
         "type": "tabs",
         "children": [
           {
-            "id": "42ee21686ce9685b",
+            "id": "ad6016a78fbe7793",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Proposal_4.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Proposal_4"
-            }
-          },
-          {
-            "id": "8a097d6f89124f6c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Proposal/Proposal_5.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Proposal_5"
-            }
-          },
-          {
-            "id": "581cba3b23e33809",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Networks.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Networks"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -112,7 +79,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 659.42578125
   },
   "right": {
     "id": "94aa701e6d5870ba",
@@ -218,26 +185,32 @@
       "bases:Create new base": false
     }
   },
-  "active": "581cba3b23e33809",
+  "active": "ad6016a78fbe7793",
   "lastOpenFiles": [
-    "Football Network Projects.md",
-    "Summary.md",
-    "Proposal",
-    "Proposal/Proposal_5.md",
-    "Proposal/Proposal_4.md",
-    "Proposal/Proposal_3.md",
-    "Proposal/Proposal_2.md",
+    "Network_Resources.md",
+    "Papers/On the Temporal Behaviour of a Large-Scale Microservice Architecture (Winchester et al. 2023).md",
+    "People/People.md",
+    "PhD",
+    "Football",
+    "Football/Images/trad_null_triad.png",
+    "People",
+    "Football/Images/passmap.png",
+    "Football/Images/passes.png",
+    "Football/Images/empirical_triad.png",
+    "Papers/TODO.md",
+    "Papers/A network framework of cultural history (Schich et al. 2014).md",
+    "PhD/Proposal/Proposal_5.md",
+    "Football/Football Network Projects.md",
     "Untitled.base",
-    "Proposal/Proposal.md",
-    "Files/trad_null_triad.png",
-    "Files/empirical_triad.png",
-    "Files/passes.png",
-    "Files/passmap.png",
-    "Files",
-    "Proposal/Proposal_Plan.md",
+    "Summary.md",
+    "PhD/Proposal",
+    "PhD/Proposal/Proposal_4.md",
+    "PhD/Proposal/Proposal_3.md",
+    "PhD/Proposal/Proposal_2.md",
+    "PhD/Proposal/Proposal.md",
+    "Football/Images",
+    "PhD/Proposal/Proposal_Plan.md",
     "Brief.md",
-    "Networks.md",
-    "Papers/A network framework of cultural history.md",
     "Papers"
   ]
 }

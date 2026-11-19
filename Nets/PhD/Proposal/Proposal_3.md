@@ -38,7 +38,7 @@ Furthermore, because simulated message exchange is costless, unconstrained GNN l
 [TODO: the minimum requirements for this section are just to provide context to the limitations as these form the research questions. and explain football as a human-derived sandbox substrate]
 Spatiotemporal tracking logs of association football offer an observable, bounded empirical testbed for heterogeneous multi-agent systems (Araújo et al., 2006). Eleven role-constrained agents ($\vert{}V\vert{} = 11$) interact on a bounded pitch, where completed passes generate directed, weighted relational networks ($G = (V, E, W)$) under the PassMap paradigm (Buldú et al., 2018). 
 
-![Image 1 description|341](Files/passes.png) ![Image 2 description|343](Files/passmap.png)
+![Image 1 description|341](passes.png) ![Image 2 description|343](passmap.png)
 _Figure 1: Demonstrating how a matches worth of passes are converted into a weighted, directed network_
 #### Underlying Research
 The foundation for this research was established via a preliminary study evaluating the 2023/24 FA Women’s Super League across 132 matches, 264 team networks, and 89,781 passes (StatsBomb). The primary goal was to disentangle legitimate tactic intent or high performance from enforced spatial topological properties. The experiment design involved identify the seasons outlier, highest pass match (Arsenal WFC completed 720 passes against Bristol City) to determine if its network properties were reflective of a high performance, dominant team, or whether they were a natural by-product of a high interaction match. 
@@ -49,7 +49,7 @@ To benchmark both performance analysis and null model suitability, observed topo
 #### Traditional Null Failures
 Within football's spatially embedded environment, classical baselines collapsed. An Erdős–Rényi $G(N, p)$ baseline (Erdős & Rényi, 1959; Gilbert, 1959) destroyed pitch geometry, compressed workload heterogeneity, and synthesised impossible interactions, such as designating the goalkeeper and central striker as primary passing partners.
 
-![Image 2 description|387](Files/trad_null_triad.png)
+![Image 2 description|387](trad_null_triad.png)
 _Figure 2: Demonstrating the absurd Transitive Triad Intensity ($I_{\text{transitive}}$) create by traditional null network establish a top-3 volume triad between the goalkeeper, striker and right midfield all operating in different sections of the pitch._
 #### Spatial and Role Contigious Null Framework
 The null framework for spatial bound, role-driven autonomous system requires a methodology that acknowledge domain restrictions. In football analytics literature, stochastic diffusion techniques are layered over static adjacencies to analyse on-pitch flows (Narizuka et al., 2014; Gama et al., 2026b). Semantically, these same techniques encode learned spatial transition rules which also govern the dynamic of the network. To harvest these techniques and applying them to a null framework, I worked on a methodology to sample synthetic passes using a first-order markovian process. The idea was to generate a match sample worth of passes which would be converted into a null PassMap network, whilst holding dependant topological factors such as a pass volume at a fixed level. 
