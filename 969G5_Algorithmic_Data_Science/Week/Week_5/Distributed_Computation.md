@@ -13,6 +13,21 @@ Operating System Concepts (9th) Silberschatz, Galvin and Gagne. ([1](https://git
 ---
 # Lecture
 - **_| [[lecture5.pdf]] |_**
+
+1. [[#Heaps and Heapsort Algorithm]]
+	-  [[#Complexity]]
+		-  [[#Phase 1 — Building the heap (Organising)]]
+		-  [[#Phase 2 — Extracting the sorted list (Sorting)]]
+2. [[#CPUs vs GPUs]]
+3. [[#Machine Security]]
+4. [[#Authentication]]
+5. [[#Hashed-Message Authentication]]
+6. [[#Hashing vs Encryption]]
+7. [[#Symmetric Encryption]]
+8. [[#Asymmetric Encryption]]
+	- [[#Private/Public Key Encryption 1 Way]]
+	- [[#Private/Public Key Encryption 2 Way]]
+
 ## Heaps and Heapsort Algorithm
 A **binary tree** is a hierarchical data structure where each node has at most two children (left and right), starting from a single root at the top and branching downward along parent-child chains. 
 
@@ -121,7 +136,7 @@ Hashing: a one-way process — easy to do, hard to undo.
 Encryption: a two-way process, where decoding is possible under conditions…
 ![[encryption.png]]
 
-### Symmetric Encryption
+## Symmetric Encryption
 The same key is used for encoding and decoding. Simple but not very flexible. 
 
 It is risk in the sense that both the client and host end need to fold the encryption key, if either is exposed then the whole process is flawed. 
@@ -135,7 +150,9 @@ Basic example is a one-time pad, i.e. a binary chain. Input takes through the pa
 | **Cipher** | `0011` | `1010` | `1101` | `1101` |
 
 ---
-## Private/Public Key Encryption: 1 Way
+
+## Asymmetric Encryption
+### Private/Public Key Encryption: 1 Way
 **Asymmetric:** different keys are used for coding and decoding. 
 
 Here, there are no shared keys. Each end holds different keys. 
@@ -148,7 +165,7 @@ Here, there are no shared keys. Each end holds different keys.
 **Usage 2:** Authentication
 - If a sender keeps k_1 private but uses a public k_2, people can use k_2 to decrypt but only messages sent using K_1 will work, therefore, authenticating the send. 
 ---
-## Private/Public Key Encryption: 1 Way
+### Private/Public Key Encryption: 2 Way
 Like Whatsapp, both users create a pair of keys (private-public) and share their public keys via an open channel. 
 
 User_1 encrypts first with private key and then with User_2's public key. 
@@ -165,6 +182,20 @@ No lab
 ---
 # Readings
 
+1. [[#Chapter 14 - Protection]]
+2. [[#Chapter 15 Security]]
+	1. [[#Cryptography as a Security Tool]]
+	2. [[#Encryption]]
+	3. [[#Symmetric Encryption_]]
+	4. [[#Asymmetric Encryption_]]
+	5. [[#Authentication_]]
+	6. [[#Key Distribution]]
+	7. [[#Summary]]
+3. [[#Chapter 17 Distributed Systems]]
+	1. [[#Resource Sharing]]
+	2. [[#Computation Speedup]]
+	3. [[#Reliability]]
+	4. [[#Communication]]
 
 ## Chapter 14 - Protection
 The processes in an operating system must be protected from one another’s activities. To provide such protection, we can use various mechanisms to ensure that only processes that have gained proper authorisation from the operating system can operate on the files, memory segments, CPU, and other resources of a system
@@ -184,8 +215,6 @@ A process should be allowed to access only those resources for which it has auth
 A process operates within a protection domain, which specifies the resources that the process may access. Each domain defines a set of objects and the types of operations that may be invoked on each object
 
 > Haven't take notes of, or particularly read, Access Matrix but if it comes up in the revision or past papers then review this. 
-
-
 
 
 
@@ -241,13 +270,13 @@ Thus, a computer holding $k$ can decrypt ciphertexts to the plaintexts used to p
 Ciphertexts are expected to be exposed with reasons being that they themselves should not mean anything. Therefore, it is imperative, that the key cannot be back calculate from a ciphertexts, e.g. a intermediary ciphertexts where it is easy to to work out the input message and therefore compute the key. 
 
 ---
-#### Symmetric Encryption
+#### Symmetric Encryption_
 In a symmetric encryption algorithm, the same key is used to encrypt and to decrypt.
 
 Thus, the issue of protecting the key arises as by definition, the key designed to be distributed between senders and receivers. 
 
 ---
-#### Asymmetric Encryption
+#### Asymmetric Encryption_
 In an asymmetric encryption algorithm, there are different encryption and decryption keys.
 
 An entity preparing to receive encrypted communication creates two keys and makes one of them (called the public key) available to anyone who wants it.
@@ -259,7 +288,7 @@ This is known as public-key encryption.
 It removes the need for any keys to be kept safe and secure. The public key is available for anyone that wants it and the private key never leaves the receivers computer. 
 
 ---
-#### Authentication
+#### Authentication_
 Above we looked at constraining the set of possible receivers of a message. Constraining the set of potential senders of a message is called authentication.
 - Authentication is thus complementary to encryption.
 - Authentication is also useful for proving that a message has not been modified.
@@ -275,4 +304,62 @@ The critical property that an authentication algorithm must possess is this: for
 
 a computer holding $k$ can generate authenticators on messages so that any computer possessing $k$ can verify them
 
-> Note, this is a circular issue linking back to symmetric encrption. It requires the safe and secure distribution of the key. 
+> Note, this is a circular issue linking back to symmetric encryption. It requires the safe and secure distribution of the key. 
+
+---
+#### Key Distribution
+A good part of the battle between cryptographers (those inventing ciphers) and cryptanalysts (those trying to break them) involves keys.
+
+With symmetric algorithms, both parties need the key, and no one else should have it. The delivery of this key is a huge issue. 
+- Such as issue that it may be distributed "out-of-band", meaning in person/offline.
+
+Also, this current set up is pairwise. User needs N keys to communicate with N people. 
+
+This is why Authorisation, like general encryption, turns to asymmetric algorithms. This means keys can be publicly exchanged and a user only needs to retain their private decryption key. 
+
+Note, this public key option is not without negatives. It relies on a sender obtaining the true public key. The access point could be polluted, resulting in senders messages being intercepted, i.e. they have accidentally downloaded a hackers encryption and are sending it to a man-in-the-middle. 
+
+This is where the use of Digital certificates which are digitally signed by trusted parties to verify the key itself. 
+
+---
+#### Summary
+Encryption limits the domain of receivers of data, while authentication limits the domain of senders.
+
+Encryption is used to provide confidentiality of data being stored or transferred.
+
+Symmetric encryption requires a shared key, while asymmetric encryption provides a public key and a private key.
+
+Authentication, when combined with hashing, can prove that data have not been changed.
+
+
+
+---
+## Chapter 17 Distributed Systems
+A distributed system is a collection of processors that do not share memory or a clock. Each has its own local memory.
+
+A distributed system is a collection of loosely coupled nodes interconnected by a communication network.
+
+There are four major reasons for building distributed systems: 
+- Resource sharing
+- Computation speedup
+- Reliability
+- Communication.
+### Resource Sharing
+If a number of different sites (with different capabilities) are connected to one another, then a user at one site may be able to use the resources available at another (files, databases, specialised hardware)
+### Computation Speedup
+If a computation can be partitioned into subcomputations that can run concurrently, then a distributed system allows us to distribute the subcomputations among the various sites.
+
+Or, if a single sited is overloaded with jobs in a queue, then it can be distributes across other less loaded sites. Movement of jobs is called load sharing. 
+### Reliability
+If one site fails in a distributed system, the remaining sites can continue operating, giving the system better reliability.
+
+In general, with enough redundancy (in both hardware and data), the system can continue operation, even if some of its sites have failed.
+### Communication
+When several sites are connected to one another by a communication network, users at the various sites have the opportunity to exchange information.
+
+Such functions include file transfer, login, mail, and remote procedure calls (RPCs).
+
+The advantage of a distributed system is that these functions can be carried out over great distances. Two people at geographically distant sites can collaborate on a project, for example.
+
+---
+
