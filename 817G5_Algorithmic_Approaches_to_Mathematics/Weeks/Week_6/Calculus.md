@@ -241,8 +241,35 @@ Differentiate the **outside** function (leaving the inside untouched), then mult
 
 ---
 # Lab
+Differentiation maps a function $f$ to a new derivative function via the differential operator $D_x(f) = \frac{\mathrm{d}f}{\mathrm{d}x}$, which can then be evaluated at a specific point $x$ to return a scalar slope.
 
+There are [3 main frameworks](https://juliadiff.org/) towards computing differentials:
+- Symbolic differentiation, which uses [computer algebra](https://en.wikipedia.org/wiki/Computer_algebra) to work out explicit formulas. Generally fails with real world applications as there is no algebraic formula that defines that day.
+- [Numerical differentiation](https://en.wikipedia.org/wiki/Numerical_differentiation), which relies on variants of the finite difference approximation $f′(x)≈f(x+ε)−f(x)εf′(x)≈εf(x+ε)−f(x)​$. With this you scope in a select a value of $x$ to explore, e.g. `velocity(t)` that looks up or interpolates the car's speed at time $t$. 
+- [Automatic differentiation](https://en.wikipedia.org/wiki/Automatic_differentiation) (AD), which reinterprets the code of $f$ either in "forward" or "reverse" mode.
+---
+### **Symbolic Differentiation**
+> Symbolics.jl (`@variables`, `Differential`, `expand_derivatives`)
+- Applies exact pen-and-paper calculus rules (product, chain, quotient rules) to algebraic expression trees to output a closed-form formula.
+- Exact mathematical truth** (zero step-size error).
+- Only works on closed-form algebraic formulas; suffers from "expression swell" and slow simplification on large functions.
+---
+### **Automatic Differentiation (AD)**
+> `ForwardDiff.jl` (`ForwardDiff.derivative`)
+- Decomposes a program into elementary operations (`+`, `*`, `/`, `sin`) and applies exact calculus rules directly to numbers step-by-step using Dual numbers.
+- Machine-precision exact**; fast on large programs and loops.
+- Produces no human-readable symbolic equation.
+---
+### **Finite Differences**
+> Custom `return_fd_operator(Δx)`
+- Treats $f$ as a black box and approximates the tangent slope via a secant line: $\frac{f(x + \Delta x) - f(x)}{\Delta x}$.
+- Always an approximation**
+- Sensitive to step size $\Delta x$; fails when functions oscillate faster than $\Delta x$ or when $\Delta x$ hits floating-point rounding limits.
+---
 
+**Symbolic calculus** works _globally and abstractly_—it rearranges algebraic symbols before you ever pick a number, creating a formula that holds everywhere at once.
+    
+**The finite difference approach** works _locally and concretely_—it waits until you hand it a specific input $x$, looks right at that neighbourhood ($x$ and $x + \Delta x$), evaluates the function twice, and computes the slope right on the spot.
 
 ---
 # 3B1B
