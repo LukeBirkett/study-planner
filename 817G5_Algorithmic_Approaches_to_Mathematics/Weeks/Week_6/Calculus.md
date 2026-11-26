@@ -272,6 +272,190 @@ There are [3 main frameworks](https://juliadiff.org/) towards computing differen
 **The finite difference approach** works _locally and concretely_—it waits until you hand it a specific input $x$, looks right at that neighbourhood ($x$ and $x + \Delta x$), evaluates the function twice, and computes the slope right on the spot.
 
 ---
+# Cheatsheet Questions
+1. [[#First and Second Order Derivatives]]
+	- [[#1. Modify the working in the previous section to find out that $ frac{d𝑥}{d𝑡} (𝑡)$]]
+	- [[#2. Do your own working to show that the acceleration function is $ frac{d 2 𝑥}{d 𝑡2} (𝑡) = 2$]]
+2. [[#Linearity and Derivatives]]
+	- [[#1. Use linearity of the differential operator to calculate $D𝑥(ℎ)$ from the derivatives for $𝑓$ and $𝑔$]]
+	- [[#2. Is it possible, or not, to calculate the derivative of $𝑗(𝑥) = cos(4𝑥) + sin(5𝑥)$ in the same way?]]
+3. [[#Polynomials]]
+	- [[#1. Why degree-3 polynomials form a vector space]]
+	- [[#2. Finding the matrix for the differential operator $D$]]
+		- [[#The differential operator $D$ is universal]]
+	- [[#3. How would you use this matrix to differentiate a polynomial twice?]]
+	4. [[]]
+## First and Second Order Derivatives
+Let position of an object at time $𝑡$ be described by the function $𝑥(𝑡) = 𝑡^2 + 4$: 
+### 1. Modify the working in the previous section to find out that $\frac{d𝑥}{d𝑡} (𝑡)$ 
+We need to first find the change in position: $x(t + \Delta t) - x(t)$
+
+Plug $(t + \Delta t)$ into the new formula $x(t) = t^2 + 4$, and subtract the original $x(t)$: 
+$$x(t + \Delta t) - x(t) = \left[(t + \Delta t)^2 + 4\right] - (t^2 + 4)$$
+Note that, $x(t) = t^2 + 4$ means $x(\,\square\,) = (\,\square\,)^2 + 4$, we are plugging in $t + \Delta t$ which is why $+4+ remains outside the brackets. 
+
+Next we expand $(t + \Delta t)^2$ and distribute the minus sign to the second group:
+$$= t^2 + 2t\Delta t + (\Delta t)^2 + 4 - t^2 - 4$$
+We grouping these terms, both ($t^2 - t^2 = 0$ and $4 - 4 = 0$) cancel out, resulting in 
+$$= 2t\Delta t + (\Delta t)^2$$
+Resultantly, this form is the same as if the input function was just $x(t) = t^2$, telling that the $+4$ does not impact the velocity calculation and instead just impact the starting point.
+
+Then we divide by $\Delta t$. This isn't a lucky algebraic trick to just remove the terms, instead is converts the distance travelled equation ($x(t + \Delta t) - x(t)$) into **speed (velocity)** by dividing by the **time elapsed** ($\Delta t$):
+$$\text{Average Velocity} = \frac{\text{Change in Position}}{\text{Change in Time}} = \frac{x(t + \Delta t) - x(t)}{\Delta t}$$
+This gives us:
+$$\frac{x(t + \Delta t) - x(t)}{\Delta t} = \frac{2t\Delta t + (\Delta t)^2}{\Delta t} = 2t + \Delta t$$
+The question being asked is **"How many meters am I covering _per second_ right around this instant?"**. This shrinks both the distance and the time window shrink together proportionally revealing ($2t + \Delta t$)
+
+The final step is to shrink the time window $\Delta t$ down to $0$ so the second term vanishes: 
+$$\frac{\mathrm{d}x}{\mathrm{d}t}(t) = \lim_{\Delta t \to 0} (2t + \Delta t) = 2t$$
+> **The intuition:** Adding $+ 4$ just shifts your starting position forward by 4 units—it doesn't change how fast you are moving at any moment, so the $+ 4$ vanishes during subtraction and gives the exact same velocity $2t$.
+---
+### 2. Do your own working to show that the acceleration function is $\frac{d^2 𝑥}{d^𝑡2} (𝑡) = 2$ 
+To find the acceleration function $\frac{\mathrm{d}^2 x}{\mathrm{d}t^2}(t)$, we repeat the exact same four-step process, except this time our starting machine is the **velocity function**: 
+$$v(t) = 2t$$
+Find the change in velocity, $v(t + \Delta t) - v(t)$, by dropping $(t + \Delta t)$ into the velocity slot  $v(\,\square\,) = 2(\,\square\,)$ and subtract the original $v(t)$:
+$$v(t + \Delta t) - v(t) = 2(t + \Delta t) - 2t$$
+Expand and cancel the terms. The $2t$ and $-2t$ cancel each other out, leaving just the change in velocity:
+$$= 2t + 2\Delta t - 2t$$
+$$= 2\Delta t$$
+Divide by $\Delta t$ to get the ratio representing the rate of change (average acceleration). Cancelling out the $\Delta t$ leaves us with:
+$$\frac{v(t + \Delta t) - v(t)}{\Delta t} = \frac{2\Delta t}{\Delta t}$$
+$$= 2$$
+Take the limit as $\Delta t \to 0$. Note, the derivative is formally _defined_ as the limit of that ratio as $\Delta t \to 0$. Including the $\lim_{\Delta t \to 0}$ line simply finishes the formal mathematical sentence so that the average acceleration ($\frac{v(t + \Delta t) - v(t)}{\Delta t}$) officially becomes the instantaneous acceleration ($\frac{\mathrm{d}^2 x}{\mathrm{d}t^2}(t)$).
+$$\frac{\mathrm{d}^2 x}{\mathrm{d}t^2}(t) = \lim_{\Delta t \to 0} 2 = 2$$
+> **The intuition:** Because your velocity $2t$ increases by a steady $2$ units every single second, your acceleration is a constant **$2$**—independent of both $\Delta t$ and $t$.
+> 
+> Physically, this happens because $v(t) = 2t$ is a straight line—the rate of change is identical whether you measure it over $10$ seconds or $0.00001$ seconds, so zooming in with a limit leaves the number untouched.
+
+---
+## Linearity and Derivatives
+Let $$f(x) = \sin(x) \qquad g(x) = \cos(x)$$ Note that $$\frac{\mathrm{d}f}{\mathrm{d}x}(x) = g(x) \qquad \frac{\mathrm{d}g}{\mathrm{d}x}(x) = -f(x)$$ Now let $h(x) = 2\cos(x) + 3\sin(x)$
+
+### 1. Use linearity of the differential operator to calculate $D𝑥(ℎ)$ from the derivatives for $𝑓$ and $𝑔$
+**Linearity** just means that the derivative operator plays nicely with addition and constant multipliers:
+1. You can split a sum into separate derivatives: $\mathrm{D}_x(A + B) = \mathrm{D}_x(A) + \mathrm{D}_x(B)$
+2. You can pull constant numbers out in front: $\mathrm{D}_x(c \cdot A) = c \cdot \mathrm{D}_x(A)$
+#### Step-by-Step Solution
+1. **Rewrite $h(x)$ using the names $f$ and $g$:** Since $f(x) = \sin(x)$ and $g(x) = \cos(x)$, we can rewrite $h(x) = 2\cos(x) + 3\sin(x)$ as:$$h(x) = 2g(x) + 3f(x)$$
+2. **Apply the $\mathrm{D}_x$ operator to both sides:**$$\mathrm{D}_x(h) = \mathrm{D}_x\big(2g(x) + 3f(x)\big)$$
+3. **Use linearity to split the sum and pull out the constants ($2$ and $3$):**
+$$\mathrm{D}_x(h) = 2\,\mathrm{D}_x\big(g(x)\big) + 3\,\mathrm{D}_x\big(f(x)\big)$$
+4. **Substitute the given derivatives:** The box tells us that $\mathrm{D}_x(g) = -f(x)$ and $\mathrm{D}_x(f) = g(x)$:
+$$\mathrm{D}_x(h) = 2\big(-f(x)\big) + 3\big(g(x)\big)$$
+$$= -2f(x) + 3g(x)$$
+5. **Plug $\sin(x)$ and $\cos(x)$ back in:**
+$$\mathrm{D}_x(h) = -2\sin(x) + 3\cos(x)$$
+### 2. Is it possible, or not, to calculate the derivative of $𝑗(𝑥) = cos(4𝑥) + sin(5𝑥)$ in the same way?
+
+**No**, it is not possible using linearity alone.
+
+**What linearity allows:** Linearity allows us to split the sum into $\mathrm{D}_x\big(\cos(4x)\big) + \mathrm{D}_x\big(\sin(5x)\big)$ and pull out constant factors that multiply the _outside_ of a function, such as $\mathrm{D}_x\big(4\cos(x)\big) = 4\,\mathrm{D}_x\big(\cos(x)\big)$.
+
+**Why it fails here:** In $j(x)$, the constants $4$ and $5$ multiply the input $x$ _inside_ the functions rather than multiplying the functions themselves. Because $\cos(4x)$ and $\sin(5x)$ are composite functions (functions nested inside other functions), you cannot pull $4$ or $5$ outside the differential operator—doing so requires the **chain rule** instead
+
+---
+## Polynomials
+Let’s consider degree 3 polynomials (cubic equations). An example is $f(x) = -x^3 + 4x - 6$.
+
+We can represent degree 3 polynomials as a 4 dimensional vector space, whose bases are
+$\underline{e}_1 = 1 \qquad \underline{e}_2 = x$
+$\underline{e}_3 = x^2 \qquad \underline{e}_4 = x^3$
+For instance, in this basis, we have $f = \begin{bmatrix} -1 \\ 0 \\ 4 \\ -6 \end{bmatrix}$
+Note, the vector represents the basis as **highest power to lowest power** ($x^3, x^2, x, 1$), not the same order as written out above it. 
+
+### 1. Why degree-3 polynomials form a vector space
+**Vector space axioms:** If you add two polynomials of degree $\le 3$ together, you still get a polynomial of degree $\le 3$ (closed under addition). If you multiply one by any constant scalar, its degree never exceeds $3$ (closed under scalar multiplication), and the zero polynomial $0$ acts as the zero vector.
+
+**Spanning set:** Any degree-3 polynomial has the form $ax^3 + bx^2 + cx + d$, which is just a linear combination of the four basis pieces $\{x^3, x^2, x, 1\}$. Since no combination of lower powers can create a higher power, those four elements are linearly independent and span the entire 4D space.
+
+> A **vector space** is simply any collection of objects ("vectors") equipped with **only two legal operations**:
+> 1. **Vector addition:** Adding two objects in the set together ($\mathbf{u} + \mathbf{v}$).
+> 2. **Scalar multiplication:** Stretching or shrinking an object by a plain number ($c \cdot \mathbf{u}$).
+> To qualify as a vector space, the set must be **closed** under those two operations (meaning adding two objects or scaling one never kicks you out of the set), and those operations have to obey standard arithmetic rules (like $\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$, having a zero object, etc.).
+
+> Linearity is defined to respect the two operations of a vector space. 
+> - **Vector Space (the objects):** A collection of things where the only two legal moves are **adding** ($\mathbf{u} + \mathbf{v}$) and **scaling** ($c \cdot \mathbf{u}$).
+> - **Linearity (the transformation/operator):** A rule $T$ acting on those objects that **preserves** those exact two moves—meaning it doesn't matter whether you add/scale _before_ applying $T$ or _after_ applying $T$:
+---
+### 2. Finding the matrix for the differential operator $D$
+Because a $4 \times 4$ matrix maps a 4-entry vector to a 4-entry vector, each **column** of the matrix simply shows what the derivative does to each basis element in order ($x^3$, then $x^2$, then $x$, then $1$)
+
+$f(x) = -x^3 + 4x - 6$.
+$\frac{\mathrm{d}f}{\mathrm{d}x}(x) = 0x^3 - 3x^2 + 0x + 4$
+
+| Description                    | Input | Derivative                                                          | Vector                                           |
+| :----------------------------- | :---- | :------------------------------------------------------------------ | :----------------------------------------------- |
+| Column 1 (derivative of $x^3$) | $x^3$ | $\frac{\mathrm{d}}{\mathrm{d}x}(x^3) = 3x^2 = 0x^3 + 3x^2 + 0x + 0$ | $\begin{bmatrix} 0 \\ 3 \\ 0 \\ 0 \end{bmatrix}$ |
+| Column 2 (derivative of $x^2$) | $x^2$ | $\frac{\mathrm{d}}{\mathrm{d}x}(x^2) = 2x = 0x^3 + 0x^2 + 2x + 0$   | $\begin{bmatrix} 0 \\ 0 \\ 2 \\ 0 \end{bmatrix}$ |
+| Column 3 (derivative of $x$)   | $x$   | $\frac{\mathrm{d}}{\mathrm{d}x}(x) = 1 = 0x^3 + 0x^2 + 0x + 1$      | $\begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix}$ |
+| Column 4 (derivative of $1$)   | $1$   | $\frac{\mathrm{d}}{\mathrm{d}x}(1) = 0 = 0x^3 + 0x^2 + 0x + 0$      | $\begin{bmatrix} 0 \\ 0 \\ 0 \\ 0 \end{bmatrix}$ |
+|                                |       |                                                                     |                                                  |
+
+Putting those four columns side by side gives the differential operator matrix:
+$$D = \begin{bmatrix} 0 & 0 & 0 & 0 \\ 3 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}$$
+**Quick check on $f$:**
+$$D f = \begin{bmatrix} 0 & 0 & 0 & 0 \\ 3 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix} \begin{bmatrix} -1 \\ 0 \\ 4 \\ -6 \end{bmatrix} = \begin{bmatrix} 0 \\ -3 \\ 0 \\ 4 \end{bmatrix}$$
+#### The differential operator $D$ is universal
+> Its important to understand that computing the differential operator is a step that comes before working with a function and works for all functions. We are building a blank template for **all** degree-3 polynomials.
+> 
+> First we need to setup the coordinate slots. in the top-to-bottom order of our 4D vector space from highest power to lowest power:
+> $$\text{Vector} = \begin{bmatrix} \text{coefficient of } x^3 \\ \text{coefficient of } x^2 \\ \text{coefficient of } x \\ \text{constant } (1) \end{bmatrix}$$
+> Next we list the 4 pure basis polynomials: $b_1(x) = x^3$,  $b_2(x) = x^2$, $b_3(x) = x$, $b_4(x) = 1$
+> 
+> Now, apply the standard calculus derivative $\frac{\mathrm{d}}{\mathrm{d}x}$ to each of those four building blocks, and translate each result into our 4-slot vector format:
+> 1. First basis element, $x^3$: 
+> 	- Differentiate it: $\frac{\mathrm{d}}{\mathrm{d}x}(x^3) = 3x^2$
+> 	- Fill in all four slots ($0x^3 + 3x^2 + 0x + 0$):
+> 2. Second basis element, $x^2$:
+> 	- Differentiate it: $\frac{\mathrm{d}}{\mathrm{d}x}(x^2) = 2x$
+> 	- Fill in all four slots ($0x^3 + 0x^2 + 2x + 0$
+> 3. Take the third basis element, $x$:
+> 	- Differentiate it: $\frac{\mathrm{d}}{\mathrm{d}x}(x) = 1$
+> 	- Fill in all four slots ($0x^3 + 0x^2 + 0x + 1$):
+> 4. Take the fourth basis element, $1$:
+> 	- Differentiate it: $\frac{\mathrm{d}}{\mathrm{d}x}(1) = 0$
+> 	- Fill in all four slots ($0x^3 + 0x^2 + 0x + 0$)
+>
+> Each of those derivatives can be represented using the 4d basis vectors and put into a single matrix
+> $$D = \begin{bmatrix} 0 & 0 & 0 & 0 \\ 3 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}$$
+> Because every degree-3 polynomial is just a combination of $x^3, x^2, x,$ and $1$, knowing what the derivative does to those four pure pieces automatically tells the matrix how to differentiate _any_ degree-3 polynomial you throw at it.
+> 
+> It is not unique to the function we are working with, it tells us how to work with all functions, say $g(x) = 5x^3 + 2x^2 - 7x + 9$:
+> $$\begin{bmatrix} 0 & 0 & 0 & 0 \\ 3 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix} \begin{bmatrix} 5 \\ 2 \\ -7 \\ 9 \end{bmatrix} = \begin{bmatrix} 0 \\ 3(5) \\ 2(2) \\ 1(-7) \end{bmatrix} = \begin{bmatrix} 0 \\ 15 \\ 4 \\ -7 \end{bmatrix}$$
+> Which is $15x^2 + 4x - 7$—the exact derivative of $g(x)$, using the **exact same matrix $D$**
+> 
+> **Why this works for any polynomial:** When you multiply $D$ by a vector $\begin{bmatrix} a \\ b \\ c \\ d \end{bmatrix}$, matrix
+---
+### 3. How would you use this matrix to differentiate a polynomial twice?
+Since applying $D$ once differentiates the polynomial once, differentiating twice just means applying the matrix $D$ **twice**—which is matrix multiplication by **$D^2$** ($D \cdot D$):
+$$\frac{\mathrm{d}^2 f}{\mathrm{d}x^2} = D(Df) = D^2 f$$
+Explicitly, squaring the matrix shifts the numbers down one more diagonal:
+$$D^2 = \begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 6 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \end{bmatrix}$$
+_(Notice that if you apply $D$ four times, $D^4$ becomes the all-zero matrix—matching the fact that the 4th derivative of any cubic polynomial is $0$!)_
+
+> This means that we don't need to play around with working out second-order and beyond differentials. We can just use the same one to cycle down. 
+
+> Here is the neat surprise about polynomials: **you actually _can_ keep taking derivatives forever!** Unlike $f(x) = x\vert{}x\vert{}$, which broke at a sharp V-shaped corner on its second derivative, polynomials are completely smooth everywhere—they never develop corners, jumps, or breaks, no matter how many times you differentiate them. Instead of breaking, polynomials just **flatten out to zero**. This is unlike the $f(x\vert{}x\vert{})$ example from before which cannot enter this polynomial vector space.
+
+---
+### 4. What would the differential operator on degree 𝑛 polynomials look like? 
+A degree-$n$ polynomial has $n + 1$ basis terms ($x^n, x^{n-1}, \dots, x, 1$), so it lives in an $(n + 1)$-dimensional vector space and uses an **$(n + 1) \times (n + 1)$ matrix**.
+
+Following the exact same pattern (with $x^n$ at the top and $1$ at the bottom), the matrix has zeros everywhere except on the **subdiagonal** (the diagonal immediately below the main diagonal), which counts down from $n$ to $1$:
+$$D = \begin{bmatrix} 0 & 0 & 0 & \cdots & 0 & 0 \\ n & 0 & 0 & \cdots & 0 & 0 \\ 0 & n-1 & 0 & \cdots & 0 & 0 \\ \vdots & \vdots & \ddots & \ddots & \vdots & \vdots \\ 0 & 0 & 0 & \ddots & 0 & 0 \\ 0 & 0 & 0 & \cdots & 1 & 0 \end{bmatrix}$$
+---
+## Derivative Proof
+Here is the proof for $f(x) = x$
+
+1. **Find the change in output, $f(x + \Delta x) - f(x)$:** Since the rule $f(\,\square\,) = \square$ just outputs whatever you feed into it, plugging in $(x + \Delta x)$ gives $x + \Delta x$, and plugging in $x$ gives $x$:
+$$f(x + \Delta x) - f(x) = (x + \Delta x) - x$$
+2. **Simplify by canceling terms:**
+$$x + \Delta x - x = \Delta x$$
+3. **Divide by the change in input, $\Delta x$:**
+$$\frac{f(x + \Delta x) - f(x)}{\Delta x} = \frac{\Delta x}{\Delta x} = 1$$
+4. **Take the limit as $\Delta x \to 0$:**
+$$\frac{\mathrm{d}f}{\mathrm{d}x}(x) = \lim_{\Delta x \to 0} 1 = 1$$
+---
 # 3B1B
 **| [3B1B Calculus Series](https://www.3blue1brown.com/?topic=calculus) | [The Essence of Calculus](https://www.3blue1brown.com/?topic=calculus&lesson=essence-of-calculus) | [The Paradox of the Derivative](https://www.3blue1brown.com/?topic=calculus&lesson=derivatives) | [Power Rule Through Geometry](https://www.3blue1brown.com/?topic=calculus&lesson=derivatives-power-rule)| [Trig Derivative Through Geometry](https://www.3blue1brown.com/lessons/derivatives-trig-functions/)] | [Visualising the Chain Rule and Produce Rule](https://www.3blue1brown.com/?topic=calculus&lesson=chain-rule-and-product-rule) |**
 
